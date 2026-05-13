@@ -799,6 +799,128 @@ img, svg { display: block; max-width: 100%; }
 a.contact-v:hover { color: var(--blue); }
 
 /* =========================================================
+   SCROLL PROGRESS BAR
+   ========================================================= */
+.scroll-progress {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--grad);
+  z-index: 100;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  pointer-events: none;
+  box-shadow: 0 0 14px rgba(110,142,255,0.6);
+}
+
+/* =========================================================
+   CURSOR SPOTLIGHT (hero ambient glow that follows cursor)
+   ========================================================= */
+.cursor-spotlight {
+  position: fixed;
+  top: 0; left: 0;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, rgba(110,142,255,0.12), rgba(94,234,212,0.06) 35%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  mix-blend-mode: screen;
+  will-change: transform;
+}
+@media (hover: none) and (pointer: coarse) {
+  .cursor-spotlight { display: none; }
+}
+
+/* =========================================================
+   WORD-BY-WORD REVEAL (section headings)
+   ========================================================= */
+.word-reveal { display: inline; }
+.word-reveal .wr-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(40%);
+  filter: blur(4px);
+  transition: opacity 0.7s var(--easing), transform 0.7s var(--easing), filter 0.7s var(--easing);
+}
+.word-reveal.inView .wr-word {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* =========================================================
+   MARQUEE — infinite-scrolling tech strip
+   ========================================================= */
+.marquee {
+  overflow: hidden;
+  padding: 22px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(110,142,255,0.02), transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  margin-bottom: 32px;
+}
+.marquee-track {
+  display: flex;
+  gap: 56px;
+  width: max-content;
+  animation: marquee 50s linear infinite;
+  white-space: nowrap;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+.marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--mono);
+  font-size: 15px;
+  letter-spacing: 0.3px;
+  color: var(--fg-soft);
+  font-weight: 600;
+  transition: color var(--t-fast) ease;
+}
+.marquee-item:hover { color: var(--fg); }
+.marquee-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--grad);
+  flex-shrink: 0;
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+}
+
+/* =========================================================
+   3D TILT cards (extends .project hover effect)
+   ========================================================= */
+.project {
+  transform-style: preserve-3d;
+  transition: transform 0.18s var(--easing), border-color var(--t) ease, background var(--t) ease;
+  will-change: transform;
+}
+.project > * { transform: translateZ(0); }   /* keep contents on top plane */
+.project::before {
+  /* radial spotlight follows --mx/--my set by TiltCard */
+  content: "";
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(110,142,255,0.18), transparent 55%);
+  opacity: 0;
+  transition: opacity var(--t) ease;
+  pointer-events: none;
+  border-radius: inherit;
+}
+.project:hover::before { opacity: 1; }
+
+/* =========================================================
    STACK CHIPS (tech stack overview)
    ========================================================= */
 .stack-chips-section {
