@@ -24,3 +24,10 @@ dist/
 **/*.pem
 **/*.key
 **/.env
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
