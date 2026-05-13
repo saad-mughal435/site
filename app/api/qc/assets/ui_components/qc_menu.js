@@ -796,7 +796,7 @@ function escapeHtml(value) {
     .replace(/'/g, '&#39;');
 }
 
-const QC_SIGNATORY_NAMES = ['Muhammad Mughees', 'Muneer KP', 'Muhammad Shakoor'];
+const QC_SIGNATORY_NAMES = ['Demo Analyst', 'Demo Supervisor', 'Demo QC Manager'];
 
 function signatorySelectHtml(currentValue, fieldAttr) {
   const cur = String(currentValue || '').trim();

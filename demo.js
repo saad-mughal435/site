@@ -1,5 +1,5 @@
 /* =========================================================
-   Demo page — sidebar nav for the MES/ERP showcase
+   Demo page - sidebar nav for the MES/ERP showcase
    ========================================================= */
 
 (function () {

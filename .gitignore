@@ -16,7 +16,6 @@ dist/
 *_DO_NOT_PUBLISH*/
 *.env
 *.env.local
-.claude/
 
 # Defensive blocklist — never publish these even if accidentally placed under site/
 **/certbot/

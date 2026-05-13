@@ -1,5 +1,5 @@
 /* =========================================================
-   Contact form — Muhammad Saad
+   Contact form - Saad
    - Submits via Formsubmit.co AJAX endpoint
    - Inline validation + success/error state
    - mailto: fallback button stays in sync with form contents
@@ -46,10 +46,10 @@
     const lines = [
       `Name:    ${fields.name.value}`,
       `Email:   ${fields.email.value}`,
-      `Company: ${fields.company.value || '—'}`,
+      `Company: ${fields.company.value || '-'}`,
       `Topic:   ${fields.topic.value}`,
       '',
-      '—',
+      '-',
       fields.message.value || '(write your message here)',
     ];
     const body = encodeURIComponent(lines.join('\n'));
@@ -94,7 +94,7 @@
     e.preventDefault();
     clearStatus();
 
-    // honeypot — silently ignore bots
+    // honeypot - silently ignore bots
     if (fields.honey && fields.honey.value) return;
 
     if (!validate()) {
