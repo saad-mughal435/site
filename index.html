@@ -123,7 +123,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="home.css?v=20260514m1" />
+<link rel="stylesheet" href="home.css?v=20260514m2" />
 </head>
 <body>
 
@@ -198,6 +198,21 @@ function useScrollPos() {
   return scrolled;
 }
 
+function useScrollProgress() {
+  const [p, setP] = useState(0);
+  useEffect(() => {
+    const onScroll = () => {
+      const h = document.documentElement;
+      const max = h.scrollHeight - h.clientHeight;
+      setP(max > 0 ? (h.scrollTop / max) * 100 : 0);
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+  return p;
+}
+
 /* =========================================================
    PRIMITIVES
    ========================================================= */
@@ -210,6 +225,91 @@ function Reveal({ children, className = '', stagger = false, as: Tag = 'div', ..
       className={(stagger ? 'stagger ' : 'reveal ') + (inView ? 'inView ' : '') + className}
       {...rest}
     >
+      {children}
+    </Tag>
+  );
+}
+
+function ScrollProgress() {
+  const p = useScrollProgress();
+  return <div className="scroll-progress" style={{ transform: `scaleX(${p / 100})` }} />;
+}
+
+function CursorSpotlight() {
+  const ref = useRef(null);
+  useEffect(() => {
+    if (matchMedia('(hover: none)').matches) return;
+    let frame;
+    const onMove = (e) => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        if (ref.current) {
+          ref.current.style.transform = `translate(${e.clientX - 200}px, ${e.clientY - 200}px)`;
+          ref.current.style.opacity = 1;
+        }
+      });
+    };
+    const onLeave = () => { if (ref.current) ref.current.style.opacity = 0; };
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseout', onLeave);
+    return () => { window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseout', onLeave); cancelAnimationFrame(frame); };
+  }, []);
+  return <div ref={ref} className="cursor-spotlight" aria-hidden="true" />;
+}
+
+function WordReveal({ children, className = '', as: Tag = 'span' }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { threshold: 0.2 });
+  const text = typeof children === 'string' ? children : '';
+  if (!text) return <Tag className={className} ref={ref}>{children}</Tag>;
+  const words = text.split(' ');
+  return (
+    <Tag ref={ref} className={'word-reveal ' + className + (inView ? ' inView' : '')}>
+      {words.map((w, i) => (
+        <span key={i} className="wr-word" style={{ transitionDelay: (i * 70) + 'ms' }}>
+          {w}{i < words.length - 1 ? ' ' : ''}
+        </span>
+      ))}
+    </Tag>
+  );
+}
+
+const MARQUEE_ITEMS = [
+  'Python', 'FastAPI', 'React', 'JavaScript', 'TypeScript', 'MongoDB', 'SQL Server',
+  'Docker', 'Linux', 'nginx', 'Cloudflare', 'Git', 'GitHub', 'Tailwind CSS',
+  'REST APIs', 'JWT', 'Pandas', 'NumPy', 'OpenAI API', 'LangChain', 'Sage Evolution',
+  'OEE', 'MES / ERP', 'Production Automation',
+];
+
+function MarqueeStrip() {
+  return (
+    <div className="marquee" aria-hidden="true">
+      <div className="marquee-track">
+        {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map((item, i) => (
+          <span className="marquee-item" key={i}>
+            <span className="marquee-dot" />{item}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function TiltCard({ children, intensity = 6, className = '', tag: Tag = 'div', ...rest }) {
+  const ref = useRef(null);
+  const onMove = (e) => {
+    if (!ref.current) return;
+    if (matchMedia('(hover: none)').matches) return;
+    const r = ref.current.getBoundingClientRect();
+    const x = ((e.clientX - r.left) / r.width - 0.5) * intensity;
+    const y = ((e.clientY - r.top) / r.height - 0.5) * intensity;
+    ref.current.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+    ref.current.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+    ref.current.style.transform = `perspective(1200px) rotateY(${-x.toFixed(2)}deg) rotateX(${y.toFixed(2)}deg) translateY(-3px)`;
+  };
+  const reset = () => { if (ref.current) ref.current.style.transform = ''; };
+  return (
+    <Tag ref={ref} onMouseMove={onMove} onMouseLeave={reset} className={className} {...rest}>
       {children}
     </Tag>
   );
@@ -625,7 +725,7 @@ function About() {
     <section id="about" className="section container">
       <Reveal className="section-head">
         <span className="section-tag">01 - About</span>
-        <h2>I sit between the factory floor and the keyboard.</h2>
+        <h2><WordReveal>I sit between the factory floor and the keyboard.</WordReveal></h2>
       </Reveal>
       <div className="about-grid">
         <Reveal className="about-copy">
@@ -735,7 +835,7 @@ function Experience({ view }) {
     <section id="experience" className="section container">
       <Reveal className="section-head">
         <span className="section-tag">02 - Experience</span>
-        <h2>A short career, but a wide one.</h2>
+        <h2><WordReveal>A short career, but a wide one.</WordReveal></h2>
       </Reveal>
       <ol className="timeline">
         {items.map((e, i) => (
@@ -802,15 +902,8 @@ const PROJECTS = [
 ];
 
 function ProjectCard({ p }) {
-  const ref = useRef(null);
-  const onMove = (e) => {
-    if (!ref.current) return;
-    const r = ref.current.getBoundingClientRect();
-    ref.current.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
-    ref.current.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
-  };
   return (
-    <article ref={ref} onMouseMove={onMove} className={'project' + (p.featured ? ' featured' : '')}>
+    <TiltCard tag="article" intensity={5} className={'project' + (p.featured ? ' featured' : '')}>
       <div className="project-meta">
         <span className="project-kind">{p.kind}</span>
         <span className="project-year">{p.year}</span>
@@ -838,7 +931,7 @@ function ProjectCard({ p }) {
           ))}
         </div>
       )}
-    </article>
+    </TiltCard>
   );
 }
 
@@ -848,7 +941,7 @@ function Projects({ view }) {
     <section id="projects" className="section container">
       <Reveal className="section-head">
         <span className="section-tag">03 - Selected Work</span>
-        <h2>Projects where code met the factory.</h2>
+        <h2><WordReveal>Projects where code met the factory.</WordReveal></h2>
       </Reveal>
       <Reveal stagger className="projects-grid">
         {items.map((p) => <ProjectCard key={p.title} p={p} />)}
@@ -913,7 +1006,7 @@ function Skills({ view }) {
     <section id="skills" className="section container">
       <Reveal className="section-head">
         <span className="section-tag">04 - Skills</span>
-        <h2>What I bring to a team.</h2>
+        <h2><WordReveal>What I bring to a team.</WordReveal></h2>
       </Reveal>
       <Reveal stagger className="skills-grid">
         {items.map((s) => <SkillCard key={s.title} s={s} />)}
@@ -984,10 +1077,13 @@ function App() {
 
   return (
     <Fragment>
+      <ScrollProgress />
+      <CursorSpotlight />
       <Nav />
       <main>
         <Hero view={view} setView={setView} />
         <Stats view={view} />
+        <MarqueeStrip />
         <StackChips />
         <About />
         <Experience view={view} />
