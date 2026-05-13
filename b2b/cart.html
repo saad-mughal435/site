@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#16314f" />
+<title>Cart - Anvil Supply Co.</title>
+<meta name="robots" content="noindex" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%2316314f'/%3E%3Ctext x='50%25' y='66%25' text-anchor='middle' font-family='JetBrains Mono,monospace' font-weight='700' font-size='38' fill='%23fff'%3EA%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/shop.css" />
+</head>
+<body>
+
+<div id="nav-host"></div>
+
+<main>
+  <section class="container" style="padding-top:28px;">
+    <h1>Cart</h1>
+    <p style="color:var(--ink-soft); margin-top:4px;" id="cart-subtitle">Loading...</p>
+  </section>
+
+  <section class="container" style="padding:18px 22px 60px;">
+    <div id="cart-root">
+      <div style="padding:60px 0; text-align:center; color:var(--ink-soft);">Loading...</div>
+    </div>
+  </section>
+</main>
+
+<div id="footer-host"></div>
+
+<script src="js/data.js"></script>
+<script src="js/mock-api.js"></script>
+<script src="js/app.js"></script>
+<script>
+(function () {
+  document.addEventListener('DOMContentLoaded', render);
+
+  async function render() {
+    const root = document.getElementById('cart-root');
+    const subtitle = document.getElementById('cart-subtitle');
+    const data = await fetch('/b2b/api/cart').then(r => r.json());
+
+    if (!data.lines.length) {
+      subtitle.textContent = '';
+      root.innerHTML = `
+        <div class="cart-empty">
+          <h2>Cart is empty.</h2>
+          <p>Add SKUs from the catalog or paste a SKU list to bulk-add.</p>
+          <a href="catalog.html" class="btn btn-primary">Browse catalog</a>
+        </div>`;
+      return;
+    }
+
+    subtitle.textContent = `${data.lines.length} line(s) - ${data.lines.reduce((s,l)=>s+l.qty,0)} units total`;
+
+    root.innerHTML = `
+      <div class="cart-layout">
+        <div class="cart-card">
+          ${data.lines.map(l => `
+            <div class="cart-row" data-line="${l.product_id}">
+              <div class="img">${window.skuMark(l.product.sku)}</div>
+              <div>
+                <div class="sku">${l.product.sku}</div>
+                <div class="name">${l.product.name}</div>
+                <div class="blurb">${l.product.short_desc}</div>
+              </div>
+              <div class="qty">
+                <input type="number" min="0" step="${l.product.pack_multiple}" value="${l.qty}" data-qty>
+                <div class="hint">step ${l.product.pack_multiple} &middot; MOQ ${l.product.moq}</div>
+              </div>
+              <div class="price">
+                <strong>${window.formatMoney(l.line_total)}</strong>
+                <div style="font-size:11.5px; color:var(--ink-mute);">${window.formatMoney(l.unit_price)} ea</div>
+              </div>
+              <div class="actions">
+                <button class="btn-link danger" data-remove>Remove</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+
+        <aside class="cart-summary">
+          <h3>Order summary</h3>
+
+          <div class="freight-bar">
+            <div class="freight-bar-text">
+              ${data.free_freight_eligible
+                ? '✓ Free freight unlocked'
+                : `Add <strong>${window.formatMoney(500 - data.after)}</strong> for free freight`}
+            </div>
+            <div class="freight-progress"><div class="freight-fill" style="width:${data.free_freight_progress}%;"></div></div>
+          </div>
+
+          <div class="po-field">
+            <label>PO number (required at checkout)</label>
+            <input type="text" placeholder="e.g. PO-2026-XXXX" id="po-number">
+          </div>
+
+          <div style="border-top:1px solid var(--line); padding-top:10px;"></div>
+          <div class="summary-row"><span>Subtotal</span><span style="font-family:var(--mono);">${window.formatMoney(data.subtotal)}</span></div>
+          ${data.discount > 0 ? `<div class="summary-row discount"><span>Contract discount (${data.contract_discount_pct.toFixed(0)}%)</span><span>- ${window.formatMoney(data.discount)}</span></div>` : ''}
+          <div class="summary-row"><span>Freight</span><span style="font-family:var(--mono);">${data.freight === 0 ? 'Free' : window.formatMoney(data.freight)}</span></div>
+          <div class="summary-row"><span>Tax (5%)</span><span style="font-family:var(--mono);">${window.formatMoney(data.tax)}</span></div>
+          <div class="summary-row total"><span>Total</span><span>${window.formatMoney(data.total)}</span></div>
+
+          <div class="summary-row terms" style="margin-top:8px;">
+            <span>Payment terms</span><span>${data.company.payment_terms}</span>
+          </div>
+          <div class="summary-row terms">
+            <span>Credit available</span><span>${window.formatMoney(Math.max(0, (data.company.credit_limit||0) - (data.company.open_balance||0)))}</span>
+          </div>
+
+          ${data.total >= 1000 ? `
+            <div class="approval-banner" style="margin-top:12px;">
+              ⚠ <strong>Approval required.</strong> Orders over $1,000 route to your approver.
+            </div>
+          ` : ''}
+
+          <a href="checkout.html" class="btn btn-primary btn-block btn-lg" style="margin-top:16px;" id="go-checkout">Proceed to checkout</a>
+          <a href="quote-request.html" class="btn btn-ghost btn-block" style="margin-top:6px; display:flex; justify-content:center;">Request a custom quote instead</a>
+        </aside>
+      </div>
+    `;
+
+    document.querySelectorAll('[data-line]').forEach(row => {
+      const id = row.dataset.line;
+      row.querySelector('[data-qty]').addEventListener('change', async (e) => {
+        const qty = Math.max(0, Number(e.target.value) || 0);
+        await fetch('/b2b/api/cart', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'set', product_id: id, qty }) });
+        render();
+      });
+      row.querySelector('[data-remove]').addEventListener('click', async () => {
+        await fetch('/b2b/api/cart', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'remove', product_id: id }) });
+        render();
+      });
+    });
+
+    const goBtn = document.getElementById('go-checkout');
+    goBtn.addEventListener('click', (e) => {
+      const po = document.getElementById('po-number').value.trim();
+      if (po) sessionStorage.setItem('anvil.po', po);
+    });
+  }
+})();
+</script>
+<script>window.bootstrapShell('catalog');</script>
+
+</body>
+</html>

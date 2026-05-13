@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#16314f" />
+<title>Request a quote - Anvil Supply Co.</title>
+<meta name="robots" content="noindex" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%2316314f'/%3E%3Ctext x='50%25' y='66%25' text-anchor='middle' font-family='JetBrains Mono,monospace' font-weight='700' font-size='38' fill='%23fff'%3EA%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/shop.css" />
+</head>
+<body>
+
+<div id="nav-host"></div>
+
+<main>
+  <section class="container" style="padding-top:28px;">
+    <h1>Request a quote</h1>
+    <p style="color:var(--ink-soft); margin-top:6px;">Need volume pricing, a custom pack, or freight to a non-standard zone? Drop the SKUs and quantities here. We respond same-day for in-stock items.</p>
+  </section>
+
+  <section class="container" style="padding-bottom:60px;">
+    <div class="checkout-layout">
+      <div class="checkout-main">
+        <div class="checkout-card">
+          <h2 class="step-heading">Items</h2>
+          <p style="color:var(--ink-soft); font-size:13px; margin-bottom:14px;">Add up to 20 lines. SKUs are validated against our catalog. If unknown, write a free-text description in the notes.</p>
+
+          <div id="quote-lines"></div>
+          <button class="btn-link" id="add-line" style="margin-top:10px;">+ Add another line</button>
+
+          <h3 class="step-subheading">Details</h3>
+          <div class="checkout-form-grid">
+            <div class="field full">
+              <label>Notes &middot; special requirements, freight zone, deadlines</label>
+              <textarea id="q-notes" placeholder="We need 500 BR-6204 by end of month, please freight to Sharjah DC."></textarea>
+            </div>
+            <div class="field">
+              <label>Expected delivery</label>
+              <input type="text" id="q-delivery" placeholder="e.g. within 14 days">
+            </div>
+            <div class="field">
+              <label>Budget range (optional)</label>
+              <input type="text" id="q-budget" placeholder="e.g. $5,000 - $8,000">
+            </div>
+          </div>
+
+          <div class="checkout-nav">
+            <a href="catalog.html" class="btn btn-ghost">&larr; Back to catalog</a>
+            <button class="btn btn-orange btn-lg" id="submit-quote">Submit quote request &rarr;</button>
+          </div>
+        </div>
+      </div>
+
+      <aside class="cart-summary" style="position:sticky; top:110px;">
+        <h3>What happens next?</h3>
+        <ol style="padding-left:18px; line-height:1.7; font-size:13.5px; color:var(--ink-2); margin-top:8px;">
+          <li>Our team reviews your list against current stock and contract pricing.</li>
+          <li>You get an email with line-by-line pricing within 1 business day (in-stock items: same day).</li>
+          <li>Pricing is locked for 14 days from issue.</li>
+          <li>Accept the quote and it converts to an order with one click.</li>
+        </ol>
+        <div style="border-top:1px solid var(--line); margin:14px 0; padding-top:14px; font-size:12.5px; color:var(--ink-mute);">
+          For demo purposes the quote is created instantly and listed in your account. No real email is sent.
+        </div>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<div id="footer-host"></div>
+
+<script src="js/data.js"></script>
+<script src="js/mock-api.js"></script>
+<script src="js/app.js"></script>
+<script>
+(function () {
+  let lines = [{ sku: '', qty: '' }];
+
+  document.addEventListener('DOMContentLoaded', init);
+
+  function init() {
+    const prefillSku = new URLSearchParams(window.location.search).get('sku');
+    if (prefillSku) lines[0].sku = prefillSku;
+    render();
+    document.getElementById('add-line').addEventListener('click', () => {
+      if (lines.length >= 20) { window.toast('Max 20 lines per quote', 'error'); return; }
+      lines.push({ sku: '', qty: '' });
+      render();
+    });
+    document.getElementById('submit-quote').addEventListener('click', submit);
+  }
+
+  function render() {
+    document.getElementById('quote-lines').innerHTML = `
+      <div class="quote-line" style="font-weight:600; color:var(--ink-mute); font-size:11.5px; text-transform:uppercase; letter-spacing:0.6px; border-bottom:0;">
+        <div>SKU or description</div>
+        <div>Quantity</div>
+        <div></div>
+      </div>
+      ${lines.map((l, i) => `
+        <div class="quote-line" data-idx="${i}">
+          <input type="text" placeholder="e.g. BR-6204 or 'industrial mop'" value="${l.sku}" data-sku>
+          <input type="number" placeholder="e.g. 100" value="${l.qty}" data-qty>
+          <button data-remove ${lines.length === 1 ? 'disabled style="opacity:0.3;"' : ''}>×</button>
+        </div>
+      `).join('')}
+    `;
+    document.querySelectorAll('.quote-line[data-idx]').forEach(row => {
+      const i = Number(row.dataset.idx);
+      row.querySelector('[data-sku]').addEventListener('input', (e) => { lines[i].sku = e.target.value; });
+      row.querySelector('[data-qty]').addEventListener('input', (e) => { lines[i].qty = e.target.value; });
+      row.querySelector('[data-remove]').addEventListener('click', () => {
+        lines.splice(i, 1);
+        if (!lines.length) lines = [{ sku: '', qty: '' }];
+        render();
+      });
+    });
+  }
+
+  async function submit() {
+    const items = lines.filter(l => l.sku.trim() && l.qty);
+    if (!items.length) { window.toast('Add at least one line', 'error'); return; }
+    const notes = document.getElementById('q-notes').value.trim();
+    const expected_delivery = document.getElementById('q-delivery').value.trim();
+    const budget_range = document.getElementById('q-budget').value.trim();
+
+    const btn = document.getElementById('submit-quote');
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+
+    const res = await fetch('/b2b/api/quotes', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items, notes, expected_delivery, budget_range }),
+    });
+    const data = await res.json();
+    if (data.success) {
+      window.showModal('Quote request submitted', `
+        <p style="font-size:14px; color:var(--ink-2); margin-bottom:14px;">
+          Quote <strong style="font-family:var(--mono);">${data.quote.id}</strong> is in our queue. ${items.length} line(s) submitted.
+        </p>
+        <p style="font-size:13.5px; color:var(--ink-soft); margin-bottom:18px;">
+          You will receive an email response within 1 business day. In the meantime, you can track this quote in your account.
+        </p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <a href="account.html#quotes" class="btn btn-primary">View my quotes</a>
+          <a href="catalog.html" class="btn btn-ghost">Back to catalog</a>
+        </div>
+      `);
+      lines = [{ sku: '', qty: '' }];
+      document.getElementById('q-notes').value = '';
+      document.getElementById('q-delivery').value = '';
+      document.getElementById('q-budget').value = '';
+      render();
+    } else {
+      window.toast('Submission failed', 'error');
+    }
+    btn.disabled = false;
+    btn.textContent = 'Submit quote request →';
+  }
+})();
+</script>
+<script>window.bootstrapShell('quote');</script>
+
+</body>
+</html>

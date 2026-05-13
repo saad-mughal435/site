@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#16314f" />
+<title>Order submitted - Anvil Supply Co.</title>
+<meta name="robots" content="noindex" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%2316314f'/%3E%3Ctext x='50%25' y='66%25' text-anchor='middle' font-family='JetBrains Mono,monospace' font-weight='700' font-size='38' fill='%23fff'%3EA%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/shop.css" />
+</head>
+<body>
+
+<div id="nav-host"></div>
+
+<main>
+  <section class="container" style="padding:32px 0;">
+    <div id="success-root">
+      <div style="padding:60px 0; text-align:center; color:var(--ink-soft);">Loading...</div>
+    </div>
+  </section>
+</main>
+
+<div id="footer-host"></div>
+
+<script src="js/data.js"></script>
+<script src="js/mock-api.js"></script>
+<script src="js/app.js"></script>
+<script>
+(function () {
+  document.addEventListener('DOMContentLoaded', init);
+
+  async function init() {
+    const root = document.getElementById('success-root');
+    const id = new URLSearchParams(window.location.search).get('order');
+    if (!id) {
+      root.innerHTML = `<div style="text-align:center; padding:40px 22px;">
+        <h2>No order to show.</h2>
+        <a href="catalog.html" class="btn btn-primary" style="margin-top:16px;">Back to catalog</a>
+      </div>`;
+      return;
+    }
+    const order = await fetch('/b2b/api/orders/' + encodeURIComponent(id)).then(r => r.ok ? r.json() : null);
+    if (!order) {
+      root.innerHTML = `<div style="text-align:center; padding:40px 22px;">
+        <h2>We can't find that order.</h2>
+        <a href="catalog.html" class="btn btn-primary">Back to catalog</a>
+      </div>`;
+      return;
+    }
+    const eta = new Date(order.eta || new Date(order.placed_at).getTime() + 5 * 24 * 3600 * 1000);
+
+    root.innerHTML = `
+      <div class="success-hero">
+        <div class="success-icon">${order.requires_approval ? '⏳' : '✓'}</div>
+        <h1>${order.requires_approval ? 'Submitted for approval.' : 'Order submitted.'}</h1>
+        <p>
+          ${order.requires_approval
+            ? `Order <strong>${order.id}</strong> is awaiting approval from <strong>${esc(order.approver_email || 'your approver')}</strong>. We'll notify you the moment it's released.`
+            : `Order <strong>${order.id}</strong> is in our queue. Expected ship date: <strong>${eta.toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}</strong>.`}
+        </p>
+        <div style="display:flex; gap:10px; justify-content:center; margin-top:18px; flex-wrap:wrap;">
+          <a href="account.html#orders" class="btn btn-primary">View my orders</a>
+          <a href="catalog.html" class="btn btn-ghost">Continue shopping</a>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="success-grid" style="margin-top:8px;">
+          <div class="success-card">
+            <h3>Items</h3>
+            <table class="product-table" style="margin:8px 0 12px;">
+              <thead><tr><th>SKU</th><th>Name</th><th>Qty</th><th style="text-align:right;">Line</th></tr></thead>
+              <tbody>
+                ${order.lines.map(l => `
+                  <tr>
+                    <td class="sku-cell">${l.sku}</td>
+                    <td>${esc(l.name || l.product?.name || '-')}</td>
+                    <td style="font-family:var(--mono);">${l.qty}</td>
+                    <td style="font-family:var(--mono); text-align:right; font-weight:600;">${window.formatMoney(l.line_total)}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+            <div style="border-top:1px solid var(--line); padding-top:10px;"></div>
+            <div class="summary-row"><span>Subtotal</span><span style="font-family:var(--mono);">${window.formatMoney(order.subtotal)}</span></div>
+            ${order.discount > 0 ? `<div class="summary-row discount"><span>Contract discount</span><span>- ${window.formatMoney(order.discount)}</span></div>` : ''}
+            <div class="summary-row"><span>Freight</span><span style="font-family:var(--mono);">${order.freight === 0 ? 'Free' : window.formatMoney(order.freight)}</span></div>
+            <div class="summary-row"><span>Tax</span><span style="font-family:var(--mono);">${window.formatMoney(order.tax)}</span></div>
+            <div class="summary-row total"><span>Total</span><span>${window.formatMoney(order.total)}</span></div>
+          </div>
+
+          <div class="success-card">
+            <h3>Order references</h3>
+            <p><strong>Order:</strong> <code>${order.id}</code></p>
+            <p><strong>PO:</strong> <code>${esc(order.po_number || '-')}</code></p>
+            <p><strong>Status:</strong> <span class="badge ${order.requires_approval ? 'badge-amber' : 'badge-navy'}">${order.status.replace(/_/g, ' ')}</span></p>
+            <p><strong>Terms:</strong> ${esc(order.payment_terms)}</p>
+
+            <h3 style="margin-top:18px;">Ship to</h3>
+            <p><strong>${esc(order.ship_to.label)}</strong></p>
+            <p>${esc(order.ship_to.line1)}</p>
+            <p>${esc(order.ship_to.city)}, ${esc(order.ship_to.country)}</p>
+
+            <h3 style="margin-top:18px;">Status timeline</h3>
+            <div class="status-timeline">
+              <div class="status-step done"><div class="status-dot"></div><div><strong>Submitted</strong><div class="status-time">${new Date(order.placed_at).toLocaleString()}</div></div></div>
+              ${order.requires_approval
+                ? '<div class="status-step"><div class="status-dot"></div><div><strong>Approval pending</strong><div class="status-time">Awaiting approver action</div></div></div>'
+                : '<div class="status-step done"><div class="status-dot"></div><div><strong>Approved</strong><div class="status-time">Auto-approved (under threshold)</div></div></div>'}
+              <div class="status-step"><div class="status-dot"></div><div><strong>Packed</strong><div class="status-time">Within 1-2 business days</div></div></div>
+              <div class="status-step"><div class="status-dot"></div><div><strong>Shipped</strong><div class="status-time">Tracking emailed</div></div></div>
+              <div class="status-step"><div class="status-dot"></div><div><strong>Delivered</strong><div class="status-time">${eta.toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}</div></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align:center; margin-top:32px; padding:18px; background:var(--surface); border:1px solid var(--line); border-radius:var(--r-lg); max-width:760px; margin-left:auto; margin-right:auto;">
+          <p style="font-size:13px; color:var(--ink-soft);">
+            This is a portfolio demo for <strong>Saad Mughal</strong>. No real order has been created, no email has been sent, no shipment will be made.
+            The same architecture (catalog → cart → multi-step checkout → approval workflow → admin) can be wired to a real ERP.
+          </p>
+        </div>
+      </div>
+    `;
+  }
+
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+})();
+</script>
+<script>window.bootstrapShell();</script>
+
+</body>
+</html>
