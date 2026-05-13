@@ -1,0 +1,54 @@
+name: Lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  prettier:
+    name: Prettier check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Prettier
+        run: npm install --no-save prettier@^3.3.0
+
+      - name: Run Prettier (non-blocking, report-only)
+        run: npx prettier --check "**/*.{html,css,js,json,md}" --ignore-path .gitignore || true
+
+  html-validate:
+    name: HTML validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install html-validate
+        run: npm install --no-save html-validate@^9
+
+      - name: Validate top-level HTML
+        run: |
+          npx html-validate index.html contact.html demo.html || true
+
+  links:
+    name: Link check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check internal links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --offline --no-progress "*.html" "*.md"
+          fail: false

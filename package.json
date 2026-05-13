@@ -1,0 +1,43 @@
+{
+  "name": "saadm.dev",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Personal portfolio for Saad - Full-Stack Developer in Dubai. Static site (HTML + React via CDN + Vanilla CSS), deployed on Cloudflare Pages.",
+  "homepage": "https://saadm.dev/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/saad-mughal435/site.git"
+  },
+  "author": {
+    "name": "Saad",
+    "email": "saad@saadm.dev",
+    "url": "https://saadm.dev/"
+  },
+  "license": "MIT",
+  "keywords": [
+    "portfolio",
+    "personal-website",
+    "developer-portfolio",
+    "react",
+    "python",
+    "fastapi",
+    "mongodb",
+    "dubai-developer",
+    "saad"
+  ],
+  "scripts": {
+    "dev": "python -m http.server 8000 --bind 127.0.0.1",
+    "serve": "python -m http.server 8000 --bind 127.0.0.1",
+    "start": "python -m http.server 8000 --bind 127.0.0.1",
+    "format": "prettier --write \"**/*.{html,css,js,json,md}\" --ignore-path .gitignore",
+    "format:check": "prettier --check \"**/*.{html,css,js,json,md}\" --ignore-path .gitignore",
+    "validate": "echo \"Static site - no build step. Validation runs in CI.\"",
+    "preview": "echo \"Open http://127.0.0.1:8000 after running 'npm run dev'\""
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.0"
+  }
+}
