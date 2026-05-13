@@ -1,0 +1,16 @@
+﻿{
+  "menu": {
+    "title": "QC MENU",
+    "tabs": [
+      "cover_page",
+      "picking_sheet",
+      "mixing",
+      "tank_cip",
+      "filler_mixer_cip",
+      "qc_report",
+      "batch_record",
+      "sample",
+      "seam"
+    ]
+  }
+}

@@ -1,0 +1,1591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MES/ERP Demo — Muhammad Saad</title>
+<meta name="description" content="Interactive walkthrough of the MES/ERP system built by Muhammad Saad. Every value here is fabricated; this is structure and functionality only." />
+<meta name="robots" content="noindex" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="demo.css" />
+</head>
+<body>
+
+<!-- ================= NAV ================= -->
+<header class="nav no-print">
+  <div class="container nav-inner">
+    <a href="index.html#top" class="logo">
+      <span class="logo-mark">MS</span>
+      <span class="logo-text">Muhammad Saad</span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html#about">About</a>
+      <a href="index.html#experience">Experience</a>
+      <a href="index.html#projects">Projects</a>
+      <a href="demo.html" class="active">Demo</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <a class="nav-cta" href="contact.html">Get in touch</a>
+  </div>
+</header>
+
+<!-- ================= BANNER ================= -->
+<div class="demo-banner no-print">
+  <div class="container demo-banner-inner">
+    <span class="demo-badge">DEMO MODE</span>
+    <span class="demo-banner-text">
+      <strong>Everything below is fabricated.</strong>
+      Customers, products, recipes, prices, batch numbers and document content are placeholders.
+      The structure, workflows, menus and PDF document templates reflect the real application.
+    </span>
+  </div>
+</div>
+
+<!-- ================= INTRO ================= -->
+<section class="container demo-intro no-print">
+  <span class="section-tag">Project walkthrough</span>
+  <h1 class="hero-title" style="font-size:clamp(30px,3.8vw,46px); margin-top:10px;">
+    The MES / ERP system <span class="grad">behind the factory floor.</span>
+  </h1>
+  <p class="hero-sub">
+    A faithful walkthrough of the enterprise application I designed and built for an automated
+    beverage plant. Click any sidebar item to tour a module; click the <em>ⓘ How it works</em>
+    button inside a module to read its documentation; click <em>Generate PDF</em> on any record to
+    see a print-ready document and save it.
+  </p>
+
+  <div class="demo-meta">
+    <div class="demo-meta-item">
+      <div class="demo-meta-k">Stack</div>
+      <div class="demo-meta-v">Python · FastAPI · MongoDB · Vanilla JS</div>
+    </div>
+    <div class="demo-meta-item">
+      <div class="demo-meta-k">Role</div>
+      <div class="demo-meta-v">Sole designer &amp; developer</div>
+    </div>
+    <div class="demo-meta-item">
+      <div class="demo-meta-k">Modules</div>
+      <div class="demo-meta-v">20+ integrated areas</div>
+    </div>
+    <div class="demo-meta-item">
+      <div class="demo-meta-k">Documents</div>
+      <div class="demo-meta-v">6 PDF templates · all viewable below</div>
+    </div>
+  </div>
+
+  <div class="hero-cta" style="margin-top:28px;">
+    <a class="btn btn-primary" href="/app/index.html" target="_blank" rel="noopener">
+      Launch the live app <span class="arrow">↗</span>
+    </a>
+    <a class="btn btn-ghost" href="#app-frame">View static walkthrough</a>
+  </div>
+  <p style="font-family:var(--mono); font-size:12.5px; color:var(--fg-mute); margin-top:10px;">
+    The live app runs the real frontend, fully disconnected — no Mongo, no Sage, no VM, no network.
+    Auto-logs you in as admin · all data is placeholder · realistic shortfall and calculator scenarios.
+  </p>
+</section>
+
+<!-- ================= APP SHELL ================= -->
+<section id="app-frame" class="container app-frame no-print">
+
+  <div class="window-chrome">
+    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+    <div class="window-url">
+      <span class="url-lock">⌬</span>
+      <span class="url-text">app.demo.local — Plant Operations · Demo</span>
+    </div>
+    <div class="window-user">demo.user · Supervisor</div>
+  </div>
+
+  <div class="app-shell">
+
+    <!-- ============ SIDEBAR ============ -->
+    <aside class="app-sidebar">
+      <div class="brand">
+        <div class="brand-mark">DP</div>
+        <div>
+          <div class="brand-name">Demo Plant</div>
+          <div class="brand-env">DEMO · v1.0.0</div>
+        </div>
+      </div>
+
+      <div class="app-search">
+        <input type="text" placeholder="Search records…" disabled />
+        <span class="hint">⌘K</span>
+      </div>
+
+      <nav class="app-nav">
+
+        <div class="nav-group">
+          <div class="app-nav-section">Operations</div>
+          <a class="app-nav-link active" data-view="dashboard"><span class="ico">▦</span>Dashboard</a>
+          <a class="app-nav-link" data-view="jobs"><span class="ico">⚙</span>Job Orders</a>
+          <a class="app-nav-link" data-view="production"><span class="ico">▶</span>Production Control</a>
+          <a class="app-nav-link" data-view="recipes"><span class="ico">⚗</span>Recipes</a>
+          <a class="app-nav-link" data-view="mixing"><span class="ico">◉</span>Mixing &amp; CIP</a>
+          <a class="app-nav-link" data-view="qc"><span class="ico">✓</span>Quality Control</a>
+          <a class="app-nav-link" data-view="yield"><span class="ico">∆</span>Yield</a>
+        </div>
+
+        <div class="nav-group">
+          <div class="app-nav-section">Inventory</div>
+          <a class="app-nav-link" data-view="inventory"><span class="ico">▥</span>Stock</a>
+          <a class="app-nav-link" data-view="grn"><span class="ico">⬇</span>Goods Receipt (GRN)</a>
+          <a class="app-nav-link" data-view="rmorders"><span class="ico">⌬</span>Raw Material Orders</a>
+        </div>
+
+        <div class="nav-group">
+          <div class="app-nav-section">Sales &amp; Dispatch</div>
+          <a class="app-nav-link" data-view="quotations"><span class="ico">▤</span>Quotations</a>
+          <a class="app-nav-link" data-view="pi"><span class="ico">▦</span>Performa Invoice</a>
+          <a class="app-nav-link" data-view="dispatch"><span class="ico">▻</span>Dispatch</a>
+        </div>
+
+        <div class="nav-group">
+          <div class="app-nav-section">Procurement</div>
+          <a class="app-nav-link" data-view="suppliers"><span class="ico">◎</span>Suppliers</a>
+          <a class="app-nav-link" data-view="po"><span class="ico">▢</span>Purchase Orders</a>
+        </div>
+
+        <div class="nav-group">
+          <div class="app-nav-section">Finance</div>
+          <a class="app-nav-link" data-view="accounting"><span class="ico">$</span>Accounts &amp; Vouchers</a>
+          <a class="app-nav-link" data-view="sage"><span class="ico">≣</span>Sage Entries</a>
+          <a class="app-nav-link" data-view="forecast"><span class="ico">∼</span>Forecast</a>
+          <a class="app-nav-link" data-view="customs"><span class="ico">▣</span>Customs / FTA</a>
+        </div>
+
+        <div class="nav-group">
+          <div class="app-nav-section">System</div>
+          <a class="app-nav-link" data-view="documents"><span class="ico">📄</span>Documents</a>
+          <a class="app-nav-link" data-view="reporting"><span class="ico">▤</span>Reports</a>
+          <a class="app-nav-link" data-view="settings"><span class="ico">⚙</span>Settings</a>
+        </div>
+
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="sidebar-help">
+          <strong>Demo data only</strong><br/>
+          Click any module on the left. Use <em>ⓘ How it works</em> for module docs.
+          <em>Generate PDF</em> opens a printable document.
+        </div>
+      </div>
+    </aside>
+
+    <!-- ============ MAIN ============ -->
+    <main class="app-main">
+
+      <!-- ====== DASHBOARD ====== -->
+      <section class="view active" id="view-dashboard">
+        <div class="view-head">
+          <div>
+            <div class="crumb">Operations / Dashboard</div>
+            <h2>Plant overview</h2>
+          </div>
+          <div class="view-actions">
+            <button class="btn-mini" data-info="dashboard">ⓘ How it works</button>
+            <button class="btn-mini">Today</button>
+            <button class="btn-mini active">This shift</button>
+            <button class="btn-mini">Custom</button>
+          </div>
+        </div>
+
+        <div class="info-panel" id="info-dashboard" hidden>
+          <h4>About the Dashboard</h4>
+          <p>The Dashboard is a read-only aggregated view of every other module — production, QC, inventory, finance. It refreshes from the same MongoDB collections the operational modules write to, so what you see here is the same data, summarised. It's the first screen supervisors open at the start of each shift.</p>
+          <ul class="info-list">
+            <li><strong>Reads from:</strong> Job Orders, Production batches, QC results, Inventory, Vouchers</li>
+            <li><strong>Refresh:</strong> live (polled every 15 s) for line status; hourly for finance metrics</li>
+            <li><strong>Used by:</strong> Plant Manager, Shift Supervisor, Production Planner</li>
+          </ul>
+        </div>
+
+        <div class="kpi-row">
+          <div class="kpi-card"><div class="kpi-lbl">Active JOs</div><div class="kpi-val">1</div><div class="kpi-trend up">▲ 0% vs prev</div></div>
+          <div class="kpi-card"><div class="kpi-lbl">OEE Line A</div><div class="kpi-val">1<span class="kpi-unit">%</span></div><div class="kpi-trend up">▲ target 85%</div></div>
+          <div class="kpi-card"><div class="kpi-lbl">Units / shift</div><div class="kpi-val">1</div><div class="kpi-trend">▬ flat</div></div>
+          <div class="kpi-card"><div class="kpi-lbl">QC pending</div><div class="kpi-val">1</div><div class="kpi-trend down">▼ 0</div></div>
+          <div class="kpi-card"><div class="kpi-lbl">Open POs</div><div class="kpi-val">AED&nbsp;1</div><div class="kpi-trend up">▲ —</div></div>
+          <div class="kpi-card"><div class="kpi-lbl">Downtime (min)</div><div class="kpi-val">1</div><div class="kpi-trend down">▼ —</div></div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head"><h3>Production trend</h3><div class="card-sub">last 7 shifts · demo</div></div>
+            <div class="chart">
+              <div class="bar"><span style="--h:30%"></span><b>S-1</b></div>
+              <div class="bar"><span style="--h:55%"></span><b>S-2</b></div>
+              <div class="bar"><span style="--h:42%"></span><b>S-3</b></div>
+              <div class="bar"><span style="--h:70%"></span><b>S-4</b></div>
+              <div class="bar"><span style="--h:48%"></span><b>S-5</b></div>
+              <div class="bar"><span style="--h:62%"></span><b>S-6</b></div>
+              <div class="bar"><span style="--h:80%"></span><b>now</b></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h3>Recent activity</h3><div class="card-sub">latest 6</div></div>
+            <ul class="activity-list">
+              <li><span class="act-time">just now</span><span class="act-tag tag-prod">PROD</span><span class="act-msg">Batch <code>DEMO-0001</code> closed on Line A</span></li>
+              <li><span class="act-time">3m ago</span><span class="act-tag tag-qc">QC</span><span class="act-msg">Sample passed for <code>DEMO-0001</code></span></li>
+              <li><span class="act-time">11m ago</span><span class="act-tag tag-inv">INV</span><span class="act-msg">RM <code>SUGAR-X</code> received · qty <strong>1</strong></span></li>
+              <li><span class="act-time">22m ago</span><span class="act-tag tag-acc">ACC</span><span class="act-msg">Voucher <code>BPV-0001</code> posted · <strong>AED 1.00</strong></span></li>
+              <li><span class="act-time">38m ago</span><span class="act-tag tag-prod">PROD</span><span class="act-msg">Job order <code>JO-DEMO-1</code> opened</span></li>
+              <li><span class="act-time">1h ago</span><span class="act-tag tag-dis">DSP</span><span class="act-msg">Dispatch <code>DA-0001</code> printed</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====== JOB ORDERS ====== -->
+      <section class="view" id="view-jobs">
+        <div class="view-head">
+          <div><div class="crumb">Operations / Job Orders</div><h2>Job orders</h2></div>
+          <div class="view-actions">
+            <button class="btn-mini" data-info="jobs">ⓘ How it works</button>
+            <button class="btn-mini active">All</button>
+            <button class="btn-mini">Open</button>
+            <button class="btn-mini">In Production</button>
+            <button class="btn-mini">Closed</button>
+            <button class="btn-mini primary" data-modal="new-jo">+ New JO</button>
+          </div>
+        </div>
+
+        <div class="info-panel" id="info-jobs" hidden>
+          <h4>About Job Orders</h4>
+          <p>A Job Order (JO) is the production planning record — a customer order, internal stock build, or forecast triggers a JO for a specific product, quantity, and line. The JO carries through the entire lifecycle: picking sheet → mixing → filling → packaging → QC → dispatch. Every batch produced is linked to a JO.</p>
+          <ul class="info-list">
+            <li><strong>Inputs:</strong> Customer order, sales forecast, or stock build</li>
+            <li><strong>Workflow:</strong> Draft → Released → In Production → Closed</li>
+            <li><strong>Outputs:</strong> Picking sheet PDF, Production batches, QC records, FG to inventory</li>
+            <li><strong>Integrations:</strong> Recipes (BOM), Inventory (stock reservation), Sage (COGS on close)</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>Job orders list</h3><div class="card-sub">demo records · all values are placeholders</div></div>
+          <table class="data-table">
+            <thead><tr><th>JO #</th><th>Customer</th><th>Product</th><th>Qty</th><th>Unit cost</th><th>Total</th><th>Line</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+              <tr>
+                <td><code>JO-DEMO-1</code></td><td>Demo Customer Ltd</td><td>Sample Beverage 500 mL</td>
+                <td>1</td><td>AED 1.00</td><td>AED 1.00</td><td>Line A</td>
+                <td><span class="pill pill-blue">In Production</span></td>
+                <td><button class="link-btn" data-pdf="job-order" data-jo="JO-DEMO-1">Generate PDF</button></td>
+              </tr>
+              <tr>
+                <td><code>JO-DEMO-2</code></td><td>Acme Beverages</td><td>Sample Beverage 1 L</td>
+                <td>1</td><td>AED 1.00</td><td>AED 1.00</td><td>Line A</td>
+                <td><span class="pill pill-amber">Queued</span></td>
+                <td><button class="link-btn" data-pdf="job-order" data-jo="JO-DEMO-2">Generate PDF</button></td>
+              </tr>
+              <tr>
+                <td><code>JO-DEMO-3</code></td><td>Placeholder FZE</td><td>Sample Beverage 250 mL</td>
+                <td>1</td><td>AED 1.00</td><td>AED 1.00</td><td>Line B</td>
+                <td><span class="pill pill-green">Closed</span></td>
+                <td><button class="link-btn" data-pdf="job-order" data-jo="JO-DEMO-3">Generate PDF</button></td>
+              </tr>
+              <tr>
+                <td><code>JO-DEMO-4</code></td><td>Sample Distribution Co</td><td>Sample Beverage 500 mL</td>
+                <td>1</td><td>AED 1.00</td><td>AED 1.00</td><td>Line A</td>
+                <td><span class="pill pill-grey">Draft</span></td>
+                <td><button class="link-btn" data-pdf="job-order" data-jo="JO-DEMO-4">Generate PDF</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head"><h3><code>JO-DEMO-1</code> · header</h3><div class="card-sub">opened 2026-05-13</div></div>
+            <dl class="kv-grid">
+              <dt>Customer</dt><dd>Demo Customer Ltd</dd>
+              <dt>Product</dt><dd>Sample Beverage 500 mL</dd>
+              <dt>Recipe</dt><dd>Recipe-A1 · v1</dd>
+              <dt>Order qty</dt><dd>1 case</dd>
+              <dt>Planned start</dt><dd>2026-05-13 08:00</dd>
+              <dt>Line</dt><dd>Line A</dd>
+              <dt>Estimated cost</dt><dd>AED 1.00</dd>
+              <dt>Status</dt><dd><span class="pill pill-blue">In Production</span></dd>
+            </dl>
+            <div class="row-actions">
+              <button class="btn-mini" data-pdf="job-order" data-jo="JO-DEMO-1">📄 Job Order PDF</button>
+              <button class="btn-mini" data-pdf="picking-sheet" data-jo="JO-DEMO-1">📄 Picking Sheet PDF</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h3>Picking sheet</h3><div class="card-sub">RMs required for <code>JO-DEMO-1</code></div></div>
+            <table class="data-table compact">
+              <thead><tr><th>RM</th><th>Description</th><th>Req</th><th>Stock</th><th>Cost</th></tr></thead>
+              <tbody>
+                <tr><td><code>RM-WATER</code></td><td>Demo Water</td><td>1 L</td><td>1</td><td>AED 1</td></tr>
+                <tr><td><code>RM-SUGAR</code></td><td>Demo Sugar</td><td>1 kg</td><td>1</td><td>AED 1</td></tr>
+                <tr><td><code>RM-FLAVOR</code></td><td>Demo Flavor X</td><td>1 mL</td><td>1</td><td>AED 1</td></tr>
+                <tr><td><code>RM-PREFORM</code></td><td>PET preform 500 mL</td><td>1</td><td>1</td><td>AED 1</td></tr>
+                <tr><td><code>RM-CAP</code></td><td>Bottle cap</td><td>1</td><td>1</td><td>AED 1</td></tr>
+                <tr><td><code>RM-LABEL</code></td><td>Shrink label</td><td>1</td><td>1</td><td>AED 1</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====== PRODUCTION CONTROL ====== -->
+      <section class="view" id="view-production">
+        <div class="view-head">
+          <div><div class="crumb">Operations / Production Control</div><h2>Production control</h2></div>
+          <div class="view-actions">
+            <button class="btn-mini" data-info="production">ⓘ How it works</button>
+            <button class="btn-mini active">Line A</button>
+            <button class="btn-mini">Line B</button>
+            <button class="btn-mini">Line C</button>
+          </div>
+        </div>
+
+        <div class="info-panel" id="info-production" hidden>
+          <h4>About Production Control</h4>
+          <p>The live nerve-centre during a shift. Operators record output, downtime, and quality holds against the active Job Order. The system computes OEE in real time (Availability × Performance × Quality), publishes batch records, and closes-out the JO when the planned quantity is reached.</p>
+          <ul class="info-list">
+            <li><strong>Reads:</strong> Active JO, Recipe, Line capacity</li>
+            <li><strong>Writes:</strong> Production batches, Downtime events, OEE snapshots</li>
+            <li><strong>Outputs:</strong> Batch record, OEE report, hand-off to QC</li>
+          </ul>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head"><h3>Line A · live status</h3><div class="card-sub">demo telemetry</div></div>
+            <ul class="status-list">
+              <li><span class="led led-g"></span>Blow molder · running</li>
+              <li><span class="led led-g"></span>Filler · running</li>
+              <li><span class="led led-y"></span>Checkmate · idle</li>
+              <li><span class="led led-g"></span>Variopac FS · running</li>
+              <li><span class="led led-g"></span>Palletizer · running</li>
+            </ul>
+            <div class="mini-stats">
+              <div><span>OEE</span><strong>1%</strong></div>
+              <div><span>Speed</span><strong>1 cpm</strong></div>
+              <div><span>Downtime</span><strong>1 min</strong></div>
+              <div><span>Output</span><strong>1 case</strong></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h3>Batch close form</h3><div class="card-sub">end-of-shift</div></div>
+            <div class="form-row">
+              <label>Active JO</label>
+              <input type="text" value="JO-DEMO-1" readonly />
+            </div>
+            <div class="form-row">
+              <label>Produced (cases)</label>
+              <input type="number" value="1" />
+            </div>
+            <div class="form-row">
+              <label>Rejected (cases)</label>
+              <input type="number" value="1" />
+            </div>
+            <div class="form-row">
+              <label>Downtime reason</label>
+              <select>
+                <option>None</option>
+                <option>Mechanical</option>
+                <option>Electrical</option>
+                <option>Quality hold</option>
+                <option>Material shortage</option>
+              </select>
+            </div>
+            <div class="row-actions"><button class="btn-mini primary">Close batch</button></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>Batches today</h3><div class="card-sub">demo</div></div>
+          <table class="data-table">
+            <thead><tr><th>Batch</th><th>JO</th><th>Product</th><th>Qty</th><th>Reject</th><th>OEE</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><code>DEMO-0001</code></td><td><code>JO-DEMO-1</code></td><td>Sample Beverage 500 mL</td><td>1</td><td>1</td><td>1%</td><td><span class="pill pill-green">Closed</span></td></tr>
+              <tr><td><code>DEMO-0002</code></td><td><code>JO-DEMO-2</code></td><td>Sample Beverage 1 L</td><td>1</td><td>1</td><td>1%</td><td><span class="pill pill-blue">In progress</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ====== RECIPES ====== -->
+      <section class="view" id="view-recipes">
+        <div class="view-head">
+          <div><div class="crumb">Operations / Recipes</div><h2>Recipe library</h2></div>
+          <div class="view-actions">
+            <button class="btn-mini" data-info="recipes">ⓘ How it works</button>
+            <button class="btn-mini">All versions</button>
+            <button class="btn-mini active">Released</button>
+            <button class="btn-mini primary">+ New recipe</button>
+          </div>
+        </div>
+
+        <div class="info-panel" id="info-recipes" hidden>
+          <h4>About Recipes</h4>
+          <p>The bill-of-materials and process steps for each product. Versioned — only one version is "released" per product at a time. Picking sheets, mixing operations, costing and QC specs all derive from the released version.</p>
+          <ul class="info-list">
+            <li><strong>Workflow:</strong> Draft → Review → Released (older versions archived)</li>
+            <li><strong>Drives:</strong> Picking sheet, Mixing instructions, Cost estimate, QC spec ranges</li>
+          </ul>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head"><h3>Recipe-A1 · Sample Beverage 500 mL</h3><div class="card-sub">v1 · released</div></div>
+            <table class="data-table compact">
+              <thead><tr><th>Step</th><th>Ingredient</th><th>Qty</th><th>UoM</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>Demo Water</td><td>1</td><td>L</td></tr>
+                <tr><td>2</td><td>Demo Sugar</td><td>1</td><td>kg</td></tr>
+                <tr><td>3</td><td>Demo Flavor X</td><td>1</td><td>mL</td></tr>
+                <tr><td>4</td><td>Demo Preservative</td><td>1</td><td>mL</td></tr>
+                <tr><td>5</td><td>Demo CO₂</td><td>1</td><td>g</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h3>Recipe-B2 · Sample Beverage 1 L</h3><div class="card-sub">v1 · released</div></div>
+            <table class="data-table compact">
+              <thead><tr><th>Step</th><th>Ingredient</th><th>Qty</th><th>UoM</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>Demo Water</td><td>1</td><td>L</td></tr>
+                <tr><td>2</td><td>Demo Sugar</td><td>1</td><td>kg</td></tr>
+                <tr><td>3</td><td>Demo Flavor Y</td><td>1</td><td>mL</td></tr>
+                <tr><td>4</td><td>Demo Preservative</td><td>1</td><td>mL</td></tr>
+                <tr><td>5</td><td>Demo CO₂</td><td>1</td><td>g</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====== MIXING ====== -->
+      <section class="view" id="view-mixing">
+        <div class="view-head">
+          <div><div class="crumb">Operations / Mixing &amp; CIP</div><h2>Mixing tanks &amp; CIP</h2></div>
+          <div class="view-actions">
+            <button class="btn-mini" data-info="mixing">ⓘ How it works</button>
+            <button class="btn-mini active">Tanks</button>
+            <button class="btn-mini">CIP cycles</button>
+            <button class="btn-mini">Operations log</button>
+          </div>
+        </div>
+
+        <div class="info-panel" id="info-mixing" hidden>
+          <h4>About Mixing &amp; CIP</h4>
+          <p>Tracks each mixing tank's contents, temperature, and lifecycle: charge → mix → hold → transfer → CIP. CIP (Clean-in-Place) cycles are sanitation washes; the system records each step and time so audits can trace any batch back to a clean tank.</p>
+          <ul class="info-list">
+            <li><strong>States:</strong> Idle · Charging · Mixing · Hold · Transferring · CIP · Ready</li>
+            <li><strong>Outputs:</strong> Mixing operations PDF, Tank CIP PDF (audit evidence)</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>Tank board</h3><div class="card-sub">demo state</div></div>
+          <div class="tanks">
+            <div class="tank">
+              <div class="tank-head">Tank&nbsp;1<span class="pill pill-blue">Mixing</span></div>
+              <div class="tank-fill"><span style="--f:60%"></span></div>
+              <div class="tank-meta">Recipe-A1 · 1 L · 1°C</div>
+            </div>
+            <div class="tank">
+              <div class="tank-head">Tank&nbsp;2<span class="pill pill-amber">CIP</span></div>
+              <div class="tank-fill"><span style="--f:0%"></span></div>
+              <div class="tank-meta">CIP cycle · step 1/4</div>
+            </div>
+            <div class="tank">
+              <div class="tank-head">Tank&nbsp;3<span class="pill pill-green">Ready</span></div>
+              <div class="tank-fill"><span style="--f:100%"></span></div>
+              <div class="tank-meta">Recipe-B2 · 1 L · 1°C</div>
+            </div>
+            <div class="tank">
+              <div class="tank-head">Tank&nbsp;4<span class="pill pill-grey">Idle</span></div>
+              <div class="tank-fill"><span style="--f:0%"></span></div>
+              <div class="tank-meta">—</div>
+            </div>
+          </div>
+          <div class="row-actions"><button class="btn-mini" data-pdf="mixing-ops">📄 Mixing Operations PDF</button></div>
+        </div>
+      </section>
+
+      <!-- ====== QC ====== -->
+      <section class="view" id="view-qc">
+        <div class="view-head">
+          <div><div class="crumb">Operations / Quality Control</div><h2>QC batch records</h2></div>
+          <div class="view-actions">
+            <button class="btn-mini" data-info="qc">ⓘ How it works</button>
+            <button class="btn-mini active">Pending</button>
+            <button class="btn-mini">Approved</button>
+            <button class="btn-mini">Rejected</button>
+          </div>
+        </div>
+
+        <div class="info-panel" id="info-qc" hidden>
+          <h4>About Quality Control</h4>
+          <p>Every production batch generates QC checks against the Recipe's spec ranges. The QC module captures sample measurements (Brix, pH, net content, cap torque, seam, carbonation, micro), flags out-of-spec results, and produces a Certificate of Analysis (QC Batch Report).</p>
+          <ul class="info-list">
+            <li><strong>Reads from:</strong> Production batches, Recipe QC spec</li>
+            <li><strong>Outputs:</strong> QC Batch Report PDF (Certificate of Analysis), seam check PDF, sample PDF</li>
+            <li><strong>Approvals:</strong> Two-level — QC Analyst → QC Manager</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>Batch <code>DEMO-0001</code> · QC sheet</h3><div class="card-sub">demo measurements</div></div>
+          <table class="data-table">
+            <thead><tr><th>Check</th><th>UoM</th><th>Min</th><th>Max</th><th>Measured</th><th>Result</th></tr></thead>
+            <tbody>
+              <tr><td>Brix</td><td>°Bx</td><td>1</td><td>1</td><td>1</td><td><span class="pill pill-green">PASS</span></td></tr>
+              <tr><td>pH</td><td>—</td><td>1</td><td>1</td><td>1</td><td><span class="pill pill-green">PASS</span></td></tr>
+              <tr><td>Net content</td><td>mL</td><td>1</td><td>1</td><td>1</td><td><span class="pill pill-green">PASS</span></td></tr>
+              <tr><td>Cap torque</td><td>lb·in</td><td>1</td><td>1</td><td>1</td><td><span class="pill pill-green">PASS</span></td></tr>
+              <tr><td>Seam thickness</td><td>mm</td><td>1</td><td>1</td><td>1</td><td><span class="pill pill-green">PASS</span></td></tr>
+              <tr><td>Carbonation</td><td>vol</td><td>1</td><td>1</td><td>1</td><td><span class="pill pill-amber">REVIEW</span></td></tr>
+            </tbody>
+          </table>
+          <div class="row-actions">
+            <button class="btn-mini" data-pdf="qc-report" data-batch="DEMO-0001">📄 QC Batch Report PDF</button>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head"><h3>Mixing checks</h3></div>
+            <ul class="check-list">
+              <li><span class="led led-g"></span>Ingredients verified</li>
+              <li><span class="led led-g"></span>Temperature in spec</li>
+              <li><span class="led led-g"></span>Mixing time recorded</li>
+              <li><span class="led led-y"></span>Operator sign-off pending</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-head"><h3>Tank CIP</h3></div>
+            <ul class="check-list">
+              <li><span class="led led-g"></span>Pre-rinse complete</li>
+              <li><span class="led led-g"></span>Caustic cycle complete</li>
+              <li><span class="led led-y"></span>Acid cycle in progress</li>
+              <li><span class="led led-grey"></span>Final rinse pending</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====== YIELD ====== -->
+      <section class="view" id="view-yield">
+        <div class="view-head">
+          <div><div class="crumb">Operations / Yield</div><h2>Yield analysis</h2></div>
+          <div class="view-actions">
+            <button class="btn-mini" data-info="yield">ⓘ How it works</button>
+            <button class="btn-mini active">By batch</button>
+            <button class="btn-mini">By product</button>
+            <button class="btn-mini">By line</button>
+          </div>
+        </div>
+
+        <div class="info-panel" id="info-yield" hidden>
+          <h4>About Yield</h4>
+          <p>Compares theoretical yield (from the Recipe) against actual produced quantity (from Production batches). Variance is broken down into mixing loss, fill loss, packaging loss, and rejects. Used by production planning to refine recipes and cost models.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>Yield by batch · last 5</h3></div>
+          <table class="data-table">
+            <thead><tr><th>Batch</th><th>Product</th><th>Theoretical</th><th>Actual</th><th>Variance</th><th>Yield %</th></tr></thead>
+            <tbody>
+              <tr><td><code>DEMO-0001</code></td><td>Sample Beverage 500 mL</td><td>1</td><td>1</td><td>0</td><td>100%</td></tr>
+              <tr><td><code>DEMO-0002</code></td><td>Sample Beverage 1 L</td><td>1</td><td>1</td><td>0</td><td>100%</td></tr>
+              <tr><td><code>DEMO-0003</code></td><td>Sample Beverage 250 mL</td><td>1</td><td>1</td><td>0</td><td>100%</td></tr>
+              <tr><td><code>DEMO-0004</code></td><td>Sample Beverage 500 mL</td><td>1</td><td>1</td><td>0</td><td>100%</td></tr>
+              <tr><td><code>DEMO-0005</code></td><td>Sample Beverage 1 L</td><td>1</td><td>1</td><td>0</td><td>100%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ====== INVENTORY ====== -->
+      <section class="view" id="view-inventory">
+        <div class="view-head">
+          <div><div class="crumb">Inventory / Stock</div><h2>Raw materials &amp; finished goods</h2></div>
+          <div class="view-actions">
+            <button class="btn-mini" data-info="inventory">ⓘ How it works</button>
+            <button class="btn-mini active">All</button>
+            <button class="btn-mini">RM</button>
+            <button class="btn-mini">FG</button>
+            <button class="btn-mini">Below reorder</button>
+          </div>
+        </div>
+
+        <div class="info-panel" id="info-inventory" hidden>
+          <h4>About Inventory</h4>
+          <p>Live stock balance for every Raw Material and Finished Good. Reservations are made automatically when a Job Order is released. Movements (GRN, picking, transfer, dispatch) post here; values are FIFO. Reorder points trigger alerts and feed RM Order suggestions.</p>
+          <ul class="info-list">
+            <li><strong>Costing:</strong> FIFO</li>
+            <li><strong>Reads from:</strong> GRN (in), Picking (out to production), Dispatch (out to customer)</li>
+            <li><strong>Writes to:</strong> Inventory ledger, Sage Inventory account</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>Stock items</h3><div class="card-sub">demo</div></div>
+          <table class="data-table">
+            <thead><tr><th>Code</th><th>Description</th><th>Type</th><th>On hand</th><th>Reserved</th><th>UoM</th><th>Unit cost</th><th>Value</th></tr></thead>
+            <tbody>
+              <tr><td><code>RM-WATER</code></td><td>Demo Water</td><td>RM</td><td>1</td><td>1</td><td>L</td><td>AED 1.00</td><td>AED 1.00</td></tr>
+              <tr><td><code>RM-SUGAR</code></td><td>Demo Sugar</td><td>RM</td><td>1</td><td>1</td><td>kg</td><td>AED 1.00</td><td>AED 1.00</td></tr>
+              <tr><td><code>RM-FLAVOR</code></td><td>Demo Flavor X</td><td>RM</td><td>1</td><td>1</td><td>mL</td><td>AED 1.00</td><td>AED 1.00</td></tr>
+              <tr><td><code>RM-PREFORM</code></td><td>PET preform 500 mL</td><td>RM</td><td>1</td><td>1</td><td>pcs</td><td>AED 1.00</td><td>AED 1.00</td></tr>
+              <tr><td><code>RM-CAP</code></td><td>Bottle cap</td><td>RM</td><td>1</td><td>1</td><td>pcs</td><td>AED 1.00</td><td>AED 1.00</td></tr>
+              <tr><td><code>RM-LABEL</code></td><td>Shrink label</td><td>RM</td><td>1</td><td>1</td><td>pcs</td><td>AED 1.00</td><td>AED 1.00</td></tr>
+              <tr><td><code>FG-500ML</code></td><td>Sample Beverage 500 mL</td><td>FG</td><td>1</td><td>0</td><td>case</td><td>AED 1.00</td><td>AED 1.00</td></tr>
+              <tr><td><code>FG-1L</code></td><td>Sample Beverage 1 L</td><td>FG</td><td>1</td><td>0</td><td>case</td><td>AED 1.00</td><td>AED 1.00</td></tr>
+              <tr class="tr-total"><td colspan="7"><strong>Inventory value</strong></td><td><strong>AED 8.00</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ====== GRN ====== -->
+      <section class="view" id="view-grn">
+        <div class="view-head">
+          <div><div class="crumb">Inventory / Goods Receipt</div><h2>Goods Receipt Notes (GRN)</h2></div>
+          <div class="view-actions">
+            <button class="btn-mini" data-info="grn">ⓘ How it works</button>
+            <button class="btn-mini primary">+ New GRN</button>
+          </div>
+        </div>
+
+        <div class="info-panel" id="info-grn" hidden>
+          <h4>About GRN</h4>
+          <p>The Goods Receipt Note records incoming materials from a supplier against an open PO. QC inspects and accepts/rejects; accepted qty posts to Inventory at the PO price (or actual invoice price if it differs).</p>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>GRN list</h3></div>
+          <table class="data-table">
+            <thead><tr><th>GRN #</th><th>Date</th><th>PO #</th><th>Supplier</th><th>Items</th><th>Value</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><code>GRN-0001</code></td><td>2026-05-13</td><td><code>PO-DEMO-1</code></td><td>Demo Supplier Co</td><td>1</td><td>AED 1.00</td><td><span class="pill pill-green">Posted</span></td></tr>
+              <tr><td><code>GRN-0002</code></td><td>2026-05-12</td><td><code>PO-DEMO-2</code></td><td>Acme Materials</td><td>1</td><td>AED 1.00</td><td><span class="pill pill-amber">Awaiting QC</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ====== RM ORDERS ====== -->
+      <section class="view" id="view-rmorders">
+        <div class="view-head">
+          <div><div class="crumb">Inventory / Raw Material Orders</div><h2>Raw material reorder</h2></div>
+          <div class="view-actions">
+            <button class="btn-mini" data-info="rmorders">ⓘ How it works</button>
+            <button class="btn-mini primary">Generate from forecast</button>
+          </div>
+        </div>
+
+        <div class="info-panel" id="info-rmorders" hidden>
+          <h4>About RM Orders</h4>
+          <p>Suggests reorder quantities by combining current stock, reorder point, lead time, and demand forecast. The output is a draft Purchase Order per supplier, ready for review and release.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>Suggested reorders</h3></div>
+          <table class="data-table">
+            <thead><tr><th>RM</th><th>Stock</th><th>Reorder pt</th><th>Lead time</th><th>Suggested qty</th><th>Supplier</th></tr></thead>
+            <tbody>
+              <tr><td><code>RM-SUGAR</code></td><td>1</td><td>1</td><td>1 day</td><td>1</td><td>Demo Supplier Co</td></tr>
+              <tr><td><code>RM-FLAVOR</code></td><td>1</td><td>1</td><td>1 day</td><td>1</td><td>Acme Materials</td></tr>
+            </tbody>
+          </table>
+          <div class="row-actions"><button class="btn-mini" data-pdf="rm-order">📄 Draft RM Order PDF</button></div>
+        </div>
+      </section>
+
+      <!-- ====== QUOTATIONS ====== -->
+      <section class="view" id="view-quotations">
+        <div class="view-head">
+          <div><div class="crumb">Sales / Quotations</div><h2>Customer quotations</h2></div>
+          <div class="view-actions">
+            <button class="btn-mini" data-info="quotations">ⓘ How it works</button>
+            <button class="btn-mini primary">+ New quotation</button>
+          </div>
+        </div>
+
+        <div class="info-panel" id="info-quotations" hidden>
+          <h4>About Quotations</h4>
+          <p>Customer pricing quotes generated against current cost + margin policy. Accepted quotes convert directly into Performa Invoices and Job Orders.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>Quotations</h3></div>
+          <table class="data-table">
+            <thead><tr><th>Quote #</th><th>Date</th><th>Customer</th><th>Product</th><th>Qty</th><th>Unit</th><th>Total</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><code>QT-0001</code></td><td>2026-05-13</td><td>Demo Customer Ltd</td><td>Sample Beverage 500 mL</td><td>1</td><td>AED 1.00</td><td>AED 1.00</td><td><span class="pill pill-amber">Sent</span></td></tr>
+              <tr><td><code>QT-0002</code></td><td>2026-05-12</td><td>Acme Beverages</td><td>Sample Beverage 1 L</td><td>1</td><td>AED 1.00</td><td>AED 1.00</td><td><span class="pill pill-green">Accepted</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ====== PERFORMA INVOICE ====== -->
+      <section class="view" id="view-pi">
+        <div class="view-head">
+          <div><div class="crumb">Sales / Performa Invoice</div><h2>Performa invoices</h2></div>
+          <div class="view-actions">
+            <button class="btn-mini" data-info="pi">ⓘ How it works</button>
+            <button class="btn-mini primary">+ New PI</button>
+          </div>
+        </div>
+
+        <div class="info-panel" id="info-pi" hidden>
+          <h4>About Performa Invoice</h4>
+          <p>A pro-forma invoice issued before goods ship — confirms what will be billed once the order is fulfilled. Used by the customer for advance payment, by us for AR forecasting.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>PI list</h3></div>
+          <table class="data-table">
+            <thead><tr><th>PI #</th><th>Date</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+              <tr><td><code>PI-0001</code></td><td>2026-05-13</td><td>Demo Customer Ltd</td><td>1</td><td>AED 1.00</td><td><span class="pill pill-blue">Issued</span></td><td><button class="link-btn" data-pdf="invoice" data-pi="PI-0001">Generate PDF</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ====== DISPATCH ====== -->
+      <section class="view" id="view-dispatch">
+        <div class="view-head">
+          <div><div class="crumb">Sales / Dispatch</div><h2>Outbound dispatch</h2></div>
+          <div class="view-actions">
+            <button class="btn-mini" data-info="dispatch">ⓘ How it works</button>
+            <button class="btn-mini primary">+ New dispatch</button>
+          </div>
+        </div>
+
+        <div class="info-panel" id="info-dispatch" hidden>
+          <h4>About Dispatch</h4>
+          <p>Plans the outbound load — links FG cases to a vehicle, prints a Delivery Advice + Gate Pass + Packing List, and posts the inventory movement. Drivers receive a printed gate pass; reception scans on arrival at customer.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>Dispatch DA-0001</h3></div>
+          <dl class="kv-grid">
+            <dt>Customer</dt><dd>Demo Customer Ltd</dd>
+            <dt>Address</dt><dd>Plot 1, Demo Industrial Area</dd>
+            <dt>Vehicle</dt><dd>DEMO-1</dd>
+            <dt>Driver</dt><dd>Driver One</dd>
+            <dt>Loaded qty</dt><dd>1 case</dd>
+            <dt>Invoice</dt><dd><code>PI-0001</code> · AED 1.00</dd>
+            <dt>Status</dt><dd><span class="pill pill-blue">Loading</span></dd>
+          </dl>
+          <div class="row-actions">
+            <button class="btn-mini" data-pdf="dispatch" data-da="DA-0001">📄 Delivery Advice PDF</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====== SUPPLIERS ====== -->
+      <section class="view" id="view-suppliers">
+        <div class="view-head">
+          <div><div class="crumb">Procurement / Suppliers</div><h2>Supplier master</h2></div>
+          <div class="view-actions">
+            <button class="btn-mini" data-info="suppliers">ⓘ How it works</button>
+            <button class="btn-mini primary">+ New supplier</button>
+          </div>
+        </div>
+
+        <div class="info-panel" id="info-suppliers" hidden>
+          <h4>About Suppliers</h4>
+          <p>Vendor master — contact, payment terms, lead time, materials supplied, qualification status. Drives PO defaults and RM Order suggestions.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>Suppliers</h3></div>
+          <table class="data-table">
+            <thead><tr><th>Code</th><th>Name</th><th>Materials</th><th>Lead time</th><th>Payment</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><code>SUP-001</code></td><td>Demo Supplier Co</td><td>RM-SUGAR, RM-WATER</td><td>1 day</td><td>Net 30</td><td><span class="pill pill-green">Active</span></td></tr>
+              <tr><td><code>SUP-002</code></td><td>Acme Materials</td><td>RM-FLAVOR, RM-PREFORM</td><td>1 day</td><td>Net 60</td><td><span class="pill pill-green">Active</span></td></tr>
+              <tr><td><code>SUP-003</code></td><td>Placeholder Supply</td><td>RM-CAP, RM-LABEL</td><td>1 day</td><td>Advance</td><td><span class="pill pill-grey">Inactive</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ====== PURCHASE ORDERS ====== -->
+      <section class="view" id="view-po">
+        <div class="view-head">
+          <div><div class="crumb">Procurement / Purchase Orders</div><h2>Purchase orders</h2></div>
+          <div class="view-actions">
+            <button class="btn-mini" data-info="po">ⓘ How it works</button>
+            <button class="btn-mini primary">+ New PO</button>
+          </div>
+        </div>
+
+        <div class="info-panel" id="info-po" hidden>
+          <h4>About Purchase Orders</h4>
+          <p>Procurement orders sent to suppliers. Generated from RM Order suggestions or manually. Open POs drive expected GRNs and AP commitments.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>POs</h3></div>
+          <table class="data-table">
+            <thead><tr><th>PO #</th><th>Date</th><th>Supplier</th><th>Items</th><th>Total</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><code>PO-DEMO-1</code></td><td>2026-05-13</td><td>Demo Supplier Co</td><td>1</td><td>AED 1.00</td><td><span class="pill pill-green">Received</span></td></tr>
+              <tr><td><code>PO-DEMO-2</code></td><td>2026-05-12</td><td>Acme Materials</td><td>1</td><td>AED 1.00</td><td><span class="pill pill-amber">Partial</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ====== ACCOUNTING ====== -->
+      <section class="view" id="view-accounting">
+        <div class="view-head">
+          <div><div class="crumb">Finance / Accounts &amp; Vouchers</div><h2>Vouchers</h2></div>
+          <div class="view-actions">
+            <button class="btn-mini" data-info="accounting">ⓘ How it works</button>
+            <button class="btn-mini active">Drafts</button>
+            <button class="btn-mini">Posted</button>
+            <button class="btn-mini">Reconciled</button>
+            <button class="btn-mini primary">+ New voucher</button>
+          </div>
+        </div>
+
+        <div class="info-panel" id="info-accounting" hidden>
+          <h4>About Accounts &amp; Vouchers</h4>
+          <p>Bank Payment Voucher (BPV), Cash Payment Voucher (CPV), Bank Receipt Voucher (BRV), Cash Receipt Voucher (CRV), Journal Voucher (JV). Each draft can be edited; once posted, it generates a Sage entry pair (debit/credit) and updates the running balances.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head"><h3>Bank Payment Voucher</h3><div class="card-sub">BPV-0001</div></div>
+            <dl class="kv-grid">
+              <dt>Date</dt><dd>2026-05-13</dd>
+              <dt>Pay to</dt><dd>Demo Supplier Co</dd>
+              <dt>Account</dt><dd>Bank Demo · ****0001</dd>
+              <dt>Amount</dt><dd><strong>AED 1.00</strong></dd>
+              <dt>Reference</dt><dd>PI-0001 / GRN-0001</dd>
+              <dt>Status</dt><dd><span class="pill pill-amber">Draft</span></dd>
+            </dl>
+          </div>
+          <div class="card">
+            <div class="card-head"><h3>Cash Payment Voucher</h3><div class="card-sub">CPV-0001</div></div>
+            <dl class="kv-grid">
+              <dt>Date</dt><dd>2026-05-13</dd>
+              <dt>Pay to</dt><dd>Petty Cash</dd>
+              <dt>Account</dt><dd>Cash on hand</dd>
+              <dt>Amount</dt><dd><strong>AED 1.00</strong></dd>
+              <dt>Reference</dt><dd>EXP-0001</dd>
+              <dt>Status</dt><dd><span class="pill pill-green">Posted</span></dd>
+            </dl>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====== SAGE ENTRIES ====== -->
+      <section class="view" id="view-sage">
+        <div class="view-head">
+          <div><div class="crumb">Finance / Sage Entries</div><h2>Sage draft entries</h2></div>
+          <div class="view-actions">
+            <button class="btn-mini" data-info="sage">ⓘ How it works</button>
+            <button class="btn-mini active">Drafts</button>
+            <button class="btn-mini">Exported</button>
+            <button class="btn-mini primary">Export batch</button>
+          </div>
+        </div>
+
+        <div class="info-panel" id="info-sage" hidden>
+          <h4>About Sage Entries</h4>
+          <p>Staging layer between the operational modules and the Sage accounting system. Whenever a JO closes, a GRN posts, a voucher is approved, or a dispatch invoices, the system generates draft journal entries here. The accounts team batches them and exports a Sage-compatible CSV daily.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>Draft entries</h3></div>
+          <table class="data-table">
+            <thead><tr><th>Ref</th><th>Date</th><th>Account</th><th>Description</th><th>Debit</th><th>Credit</th></tr></thead>
+            <tbody>
+              <tr><td><code>SE-0001</code></td><td>2026-05-13</td><td>5000 · Demo COGS</td><td>JO-DEMO-1 closing</td><td>AED 1.00</td><td>—</td></tr>
+              <tr><td><code>SE-0001</code></td><td>2026-05-13</td><td>1300 · Demo Inventory</td><td>JO-DEMO-1 closing</td><td>—</td><td>AED 1.00</td></tr>
+              <tr><td><code>SE-0002</code></td><td>2026-05-13</td><td>2100 · AP — Demo Supplier</td><td>BPV-0001</td><td>AED 1.00</td><td>—</td></tr>
+              <tr><td><code>SE-0002</code></td><td>2026-05-13</td><td>1010 · Bank Demo</td><td>BPV-0001</td><td>—</td><td>AED 1.00</td></tr>
+            </tbody>
+          </table>
+          <div class="row-actions"><button class="btn-mini" data-pdf="sage">📄 Sage Batch Export PDF</button></div>
+        </div>
+      </section>
+
+      <!-- ====== FORECAST ====== -->
+      <section class="view" id="view-forecast">
+        <div class="view-head">
+          <div><div class="crumb">Finance / Forecast</div><h2>Demand forecast</h2></div>
+          <div class="view-actions">
+            <button class="btn-mini" data-info="forecast">ⓘ How it works</button>
+            <button class="btn-mini active">This month</button>
+            <button class="btn-mini">Next month</button>
+            <button class="btn-mini">Quarter</button>
+          </div>
+        </div>
+
+        <div class="info-panel" id="info-forecast" hidden>
+          <h4>About Forecast</h4>
+          <p>Monthly demand forecast per SKU, by region. Combines historical sales, customer orders on hand, and seasonality factors. Drives production planning and raw-material reorder suggestions.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>Forecast by SKU</h3></div>
+          <table class="data-table">
+            <thead><tr><th>SKU</th><th>Last month</th><th>Forecast</th><th>Bookings</th><th>Coverage</th></tr></thead>
+            <tbody>
+              <tr><td>FG-500ML</td><td>1</td><td>1</td><td>1</td><td>100%</td></tr>
+              <tr><td>FG-1L</td><td>1</td><td>1</td><td>1</td><td>100%</td></tr>
+              <tr><td>FG-250ML</td><td>1</td><td>1</td><td>1</td><td>100%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ====== CUSTOMS / FTA ====== -->
+      <section class="view" id="view-customs">
+        <div class="view-head">
+          <div><div class="crumb">Finance / Customs &amp; FTA</div><h2>Customs &amp; FTA exports</h2></div>
+          <div class="view-actions">
+            <button class="btn-mini" data-info="customs">ⓘ How it works</button>
+            <button class="btn-mini active">Excise</button>
+            <button class="btn-mini">Transfers</button>
+            <button class="btn-mini">VAT</button>
+          </div>
+        </div>
+
+        <div class="info-panel" id="info-customs" hidden>
+          <h4>About Customs &amp; FTA</h4>
+          <p>Generates the regulatory exports required by the UAE FTA — excise goods declarations, internal-transfer movements, VAT-relevant records. Outputs are validated against the FTA templates before submission.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>Excise declarations</h3></div>
+          <table class="data-table">
+            <thead><tr><th>Period</th><th>Items</th><th>Excise qty</th><th>Excise value</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>2026-05</td><td>1</td><td>1</td><td>AED 1.00</td><td><span class="pill pill-amber">Draft</span></td></tr>
+              <tr><td>2026-04</td><td>1</td><td>1</td><td>AED 1.00</td><td><span class="pill pill-green">Submitted</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ====== DOCUMENTS ====== -->
+      <section class="view" id="view-documents">
+        <div class="view-head">
+          <div><div class="crumb">System / Documents</div><h2>Document library</h2></div>
+          <div class="view-actions">
+            <button class="btn-mini" data-info="documents">ⓘ How it works</button>
+          </div>
+        </div>
+
+        <div class="info-panel" id="info-documents" hidden>
+          <h4>About Documents</h4>
+          <p>Every PDF the system generates — job orders, picking sheets, QC reports, vouchers, invoices, dispatches, Sage batches — is stored here and linked to the originating record. The buttons below open each PDF template so you can preview and print/save as PDF.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>Available document templates</h3><div class="card-sub">click to preview</div></div>
+          <div class="doc-grid">
+            <button class="doc-tile" data-pdf="job-order" data-jo="JO-DEMO-1">
+              <div class="doc-ico">📄</div>
+              <div class="doc-name">Job Order Summary</div>
+              <div class="doc-sub">JO-DEMO-1</div>
+            </button>
+            <button class="doc-tile" data-pdf="picking-sheet" data-jo="JO-DEMO-1">
+              <div class="doc-ico">📄</div>
+              <div class="doc-name">Picking Sheet</div>
+              <div class="doc-sub">JO-DEMO-1</div>
+            </button>
+            <button class="doc-tile" data-pdf="qc-report" data-batch="DEMO-0001">
+              <div class="doc-ico">📄</div>
+              <div class="doc-name">QC Batch Report</div>
+              <div class="doc-sub">DEMO-0001</div>
+            </button>
+            <button class="doc-tile" data-pdf="invoice" data-pi="PI-0001">
+              <div class="doc-ico">📄</div>
+              <div class="doc-name">Performa Invoice</div>
+              <div class="doc-sub">PI-0001</div>
+            </button>
+            <button class="doc-tile" data-pdf="dispatch" data-da="DA-0001">
+              <div class="doc-ico">📄</div>
+              <div class="doc-name">Delivery Advice</div>
+              <div class="doc-sub">DA-0001</div>
+            </button>
+            <button class="doc-tile" data-pdf="sage">
+              <div class="doc-ico">📄</div>
+              <div class="doc-name">Sage Batch Export</div>
+              <div class="doc-sub">2026-05-13</div>
+            </button>
+            <button class="doc-tile" data-pdf="mixing-ops">
+              <div class="doc-ico">📄</div>
+              <div class="doc-name">Mixing Operations</div>
+              <div class="doc-sub">Today</div>
+            </button>
+            <button class="doc-tile" data-pdf="rm-order">
+              <div class="doc-ico">📄</div>
+              <div class="doc-name">RM Order Draft</div>
+              <div class="doc-sub">Auto-generated</div>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====== REPORTING ====== -->
+      <section class="view" id="view-reporting">
+        <div class="view-head">
+          <div><div class="crumb">System / Reports</div><h2>Operational reports</h2></div>
+          <div class="view-actions">
+            <button class="btn-mini" data-info="reporting">ⓘ How it works</button>
+            <button class="btn-mini">Daily</button>
+            <button class="btn-mini active">Weekly</button>
+            <button class="btn-mini">Monthly</button>
+          </div>
+        </div>
+
+        <div class="info-panel" id="info-reporting" hidden>
+          <h4>About Reports</h4>
+          <p>Pre-built reports that aggregate the operational modules: production by line, OEE breakdown, QC pass-rates, inventory value movement, AP/AR aging. Each report can export to PDF or CSV.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head"><h3>Output by day</h3><div class="card-sub">cases · demo</div></div>
+            <div class="chart">
+              <div class="bar"><span style="--h:40%"></span><b>Mon</b></div>
+              <div class="bar"><span style="--h:55%"></span><b>Tue</b></div>
+              <div class="bar"><span style="--h:38%"></span><b>Wed</b></div>
+              <div class="bar"><span style="--h:70%"></span><b>Thu</b></div>
+              <div class="bar"><span style="--h:62%"></span><b>Fri</b></div>
+              <div class="bar"><span style="--h:80%"></span><b>Sat</b></div>
+              <div class="bar"><span style="--h:25%"></span><b>Sun</b></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h3>OEE — Line A</h3><div class="card-sub">target 85%</div></div>
+            <div class="ring-chart">
+              <div class="ring" style="--p:1deg">
+                <div class="ring-inner">
+                  <div class="ring-val">1%</div>
+                  <div class="ring-lbl">OEE</div>
+                </div>
+              </div>
+              <ul class="ring-legend">
+                <li><span class="dot d-blue"></span>Availability · 1%</li>
+                <li><span class="dot d-green"></span>Performance · 1%</li>
+                <li><span class="dot d-purple"></span>Quality · 1%</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====== SETTINGS ====== -->
+      <section class="view" id="view-settings">
+        <div class="view-head">
+          <div><div class="crumb">System / Settings</div><h2>Configuration</h2></div>
+          <div class="view-actions">
+            <button class="btn-mini" data-info="settings">ⓘ How it works</button>
+          </div>
+        </div>
+
+        <div class="info-panel" id="info-settings" hidden>
+          <h4>About Settings</h4>
+          <p>Admin module — user accounts &amp; roles, line configuration, document templates, system parameters, audit log. Role-based access control: Operator, Supervisor, QC, Accounts, Admin.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head"><h3>Users &amp; roles</h3></div>
+            <table class="data-table compact">
+              <thead><tr><th>User</th><th>Role</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>demo.user</td><td>Supervisor</td><td><span class="pill pill-green">Active</span></td></tr>
+                <tr><td>demo.qc</td><td>QC Analyst</td><td><span class="pill pill-green">Active</span></td></tr>
+                <tr><td>demo.acc</td><td>Accountant</td><td><span class="pill pill-green">Active</span></td></tr>
+                <tr><td>demo.admin</td><td>Admin</td><td><span class="pill pill-green">Active</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h3>Lines</h3></div>
+            <table class="data-table compact">
+              <thead><tr><th>Line</th><th>Speed</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>Line A</td><td>1 cpm</td><td><span class="pill pill-green">Running</span></td></tr>
+                <tr><td>Line B</td><td>1 cpm</td><td><span class="pill pill-amber">Idle</span></td></tr>
+                <tr><td>Line C</td><td>1 cpm</td><td><span class="pill pill-grey">Down</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <div class="after-note">
+    Every value above is fabricated. The structure, workflow names, document templates and inter-module
+    integrations mirror the real system — they're industry-standard MES/ERP shapes.
+  </div>
+
+</section>
+
+<!-- ================= CTA ================= -->
+<section class="container section reveal no-print">
+  <div class="contact-box">
+    <div class="contact-left">
+      <span class="section-tag">Want to see the real thing?</span>
+      <h2>Happy to walk through it on a call.</h2>
+      <p>I can demo the actual application in a screen-share with redactions on real customer data, or talk through architecture, trade-offs, and what I'd build differently.</p>
+      <a class="btn btn-primary" href="contact.html">Request a walkthrough <span class="arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer no-print">
+  <div class="container footer-inner">
+    <div class="footer-copy">© <span id="year"></span> Muhammad Saad. Demo data is fabricated.</div>
+    <div class="footer-links">
+      <a href="index.html#top">← Back to home</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ================= PDF PREVIEW MODAL ================= -->
+<div class="pdf-modal" id="pdf-modal" hidden>
+  <div class="pdf-toolbar no-print">
+    <div class="pdf-toolbar-l">
+      <span class="pdf-doc-ico">📄</span>
+      <div>
+        <div class="pdf-doc-name" id="pdf-doc-name">Document Preview</div>
+        <div class="pdf-doc-meta">Demo Plant · DEMO MODE</div>
+      </div>
+    </div>
+    <div class="pdf-toolbar-r">
+      <button class="btn-mini" onclick="window.print()">🖨 Print / Save as PDF</button>
+      <button class="btn-mini" data-close-modal>✕ Close</button>
+    </div>
+  </div>
+  <div class="pdf-paper-wrap">
+    <div class="pdf-paper" id="pdf-paper">
+      <!-- injected -->
+    </div>
+  </div>
+</div>
+
+<!-- ================= PDF TEMPLATES ================= -->
+<template id="tpl-job-order">
+  <div class="doc">
+    <header class="doc-head">
+      <div class="doc-brand">
+        <div class="doc-logo">DP</div>
+        <div>
+          <div class="doc-co">Demo Plant LLC</div>
+          <div class="doc-addr">Plot 1, Demo Industrial Area · Dubai, UAE · TRN 100000000000003</div>
+        </div>
+      </div>
+      <div class="doc-title-block">
+        <div class="doc-title">JOB ORDER</div>
+        <div class="doc-num">__JO__</div>
+      </div>
+    </header>
+
+    <section class="doc-meta">
+      <div><span>Date</span><strong>2026-05-13</strong></div>
+      <div><span>Customer</span><strong>__CUSTOMER__</strong></div>
+      <div><span>Product</span><strong>__PRODUCT__</strong></div>
+      <div><span>Line</span><strong>__LINE__</strong></div>
+      <div><span>Recipe</span><strong>__RECIPE__</strong></div>
+      <div><span>Status</span><strong>__STATUS__</strong></div>
+    </section>
+
+    <table class="doc-table">
+      <thead><tr><th>Item</th><th>Description</th><th class="r">Qty</th><th class="r">Unit cost</th><th class="r">Total</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>__PRODUCT__</td><td class="r">1</td><td class="r">AED 1.00</td><td class="r">AED 1.00</td></tr>
+      </tbody>
+      <tfoot>
+        <tr><td colspan="4" class="r">Estimated cost</td><td class="r"><strong>AED 1.00</strong></td></tr>
+      </tfoot>
+    </table>
+
+    <section class="doc-notes">
+      <h5>Notes</h5>
+      <ul>
+        <li>This is a demo / placeholder document. All values are fabricated.</li>
+        <li>Raw materials reserved per the picking sheet attached separately.</li>
+        <li>Quality holds escalate to QC Manager.</li>
+      </ul>
+    </section>
+
+    <footer class="doc-sign">
+      <div><span>Prepared by</span><div class="sig-line"></div><span>Planner</span></div>
+      <div><span>Approved by</span><div class="sig-line"></div><span>Supervisor</span></div>
+    </footer>
+
+    <div class="doc-foot">
+      Demo Plant LLC · auto-generated by MES/ERP · DEMO MODE · all values are placeholders
+    </div>
+  </div>
+</template>
+
+<template id="tpl-picking-sheet">
+  <div class="doc">
+    <header class="doc-head">
+      <div class="doc-brand">
+        <div class="doc-logo">DP</div>
+        <div>
+          <div class="doc-co">Demo Plant LLC</div>
+          <div class="doc-addr">Plot 1, Demo Industrial Area · Dubai, UAE</div>
+        </div>
+      </div>
+      <div class="doc-title-block">
+        <div class="doc-title">PICKING SHEET</div>
+        <div class="doc-num">__JO__</div>
+      </div>
+    </header>
+
+    <section class="doc-meta">
+      <div><span>Date</span><strong>2026-05-13</strong></div>
+      <div><span>Job Order</span><strong>__JO__</strong></div>
+      <div><span>Recipe</span><strong>Recipe-A1 · v1</strong></div>
+      <div><span>Line</span><strong>Line A</strong></div>
+    </section>
+
+    <table class="doc-table">
+      <thead><tr><th>RM code</th><th>Description</th><th class="r">Required</th><th class="r">Available</th><th class="r">Unit cost</th><th class="r">Sub-total</th></tr></thead>
+      <tbody>
+        <tr><td>RM-WATER</td><td>Demo Water</td><td class="r">1 L</td><td class="r">1</td><td class="r">AED 1.00</td><td class="r">AED 1.00</td></tr>
+        <tr><td>RM-SUGAR</td><td>Demo Sugar</td><td class="r">1 kg</td><td class="r">1</td><td class="r">AED 1.00</td><td class="r">AED 1.00</td></tr>
+        <tr><td>RM-FLAVOR</td><td>Demo Flavor X</td><td class="r">1 mL</td><td class="r">1</td><td class="r">AED 1.00</td><td class="r">AED 1.00</td></tr>
+        <tr><td>RM-PREFORM</td><td>PET preform 500 mL</td><td class="r">1</td><td class="r">1</td><td class="r">AED 1.00</td><td class="r">AED 1.00</td></tr>
+        <tr><td>RM-CAP</td><td>Bottle cap</td><td class="r">1</td><td class="r">1</td><td class="r">AED 1.00</td><td class="r">AED 1.00</td></tr>
+        <tr><td>RM-LABEL</td><td>Shrink label</td><td class="r">1</td><td class="r">1</td><td class="r">AED 1.00</td><td class="r">AED 1.00</td></tr>
+      </tbody>
+      <tfoot>
+        <tr><td colspan="5" class="r">Total</td><td class="r"><strong>AED 6.00</strong></td></tr>
+      </tfoot>
+    </table>
+
+    <footer class="doc-sign">
+      <div><span>Picked by</span><div class="sig-line"></div><span>Warehouse</span></div>
+      <div><span>Verified</span><div class="sig-line"></div><span>QC</span></div>
+    </footer>
+
+    <div class="doc-foot">Demo Plant LLC · MES/ERP picking sheet · DEMO MODE</div>
+  </div>
+</template>
+
+<template id="tpl-qc-report">
+  <div class="doc">
+    <header class="doc-head">
+      <div class="doc-brand">
+        <div class="doc-logo">DP</div>
+        <div>
+          <div class="doc-co">Demo Plant LLC — Quality Control</div>
+          <div class="doc-addr">Certificate of Analysis · Internal use</div>
+        </div>
+      </div>
+      <div class="doc-title-block">
+        <div class="doc-title">QC BATCH REPORT</div>
+        <div class="doc-num">__BATCH__</div>
+      </div>
+    </header>
+
+    <section class="doc-meta">
+      <div><span>Batch</span><strong>__BATCH__</strong></div>
+      <div><span>Product</span><strong>Sample Beverage 500 mL</strong></div>
+      <div><span>Recipe</span><strong>Recipe-A1 · v1</strong></div>
+      <div><span>Mfg date</span><strong>2026-05-13</strong></div>
+      <div><span>Best before</span><strong>2027-05-13</strong></div>
+      <div><span>Sample size</span><strong>1</strong></div>
+    </section>
+
+    <table class="doc-table">
+      <thead><tr><th>Check</th><th>UoM</th><th class="r">Min</th><th class="r">Max</th><th class="r">Measured</th><th class="c">Result</th></tr></thead>
+      <tbody>
+        <tr><td>Brix</td><td>°Bx</td><td class="r">1</td><td class="r">1</td><td class="r">1</td><td class="c">PASS</td></tr>
+        <tr><td>pH</td><td>—</td><td class="r">1</td><td class="r">1</td><td class="r">1</td><td class="c">PASS</td></tr>
+        <tr><td>Net content</td><td>mL</td><td class="r">1</td><td class="r">1</td><td class="r">1</td><td class="c">PASS</td></tr>
+        <tr><td>Cap torque</td><td>lb·in</td><td class="r">1</td><td class="r">1</td><td class="r">1</td><td class="c">PASS</td></tr>
+        <tr><td>Seam thickness</td><td>mm</td><td class="r">1</td><td class="r">1</td><td class="r">1</td><td class="c">PASS</td></tr>
+        <tr><td>Carbonation</td><td>vol</td><td class="r">1</td><td class="r">1</td><td class="r">1</td><td class="c">REVIEW</td></tr>
+        <tr><td>Microbiology</td><td>cfu/mL</td><td class="r">1</td><td class="r">1</td><td class="r">1</td><td class="c">PASS</td></tr>
+      </tbody>
+    </table>
+
+    <section class="doc-notes">
+      <h5>QC verdict</h5>
+      <p><strong>Batch released for dispatch.</strong> One parameter flagged for review — within tolerance but trending toward upper bound.</p>
+    </section>
+
+    <footer class="doc-sign">
+      <div><span>QC Analyst</span><div class="sig-line"></div><span>demo.qc</span></div>
+      <div><span>QC Manager</span><div class="sig-line"></div><span>demo.admin</span></div>
+    </footer>
+
+    <div class="doc-foot">Demo Plant LLC · MES/ERP QC Report · DEMO MODE</div>
+  </div>
+</template>
+
+<template id="tpl-invoice">
+  <div class="doc">
+    <header class="doc-head">
+      <div class="doc-brand">
+        <div class="doc-logo">DP</div>
+        <div>
+          <div class="doc-co">Demo Plant LLC</div>
+          <div class="doc-addr">Plot 1, Demo Industrial Area · Dubai, UAE · TRN 100000000000003</div>
+        </div>
+      </div>
+      <div class="doc-title-block">
+        <div class="doc-title">PERFORMA INVOICE</div>
+        <div class="doc-num">__PI__</div>
+      </div>
+    </header>
+
+    <section class="doc-meta cols-2">
+      <div class="meta-block">
+        <h5>Bill to</h5>
+        <p>Demo Customer Ltd<br/>Plot 99, Demo Trade Zone<br/>Dubai, UAE<br/>TRN 100000000000004</p>
+      </div>
+      <div class="meta-block">
+        <h5>Document</h5>
+        <p>Date: 2026-05-13<br/>PI #: __PI__<br/>Validity: 30 days<br/>Quotation: QT-0001</p>
+      </div>
+    </section>
+
+    <table class="doc-table">
+      <thead><tr><th>#</th><th>Description</th><th class="r">Qty</th><th class="r">Unit</th><th class="r">Amount</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Sample Beverage 500 mL (case of 24)</td><td class="r">1</td><td class="r">AED 1.00</td><td class="r">AED 1.00</td></tr>
+      </tbody>
+      <tfoot>
+        <tr><td colspan="4" class="r">Sub-total</td><td class="r">AED 1.00</td></tr>
+        <tr><td colspan="4" class="r">VAT (5%)</td><td class="r">AED 0.05</td></tr>
+        <tr><td colspan="4" class="r"><strong>Total</strong></td><td class="r"><strong>AED 1.05</strong></td></tr>
+      </tfoot>
+    </table>
+
+    <section class="doc-notes">
+      <h5>Payment terms</h5>
+      <p>Net 30 from invoice date. Bank: Bank Demo · A/C ****0001 · SWIFT DEMOEDUM.</p>
+    </section>
+
+    <div class="doc-foot">Demo Plant LLC · Performa Invoice · DEMO MODE · placeholder values</div>
+  </div>
+</template>
+
+<template id="tpl-dispatch">
+  <div class="doc">
+    <header class="doc-head">
+      <div class="doc-brand">
+        <div class="doc-logo">DP</div>
+        <div>
+          <div class="doc-co">Demo Plant LLC</div>
+          <div class="doc-addr">Plot 1, Demo Industrial Area · Dubai, UAE</div>
+        </div>
+      </div>
+      <div class="doc-title-block">
+        <div class="doc-title">DELIVERY ADVICE</div>
+        <div class="doc-num">__DA__</div>
+      </div>
+    </header>
+
+    <section class="doc-meta cols-2">
+      <div class="meta-block">
+        <h5>Deliver to</h5>
+        <p>Demo Customer Ltd<br/>Plot 99, Demo Trade Zone<br/>Dubai, UAE</p>
+      </div>
+      <div class="meta-block">
+        <h5>Logistics</h5>
+        <p>Date: 2026-05-13<br/>Vehicle: DEMO-1<br/>Driver: Driver One<br/>Reference PI: PI-0001</p>
+      </div>
+    </section>
+
+    <table class="doc-table">
+      <thead><tr><th>#</th><th>Product</th><th class="r">Cases</th><th class="r">Units / case</th><th class="r">Total units</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Sample Beverage 500 mL</td><td class="r">1</td><td class="r">1</td><td class="r">1</td></tr>
+      </tbody>
+      <tfoot>
+        <tr><td colspan="4" class="r"><strong>Total cases</strong></td><td class="r"><strong>1</strong></td></tr>
+      </tfoot>
+    </table>
+
+    <footer class="doc-sign">
+      <div><span>Loaded by</span><div class="sig-line"></div><span>Warehouse</span></div>
+      <div><span>Driver</span><div class="sig-line"></div><span>Driver One</span></div>
+      <div><span>Received by</span><div class="sig-line"></div><span>Customer</span></div>
+    </footer>
+
+    <div class="doc-foot">Demo Plant LLC · MES/ERP Delivery Advice · DEMO MODE</div>
+  </div>
+</template>
+
+<template id="tpl-sage">
+  <div class="doc">
+    <header class="doc-head">
+      <div class="doc-brand">
+        <div class="doc-logo">DP</div>
+        <div>
+          <div class="doc-co">Demo Plant LLC — Finance</div>
+          <div class="doc-addr">Sage batch export · staged for accounting</div>
+        </div>
+      </div>
+      <div class="doc-title-block">
+        <div class="doc-title">SAGE BATCH</div>
+        <div class="doc-num">SGE-2026-05-13</div>
+      </div>
+    </header>
+
+    <section class="doc-meta">
+      <div><span>Period</span><strong>2026-05-13</strong></div>
+      <div><span>Entries</span><strong>4</strong></div>
+      <div><span>Debit total</span><strong>AED 2.00</strong></div>
+      <div><span>Credit total</span><strong>AED 2.00</strong></div>
+    </section>
+
+    <table class="doc-table">
+      <thead><tr><th>Ref</th><th>Account</th><th>Description</th><th class="r">Debit</th><th class="r">Credit</th></tr></thead>
+      <tbody>
+        <tr><td>SE-0001</td><td>5000 · Demo COGS</td><td>JO-DEMO-1 closing</td><td class="r">AED 1.00</td><td class="r">—</td></tr>
+        <tr><td>SE-0001</td><td>1300 · Demo Inventory</td><td>JO-DEMO-1 closing</td><td class="r">—</td><td class="r">AED 1.00</td></tr>
+        <tr><td>SE-0002</td><td>2100 · AP — Demo Supplier</td><td>BPV-0001</td><td class="r">AED 1.00</td><td class="r">—</td></tr>
+        <tr><td>SE-0002</td><td>1010 · Bank Demo</td><td>BPV-0001</td><td class="r">—</td><td class="r">AED 1.00</td></tr>
+      </tbody>
+    </table>
+
+    <div class="doc-foot">Demo Plant LLC · Sage batch export · DEMO MODE · drafts only</div>
+  </div>
+</template>
+
+<template id="tpl-mixing-ops">
+  <div class="doc">
+    <header class="doc-head">
+      <div class="doc-brand">
+        <div class="doc-logo">DP</div>
+        <div>
+          <div class="doc-co">Demo Plant LLC — Mixing</div>
+          <div class="doc-addr">Mixing operations log</div>
+        </div>
+      </div>
+      <div class="doc-title-block">
+        <div class="doc-title">MIXING OPERATIONS</div>
+        <div class="doc-num">2026-05-13</div>
+      </div>
+    </header>
+
+    <table class="doc-table">
+      <thead><tr><th>Time</th><th>Tank</th><th>Recipe</th><th>Action</th><th>Operator</th></tr></thead>
+      <tbody>
+        <tr><td>08:00</td><td>Tank 1</td><td>Recipe-A1</td><td>Charge water (1 L)</td><td>demo.user</td></tr>
+        <tr><td>08:05</td><td>Tank 1</td><td>Recipe-A1</td><td>Charge sugar (1 kg)</td><td>demo.user</td></tr>
+        <tr><td>08:15</td><td>Tank 1</td><td>Recipe-A1</td><td>Start mixing</td><td>demo.user</td></tr>
+        <tr><td>08:45</td><td>Tank 1</td><td>Recipe-A1</td><td>Charge flavor (1 mL)</td><td>demo.user</td></tr>
+        <tr><td>09:00</td><td>Tank 1</td><td>Recipe-A1</td><td>Quality sample taken</td><td>demo.qc</td></tr>
+        <tr><td>09:15</td><td>Tank 1</td><td>Recipe-A1</td><td>Transfer to filler</td><td>demo.user</td></tr>
+      </tbody>
+    </table>
+
+    <div class="doc-foot">Demo Plant LLC · Mixing operations log · DEMO MODE</div>
+  </div>
+</template>
+
+<template id="tpl-rm-order">
+  <div class="doc">
+    <header class="doc-head">
+      <div class="doc-brand">
+        <div class="doc-logo">DP</div>
+        <div>
+          <div class="doc-co">Demo Plant LLC — Procurement</div>
+          <div class="doc-addr">Raw material order — draft</div>
+        </div>
+      </div>
+      <div class="doc-title-block">
+        <div class="doc-title">RM ORDER</div>
+        <div class="doc-num">RMO-2026-05-13</div>
+      </div>
+    </header>
+
+    <section class="doc-meta">
+      <div><span>Date</span><strong>2026-05-13</strong></div>
+      <div><span>Supplier</span><strong>Demo Supplier Co</strong></div>
+      <div><span>Lead time</span><strong>1 day</strong></div>
+      <div><span>Status</span><strong>Draft</strong></div>
+    </section>
+
+    <table class="doc-table">
+      <thead><tr><th>RM</th><th>Description</th><th class="r">Qty</th><th class="r">UoM</th><th class="r">Unit cost</th><th class="r">Total</th></tr></thead>
+      <tbody>
+        <tr><td>RM-SUGAR</td><td>Demo Sugar</td><td class="r">1</td><td class="r">kg</td><td class="r">AED 1.00</td><td class="r">AED 1.00</td></tr>
+        <tr><td>RM-WATER</td><td>Demo Water</td><td class="r">1</td><td class="r">L</td><td class="r">AED 1.00</td><td class="r">AED 1.00</td></tr>
+      </tbody>
+      <tfoot>
+        <tr><td colspan="5" class="r"><strong>Total</strong></td><td class="r"><strong>AED 2.00</strong></td></tr>
+      </tfoot>
+    </table>
+
+    <div class="doc-foot">Demo Plant LLC · RM Order draft · DEMO MODE</div>
+  </div>
+</template>
+
+<!-- ================= NEW JO MODAL ================= -->
+<div class="action-modal" id="modal-new-jo" hidden>
+  <div class="action-modal-card">
+    <header class="action-head">
+      <h3>New Job Order</h3>
+      <button class="link-btn" data-close-modal>✕</button>
+    </header>
+    <form class="action-form" onsubmit="event.preventDefault(); document.getElementById('modal-new-jo').hidden = true;">
+      <div class="form-row">
+        <label>Customer</label>
+        <select><option>Demo Customer Ltd</option><option>Acme Beverages</option><option>Placeholder FZE</option></select>
+      </div>
+      <div class="form-row">
+        <label>Product</label>
+        <select><option>Sample Beverage 500 mL</option><option>Sample Beverage 1 L</option><option>Sample Beverage 250 mL</option></select>
+      </div>
+      <div class="form-grid">
+        <div class="form-row"><label>Quantity (cases)</label><input type="number" value="1" /></div>
+        <div class="form-row"><label>Planned start</label><input type="date" value="2026-05-13" /></div>
+      </div>
+      <div class="form-row">
+        <label>Line</label>
+        <select><option>Line A</option><option>Line B</option><option>Line C</option></select>
+      </div>
+      <div class="form-row">
+        <label>Recipe</label>
+        <select><option>Recipe-A1 · v1 (released)</option><option>Recipe-B2 · v1 (released)</option></select>
+      </div>
+      <div class="row-actions">
+        <button class="btn-mini" type="button" data-close-modal>Cancel</button>
+        <button class="btn-mini primary" type="submit">Save draft</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ================= TOAST ================= -->
+<div class="toast" id="toast" hidden></div>
+
+<script src="script.js"></script>
+<script src="demo.js"></script>
+</body>
+</html>

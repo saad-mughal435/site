@@ -1,0 +1,343 @@
+/* ============================================================
+   Dark mode overrides for the MES/ERP demo app.
+   Applied when <html> has class "dark".
+   Targets the Tailwind utility classes used throughout the app.
+   ============================================================ */
+
+html.dark { color-scheme: dark; }
+
+html.dark body {
+  background: #0a0d12 !important;
+  color: #e8ecf3;
+}
+
+/* ---------- Backgrounds ---------- */
+html.dark .bg-white                    { background-color: #131826 !important; }
+html.dark .bg-gray-50,
+html.dark .bg-slate-50,
+html.dark .bg-zinc-50,
+html.dark .bg-neutral-50               { background-color: #161b29 !important; }
+html.dark .bg-gray-100,
+html.dark .bg-slate-100,
+html.dark .bg-zinc-100,
+html.dark .bg-neutral-100              { background-color: #1a2030 !important; }
+html.dark .bg-gray-200,
+html.dark .bg-slate-200                { background-color: #232b3d !important; }
+html.dark .bg-gray-300,
+html.dark .bg-slate-300                { background-color: #2b3448 !important; }
+html.dark .bg-black,
+html.dark .bg-gray-900,
+html.dark .bg-slate-900                { background-color: #0a0d12 !important; }
+html.dark .bg-gray-800,
+html.dark .bg-slate-800                { background-color: #11161e !important; }
+
+/* Tinted backgrounds — softened to dark equivalents */
+html.dark .bg-blue-50                  { background-color: rgba(124,156,255,0.10) !important; }
+html.dark .bg-blue-100                 { background-color: rgba(124,156,255,0.16) !important; }
+html.dark .bg-blue-600,
+html.dark .bg-blue-700                 { background-color: #4a7cff !important; }
+html.dark .bg-red-50                   { background-color: rgba(248,113,113,0.10) !important; }
+html.dark .bg-red-100                  { background-color: rgba(248,113,113,0.18) !important; }
+html.dark .bg-red-600,
+html.dark .bg-red-700                  { background-color: #d23a3a !important; }
+html.dark .bg-green-50                 { background-color: rgba(52,211,153,0.10) !important; }
+html.dark .bg-green-100                { background-color: rgba(52,211,153,0.18) !important; }
+html.dark .bg-green-600,
+html.dark .bg-green-700                { background-color: #2db478 !important; }
+html.dark .bg-yellow-50,
+html.dark .bg-amber-50                 { background-color: rgba(245,196,81,0.10) !important; }
+html.dark .bg-yellow-100,
+html.dark .bg-amber-100                { background-color: rgba(245,196,81,0.18) !important; }
+html.dark .bg-orange-50                { background-color: rgba(255,154,72,0.10) !important; }
+html.dark .bg-purple-50                { background-color: rgba(196,181,253,0.10) !important; }
+html.dark .bg-purple-100               { background-color: rgba(196,181,253,0.18) !important; }
+html.dark .bg-indigo-50                { background-color: rgba(129,140,248,0.10) !important; }
+html.dark .bg-pink-50                  { background-color: rgba(244,114,182,0.10) !important; }
+html.dark .bg-rose-50                  { background-color: rgba(251,113,133,0.10) !important; }
+html.dark .bg-emerald-50               { background-color: rgba(52,211,153,0.10) !important; }
+html.dark .bg-teal-50                  { background-color: rgba(94,234,212,0.10) !important; }
+html.dark .bg-cyan-50                  { background-color: rgba(86,212,253,0.10) !important; }
+html.dark .bg-sky-50                   { background-color: rgba(124,196,255,0.10) !important; }
+html.dark .bg-violet-50                { background-color: rgba(167,139,250,0.10) !important; }
+html.dark .bg-fuchsia-50               { background-color: rgba(232,121,249,0.10) !important; }
+html.dark .bg-lime-50                  { background-color: rgba(190,242,100,0.10) !important; }
+
+/* Hover bgs */
+html.dark .hover\:bg-gray-50:hover,
+html.dark .hover\:bg-slate-50:hover    { background-color: #1d2333 !important; }
+html.dark .hover\:bg-gray-100:hover,
+html.dark .hover\:bg-slate-100:hover   { background-color: #1f2638 !important; }
+html.dark .hover\:bg-gray-200:hover,
+html.dark .hover\:bg-slate-200:hover   { background-color: #232b3d !important; }
+html.dark .hover\:bg-white:hover       { background-color: #1a2030 !important; }
+html.dark .hover\:bg-blue-600:hover,
+html.dark .hover\:bg-blue-700:hover    { background-color: #5b8aff !important; }
+html.dark .hover\:bg-red-600:hover     { background-color: #e34a4a !important; }
+html.dark .hover\:bg-green-600:hover   { background-color: #3bc485 !important; }
+
+/* Odd-child / striped rows */
+html.dark tr:nth-child(even)           { background-color: rgba(255,255,255,0.02); }
+html.dark tbody tr:hover               { background-color: rgba(255,255,255,0.04) !important; }
+
+/* ---------- Text colors ---------- */
+html.dark .text-gray-900,
+html.dark .text-slate-900,
+html.dark .text-black                  { color: #e8ecf3 !important; }
+html.dark .text-gray-800,
+html.dark .text-slate-800              { color: #d8dde6 !important; }
+html.dark .text-gray-700,
+html.dark .text-slate-700              { color: #c8cdd8 !important; }
+html.dark .text-gray-600,
+html.dark .text-slate-600              { color: #b0b7c4 !important; }
+html.dark .text-gray-500,
+html.dark .text-slate-500              { color: #8b94a7 !important; }
+html.dark .text-gray-400,
+html.dark .text-slate-400              { color: #6f7787 !important; }
+html.dark .text-gray-300,
+html.dark .text-slate-300              { color: #5a6273 !important; }
+html.dark .text-white                  { color: #e8ecf3 !important; }
+
+/* Tinted text — keep accent but lighter */
+html.dark .text-blue-600,
+html.dark .text-blue-700,
+html.dark .text-blue-800,
+html.dark .text-blue-900               { color: #8aabff !important; }
+html.dark .text-red-600,
+html.dark .text-red-700,
+html.dark .text-red-800                { color: #ff8a8a !important; }
+html.dark .text-green-600,
+html.dark .text-green-700,
+html.dark .text-green-800              { color: #4fdba2 !important; }
+html.dark .text-yellow-700,
+html.dark .text-amber-700,
+html.dark .text-amber-800              { color: #f5d77a !important; }
+html.dark .text-orange-600             { color: #ffae72 !important; }
+html.dark .text-purple-700,
+html.dark .text-violet-700             { color: #d2b8ff !important; }
+html.dark .text-pink-700,
+html.dark .text-rose-700               { color: #f49ed1 !important; }
+html.dark .text-indigo-700             { color: #a0aeff !important; }
+html.dark .text-teal-700               { color: #6ff0d4 !important; }
+html.dark .text-cyan-700               { color: #6ed5f5 !important; }
+html.dark .text-emerald-700            { color: #4fdba2 !important; }
+
+/* ---------- Borders ---------- */
+html.dark .border-gray-100,
+html.dark .border-slate-100            { border-color: #1f2638 !important; }
+html.dark .border-gray-200,
+html.dark .border-slate-200            { border-color: #232b3d !important; }
+html.dark .border-gray-300,
+html.dark .border-slate-300            { border-color: #2b3448 !important; }
+html.dark .border-gray-400,
+html.dark .border-slate-400            { border-color: #3b455e !important; }
+html.dark .border                      { border-color: #232b3d; }
+html.dark .border-blue-200,
+html.dark .border-blue-300             { border-color: rgba(124,156,255,0.4) !important; }
+html.dark .border-blue-500,
+html.dark .border-blue-600             { border-color: #4a7cff !important; }
+html.dark .border-red-200              { border-color: rgba(248,113,113,0.4) !important; }
+html.dark .border-green-200,
+html.dark .border-green-300            { border-color: rgba(52,211,153,0.4) !important; }
+html.dark .border-amber-200            { border-color: rgba(245,196,81,0.4) !important; }
+html.dark .border-purple-200,
+html.dark .border-purple-300           { border-color: rgba(196,181,253,0.4) !important; }
+
+/* ---------- Form controls ---------- */
+html.dark input,
+html.dark select,
+html.dark textarea {
+  background-color: #131826 !important;
+  color: #e8ecf3 !important;
+  border-color: #2b3448 !important;
+}
+html.dark input::placeholder,
+html.dark textarea::placeholder         { color: #6f7787 !important; }
+html.dark input:focus,
+html.dark select:focus,
+html.dark textarea:focus {
+  border-color: #4a7cff !important;
+  box-shadow: 0 0 0 3px rgba(74,124,255,0.18) !important;
+}
+html.dark input[type="checkbox"],
+html.dark input[type="radio"]           { accent-color: #4a7cff; }
+html.dark input[type="date"],
+html.dark input[type="time"]            { color-scheme: dark; }
+
+/* Disabled */
+html.dark input:disabled,
+html.dark select:disabled,
+html.dark textarea:disabled,
+html.dark button:disabled {
+  opacity: 0.6;
+  background-color: #0e1320 !important;
+}
+
+/* ---------- Tables ---------- */
+html.dark table                         { color: #d8dde6; }
+html.dark thead                         { background-color: #161b29 !important; }
+html.dark th                            { color: #b0b7c4 !important; }
+html.dark td, html.dark th              { border-color: #232b3d !important; }
+html.dark .divide-gray-200 > * + *,
+html.dark .divide-slate-200 > * + *     { border-color: #232b3d !important; }
+
+/* ---------- Shadow → softer in dark ---------- */
+html.dark .shadow,
+html.dark .shadow-sm,
+html.dark .shadow-md,
+html.dark .shadow-lg,
+html.dark .shadow-xl,
+html.dark .shadow-2xl {
+  box-shadow: 0 6px 24px rgba(0,0,0,0.45), 0 1px 2px rgba(0,0,0,0.3) !important;
+}
+
+/* ---------- Common ring colors ---------- */
+html.dark .ring-blue-500                { --tw-ring-color: rgba(74,124,255,0.45) !important; }
+html.dark .ring-red-500                 { --tw-ring-color: rgba(248,113,113,0.45) !important; }
+html.dark .ring-green-500               { --tw-ring-color: rgba(52,211,153,0.45) !important; }
+
+/* ---------- Sidebar / nav (app-specific) ---------- */
+html.dark #sidebar,
+html.dark .sidebar,
+html.dark aside                         { background-color: #0b1020 !important; border-color: #1d2438 !important; }
+html.dark .sb-brand-title,
+html.dark .sb-brand-sub                 { color: #e8ecf3; }
+html.dark .nav-tooltip                  { background: #0e1325 !important; color: #e8ecf3 !important; border-color: #2b3448 !important; }
+
+/* ---------- KBE home dashboard scoped variables (used by index.html .kbe-home) ---------- */
+html.dark .kbe-home {
+  --bg:        #0a0d12 !important;
+  --surface:   #11161e !important;
+  --surface-2: #161b29 !important;
+  --ink:       #e8ecf3 !important;
+  --ink-2:     #d8dde6 !important;
+  --muted:     #8b94a7 !important;
+  --muted-2:   #6f7787 !important;
+  --line:      #232b3d !important;
+  --line-2:    #2b3448 !important;
+  --line-strong: #3b455e !important;
+  --red:       #ff6b6b !important;
+  --red-deep:  #d23a3a !important;
+  --red-soft:  rgba(248,113,113,0.10) !important;
+}
+
+/* ---------- Toggle button (floating) ---------- */
+#dark-mode-toggle {
+  position: fixed;
+  bottom: 18px;
+  right: 18px;
+  z-index: 9999;
+  width: 44px; height: 44px;
+  border-radius: 999px;
+  border: 1px solid #2b3448;
+  background: #131826;
+  color: #e8ecf3;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform .15s ease, background .15s ease;
+}
+#dark-mode-toggle:hover { transform: translateY(-2px); }
+html:not(.dark) #dark-mode-toggle {
+  background: #ffffff;
+  color: #0a0d12;
+  border-color: #d4d4d4;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+}
+
+/* ---------- Tailwind preflight images / scrollbars ---------- */
+html.dark ::-webkit-scrollbar           { width: 10px; height: 10px; }
+html.dark ::-webkit-scrollbar-track     { background: #0a0d12; }
+html.dark ::-webkit-scrollbar-thumb     { background: #232b3d; border-radius: 4px; }
+html.dark ::-webkit-scrollbar-thumb:hover { background: #2f394f; }
+
+/* ---------- Dimmed logos / images so they don't glare ---------- */
+html.dark img:not([data-no-dim])        { filter: brightness(0.92) contrast(1.05); }
+
+/* ---------- Specific app surfaces seen in the wild ---------- */
+html.dark .filter-btn                   { background: #1a2030 !important; border-color: #2b3448 !important; color: #c8cdd8 !important; }
+html.dark .filter-btn:hover             { background: #232b3d !important; }
+
+/* ---------- Dropdowns / popovers / menus ---------- */
+/* Tailwind dropdowns commonly stack: absolute + bg-white + shadow.
+   .bg-white is already overridden above. Add overlay scrim + menu items. */
+html.dark [role="menu"],
+html.dark [role="listbox"],
+html.dark [role="dialog"],
+html.dark .dropdown,
+html.dark .dropdown-menu,
+html.dark .menu-panel,
+html.dark .popover {
+  background-color: #131826 !important;
+  color: #e8ecf3 !important;
+  border-color: #2b3448 !important;
+}
+html.dark [role="menuitem"]:hover,
+html.dark .dropdown-item:hover           { background-color: #1d2333 !important; }
+
+/* Backdrop / scrim */
+html.dark .backdrop,
+html.dark .modal-backdrop                { background-color: rgba(0,0,0,0.6) !important; }
+
+/* Tooltips */
+html.dark [role="tooltip"],
+html.dark .tooltip                       { background: #0e1325 !important; color: #e8ecf3 !important; border: 1px solid #2b3448 !important; }
+
+/* ---------- Additional Tailwind color steps that may sneak in ---------- */
+html.dark .bg-stone-50, html.dark .bg-stone-100  { background-color: #161b29 !important; }
+html.dark .bg-stone-200                          { background-color: #1f2638 !important; }
+html.dark .bg-zinc-200                           { background-color: #232b3d !important; }
+html.dark .bg-neutral-200                        { background-color: #232b3d !important; }
+html.dark .text-stone-700, html.dark .text-stone-800, html.dark .text-stone-900 { color: #e8ecf3 !important; }
+html.dark .text-zinc-700,  html.dark .text-zinc-800,  html.dark .text-zinc-900  { color: #e8ecf3 !important; }
+html.dark .text-neutral-700, html.dark .text-neutral-800, html.dark .text-neutral-900 { color: #e8ecf3 !important; }
+
+/* divide-y with gray colors */
+html.dark .divide-gray-100 > * + *, html.dark .divide-slate-100 > * + * { border-color: #1f2638 !important; }
+html.dark .divide-gray-300 > * + *, html.dark .divide-slate-300 > * + * { border-color: #2b3448 !important; }
+
+/* Saturated brand-red elements — soften so they don't glare */
+html.dark .kbe-home {
+  --red:      #ff7373 !important;
+  --red-deep: #d23a3a !important;
+}
+html.dark .bg-red-500, html.dark .bg-red-600, html.dark .bg-red-700 { background-color: #d23a3a !important; }
+html.dark .text-red-500, html.dark .text-red-600                    { color: #ff8a8a !important; }
+
+/* Admin/role pills frequently rendered as bg-red-100 text-red-700 etc. */
+html.dark .bg-red-100   { background-color: rgba(248,113,113,0.20) !important; }
+html.dark .bg-red-50    { background-color: rgba(248,113,113,0.10) !important; }
+html.dark .ring-red-100,
+html.dark .ring-red-200 { --tw-ring-color: rgba(248,113,113,0.30) !important; }
+
+/* Tailwind 'shadow' rings frequently used on cards in light mode */
+html.dark .shadow-inner                  { box-shadow: inset 0 2px 4px 0 rgba(0,0,0,0.4) !important; }
+
+/* Bigger / more visible dark-mode toggle button */
+#dark-mode-toggle {
+  width: 48px; height: 48px;
+  font-size: 20px;
+  bottom: 22px; right: 22px;
+}
+
+/* Tables in dark mode: hover/selected rows */
+html.dark tr.selected,
+html.dark tr[aria-selected="true"]       { background-color: rgba(110,142,255,0.12) !important; }
+html.dark thead tr                       { background-color: rgba(255,255,255,0.02) !important; }
+
+/* Inline `style="background:#fff"` / `style="background-color: white"` — invert via attribute selector */
+html.dark [style*="background:#fff"],
+html.dark [style*="background: #fff"],
+html.dark [style*="background:#ffffff"],
+html.dark [style*="background: #ffffff"],
+html.dark [style*="background-color:#fff"],
+html.dark [style*="background-color: #fff"],
+html.dark [style*="background-color: white"],
+html.dark [style*="background-color:white"] {
+  background-color: #131826 !important;
+}
+html.dark [style*="color:#000"],
+html.dark [style*="color: #000"],
+html.dark [style*="color: black"] {
+  color: #e8ecf3 !important;
+}

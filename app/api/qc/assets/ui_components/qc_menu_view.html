@@ -1,0 +1,342 @@
+<div class="qc-shell">
+  <div class="qc-submenu qc-toolbar">
+    <div class="qc-submenu__tabs">
+      <button id="qc-submenu-cover-page" class="qc-btn">Cover Page</button>
+      <button id="qc-submenu-picking-sheet" class="qc-btn qc-btn-primary">Picking Sheet</button>
+      <button id="qc-submenu-mixing" class="qc-btn">Mixing Instructions</button>
+      <button id="qc-submenu-tank-cip" class="qc-btn">Tank CIP</button>
+      <button id="qc-submenu-filler-mixer-cip" class="qc-btn">Filler/Mixer CIP</button>
+      <button id="qc-submenu-qc-report" class="qc-btn">QC Report</button>
+      <button id="qc-submenu-seam-check" class="qc-btn qc-hidden">Seam Check</button>
+    </div>
+    <div class="qc-actions">
+      <button id="qc-config-mixing-btn" class="qc-btn qc-btn-utility">Configure Mixing Procedure</button>
+      <button id="qc-refresh-btn" class="qc-btn qc-btn-utility">Refresh</button>
+    </div>
+  </div>
+
+  <div id="qc-current-batch-bar" class="qc-current-batch-bar qc-hidden" aria-live="polite">
+    <div class="qc-current-batch-bar__main">
+      <div id="qc-current-batch-no" class="qc-current-batch-bar__no"></div>
+      <div id="qc-current-batch-recipe" class="qc-current-batch-bar__recipe"></div>
+    </div>
+    <div class="qc-current-batch-bar__actions">
+      <button type="button" id="qc-current-batch-full-pdf" class="qc-btn">Full QC record (PDF)</button>
+      <button type="button" id="qc-current-batch-delete" class="qc-btn qc-btn-danger qc-btn-icon" title="Delete batch" aria-label="Delete batch"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"></path></svg></button>
+      <button type="button" id="qc-show-all-batches-btn" class="qc-btn qc-hidden">Clear search</button>
+    </div>
+  </div>
+
+  <div class="qc-grid">
+    <aside class="qc-list-panel" aria-label="QC batches">
+      <div class="qc-batch-sidebar">
+        <input type="text" id="qc-batch-search" class="qc-batch-search qc-batch-search--sidebar" placeholder="Search batches..." autocomplete="off" />
+        <div id="qc-batch-results" class="qc-batch-results" role="listbox" aria-label="Batch list"></div>
+      </div>
+    </aside>
+    <section class="qc-editor-panel">
+      <div id="qc-mixing-empty" class="qc-muted">Select a batch to open Picking Sheet.</div>
+      <div id="qc-cover-page-panel" class="qc-hidden">
+        <div class="qc-editor-header">
+          <h3>Quality Control File Cover</h3>
+          <div class="qc-inline-actions">
+            <button type="button" id="qc-cover-page-save-btn" class="qc-btn qc-btn-primary">Save</button>
+            <button type="button" id="qc-cover-page-pdf-btn" class="qc-btn">Download PDF</button>
+          </div>
+        </div>
+        <p id="qc-cover-page-status" class="qc-muted"></p>
+        <div class="qc-bubble-row" id="qc-cover-page-bubbles">
+          <label class="qc-bubble-field">
+            <span class="qc-bubble-label">Product</span>
+            <input type="text" id="qc-cover-page-product" class="qc-input qc-bubble-input" />
+          </label>
+          <label class="qc-bubble-field">
+            <span class="qc-bubble-label">Batch No</span>
+            <input type="text" id="qc-cover-page-batch-no" class="qc-input qc-bubble-input" />
+          </label>
+          <label class="qc-bubble-field">
+            <span class="qc-bubble-label">Destination</span>
+            <input type="text" id="qc-cover-page-destination" class="qc-input qc-bubble-input" placeholder="Viva Oman / Local" />
+          </label>
+          <label class="qc-bubble-field">
+            <span class="qc-bubble-label">Date</span>
+            <input type="date" id="qc-cover-page-date" class="qc-input qc-bubble-input" />
+          </label>
+        </div>
+      </div>
+      <div id="qc-picking-sheet-panel" class="qc-hidden">
+        <div class="qc-editor-header">
+          <h3>Picking Sheet</h3>
+          <div class="qc-inline-actions">
+            <button type="button" id="qc-picking-edit" class="qc-btn">Edit picking sheet</button>
+            <button type="button" id="qc-picking-prefill-calc" class="qc-btn">Prefill Calculator</button>
+            <button type="button" id="qc-picking-open-tab" class="qc-btn">Open in new tab</button>
+          </div>
+        </div>
+        <p id="qc-picking-status" class="qc-muted"></p>
+        <div id="qc-picking-sheet-bubbles" class="qc-picking-bubbles"></div>
+
+        <div id="qc-edit-batch-modal" class="qc-edit-modal-backdrop qc-hidden" role="dialog" aria-modal="true" aria-labelledby="qc-edit-batch-title">
+          <div class="qc-edit-modal-card">
+            <h3 id="qc-edit-batch-title">Edit Picking Sheet</h3>
+            <p class="qc-edit-modal-help">
+              Renaming the <strong>Batch No</strong> renames the QC record on disk and updates the matching production batch.
+              Changing the <strong>Tank No</strong> clears this batch's Tank CIP and Filler/Mixer CIP entries and returns previously assigned mixing-section CIPs to <em>pending</em>. You'll re-assign the new tank's CIPs from the Mixing Section.
+            </p>
+            <label for="qc-edit-batch-no-input" class="qc-edit-modal-label">Batch No</label>
+            <input id="qc-edit-batch-no-input" type="text" class="qc-input" autocomplete="off" />
+            <label for="qc-edit-tank-no-input" class="qc-edit-modal-label">Tank No</label>
+            <input id="qc-edit-tank-no-input" type="text" class="qc-input" autocomplete="off" />
+            <div id="qc-edit-batch-error" class="qc-edit-modal-error qc-hidden"></div>
+            <div class="qc-edit-modal-actions">
+              <button type="button" id="qc-edit-batch-cancel" class="qc-btn">Cancel</button>
+              <button type="button" id="qc-edit-batch-save" class="qc-btn qc-btn-primary">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="qc-mixing-panel" class="qc-hidden">
+        <div class="qc-editor-header">
+          <h3>Mixing Instructions</h3>
+          <div class="qc-inline-actions">
+            <button id="qc-mixing-print-btn" class="qc-btn">Save PDF</button>
+            <button id="qc-mixing-save-btn" class="qc-btn qc-btn-primary">Save</button>
+          </div>
+        </div>
+
+        <div class="qc-mixing-grid">
+          <label class="qc-field">
+            <span>Date</span>
+            <input type="date" id="qc-mix-date" class="qc-input" />
+          </label>
+          <label class="qc-field">
+            <span>Batch Number</span>
+            <input type="text" id="qc-mix-batch-no" class="qc-input" readonly />
+          </label>
+          <label class="qc-field">
+            <span>Job No</span>
+            <input type="text" id="qc-mix-job-no" class="qc-input" readonly />
+          </label>
+          <label class="qc-field">
+            <span>Tank No</span>
+            <input type="text" id="qc-mix-tank-no" class="qc-input" placeholder="Enter tank number" required />
+          </label>
+          <label class="qc-field">
+            <span>Product Name</span>
+            <input type="text" id="qc-mix-product-name-top" class="qc-input" readonly />
+          </label>
+        </div>
+
+        <div class="qc-product-title" id="qc-mix-product-name"></div>
+
+        <div class="qc-info-block">
+          <h4>Notes</h4>
+          <ul id="qc-mix-notes" class="qc-note-list"></ul>
+        </div>
+
+        <div class="qc-info-block">
+          <h4>Steps</h4>
+          <ol id="qc-mix-steps" class="qc-step-list"></ol>
+        </div>
+
+        <div class="qc-syrup-row">
+          <label class="qc-field">
+            <span>Syrup Quantity (L)</span>
+            <input type="text" id="qc-mix-syrup-qty" class="qc-input" readonly />
+          </label>
+          <label class="qc-field">
+            <span>Actual Syrup (L)</span>
+            <input type="text" id="qc-mix-syrup-actual" class="qc-input" placeholder="Enter actual syrup" />
+          </label>
+        </div>
+
+        <div class="qc-table-wrap">
+          <table class="qc-table">
+            <thead>
+              <tr>
+                <th>Test</th>
+                <th>Limits</th>
+                <th>Results</th>
+                <th>Adjustments</th>
+              </tr>
+            </thead>
+            <tbody id="qc-mix-checks-body"></tbody>
+          </table>
+        </div>
+
+        <div class="qc-conv-section">
+          <h4 class="qc-conv-title">Simple syrup conversion</h4>
+          <div class="qc-conv-grid">
+            <div class="qc-conv-left">
+              <div class="qc-conv-row">
+                <span class="qc-conv-label">Simple syrup brix</span>
+                <input type="text" id="qc-conv-syrup-brix" class="qc-input" placeholder="Enter syrup brix" />
+              </div>
+              <div class="qc-conv-row">
+                <span class="qc-conv-label">g/L</span>
+                <input type="text" id="qc-conv-gl" class="qc-input" placeholder="Enter g/L" />
+              </div>
+              <div class="qc-conv-row">
+                <span class="qc-conv-label">Kg sugar</span>
+                <input type="text" id="qc-conv-kg-sugar" class="qc-input" placeholder="Enter kg sugar" />
+              </div>
+              <div class="qc-conv-row">
+                <span class="qc-conv-label">Kg/L</span>
+                <input type="text" id="qc-conv-kg-l" class="qc-input" readonly />
+              </div>
+            </div>
+            <div class="qc-conv-equals">=</div>
+            <div class="qc-conv-right">
+              <input type="text" id="qc-conv-total" class="qc-input qc-conv-total" readonly />
+            </div>
+          </div>
+        </div>
+
+        <div class="qc-pack-section">
+          <h4 class="qc-pack-title">Batch approved/rejected for packing</h4>
+          <div class="qc-pack-row">
+            <div class="qc-pack-approval">
+              <span class="qc-pack-label">Approved</span>
+              <label class="qc-pack-check">
+                <span>Yes</span>
+                <input type="checkbox" id="qc-pack-approved-yes" />
+              </label>
+              <label class="qc-pack-check">
+                <span>No</span>
+                <input type="checkbox" id="qc-pack-approved-no" />
+              </label>
+            </div>
+            <label class="qc-field qc-pack-volume">
+              <span>Actual Final Volume of the Tank</span>
+              <input type="text" id="qc-pack-final-volume" class="qc-input" readonly />
+            </label>
+          </div>
+          <div class="qc-pack-confirm-line"><strong>Taste &amp; appearance confirmation (at least one person from blending/production)</strong></div>
+          <div class="qc-pack-compare-row">
+            <label class="qc-pack-compare-label" for="qc-pack-compared-batch">Write compared to batch</label>
+            <input type="text" id="qc-pack-compared-batch" class="qc-input" placeholder="Enter comparison batch number" />
+          </div>
+        </div>
+      </div>
+      <div id="qc-tank-cip-panel" class="qc-hidden">
+        <div class="qc-editor-header">
+          <div class="qc-cip-title-group">
+            <h3 id="qc-cip-panel-title">Tank CIP</h3>
+            <span id="qc-tank-cip-page-count" class="qc-cip-page-count">0 pages</span>
+          </div>
+          <div class="qc-inline-actions">
+            <button id="qc-tank-cip-print-btn" class="qc-btn">Save PDF</button>
+            <button id="qc-tank-cip-save-btn" class="qc-btn qc-btn-primary">Save</button>
+          </div>
+        </div>
+
+        <div class="qc-cip-add-buttons">
+          <button id="qc-cip-add-3-step-btn" class="qc-btn">Add 3 STEP CIP</button>
+          <button id="qc-cip-add-5-step-btn" class="qc-btn">Add 5 STEP CIP</button>
+          <button id="qc-cip-add-foam-btn" class="qc-btn">Add 5 STEP Foam CIP</button>
+        </div>
+
+        <div id="qc-tank-cip-empty" class="qc-muted">Add one or more Tank CIP procedures to begin.</div>
+        <div id="qc-tank-cip-blocks"></div>
+      </div>
+        <div id="qc-report-panel" class="qc-hidden">
+          <div class="qc-editor-header">
+            <h3 id="qc-report-panel-title">QC Report</h3>
+            <div class="qc-inline-actions">
+              <button id="qc-report-pdf-btn" class="qc-btn">Save as PDF</button>
+              <button id="qc-report-save-btn" class="qc-btn qc-btn-primary">Save</button>
+            </div>
+          </div>
+        <div class="qc-cip-add-buttons">
+          <button id="qc-report-add-day-btn" class="qc-btn">Add Another Day</button>
+        </div>
+        <div id="qc-report-empty" class="qc-muted">Add QC report day entries to begin.</div>
+        <div id="qc-report-days"></div>
+      </div>
+      <div id="qc-mixing-config-panel" class="qc-hidden">
+        <div class="qc-editor-header">
+          <h3>Configure Mixing Procedure</h3>
+          <div class="qc-inline-actions">
+            <button id="qc-mixing-config-add-btn" class="qc-btn">Add Configuration</button>
+            <button id="qc-mixing-config-copy-btn" class="qc-btn">Copy Configuration</button>
+            <button id="qc-mixing-config-remove-btn" class="qc-btn qc-btn-danger">Remove Configuration</button>
+            <button id="qc-mixing-config-save-btn" class="qc-btn qc-btn-primary">Save Configuration</button>
+          </div>
+        </div>
+
+        <div class="qc-config-grid">
+          <label class="qc-field">
+            <span>Recipe Name</span>
+            <div class="qc-multi-picker">
+              <div id="qc-config-recipe-tags" class="qc-multi-tags"></div>
+              <input type="text" id="qc-config-recipe-search" class="qc-input qc-multi-input" placeholder="Search recipe name..." />
+              <div id="qc-config-recipe-options" class="qc-multi-options qc-hidden"></div>
+            </div>
+          </label>
+          <label class="qc-field">
+            <span>Mixing Procedure Title</span>
+            <div id="qc-config-procedure-wrap" class="qc-proc-dropdown">
+              <input type="text" id="qc-config-procedure-search" class="qc-input qc-proc-search" placeholder="Search procedure..." autocomplete="off" />
+              <div id="qc-config-procedure-options" class="qc-proc-options qc-hidden"></div>
+              <select id="qc-config-procedure-select" class="qc-hidden"></select>
+            </div>
+          </label>
+        </div>
+        <p class="qc-muted">
+          Mapping rule: when this recipe is pushed to production, the selected mixing procedure is used.
+        </p>
+
+        <div class="qc-config-grid">
+          <label class="qc-field">
+            <span>Title Name</span>
+            <input type="text" id="qc-config-title-name" class="qc-input" />
+          </label>
+          <label class="qc-field">
+            <span>Procedure Name</span>
+            <input type="text" id="qc-config-procedure-name" class="qc-input" placeholder="Enter procedure title" />
+          </label>
+        </div>
+
+        <div class="qc-info-block">
+          <h4>Notes (one line per note)</h4>
+          <textarea id="qc-config-notes" class="qc-textarea" placeholder="Enter notes..."></textarea>
+        </div>
+
+        <div class="qc-info-block">
+          <h4>Steps (one line per step)</h4>
+          <textarea id="qc-config-steps" class="qc-textarea" placeholder="Enter steps..."></textarea>
+        </div>
+
+        <div class="qc-editor-header">
+          <h4>Test / Limits</h4>
+          <button id="qc-config-add-check-btn" class="qc-btn">Add Check Row</button>
+        </div>
+        <div class="qc-table-wrap">
+          <table class="qc-table">
+            <thead>
+              <tr>
+                <th>Test</th>
+                <th>Limits</th>
+                <th>Type</th>
+                <th>Data Entry</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="qc-config-checks-body"></tbody>
+          </table>
+        </div>
+      </div>
+      <div id="qc-seam-panel" class="qc-hidden">
+        <div class="qc-editor-header">
+          <h3 id="qc-seam-panel-title">Seam Check</h3>
+          <div class="qc-inline-actions">
+            <button id="qc-seam-pdf-btn" class="qc-btn">Save as PDF</button>
+            <button id="qc-seam-save-btn" class="qc-btn qc-btn-primary">Save</button>
+          </div>
+        </div>
+        <div id="qc-seam-empty" class="qc-muted">Seam Check is available only for CAN batches.</div>
+        <div id="qc-seam-sheet-wrap"></div>
+      </div>
+    </section>
+  </div>
+</div>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Contact — Muhammad Saad</title>
+<meta name="description" content="Get in touch with Muhammad Saad — Electrical & Automation Engineer in Dubai." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ================= NAV ================= -->
+<header class="nav">
+  <div class="container nav-inner">
+    <a href="index.html#top" class="logo">
+      <span class="logo-mark">MS</span>
+      <span class="logo-text">Muhammad Saad</span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html#about">About</a>
+      <a href="index.html#experience">Experience</a>
+      <a href="index.html#projects">Projects</a>
+      <a href="index.html#skills">Skills</a>
+      <a href="demo.html" target="_blank" rel="noopener">Demo ↗</a>
+      <a href="contact.html" class="active">Contact</a>
+    </nav>
+    <a class="nav-cta" href="mailto:saad@saadm.dev">Email direct</a>
+  </div>
+</header>
+
+<main>
+
+  <!-- ================= CONTACT PAGE HERO ================= -->
+  <section class="contact-page container">
+    <div class="contact-page-grid">
+
+      <!-- LEFT: pitch + alt channels -->
+      <div class="contact-page-left">
+        <span class="section-tag">Contact</span>
+        <h1 class="hero-title" style="font-size:clamp(34px,4.6vw,52px);">
+          Let&rsquo;s talk.<br/>
+          <span class="grad">I reply within 24 hours.</span>
+        </h1>
+        <p class="hero-sub" style="margin-bottom:28px;">
+          Fill the form and your message lands directly in my inbox. If you&rsquo;d rather use email,
+          phone, or LinkedIn, those are below too.
+        </p>
+
+        <ul class="contact-list" style="margin-bottom:24px;">
+          <li>
+            <span class="contact-k">Email</span>
+            <a class="contact-v" href="mailto:saad@saadm.dev">saad@saadm.dev</a>
+          </li>
+          <li>
+            <span class="contact-k">Phone</span>
+            <a class="contact-v" href="tel:+971502578065">+971 50 257 8065</a>
+          </li>
+          <li>
+            <span class="contact-k">LinkedIn</span>
+            <a class="contact-v" href="https://www.linkedin.com/in/muhammadsaad435/" target="_blank" rel="noopener">/in/muhammadsaad435</a>
+          </li>
+          <li>
+            <span class="contact-k">Based in</span>
+            <span class="contact-v">Dubai, United Arab Emirates</span>
+          </li>
+          <li>
+            <span class="contact-k">Status</span>
+            <span class="contact-v"><span class="led"></span> Open to work</span>
+          </li>
+        </ul>
+
+        <div class="reply-time">
+          <div class="reply-bar"><span class="reply-fill"></span></div>
+          <div class="reply-text">
+            <strong>Avg. response time:</strong> &lt; 24 hours · Dubai time (GMT+4)
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: form card -->
+      <div class="contact-page-right">
+        <form id="contact-form" class="form-card" novalidate
+              action="https://formsubmit.co/ajax/saad@saadm.dev"
+              method="POST">
+
+          <!-- Formsubmit configuration -->
+          <input type="hidden" name="_subject" value="New message from your portfolio site" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_captcha" value="false" />
+          <!-- honeypot for spam bots -->
+          <input type="text" name="_honey" tabindex="-1" autocomplete="off" class="honeypot" aria-hidden="true" />
+
+          <div class="form-head">
+            <h2>Send a message</h2>
+            <p>Delivered straight to <span class="mono-inline">saad@saadm.dev</span>.</p>
+          </div>
+
+          <div class="form-row">
+            <label for="f-name">Your name <span class="req">*</span></label>
+            <input id="f-name" name="name" type="text" required autocomplete="name" placeholder="Jane Engineer" />
+          </div>
+
+          <div class="form-grid">
+            <div class="form-row">
+              <label for="f-email">Email <span class="req">*</span></label>
+              <input id="f-email" name="email" type="email" required autocomplete="email" placeholder="jane@company.com" />
+            </div>
+            <div class="form-row">
+              <label for="f-company">Company <span class="opt">(optional)</span></label>
+              <input id="f-company" name="company" type="text" autocomplete="organization" placeholder="Acme Manufacturing" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label for="f-topic">What's this about?</label>
+            <select id="f-topic" name="topic">
+              <option value="Opportunity">Job / contract opportunity</option>
+              <option value="Project">Project collaboration</option>
+              <option value="Consulting">Consulting / freelance</option>
+              <option value="Networking">Networking / introduction</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <label for="f-message">Message <span class="req">*</span></label>
+            <textarea id="f-message" name="message" rows="6" required
+                      placeholder="A few lines on what you have in mind. Role, timeline, location, budget — whatever's relevant."></textarea>
+            <div class="form-hint"><span id="char-count">0</span> / 2000</div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" id="submit-btn">
+              <span class="btn-label">Send message</span>
+              <span class="arrow">→</span>
+            </button>
+            <a class="btn btn-ghost" id="mailto-fallback" href="#"
+               title="Open your email client with this message pre-filled">
+              Or open in email app
+            </a>
+          </div>
+
+          <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-copy">© <span id="year"></span> Muhammad Saad. Built with HTML, CSS, and a healthy disrespect for Excel.</div>
+    <div class="footer-links">
+      <a href="mailto:saad@saadm.dev">Email</a>
+      <a href="https://www.linkedin.com/in/muhammadsaad435/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="index.html#top">← Back to home</a>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script src="contact.js"></script>
+</body>
+</html>

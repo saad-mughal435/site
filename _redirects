@@ -1,0 +1,12 @@
+# Cloudflare Pages — URL rewrites/redirects
+# https://developers.cloudflare.com/pages/configuration/redirects/
+
+# If the live app's early auth gate ever fires before the bootstrap seeds
+# the token, it tries to navigate to /login. Send it back to the app.
+/login         /app/index.html  302
+/logout        /app/index.html  302
+
+# Friendly URLs
+/cv            /contact.html    302
+/resume        /contact.html    302
+/take-demo     /demo.html       302

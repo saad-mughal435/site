@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Muhammad Saad — Electrical &amp; Automation Engineer · MES/ERP Developer</title>
+<meta name="description" content="Muhammad Saad — Electrical & Automation Engineer in Dubai. Builds MES/ERP systems, automates production with Python, runs Krones beverage lines." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="home.css" />
+</head>
+<body>
+
+<div class="orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<div id="root"></div>
+
+<noscript>
+  <div style="padding:60px 28px; max-width:680px; margin:0 auto; text-align:center;">
+    <h1 style="font-family:'JetBrains Mono', monospace; color:#edf1f8;">Muhammad Saad</h1>
+    <p style="color:#b5bdcc;">This portfolio uses React. Please enable JavaScript or visit
+      <a href="contact.html" style="color:#6e8eff;">contact.html</a> for direct details.</p>
+  </div>
+</noscript>
+
+<!-- React + Babel from CDN -->
+<script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useRef, useMemo, useCallback, Fragment } = React;
+const { createRoot } = ReactDOM;
+
+/* =========================================================
+   HOOKS
+   ========================================================= */
+function useInView(ref, opts = {}) {
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    if (!ref.current) return;
+    const io = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setInView(true); io.disconnect(); } },
+      { threshold: 0.12, rootMargin: '0px 0px -60px 0px', ...opts }
+    );
+    io.observe(ref.current);
+    return () => io.disconnect();
+  }, []);
+  return inView;
+}
+
+function useCountUp(target, inView, duration = 1400) {
+  const [val, setVal] = useState(0);
+  useEffect(() => {
+    if (!inView) return;
+    let frame;
+    const start = performance.now();
+    const tick = (now) => {
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setVal(target * eased);
+      if (t < 1) frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [inView, target, duration]);
+  return val;
+}
+
+function useScrollPos() {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+  return scrolled;
+}
+
+/* =========================================================
+   PRIMITIVES
+   ========================================================= */
+function Reveal({ children, className = '', stagger = false, as: Tag = 'div', ...rest }) {
+  const ref = useRef(null);
+  const inView = useInView(ref);
+  return (
+    <Tag
+      ref={ref}
+      className={(stagger ? 'stagger ' : 'reveal ') + (inView ? 'inView ' : '') + className}
+      {...rest}
+    >
+      {children}
+    </Tag>
+  );
+}
+
+function MagneticBtn({ as: Tag = 'a', children, className = 'btn btn-primary', ...rest }) {
+  const ref = useRef(null);
+  const [t, setT] = useState({ x: 0, y: 0 });
+  const onMove = (e) => {
+    if (!ref.current) return;
+    const r = ref.current.getBoundingClientRect();
+    const x = (e.clientX - r.left - r.width / 2) * 0.25;
+    const y = (e.clientY - r.top - r.height / 2) * 0.25;
+    setT({ x, y });
+  };
+  const reset = () => setT({ x: 0, y: 0 });
+  return (
+    <Tag
+      ref={ref}
+      onMouseMove={onMove}
+      onMouseLeave={reset}
+      className={className}
+      style={{ transform: `translate(${t.x}px, ${t.y}px)` }}
+      {...rest}
+    >
+      {children}
+    </Tag>
+  );
+}
+
+/* =========================================================
+   NAV
+   ========================================================= */
+function Nav() {
+  const scrolled = useScrollPos();
+  const [active, setActive] = useState('');
+  useEffect(() => {
+    const sections = document.querySelectorAll('section[id]');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) setActive(e.target.id); });
+    }, { rootMargin: '-45% 0px -50% 0px', threshold: 0.01 });
+    sections.forEach((s) => io.observe(s));
+    return () => io.disconnect();
+  }, []);
+  return (
+    <header className={'nav' + (scrolled ? ' scrolled' : '')}>
+      <div className="container nav-inner">
+        <a className="logo" href="#top">
+          <span className="logo-mark">MS</span>
+          <span>Muhammad Saad</span>
+        </a>
+        <nav className="nav-links">
+          <a href="#about" className={active === 'about' ? 'active' : ''}>About</a>
+          <a href="#experience" className={active === 'experience' ? 'active' : ''}>Experience</a>
+          <a href="#projects" className={active === 'projects' ? 'active' : ''}>Projects</a>
+          <a href="#skills" className={active === 'skills' ? 'active' : ''}>Skills</a>
+          <a href="demo.html" target="_blank" rel="noopener">Demo ↗</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <a className="nav-cta" href="contact.html">Get in touch <span className="arrow">→</span></a>
+      </div>
+    </header>
+  );
+}
+
+/* =========================================================
+   VIEW TOGGLE
+   ========================================================= */
+const VIEWS = [
+  { key: 'all',  label: 'All' },
+  { key: 'eng',  label: 'Engineering' },
+  { key: 'code', label: 'Coding' },
+];
+
+function ViewToggle({ view, setView }) {
+  const wrapRef = useRef(null);
+  const [indicator, setIndicator] = useState({ left: 4, width: 0 });
+  useEffect(() => {
+    if (!wrapRef.current) return;
+    const btn = wrapRef.current.querySelector('.vt-pill.active');
+    if (!btn) return;
+    setIndicator({ left: btn.offsetLeft, width: btn.offsetWidth });
+  }, [view]);
+  return (
+    <div className="view-toggle" ref={wrapRef} role="tablist" aria-label="Switch portfolio view">
+      <div className="vt-indicator" style={{ left: indicator.left + 'px', width: indicator.width + 'px' }}></div>
+      {VIEWS.map((v) => (
+        <button
+          key={v.key}
+          className={'vt-pill' + (view === v.key ? ' active' : '')}
+          onClick={() => setView(v.key)}
+          role="tab"
+          aria-selected={view === v.key}
+        >{v.label}</button>
+      ))}
+    </div>
+  );
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+const HERO_COPY = {
+  all: {
+    title: ['Engineering on the floor.', 'Software around it.'],
+    sub: <Fragment>I&rsquo;m <strong>Muhammad Saad</strong>, an Electrical &amp; Automation Engineer who builds
+      the systems most factories still run on spreadsheets. I troubleshoot Krones lines by day
+      and ship the MES/ERP code that runs around them by night.</Fragment>,
+    stack: 'Python · MES/ERP · PLCs · Krones',
+    cta: { href: 'demo.html', label: 'Take demo ↗', target: '_blank' },
+  },
+  eng: {
+    title: ['Hands on the line.', 'Eyes on the OEE.'],
+    sub: <Fragment>I&rsquo;m <strong>Muhammad Saad</strong>, an Electrical &amp; Automation Engineer running
+      fully automated Krones beverage lines — blow molding, filling, Checkmate, Variopac FS, palletizing.
+      Electrical troubleshooting, RCA, preventive maintenance, commissioning. Hardware-first, line-first.</Fragment>,
+    stack: 'Krones · PLCs · RCA · Commissioning',
+    cta: { href: '#projects', label: 'See work →' },
+  },
+  code: {
+    title: ['I write Python', 'that kills Excel.'],
+    sub: <Fragment>I&rsquo;m <strong>Muhammad Saad</strong>, a Python developer who builds the operational
+      software factories normally outsource. Sole developer of an enterprise MES/ERP —
+      production planning, inventory, QC, accounts, live reporting — used in production across 5 departments.</Fragment>,
+    stack: 'Python · Pandas · MES/ERP · SQL',
+    cta: { href: 'app/index.html', label: 'Launch live app ↗', target: '_blank' },
+  },
+};
+
+const CODE_SNIPPETS = {
+  all: { title: 'engineer.py', body: (
+    <Fragment>
+      <span className="k">class</span> <span className="cls">Engineer</span>:{'\n'}
+      {'    '}<span className="v">name</span>      = <span className="s">"Muhammad Saad"</span>{'\n'}
+      {'    '}<span className="v">based_in</span>  = <span className="s">"Dubai, UAE"</span>{'\n'}
+      {'    '}<span className="v">role</span>      = <span className="s">"Electrical / Automation / MES-ERP"</span>{'\n'}
+      {'    '}<span className="v">does</span> = [{'\n'}
+      {'        '}<span className="s">"Run automated Krones lines"</span>,{'\n'}
+      {'        '}<span className="s">"Build MES/ERP from scratch"</span>,{'\n'}
+      {'        '}<span className="s">"Automate Excel hell with Python"</span>,{'\n'}
+      {'        '}<span className="s">"Troubleshoot what others escalate"</span>,{'\n'}
+      {'    '}]{'\n\n'}
+      {'    '}<span className="k">def</span> <span className="fn">value</span>(<span className="v">self</span>) -&gt; <span className="c">str</span>:{'\n'}
+      {'        '}<span className="k">return</span> <span className="s">"hardware + software, same engineer"</span>{'\n\n\n'}
+      <span className="v">me</span> = <span className="cls">Engineer</span>(){'\n'}
+      <span className="b">print</span>(<span className="v">me</span>.<span className="fn">value</span>())  <span className="comment"># → hardware + software, same engineer</span>
+    </Fragment>
+  )},
+  code: { title: 'close_shift.py', body: (
+    <Fragment>
+      <span className="k">from</span> <span className="m">dataclasses</span> <span className="k">import</span> <span className="c">dataclass</span>{'\n'}
+      <span className="k">from</span> <span className="m">decimal</span> <span className="k">import</span> <span className="c">Decimal</span>{'\n\n\n'}
+      <span className="d">@dataclass</span>{'\n'}
+      <span className="k">class</span> <span className="cls">Batch</span>:{'\n'}
+      {'    '}<span className="v">line</span>: <span className="c">str</span>{'\n'}
+      {'    '}<span className="v">recipe</span>: <span className="c">str</span>{'\n'}
+      {'    '}<span className="v">good</span>: <span className="c">int</span>{'\n'}
+      {'    '}<span className="v">reject</span>: <span className="c">int</span>{'\n'}
+      {'    '}<span className="v">planned</span>: <span className="c">int</span>{'\n\n'}
+      {'    '}<span className="d">@property</span>{'\n'}
+      {'    '}<span className="k">def</span> <span className="fn">oee</span>(<span className="v">self</span>) -&gt; <span className="c">Decimal</span>:{'\n'}
+      {'        '}<span className="v">avail</span>   = <span className="cls">Decimal</span>(<span className="v">self</span>.good + <span className="v">self</span>.reject) / <span className="v">self</span>.planned{'\n'}
+      {'        '}<span className="v">quality</span> = <span className="cls">Decimal</span>(<span className="v">self</span>.good) / (<span className="v">self</span>.good + <span className="v">self</span>.reject){'\n'}
+      {'        '}<span className="k">return</span> <span className="v">avail</span> * <span className="v">quality</span>  <span className="comment"># × performance</span>{'\n\n\n'}
+      <span className="k">def</span> <span className="fn">close_shift</span>(<span className="v">batches</span>: <span className="c">list</span>[<span className="cls">Batch</span>]):{'\n'}
+      {'    '}<span className="k">for</span> <span className="v">b</span> <span className="k">in</span> <span className="v">batches</span>:{'\n'}
+      {'        '}<span className="fn">publish_to_mes</span>(<span className="v">b</span>, <span className="v">b</span>.<span className="fn">oee</span>)
+    </Fragment>
+  )},
+  eng: { title: 'shift_report.yaml', body: (
+    <Fragment>
+      <span className="comment"># shift A · line A · 2026-05-13</span>{'\n'}
+      <span className="k">operator</span>:       <span className="s">muhammad.saad</span>{'\n'}
+      <span className="k">line</span>:           <span className="s">Line A — Krones</span>{'\n'}
+      <span className="k">subsystems</span>:{'\n'}
+      {'  '}- <span className="s">blow_molder</span>:        <span className="v">✓ running</span>{'\n'}
+      {'  '}- <span className="s">filler</span>:             <span className="v">✓ running</span>{'\n'}
+      {'  '}- <span className="s">checkmate_inspect</span>:  <span className="v">⚠ idle</span>   <span className="comment"># sensor flag</span>{'\n'}
+      {'  '}- <span className="s">variopac_fs</span>:        <span className="v">✓ running</span>{'\n'}
+      {'  '}- <span className="s">palletizer</span>:         <span className="v">✓ running</span>{'\n\n'}
+      <span className="k">recipe</span>:         <span className="s">Demo Beverage 500 mL</span>{'\n'}
+      <span className="k">planned_qty</span>:    <span className="n">1000</span> cases{'\n'}
+      <span className="k">good</span>:           <span className="n">962</span>{'\n'}
+      <span className="k">reject</span>:         <span className="n">18</span>{'\n'}
+      <span className="k">downtime_min</span>:   <span className="n">12</span>{'\n'}
+      <span className="k">downtime_cause</span>: <span className="s">Variopac jam · cleared in 12 min</span>{'\n'}
+      <span className="k">oee_percent</span>:    <span className="n">78</span>{'\n\n'}
+      <span className="k">root_cause</span>:{'\n'}
+      {'  '}<span className="k">where</span>:   <span className="s">Variopac infeed</span>{'\n'}
+      {'  '}<span className="k">why</span>:     <span className="s">torn shrink film</span>{'\n'}
+      {'  '}<span className="k">fix</span>:     <span className="s">replaced film roll · tension reset</span>{'\n'}
+      {'  '}<span className="k">prevent</span>: <span className="s">spec change to film supplier</span>{'\n\n'}
+      <span className="k">handover_to</span>:    <span className="s">shift B</span>
+    </Fragment>
+  )},
+};
+
+function CodeWindow({ view }) {
+  const ref = useRef(null);
+  const onMove = (e) => {
+    if (!ref.current) return;
+    const r = ref.current.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    ref.current.style.transform = `perspective(1400px) rotateY(${(-x * 8).toFixed(2)}deg) rotateX(${(y * 6).toFixed(2)}deg)`;
+  };
+  const reset = () => {
+    if (ref.current) ref.current.style.transform = 'perspective(1400px) rotateY(-3deg) rotateX(2deg)';
+  };
+  useEffect(() => { reset(); }, [view]);
+  const snippet = CODE_SNIPPETS[view] || CODE_SNIPPETS.all;
+  return (
+    <div className="code-window view-fade" key={view} ref={ref}
+         onMouseMove={onMove} onMouseLeave={reset}
+         style={{ transform: 'perspective(1400px) rotateY(-3deg) rotateX(2deg)' }}>
+      <div className="code-window-bar">
+        <span className="dot red"></span><span className="dot yellow"></span><span className="dot green"></span>
+        <span className="code-window-title">{snippet.title}</span>
+      </div>
+      <pre className="code-window-body"><code>{snippet.body}</code></pre>
+    </div>
+  );
+}
+
+function Hero({ view, setView }) {
+  const copy = HERO_COPY[view] || HERO_COPY.all;
+  return (
+    <section className="hero container" id="top">
+      <div className="hero-left">
+        <div className="eyebrow"><span className="led"></span> Available for new opportunities · Dubai, UAE</div>
+        <ViewToggle view={view} setView={setView} />
+        <h1 className="hero-title view-fade" key={'t-' + view}>
+          {copy.title.map((line, i) => (
+            <span className="line" key={i}>
+              <span>{i === copy.title.length - 1 ? <span className="grad">{line}</span> : line}</span>
+            </span>
+          ))}
+        </h1>
+        <p className="hero-sub view-fade" key={'s-' + view}>{copy.sub}</p>
+        <div className="hero-cta">
+          <MagneticBtn as="a" href="contact.html" className="btn btn-primary">Hire me <span className="arrow">→</span></MagneticBtn>
+          <a className="btn btn-ghost view-fade" key={'c-' + view}
+             href={copy.cta.href}
+             {...(copy.cta.target ? { target: copy.cta.target, rel: 'noopener' } : {})}
+          >{copy.cta.label}</a>
+        </div>
+        <div className="hero-meta">
+          <div><span className="meta-k">Currently</span><span className="meta-v">Kingsley Beverage FZCO · Dubai</span></div>
+          <div className="view-fade" key={'m-' + view}>
+            <span className="meta-k">Stack</span><span className="meta-v">{copy.stack}</span>
+          </div>
+          <div><span className="meta-k">Open to</span><span className="meta-v">On-site · Hybrid · Remote</span></div>
+        </div>
+      </div>
+      <div className="hero-right">
+        <CodeWindow view={view} />
+      </div>
+    </section>
+  );
+}
+
+/* =========================================================
+   STATS
+   ========================================================= */
+const STATS_ALL = [
+  { num: 60,   suffix: '%',    label: 'reduction in production reporting time', domain: 'code' },
+  { num: 5,    suffix: '',     label: 'departments digitised by the MES/ERP I built', domain: 'code' },
+  { num: 3,    suffix: '+ yrs',label: 'combined industrial & telecom-ops experience', domain: 'all' },
+  { num: 7,    suffix: '',     label: 'Krones subsystems owned end-to-end', domain: 'eng' },
+  { num: 2,    suffix: ' yrs', label: 'GPON / PSTN / broadband NOC operations', domain: 'eng' },
+  { num: 6,    suffix: '+',    label: 'years writing production Python & web', domain: 'code' },
+];
+
+function Stat({ s, view }) {
+  const ref = useRef(null);
+  const inView = useInView(ref);
+  const v = useCountUp(s.num, inView);
+  return (
+    <div ref={ref} className="stat">
+      <div className="stat-num">
+        {s.suffix.includes('%') ? '~' : ''}{Math.round(v).toLocaleString()}{s.suffix}
+      </div>
+      <div className="stat-lbl">{s.label}</div>
+    </div>
+  );
+}
+
+function Stats({ view }) {
+  const list = STATS_ALL.filter((s) => view === 'all' || s.domain === view || s.domain === 'all');
+  return (
+    <section className="stats container">
+      {list.map((s, i) => <Stat key={s.label} s={s} view={view} />)}
+    </section>
+  );
+}
+
+/* =========================================================
+   ABOUT
+   ========================================================= */
+function About() {
+  return (
+    <section id="about" className="section container">
+      <Reveal className="section-head">
+        <span className="section-tag">01 — About</span>
+        <h2>I sit between the factory floor and the keyboard.</h2>
+      </Reveal>
+      <div className="about-grid">
+        <Reveal className="about-copy">
+          <p>I&rsquo;m an Electrical Engineer (B.Sc., COMSATS Islamabad) currently working as
+            <strong> Line In-Charge</strong> and <strong>MES/ERP Developer</strong> at Kingsley Beverage FZCO in Dubai.
+            I run fully automated Krones beverage production lines — blow molding, filling, Checkmate inspection,
+            Variopac FS packaging, palletizing — and I&rsquo;m the sole developer of the enterprise software that
+            runs alongside them.</p>
+          <p>Before that I spent two years as a <strong>NOC Engineer at PTCL</strong> running GPON / PSTN /
+            broadband infrastructure, where I shipped a Python tool that auto-generated configuration scripts
+            from tickets and cut manual Excel work to zero.</p>
+          <p>The pattern: I look at slow, manual operational work and rebuild it in code. That&rsquo;s what I&rsquo;m
+            looking to do next, ideally on automation, commissioning, controls, or industrial-software teams where
+            domain knowledge of the floor matters.</p>
+          <div className="about-tags">
+            {['Python', 'MES / ERP', 'PLC concepts', 'Krones', 'RCA', 'Commissioning', 'GPON / PSTN'].map((t) =>
+              <span className="tag" key={t}>{t}</span>
+            )}
+          </div>
+        </Reveal>
+        <Reveal className="aside-card">
+          <div className="aside-card-head">// quick facts</div>
+          <dl>
+            <dt>Location</dt><dd>Dubai, UAE</dd>
+            <dt>Education</dt><dd>B.Sc. EE — COMSATS Islamabad (2024)</dd>
+            <dt>Languages</dt><dd>English (IELTS) · Urdu</dd>
+            <dt>Open to</dt><dd>On-site · Hybrid · Remote</dd>
+            <dt>Status</dt><dd><span className="led" style={{ marginRight: 6 }}></span>Open to work</dd>
+          </dl>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+/* =========================================================
+   EXPERIENCE
+   ========================================================= */
+const EXPERIENCE = [
+  { domain: 'all',
+    title: 'Electrical Engineer · Line In-Charge · MES/ERP Developer',
+    when: 'Jul 2025 — Present',
+    company: 'Kingsley Beverage FZCO · Dubai, UAE',
+    points: [
+      <Fragment>Operate fully automated <em>Krones</em> production lines — blow molding, filling, Checkmate inspection, Variopac FS packaging, tray packing, palletizing, depalletizing, PET preform.</Fragment>,
+      'Electrical troubleshooting, root cause analysis, and corrective action across interconnected line machines.',
+      'Support commissioning, testing, and validation of new equipment during setup and upgrades.',
+      <Fragment><strong>Designed and shipped an enterprise MES/ERP from scratch</strong> covering PPC, inventory, QC, accounts, and live production reporting across <strong>5 departments</strong>.</Fragment>,
+      <Fragment>Cut production reporting time by an estimated <strong>~60%</strong>; built OEE monitoring, batch tracking, and automated reporting modules.</Fragment>,
+      'Progressed Machine Operator → Electrical Engineer → Line In-Charge within the year.',
+    ],
+  },
+  { domain: 'all',
+    title: 'NOC Engineer',
+    when: 'Jul 2023 — Jul 2025',
+    company: 'PTCL · Rawalpindi, Pakistan',
+    points: [
+      <Fragment>Backend operations for <em>GPON</em>, <em>PSTN</em>, and broadband network infrastructure at telecom scale.</Fragment>,
+      'Monitored KPIs and resolved faults using Huawei and Nokia tooling; minimal subscriber downtime.',
+      'Handled escalations via Oracle CRM; partnered with the switching dept for PSTN migrations with zero outages.',
+      <Fragment><strong>Built a Python tool</strong> that auto-generated PSTN configuration scripts from incoming tickets, removing manual Excel preparation entirely.</Fragment>,
+    ],
+  },
+  { domain: 'code',
+    title: 'Freelance Designer & WordPress Developer',
+    when: '2019 — Jul 2025',
+    company: 'Fiverr · Remote',
+    points: [
+      'Delivered branding, graphics, and custom WordPress builds for international clients.',
+      'Managed multiple concurrent projects end-to-end — scoping, design, delivery.',
+    ],
+  },
+  { domain: 'code',
+    title: 'Machine Learning Intern',
+    when: '2023',
+    company: 'Omdena · Remote',
+    points: [
+      'Trained ML models for accessibility apps and environmental monitoring on a global AI collaboration.',
+      'Hands-on with training, evaluation, and deployment pipelines.',
+    ],
+  },
+  { domain: 'eng',
+    title: 'Technical Engineering Intern',
+    when: 'Jun — Aug 2023',
+    company: 'Kingsley Beverage FZCO · Dubai, UAE',
+    points: [
+      'First exposure to Krones machines; authored SOPs, work instructions, and quality manuals.',
+      'Troubleshot and resolved machine faults under supervision.',
+    ],
+  },
+  { domain: 'eng',
+    title: 'Network Engineering Intern',
+    when: 'Jun — Aug 2022',
+    company: 'PTCL · Rawalpindi, Pakistan',
+    points: [
+      'Maintained power systems, wireless communication, and switching equipment.',
+      'Contributed to a data center server migration with minimal disruption.',
+    ],
+  },
+];
+
+function Experience({ view }) {
+  const items = EXPERIENCE.filter((e) => view === 'all' || e.domain === view || e.domain === 'all');
+  return (
+    <section id="experience" className="section container">
+      <Reveal className="section-head">
+        <span className="section-tag">02 — Experience</span>
+        <h2>A short career, but a wide one.</h2>
+      </Reveal>
+      <ol className="timeline">
+        {items.map((e, i) => (
+          <Reveal as="li" key={e.title + i} className="t-item">
+            <div className="t-marker"></div>
+            <div className="t-card">
+              <div className="t-head">
+                <h3>{e.title}</h3>
+                <span className="t-when">{e.when}</span>
+              </div>
+              <div className="t-company">{e.company}</div>
+              <ul className="t-points">{e.points.map((p, j) => <li key={j}>{p}</li>)}</ul>
+            </div>
+          </Reveal>
+        ))}
+      </ol>
+    </section>
+  );
+}
+
+/* =========================================================
+   PROJECTS
+   ========================================================= */
+const PROJECTS = [
+  {
+    domain: 'all', featured: true, kind: 'Internal Product', year: '2025 — Present',
+    title: 'Enterprise MES/ERP System',
+    desc: <Fragment>A full-stack manufacturing system replacing Excel workflows across an entire beverage plant.
+      Production planning, inventory, QC, accounts, and live reporting — sole developer, end-to-end.</Fragment>,
+    bullets: [
+      <Fragment><strong>~60%</strong> faster production reporting</Fragment>,
+      <Fragment>OEE monitoring &amp; batch traceability modules</Fragment>,
+      <Fragment>Centralized data across <strong>5 departments</strong></Fragment>,
+    ],
+    tags: ['Python', 'Pandas', 'OpenPyXL', 'OEE', 'Manufacturing'],
+    showCode: true,
+    ctas: [
+      { label: 'Launch live app ↗', href: 'app/index.html', target: '_blank', primary: true },
+      { label: 'Static walkthrough', href: 'demo.html', target: '_blank' },
+    ],
+  },
+  {
+    domain: 'code', kind: 'Internal Tool', year: '2023 — 2025',
+    title: 'PSTN Config Auto-Generator',
+    desc: 'Python tool that ingested PTCL service-tickets and emitted ready-to-run configuration scripts using a structured database of area codes, number ranges, and network parameters.',
+    bullets: ['Eliminated manual Excel preparation','Faster provisioning + lower error rate','Zero-outage PSTN migrations'],
+    tags: ['Python', 'SQLite', 'Templates', 'Telecom'],
+  },
+  {
+    domain: 'code', kind: 'Open Collaboration', year: '2023',
+    title: 'Omdena — AI for Accessibility',
+    desc: 'Contributed to ML models for accessibility applications and environmental monitoring on a global Omdena collaboration — data, training, evaluation, deployment.',
+    bullets: ['Hands-on model training & evaluation','Worked in a distributed contributor team'],
+    tags: ['scikit-learn', 'NumPy', 'Pandas'],
+  },
+  {
+    domain: 'eng', kind: 'Operations', year: '2025 — Present',
+    title: 'Krones Line Runbooks',
+    desc: 'A personal library of troubleshooting trees and runbooks for Krones subsystems — Variopac jams, filler valve faults, Checkmate sensor failures. Used on shift, every shift.',
+    bullets: ['Lowered mean-time-to-repair on recurring faults','Onboarding aid for newer operators'],
+    tags: ['Krones', 'RCA', 'Maintenance'],
+  },
+];
+
+function ProjectCard({ p }) {
+  const ref = useRef(null);
+  const onMove = (e) => {
+    if (!ref.current) return;
+    const r = ref.current.getBoundingClientRect();
+    ref.current.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+    ref.current.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+  };
+  return (
+    <article ref={ref} onMouseMove={onMove} className={'project' + (p.featured ? ' featured' : '')}>
+      <div className="project-meta">
+        <span className="project-kind">{p.kind}</span>
+        <span className="project-year">{p.year}</span>
+      </div>
+      <h3 className="project-title">{p.title}</h3>
+      <p className="project-desc">{p.desc}</p>
+      <ul className="project-bullets">{p.bullets.map((b, i) => <li key={i}>{b}</li>)}</ul>
+      <div className="project-tags">{p.tags.map((t) => <span key={t} className="tag">{t}</span>)}</div>
+      {p.showCode && (
+        <div className="project-impl">
+          <pre className="mini-code"><code>
+            <span className="comment"># core loop — simplified</span>{'\n'}
+            <span className="k">def</span> <span className="fn">close_shift</span>(<span className="v">line</span>: <span className="c">str</span>, <span className="v">shift</span>: <span className="c">int</span>):{'\n'}
+            {'    '}<span className="v">batches</span> = <span className="fn">collect_batches</span>(<span className="v">line</span>, <span className="v">shift</span>){'\n'}
+            {'    '}<span className="v">oee</span> = <span className="fn">compute_oee</span>(<span className="v">batches</span>){'\n'}
+            {'    '}<span className="fn">publish</span>(<span className="v">line</span>, <span className="v">shift</span>, <span className="v">oee</span>, <span className="v">batches</span>)
+          </code></pre>
+        </div>
+      )}
+      {p.ctas && (
+        <div className="project-cta">
+          {p.ctas.map((c) => (
+            <a key={c.label} href={c.href} className={'btn ' + (c.primary ? 'btn-primary' : 'btn-ghost')}
+               {...(c.target ? { target: c.target, rel: 'noopener' } : {})}>{c.label}</a>
+          ))}
+        </div>
+      )}
+    </article>
+  );
+}
+
+function Projects({ view }) {
+  const items = PROJECTS.filter((p) => view === 'all' || p.domain === view || p.domain === 'all');
+  return (
+    <section id="projects" className="section container">
+      <Reveal className="section-head">
+        <span className="section-tag">03 — Selected Work</span>
+        <h2>Projects where code met the factory.</h2>
+      </Reveal>
+      <Reveal stagger className="projects-grid">
+        {items.map((p) => <ProjectCard key={p.title} p={p} />)}
+      </Reveal>
+    </section>
+  );
+}
+
+/* =========================================================
+   SKILLS
+   ========================================================= */
+const SKILLS = [
+  { domain: 'code', title: 'Programming', items: [
+    ['Python', 92], ['C++', 68], ['MATLAB', 62], ['SQL', 55], ['Bash', 50],
+  ]},
+  { domain: 'code', title: 'Data & Automation', items: [
+    ['Pandas', 85], ['OpenPyXL / Excel Automation', 80], ['NumPy', 72], ['scikit-learn', 60], ['Matplotlib', 55],
+  ]},
+  { domain: 'all', title: 'MES / ERP', items: [
+    ['Production Planning (PPC)', 88], ['Inventory & Batch Tracking', 85], ['OEE Monitoring', 80],
+    ['Quality Control Workflows', 78], ['Reporting Pipelines', 75],
+  ]},
+  { domain: 'eng', title: 'Industrial / Controls', items: [
+    ['Krones lines (end-to-end)', 85], ['Electrical troubleshooting / RCA', 82], ['Commissioning & Validation', 75],
+    ['Signal flow & interlocks', 65], ['PLC (Siemens — in progress)', 50],
+  ]},
+  { domain: 'eng', title: 'Networks & Ops', items: [
+    ['GPON / PSTN / Broadband', 80], ['Huawei / Nokia tooling', 72], ['Oracle CRM', 70], ['Incident response', 65],
+  ]},
+  { domain: 'all', title: 'Soft', items: [
+    ['Cross-team communication', 90], ['Documentation / SOPs', 85], ['Ownership & reliability', 80], ['Learning velocity', 78],
+  ]},
+];
+
+function SkillCard({ s }) {
+  const ref = useRef(null);
+  const inView = useInView(ref);
+  return (
+    <div ref={ref} className={'skill-card' + (inView ? ' inView' : '')}>
+      <h4>{s.title}</h4>
+      <ul>
+        {s.items.map(([name, w]) => (
+          <li key={name}>
+            <span className="bar"><span style={{ '--w': w + '%' }}></span></span>
+            <span className="bar-lbl">{name}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function Skills({ view }) {
+  const items = SKILLS.filter((s) => view === 'all' || s.domain === view || s.domain === 'all');
+  return (
+    <section id="skills" className="section container">
+      <Reveal className="section-head">
+        <span className="section-tag">04 — Skills</span>
+        <h2>What I bring to a team.</h2>
+      </Reveal>
+      <Reveal stagger className="skills-grid">
+        {items.map((s) => <SkillCard key={s.title} s={s} />)}
+      </Reveal>
+    </section>
+  );
+}
+
+/* =========================================================
+   CONTACT
+   ========================================================= */
+function Contact() {
+  return (
+    <section id="contact" className="section container">
+      <Reveal className="contact-box">
+        <div className="contact-left">
+          <span className="section-tag">05 — Contact</span>
+          <h2>Let&rsquo;s build something that ships.</h2>
+          <p>If you&rsquo;re hiring for automation, controls, commissioning, MES/ERP, or Python-heavy industrial
+            software roles in the UAE (or remote), I&rsquo;d love to talk.</p>
+          <MagneticBtn as="a" href="contact.html" className="btn btn-primary">
+            Open contact form <span className="arrow">→</span>
+          </MagneticBtn>
+        </div>
+        <ul className="contact-list">
+          <li><span className="contact-k">Email</span><a className="contact-v" href="mailto:saad@saadm.dev">saad@saadm.dev</a></li>
+          <li><span className="contact-k">Phone</span><a className="contact-v" href="tel:+971502578065">+971 50 257 8065</a></li>
+          <li><span className="contact-k">LinkedIn</span><a className="contact-v" href="https://www.linkedin.com/in/muhammadsaad435/" target="_blank" rel="noopener">/in/muhammadsaad435</a></li>
+          <li><span className="contact-k">Based in</span><span className="contact-v">Dubai, UAE — on-site / hybrid / remote</span></li>
+        </ul>
+      </Reveal>
+    </section>
+  );
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+function Footer() {
+  return (
+    <footer className="footer">
+      <div className="container footer-inner">
+        <div className="footer-copy">© {new Date().getFullYear()} Muhammad Saad. Built with React, vanilla CSS, and a healthy disrespect for Excel.</div>
+        <div className="footer-links">
+          <a href="mailto:saad@saadm.dev">Email</a>
+          <a href="https://www.linkedin.com/in/muhammadsaad435/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="#top">Back to top ↑</a>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+/* =========================================================
+   APP
+   ========================================================= */
+function App() {
+  const [view, setView] = useState(() => {
+    try {
+      const q = new URLSearchParams(window.location.search).get('view');
+      if (q === 'eng' || q === 'code' || q === 'all') return q;
+      return localStorage.getItem('portfolio_view') || 'all';
+    } catch (_) { return 'all'; }
+  });
+  useEffect(() => {
+    try { localStorage.setItem('portfolio_view', view); } catch (_) {}
+  }, [view]);
+
+  return (
+    <Fragment>
+      <Nav />
+      <main>
+        <Hero view={view} setView={setView} />
+        <Stats view={view} />
+        <About />
+        <Experience view={view} />
+        <Projects view={view} />
+        <Skills view={view} />
+        <Contact />
+      </main>
+      <Footer />
+    </Fragment>
+  );
+}
+
+createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

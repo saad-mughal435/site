@@ -1,0 +1,26 @@
+# Editor / OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs / build artifacts (none expected, but defensive)
+*.log
+node_modules/
+dist/
+.cache/
+
+# Helper / private files that should never be in git
+*_DO_NOT_PUBLISH*/
+*.env
+*.env.local
+.claude/
+
+# Defensive blocklist — never publish these even if accidentally placed under site/
+**/certbot/
+**/private_key.json
+**/*.pem
+**/*.key
+**/.env
