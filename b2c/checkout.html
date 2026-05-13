@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#fdfaf6" />
+<title>Checkout - Pebble &amp; Co.</title>
+<meta name="robots" content="noindex" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23f15a3a'/%3E%3Ccircle cx='32' cy='32' r='14' fill='%23fdfaf6'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/shop.css" />
+</head>
+<body>
+
+<div id="nav-host"></div>
+
+<main>
+  <section class="container" style="padding-top:32px;">
+    <h1 style="font-size:clamp(28px,3.6vw,40px);">Checkout</h1>
+    <p style="color:var(--ink-soft); margin-top:6px; font-size:14px;">
+      This is a demo. No card is charged. No order is shipped.
+    </p>
+  </section>
+
+  <section class="container" style="padding-bottom:60px;">
+    <div class="checkout-layout">
+      <div class="checkout-main">
+        <ol class="checkout-steps" id="checkout-steps">
+          <li class="active" data-step-pill="1"><span class="step-num">1</span> Shipping</li>
+          <li data-step-pill="2"><span class="step-num">2</span> Payment</li>
+          <li data-step-pill="3"><span class="step-num">3</span> Review</li>
+        </ol>
+
+        <div id="checkout-content">
+          <div style="padding:40px 0; text-align:center; color:var(--ink-soft);">Loading...</div>
+        </div>
+      </div>
+
+      <aside class="cart-summary checkout-summary" id="checkout-summary">
+        <h3 style="font-family:var(--display); font-size:22px; margin-bottom:14px;">Your order</h3>
+        <div id="checkout-summary-content">Loading...</div>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<div id="footer-host"></div>
+
+<script src="js/data.js"></script>
+<script src="js/mock-api.js"></script>
+<script src="js/app.js"></script>
+<script src="js/checkout.js"></script>
+<script>window.bootstrapShell('shop');</script>
+
+</body>
+</html>
