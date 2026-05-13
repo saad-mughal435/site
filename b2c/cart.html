@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#fdfaf6" />
+<title>Cart - Pebble &amp; Co.</title>
+<meta name="robots" content="noindex" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23f15a3a'/%3E%3Ccircle cx='32' cy='32' r='14' fill='%23fdfaf6'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/shop.css" />
+</head>
+<body>
+
+<div id="nav-host"></div>
+
+<main>
+  <section class="container" style="padding-top:40px;">
+    <h1 style="font-size:clamp(32px,4vw,44px);">Your cart</h1>
+    <p style="color:var(--ink-soft); margin-top:6px;" id="cart-subtitle">Loading...</p>
+  </section>
+
+  <section class="container" style="padding-bottom:60px;">
+    <div id="cart-root">
+      <div style="padding:60px 0; text-align:center; color:var(--ink-soft);">Loading...</div>
+    </div>
+  </section>
+</main>
+
+<div id="footer-host"></div>
+
+<script src="js/data.js"></script>
+<script src="js/mock-api.js"></script>
+<script src="js/app.js"></script>
+<script>
+(function(){
+  'use strict';
+  document.addEventListener('DOMContentLoaded', render);
+
+  async function render() {
+    const root = document.getElementById('cart-root');
+    const subtitle = document.getElementById('cart-subtitle');
+    const promo = localStorage.getItem('pebble.promo') || '';
+    const data = await fetch('/b2c/api/cart?promo=' + encodeURIComponent(promo)).then(r => r.json());
+
+    if (!data.lines.length) {
+      subtitle.textContent = '';
+      root.innerHTML = `
+        <div class="cart-empty">
+          <h2>Nothing here yet.</h2>
+          <p>Have a look around. The store has 24 things in it.</p>
+          <a href="products.html" class="btn btn-primary btn-lg">Browse products</a>
+        </div>`;
+      return;
+    }
+
+    subtitle.textContent = `${data.lines.reduce((s,l)=>s+l.qty,0)} item${data.lines.length === 1 ? '' : 's'} in your cart`;
+
+    root.innerHTML = `
+      <div class="cart-layout">
+        <div class="cart-items">
+          ${data.lines.map(l => `
+            <div class="cart-item" data-line="${l.product_id}::${l.variant_id||''}">
+              <a href="product.html?id=${l.product_id}" class="cart-item-image">
+                ${window.makeProductSvg(l.product, { k: 0 })}
+              </a>
+              <div class="cart-item-body">
+                <h4><a href="product.html?id=${l.product_id}" style="color:inherit;">${l.product.name}</a></h4>
+                <div class="cart-item-meta">
+                  ${l.variant_name ? `Color: ${l.variant_name} &middot; ` : ''}
+                  ${window.formatMoney(l.product.price)} each
+                </div>
+                <div class="qty-stepper" style="margin-top:10px;">
+                  <button class="qty-btn" data-decr aria-label="Decrease">-</button>
+                  <input class="qty-input" type="text" value="${l.qty}" data-qty-input>
+                  <button class="qty-btn" data-incr aria-label="Increase">+</button>
+                </div>
+              </div>
+              <div class="cart-item-actions">
+                <div class="cart-item-price">${window.formatMoney(l.line_total)}</div>
+                <button class="cart-remove" data-remove>Remove</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+
+        <aside class="cart-summary">
+          <h3 style="font-family:var(--display); font-size:22px; margin-bottom:14px;">Summary</h3>
+
+          <div class="free-shipping-bar">
+            <div class="free-shipping-bar-text">
+              ${data.free_shipping_eligible
+                ? '✓ <strong>Free shipping unlocked</strong>'
+                : `Add <strong>${window.formatMoney(75 - data.after_discount)}</strong> for free shipping`}
+            </div>
+            <div class="free-shipping-progress">
+              <div class="free-shipping-fill" style="width:${data.free_shipping_progress}%;"></div>
+            </div>
+          </div>
+
+          <div class="promo-input">
+            <input type="text" placeholder="Promo code" id="promo-code" value="${promo}">
+            <button class="btn btn-ghost btn-sm" id="apply-promo">Apply</button>
+          </div>
+          ${data.promo ? `<div style="font-size:12.5px; color:var(--green); margin-top:-12px; margin-bottom:8px;">✓ ${data.promo.description}</div>` : ''}
+          <p style="font-size:12px; color:var(--ink-mute); margin-top:-8px;">Try <code>DEMO10</code>, <code>FREESHIP</code>, or <code>WELCOME15</code></p>
+
+          <div style="border-top:1px solid var(--line); margin:14px 0;"></div>
+
+          <div class="summary-row"><span>Subtotal</span><span>${window.formatMoney(data.subtotal)}</span></div>
+          ${data.discount > 0 ? `<div class="summary-row discount"><span>Discount</span><span>- ${window.formatMoney(data.discount)}</span></div>` : ''}
+          <div class="summary-row"><span>Shipping</span><span>${data.shipping === 0 ? 'Free' : window.formatMoney(data.shipping)}</span></div>
+          <div class="summary-row"><span>Tax (5%)</span><span>${window.formatMoney(data.tax)}</span></div>
+          <div class="summary-row total"><span>Total</span><span>${window.formatMoney(data.total)}</span></div>
+
+          <a href="checkout.html" class="btn btn-primary btn-lg btn-block" style="margin-top:18px;">Checkout</a>
+          <a href="products.html" class="btn btn-link btn-block" style="margin-top:6px; display:block; text-align:center;">Continue shopping</a>
+
+          <div style="margin-top:18px; font-size:12px; color:var(--ink-mute); text-align:center;">
+            ✓ Secure checkout &middot; ✓ Mock payment - nothing real charged
+          </div>
+        </aside>
+      </div>
+    `;
+
+    bindCartInteractions(data);
+  }
+
+  function bindCartInteractions(data) {
+    document.querySelectorAll('.cart-item').forEach(el => {
+      const [product_id, variant_id] = el.dataset.line.split('::');
+      const line = data.lines.find(l => l.product_id === product_id && (l.variant_id || '') === variant_id);
+      const qtyInput = el.querySelector('[data-qty-input]');
+
+      el.querySelector('[data-incr]').addEventListener('click', () => setQty(line.qty + 1));
+      el.querySelector('[data-decr]').addEventListener('click', () => setQty(Math.max(0, line.qty - 1)));
+      qtyInput.addEventListener('change', () => setQty(Math.max(0, Math.min(99, Number(qtyInput.value) || 0))));
+      el.querySelector('[data-remove]').addEventListener('click', async () => {
+        await fetch('/b2c/api/cart', {
+          method: 'POST', headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ action: 'remove', product_id, variant_id: variant_id || null }),
+        });
+        window.toast('Removed');
+        render();
+      });
+
+      async function setQty(qty) {
+        await fetch('/b2c/api/cart', {
+          method: 'POST', headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ action: 'set', product_id, variant_id: variant_id || null, qty }),
+        });
+        render();
+      }
+    });
+
+    const applyBtn = document.getElementById('apply-promo');
+    if (applyBtn) applyBtn.addEventListener('click', async () => {
+      const code = document.getElementById('promo-code').value.trim();
+      if (!code) { localStorage.removeItem('pebble.promo'); render(); return; }
+      const r = await fetch('/b2c/api/promo', {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ code }),
+      }).then(r => r.json());
+      if (r.success) {
+        localStorage.setItem('pebble.promo', code.toUpperCase());
+        window.toast(`Applied: ${r.promo.description}`, 'success');
+      } else if (r.error === 'min_subtotal_not_met') {
+        window.toast(`Need a subtotal of $${r.min} for this code`, 'error');
+      } else {
+        window.toast('Code not recognised', 'error');
+      }
+      render();
+    });
+  }
+})();
+</script>
+<script>window.bootstrapShell('shop');</script>
+
+</body>
+</html>
