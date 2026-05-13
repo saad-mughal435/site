@@ -3,14 +3,26 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>MES/ERP Demo — Muhammad Saad</title>
-<meta name="description" content="Interactive walkthrough of the MES/ERP system built by Muhammad Saad. Every value here is fabricated; this is structure and functionality only." />
-<meta name="robots" content="noindex" />
+<title>MES/ERP Demo - Saad's Manufacturing Software Walkthrough</title>
+<meta name="description" content="Interactive walkthrough of an enterprise MES/ERP system built by Saad. Production planning, inventory, quality control, accounts, OEE monitoring and Sage integration. Built with Python, FastAPI, MongoDB. All data fabricated for demonstration." />
+<meta name="keywords" content="MES demo, ERP demo, manufacturing software demo, Saad portfolio, Python MES, FastAPI ERP, beverage manufacturing software" />
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+<meta name="theme-color" content="#07080d" />
+<link rel="canonical" href="https://saadm.dev/demo.html" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2064%2064'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0%25'%20stop-color%3D'%237c9cff'/%3E%3Cstop%20offset%3D'100%25'%20stop-color%3D'%235eead4'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D'64'%20height%3D'64'%20rx%3D'14'%20fill%3D'url(%23g)'/%3E%3Ctext%20x%3D'50%25'%20y%3D'56%25'%20font-family%3D'monospace'%20font-weight%3D'700'%20font-size%3D'22'%20fill%3D'%2307080d'%20text-anchor%3D'middle'%3ES%3C/text%3E%3C/svg%3E" />
+<link rel="apple-touch-icon" href="saad.png" />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Saad - saadm.dev" />
+<meta property="og:title" content="MES/ERP Demo - Saad's Manufacturing Software Walkthrough" />
+<meta property="og:description" content="Interactive walkthrough of an enterprise MES/ERP system built by Saad - production planning, inventory, QC, accounts, OEE monitoring. All data fabricated." />
+<meta property="og:url" content="https://saadm.dev/demo.html" />
+<meta property="og:image" content="https://saadm.dev/saad.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles.css" />
-<link rel="stylesheet" href="demo.css" />
+<link rel="stylesheet" href="styles.css?v=20260513m2" />
+<link rel="stylesheet" href="demo.css?v=20260513m2" />
 </head>
 <body>
 
@@ -18,8 +30,8 @@
 <header class="nav no-print">
   <div class="container nav-inner">
     <a href="index.html#top" class="logo">
-      <span class="logo-mark">MS</span>
-      <span class="logo-text">Muhammad Saad</span>
+      <img class="logo-photo" src="saad.png" alt="Saad" />
+      <span class="logo-text">Saad</span>
     </a>
     <nav class="nav-links">
       <a href="index.html#about">About</a>
@@ -83,7 +95,7 @@
     <a class="btn btn-ghost" href="#app-frame">View static walkthrough</a>
   </div>
   <p style="font-family:var(--mono); font-size:12.5px; color:var(--fg-mute); margin-top:10px;">
-    The live app runs the real frontend, fully disconnected — no Mongo, no Sage, no VM, no network.
+    The live app runs the real frontend, fully disconnected - no Mongo, no Sage, no VM, no network.
     Auto-logs you in as admin · all data is placeholder · realistic shortfall and calculator scenarios.
   </p>
 </section>
@@ -95,7 +107,7 @@
     <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
     <div class="window-url">
       <span class="url-lock">⌬</span>
-      <span class="url-text">app.demo.local — Plant Operations · Demo</span>
+      <span class="url-text">app.demo.local - Plant Operations · Demo</span>
     </div>
     <div class="window-user">demo.user · Supervisor</div>
   </div>
@@ -196,7 +208,7 @@
 
         <div class="info-panel" id="info-dashboard" hidden>
           <h4>About the Dashboard</h4>
-          <p>The Dashboard is a read-only aggregated view of every other module — production, QC, inventory, finance. It refreshes from the same MongoDB collections the operational modules write to, so what you see here is the same data, summarised. It's the first screen supervisors open at the start of each shift.</p>
+          <p>The Dashboard is a read-only aggregated view of every other module - production, QC, inventory, finance. It refreshes from the same MongoDB collections the operational modules write to, so what you see here is the same data, summarised. It's the first screen supervisors open at the start of each shift.</p>
           <ul class="info-list">
             <li><strong>Reads from:</strong> Job Orders, Production batches, QC results, Inventory, Vouchers</li>
             <li><strong>Refresh:</strong> live (polled every 15 s) for line status; hourly for finance metrics</li>
@@ -209,8 +221,8 @@
           <div class="kpi-card"><div class="kpi-lbl">OEE Line A</div><div class="kpi-val">1<span class="kpi-unit">%</span></div><div class="kpi-trend up">▲ target 85%</div></div>
           <div class="kpi-card"><div class="kpi-lbl">Units / shift</div><div class="kpi-val">1</div><div class="kpi-trend">▬ flat</div></div>
           <div class="kpi-card"><div class="kpi-lbl">QC pending</div><div class="kpi-val">1</div><div class="kpi-trend down">▼ 0</div></div>
-          <div class="kpi-card"><div class="kpi-lbl">Open POs</div><div class="kpi-val">AED&nbsp;1</div><div class="kpi-trend up">▲ —</div></div>
-          <div class="kpi-card"><div class="kpi-lbl">Downtime (min)</div><div class="kpi-val">1</div><div class="kpi-trend down">▼ —</div></div>
+          <div class="kpi-card"><div class="kpi-lbl">Open POs</div><div class="kpi-val">AED&nbsp;1</div><div class="kpi-trend up">▲ -</div></div>
+          <div class="kpi-card"><div class="kpi-lbl">Downtime (min)</div><div class="kpi-val">1</div><div class="kpi-trend down">▼ -</div></div>
         </div>
 
         <div class="grid-2">
@@ -257,7 +269,7 @@
 
         <div class="info-panel" id="info-jobs" hidden>
           <h4>About Job Orders</h4>
-          <p>A Job Order (JO) is the production planning record — a customer order, internal stock build, or forecast triggers a JO for a specific product, quantity, and line. The JO carries through the entire lifecycle: picking sheet → mixing → filling → packaging → QC → dispatch. Every batch produced is linked to a JO.</p>
+          <p>A Job Order (JO) is the production planning record - a customer order, internal stock build, or forecast triggers a JO for a specific product, quantity, and line. The JO carries through the entire lifecycle: picking sheet → mixing → filling → packaging → QC → dispatch. Every batch produced is linked to a JO.</p>
           <ul class="info-list">
             <li><strong>Inputs:</strong> Customer order, sales forecast, or stock build</li>
             <li><strong>Workflow:</strong> Draft → Released → In Production → Closed</li>
@@ -429,7 +441,7 @@
 
         <div class="info-panel" id="info-recipes" hidden>
           <h4>About Recipes</h4>
-          <p>The bill-of-materials and process steps for each product. Versioned — only one version is "released" per product at a time. Picking sheets, mixing operations, costing and QC specs all derive from the released version.</p>
+          <p>The bill-of-materials and process steps for each product. Versioned - only one version is "released" per product at a time. Picking sheets, mixing operations, costing and QC specs all derive from the released version.</p>
           <ul class="info-list">
             <li><strong>Workflow:</strong> Draft → Review → Released (older versions archived)</li>
             <li><strong>Drives:</strong> Picking sheet, Mixing instructions, Cost estimate, QC spec ranges</li>
@@ -509,7 +521,7 @@
             <div class="tank">
               <div class="tank-head">Tank&nbsp;4<span class="pill pill-grey">Idle</span></div>
               <div class="tank-fill"><span style="--f:0%"></span></div>
-              <div class="tank-meta">—</div>
+              <div class="tank-meta">-</div>
             </div>
           </div>
           <div class="row-actions"><button class="btn-mini" data-pdf="mixing-ops">📄 Mixing Operations PDF</button></div>
@@ -534,7 +546,7 @@
           <ul class="info-list">
             <li><strong>Reads from:</strong> Production batches, Recipe QC spec</li>
             <li><strong>Outputs:</strong> QC Batch Report PDF (Certificate of Analysis), seam check PDF, sample PDF</li>
-            <li><strong>Approvals:</strong> Two-level — QC Analyst → QC Manager</li>
+            <li><strong>Approvals:</strong> Two-level - QC Analyst → QC Manager</li>
           </ul>
         </div>
 
@@ -544,7 +556,7 @@
             <thead><tr><th>Check</th><th>UoM</th><th>Min</th><th>Max</th><th>Measured</th><th>Result</th></tr></thead>
             <tbody>
               <tr><td>Brix</td><td>°Bx</td><td>1</td><td>1</td><td>1</td><td><span class="pill pill-green">PASS</span></td></tr>
-              <tr><td>pH</td><td>—</td><td>1</td><td>1</td><td>1</td><td><span class="pill pill-green">PASS</span></td></tr>
+              <tr><td>pH</td><td>-</td><td>1</td><td>1</td><td>1</td><td><span class="pill pill-green">PASS</span></td></tr>
               <tr><td>Net content</td><td>mL</td><td>1</td><td>1</td><td>1</td><td><span class="pill pill-green">PASS</span></td></tr>
               <tr><td>Cap torque</td><td>lb·in</td><td>1</td><td>1</td><td>1</td><td><span class="pill pill-green">PASS</span></td></tr>
               <tr><td>Seam thickness</td><td>mm</td><td>1</td><td>1</td><td>1</td><td><span class="pill pill-green">PASS</span></td></tr>
@@ -746,7 +758,7 @@
 
         <div class="info-panel" id="info-pi" hidden>
           <h4>About Performa Invoice</h4>
-          <p>A pro-forma invoice issued before goods ship — confirms what will be billed once the order is fulfilled. Used by the customer for advance payment, by us for AR forecasting.</p>
+          <p>A pro-forma invoice issued before goods ship - confirms what will be billed once the order is fulfilled. Used by the customer for advance payment, by us for AR forecasting.</p>
         </div>
 
         <div class="card">
@@ -772,7 +784,7 @@
 
         <div class="info-panel" id="info-dispatch" hidden>
           <h4>About Dispatch</h4>
-          <p>Plans the outbound load — links FG cases to a vehicle, prints a Delivery Advice + Gate Pass + Packing List, and posts the inventory movement. Drivers receive a printed gate pass; reception scans on arrival at customer.</p>
+          <p>Plans the outbound load - links FG cases to a vehicle, prints a Delivery Advice + Gate Pass + Packing List, and posts the inventory movement. Drivers receive a printed gate pass; reception scans on arrival at customer.</p>
         </div>
 
         <div class="card">
@@ -804,7 +816,7 @@
 
         <div class="info-panel" id="info-suppliers" hidden>
           <h4>About Suppliers</h4>
-          <p>Vendor master — contact, payment terms, lead time, materials supplied, qualification status. Drives PO defaults and RM Order suggestions.</p>
+          <p>Vendor master - contact, payment terms, lead time, materials supplied, qualification status. Drives PO defaults and RM Order suggestions.</p>
         </div>
 
         <div class="card">
@@ -913,10 +925,10 @@
           <table class="data-table">
             <thead><tr><th>Ref</th><th>Date</th><th>Account</th><th>Description</th><th>Debit</th><th>Credit</th></tr></thead>
             <tbody>
-              <tr><td><code>SE-0001</code></td><td>2026-05-13</td><td>5000 · Demo COGS</td><td>JO-DEMO-1 closing</td><td>AED 1.00</td><td>—</td></tr>
-              <tr><td><code>SE-0001</code></td><td>2026-05-13</td><td>1300 · Demo Inventory</td><td>JO-DEMO-1 closing</td><td>—</td><td>AED 1.00</td></tr>
-              <tr><td><code>SE-0002</code></td><td>2026-05-13</td><td>2100 · AP — Demo Supplier</td><td>BPV-0001</td><td>AED 1.00</td><td>—</td></tr>
-              <tr><td><code>SE-0002</code></td><td>2026-05-13</td><td>1010 · Bank Demo</td><td>BPV-0001</td><td>—</td><td>AED 1.00</td></tr>
+              <tr><td><code>SE-0001</code></td><td>2026-05-13</td><td>5000 · Demo COGS</td><td>JO-DEMO-1 closing</td><td>AED 1.00</td><td>-</td></tr>
+              <tr><td><code>SE-0001</code></td><td>2026-05-13</td><td>1300 · Demo Inventory</td><td>JO-DEMO-1 closing</td><td>-</td><td>AED 1.00</td></tr>
+              <tr><td><code>SE-0002</code></td><td>2026-05-13</td><td>2100 · AP - Demo Supplier</td><td>BPV-0001</td><td>AED 1.00</td><td>-</td></tr>
+              <tr><td><code>SE-0002</code></td><td>2026-05-13</td><td>1010 · Bank Demo</td><td>BPV-0001</td><td>-</td><td>AED 1.00</td></tr>
             </tbody>
           </table>
           <div class="row-actions"><button class="btn-mini" data-pdf="sage">📄 Sage Batch Export PDF</button></div>
@@ -967,7 +979,7 @@
 
         <div class="info-panel" id="info-customs" hidden>
           <h4>About Customs &amp; FTA</h4>
-          <p>Generates the regulatory exports required by the UAE FTA — excise goods declarations, internal-transfer movements, VAT-relevant records. Outputs are validated against the FTA templates before submission.</p>
+          <p>Generates the regulatory exports required by the UAE FTA - excise goods declarations, internal-transfer movements, VAT-relevant records. Outputs are validated against the FTA templates before submission.</p>
         </div>
 
         <div class="card">
@@ -993,7 +1005,7 @@
 
         <div class="info-panel" id="info-documents" hidden>
           <h4>About Documents</h4>
-          <p>Every PDF the system generates — job orders, picking sheets, QC reports, vouchers, invoices, dispatches, Sage batches — is stored here and linked to the originating record. The buttons below open each PDF template so you can preview and print/save as PDF.</p>
+          <p>Every PDF the system generates - job orders, picking sheets, QC reports, vouchers, invoices, dispatches, Sage batches - is stored here and linked to the originating record. The buttons below open each PDF template so you can preview and print/save as PDF.</p>
         </div>
 
         <div class="card">
@@ -1075,7 +1087,7 @@
           </div>
 
           <div class="card">
-            <div class="card-head"><h3>OEE — Line A</h3><div class="card-sub">target 85%</div></div>
+            <div class="card-head"><h3>OEE - Line A</h3><div class="card-sub">target 85%</div></div>
             <div class="ring-chart">
               <div class="ring" style="--p:1deg">
                 <div class="ring-inner">
@@ -1104,7 +1116,7 @@
 
         <div class="info-panel" id="info-settings" hidden>
           <h4>About Settings</h4>
-          <p>Admin module — user accounts &amp; roles, line configuration, document templates, system parameters, audit log. Role-based access control: Operator, Supervisor, QC, Accounts, Admin.</p>
+          <p>Admin module - user accounts &amp; roles, line configuration, document templates, system parameters, audit log. Role-based access control: Operator, Supervisor, QC, Accounts, Admin.</p>
         </div>
 
         <div class="grid-2">
@@ -1140,7 +1152,7 @@
 
   <div class="after-note">
     Every value above is fabricated. The structure, workflow names, document templates and inter-module
-    integrations mirror the real system — they're industry-standard MES/ERP shapes.
+    integrations mirror the real system - they're industry-standard MES/ERP shapes.
   </div>
 
 </section>
@@ -1159,7 +1171,7 @@
 
 <footer class="footer no-print">
   <div class="container footer-inner">
-    <div class="footer-copy">© <span id="year"></span> Muhammad Saad. Demo data is fabricated.</div>
+    <div class="footer-copy">© <span id="year"></span> Saad. Demo data is fabricated.</div>
     <div class="footer-links">
       <a href="index.html#top">← Back to home</a>
       <a href="contact.html">Contact</a>
@@ -1298,7 +1310,7 @@
       <div class="doc-brand">
         <div class="doc-logo">DP</div>
         <div>
-          <div class="doc-co">Demo Plant LLC — Quality Control</div>
+          <div class="doc-co">Demo Plant LLC - Quality Control</div>
           <div class="doc-addr">Certificate of Analysis · Internal use</div>
         </div>
       </div>
@@ -1321,7 +1333,7 @@
       <thead><tr><th>Check</th><th>UoM</th><th class="r">Min</th><th class="r">Max</th><th class="r">Measured</th><th class="c">Result</th></tr></thead>
       <tbody>
         <tr><td>Brix</td><td>°Bx</td><td class="r">1</td><td class="r">1</td><td class="r">1</td><td class="c">PASS</td></tr>
-        <tr><td>pH</td><td>—</td><td class="r">1</td><td class="r">1</td><td class="r">1</td><td class="c">PASS</td></tr>
+        <tr><td>pH</td><td>-</td><td class="r">1</td><td class="r">1</td><td class="r">1</td><td class="c">PASS</td></tr>
         <tr><td>Net content</td><td>mL</td><td class="r">1</td><td class="r">1</td><td class="r">1</td><td class="c">PASS</td></tr>
         <tr><td>Cap torque</td><td>lb·in</td><td class="r">1</td><td class="r">1</td><td class="r">1</td><td class="c">PASS</td></tr>
         <tr><td>Seam thickness</td><td>mm</td><td class="r">1</td><td class="r">1</td><td class="r">1</td><td class="c">PASS</td></tr>
@@ -1332,7 +1344,7 @@
 
     <section class="doc-notes">
       <h5>QC verdict</h5>
-      <p><strong>Batch released for dispatch.</strong> One parameter flagged for review — within tolerance but trending toward upper bound.</p>
+      <p><strong>Batch released for dispatch.</strong> One parameter flagged for review - within tolerance but trending toward upper bound.</p>
     </section>
 
     <footer class="doc-sign">
@@ -1445,7 +1457,7 @@
       <div class="doc-brand">
         <div class="doc-logo">DP</div>
         <div>
-          <div class="doc-co">Demo Plant LLC — Finance</div>
+          <div class="doc-co">Demo Plant LLC - Finance</div>
           <div class="doc-addr">Sage batch export · staged for accounting</div>
         </div>
       </div>
@@ -1465,10 +1477,10 @@
     <table class="doc-table">
       <thead><tr><th>Ref</th><th>Account</th><th>Description</th><th class="r">Debit</th><th class="r">Credit</th></tr></thead>
       <tbody>
-        <tr><td>SE-0001</td><td>5000 · Demo COGS</td><td>JO-DEMO-1 closing</td><td class="r">AED 1.00</td><td class="r">—</td></tr>
-        <tr><td>SE-0001</td><td>1300 · Demo Inventory</td><td>JO-DEMO-1 closing</td><td class="r">—</td><td class="r">AED 1.00</td></tr>
-        <tr><td>SE-0002</td><td>2100 · AP — Demo Supplier</td><td>BPV-0001</td><td class="r">AED 1.00</td><td class="r">—</td></tr>
-        <tr><td>SE-0002</td><td>1010 · Bank Demo</td><td>BPV-0001</td><td class="r">—</td><td class="r">AED 1.00</td></tr>
+        <tr><td>SE-0001</td><td>5000 · Demo COGS</td><td>JO-DEMO-1 closing</td><td class="r">AED 1.00</td><td class="r">-</td></tr>
+        <tr><td>SE-0001</td><td>1300 · Demo Inventory</td><td>JO-DEMO-1 closing</td><td class="r">-</td><td class="r">AED 1.00</td></tr>
+        <tr><td>SE-0002</td><td>2100 · AP - Demo Supplier</td><td>BPV-0001</td><td class="r">AED 1.00</td><td class="r">-</td></tr>
+        <tr><td>SE-0002</td><td>1010 · Bank Demo</td><td>BPV-0001</td><td class="r">-</td><td class="r">AED 1.00</td></tr>
       </tbody>
     </table>
 
@@ -1482,7 +1494,7 @@
       <div class="doc-brand">
         <div class="doc-logo">DP</div>
         <div>
-          <div class="doc-co">Demo Plant LLC — Mixing</div>
+          <div class="doc-co">Demo Plant LLC - Mixing</div>
           <div class="doc-addr">Mixing operations log</div>
         </div>
       </div>
@@ -1514,8 +1526,8 @@
       <div class="doc-brand">
         <div class="doc-logo">DP</div>
         <div>
-          <div class="doc-co">Demo Plant LLC — Procurement</div>
-          <div class="doc-addr">Raw material order — draft</div>
+          <div class="doc-co">Demo Plant LLC - Procurement</div>
+          <div class="doc-addr">Raw material order - draft</div>
         </div>
       </div>
       <div class="doc-title-block">

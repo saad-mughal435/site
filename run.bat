@@ -1,6 +1,6 @@
 @echo off
 REM ============================================================
-REM  Muhammad Saad - Portfolio local server launcher
+REM  Saad - Portfolio local server launcher
 REM  Double-click this file to view the site at http://localhost:8000
 REM ============================================================
 
@@ -13,7 +13,7 @@ cd /d "%~dp0"
 
 echo.
 echo  =====================================================
-echo    Muhammad Saad - Portfolio
+echo    Saad - Portfolio
 echo    Serving:  %CD%
 echo    URL:      http://%HOST%:%PORT%/
 echo    Stop:     Ctrl+C in this window

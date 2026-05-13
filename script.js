@@ -1,5 +1,5 @@
 /* =========================================================
-   Muhammad Saad — Portfolio interactions
+   Saad - Portfolio interactions
    ========================================================= */
 
 /* ---------- year in footer ---------- */

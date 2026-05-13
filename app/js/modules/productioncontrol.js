@@ -1107,7 +1107,7 @@ function formTemplate() {
         <table class="ppc-table"><tr><th colspan="2" style="font-size:14px">Machine Hours</th></tr><tr><td>Filler</td><td><input id="ppc-mh-filler" type="number" step="0.0001" class="ppc-input"></td></tr><tr id="ppc-mh-contiform-row" class="ppc-hidden"><td>Contiform</td><td><input id="ppc-mh-contiform" type="number" step="0.0001" class="ppc-input"></td></tr><tr><td>Mixer</td><td><input id="ppc-mh-mixer" type="number" step="0.0001" class="ppc-input"></td></tr><tr id="ppc-mh-contiroll-row" class="ppc-hidden"><td>Contiroll</td><td><input id="ppc-mh-contiroll" type="number" step="0.0001" class="ppc-input"></td></tr><tr><td>Variopac Pro FS</td><td><input id="ppc-mh-vfs" type="number" step="0.0001" class="ppc-input"></td></tr><tr><td>Shrinking Tunnel</td><td><input id="ppc-mh-sh" type="number" step="0.0001" class="ppc-input"></td></tr><tr><td>Variopac Pro Tray</td><td><input id="ppc-mh-vt" type="number" step="0.0001" class="ppc-input"></td></tr><tr><td>Palletizer</td><td><input id="ppc-mh-pal" type="number" step="0.0001" class="ppc-input"></td></tr><tr id="ppc-mh-dep-row"><td>Depalletizer</td><td><input id="ppc-mh-dep" type="number" step="0.0001" class="ppc-input"></td></tr></table>
         <div class="ppc-notes"><div class="ppc-note-head">Notes</div><textarea id="ppc-notes" class="ppc-text" style="min-height:250px;resize:vertical"></textarea></div>
       </div>
-      <div class="ppc-sign"><div>Line Incharge</div><div>Store Incharge</div><div>Production Manager</div></div>
+      <div class="ppc-sign"><div>Production Supervisor</div><div>Store Supervisor</div><div>Production Manager</div></div>
     </div></div>`;
 }
 
