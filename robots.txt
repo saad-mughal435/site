@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Disconnected MES/ERP live demo — okay to index but it's interactive
+# (fake admin auto-login + mock data), pages render via JS.
+Allow: /app/
+
+Sitemap: https://saadm.dev/sitemap.xml
+Host: saadm.dev
