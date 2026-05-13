@@ -1,0 +1,28 @@
+# Cloudflare Pages — HTTP headers
+# https://developers.cloudflare.com/pages/configuration/headers/
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
+
+# Long-cache static assets (filenames embed ?v=... query — busts cache on change)
+/app/css/*
+  Cache-Control: public, max-age=31536000, immutable
+/app/js/*
+  Cache-Control: public, max-age=31536000, immutable
+/app/api/qc/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# HTML — short cache so updates surface quickly
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Site CSS / JS at root — short cache
+/home.css
+  Cache-Control: public, max-age=86400
+/styles.css
+  Cache-Control: public, max-age=86400
+/script.js
+  Cache-Control: public, max-age=86400
