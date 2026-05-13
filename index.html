@@ -861,6 +861,42 @@ function Experience({ view }) {
    ========================================================= */
 const PROJECTS = [
   {
+    domain: 'code', kind: 'Disconnected demo', year: '2026',
+    title: 'Pebble & Co. - DTC storefront',
+    desc: <Fragment>A full direct-to-consumer storefront built end-to-end as a portfolio piece - storefront, catalog,
+      product detail, cart, multi-step checkout, customer account, and a Shopify-style admin panel with
+      dashboard / orders / products / customers / promotions / analytics. Mock API runs entirely in-browser.</Fragment>,
+    bullets: [
+      <Fragment>Storefront + catalog + filters + product detail + cart + multi-step checkout</Fragment>,
+      <Fragment>Customer account: orders, wishlist, addresses, loyalty points</Fragment>,
+      <Fragment>Shopify-style admin: dashboard, orders, products, customers, promotions, analytics</Fragment>,
+      <Fragment>In-browser notifications (toast + bell + email log + demo event ticker)</Fragment>,
+    ],
+    tags: ['HTML', 'CSS', 'Vanilla JS', 'localStorage', 'mock API', 'design system'],
+    ctas: [
+      { label: 'Open storefront ↗', href: 'b2c/index.html', target: '_blank', primary: true },
+      { label: 'Open admin ↗', href: 'b2c/admin.html', target: '_blank' },
+    ],
+  },
+  {
+    domain: 'code', kind: 'Disconnected demo', year: '2026',
+    title: 'Anvil Supply Co. - B2B wholesale portal',
+    desc: <Fragment>A wholesale/industrial portal with tier pricing, MOQs, contract discounts, quote requests, and an
+      approval workflow for large orders. Multi-user accounts with purchaser / approver / viewer roles, recurring
+      orders, statements view, and a data-dense admin panel with quote queue and approval queue.</Fragment>,
+    bullets: [
+      <Fragment>Tier pricing (1/10/50/100), MOQ enforcement, customer contract discounts</Fragment>,
+      <Fragment>Quote request workflow + approval workflow for orders over $1,000</Fragment>,
+      <Fragment>Multi-user accounts (purchaser / approver / viewer), bulk SKU paste add</Fragment>,
+      <Fragment>Admin: order queue, quote queue, approval queue, customers, analytics</Fragment>,
+    ],
+    tags: ['HTML', 'CSS', 'Vanilla JS', 'workflows', 'role-based UI', 'data-dense tables'],
+    ctas: [
+      { label: 'Open portal ↗', href: 'b2b/index.html', target: '_blank', primary: true },
+      { label: 'Open admin ↗', href: 'b2b/admin.html', target: '_blank' },
+    ],
+  },
+  {
     domain: 'all', featured: true, kind: 'Internal Product', year: '2025 - Present',
     title: 'Enterprise MES/ERP System',
     desc: <Fragment>A full-stack manufacturing system that replaces manual workflows - spreadsheets, paper logs,

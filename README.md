@@ -25,6 +25,8 @@ interactive walkthrough of a real-world MES/ERP project.
 | [`/contact.html`](https://saadm.dev/contact.html) | Contact form, posts to [Formsubmit.co](https://formsubmit.co) → email inbox. |
 | [`/demo.html`](https://saadm.dev/demo.html) | Static screenshot-style walkthrough of the MES/ERP project (fabricated data). |
 | [`/app/`](https://saadm.dev/app/) | Disconnected live demo: the real frontend running entirely in the browser with a fetch interceptor. Auto-logs in as admin. |
+| [`/b2c/`](https://saadm.dev/b2c/) | **Pebble & Co.** — full DTC storefront demo. Storefront, catalog, product detail, cart, multi-step checkout, customer account, Shopify-style admin panel. Mock API runs in-browser. |
+| [`/b2b/`](https://saadm.dev/b2b/) | **Anvil Supply Co.** — full B2B wholesale portal demo. Tier pricing, MOQ, contract discounts, quote workflow, approval workflow for orders over $1,000, admin with order/quote/approval queues. |
 
 ## Tech stack
 
@@ -59,7 +61,19 @@ interactive walkthrough of a real-world MES/ERP project.
 ├── package.json           # Dev scripts (no runtime deps)
 ├── app/                   # Disconnected live MES/ERP demo
 │   ├── index.html
-│   ├── css/  js/  api/    # Sanitised assets + mock-api interceptor
+│   └── css/  js/  api/    # Sanitised assets + mock-api interceptor
+├── b2c/                   # Pebble & Co. DTC storefront demo
+│   ├── index.html  products.html  product.html
+│   ├── cart.html  checkout.html  success.html
+│   ├── account.html  admin.html
+│   ├── css/shop.css       # Coral/peach light design system
+│   └── js/                # data, mock-api, storefront, checkout, admin, notifications
+├── b2b/                   # Anvil Supply Co. wholesale portal demo
+│   ├── index.html  catalog.html  product.html
+│   ├── cart.html  quote-request.html  checkout.html  success.html
+│   ├── account.html  admin.html
+│   ├── css/shop.css       # Navy/slate light design system
+│   └── js/                # data, mock-api, catalog (bulk paste), checkout (approval), admin
 └── .github/
     ├── workflows/lint.yml # Prettier + HTML validate + link check
     ├── ISSUE_TEMPLATE/

@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-05-14
+
+### Added
+- **Pebble & Co.** - full direct-to-consumer storefront demo at `/b2c/`.
+  Storefront, catalog, product detail, cart, multi-step checkout, customer
+  account, and a Shopify-style admin panel (dashboard, orders, products,
+  customers, promotions, analytics, email log, settings). In-browser
+  notifications with toast + bell + demo event ticker.
+- **Anvil Supply Co.** - full B2B wholesale portal demo at `/b2b/`.
+  Catalog with table/grid toggle and bulk SKU paste, tier pricing, MOQ
+  enforcement, contract discounts, quote request flow, approval workflow
+  for orders over $1,000. Account dashboard with orders, quotes,
+  invoices, recurring orders, users & roles, ship-to addresses. Admin panel
+  with order queue, quote queue, approval queue, customers, analytics,
+  email log, settings.
+- Two new entries on the homepage `PROJECTS` array with direct CTAs to each
+  storefront and admin.
+- Sitemap entries for both demos.
+- `_headers` cache rules for `/b2c/` and `/b2b/` static assets.
+
+### Changed
+- All B2B and B2C demo data is fabricated. No real APIs, no real payments,
+  no real shipping. Each demo ships its own mock-api shim that intercepts
+  fetch + XHR for its prefix.
+
 ## [1.2.0] - 2026-05-14
 
 ### Added
@@ -64,7 +89,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Contact form via Formsubmit.co AJAX integration.
 - Cloudflare Pages deployment with `_headers` + `_redirects`.
 
-[Unreleased]: https://github.com/saad-mughal435/site/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/saad-mughal435/site/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/saad-mughal435/site/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/saad-mughal435/site/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/saad-mughal435/site/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/saad-mughal435/site/releases/tag/v1.0.0
