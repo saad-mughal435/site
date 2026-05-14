@@ -20,16 +20,34 @@
     orders:          'pebble.orders.created',
     notif:           'pebble.notifications',
     statusOverrides: 'pebble.orders.status_overrides',
+    productsCreated: 'pebble.products.created',
+    productEdits:    'pebble.products.edits',
+    productsDeleted: 'pebble.products.deleted',
+    customersCreated:'pebble.customers.created',
+    customerEdits:   'pebble.customers.edits',
+    promosCreated:   'pebble.promos.created',
+    banners:         'pebble.banners',
+    emailLog:        'pebble.email_log',
+    settings:        'pebble.settings.overrides',
   };
   try {
     if (!localStorage.getItem(LS.user)) {
       localStorage.setItem(LS.user, JSON.stringify(D.current_user));
     }
-    if (!localStorage.getItem(LS.cart))            localStorage.setItem(LS.cart, '[]');
-    if (!localStorage.getItem(LS.wishlist))        localStorage.setItem(LS.wishlist, '[]');
-    if (!localStorage.getItem(LS.orders))          localStorage.setItem(LS.orders, '[]');
-    if (!localStorage.getItem(LS.notif))           localStorage.setItem(LS.notif, '[]');
-    if (!localStorage.getItem(LS.statusOverrides)) localStorage.setItem(LS.statusOverrides, '{}');
+    if (!localStorage.getItem(LS.cart))             localStorage.setItem(LS.cart, '[]');
+    if (!localStorage.getItem(LS.wishlist))         localStorage.setItem(LS.wishlist, '[]');
+    if (!localStorage.getItem(LS.orders))           localStorage.setItem(LS.orders, '[]');
+    if (!localStorage.getItem(LS.notif))            localStorage.setItem(LS.notif, '[]');
+    if (!localStorage.getItem(LS.statusOverrides))  localStorage.setItem(LS.statusOverrides, '{}');
+    if (!localStorage.getItem(LS.productsCreated))  localStorage.setItem(LS.productsCreated, '[]');
+    if (!localStorage.getItem(LS.productEdits))     localStorage.setItem(LS.productEdits, '{}');
+    if (!localStorage.getItem(LS.productsDeleted))  localStorage.setItem(LS.productsDeleted, '[]');
+    if (!localStorage.getItem(LS.customersCreated)) localStorage.setItem(LS.customersCreated, '[]');
+    if (!localStorage.getItem(LS.customerEdits))    localStorage.setItem(LS.customerEdits, '{}');
+    if (!localStorage.getItem(LS.promosCreated))    localStorage.setItem(LS.promosCreated, '[]');
+    if (!localStorage.getItem(LS.banners))          localStorage.setItem(LS.banners, '[]');
+    if (!localStorage.getItem(LS.emailLog))         localStorage.setItem(LS.emailLog, '[]');
+    if (!localStorage.getItem(LS.settings))         localStorage.setItem(LS.settings, '{}');
   } catch (_) {}
 
   function applyStatusOverride(order) {
@@ -37,6 +55,25 @@
     const overrides = readLS(LS.statusOverrides, {});
     const ov = overrides[order.id] || overrides[order.number];
     return ov ? { ...order, status: ov } : order;
+  }
+
+  // Merge seed products with user-created + user edits, minus deleted
+  function effectiveProducts() {
+    const created = readLS(LS.productsCreated, []);
+    const edits = readLS(LS.productEdits, {});
+    const deleted = new Set(readLS(LS.productsDeleted, []));
+    const all = [...D.products, ...created]
+      .filter(p => !deleted.has(p.id))
+      .map(p => edits[p.id] ? { ...p, ...edits[p.id] } : p);
+    return all;
+  }
+  function effectiveCustomers() {
+    const created = readLS(LS.customersCreated, []);
+    const edits = readLS(LS.customerEdits, {});
+    return [...D.customers, ...created].map(c => edits[c.id] ? { ...c, ...edits[c.id] } : c);
+  }
+  function effectivePromos() {
+    return [...D.promo_codes, ...readLS(LS.promosCreated, [])];
   }
 
   function readLS(key, fallback) {
@@ -76,7 +113,8 @@
     const subtotal = +lines.reduce((s, l) => s + l.line_total, 0).toFixed(2);
     let discount = 0;
     let free_shipping_override = false;
-    const promo = promoCode ? D.promo_codes.find(p => p.code === promoCode.toUpperCase() && p.active) : null;
+    const allPromos = [...D.promo_codes, ...readLS(LS.promosCreated, [])];
+    const promo = promoCode ? allPromos.find(p => p.code === promoCode.toUpperCase() && p.active) : null;
     if (promo) {
       if (promo.type === 'percent')  discount = +(subtotal * promo.value / 100).toFixed(2);
       if (promo.type === 'fixed')    discount = Math.min(promo.value, subtotal);
@@ -129,7 +167,8 @@
 
     // ---- products ----
     if (path === '/products') {
-      const filtered = applyFilters(D.products, q);
+      const all = effectiveProducts();
+      const filtered = applyFilters(all, q);
       const page = Math.max(1, Number(q.page) || 1);
       const per_page = Number(q.per_page) || 24;
       const start = (page - 1) * per_page;
@@ -139,14 +178,15 @@
         pages: Math.ceil(filtered.length / per_page),
       });
     }
-    if (path === '/products/featured')    return jsonResponse({ items: D.products.filter(p => p.featured) });
-    if (path === '/products/trending')    return jsonResponse({ items: D.products.filter(p => (p.tags||[]).includes('bestseller')) });
+    if (path === '/products/featured')    return jsonResponse({ items: effectiveProducts().filter(p => p.featured) });
+    if (path === '/products/trending')    return jsonResponse({ items: effectiveProducts().filter(p => (p.tags||[]).includes('bestseller')) });
 
     if (path.startsWith('/products/')) {
-      const idOrSlug = path.split('/')[2];
-      const p = productById(idOrSlug) || productBySlug(idOrSlug);
+      const idOrSlug = decodeURIComponent(path.split('/')[2]);
+      const all = effectiveProducts();
+      const p = all.find(x => x.id === idOrSlug) || all.find(x => x.slug === idOrSlug);
       if (!p) return jsonResponse({ error: 'not_found' }, 404);
-      const related = (p.related || []).map(productById).filter(Boolean);
+      const related = (p.related || []).map(rid => all.find(x => x.id === rid)).filter(Boolean);
       return jsonResponse({
         product: p,
         reviews: reviewsFor(p.id),
@@ -212,7 +252,8 @@
     // ---- promo ----
     if (path === '/promo' && method === 'POST') {
       const body = payload || {};
-      const promo = D.promo_codes.find(p => p.code === (body.code || '').toUpperCase() && p.active);
+      const all = [...D.promo_codes, ...readLS(LS.promosCreated, [])];
+      const promo = all.find(p => p.code === (body.code || '').toUpperCase() && p.active);
       if (!promo) return jsonResponse({ success: false, error: 'invalid_code' });
       const totals = cartTotals(promo.code);
       if (promo.min_subtotal && totals.subtotal < promo.min_subtotal) {
@@ -396,20 +437,124 @@
       return jsonResponse(applyStatusOverride(found));
     }
     if (path === '/admin/products') {
-      if (method === 'GET') return jsonResponse({ items: D.products });
+      if (method === 'GET') return jsonResponse({ items: effectiveProducts() });
+      if (method === 'POST') {
+        const body = payload || {};
+        const id = body.id || 'p-new-' + Math.random().toString(36).slice(2, 7);
+        const created = readLS(LS.productsCreated, []);
+        const newProd = {
+          id,
+          slug: (body.slug || body.name || id).toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+          name: body.name || 'Untitled product',
+          category: body.category || 'audio',
+          price: Number(body.price) || 0,
+          compare_at: body.compare_at ? Number(body.compare_at) : null,
+          stock: Number(body.stock) || 0,
+          rating: 5,
+          review_count: 0,
+          palette: ['#7c9cff', '#5eead4'],
+          variants: [{ id: 'v-default', name: 'Default', hex: '#444', stock: Number(body.stock) || 0 }],
+          tags: [], featured: false,
+          short_desc: body.short_desc || '',
+          description: body.description || '',
+          features: [], specs: {},
+          related: [],
+        };
+        created.unshift(newProd);
+        writeLS(LS.productsCreated, created);
+        return jsonResponse({ success: true, product: newProd });
+      }
       return jsonResponse({ success: true });
     }
     if (path.startsWith('/admin/products/')) {
-      if (method === 'PUT' || method === 'PATCH' || method === 'DELETE') return jsonResponse({ success: true });
-      return jsonResponse(productById(path.split('/')[3]) || D.products[0]);
+      const id = decodeURIComponent(path.split('/')[3]);
+      if (method === 'PUT' || method === 'PATCH') {
+        const body = payload || {};
+        const edits = readLS(LS.productEdits, {});
+        edits[id] = { ...(edits[id] || {}), ...body };
+        if (body.price != null) edits[id].price = Number(body.price);
+        if (body.stock != null) edits[id].stock = Number(body.stock);
+        writeLS(LS.productEdits, edits);
+        return jsonResponse({ success: true });
+      }
+      if (method === 'DELETE') {
+        const deleted = readLS(LS.productsDeleted, []);
+        if (!deleted.includes(id)) deleted.push(id);
+        writeLS(LS.productsDeleted, deleted);
+        // Also remove from created list if present
+        const created = readLS(LS.productsCreated, []).filter(p => p.id !== id);
+        writeLS(LS.productsCreated, created);
+        return jsonResponse({ success: true });
+      }
+      return jsonResponse(effectiveProducts().find(p => p.id === id) || effectiveProducts()[0]);
     }
-    if (path === '/admin/customers') return jsonResponse({ items: D.customers });
+    if (path === '/admin/customers') {
+      if (method === 'GET') return jsonResponse({ items: effectiveCustomers() });
+      if (method === 'POST') {
+        const body = payload || {};
+        const id = body.id || 'c-new-' + Math.random().toString(36).slice(2, 7);
+        const created = readLS(LS.customersCreated, []);
+        const newCust = {
+          id,
+          name: body.name || 'New Customer',
+          email: body.email || 'new@demo.local',
+          joined: new Date().toISOString(),
+          orders_count: 0,
+          lifetime_value: 0,
+          points: 0,
+          segment: body.segment || 'new',
+        };
+        created.unshift(newCust);
+        writeLS(LS.customersCreated, created);
+        return jsonResponse({ success: true, customer: newCust });
+      }
+    }
     if (path.startsWith('/admin/customers/')) {
-      const c = D.customers.find(x => x.id === path.split('/')[3]) || D.customers[0];
+      const id = decodeURIComponent(path.split('/')[3]);
+      if (method === 'PUT' || method === 'PATCH') {
+        const body = payload || {};
+        const edits = readLS(LS.customerEdits, {});
+        edits[id] = { ...(edits[id] || {}), ...body };
+        writeLS(LS.customerEdits, edits);
+        return jsonResponse({ success: true });
+      }
+      const all = effectiveCustomers();
+      const c = all.find(x => x.id === id) || all[0];
       const allOrders = [...readLS(LS.orders, []), ...D.orders];
       return jsonResponse({ ...c, orders: allOrders.filter(o => o.customer_id === c.id) });
     }
-    if (path === '/admin/promotions') return jsonResponse({ items: D.promo_codes });
+    if (path === '/admin/promotions') {
+      if (method === 'GET') return jsonResponse({ items: effectivePromos() });
+      if (method === 'POST') {
+        const body = payload || {};
+        const code = String(body.code || '').toUpperCase().replace(/\s+/g, '');
+        if (!code) return jsonResponse({ success: false, error: 'code_required' }, 400);
+        const created = readLS(LS.promosCreated, []);
+        const newPromo = {
+          code,
+          description: body.description || '',
+          type: body.type || 'percent',
+          value: Number(body.value) || 0,
+          min_subtotal: body.min_subtotal ? Number(body.min_subtotal) : null,
+          max_uses: body.max_uses ? Number(body.max_uses) : null,
+          used_count: 0,
+          active: body.active !== 'false' && body.active !== false,
+        };
+        created.unshift(newPromo);
+        writeLS(LS.promosCreated, created);
+        return jsonResponse({ success: true, promo: newPromo });
+      }
+    }
+    if (path === '/admin/banners') {
+      if (method === 'GET') return jsonResponse({ items: readLS(LS.banners, []) });
+      if (method === 'POST') {
+        const body = payload || {};
+        const list = readLS(LS.banners, []);
+        list.unshift({ id: 'b-' + Date.now(), title: body.title || 'New banner', blurb: body.blurb || '', status: 'running', kind: body.kind || 'manual' });
+        writeLS(LS.banners, list);
+        return jsonResponse({ success: true });
+      }
+    }
     if (path === '/admin/analytics') {
       const byCategory = D.categories.map(c => ({
         category: c.name,
@@ -424,24 +569,49 @@
       });
     }
     if (path === '/admin/email-log') {
-      return jsonResponse({ items: [
+      const seed = [
         { id: 'em-1', subject: 'Your order PBL-10024 is confirmed', to: 'demo.shopper@demo.local', kind: 'order_confirmation', preview: 'Thanks for your order. We will email when it ships.', sent_at: new Date(Date.now() - 1000*60*5).toISOString() },
         { id: 'em-2', subject: 'PBL-10023 has shipped',            to: 'sample@demo.local',         kind: 'shipping',           preview: 'Your order is on the way. Tracking: TRACK-DEMO-981.', sent_at: new Date(Date.now() - 1000*60*45).toISOString() },
         { id: 'em-3', subject: 'Stock alert: Bloom Earbuds (Coral)',to: 'admin@pebbleandco.demo',   kind: 'stock_alert',        preview: 'Bloom Earbuds in Coral is below 5 units.', sent_at: new Date(Date.now() - 1000*60*120).toISOString() },
         { id: 'em-4', subject: 'Welcome to Pebble & Co.',          to: 'sam@demo.local',            kind: 'welcome',            preview: 'Thanks for signing up. Your code WELCOME15 saves $15.', sent_at: new Date(Date.now() - 1000*60*240).toISOString() },
         { id: 'em-5', subject: 'You left something behind',        to: 'casey@demo.local',          kind: 'abandoned_cart',     preview: 'Hush Headphones are still in your cart.', sent_at: new Date(Date.now() - 1000*60*360).toISOString() },
-      ]});
+      ];
+      if (method === 'POST') {
+        const body = payload || {};
+        const sent = readLS(LS.emailLog, []);
+        const em = {
+          id: 'em-' + Date.now(),
+          subject: body.subject || '(no subject)',
+          to: body.to || 'unknown@demo.local',
+          kind: body.kind || 'welcome',
+          preview: (body.body || body.preview || '').slice(0, 200),
+          sent_at: new Date().toISOString(),
+        };
+        sent.unshift(em);
+        writeLS(LS.emailLog, sent.slice(0, 100));
+        return jsonResponse({ success: true, email: em });
+      }
+      const sent = readLS(LS.emailLog, []);
+      return jsonResponse({ items: [...sent, ...seed].slice(0, 50) });
     }
     if (path === '/admin/settings') {
-      if (method === 'GET') return jsonResponse({
+      const overrides = readLS(LS.settings, {});
+      const base = {
         store_name: D.brand.name,
         email: D.brand.email,
         free_shipping_threshold: D.brand.free_shipping_threshold,
         tax_rate: D.brand.tax_rate,
-        integrations: {
-          mailchimp: false, klaviyo: true, googleAnalytics: true, metaPixel: true,
-        },
-      });
+        integrations: { mailchimp: false, klaviyo: true, googleAnalytics: true, metaPixel: true },
+      };
+      if (method === 'GET') return jsonResponse({ ...base, ...overrides, integrations: { ...base.integrations, ...(overrides.integrations || {}) } });
+      if (method === 'POST' || method === 'PUT') {
+        writeLS(LS.settings, { ...overrides, ...(payload || {}) });
+        return jsonResponse({ success: true });
+      }
+      if (method === 'DELETE') {
+        writeLS(LS.settings, {});
+        return jsonResponse({ success: true });
+      }
       return jsonResponse({ success: true });
     }
 
