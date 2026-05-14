@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>List your property — Vacation Homes</title>
+<meta name="description" content="List your UAE property on Vacation Homes. 6-step wizard with document upload, manual verification within 24h." />
+<meta name="theme-color" content="#c66b3d" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2064%2064'%3E%3Crect%20width%3D'64'%20height%3D'64'%20rx%3D'14'%20fill%3D'%23c66b3d'/%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20font-family%3D'sans-serif'%20font-weight%3D'700'%20font-size%3D'30'%20fill%3D'%23fff'%20text-anchor%3D'middle'%3EV%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/vacation.css?v=20260514c" />
+</head>
+<body class="vacation">
+
+<div class="v-wizard" id="wizard">
+  <header class="v-wizard-head">
+    <div class="v-wizard-head-inner">
+      <a href="host.html" class="v-wizard-brand">
+        <span class="v-wizard-brand-mark">V</span>
+        <span>Vacation Homes</span>
+      </a>
+      <button class="v-wizard-save-exit" id="wz-save-exit">Save &amp; exit</button>
+    </div>
+    <div class="v-wizard-progress">
+      <div class="v-stepper" id="wz-stepper"></div>
+    </div>
+  </header>
+
+  <main class="v-wizard-body" id="wz-body">
+    <div class="v-wizard-step">
+      <div class="v-skel v-skel--card" style="height:240px;"></div>
+    </div>
+  </main>
+
+  <footer class="v-wizard-foot">
+    <div class="v-wizard-foot-inner">
+      <button class="v-btn v-btn--ghost" id="wz-back">← Back</button>
+      <div class="v-wizard-foot-progress"><div class="bar" id="wz-bar" style="width:0%"></div></div>
+      <button class="v-btn v-btn--primary" id="wz-next">Continue →</button>
+    </div>
+  </footer>
+</div>
+
+<script src="js/data.js?v=20260514c"></script>
+<script src="js/mock-api.js?v=20260514c"></script>
+<script src="js/notifications.js?v=20260514c"></script>
+<script src="js/app.js?v=20260514c"></script>
+<script src="js/calendar.js?v=20260514c"></script>
+<script src="js/host-onboard.js?v=20260514c"></script>
+<script>
+  HostOnboard.start();
+</script>
+</body>
+</html>

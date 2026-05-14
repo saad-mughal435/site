@@ -29,7 +29,10 @@
     content_dest:       'vacation.content.destinations',
     settings:           'vacation.settings.overrides',
     audit:              'vacation.audit',
-    notifications:      'vacation.notifications'
+    notifications:      'vacation.notifications',
+    host_session:       'vacation.host_session',         // current logged-in host { host_id, started_at }
+    host_applications:  'vacation.host_applications',    // overrides on seed HOST_APPLICATIONS, keyed by host_id
+    host_draft:         'vacation.host_draft'            // wizard save-and-resume payload
   };
 
   function jget(k, def) { try { return JSON.parse(localStorage.getItem(k)) || def; } catch (e) { return def; } }
@@ -52,6 +55,11 @@
     var deleted = jget(LS.listings_deleted, []);
     return seed.concat(created).filter(function (l) { return deleted.indexOf(l.id) === -1; })
       .map(function (l) { return edits[l.id] ? Object.assign({}, l, edits[l.id]) : l; });
+  }
+  // Public-facing view: only listings that have been approved by admin appear on the marketplace.
+  // Direct ID/slug lookup uses listings() so hosts can preview their own pending listing.
+  function liveListings() {
+    return listings().filter(function (l) { return !l.status || l.status === 'live'; });
   }
   function hosts() {
     var seed = window.VACATION_DATA.HOSTS.slice();
@@ -77,6 +85,31 @@
     var seed = window.VACATION_DATA.REVIEWS.slice();
     var created = jget(LS.reviews_created, []);
     return seed.concat(created);
+  }
+  // Merged view of host applications — seed + per-host overrides from localStorage.
+  function applications() {
+    var seed = (window.VACATION_DATA.HOST_APPLICATIONS || []).slice();
+    var overrides = jget(LS.host_applications, {});
+    var seedByHost = {};
+    seed.forEach(function (a) { seedByHost[a.host_id] = a; });
+    // Apply overrides; new applications come in as keys not present in seedByHost.
+    Object.keys(overrides).forEach(function (hid) {
+      seedByHost[hid] = Object.assign({}, seedByHost[hid] || {}, overrides[hid]);
+    });
+    return Object.keys(seedByHost).map(function (hid) { return seedByHost[hid]; });
+  }
+  function getApplication(host_id) {
+    return applications().find(function (a) { return a.host_id === host_id; }) || null;
+  }
+  function saveApplication(host_id, app) {
+    var o = jget(LS.host_applications, {});
+    o[host_id] = app;
+    jset(LS.host_applications, o);
+  }
+  function pushNotification(n) {
+    var l = jget(LS.notifications, []);
+    l.unshift(Object.assign({ id: 'n' + Date.now(), when: Date.now(), unread: true }, n));
+    jset(LS.notifications, l.slice(0, 40));
   }
   function guests() {
     var seed = window.VACATION_DATA.GUESTS.slice();
@@ -175,7 +208,7 @@
 
   /* ---------- Filtering ---------- */
   function filterListings(p) {
-    var rows = listings();
+    var rows = liveListings();
     if (p.q) {
       var q = String(p.q).toLowerCase();
       rows = rows.filter(function (l) { return (l.title + ' ' + (l.address || '') + ' ' + l.type).toLowerCase().indexOf(q) !== -1; });
@@ -221,7 +254,7 @@
       var paged = rows.slice((page - 1) * size, page * size);
       return { ok: true, total: total, page: page, page_size: size, items: paged };
     }
-    if (path === '/listings/featured') return { ok: true, items: listings().filter(function (l) { return l.featured; }).slice(0, 8) };
+    if (path === '/listings/featured') return { ok: true, items: liveListings().filter(function (l) { return l.featured; }).slice(0, 8) };
 
     var m;
     if (m = path.match(/^\/listings\/([^\/]+)$/)) {
@@ -236,7 +269,7 @@
     // ----- Destinations -----
     if (path === '/destinations') {
       var withCounts = window.VACATION_DATA.DESTINATIONS.map(function (d) {
-        var count = listings().filter(function (l) { return l.destination_id === d.id; }).length;
+        var count = liveListings().filter(function (l) { return l.destination_id === d.id; }).length;
         return Object.assign({}, d, { listings_count: count });
       });
       return { ok: true, items: withCounts };
@@ -244,7 +277,7 @@
     if (m = path.match(/^\/destinations\/([^\/]+)$/)) {
       var dest = window.VACATION_DATA.DESTINATIONS.find(function (x) { return x.slug === m[1] || x.id === m[1]; });
       if (!dest) return { ok: false, error: 'not_found' };
-      var topL = listings().filter(function (l) { return l.destination_id === dest.id; }).slice(0, 8);
+      var topL = liveListings().filter(function (l) { return l.destination_id === dest.id; }).slice(0, 8);
       return { ok: true, destination: dest, top_listings: topL };
     }
 
@@ -252,7 +285,7 @@
     if (m = path.match(/^\/hosts\/([^\/]+)$/)) {
       var h = hosts().find(function (x) { return x.id === m[1]; });
       if (!h) return { ok: false, error: 'not_found' };
-      var hL = listings().filter(function (l) { return l.host_id === h.id; });
+      var hL = liveListings().filter(function (l) { return l.host_id === h.id; });
       var hR = reviews().filter(function (r) { return r.host_id === h.id; });
       return { ok: true, host: h, listings: hL, reviews: hR };
     }
@@ -372,6 +405,198 @@
       return { ok: true };
     }
 
+    /* ================== HOST (public producer side) ================== */
+
+    // Sign up as a host — creates a host record + sets session.
+    if (path === '/auth/host-signup' && method === 'POST') {
+      var hid = 'h' + Date.now();
+      var newHost = {
+        id: hid,
+        name: body.name || 'New host',
+        email: body.email || '',
+        phone: body.phone || '',
+        photo: body.photo || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80&auto=format&fit=crop&crop=faces',
+        joined: new Date().toISOString().slice(0, 7),
+        response_rate: 95, response_time_hrs: 2,
+        languages: body.languages || ['English'],
+        superhost: false,
+        bio: body.bio || '',
+        verified: false
+      };
+      var hc2 = jget(LS.hosts_created, []); hc2.unshift(newHost); jset(LS.hosts_created, hc2);
+      jset(LS.host_session, { host_id: hid, started_at: new Date().toISOString() });
+      audit('host.signup', hid, newHost.name);
+      return { ok: true, host: newHost };
+    }
+
+    // Current host session
+    if (path === '/host/session' && method === 'GET') {
+      var sess = jget(LS.host_session, null);
+      if (!sess) return { ok: false, error: 'not_authenticated', status: 401 };
+      var hh = hosts().find(function (x) { return x.id === sess.host_id; });
+      return { ok: true, session: sess, host: hh };
+    }
+    if (path === '/host/session' && method === 'DELETE') {
+      localStorage.removeItem(LS.host_session);
+      return { ok: true };
+    }
+    // For demo convenience: log in as any seed host so reviewers can poke around without going through signup.
+    if (path === '/host/session/impersonate' && method === 'POST') {
+      jset(LS.host_session, { host_id: body.host_id, started_at: new Date().toISOString() });
+      return { ok: true };
+    }
+
+    // Submit / update host application (documents bundle)
+    if (path === '/host/applications' && method === 'POST') {
+      var sess1 = jget(LS.host_session, null);
+      if (!sess1) return { ok: false, error: 'not_authenticated', status: 401 };
+      var existing = getApplication(sess1.host_id) || { host_id: sess1.host_id, submitted_at: null, status: 'draft', documents: [], notes_from_admin: '' };
+      // Merge new documents — each body.documents[i] is { type, filename, thumb, mime } and we mark status: 'submitted'.
+      var docs = (body.documents || []).map(function (doc) {
+        return Object.assign({ status: 'submitted' }, doc);
+      });
+      // Replace doc with matching type (re-uploads keep one entry per type).
+      var merged = existing.documents.slice();
+      docs.forEach(function (newDoc) {
+        var idx = merged.findIndex(function (d) { return d.type === newDoc.type; });
+        if (idx >= 0) merged[idx] = newDoc;
+        else merged.push(newDoc);
+      });
+      var nextApp = Object.assign({}, existing, {
+        documents: merged,
+        resident: typeof body.resident === 'boolean' ? body.resident : existing.resident,
+        destination_id: body.destination_id || existing.destination_id,
+        status: 'submitted',
+        submitted_at: new Date().toISOString().slice(0, 10),
+        notes_from_admin: ''
+      });
+      saveApplication(sess1.host_id, nextApp);
+      audit('host.application.submit', sess1.host_id, merged.length + ' documents');
+      pushNotification({ title: 'New host application', body: nextApp.host_id + ' submitted ' + merged.length + ' documents.', kind: 'verify' });
+      return { ok: true, application: nextApp };
+    }
+    if (path === '/host/applications/me' && method === 'GET') {
+      var sess2 = jget(LS.host_session, null);
+      if (!sess2) return { ok: false, error: 'not_authenticated', status: 401 };
+      var app = getApplication(sess2.host_id);
+      return { ok: true, application: app };
+    }
+
+    // Public host listings — create / list / update / delete own listings.
+    if (path === '/host/listings' && method === 'POST') {
+      var sess3 = jget(LS.host_session, null);
+      if (!sess3) return { ok: false, error: 'not_authenticated', status: 401 };
+      var nid2 = body.id || ('L' + Date.now());
+      var newL = Object.assign({
+        id: nid2,
+        slug: (body.title || 'new-listing').toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 50),
+        host_id: sess3.host_id,
+        photos: body.photos && body.photos.length ? body.photos : [window.VACATION_DATA.PHOTO_POOL[0]],
+        listed_at: new Date().toISOString().slice(0, 10),
+        rating: 0, review_count: 0,
+        amenities: body.amenities || [], blocked_dates: body.blocked_dates || [],
+        house_rules: body.house_rules || ['No smoking','No parties','Check-in 3 PM','Check-out 11 AM'],
+        cancellation: body.cancellation || 'flexible',
+        instant_book: typeof body.instant_book === 'boolean' ? body.instant_book : false,
+        featured: false, verified: false,
+        status: 'pending_review'
+      }, body, {
+        // Force-overwrite: server-controlled fields don't trust client input.
+        host_id: sess3.host_id, status: 'pending_review', verified: false, featured: false
+      });
+      var lc2 = jget(LS.listings_created, []); lc2.unshift(newL); jset(LS.listings_created, lc2);
+      audit('listing.host.create', nid2, newL.title + ' (pending review)');
+      pushNotification({ title: 'New listing pending review', body: newL.title, kind: 'review' });
+      return { ok: true, listing: newL };
+    }
+    if (path === '/host/listings' && method === 'GET') {
+      var sess4 = jget(LS.host_session, null);
+      if (!sess4) return { ok: false, error: 'not_authenticated', status: 401 };
+      var my = listings().filter(function (l) { return l.host_id === sess4.host_id; });
+      return { ok: true, items: my };
+    }
+    if (m = path.match(/^\/host\/listings\/([^\/]+)$/)) {
+      var sess5 = jget(LS.host_session, null);
+      if (!sess5) return { ok: false, error: 'not_authenticated', status: 401 };
+      var l5 = listings().find(function (x) { return x.id === m[1]; });
+      if (!l5 || l5.host_id !== sess5.host_id) return { ok: false, error: 'forbidden', status: 403 };
+      if (method === 'PUT') {
+        var ed5 = jget(LS.listings_edits, {});
+        var nextEd = Object.assign({}, ed5[m[1]] || {}, body);
+        // Live edits to material fields re-trigger admin review.
+        var materialFields = ['title', 'description', 'photos', 'base_nightly_aed', 'address'];
+        var triggersReview = materialFields.some(function (f) { return body.hasOwnProperty(f); });
+        if (l5.status === 'live' && triggersReview) nextEd.status = 'pending_review';
+        ed5[m[1]] = nextEd;
+        jset(LS.listings_edits, ed5);
+        audit('listing.host.update', m[1], '');
+        return { ok: true };
+      }
+      if (method === 'DELETE') {
+        var dd = jget(LS.listings_deleted, []);
+        if (dd.indexOf(m[1]) === -1) dd.push(m[1]);
+        jset(LS.listings_deleted, dd);
+        audit('listing.host.delete', m[1], '');
+        return { ok: true };
+      }
+    }
+    if (m = path.match(/^\/host\/listings\/([^\/]+)\/(pause|unpause)$/) && method === 'POST') {
+      var sess6 = jget(LS.host_session, null);
+      if (!sess6) return { ok: false, error: 'not_authenticated', status: 401 };
+      var ed6 = jget(LS.listings_edits, {});
+      ed6[m[1]] = Object.assign({}, ed6[m[1]] || {}, { status: m[2] === 'pause' ? 'paused' : 'live' });
+      jset(LS.listings_edits, ed6);
+      audit('listing.host.' + m[2], m[1], '');
+      return { ok: true };
+    }
+    if (m = path.match(/^\/host\/listings\/([^\/]+)\/block-dates$/) && method === 'POST') {
+      var sess7 = jget(LS.host_session, null);
+      if (!sess7) return { ok: false, error: 'not_authenticated', status: 401 };
+      var l7 = listings().find(function (x) { return x.id === m[1]; });
+      if (!l7) return { ok: false, error: 'not_found' };
+      var ed7 = jget(LS.listings_edits, {});
+      var cur = (ed7[m[1]] && ed7[m[1]].blocked_dates) || l7.blocked_dates || [];
+      var add = body.add || []; var remove = body.remove || [];
+      var nextBlocked = cur.filter(function (d) { return remove.indexOf(d) === -1; }).concat(add).filter(function (x, i, a) { return a.indexOf(x) === i; }).sort();
+      ed7[m[1]] = Object.assign({}, ed7[m[1]] || {}, { blocked_dates: nextBlocked });
+      jset(LS.listings_edits, ed7);
+      audit('listing.host.block', m[1], add.length + ' added, ' + remove.length + ' removed');
+      return { ok: true, blocked_dates: nextBlocked };
+    }
+    if (path === '/host/bookings' && method === 'GET') {
+      var sess8 = jget(LS.host_session, null);
+      if (!sess8) return { ok: false, error: 'not_authenticated', status: 401 };
+      var mine = bookings().filter(function (b) { return b.host_id === sess8.host_id; });
+      return { ok: true, items: mine };
+    }
+    if (path === '/host/dashboard' && method === 'GET') {
+      var sess9 = jget(LS.host_session, null);
+      if (!sess9) return { ok: false, error: 'not_authenticated', status: 401 };
+      var myL = listings().filter(function (l) { return l.host_id === sess9.host_id; });
+      var myB = bookings().filter(function (b) { return b.host_id === sess9.host_id; });
+      var liveCount = myL.filter(function (l) { return l.status === 'live' || !l.status; }).length;
+      var pendingCount = myL.filter(function (l) { return l.status === 'pending_review' || l.status === 'changes_requested'; }).length;
+      var upcomingBk = myB.filter(function (b) { return b.status === 'confirmed' || b.status === 'pending'; });
+      var rev30 = myB.filter(function (b) {
+        return (Date.now() - new Date(b.created_at).getTime()) < 30 * 86400000 && b.status !== 'cancelled' && b.status !== 'refunded';
+      }).reduce(function (s, b) { return s + (b.pricing && b.pricing.total || 0); }, 0);
+      var ratings = reviews().filter(function (r) { return r.host_id === sess9.host_id; });
+      var avgRating = ratings.length ? Math.round(ratings.reduce(function (s, r) { return s + r.rating_overall; }, 0) / ratings.length * 10) / 10 : 0;
+      return {
+        ok: true,
+        kpis: {
+          listings_live: liveCount,
+          listings_pending: pendingCount,
+          bookings_upcoming: upcomingBk.length,
+          revenue_30d: rev30,
+          avg_rating: avgRating,
+          review_count: ratings.length
+        },
+        listings: myL,
+        recent_bookings: myB.slice().sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at); }).slice(0, 6)
+      };
+    }
+
     /* ================== ADMIN ================== */
 
     if (path === '/admin/dashboard') {
@@ -392,23 +617,28 @@
         var d = new Date(); d.setMonth(d.getMonth() - i);
         monthly.push({ label: d.toLocaleString('en', { month: 'short' }), bookings: 18 + ((i * 41) % 28) });
       }
+      var pendingApps = applications().filter(function (a) { return a.status === 'submitted' || a.status === 'changes_requested'; });
+      var pendingListings = listings().filter(function (l) { return l.status === 'pending_review'; });
+      var alertsList = [];
+      if (pendingApps.length)     alertsList.push({ kind: 'verify',  msg: pendingApps.length + ' host application' + (pendingApps.length === 1 ? '' : 's') + ' awaiting review', count: pendingApps.length, link: '#verifications' });
+      if (pendingListings.length) alertsList.push({ kind: 'listing', msg: pendingListings.length + ' listing' + (pendingListings.length === 1 ? '' : 's') + ' pending approval',     count: pendingListings.length, link: '#verifications' });
+      alertsList.push({ kind: 'review', msg: '3 reviews under 3★ — review for moderation', count: 3, link: '#reviews' });
+      alertsList.push({ kind: 'payout', msg: '14 host payouts in queue', count: 14, link: '#payments' });
       return {
         ok: true,
         kpis: {
-          active_listings: active.length,
+          active_listings: active.filter(function (l) { return !l.status || l.status === 'live'; }).length,
           bookings_7d: sevenDayBk.length,
           occupancy_pct: occupancyPct,
           adr: adr,
-          revenue_30d: rev30
+          revenue_30d: rev30,
+          pending_verifications: pendingApps.length,
+          pending_listings: pendingListings.length
         },
         monthly: monthly,
         recent_bookings: recentBk,
         recent_reviews: reviews().slice(0, 5),
-        alerts: [
-          { kind: 'verify', msg: '2 hosts pending verification', count: 2 },
-          { kind: 'review', msg: '3 reviews under 3★ — review for moderation', count: 3 },
-          { kind: 'payout', msg: '14 host payouts in queue', count: 14 }
-        ]
+        alerts: alertsList
       };
     }
 
@@ -417,6 +647,12 @@
       if (params.q) {
         var qq = String(params.q).toLowerCase();
         rs = rs.filter(function (l) { return (l.title + ' ' + l.address).toLowerCase().indexOf(qq) !== -1; });
+      }
+      if (params.status) {
+        rs = rs.filter(function (l) {
+          var s = l.status || 'live';
+          return s === params.status;
+        });
       }
       return { ok: true, items: rs };
     }
@@ -462,15 +698,34 @@
           ed2[id] = ed2[id] || {};
           if (op === 'feature')   ed2[id].featured = true;
           if (op === 'unfeature') ed2[id].featured = false;
-          if (op === 'verify')    ed2[id].verified = true;
+          if (op === 'verify')    { ed2[id].verified = true;  ed2[id].status = 'live'; }
           if (op === 'unverify')  ed2[id].verified = false;
           if (op === 'instant-on')  ed2[id].instant_book = true;
           if (op === 'instant-off') ed2[id].instant_book = false;
+          if (op === 'approve')   { ed2[id].status = 'live'; ed2[id].verified = true; }
+          if (op === 'pause')     ed2[id].status = 'paused';
+          if (op === 'unpause')   ed2[id].status = 'live';
         }
       });
       jset(LS.listings_edits, ed2);
       jset(LS.listings_deleted, de2);
       audit('listing.bulk', op, ids.length + ' listings');
+      return { ok: true };
+    }
+
+    // Admin listing approval pipeline.
+    if (m = path.match(/^\/admin\/listings\/([^\/]+)\/(approve|request-changes|reject)$/) && method === 'POST') {
+      var lid = m[1]; var action = m[2];
+      var l_target = listings().find(function (x) { return x.id === lid; });
+      if (!l_target) return { ok: false, error: 'not_found' };
+      var leds = jget(LS.listings_edits, {});
+      leds[lid] = leds[lid] || {};
+      if (action === 'approve') { leds[lid].status = 'live'; leds[lid].verified = true; }
+      if (action === 'request-changes') { leds[lid].status = 'changes_requested'; leds[lid].review_note = body.reason || ''; }
+      if (action === 'reject') { leds[lid].status = 'rejected'; leds[lid].review_note = body.reason || ''; }
+      jset(LS.listings_edits, leds);
+      audit('listing.' + action, lid, body.reason || '');
+      pushNotification({ title: 'Listing ' + action, body: l_target.title + (body.reason ? ' — ' + body.reason : ''), kind: 'review' });
       return { ok: true };
     }
 
@@ -527,6 +782,74 @@
       he2[m[1]].superhost = true;
       jset(LS.hosts_edits, he2);
       audit('host.verify', m[1], '');
+      return { ok: true };
+    }
+
+    /* ---- Admin verifications (host applications + document review) ---- */
+    if (path === '/admin/verifications' && method === 'GET') {
+      var apps = applications();
+      if (params.status) apps = apps.filter(function (a) { return a.status === params.status; });
+      var withHost = apps.map(function (a) {
+        var h_app = hosts().find(function (x) { return x.id === a.host_id; });
+        return Object.assign({}, a, {
+          host_name: h_app ? h_app.name : '(host removed)',
+          host_photo: h_app ? h_app.photo : null,
+          document_count: (a.documents || []).length,
+          submitted_doc_count: (a.documents || []).filter(function (d) { return d.status === 'submitted'; }).length
+        });
+      });
+      withHost.sort(function (a, b) { return (b.submitted_at || '').localeCompare(a.submitted_at || ''); });
+      return { ok: true, items: withHost };
+    }
+    if (m = path.match(/^\/admin\/verifications\/([^\/]+)$/) && method === 'GET') {
+      var app_d = getApplication(m[1]);
+      if (!app_d) return { ok: false, error: 'not_found' };
+      var h_d = hosts().find(function (x) { return x.id === m[1]; });
+      var l_d = listings().filter(function (l) { return l.host_id === m[1]; });
+      return { ok: true, application: app_d, host: h_d, listings: l_d };
+    }
+    if (m = path.match(/^\/admin\/verifications\/([^\/]+)\/(approve|request-changes|reject)$/) && method === 'POST') {
+      var hid_v = m[1]; var act = m[2];
+      var app_v = getApplication(hid_v);
+      if (!app_v) return { ok: false, error: 'not_found' };
+      var nextStatus = act === 'approve' ? 'approved' : (act === 'request-changes' ? 'changes_requested' : 'rejected');
+      var nextApp_v = Object.assign({}, app_v, {
+        status: nextStatus,
+        notes_from_admin: body.reason || app_v.notes_from_admin || ''
+      });
+      // Cascade per-doc status on approve / reject, leave individual doc decisions untouched on request-changes.
+      if (act === 'approve') {
+        nextApp_v.documents = (app_v.documents || []).map(function (d) { return Object.assign({}, d, { status: 'approved' }); });
+        // Mark host verified.
+        var he_v = jget(LS.hosts_edits, {});
+        he_v[hid_v] = Object.assign({}, he_v[hid_v] || {}, { verified: true, verified_at: new Date().toISOString().slice(0, 10) });
+        jset(LS.hosts_edits, he_v);
+      } else if (act === 'reject') {
+        nextApp_v.documents = (app_v.documents || []).map(function (d) {
+          return d.status === 'approved' ? d : Object.assign({}, d, { status: 'rejected' });
+        });
+      }
+      saveApplication(hid_v, nextApp_v);
+      audit('verification.' + act, hid_v, body.reason || '');
+      pushNotification({ title: 'Host verification ' + act, body: hid_v + (body.reason ? ' — ' + body.reason : ''), kind: 'verify' });
+      return { ok: true, application: nextApp_v };
+    }
+    if (m = path.match(/^\/admin\/verifications\/([^\/]+)\/docs\/([^\/]+)\/(approve|reject)$/) && method === 'POST') {
+      var hid_d2 = m[1]; var dtype = m[2]; var dact = m[3];
+      var app_d2 = getApplication(hid_d2);
+      if (!app_d2) return { ok: false, error: 'not_found' };
+      var docs = (app_d2.documents || []).map(function (d) {
+        if (d.type !== dtype) return d;
+        return Object.assign({}, d, {
+          status: dact === 'approve' ? 'approved' : 'rejected',
+          rejection_reason: dact === 'reject' ? (body.reason || 'Please re-upload') : undefined
+        });
+      });
+      var nextApp_d = Object.assign({}, app_d2, { documents: docs });
+      // If any doc is rejected, application status auto-shifts to changes_requested.
+      if (dact === 'reject' && app_d2.status !== 'changes_requested') nextApp_d.status = 'changes_requested';
+      saveApplication(hid_d2, nextApp_d);
+      audit('verification.doc.' + dact, hid_d2, dtype + (body.reason ? ' — ' + body.reason : ''));
       return { ok: true };
     }
 

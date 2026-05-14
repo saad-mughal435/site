@@ -1004,12 +1004,14 @@ const PROJECTS = [
     bullets: [
       <Fragment>Hand-rolled <strong>date-range picker</strong> + availability calendar (no library) with blocked / booked / available states</Fragment>,
       <Fragment><strong>Conflict-check booking flow</strong>: POST /bookings returns 409 if dates were just taken; UI bounces back with a toast</Fragment>,
-      <Fragment>9 guest pages + 11-section admin: dashboard, listings (CRUD + bulk + CSV), bookings (status + refund), hosts (verify Superhost), guests, reviews, payments/payouts, promotions, destinations, settings, audit</Fragment>,
+      <Fragment><strong>Host-side: 6-step listing wizard</strong> (save-and-resume drafts, map-pin selector, document upload — Emirates ID + ownership + DTCM permit + IBAN) feeding an <strong>admin verification queue</strong> for manual approval; listings stay off-market until live</Fragment>,
+      <Fragment>9 guest pages + 12-section admin SPA + host dashboard: dashboard, listings (CRUD + bulk + status pipeline + CSV), bookings, hosts (Superhost verify), guests, reviews, payments/payouts, promotions, destinations, settings, audit, <strong>verifications drawer with approve / request-changes / reject</strong></Fragment>,
       <Fragment>Full pricing breakdown: nightly subtotal × nights + weekend surcharge + cleaning + 10% service fee + 5% VAT</Fragment>,
     ],
-    tags: ['HTML5', 'CSS Grid', 'Vanilla JS (ES6+)', 'Custom date-range picker', 'Availability calendar', 'Booking conflict-check', 'Leaflet maps', 'localStorage', 'Mock API', 'Hash-routed SPA'],
+    tags: ['HTML5', 'CSS Grid', 'Vanilla JS (ES6+)', 'Multi-step wizard', 'Document upload', 'Verification queue', 'Custom date-range picker', 'Leaflet maps', 'localStorage', 'Mock API', 'Hash-routed SPA'],
     ctas: [
       { label: 'Open marketplace ↗', href: 'vacation/index.html', target: '_blank', primary: true },
+      { label: 'List a property ↗', href: 'vacation/host-onboard.html', target: '_blank' },
       { label: 'Open admin ↗', href: 'vacation/admin.html', target: '_blank' },
     ],
   },

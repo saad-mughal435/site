@@ -104,10 +104,10 @@
   // ===================== HOSTS =====================
   function hp(id, w) { return 'https://images.unsplash.com/photo-' + id + '?w=' + (w || 200) + '&q=80&auto=format&fit=crop&crop=faces'; }
   var HOSTS = [
-    { id: 'h01', name: 'Sarah Mitchell',    photo: hp('1494790108377-be9c29b29330'), joined: '2023-04', response_rate: 99, response_time_hrs: 1,  languages: ['English','French'],            superhost: true,  bio: 'Marina resident who hosts on weekends. I love showing guests the best brunch spots.' },
-    { id: 'h02', name: 'Mohammed Al-Rashid',photo: hp('1472099645785-5658abf4ff4e'), joined: '2022-08', response_rate: 100,response_time_hrs: 1,  languages: ['Arabic','English'],            superhost: true,  bio: 'Emirati host. Local insider tips guaranteed.' },
+    { id: 'h01', name: 'Sarah Mitchell',    photo: hp('1494790108377-be9c29b29330'), joined: '2023-04', response_rate: 99, response_time_hrs: 1,  languages: ['English','French'],            superhost: true,  bio: 'Marina resident who hosts on weekends. I love showing guests the best brunch spots.', verified_at: '2023-04-18' },
+    { id: 'h02', name: 'Mohammed Al-Rashid',photo: hp('1472099645785-5658abf4ff4e'), joined: '2022-08', response_rate: 100,response_time_hrs: 1,  languages: ['Arabic','English'],            superhost: true,  bio: 'Emirati host. Local insider tips guaranteed.', verified_at: '2022-08-05' },
     { id: 'h03', name: 'Olga Volkova',      photo: hp('1438761681033-6461ffad8d80'), joined: '2024-01', response_rate: 96, response_time_hrs: 2,  languages: ['Russian','English'],           superhost: false, bio: 'Manage 4 Marina apartments. Quick replies, fast keys.' },
-    { id: 'h04', name: 'James Carter',      photo: hp('1500648767791-00dcc994a43e'), joined: '2021-11', response_rate: 99, response_time_hrs: 1,  languages: ['English'],                     superhost: true,  bio: 'Palm Jumeirah villa specialist. Family weekends are my niche.' },
+    { id: 'h04', name: 'James Carter',      photo: hp('1500648767791-00dcc994a43e'), joined: '2021-11', response_rate: 99, response_time_hrs: 1,  languages: ['English'],                     superhost: true,  bio: 'Palm Jumeirah villa specialist. Family weekends are my niche.', verified_at: '2021-11-22' },
     { id: 'h05', name: 'Layla Hammoud',     photo: hp('1573496359142-b8d87734a5a2'), joined: '2023-09', response_rate: 98, response_time_hrs: 1,  languages: ['Arabic','English','French'],   superhost: true,  bio: 'Lebanese-French. I host RAK beach villas. Sunsets are mandatory.' },
     { id: 'h06', name: 'Priya Sharma',      photo: hp('1573496799652-408c2ac9fe98'), joined: '2024-03', response_rate: 94, response_time_hrs: 3,  languages: ['English','Hindi'],             superhost: false, bio: 'Two Downtown apartments. Walking distance to everything.' },
     { id: 'h07', name: 'Charles Thornton',  photo: hp('1519085360753-af0119f7cbe7'), joined: '2020-06', response_rate: 100,response_time_hrs: 1,  languages: ['English'],                     superhost: true,  bio: 'Long-time Palm host. Concierge-level service is the standard.' },
@@ -190,7 +190,8 @@
       review_count: 8 + (seed * 3) % 120,
       featured: !!spec.featured,
       verified: spec.verified !== false,
-      listed_at: new Date(Date.now() - (seed * 7 + 14) * 86400000).toISOString().slice(0, 10)
+      listed_at: new Date(Date.now() - (seed * 7 + 14) * 86400000).toISOString().slice(0, 10),
+      status: spec.status || 'live'
     });
   }
 
@@ -269,6 +270,10 @@
   L({ title: 'Saadiyat Beach Hotel Suite — 1BR',           destination_id: 'd-corniche', type: 'apartment', max_guests: 2, bedrooms: 1, baths: 2, base_nightly: 980, host_id: 'h14', must_amenities: ['beach','pool-shared','breakfast','concierge'], description: '1BR hotel suite on Saadiyat Beach. Breakfast included.' });
   L({ title: 'Yas Acres — 4BR Golf Villa',                 destination_id: 'd-corniche', type: 'villa',     max_guests: 8, bedrooms: 4, baths: 5, base_nightly: 1850, host_id: 'h02', must_amenities: ['pool','bbq','kids','workspace'], description: '4BR family villa on Yas Acres — Yas Mall + F1 circuit minutes away.' });
   L({ title: 'Fujairah Coast Glamp — 2 Tents',             destination_id: 'd-fuj',      type: 'glamping',  max_guests: 4, bedrooms: 2, baths: 2, base_nightly: 720, host_id: 'h12', must_amenities: ['sea-view','beach','fireplace','breakfast'], description: 'Coastal glamping — 2 tents with sea view, breakfast included.' });
+
+  // Pending-review listings (created via host wizard, awaiting admin approval).
+  L({ title: 'Bluewaters — 2BR Ain Dubai View',            destination_id: 'd-marina',   type: 'apartment', max_guests: 4, bedrooms: 2, baths: 2, base_nightly: 980, host_id: 'h18', verified: false, status: 'pending_review', must_amenities: ['marina-view','sea-view','pool-shared','gym'], description: 'New listing — 2BR with full Ain Dubai view. Boutique tower, walk to Bluewaters restaurants.' });
+  L({ title: 'JBR Rimal 4 — 1BR Newly Renovated',          destination_id: 'd-jbr',      type: 'apartment', max_guests: 2, bedrooms: 1, baths: 1, base_nightly: 540, host_id: 'h09', verified: false, status: 'pending_review', must_amenities: ['sea-view','beach','wifi'], description: 'Fresh renovation, new kitchen, sea view from balcony. Two-night minimum.' });
 
   // ===================== GUESTS =====================
   function guest(id, name, email, joined, locale, currency) {
@@ -384,6 +389,102 @@
     }
   });
 
+  // ===================== DOCUMENT TYPES =====================
+  // The six identity / ownership / licence documents a host must upload.
+  // Admin manually reviews each one in /admin#verifications.
+  var DOCUMENT_TYPES = [
+    { id: 'emirates_id_front', label: 'Emirates ID — front',           icon: '🪪', required: 'always',        tooltip: 'Front side of your Emirates ID card. Used for identity verification.' },
+    { id: 'emirates_id_back',  label: 'Emirates ID — back',            icon: '🪪', required: 'always',        tooltip: 'Back side of your Emirates ID card.' },
+    { id: 'passport',          label: 'Passport bio page',             icon: '📘', required: 'non_resident',  tooltip: 'Required only if you are a non-resident owner. Bio-data page only.' },
+    { id: 'ownership_doc',     label: 'Title deed or tenancy contract',icon: '📄', required: 'always',        tooltip: 'Mulkiya (title deed) if you own the property, or Ejari (tenancy contract) + landlord permission if you sublease.' },
+    { id: 'dtcm_permit',       label: 'DTCM Holiday Homes permit',     icon: '🏛️', required: 'dubai_only',    tooltip: 'Department of Tourism and Commerce Marketing — required for short-term rentals in Dubai.' },
+    { id: 'iban',              label: 'Bank IBAN (for payouts)',       icon: '💳', required: 'always',        tooltip: 'UAE bank IBAN format: AE + 21 digits. Stored encrypted in the live product.' }
+  ];
+
+  // ===================== HOST APPLICATIONS =====================
+  // Seed data so the admin verification queue is non-empty on cold start.
+  // Each application has per-document statuses so the admin can approve / reject individual docs.
+  function todayMinus(days) { var d = new Date(); d.setDate(d.getDate() - days); return d.toISOString().slice(0, 10); }
+  function stockDoc(type, filename) { return { type: type, filename: filename, thumb: PHOTO_POOL[(type.length * 7) % PHOTO_POOL.length], status: 'submitted' }; }
+
+  var HOST_APPLICATIONS = [
+    {
+      host_id: 'h18',
+      submitted_at: todayMinus(2),
+      status: 'submitted',
+      resident: true,
+      destination_id: 'd-marina',
+      documents: [
+        stockDoc('emirates_id_front', 'eid-front-h18.jpg'),
+        stockDoc('emirates_id_back',  'eid-back-h18.jpg'),
+        stockDoc('ownership_doc',     'mulkiya-bluewaters.pdf'),
+        stockDoc('dtcm_permit',       'dtcm-2026-A-188231.pdf'),
+        { type: 'iban', filename: 'AE070331234567890123456', thumb: null, status: 'submitted' }
+      ],
+      notes_from_admin: ''
+    },
+    {
+      host_id: 'h09',
+      submitted_at: todayMinus(5),
+      status: 'changes_requested',
+      resident: true,
+      destination_id: 'd-jbr',
+      documents: [
+        stockDoc('emirates_id_front', 'eid-front-h09.jpg'),
+        Object.assign(stockDoc('emirates_id_back',  'eid-back-h09-blurry.jpg'), { status: 'rejected', rejection_reason: 'Back side is too blurry — please re-upload a clearer photo.' }),
+        stockDoc('ownership_doc',     'ejari-rimal4.pdf'),
+        stockDoc('dtcm_permit',       'dtcm-2026-B-021984.pdf'),
+        { type: 'iban', filename: 'AE140260001234567890145', thumb: null, status: 'approved' }
+      ],
+      notes_from_admin: 'Re-upload the back side of the Emirates ID — current scan is too low resolution to read.'
+    },
+    {
+      host_id: 'h01',
+      submitted_at: todayMinus(60),
+      status: 'approved',
+      resident: false,
+      destination_id: 'd-marina',
+      documents: [
+        Object.assign(stockDoc('emirates_id_front', 'eid-front-h01.jpg'), { status: 'approved' }),
+        Object.assign(stockDoc('emirates_id_back',  'eid-back-h01.jpg'),  { status: 'approved' }),
+        Object.assign(stockDoc('passport',          'passport-mitchell.pdf'), { status: 'approved' }),
+        Object.assign(stockDoc('ownership_doc',     'mulkiya-marina-heights.pdf'), { status: 'approved' }),
+        Object.assign(stockDoc('dtcm_permit',       'dtcm-2025-A-004921.pdf'), { status: 'approved' }),
+        { type: 'iban', filename: 'AE070331234567890987654', thumb: null, status: 'approved' }
+      ],
+      notes_from_admin: 'All documents verified. Welcome to Vacation Homes.'
+    },
+    {
+      host_id: 'h21',
+      submitted_at: todayMinus(12),
+      status: 'rejected',
+      resident: true,
+      destination_id: 'd-downtown',
+      documents: [
+        Object.assign(stockDoc('emirates_id_front', 'eid-front-h21.jpg'), { status: 'approved' }),
+        Object.assign(stockDoc('emirates_id_back',  'eid-back-h21.jpg'),  { status: 'approved' }),
+        Object.assign(stockDoc('ownership_doc',     'ejari-dt1.pdf'),     { status: 'rejected', rejection_reason: 'Tenancy contract does not include a landlord permission letter for short-term sub-letting.' }),
+        Object.assign(stockDoc('dtcm_permit',       'dtcm-expired.pdf'),  { status: 'rejected', rejection_reason: 'Permit expired 4 months ago. Please renew with DTCM before re-applying.' }),
+        { type: 'iban', filename: 'AE090331234567890123987', thumb: null, status: 'approved' }
+      ],
+      notes_from_admin: 'Rejected — please obtain a current DTCM permit and a landlord permission letter, then re-submit a fresh application.'
+    },
+    {
+      host_id: 'h08',
+      submitted_at: todayMinus(0),
+      status: 'submitted',
+      resident: true,
+      destination_id: 'd-hatta',
+      documents: [
+        stockDoc('emirates_id_front', 'eid-front-h08.jpg'),
+        stockDoc('emirates_id_back',  'eid-back-h08.jpg'),
+        stockDoc('ownership_doc',     'mulkiya-hatta-lodge.pdf'),
+        { type: 'iban', filename: 'AE070331234567890456789', thumb: null, status: 'submitted' }
+      ],
+      notes_from_admin: ''
+    }
+  ];
+
   // ===================== CURRENCIES =====================
   var CURRENCIES = [
     { code: 'AED', symbol: 'AED', rate_to_aed: 1 },
@@ -421,6 +522,9 @@
     REVIEWS: REVIEWS,
     CURRENCIES: CURRENCIES,
     I18N: I18N,
-    PHOTO_POOL: PHOTO_POOL
+    PHOTO_POOL: PHOTO_POOL,
+    DOCUMENT_TYPES: DOCUMENT_TYPES,
+    HOST_APPLICATIONS: HOST_APPLICATIONS,
+    LISTING_STATUSES: ['live', 'pending_review', 'changes_requested', 'paused', 'rejected']
   };
 })();

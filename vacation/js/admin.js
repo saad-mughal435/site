@@ -19,6 +19,7 @@
       { id: 'destinations',  icon: '📍', label: 'Destinations' }
     ] },
     { group: 'Govern', items: [
+      { id: 'verifications', icon: '🛡',  label: 'Verifications' },
       { id: 'settings',      icon: '⚙',  label: 'Settings' },
       { id: 'audit',         icon: '🧾', label: 'Audit log' }
     ] }

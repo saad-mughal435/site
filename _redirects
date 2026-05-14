@@ -20,5 +20,8 @@
 /properties    /property/index.html   302
 
 # Vacation Homes friendly aliases
-/vacation-homes  /vacation/index.html   302
-/stays           /vacation/index.html   302
+/vacation-homes  /vacation/index.html          302
+/stays           /vacation/index.html          302
+/list-property   /vacation/host-onboard.html   302
+/become-a-host   /vacation/host.html           302
+/host-dashboard  /vacation/host-dashboard.html 302

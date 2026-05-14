@@ -7,6 +7,72 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.0] - 2026-05-14 — Vacation Homes host onboarding + verification queue
+
+### Added
+- **Host onboarding wizard** at `/vacation/host-onboard.html` — 6-step
+  multi-page wizard with save-and-resume drafts:
+  1. About you — name, email, UAE phone, languages, bio, password.
+  2. Verification — upload Emirates ID front + back, passport (if
+     non-resident), title deed (Mulkiya) or tenancy contract (Ejari),
+     DTCM Holiday Homes permit (if Dubai), bank IBAN. Files stored as
+     base64 thumbnails for the demo; PDFs stored by filename.
+  3. Property basics — type, title, destination, address, **map-pin
+     selector** (Leaflet lazy-loaded), beds / baths / sqft / max guests.
+  4. Photos & description — upload from device or paste URL or pick
+     stock photo. Cover photo badged.
+  5. Amenities & rules — 26-amenity multi-select with icons,
+     house-rule checklist, cancellation policy.
+  6. Pricing & calendar — base nightly (with suggestion), weekend
+     surcharge %, cleaning fee, min/max nights, instant-book toggle,
+     blocked dates.
+  7. Review + submit — side-by-side summary, "Edit" jumps, confirm
+     checkbox, submit.
+  - Edit-mode (`?mode=edit&id=L0XX`) prefills the wizard; live edits
+    to material fields re-trigger admin review.
+- **Admin verification queue** at `/admin#verifications` — two tabs
+  (Host applications + Listing reviews) with status filter chips.
+  Drawer modal shows all document thumbnails with per-document approve
+  / reject actions plus overall ✓ Approve · ↻ Request changes · ✕
+  Reject buttons. Audit-log + bell notifications on every decision.
+  - Admin dashboard gains a clickable **"Pending verifications"** KPI
+    + dynamic system alerts pointing into the queue.
+  - Admin listings table gains a **Status column** + filter chips
+    (All / Live / Pending / Changes / Paused / Rejected) + bulk
+    Approve / Pause actions.
+- **Host dashboard** at `/vacation/host-dashboard.html` — six
+  hash-routed sections: listings (KPIs + pause/unpause), bookings
+  (upcoming / in-progress / past / cancelled), calendar (per-listing
+  click-to-toggle blocked dates), earnings (KPIs + 12-month bar
+  chart), profile (edit display name / photo / bio / languages),
+  verification (per-doc status with re-upload on rejected docs).
+  - **Host picker** when no session exists — lets reviewers
+    impersonate any seed host (e.g., `h09` with changes_requested) to
+    see every state of the pipeline.
+- **Listing status pipeline** — every listing now has a `status`
+  field: `live` / `pending_review` / `changes_requested` / `paused` /
+  `rejected`. Public marketplace endpoints filter to **live-only** so
+  pending or rejected listings never appear in search. Direct ID/slug
+  lookup still works so hosts can preview.
+- **Seed data**: 5 host applications spanning every state, 2 new
+  `pending_review` listings, 6 `DOCUMENT_TYPES` taxonomy, `verified_at`
+  on 3 superhosts.
+- **Mock API additions**: 11 new public host endpoints +
+  6 new admin verification endpoints + 3 listing-approval endpoints.
+- New homepage CTA: **"List a property ↗"** on the Vacation Homes
+  PROJECTS entry.
+- New `_redirects` aliases: `/list-property`, `/become-a-host`,
+  `/host-dashboard`.
+- New CSS components: `.v-stepper`, `.v-wizard`, `.v-doc-card`,
+  `.v-status-chip`, `.v-host-shell`, `.v-host-nav`, `.v-verif-banner`,
+  `.v-drawer-backdrop` / `.v-drawer`, `.v-empty-illustration`,
+  `.v-photo-strip`, `.v-amenity-grid`, `.v-map-pin`.
+
+### Changed
+- `host.html` mailto CTA → real two-CTA landing (**Start listing**
+  / **I'm already a host**) with "6 steps · ~10 min · documents
+  reviewed in 24h" note.
+
 ## [1.6.0] - 2026-05-14 — Vacation Homes demo
 
 ### Added

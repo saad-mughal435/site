@@ -713,3 +713,154 @@ p { margin: 0 0 .8em; color: var(--vacation-ink-2); }
 /* RTL flips */
 body.vacation.rtl .v-listing-media .v-fav { left: 10px; right: auto; }
 body.vacation.rtl .v-listing-media .v-badges { right: 10px; left: auto; align-items: flex-end; }
+
+/* =========================================================================
+   HOST WIZARD — stepper, wizard shell, doc upload cards
+   ========================================================================= */
+
+/* Stepper — horizontal row of numbered circles + labels with connecting lines */
+.v-stepper { display: flex; align-items: flex-start; gap: 0; padding: 18px 0 14px; overflow-x: auto; scrollbar-width: none; }
+.v-stepper::-webkit-scrollbar { display: none; }
+.v-step { flex: 1 0 auto; min-width: 90px; display: flex; flex-direction: column; align-items: center; gap: 6px; position: relative; padding: 0 4px; }
+.v-step + .v-step::before { content: ''; position: absolute; top: 14px; left: -50%; right: 50%; height: 2px; background: var(--vacation-line-2); z-index: 0; }
+.v-step.is-done + .v-step::before,
+.v-step + .v-step.is-active::before { background: var(--vacation-primary); }
+.v-step-circle { width: 28px; height: 28px; border-radius: 999px; background: var(--vacation-card); border: 2px solid var(--vacation-line-2); display: grid; place-items: center; font-size: 12px; font-weight: 700; color: var(--vacation-muted); position: relative; z-index: 1; transition: all var(--t-base) var(--ease); }
+.v-step.is-active .v-step-circle { background: var(--vacation-primary); color: white; border-color: var(--vacation-primary); transform: scale(1.05); box-shadow: 0 0 0 4px rgba(198,107,61,.18); }
+.v-step.is-done .v-step-circle { background: var(--vacation-teal); color: white; border-color: var(--vacation-teal); }
+.v-step.is-done .v-step-circle::before { content: '✓'; font-size: 14px; }
+.v-step.is-done .v-step-circle > .v-step-num { display: none; }
+.v-step-label { font-size: 11.5px; font-weight: 600; color: var(--vacation-muted); text-align: center; line-height: 1.2; max-width: 110px; }
+.v-step.is-active .v-step-label { color: var(--vacation-ink); }
+.v-step.is-done .v-step-label { color: var(--vacation-teal-2); }
+@media (max-width: 640px) {
+  .v-stepper { padding: 10px 0; }
+  .v-step:not(.is-active) .v-step-label { display: none; }
+  .v-step + .v-step::before { left: -100%; }
+  .v-step.is-active { min-width: 0; flex: 1 1 100%; flex-direction: row; }
+  .v-step.is-active .v-step-label { display: inline; max-width: none; }
+}
+
+/* Wizard shell — page-level layout */
+.v-wizard { min-height: calc(100vh - 0px); display: flex; flex-direction: column; background: var(--vacation-bg); }
+.v-wizard-head { background: var(--vacation-card); border-bottom: 1px solid var(--vacation-line); padding: 14px 0; position: sticky; top: 0; z-index: 50; }
+.v-wizard-head-inner { max-width: 920px; margin: 0 auto; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.v-wizard-brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 700; color: var(--vacation-ink); }
+.v-wizard-brand-mark { width: 32px; height: 32px; border-radius: 8px; background: var(--vacation-primary); color: white; display: grid; place-items: center; font-weight: 800; }
+.v-wizard-save-exit { font-size: 13px; color: var(--vacation-muted); background: transparent; border: 1px solid var(--vacation-line-2); padding: 8px 14px; border-radius: 999px; }
+.v-wizard-save-exit:hover { color: var(--vacation-ink); border-color: var(--vacation-ink); }
+.v-wizard-progress { max-width: 920px; margin: 0 auto; padding: 0 20px; }
+.v-wizard-body { flex: 1 0 auto; max-width: 760px; margin: 0 auto; padding: 24px 20px 140px; width: 100%; }
+.v-wizard-step h2 { font-family: var(--font-display); font-size: clamp(24px, 3vw, 32px); margin-bottom: 8px; }
+.v-wizard-step .v-step-intro { color: var(--vacation-muted); font-size: 15px; margin-bottom: 22px; }
+.v-wizard-foot { background: var(--vacation-card); border-top: 1px solid var(--vacation-line); padding: 14px 0; position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; box-shadow: 0 -4px 16px rgba(42,34,24,.06); }
+.v-wizard-foot-inner { max-width: 920px; margin: 0 auto; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.v-wizard-foot-progress { height: 4px; background: var(--vacation-line); border-radius: 999px; flex: 1 1 auto; max-width: 200px; overflow: hidden; }
+.v-wizard-foot-progress .bar { height: 100%; background: var(--vacation-primary); transition: width var(--t-slow) var(--ease); }
+
+/* Document upload card */
+.v-doc-grid { display: grid; gap: 14px; grid-template-columns: 1fr; }
+@media (min-width: 720px) { .v-doc-grid { grid-template-columns: repeat(2, 1fr); } }
+.v-doc-card { background: var(--vacation-card); border: 1.5px solid var(--vacation-line); border-radius: var(--radius); padding: 16px; display: flex; flex-direction: column; gap: 10px; transition: border-color var(--t-fast) var(--ease); position: relative; }
+.v-doc-card:hover { border-color: var(--vacation-line-2); }
+.v-doc-card.has-file { border-color: var(--vacation-teal); background: linear-gradient(to bottom, #f0f7f5, var(--vacation-card)); }
+.v-doc-card.rejected { border-color: var(--vacation-coral); background: linear-gradient(to bottom, #fdf2ee, var(--vacation-card)); }
+.v-doc-head { display: flex; align-items: center; gap: 10px; }
+.v-doc-icon { font-size: 22px; }
+.v-doc-title { font-weight: 600; font-size: 14px; color: var(--vacation-ink); flex: 1; }
+.v-doc-required { font-size: 11px; color: var(--vacation-coral-2); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+.v-doc-tooltip { font-size: 12px; color: var(--vacation-muted); line-height: 1.4; }
+.v-doc-drop { border: 2px dashed var(--vacation-line-2); border-radius: var(--radius-sm); padding: 22px 14px; text-align: center; cursor: pointer; transition: all var(--t-fast) var(--ease); position: relative; min-height: 100px; display: grid; place-items: center; }
+.v-doc-drop:hover { border-color: var(--vacation-primary); background: rgba(198,107,61,.04); }
+.v-doc-drop input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.v-doc-drop-text { color: var(--vacation-muted); font-size: 13px; }
+.v-doc-drop-text strong { color: var(--vacation-primary); font-weight: 600; }
+.v-doc-preview { display: flex; align-items: center; gap: 10px; }
+.v-doc-thumb { width: 56px; height: 56px; border-radius: 6px; overflow: hidden; background: var(--vacation-bg-2); display: grid; place-items: center; flex-shrink: 0; }
+.v-doc-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.v-doc-thumb-fallback { font-size: 26px; }
+.v-doc-meta { flex: 1; font-size: 12px; line-height: 1.4; overflow: hidden; }
+.v-doc-meta-name { font-weight: 600; color: var(--vacation-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.v-doc-meta-status { color: var(--vacation-muted); }
+.v-doc-actions { display: flex; gap: 6px; }
+.v-doc-actions .v-btn { font-size: 12px; padding: 6px 10px; }
+.v-doc-reject-reason { background: rgba(233,131,103,.08); border-left: 3px solid var(--vacation-coral); padding: 8px 10px; font-size: 12px; color: var(--vacation-coral-2); border-radius: 4px; line-height: 1.4; }
+
+/* Status chip — listing + application status pill */
+.v-status-chip { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 600; line-height: 1.2; }
+.v-status-chip::before { content: ''; width: 6px; height: 6px; border-radius: 999px; }
+.v-status-chip.live              { background: #e0f0ee; color: var(--vacation-teal-2); }
+.v-status-chip.live::before      { background: var(--vacation-teal); }
+.v-status-chip.pending_review    { background: #faf2dd; color: var(--vacation-accent-2); }
+.v-status-chip.pending_review::before { background: var(--vacation-accent); }
+.v-status-chip.changes_requested { background: #fdecea; color: var(--vacation-coral-2); }
+.v-status-chip.changes_requested::before { background: var(--vacation-coral); }
+.v-status-chip.paused            { background: var(--vacation-bg-2); color: var(--vacation-muted); }
+.v-status-chip.paused::before    { background: var(--vacation-muted-2); }
+.v-status-chip.rejected          { background: #fae2dd; color: #9c2a1a; }
+.v-status-chip.rejected::before  { background: #c2503f; }
+.v-status-chip.submitted         { background: #faf2dd; color: var(--vacation-accent-2); }
+.v-status-chip.submitted::before { background: var(--vacation-accent); }
+.v-status-chip.approved          { background: #e0f0ee; color: var(--vacation-teal-2); }
+.v-status-chip.approved::before  { background: var(--vacation-teal); }
+.v-status-chip.draft             { background: var(--vacation-bg-2); color: var(--vacation-muted); }
+
+/* Host dashboard shell (mirrors admin layout but in warm palette) */
+.v-host-shell { display: grid; min-height: 100vh; grid-template-columns: 240px 1fr; background: var(--vacation-bg); }
+@media (max-width: 880px) { .v-host-shell { grid-template-columns: 1fr; } }
+.v-host-side { background: var(--vacation-card); border-right: 1px solid var(--vacation-line); padding: 18px 14px; display: flex; flex-direction: column; gap: 14px; }
+@media (max-width: 880px) { .v-host-side { border-right: none; border-bottom: 1px solid var(--vacation-line); padding: 12px; } }
+.v-host-side-brand { font-family: var(--font-display); font-weight: 700; color: var(--vacation-ink); display: flex; align-items: center; gap: 10px; padding: 6px 8px; }
+.v-host-nav { display: flex; flex-direction: column; gap: 2px; }
+@media (max-width: 880px) { .v-host-nav { flex-direction: row; flex-wrap: wrap; } }
+.v-host-nav a { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: var(--radius-sm); color: var(--vacation-ink-2); font-weight: 500; font-size: 14px; transition: all var(--t-fast) var(--ease); }
+.v-host-nav a:hover { background: var(--vacation-bg-2); color: var(--vacation-ink); }
+.v-host-nav a.is-active { background: var(--vacation-primary); color: white; }
+.v-host-nav a.is-active:hover { color: white; }
+.v-host-main { padding: 24px 26px; max-width: 1100px; width: 100%; }
+@media (max-width: 540px) { .v-host-main { padding: 18px 16px; } }
+.v-host-side-foot { margin-top: auto; padding: 10px 8px; font-size: 12px; color: var(--vacation-muted); }
+.v-verif-banner { padding: 14px 18px; border-radius: var(--radius); margin-bottom: 18px; display: flex; align-items: center; gap: 14px; }
+.v-verif-banner.pending   { background: #faf2dd; color: var(--vacation-accent-2); }
+.v-verif-banner.approved  { background: #e0f0ee; color: var(--vacation-teal-2); }
+.v-verif-banner.changes   { background: #fdecea; color: var(--vacation-coral-2); }
+.v-verif-banner.rejected  { background: #fae2dd; color: #9c2a1a; }
+.v-verif-banner-icon { font-size: 24px; }
+.v-verif-banner-body { flex: 1; }
+.v-verif-banner-title { font-weight: 700; margin-bottom: 2px; }
+.v-verif-banner-text { font-size: 13px; opacity: 0.85; }
+
+/* Drawer modal — admin verification review */
+.v-drawer-backdrop { position: fixed; inset: 0; background: rgba(42,34,24,.42); z-index: 200; display: flex; justify-content: flex-end; opacity: 0; pointer-events: none; transition: opacity var(--t-base) var(--ease); }
+.v-drawer-backdrop.show { opacity: 1; pointer-events: auto; }
+.v-drawer { width: min(720px, 100vw); height: 100vh; background: var(--vacation-card); display: flex; flex-direction: column; transform: translateX(40px); transition: transform var(--t-base) var(--ease); overflow: hidden; }
+.v-drawer-backdrop.show .v-drawer { transform: none; }
+.v-drawer-head { padding: 18px 22px; border-bottom: 1px solid var(--vacation-line); display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.v-drawer-head h3 { margin: 0; font-family: var(--font-display); }
+.v-drawer-body { flex: 1; overflow-y: auto; padding: 20px 22px; }
+.v-drawer-foot { padding: 14px 22px; border-top: 1px solid var(--vacation-line); background: var(--vacation-bg); display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+
+/* Empty illustration — friendly state for no listings yet */
+.v-empty-illustration { text-align: center; padding: 60px 20px; }
+.v-empty-illustration-mark { font-size: 64px; margin-bottom: 14px; }
+.v-empty-illustration h3 { font-family: var(--font-display); margin-bottom: 8px; }
+.v-empty-illustration p { color: var(--vacation-muted); max-width: 360px; margin: 0 auto 18px; }
+
+/* Photo strip in wizard step 4 */
+.v-photo-strip { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+.v-photo-strip-item { position: relative; aspect-ratio: 4/3; background: var(--vacation-bg-2); border-radius: var(--radius-sm); overflow: hidden; }
+.v-photo-strip-item img { width: 100%; height: 100%; object-fit: cover; }
+.v-photo-strip-item.is-cover::after { content: 'Cover'; position: absolute; top: 6px; left: 6px; background: var(--vacation-primary); color: white; font-size: 10px; padding: 3px 7px; border-radius: 999px; font-weight: 600; }
+.v-photo-strip-remove { position: absolute; top: 6px; right: 6px; background: rgba(42,34,24,.78); color: white; border: none; width: 22px; height: 22px; border-radius: 999px; display: grid; place-items: center; font-size: 14px; cursor: pointer; }
+
+/* Amenity multi-select grid */
+.v-amenity-grid { display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+.v-amenity-tile { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 1.5px solid var(--vacation-line); border-radius: var(--radius-sm); cursor: pointer; background: var(--vacation-card); transition: all var(--t-fast) var(--ease); font-size: 13px; }
+.v-amenity-tile:hover { border-color: var(--vacation-line-2); }
+.v-amenity-tile.is-selected { border-color: var(--vacation-primary); background: rgba(198,107,61,.06); color: var(--vacation-primary-3); font-weight: 600; }
+.v-amenity-tile-icon { font-size: 18px; }
+
+/* Map pin selector container */
+.v-map-pin { height: 320px; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--vacation-line); }
+.v-map-pin-hint { font-size: 12px; color: var(--vacation-muted); margin-top: 6px; text-align: center; }
+
