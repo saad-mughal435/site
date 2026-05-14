@@ -130,10 +130,10 @@
             }
           });
           el.addEventListener('mouseenter', function () {
-            if (state.checkIn && !state.checkOut && d > state.checkIn) {
-              state.hoverEnd = d;
-              render();
-            }
+            if (!(state.checkIn && !state.checkOut && d > state.checkIn)) return;
+            if (state.hoverEnd && sameDay(state.hoverEnd, d)) return;
+            state.hoverEnd = d;
+            render();
           });
         });
       }
