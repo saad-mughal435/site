@@ -127,7 +127,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="home.css?v=20260514m2" />
+<link rel="stylesheet" href="home.css?v=20260514m5" />
 </head>
 <body>
 
@@ -1228,18 +1228,32 @@ createRoot(document.getElementById('root')).render(<App />);
 (function () {
   var btn = document.getElementById('back-to-top');
   if (!btn) return;
-  var threshold = 400;
+  var threshold = 280;
   var ticking = false;
+  function scrollY() {
+    return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+  }
   function update() {
-    btn.classList.toggle('visible', window.scrollY > threshold);
+    btn.classList.toggle('visible', scrollY() > threshold);
     ticking = false;
   }
-  window.addEventListener('scroll', function () {
+  function onScroll() {
     if (!ticking) { requestAnimationFrame(update); ticking = true; }
-  }, { passive: true });
+  }
+  // Listen on both window and document so we catch scroll regardless of root.
+  window.addEventListener('scroll', onScroll, { passive: true });
+  document.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
   btn.addEventListener('click', function () {
     var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+    if (reduced) {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    } else if (window.scrollTo) {
+      try { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+      catch (e) { window.scrollTo(0, 0); }
+    }
     btn.blur();
   });
   update();

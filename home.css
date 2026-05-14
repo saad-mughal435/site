@@ -1189,3 +1189,59 @@ a:focus-visible, button:focus-visible, .btn:focus-visible {
   outline-offset: 3px;
   border-radius: 999px;
 }
+
+/* ============================================================
+   Back-to-top button — fixed bottom-right, appears past 240px.
+   Mirror of the rule in styles.css since the homepage doesn't
+   load styles.css (only home.css).
+   ============================================================ */
+.back-to-top {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 60;
+  width: 48px; height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(124, 156, 255, 0.32);
+  border-radius: 999px;
+  background: rgba(19, 24, 38, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #edf1f8;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(8px) scale(0.96);
+  pointer-events: none;
+  transition: opacity .22s ease, transform .22s ease, background .15s ease, border-color .15s ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 18px;
+  line-height: 1;
+  padding: 0;
+}
+.back-to-top.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+.back-to-top:hover {
+  background: rgba(124, 156, 255, 0.18);
+  border-color: rgba(124, 156, 255, 0.55);
+  color: #ffffff;
+  transform: translateY(-2px) scale(1.04);
+}
+.back-to-top:active { transform: translateY(0) scale(0.97); }
+.back-to-top:focus-visible { outline: 2px solid #7c9cff; outline-offset: 2px; }
+.back-to-top svg {
+  width: 20px; height: 20px;
+  stroke: currentColor; fill: none;
+  stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
+}
+@media print { .back-to-top { display: none !important; } }
+@media (prefers-reduced-motion: reduce) {
+  .back-to-top { transition: opacity .15s linear; transform: none; }
+  .back-to-top.visible { transform: none; }
+  .back-to-top:hover { transform: none; }
+}
