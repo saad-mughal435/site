@@ -32,27 +32,41 @@ if (-not (Get-Command gh -ErrorAction SilentlyContinue)) {
     exit 1
 }
 
-Write-Host "Checking auth..." -ForegroundColor Cyan
-gh auth status 2>&1 | Out-Null
+Write-Host "Checking auth + scopes..." -ForegroundColor Cyan
+$status = gh auth status 2>&1
 if ($LASTEXITCODE -ne 0) {
     Write-Host "ERROR: gh not authenticated. Run:  gh auth login" -ForegroundColor Red
     exit 1
+}
+# Require the `user` scope — without it, PATCH /user and /user/social_accounts return 404.
+if ($status -notmatch "(?ms)Token scopes:.*\buser\b") {
+    Write-Host ""
+    Write-Host "ERROR: gh is authenticated but missing the 'user' scope." -ForegroundColor Red
+    Write-Host "Editing your profile (bio/URL/company/location/social accounts) needs it." -ForegroundColor Red
+    Write-Host ""
+    Write-Host "Run this to add it (approves a browser prompt), then re-run this script:" -ForegroundColor Yellow
+    Write-Host "  gh auth refresh -h github.com -s user" -ForegroundColor Yellow
+    exit 2
 }
 
 # --------------------- Patch the user profile ---------------------
 Write-Host ""
 Write-Host "Updating profile fields..." -ForegroundColor Cyan
 
-gh api user `
+$null = gh api user `
     --method PATCH `
     -f "name=$name" `
     -f "bio=$bio" `
     -f "blog=$url" `
     -f "company=$company" `
     -f "location=$location" `
-    -F "hireable=$hireable" | Out-Null
-
-Write-Host "  [ok] name, bio, blog, company, location, hireable" -ForegroundColor Green
+    -F "hireable=$hireable" 2>&1
+if ($LASTEXITCODE -eq 0) {
+    Write-Host "  [ok] name, bio, blog, company, location, hireable" -ForegroundColor Green
+} else {
+    Write-Host "  [FAIL] PATCH /user failed (exit $LASTEXITCODE) — output above" -ForegroundColor Red
+    exit 3
+}
 
 # --------------------- Social accounts ---------------------
 Write-Host ""
@@ -63,16 +77,23 @@ $existing = gh api /user/social_accounts 2>$null | ConvertFrom-Json
 if ($existing) {
     $existingUrls = @($existing | ForEach-Object { $_.url })
     if ($existingUrls.Count -gt 0) {
-        $payload = @{ account_urls = $existingUrls } | ConvertTo-Json -Compress
-        $payload | gh api --method DELETE /user/social_accounts --input - | Out-Null
+        $delPayload = @{ account_urls = $existingUrls } | ConvertTo-Json -Compress
+        $null = $delPayload | gh api --method DELETE /user/social_accounts --input - 2>&1
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "  [warn] couldn't clear existing accounts (exit $LASTEXITCODE) — continuing" -ForegroundColor Yellow
+        }
     }
 }
 
 # Add the configured set
 $addPayload = @{ account_urls = $socialAccounts } | ConvertTo-Json -Compress
-$addPayload | gh api --method POST /user/social_accounts --input - | Out-Null
-
-foreach ($u in $socialAccounts) { Write-Host "  [ok] $u" -ForegroundColor Green }
+$null = $addPayload | gh api --method POST /user/social_accounts --input - 2>&1
+if ($LASTEXITCODE -eq 0) {
+    foreach ($u in $socialAccounts) { Write-Host "  [ok] $u" -ForegroundColor Green }
+} else {
+    Write-Host "  [FAIL] POST /user/social_accounts failed (exit $LASTEXITCODE) — output above" -ForegroundColor Red
+    exit 4
+}
 
 # --------------------- Done ---------------------
 Write-Host ""
