@@ -44,6 +44,8 @@
 # Headshot — cache aggressively
 /saad.png
   Cache-Control: public, max-age=31536000, immutable
+/og.png
+  Cache-Control: public, max-age=86400, must-revalidate
 
 # SEO + discoverability files
 /robots.txt
