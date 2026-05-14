@@ -883,6 +883,9 @@ const PROJECTS = [
   },
   {
     domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
+    sectionEyebrow: 'B2C',
+    sectionHeading: 'Direct-to-consumer storefront demo',
+    sectionBlurb: 'A full DTC commerce flow — storefront, cart, multi-step checkout, customer account, and admin panel. Disconnected mock API, runs entirely in-browser.',
     title: 'Pebble & Co. - DTC storefront',
     desc: <Fragment>A full direct-to-consumer storefront built end-to-end as a portfolio piece - storefront, catalog,
       product detail, cart, multi-step checkout, customer account, and a Shopify-style admin panel with
@@ -901,6 +904,9 @@ const PROJECTS = [
   },
   {
     domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
+    sectionEyebrow: 'B2B',
+    sectionHeading: 'Wholesale portal demo',
+    sectionBlurb: 'A wholesale/industrial portal with tier pricing, MOQs, contract discounts, quote requests, and an approval workflow — multi-user roles and a data-dense admin panel.',
     title: 'Anvil Supply Co. - B2B wholesale portal',
     desc: <Fragment>A wholesale/industrial portal with tier pricing, MOQs, contract discounts, quote requests, and an
       approval workflow for large orders. Multi-user accounts with purchaser / approver / viewer roles, recurring
@@ -978,7 +984,18 @@ function Projects({ view }) {
         <h2><WordReveal>Projects where code met the factory.</WordReveal></h2>
       </Reveal>
       <Reveal stagger className="projects-grid">
-        {items.map((p) => <ProjectCard key={p.title} p={p} />)}
+        {items.map((p) => (
+          <Fragment key={p.title}>
+            {p.sectionHeading && (
+              <div className="project-section-heading">
+                <span className="section-tag">{p.sectionEyebrow}</span>
+                <h3>{p.sectionHeading}</h3>
+                {p.sectionBlurb && <p>{p.sectionBlurb}</p>}
+              </div>
+            )}
+            <ProjectCard p={p} />
+          </Fragment>
+        ))}
       </Reveal>
     </section>
   );
