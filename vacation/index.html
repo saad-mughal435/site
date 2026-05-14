@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Vacation Homes — Book by the night across the UAE</title>
+<meta name="description" content="UAE short-stay marketplace demo. 55 vacation homes across Dubai Marina, Palm Jumeirah, Hatta, RAK, Fujairah and Liwa. Book by the night with full pricing breakdown and instant confirmation." />
+<meta name="theme-color" content="#c66b3d" />
+<link rel="canonical" href="https://saadm.dev/vacation/" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2064%2064'%3E%3Crect%20width%3D'64'%20height%3D'64'%20rx%3D'14'%20fill%3D'%23c66b3d'/%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20font-family%3D'sans-serif'%20font-weight%3D'700'%20font-size%3D'30'%20fill%3D'%23fff'%20text-anchor%3D'middle'%3EV%3C/text%3E%3C/svg%3E" />
+<meta property="og:title" content="Vacation Homes — UAE short-stay booking demo" />
+<meta property="og:description" content="55 vacation homes across the UAE. Book by the night with full pricing and instant confirmation. Demo by Saad Mughal." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://saadm.dev/vacation/" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/vacation.css?v=20260514" />
+</head>
+<body class="vacation">
+<div data-shell-nav></div>
+
+<!-- HERO -->
+<section class="v-hero">
+  <div class="v-hero-inner">
+    <span class="v-eyebrow">UAE short-stay marketplace</span>
+    <h1>Stay a night, stay a season.</h1>
+    <p class="v-tagline">55 vacation homes across 10 UAE destinations — Marina to Liwa Desert. Book by the night with instant confirmation.</p>
+
+    <form class="v-search" id="hero-search" onsubmit="event.preventDefault();goSearch()">
+      <div class="v-search-fields">
+        <div class="v-search-field">
+          <label>Where</label>
+          <select id="h-dest">
+            <option value="">Anywhere in the UAE</option>
+          </select>
+        </div>
+        <div class="v-search-field">
+          <label>Check in</label>
+          <input id="h-ci" type="date" />
+        </div>
+        <div class="v-search-field">
+          <label>Check out</label>
+          <input id="h-co" type="date" />
+        </div>
+        <div class="v-search-field">
+          <label>Guests</label>
+          <select id="h-g">
+            <option value="1">1 guest</option>
+            <option value="2" selected>2 guests</option>
+            <option value="3">3 guests</option>
+            <option value="4">4 guests</option>
+            <option value="5">5 guests</option>
+            <option value="6">6 guests</option>
+            <option value="8">8 guests</option>
+            <option value="10">10+ guests</option>
+          </select>
+        </div>
+        <button class="v-search-submit" type="submit">Search →</button>
+      </div>
+    </form>
+
+    <div class="v-search-chips">
+      <span class="v-search-chip" data-dest="d-marina">Dubai Marina</span>
+      <span class="v-search-chip" data-dest="d-palm">Palm Jumeirah</span>
+      <span class="v-search-chip" data-dest="d-hatta">Hatta Mountains</span>
+      <span class="v-search-chip" data-dest="d-rak">RAK Beach</span>
+      <span class="v-search-chip" data-dest="d-liwa">Liwa Desert</span>
+      <span class="v-search-chip" data-dest="d-fuj">Fujairah Beach</span>
+    </div>
+  </div>
+</section>
+
+<!-- Featured -->
+<section class="v-section v-container">
+  <div class="v-section-head">
+    <div><span class="v-eyebrow">Hand-picked</span><h2>Featured stays</h2></div>
+    <a class="more" href="search.html?sort=featured">View all featured →</a>
+  </div>
+  <div class="v-grid v-grid-4" id="featured-grid"></div>
+</section>
+
+<!-- Destinations -->
+<section class="v-section v-container">
+  <div class="v-section-head">
+    <div><span class="v-eyebrow">10 destinations</span><h2 data-i18n="home.destinations">Browse destinations</h2></div>
+    <a class="more" href="destinations.html">All destinations →</a>
+  </div>
+  <div class="v-grid v-grid-4" id="dest-grid"></div>
+</section>
+
+<!-- Top hosts -->
+<section class="v-section v-container">
+  <div class="v-section-head"><div><span class="v-eyebrow">Verified hosts</span><h2>Meet your hosts</h2></div></div>
+  <div class="v-grid v-grid-4" id="host-grid"></div>
+</section>
+
+<!-- Why Vacation Homes -->
+<section class="v-section">
+  <div class="v-container">
+    <div class="v-section-head"><div><span class="v-eyebrow">The promise</span><h2>Why Vacation Homes</h2></div></div>
+    <div class="v-grid v-grid-4">
+      <div class="v-card" style="padding:20px;"><div style="font-size:28px;">✅</div><h3 style="margin-top:8px;">Verified hosts</h3><p>Every host reviewed before going live. Superhost badge for top performers.</p></div>
+      <div class="v-card" style="padding:20px;"><div style="font-size:28px;">📷</div><h3 style="margin-top:8px;">Real photography</h3><p>Listings show actual photos of the unit, not stock imagery.</p></div>
+      <div class="v-card" style="padding:20px;"><div style="font-size:28px;">⚡</div><h3 style="margin-top:8px;">Instant confirmation</h3><p>Most listings are instant-book. Pick dates, pay, get the address.</p></div>
+      <div class="v-card" style="padding:20px;"><div style="font-size:28px;">🛡️</div><h3 style="margin-top:8px;">Flexible cancellation</h3><p>Full refund up to 24h after booking on flexible-policy stays.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Recently viewed -->
+<section class="v-section--tight v-container" id="recent-wrap" style="display:none;">
+  <div class="v-section-head"><div><h2 data-i18n="home.recent">Recently viewed</h2></div></div>
+  <div class="v-grid v-grid-4" id="recent-grid"></div>
+</section>
+
+<!-- Become a host CTA -->
+<section class="v-section" style="background:linear-gradient(135deg, var(--vacation-ink), #3a2e1f); color:white;">
+  <div class="v-container" style="display:grid;grid-template-columns:1fr;gap:24px;align-items:center;">
+    <div>
+      <span class="v-eyebrow" style="background:rgba(217,160,78,.18);color:var(--vacation-accent);">Own a UAE home?</span>
+      <h2 style="color:white;font-size:clamp(24px,3vw,32px);margin:8px 0 8px;">List it on Vacation Homes.</h2>
+      <p style="color:rgba(255,255,255,.7);max-width:640px;">Reach guests across the UAE and worldwide. Premium placement, calendar tools, automated pricing, and 85% of nightly revenue paid directly to you.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;">
+        <a class="v-btn v-btn--gold" href="host.html">Become a host</a>
+        <a class="v-btn v-btn--ghost" style="color:white;border-color:rgba(255,255,255,.3);" href="admin.html">See the admin panel</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div data-shell-foot></div>
+
+<script src="js/data.js"></script>
+<script src="js/mock-api.js"></script>
+<script src="js/notifications.js"></script>
+<script src="js/app.js"></script>
+<script>
+VacationApp.mountShell('nav.stays');
+
+var d = VACATION_DATA;
+
+// Destination dropdown
+var destSel = document.getElementById('h-dest');
+d.DESTINATIONS.forEach(function (de) {
+  var o = document.createElement('option'); o.value = de.id; o.textContent = de.name; destSel.appendChild(o);
+});
+
+// Default dates: 7 days out, 2 nights
+var ci = new Date(); ci.setDate(ci.getDate() + 7);
+var co = new Date(ci); co.setDate(co.getDate() + 2);
+document.getElementById('h-ci').value = VacationApp.ymd(ci);
+document.getElementById('h-co').value = VacationApp.ymd(co);
+
+document.querySelectorAll('.v-search-chip').forEach(function (ch) {
+  ch.addEventListener('click', function () {
+    location.href = 'search.html?destination=' + ch.getAttribute('data-dest') + '&check_in=' + document.getElementById('h-ci').value + '&check_out=' + document.getElementById('h-co').value + '&guests=' + document.getElementById('h-g').value;
+  });
+});
+
+function goSearch() {
+  var params = {
+    destination: document.getElementById('h-dest').value,
+    check_in: document.getElementById('h-ci').value,
+    check_out: document.getElementById('h-co').value,
+    max_guests: document.getElementById('h-g').value
+  };
+  location.href = 'search.html' + VacationApp.buildQs(params);
+}
+
+// Featured
+VacationApp.api('/listings/featured').then(function (r) {
+  document.getElementById('featured-grid').innerHTML = r.body.items.map(function (l) { return VacationApp.listingCard(l); }).join('');
+  VacationApp.updateAllPrices();
+});
+
+// Destinations
+var destGrid = document.getElementById('dest-grid');
+destGrid.innerHTML = d.DESTINATIONS.slice(0, 8).map(function (de) {
+  var count = d.LISTINGS.filter(function (l) { return l.destination_id === de.id; }).length;
+  return ''
+    + '<a href="search.html?destination=' + de.id + '" class="v-dest-card">'
+    +   '<img src="' + de.hero + '" alt="' + de.name + '" loading="lazy" />'
+    +   '<div class="cap"><h3>' + de.name + '</h3><div class="sub">' + count + ' stays · from AED ' + de.avg_nightly + '/night</div></div>'
+    + '</a>';
+}).join('');
+
+// Top hosts
+var hostGrid = document.getElementById('host-grid');
+hostGrid.innerHTML = d.HOSTS.slice(0, 8).map(function (h) {
+  var lc = d.LISTINGS.filter(function (l) { return l.host_id === h.id; }).length;
+  return ''
+    + '<div class="v-card" style="padding:16px;display:flex;gap:12px;align-items:center;">'
+    +   '<img src="' + h.photo + '" alt="' + h.name + '" style="width:48px;height:48px;border-radius:999px;object-fit:cover;" />'
+    +   '<div><h4 style="margin:0;">' + h.name + (h.superhost ? ' <span class="v-chip superhost" style="font-size:9px;">SUPER</span>' : '') + '</h4>'
+    +   '<div class="v-text-muted" style="font-size:12px;">' + lc + ' stays · ' + h.response_rate + '% response</div></div>'
+    + '</div>';
+}).join('');
+
+// Recently viewed
+var recentIds = VacationApp.getRecentlyViewed();
+if (recentIds.length) {
+  var recent = recentIds.map(function (id) { return d.LISTINGS.find(function (l) { return l.id === id; }); }).filter(Boolean).slice(0, 4);
+  if (recent.length) {
+    document.getElementById('recent-grid').innerHTML = recent.map(VacationApp.listingCard).join('');
+    document.getElementById('recent-wrap').style.display = 'block';
+    VacationApp.updateAllPrices();
+  }
+}
+</script>
+</body>
+</html>

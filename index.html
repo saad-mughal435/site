@@ -994,6 +994,26 @@ const PROJECTS = [
     ],
   },
   {
+    domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
+    title: 'Vacation Homes — UAE short-stay booking',
+    desc: <Fragment>A UAE short-stay booking marketplace demo with 55 vacation homes across 10 destinations
+      (Dubai Marina, Palm Jumeirah, Hatta Mountains, RAK Beach, Fujairah, Liwa Desert and more). Hand-rolled
+      date-range picker, availability calendar with conflict-check, per-night pricing with weekend surcharge
+      and 5% VAT breakdown, and an 11-section admin SPA covering listings, bookings, hosts, guests, reviews,
+      payments, promotions, destinations CMS, settings and audit.</Fragment>,
+    bullets: [
+      <Fragment>Hand-rolled <strong>date-range picker</strong> + availability calendar (no library) with blocked / booked / available states</Fragment>,
+      <Fragment><strong>Conflict-check booking flow</strong>: POST /bookings returns 409 if dates were just taken; UI bounces back with a toast</Fragment>,
+      <Fragment>9 guest pages + 11-section admin: dashboard, listings (CRUD + bulk + CSV), bookings (status + refund), hosts (verify Superhost), guests, reviews, payments/payouts, promotions, destinations, settings, audit</Fragment>,
+      <Fragment>Full pricing breakdown: nightly subtotal × nights + weekend surcharge + cleaning + 10% service fee + 5% VAT</Fragment>,
+    ],
+    tags: ['HTML5', 'CSS Grid', 'Vanilla JS (ES6+)', 'Custom date-range picker', 'Availability calendar', 'Booking conflict-check', 'Leaflet maps', 'localStorage', 'Mock API', 'Hash-routed SPA'],
+    ctas: [
+      { label: 'Open marketplace ↗', href: 'vacation/index.html', target: '_blank', primary: true },
+      { label: 'Open admin ↗', href: 'vacation/admin.html', target: '_blank' },
+    ],
+  },
+  {
     domain: 'code', kind: 'Internal Tool', year: '2023 - 2025',
     title: 'PSTN Config Auto-Generator',
     desc: 'Python tool that ingested PTCL service-tickets and emitted ready-to-run configuration scripts using a structured database of area codes, number ranges, and network parameters.',

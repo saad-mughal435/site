@@ -18,3 +18,7 @@
 # back to /admin.html → loop).
 /manzil        /property/index.html   302
 /properties    /property/index.html   302
+
+# Vacation Homes friendly aliases
+/vacation-homes  /vacation/index.html   302
+/stays           /vacation/index.html   302
