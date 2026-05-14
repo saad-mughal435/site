@@ -204,11 +204,13 @@
 
   async function openOrder(id) {
     const o = await fetch('/b2b/api/orders/' + encodeURIComponent(id)).then(r => r.json());
+    if (!o || o.error) { window.toast('Order not found', 'error'); return; }
+    const disabled = (s) => o.status === s ? 'disabled' : '';
     window.showModal(`Order ${o.id}`, `
       <div style="display:flex; flex-wrap:wrap; gap:12px; margin-bottom:14px; font-size:12.5px; color:var(--ink-soft);">
         <span><strong>PO:</strong> <code>${o.po_number || '-'}</code></span>
         <span><strong>Customer:</strong> ${esc(o.company_name)}</span>
-        <span><strong>Status:</strong> <span class="badge ${statusBadge(o.status)}">${o.status}</span></span>
+        <span data-status-line><strong>Status:</strong> <span class="badge ${statusBadge(o.status)}">${o.status}</span></span>
         <span><strong>Terms:</strong> ${esc(o.payment_terms)}</span>
       </div>
       <table class="product-table">
@@ -227,12 +229,188 @@
         <div class="summary-row total"><span>Total</span><span>${fm(o.total)}</span></div>
       </div>
       <div style="margin-top:14px; display:flex; gap:8px; flex-wrap:wrap;">
-        <button class="btn btn-primary btn-sm" data-demo="Order marked as shipped (demo)">Mark shipped</button>
-        <button class="btn btn-ghost btn-sm" data-demo="Pick list generated (demo)">Pick list</button>
-        <button class="btn btn-ghost btn-sm" data-demo="Invoice generated (demo)">Invoice</button>
-        <button class="btn btn-ghost btn-sm" style="color:var(--red); border-color:#f4c4b8;" data-demo="Order cancelled (demo)">Cancel</button>
+        <button class="btn btn-primary btn-sm" data-action="ship" ${o.status === 'shipped' || o.status === 'delivered' || o.status === 'cancelled' ? 'disabled' : ''}>${o.status === 'shipped' ? '✓ Marked shipped' : 'Mark shipped'}</button>
+        <button class="btn btn-ghost btn-sm" data-action="picklist">Pick list</button>
+        <button class="btn btn-ghost btn-sm" data-action="invoice">Invoice</button>
+        <button class="btn btn-ghost btn-sm" style="color:var(--red); border-color:#f4c4b8;" data-action="cancel" ${disabled('cancelled')}>${o.status === 'cancelled' ? '✓ Cancelled' : 'Cancel'}</button>
       </div>
     `, { large: true });
+    wireB2BOrderActions(o);
+  }
+
+  async function setB2BOrderStatus(orderId, newStatus) {
+    const r = await fetch('/b2b/api/admin/orders/' + encodeURIComponent(orderId), {
+      method: 'PUT', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: newStatus }),
+    });
+    return r.ok ? r.json() : null;
+  }
+
+  function refreshB2BRowBadge(orderId, newStatus) {
+    const row = document.querySelector(`#orders-body [data-order="${orderId}"]`);
+    if (!row) return;
+    const badge = row.querySelector('.badge');
+    if (!badge) return;
+    badge.className = `badge ${statusBadge(newStatus)}`;
+    badge.textContent = newStatus.replace(/_/g, ' ');
+  }
+
+  function wireB2BOrderActions(order) {
+    const modal = document.querySelector('.modal-backdrop');
+    if (!modal) return;
+    const shipBtn   = modal.querySelector('[data-action="ship"]');
+    const pickBtn   = modal.querySelector('[data-action="picklist"]');
+    const invBtn    = modal.querySelector('[data-action="invoice"]');
+    const cancelBtn = modal.querySelector('[data-action="cancel"]');
+    const statusLine = modal.querySelector('[data-status-line]');
+
+    function paint(newStatus) {
+      if (statusLine) statusLine.innerHTML = `<strong>Status:</strong> <span class="badge ${statusBadge(newStatus)}">${newStatus.replace(/_/g, ' ')}</span>`;
+      refreshB2BRowBadge(order.id, newStatus);
+    }
+
+    if (shipBtn) shipBtn.addEventListener('click', async () => {
+      shipBtn.disabled = true; shipBtn.textContent = 'Marking…';
+      const res = await setB2BOrderStatus(order.id, 'shipped');
+      if (!res?.success) { shipBtn.disabled = false; shipBtn.textContent = 'Mark shipped'; window.toast('Could not update', 'error'); return; }
+      paint('shipped'); shipBtn.textContent = '✓ Marked shipped';
+      window.toast(`Order ${order.id} marked as shipped`, 'success');
+    });
+
+    if (cancelBtn) cancelBtn.addEventListener('click', async () => {
+      if (!confirm(`Cancel order ${order.id}? (Demo)`)) return;
+      cancelBtn.disabled = true; cancelBtn.textContent = 'Cancelling…';
+      const res = await setB2BOrderStatus(order.id, 'cancelled');
+      if (!res?.success) { cancelBtn.disabled = false; cancelBtn.textContent = 'Cancel'; window.toast('Could not cancel', 'error'); return; }
+      paint('cancelled'); cancelBtn.textContent = '✓ Cancelled';
+      if (shipBtn) shipBtn.disabled = true;
+      window.toast(`Order ${order.id} cancelled (demo)`, 'error');
+    });
+
+    if (pickBtn) pickBtn.addEventListener('click', () => printB2BDoc(order, 'picklist'));
+    if (invBtn)  invBtn.addEventListener('click',  () => printB2BDoc(order, 'invoice'));
+  }
+
+  function printB2BDoc(o, kind) {
+    const isInvoice = kind === 'invoice';
+    const docTitle = isInvoice ? 'INVOICE' : 'PICK LIST';
+    const lines = (o.lines || []).map((l, i) => `
+      <tr>
+        <td style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#16314f; font-weight:600;">${esc(l.sku || l.product?.sku || '-')}</td>
+        <td>${esc(l.name || l.product?.name || '-')}</td>
+        <td style="text-align:center; font-family:'JetBrains Mono',monospace;">${l.qty}</td>
+        ${isInvoice ? `<td style="text-align:right; font-family:'JetBrains Mono',monospace;">$${Number(l.unit_price).toFixed(2)}</td><td style="text-align:right; font-family:'JetBrains Mono',monospace; font-weight:600;">$${Number(l.line_total).toFixed(2)}</td>` : `<td style="text-align:center; color:#888;">${i + 1} of ${o.lines.length}</td><td style="text-align:right;"><input type="checkbox" style="width:18px; height:18px;" disabled /></td>`}
+      </tr>
+    `).join('');
+    const ship = o.ship_to || {};
+    const html = `<!DOCTYPE html><html><head>
+      <title>${docTitle} ${esc(o.id)} — Anvil Supply Co.</title>
+      <meta charset="UTF-8" />
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+      <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', system-ui, sans-serif; padding: 40px; max-width: 820px; margin: 0 auto; color: #0c1f37; background: #f4f6f9; }
+        .toolbar { position: sticky; top: 0; background: #f4f6f9; padding: 8px 0 16px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #d6dde6; }
+        .toolbar button { background: #d96a2c; color: #fff; border: 0; padding: 10px 18px; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer; font-family: inherit; }
+        .toolbar .meta { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #56657a; letter-spacing: 0.6px; text-transform: uppercase; }
+        .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 3px solid #16314f; padding-bottom: 20px; margin-bottom: 26px; background: #fff; padding: 22px 24px; border-radius: 8px; }
+        .brand { display: flex; align-items: center; gap: 12px; }
+        .brand-mark { background: #d96a2c; color: #fff; width: 44px; height: 44px; border-radius: 6px; display: grid; place-items: center; font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 700; }
+        .brand-name { font-size: 18px; font-weight: 700; color: #16314f; letter-spacing: -0.01em; }
+        .brand-sub { color: #56657a; font-size: 12px; margin-top: 2px; }
+        .doc-title { font-size: 24px; font-weight: 700; color: #16314f; letter-spacing: 0.5px; }
+        .doc-meta { color: #56657a; font-size: 12.5px; margin-top: 4px; font-family: 'JetBrains Mono', monospace; }
+        .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
+        .meta-block { background: #fff; padding: 16px 18px; border-radius: 6px; border: 1px solid #e1e6ee; }
+        .meta-block h4 { font-size: 10.5px; text-transform: uppercase; letter-spacing: 1px; color: #56657a; margin: 0 0 8px; font-weight: 700; }
+        .meta-block p { margin: 2px 0; font-size: 13.5px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 18px; background: #fff; border-radius: 6px; overflow: hidden; border: 1px solid #e1e6ee; }
+        th { background: #16314f; padding: 11px 14px; text-align: left; font-size: 10.5px; text-transform: uppercase; letter-spacing: 1px; color: #fff; font-weight: 600; }
+        td { padding: 12px 14px; border-bottom: 1px solid #eef1f5; font-size: 13.5px; }
+        tr:last-child td { border-bottom: 0; }
+        .totals { background: #fff; padding: 16px 22px; border-radius: 6px; max-width: 360px; margin-left: auto; border: 1px solid #e1e6ee; }
+        .totals .row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 13px; }
+        .totals .grand { border-top: 2px solid #16314f; margin-top: 8px; padding-top: 10px; font-size: 17px; font-weight: 700; color: #16314f; }
+        .footer { margin-top: 32px; padding-top: 16px; border-top: 1px solid #d6dde6; font-size: 11.5px; color: #56657a; text-align: center; line-height: 1.7; }
+        .stamp { display: inline-block; padding: 5px 12px; background: rgba(217,106,44,0.1); color: #d96a2c; font-size: 10.5px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; border-radius: 4px; border: 1px dashed rgba(217,106,44,0.4); margin-top: 10px; }
+        @media print {
+          .toolbar { display: none; }
+          @page { margin: 1.2cm; }
+          body { padding: 0; background: #fff; }
+          .header, .meta-block, table, .totals { border: none; box-shadow: none; }
+        }
+      </style>
+    </head><body>
+      <div class="toolbar">
+        <span class="meta">Anvil Supply Co. — ${docTitle}</span>
+        <button onclick="window.print()">Print / Save as PDF</button>
+      </div>
+      <div class="header">
+        <div class="brand">
+          <div class="brand-mark">A</div>
+          <div>
+            <div class="brand-name">Anvil Supply Co.</div>
+            <div class="brand-sub">Industrial supplies, no nonsense.</div>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div class="doc-title">${docTitle}</div>
+          <div class="doc-meta">${esc(o.id)}${isInvoice ? ' · ' + new Date(o.placed_at).toLocaleDateString() : ''}</div>
+        </div>
+      </div>
+      <div class="meta-grid">
+        <div class="meta-block">
+          <h4>${isInvoice ? 'Bill to' : 'Ship to'}</h4>
+          <p><strong>${esc(o.company_name)}</strong></p>
+          <p>${esc(ship.label || '')}</p>
+          <p>${esc(ship.line1 || '')}</p>
+          <p>${esc(ship.city || '')}${ship.country ? ', ' + esc(ship.country) : ''}</p>
+          ${o.attention ? `<p style="color:#56657a; font-size:12.5px; margin-top:6px;"><strong>Attn:</strong> ${esc(o.attention)}</p>` : ''}
+        </div>
+        <div class="meta-block">
+          <h4>References</h4>
+          <p><strong>Order:</strong> ${esc(o.id)}</p>
+          <p><strong>PO:</strong> ${esc(o.po_number || '-')}</p>
+          <p><strong>Placed:</strong> ${new Date(o.placed_at).toLocaleDateString()}</p>
+          ${isInvoice ? `<p><strong>Terms:</strong> ${esc(o.payment_terms || 'Net 30')}</p>` : `<p><strong>Status:</strong> ${esc(o.status)}</p>`}
+          ${isInvoice ? `<p><strong>Due:</strong> ${new Date(new Date(o.placed_at).getTime() + 30 * 24 * 3600 * 1000).toLocaleDateString()}</p>` : ''}
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>SKU</th><th>Description</th><th style="text-align:center;">Qty</th>
+            ${isInvoice ? '<th style="text-align:right;">Unit</th><th style="text-align:right;">Line Total</th>' : '<th style="text-align:center;">Position</th><th style="text-align:right;">Picked</th>'}
+          </tr>
+        </thead>
+        <tbody>${lines}</tbody>
+      </table>
+      ${isInvoice ? `
+      <div class="totals">
+        <div class="row"><span>Subtotal</span><span>$${Number(o.subtotal || 0).toFixed(2)}</span></div>
+        ${o.discount > 0 ? `<div class="row" style="color:#1e5a30;"><span>Contract discount</span><span>- $${Number(o.discount).toFixed(2)}</span></div>` : ''}
+        <div class="row"><span>Freight</span><span>${o.freight === 0 ? 'Free' : '$' + Number(o.freight).toFixed(2)}</span></div>
+        <div class="row"><span>Tax</span><span>$${Number(o.tax || 0).toFixed(2)}</span></div>
+        <div class="row grand"><span>Total due</span><span>$${Number(o.total || 0).toFixed(2)}</span></div>
+      </div>
+      ` : `
+      <div class="meta-block" style="margin-top:6px;">
+        <h4>Pick instructions</h4>
+        <p style="font-size:13px; color:#42526e;">Pick from staging bay → verify SKU + lot → quantity check → tick box → consolidate at outbound dock. Flag any discrepancy on the discrepancy log.</p>
+        <p style="font-size:12.5px; color:#56657a; margin-top:8px;"><strong>Picker:</strong> _________________________ &nbsp;&nbsp; <strong>Date/time:</strong> _________________________</p>
+      </div>
+      `}
+      <div class="footer">
+        Anvil Supply Co. · orders@anvil.demo · +971 4 010 1010<br>
+        <span class="stamp">Demo · fabricated data · not a real ${isInvoice ? 'invoice' : 'pick list'}</span>
+      </div>
+    </body></html>`;
+    const w = window.open('', '_blank', 'width=900,height=1100');
+    if (!w) { window.toast('Popup blocked — allow popups to print', 'error'); return; }
+    w.document.write(html);
+    w.document.close();
   }
 
   /* =========================================================

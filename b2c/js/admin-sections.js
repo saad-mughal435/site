@@ -233,16 +233,174 @@
           <p>${esc(o.payment_method || (o.payment ? o.payment.kind : 'card'))}</p>
 
           <h4 style="margin-top:18px;">Status</h4>
-          <p><span class="badge ${statusBadge(o.status)}">${o.status}</span></p>
+          <p data-status-line><span class="badge ${statusBadge(o.status)}">${o.status}</span></p>
 
           <div style="margin-top:18px; display:flex; flex-direction:column; gap:8px;">
-            <button class="btn btn-primary btn-sm" data-demo="Order marked as shipped (demo)">Mark as shipped</button>
-            <button class="btn btn-ghost btn-sm" data-demo="Packing slip generated (demo)">Print packing slip</button>
-            <button class="btn btn-ghost btn-sm" style="color:var(--red); border-color:#f4c4b8;" data-demo="Refund initiated (demo - no real money moves)">Refund (demo)</button>
+            <button class="btn btn-primary btn-sm" data-action="ship" ${o.status === 'shipped' || o.status === 'delivered' || o.status === 'refunded' ? 'disabled' : ''}>${o.status === 'shipped' ? '✓ Already shipped' : 'Mark as shipped'}</button>
+            <button class="btn btn-ghost btn-sm" data-action="slip">Print packing slip</button>
+            <button class="btn btn-ghost btn-sm" style="color:var(--red); border-color:#f4c4b8;" data-action="refund" ${o.status === 'refunded' ? 'disabled' : ''}>${o.status === 'refunded' ? '✓ Refunded' : 'Refund (demo)'}</button>
           </div>
         </div>
       </div>
     `);
+    wireOrderModalActions(o);
+  }
+
+  async function setOrderStatus(orderId, newStatus) {
+    const r = await fetch('/b2c/api/admin/orders/' + encodeURIComponent(orderId), {
+      method: 'PUT', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: newStatus }),
+    });
+    return r.ok ? r.json() : null;
+  }
+
+  function refreshRowBadge(orderId, newStatus) {
+    const row = document.querySelector(`#orders-body [data-order="${orderId}"]`);
+    if (!row) return;
+    const badge = row.querySelector('.badge');
+    if (!badge) return;
+    badge.className = `badge ${statusBadge(newStatus)}`;
+    badge.textContent = newStatus;
+  }
+
+  function wireOrderModalActions(order) {
+    const modal = document.querySelector('.modal-backdrop');
+    if (!modal) return;
+
+    const shipBtn = modal.querySelector('[data-action="ship"]');
+    const slipBtn = modal.querySelector('[data-action="slip"]');
+    const refundBtn = modal.querySelector('[data-action="refund"]');
+    const statusLine = modal.querySelector('[data-status-line]');
+
+    function paintStatus(newStatus) {
+      if (statusLine) statusLine.innerHTML = `<span class="badge ${statusBadge(newStatus)}">${newStatus}</span>`;
+      refreshRowBadge(order.number || order.id, newStatus);
+    }
+
+    if (shipBtn) shipBtn.addEventListener('click', async () => {
+      shipBtn.disabled = true;
+      shipBtn.textContent = 'Marking…';
+      const res = await setOrderStatus(order.number || order.id, 'shipped');
+      if (!res || !res.success) { shipBtn.disabled = false; shipBtn.textContent = 'Mark as shipped'; window.toast('Could not update status', 'error'); return; }
+      paintStatus('shipped');
+      shipBtn.textContent = '✓ Marked as shipped';
+      if (refundBtn) refundBtn.disabled = false;
+      window.toast(`Order ${order.number || order.id} marked as shipped`, 'success');
+    });
+
+    if (slipBtn) slipBtn.addEventListener('click', () => printPackingSlip(order));
+
+    if (refundBtn) refundBtn.addEventListener('click', async () => {
+      if (!confirm(`Refund ${order.number || order.id}? (Demo — no real money moves.)`)) return;
+      refundBtn.disabled = true;
+      refundBtn.textContent = 'Refunding…';
+      const res = await setOrderStatus(order.number || order.id, 'refunded');
+      if (!res || !res.success) { refundBtn.disabled = false; refundBtn.textContent = 'Refund (demo)'; window.toast('Could not refund', 'error'); return; }
+      paintStatus('refunded');
+      refundBtn.textContent = '✓ Refunded';
+      if (shipBtn) shipBtn.disabled = true;
+      window.toast(`Order ${order.number || order.id} refunded (demo)`, 'success');
+    });
+  }
+
+  function printPackingSlip(o) {
+    const lines = (o.lines || []).map(l => `
+      <tr>
+        <td>${esc(l.product_name || l.product?.name || '-')}${l.variant_name ? ' <span style="color:#888; font-size:12px;">(' + esc(l.variant_name) + ')</span>' : ''}</td>
+        <td style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#666;">${esc(l.product?.sku || l.product_id || '')}</td>
+        <td style="text-align:center; font-family:'JetBrains Mono',monospace;">${l.qty}</td>
+        <td style="text-align:right; font-family:'JetBrains Mono',monospace;">$${Number(l.line_total).toFixed(2)}</td>
+      </tr>
+    `).join('');
+    const ship = o.shipping || {};
+    const shipName = [ship.first_name, ship.last_name].filter(Boolean).join(' ') || o.customer_name || '';
+    const shippingCost = (o.shipping_cost ?? (typeof o.shipping === 'number' ? o.shipping : 0)) || 0;
+    const html = `<!DOCTYPE html><html><head>
+      <title>Packing Slip ${esc(o.number || o.id)}</title>
+      <meta charset="UTF-8" />
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+      <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+      <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', system-ui, sans-serif; padding: 40px; max-width: 820px; margin: 0 auto; color: #1a1815; background: #fdfaf6; }
+        .toolbar { position: sticky; top: 0; background: #fdfaf6; padding: 8px 0 16px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e8e0d6; }
+        .toolbar button { background: #f15a3a; color: #fff; border: 0; padding: 10px 18px; border-radius: 999px; font-weight: 600; font-size: 13px; cursor: pointer; font-family: inherit; }
+        .toolbar .meta { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #888; letter-spacing: 0.6px; text-transform: uppercase; }
+        .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #f15a3a; padding-bottom: 22px; margin-bottom: 28px; }
+        .brand { font-family: 'Fraunces', Georgia, serif; font-size: 30px; color: #f15a3a; font-weight: 600; letter-spacing: -0.01em; }
+        .brand-sub { color: #888; font-size: 13px; margin-top: 4px; font-style: italic; }
+        .doc-title { font-size: 26px; font-weight: 700; letter-spacing: -0.01em; }
+        .doc-meta { color: #888; font-size: 13px; margin-top: 4px; font-family: 'JetBrains Mono', monospace; }
+        .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 28px; }
+        .meta-block h4 { font-size: 10.5px; text-transform: uppercase; letter-spacing: 1.2px; color: #888; margin: 0 0 8px; font-weight: 700; }
+        .meta-block p { margin: 2px 0; font-size: 14px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 18px; }
+        th { background: #f5ede2; padding: 11px 14px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.7px; color: #555; font-weight: 700; }
+        td { padding: 13px 14px; border-bottom: 1px solid #ece4d6; font-size: 14px; }
+        .totals { background: #f5ede2; padding: 16px 22px; border-radius: 10px; max-width: 320px; margin-left: auto; }
+        .totals .row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 13.5px; }
+        .totals .grand { border-top: 1px solid #d6cbb8; margin-top: 8px; padding-top: 10px; font-size: 17px; font-weight: 700; }
+        .footer { margin-top: 36px; padding-top: 16px; border-top: 1px solid #ece4d6; font-size: 12px; color: #888; text-align: center; line-height: 1.6; }
+        .stamp { display: inline-block; padding: 6px 14px; background: rgba(241,90,58,0.08); color: #f15a3a; font-size: 11px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; border-radius: 999px; border: 1px dashed rgba(241,90,58,0.5); margin-top: 14px; }
+        @media print {
+          .toolbar { display: none; }
+          @page { margin: 1.2cm; }
+          body { padding: 0; background: #fff; }
+        }
+      </style>
+    </head><body>
+      <div class="toolbar">
+        <span class="meta">Pebble &amp; Co. — Packing Slip</span>
+        <button onclick="window.print()">Print / Save as PDF</button>
+      </div>
+      <div class="header">
+        <div>
+          <div class="brand">Pebble &amp; Co.</div>
+          <div class="brand-sub">Small things, beautifully made.</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="doc-title">PACKING SLIP</div>
+          <div class="doc-meta">${esc(o.number || o.id)}</div>
+        </div>
+      </div>
+      <div class="meta-grid">
+        <div class="meta-block">
+          <h4>Ship To</h4>
+          <p><strong>${esc(shipName)}</strong></p>
+          <p>${esc(ship.address1 || ship.line1 || '')}${ship.address2 ? ', ' + esc(ship.address2) : ''}</p>
+          <p>${esc(ship.city || '')}${ship.state ? ', ' + esc(ship.state) : ''} ${esc(ship.postal || ship.zip || '')}</p>
+          <p>${esc(ship.country || '')}</p>
+          <p style="color:#888; font-size:12.5px; margin-top:6px;">${esc(ship.email || o.customer_email || '')}</p>
+        </div>
+        <div class="meta-block">
+          <h4>Order Details</h4>
+          <p><strong>Order:</strong> ${esc(o.number || o.id)}</p>
+          <p><strong>Placed:</strong> ${new Date(o.placed_at).toLocaleDateString(undefined, {year:'numeric', month:'long', day:'numeric'})}</p>
+          <p><strong>Status:</strong> ${esc(o.status)}</p>
+          <p><strong>Payment:</strong> ${esc(o.payment_method || 'Card')}</p>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>Item</th><th>SKU</th><th style="text-align:center;">Qty</th><th style="text-align:right;">Line Total</th></tr></thead>
+        <tbody>${lines}</tbody>
+      </table>
+      <div class="totals">
+        <div class="row"><span>Subtotal</span><span>$${Number(o.subtotal || 0).toFixed(2)}</span></div>
+        ${o.discount > 0 ? `<div class="row" style="color:#3a8a4a;"><span>Discount</span><span>- $${Number(o.discount).toFixed(2)}</span></div>` : ''}
+        <div class="row"><span>Shipping</span><span>${shippingCost === 0 ? 'Free' : '$' + Number(shippingCost).toFixed(2)}</span></div>
+        <div class="row"><span>Tax</span><span>$${Number(o.tax || 0).toFixed(2)}</span></div>
+        <div class="row grand"><span>Total</span><span>$${Number(o.total || 0).toFixed(2)}</span></div>
+      </div>
+      <div class="footer">
+        Thank you for ordering from Pebble &amp; Co. — questions? hello@pebbleandco.demo<br>
+        <span class="stamp">Demo · fabricated data · no real shipment</span>
+      </div>
+    </body></html>`;
+    const w = window.open('', '_blank', 'width=900,height=1100');
+    if (!w) { window.toast('Popup blocked — allow popups to print', 'error'); return; }
+    w.document.write(html);
+    w.document.close();
   }
 
   /* =========================================================
