@@ -153,22 +153,24 @@
   RECIPES.forEach(r => { r.items = r.ingredients.map(i => ({ ...i })); });
 
   // ---- Inventory: 12 RMs + 3 FGs, three RMs flagged short ----
+  // Realistic per-SKU unit costs in AED. stock_value / transaction_value
+  // / ave_unit_cost are derived so every screen shows believable money.
   const INVENTORY = [
-    { item_code: 'RM-WATER',      description: 'Demo Water',           category: 'RM', uom: 'L',   on_hand: 1200,  reserved: 150, reorder_point: 500,  unit_cost: 1, ave_unit_cost: 1, stock_value: 1200, transaction_value: 1200 },
-    { item_code: 'RM-SUGAR',      description: 'Demo Sugar',           category: 'RM', uom: 'kg',  on_hand: 80,    reserved: 25,  reorder_point: 150,  unit_cost: 1, ave_unit_cost: 1, stock_value: 80,   transaction_value: 80,   short: true },
-    { item_code: 'RM-FLAVOR',     description: 'Demo Flavor X',        category: 'RM', uom: 'L',   on_hand: 12,    reserved: 5,   reorder_point: 20,   unit_cost: 1, ave_unit_cost: 1, stock_value: 12,   transaction_value: 12,   short: true },
-    { item_code: 'RM-CO2',        description: 'Demo CO2',             category: 'RM', uom: 'kg',  on_hand: 450,   reserved: 30,  reorder_point: 200,  unit_cost: 1, ave_unit_cost: 1, stock_value: 450,  transaction_value: 450 },
-    { item_code: 'RM-PREFORM',    description: 'PET preform 500 mL',   category: 'RM', uom: 'pcs', on_hand: 5400,  reserved: 1200,reorder_point: 2000, unit_cost: 1, ave_unit_cost: 1, stock_value: 5400, transaction_value: 5400 },
-    { item_code: 'RM-PREFORM-1L', description: 'PET preform 1 L',      category: 'RM', uom: 'pcs', on_hand: 1800,  reserved: 600, reorder_point: 1500, unit_cost: 1, ave_unit_cost: 1, stock_value: 1800, transaction_value: 1800 },
-    { item_code: 'RM-PREFORM-250',description: 'PET preform 250 mL',   category: 'RM', uom: 'pcs', on_hand: 700,   reserved: 200, reorder_point: 1000, unit_cost: 1, ave_unit_cost: 1, stock_value: 700,  transaction_value: 700,  short: true },
-    { item_code: 'RM-CAP',        description: 'Bottle cap',           category: 'RM', uom: 'pcs', on_hand: 9100,  reserved: 1800,reorder_point: 5000, unit_cost: 1, ave_unit_cost: 1, stock_value: 9100, transaction_value: 9100 },
-    { item_code: 'RM-LABEL',      description: 'Shrink label 500 mL',  category: 'RM', uom: 'pcs', on_hand: 6300,  reserved: 1200,reorder_point: 3000, unit_cost: 1, ave_unit_cost: 1, stock_value: 6300, transaction_value: 6300 },
-    { item_code: 'RM-LABEL-1L',   description: 'Shrink label 1 L',     category: 'RM', uom: 'pcs', on_hand: 2800,  reserved: 600, reorder_point: 1500, unit_cost: 1, ave_unit_cost: 1, stock_value: 2800, transaction_value: 2800 },
-    { item_code: 'RM-LABEL-250',  description: 'Shrink label 250 mL',  category: 'RM', uom: 'pcs', on_hand: 1900,  reserved: 200, reorder_point: 1000, unit_cost: 1, ave_unit_cost: 1, stock_value: 1900, transaction_value: 1900 },
-    { item_code: 'RM-CARTON',     description: 'Demo Carton',          category: 'RM', uom: 'pcs', on_hand: 1500,  reserved: 300, reorder_point: 800,  unit_cost: 1, ave_unit_cost: 1, stock_value: 1500, transaction_value: 1500 },
-    { item_code: 'FG-500ML',      description: 'Sample Beverage 500 mL', category: 'FG', uom: 'case', on_hand: 220, reserved: 60, reorder_point: 100, unit_cost: 1, ave_unit_cost: 1, stock_value: 220, transaction_value: 220 },
-    { item_code: 'FG-1L',         description: 'Sample Beverage 1 L',    category: 'FG', uom: 'case', on_hand: 95,  reserved: 25, reorder_point: 80,  unit_cost: 1, ave_unit_cost: 1, stock_value: 95,  transaction_value: 95 },
-    { item_code: 'FG-250ML',      description: 'Sample Beverage 250 mL', category: 'FG', uom: 'case', on_hand: 140, reserved: 30, reorder_point: 60,  unit_cost: 1, ave_unit_cost: 1, stock_value: 140, transaction_value: 140 },
+    { item_code: 'RM-WATER',      description: 'Demo Water',           category: 'RM', uom: 'L',   on_hand: 28000,  reserved: 4500,   reorder_point: 8000,   unit_cost: 0.012, ave_unit_cost: 0.012, stock_value: 336,    transaction_value: 336 },
+    { item_code: 'RM-SUGAR',      description: 'Demo Sugar',           category: 'RM', uom: 'kg',  on_hand: 3200,   reserved: 850,    reorder_point: 4000,   unit_cost: 4.20,  ave_unit_cost: 4.15,  stock_value: 13440,  transaction_value: 13440, short: true },
+    { item_code: 'RM-FLAVOR',     description: 'Demo Flavor X',        category: 'RM', uom: 'L',   on_hand: 320,    reserved: 90,     reorder_point: 400,    unit_cost: 28.50, ave_unit_cost: 28.10, stock_value: 9120,   transaction_value: 9120,  short: true },
+    { item_code: 'RM-CO2',        description: 'Demo CO2',             category: 'RM', uom: 'kg',  on_hand: 8400,   reserved: 950,    reorder_point: 3000,   unit_cost: 1.85,  ave_unit_cost: 1.80,  stock_value: 15540,  transaction_value: 15540 },
+    { item_code: 'RM-PREFORM',    description: 'PET preform 500 mL',   category: 'RM', uom: 'pcs', on_hand: 480000, reserved: 120000, reorder_point: 150000, unit_cost: 0.18,  ave_unit_cost: 0.175, stock_value: 86400,  transaction_value: 86400 },
+    { item_code: 'RM-PREFORM-1L', description: 'PET preform 1 L',      category: 'RM', uom: 'pcs', on_hand: 180000, reserved: 60000,  reorder_point: 80000,  unit_cost: 0.28,  ave_unit_cost: 0.275, stock_value: 50400,  transaction_value: 50400 },
+    { item_code: 'RM-PREFORM-250',description: 'PET preform 250 mL',   category: 'RM', uom: 'pcs', on_hand: 70000,  reserved: 22000,  reorder_point: 100000, unit_cost: 0.11,  ave_unit_cost: 0.105, stock_value: 7700,   transaction_value: 7700,  short: true },
+    { item_code: 'RM-CAP',        description: 'Bottle cap',           category: 'RM', uom: 'pcs', on_hand: 510000, reserved: 110000, reorder_point: 250000, unit_cost: 0.045, ave_unit_cost: 0.043, stock_value: 22950,  transaction_value: 22950 },
+    { item_code: 'RM-LABEL',      description: 'Shrink label 500 mL',  category: 'RM', uom: 'pcs', on_hand: 470000, reserved: 90000,  reorder_point: 200000, unit_cost: 0.038, ave_unit_cost: 0.036, stock_value: 17860,  transaction_value: 17860 },
+    { item_code: 'RM-LABEL-1L',   description: 'Shrink label 1 L',     category: 'RM', uom: 'pcs', on_hand: 170000, reserved: 38000,  reorder_point: 80000,  unit_cost: 0.052, ave_unit_cost: 0.050, stock_value: 8840,   transaction_value: 8840 },
+    { item_code: 'RM-LABEL-250',  description: 'Shrink label 250 mL',  category: 'RM', uom: 'pcs', on_hand: 130000, reserved: 12000,  reorder_point: 70000,  unit_cost: 0.025, ave_unit_cost: 0.024, stock_value: 3250,   transaction_value: 3250 },
+    { item_code: 'RM-CARTON',     description: 'Demo Carton',          category: 'RM', uom: 'pcs', on_hand: 24000,  reserved: 4800,   reorder_point: 12000,  unit_cost: 1.85,  ave_unit_cost: 1.80,  stock_value: 44400,  transaction_value: 44400 },
+    { item_code: 'FG-500ML',      description: 'Sample Beverage 500 mL', category: 'FG', uom: 'case', on_hand: 3850, reserved: 980,  reorder_point: 1500, unit_cost: 14.40, ave_unit_cost: 14.10, stock_value: 55440, transaction_value: 55440 },
+    { item_code: 'FG-1L',         description: 'Sample Beverage 1 L',    category: 'FG', uom: 'case', on_hand: 1620, reserved: 420,  reorder_point: 1000, unit_cost: 19.20, ave_unit_cost: 19.00, stock_value: 31104, transaction_value: 31104 },
+    { item_code: 'FG-250ML',      description: 'Sample Beverage 250 mL', category: 'FG', uom: 'case', on_hand: 2240, reserved: 480,  reorder_point: 900,  unit_cost: 9.60,  ave_unit_cost: 9.45,  stock_value: 21504, transaction_value: 21504 },
   ];
 
   // ---- Inventory transactions log (GRN view) — synthesise 80 entries ----
@@ -179,7 +181,10 @@
       const it = INVENTORY[i % INVENTORY.length];
       const reason = reasons[i % reasons.length];
       const isIn = ['GRN', 'Production IN'].includes(reason);
-      const qty = (Math.floor(Math.random() * 80) + 5) * (isIn ? 1 : -1);
+      // Scale qty by UOM so a "GRN" of preforms isn't 5 pcs.
+      const scale = it.uom === 'pcs' ? 1000 : (it.uom === 'L' ? 50 : 1);
+      const qty = ((Math.floor(Math.random() * 80) + 5) * scale) * (isIn ? 1 : -1);
+      const txnValue = Math.round(Math.abs(qty) * it.unit_cost * 100) / 100;
       out.push({
         _id: oid('txn-'), id: oid('id-'),
         date: daysAgo(i % 30),
@@ -194,10 +199,10 @@
         qty_in: isIn ? Math.abs(qty) : 0,
         qty_out: !isIn ? Math.abs(qty) : 0,
         uom: it.uom,
-        unit_cost: 1,
-        transaction_value: Math.abs(qty),
-        total_qty_in_value: isIn ? Math.abs(qty) : 0,
-        total_qty_out_value: !isIn ? Math.abs(qty) : 0,
+        unit_cost: it.unit_cost,
+        transaction_value: txnValue,
+        total_qty_in_value: isIn ? txnValue : 0,
+        total_qty_out_value: !isIn ? txnValue : 0,
       });
     }
     return out;
@@ -225,7 +230,9 @@
     phone: '+000-' + String(100 + i).padStart(4,'0'),
     trn: '1' + String(i).padStart(14,'0'),
     active: i !== 4 && i !== 10,  // two inactives for realism
-    credit_limit: 1, balance: 1,
+    // Credit limit tiers 50k-500k AED; balance ~30-70% of limit for variety.
+    credit_limit: [150000, 250000, 100000, 400000, 80000, 200000, 350000, 120000, 180000, 90000, 500000, 220000, 160000, 280000][i],
+    balance:      [ 48200, 167400,  31900, 215000, 12300,  62500, 198200,  41700,  74100, 28800, 312000,  87600,  54900,  93400][i],
   }));
 
   // ---- Suppliers — 8 records ----
@@ -283,7 +290,8 @@
       line: ['Line A', 'Line B', 'Line C'][i % 3],
       recipe_code: p.recipe, recipe_name: p.recipe,
       planned_start: daysAgo(i % 10),
-      total_cost: 40 + (i*10), unit_cost: 1,
+      // Cost of goods for this batch — qty × FG unit_cost (use 500ml as the proxy).
+      total_cost: Math.round((40 + (i*10)) * 14.40), unit_cost: 14.40,
       source: i % 2 === 0 ? 'po_processing' : 'manual',
       po_number: 'PO-IN-' + String(1001 + i).padStart(4,'0'),
       order_type: c.market === 'EXPORT' ? 'export' : 'local',
@@ -366,6 +374,11 @@
   const QT_STATUSES = ['draft','sent','sent','accepted','accepted','expired','sent','accepted','draft','sent','rejected','accepted'];
   const QUOTATIONS = QT_STATUSES.map((status, i) => {
     const c = CUSTOMERS[i % CUSTOMERS.length];
+    // Subtotal scaled by items_count (1-4) × 4500-12000 AED per line.
+    const items = 1 + (i % 4);
+    const subtotal = items * (4500 + ((i * 1700) % 7500));
+    const vat = Math.round(subtotal * 0.05);
+    const total = subtotal + vat;
     return {
       _id: 'q-' + (i+1),
       quotation_number: 'QT-2026-' + String(i+1).padStart(4,'0'),
@@ -373,8 +386,8 @@
       number: 'QT-2026-' + String(i+1).padStart(4,'0'),
       date: daysAgo(i),
       customer_id: c._id, customer_name: c.name, customer: c.name,
-      items_count: 1 + (i % 4),
-      subtotal: 1, vat_amount: 1, line_total: 1, total: 1, grand_total: 1,
+      items_count: items,
+      subtotal, vat_amount: vat, line_total: total, total, grand_total: total,
       status,
       valid_until: daysAgo(-30 + i),
       notes: 'Demo quotation #' + (i+1),
@@ -384,13 +397,16 @@
   const PI_STATUSES = ['issued','paid','issued','overdue','paid','issued','paid','issued','draft','paid'];
   const PROFORMA_INVOICES = PI_STATUSES.map((status, i) => {
     const c = CUSTOMERS[i % CUSTOMERS.length];
+    const subtotal = 8500 + ((i * 2300) % 22000);
+    const vat = Math.round(subtotal * 0.05);
+    const total = subtotal + vat;
     return {
       _id: 'p-' + (i+1),
       pi_number: 'PI-2026-' + String(i+1).padStart(4,'0'),
       number: 'PI-2026-' + String(i+1).padStart(4,'0'),
       date: daysAgo(i),
       customer_id: c._id, customer_name: c.name, customer: c.name,
-      subtotal: 1, vat_amount: 1, total: 1, grand_total: 1,
+      subtotal, vat_amount: vat, total, grand_total: total,
       status,
       jo_ref: 'JO-DEMO-' + String(i+1).padStart(4,'0'),
     };
@@ -400,41 +416,52 @@
   const SAGE_MODULES = ['JL','AP','AR','JL','AP','JL','AR','JL','AR','AP'];
   const SAGE_ENTRY_TYPES = ['Production batch close','Supplier payment','Customer invoice','Production batch close','Supplier payment','Production batch close','Customer receipt','Production batch close','Customer invoice','Supplier payment'];
   const SAGE_DRAFT_STATUSES = ['draft','draft','approved','posted','draft','approved','draft','posted','draft','approved'];
-  const SAGE_DRAFTS = SAGE_DRAFT_STATUSES.map((status, i) => ({
-    sage_batch_id: 'SGE-2026-05-' + String(13-i).padStart(2,'0') + '-' + ((i%3)+1),
-    _id: 'sg-' + (i+1),
-    batch_id: 'SGE-2026-05-' + String(13-i).padStart(2,'0') + '-' + ((i%3)+1),
-    period: ymd(daysAgo(i)),
-    module: SAGE_MODULES[i],
-    entry_type: SAGE_ENTRY_TYPES[i],
-    source_doc: i % 2 === 0 ? `DEMO-${1001+i}` : `BPV-${String(i+1).padStart(4,'0')}`,
-    debit_total: 1, credit_total: 1,
-    status,
-    entries_count: 2 + ((i*2) % 4),
-    created_at: daysAgo(i),
-    created_by: 'demo.admin',
-  }));
-  const SAGE_POSTED = Array.from({length:10}, (_, i) => ({
-    sage_batch_id: 'SGE-2026-05-' + String(3-i+i*0).padStart(2,'0') + '-OLD-' + (i+1),
-    _id: 'sgp-' + (i+1),
-    period: ymd(daysAgo(3 + i)),
-    module: SAGE_MODULES[i],
-    entry_type: SAGE_ENTRY_TYPES[i],
-    source_doc: 'DEMO-' + String(900 + i).padStart(4,'0'),
-    debit_total: 1, credit_total: 1,
-    status: 'posted',
-    posted_at: daysAgo(3 + i),
-  }));
+  const SAGE_DRAFTS = SAGE_DRAFT_STATUSES.map((status, i) => {
+    // Balanced debit/credit pairs spanning 28k-185k AED for varied batches.
+    const total = 28000 + ((i * 19700) % 158000);
+    return {
+      sage_batch_id: 'SGE-2026-05-' + String(13-i).padStart(2,'0') + '-' + ((i%3)+1),
+      _id: 'sg-' + (i+1),
+      batch_id: 'SGE-2026-05-' + String(13-i).padStart(2,'0') + '-' + ((i%3)+1),
+      period: ymd(daysAgo(i)),
+      module: SAGE_MODULES[i],
+      entry_type: SAGE_ENTRY_TYPES[i],
+      source_doc: i % 2 === 0 ? `DEMO-${1001+i}` : `BPV-${String(i+1).padStart(4,'0')}`,
+      debit_total: total, credit_total: total,
+      status,
+      entries_count: 2 + ((i*2) % 4),
+      created_at: daysAgo(i),
+      created_by: 'demo.admin',
+    };
+  });
+  const SAGE_POSTED = Array.from({length:10}, (_, i) => {
+    const total = 32000 + ((i * 21300) % 142000);
+    return {
+      sage_batch_id: 'SGE-2026-05-' + String(3-i+i*0).padStart(2,'0') + '-OLD-' + (i+1),
+      _id: 'sgp-' + (i+1),
+      period: ymd(daysAgo(3 + i)),
+      module: SAGE_MODULES[i],
+      entry_type: SAGE_ENTRY_TYPES[i],
+      source_doc: 'DEMO-' + String(900 + i).padStart(4,'0'),
+      debit_total: total, credit_total: total,
+      status: 'posted',
+      posted_at: daysAgo(3 + i),
+    };
+  });
 
   function sageDraftDetail(batchId) {
     const header = SAGE_DRAFTS.find(d => d.sage_batch_id === batchId || d.batch_id === batchId || d._id === batchId) || SAGE_DRAFTS[0];
+    // Split the batch debit/credit total across two debit lines and two credit lines.
+    const total = header.debit_total || 50000;
+    const a = Math.round(total * 0.62);
+    const b = total - a;
     return {
       ...header,
       lines: [
-        { line: 1, account: '5000', account_name: 'Demo COGS',           description: header.entry_type, debit: 1, credit: 0 },
-        { line: 2, account: '1300', account_name: 'Demo Inventory',      description: header.entry_type, debit: 0, credit: 1 },
-        { line: 3, account: '2100', account_name: 'Demo AP — Supplier',  description: header.entry_type, debit: 1, credit: 0 },
-        { line: 4, account: '1010', account_name: 'Demo Bank Account',   description: header.entry_type, debit: 0, credit: 1 },
+        { line: 1, account: '5000', account_name: 'Demo COGS',           description: header.entry_type, debit: a, credit: 0 },
+        { line: 2, account: '1300', account_name: 'Demo Inventory',      description: header.entry_type, debit: 0, credit: a },
+        { line: 3, account: '2100', account_name: 'Demo AP — Supplier',  description: header.entry_type, debit: b, credit: 0 },
+        { line: 4, account: '1010', account_name: 'Demo Bank Account',   description: header.entry_type, debit: 0, credit: b },
       ],
     };
   }
@@ -442,32 +469,44 @@
   // ---- Accounting — drafts (12) / cashbook (15) / AR (10) / AP (8) ----
   const AD_MODULES = ['CB','AR','AP','CB','AR','AP','CB','AR','AP','CB','AR','AP'];
   const AD_STATUSES = ['pending','pending','approved','posted','pending','approved','pending','posted','pending','approved','posted','pending'];
-  const ACCOUNTING_DRAFTS = AD_MODULES.map((mod, i) => ({
-    _id: 'ad-' + (i+1),
-    draft_number: `${mod}-2026-${String(i+1).padStart(4,'0')}`,
-    module: mod,
-    date: daysAgo(i),
-    description: mod === 'CB' ? 'Demo bank/cash entry' : (mod === 'AR' ? 'Customer receipt' : 'Vendor payment'),
-    payee: mod === 'AR' ? CUSTOMERS[i % CUSTOMERS.length].name : SUPPLIERS[i % SUPPLIERS.length].name,
-    bank_account: i % 4 === 3 ? 'CASH-1' : 'BANK-DEMO',
-    tr_code: mod === 'AR' ? 'TR-02' : (mod === 'AP' ? 'TR-01' : 'TR-03'),
-    amount: 1, debit: mod === 'AR' ? 0 : 1, credit: mod === 'AR' ? 1 : 0,
-    status: AD_STATUSES[i],
-    files: [],
-    project: i % 2 === 0 ? 'PRJ-DEMO' : 'PRJ-EXP',
-  }));
-  const ACCOUNTING_CASHBOOK = Array.from({length:15}, (_, i) => ({
-    _id: 'cb-' + (i+1),
-    date: daysAgo(i),
-    description: ['Opening balance','Customer receipt','Supplier payment','Bank transfer','Petty cash expense','Customer receipt','Bank charges','Supplier payment','Refund','Customer receipt','Bank deposit','Supplier payment','Customer receipt','Bank transfer','Adjustment'][i],
-    debit: i % 2 === 0 ? 1 : 0,
-    credit: i % 2 === 0 ? 0 : 1,
-    balance: 1,
-    ref: ['OB-001','AR-2026-0001','AP-2026-0001','BT-001','PC-001','AR-2026-0002','BC-001','AP-2026-0002','RF-001','AR-2026-0003','BD-001','AP-2026-0003','AR-2026-0004','BT-002','ADJ-001'][i],
-  }));
+  const ACCOUNTING_DRAFTS = AD_MODULES.map((mod, i) => {
+    // Varied amounts 6500-78000 AED depending on row.
+    const amt = 6500 + ((i * 8400) % 71500);
+    return {
+      _id: 'ad-' + (i+1),
+      draft_number: `${mod}-2026-${String(i+1).padStart(4,'0')}`,
+      module: mod,
+      date: daysAgo(i),
+      description: mod === 'CB' ? 'Demo bank/cash entry' : (mod === 'AR' ? 'Customer receipt' : 'Vendor payment'),
+      payee: mod === 'AR' ? CUSTOMERS[i % CUSTOMERS.length].name : SUPPLIERS[i % SUPPLIERS.length].name,
+      bank_account: i % 4 === 3 ? 'CASH-1' : 'BANK-DEMO',
+      tr_code: mod === 'AR' ? 'TR-02' : (mod === 'AP' ? 'TR-01' : 'TR-03'),
+      amount: amt, debit: mod === 'AR' ? 0 : amt, credit: mod === 'AR' ? amt : 0,
+      status: AD_STATUSES[i],
+      files: [],
+      project: i % 2 === 0 ? 'PRJ-DEMO' : 'PRJ-EXP',
+    };
+  });
+  // Running balance for the cashbook so the trail looks coherent.
+  let _cb_balance = 245000;
+  const ACCOUNTING_CASHBOOK = Array.from({length:15}, (_, i) => {
+    const amt = 1200 + ((i * 6700) % 42000);
+    const isDebit = i % 2 === 0;
+    _cb_balance += isDebit ? amt : -amt;
+    return {
+      _id: 'cb-' + (i+1),
+      date: daysAgo(i),
+      description: ['Opening balance','Customer receipt','Supplier payment','Bank transfer','Petty cash expense','Customer receipt','Bank charges','Supplier payment','Refund','Customer receipt','Bank deposit','Supplier payment','Customer receipt','Bank transfer','Adjustment'][i],
+      debit: isDebit ? amt : 0,
+      credit: isDebit ? 0 : amt,
+      balance: _cb_balance,
+      ref: ['OB-001','AR-2026-0001','AP-2026-0001','BT-001','PC-001','AR-2026-0002','BC-001','AP-2026-0002','RF-001','AR-2026-0003','BD-001','AP-2026-0003','AR-2026-0004','BT-002','ADJ-001'][i],
+    };
+  });
   const ACCOUNTING_AR = Array.from({length:10}, (_, i) => {
     const dueDays = -30 + i * 7;
     const status = dueDays < 0 ? (i % 3 === 0 ? 'paid' : 'overdue') : 'open';
+    const amt = 12500 + ((i * 9700) % 84000);
     return {
       _id: 'ar-' + (i+1),
       customer: CUSTOMERS[i % CUSTOMERS.length].name,
@@ -475,7 +514,7 @@
       invoice_number: 'PI-2026-' + String(i+1).padStart(4,'0'),
       date: daysAgo(30 - dueDays),
       due_date: daysAgo(-dueDays),
-      amount: 1, balance: status === 'paid' ? 0 : 1,
+      amount: amt, balance: status === 'paid' ? 0 : amt,
       status,
       aging_bucket: status === 'paid' ? null : (dueDays < -60 ? '90+' : (dueDays < -30 ? '61-90' : (dueDays < 0 ? '31-60' : '0-30'))),
     };
@@ -483,6 +522,7 @@
   const ACCOUNTING_AP = Array.from({length:8}, (_, i) => {
     const dueDays = -20 + i * 7;
     const status = dueDays < 0 ? (i % 3 === 0 ? 'paid' : 'overdue') : 'open';
+    const amt = 8400 + ((i * 7200) % 56000);
     return {
       _id: 'ap-' + (i+1),
       vendor: SUPPLIERS[i % SUPPLIERS.length].name,
@@ -490,7 +530,7 @@
       invoice_number: 'INV-SUP-' + String(i+1).padStart(4,'0'),
       date: daysAgo(20 - dueDays),
       due_date: daysAgo(-dueDays),
-      amount: 1, balance: status === 'paid' ? 0 : 1,
+      amount: amt, balance: status === 'paid' ? 0 : amt,
       status,
       aging_bucket: status === 'paid' ? null : (dueDays < -60 ? '90+' : (dueDays < -30 ? '61-90' : (dueDays < 0 ? '31-60' : '0-30'))),
     };
@@ -545,7 +585,7 @@
     verdict,
     approver: i % 2 === 0 ? 'demo.qc' : 'demo.admin',
     status: QC_STATUSES[i],
-    sample_size: 1,
+    sample_size: 24 + ((i * 6) % 36),  // 24-60 bottles drawn per batch
     notes: verdict === 'HOLD' ? 'Demo — held for retest' : '',
   }));
 
@@ -565,6 +605,10 @@
   const CUSTOMS_DECLARATIONS = CD_TYPES.map((type, i) => {
     const monthsBack = Math.floor(i / 4);
     const month = 5 - monthsBack;
+    // Customs values 35k-220k AED, 5% duty applies on import-type rows only.
+    const customVal = 35000 + ((i * 18400) % 185000);
+    const duty = type === 'EXPORT' ? 0 : Math.round(customVal * 0.05);
+    const totalVal = customVal + duty;
     return {
       _id: 'cd-' + (i+1),
       declaration_number: `${type}-2026-${String(month).padStart(2,'0')}-${(i%4)+1}`,
@@ -573,38 +617,49 @@
       period: `2026-${String(month).padStart(2,'0')}`,
       status: CD_STATUSES[i],
       items_count: 1 + (i % 5),
-      total_value: 1, duty_5_percent: type === 'EXPORT' ? 0 : 1, custom_value: 1,
+      total_value: totalVal, duty_5_percent: duty, custom_value: customVal,
       files: [],
       created_at: daysAgo(monthsBack * 30 + i),
     };
   });
-  const FTA_TRANSFERS = Array.from({length:10}, (_, i) => ({
-    date: ymd(daysAgo(i)),
-    product: PRODUCTS[i % 3].name,
-    product_code: PRODUCTS[i % 3].code,
-    from_wh: ['WH-MAIN','WH-MAIN','WH-PROD','WH-MAIN','WH-MAIN'][i % 5],
-    to_wh: ['WH-EXPORT','WH-DISPATCH','WH-MAIN','WH-EXPORT','WH-DISPATCH'][i % 5],
-    qty: 1, value: 1,
-    hs_code: '2202.10',
-    document_no: 'TS-' + String(1000+i),
-  }));
+  const FTA_TRANSFERS = Array.from({length:10}, (_, i) => {
+    // Transfers of 40-220 cases, valued at the FG ave_unit_cost.
+    const fg = INVENTORY.find(x => x.item_code === PRODUCTS[i % 3].code) || INVENTORY[12];
+    const qty = 40 + ((i * 27) % 180);
+    return {
+      date: ymd(daysAgo(i)),
+      product: PRODUCTS[i % 3].name,
+      product_code: PRODUCTS[i % 3].code,
+      from_wh: ['WH-MAIN','WH-MAIN','WH-PROD','WH-MAIN','WH-MAIN'][i % 5],
+      to_wh: ['WH-EXPORT','WH-DISPATCH','WH-MAIN','WH-EXPORT','WH-DISPATCH'][i % 5],
+      qty, value: Math.round(qty * (fg.unit_cost || 14.40)),
+      hs_code: '2202.10',
+      document_no: 'TS-' + String(1000+i),
+    };
+  });
 
   // ---- Sugar Dissolver — richer ----
-  const SUGAR_PENDING = Array.from({length:5}, (_, i) => ({
-    _id: 'sd-' + (i+1),
-    batch_no: 'DEMO-' + String(1001 + i).padStart(4,'0'),
-    recipe_name: PRODUCTS[i % 3].recipe,
-    planned_qty: 1, dissolved_qty: i === 0 ? 1 : 0,
-    status: i === 0 ? 'in_progress' : 'pending',
-    date: daysAgo(i),
-    operator: 'demo.user',
-  }));
+  const SUGAR_PENDING = Array.from({length:5}, (_, i) => {
+    // Sugar dissolution batches: 320-680 kg planned, only the in-progress one has partial.
+    const planned = 320 + i * 90;
+    return {
+      _id: 'sd-' + (i+1),
+      batch_no: 'DEMO-' + String(1001 + i).padStart(4,'0'),
+      recipe_name: PRODUCTS[i % 3].recipe,
+      planned_qty: planned,
+      dissolved_qty: i === 0 ? Math.round(planned * 0.42) : 0,
+      status: i === 0 ? 'in_progress' : 'pending',
+      date: daysAgo(i),
+      operator: 'demo.user',
+    };
+  });
   const SUGAR_ISSUANCES = Array.from({length:12}, (_, i) => ({
     _id: 'sdi-' + (i+1),
     issuance_number: 'SDI-2026-' + String(i+1).padStart(4,'0'),
     batch_no: 'DEMO-' + String(900 + i).padStart(4,'0'),
     recipe_name: PRODUCTS[i % 3].recipe,
-    qty: 1, uom: 'kg',
+    qty: 280 + ((i * 47) % 420),
+    uom: 'kg',
     date: daysAgo(i + 2),
     operator: 'demo.user',
     status: 'issued',
@@ -628,9 +683,9 @@
     return {
       batch_no: batchNo, recipe_name: 'REC-A1', date: todayISO, inspector: 'demo.qc',
       items: [
-        { rm_code: 'RM-WATER',  description: 'Demo Water',   qty: 1, uom: 'L',  ok: true, notes: '' },
-        { rm_code: 'RM-SUGAR',  description: 'Demo Sugar',   qty: 1, uom: 'kg', ok: true, notes: '' },
-        { rm_code: 'RM-FLAVOR', description: 'Demo Flavor X',qty: 1, uom: 'L',  ok: true, notes: '' },
+        { rm_code: 'RM-WATER',  description: 'Demo Water',   qty: 1800, uom: 'L',  ok: true, notes: '' },
+        { rm_code: 'RM-SUGAR',  description: 'Demo Sugar',   qty: 420,  uom: 'kg', ok: true, notes: '' },
+        { rm_code: 'RM-FLAVOR', description: 'Demo Flavor X',qty: 35,   uom: 'L',  ok: true, notes: '' },
       ],
       verdict: 'PASS',
     };
@@ -650,23 +705,35 @@
 
   // ---- RM Orders — 10 records across full lifecycle ----
   const RMO_STATUSES = ['draft','draft','lpo','lpo','partially_received','partially_received','received','received','received','draft'];
-  const RM_ORDERS = RMO_STATUSES.map((status, i) => ({
-    _id: 'rmo-' + (i+1),
-    order_number: 'RMO-2026-' + String(i+1).padStart(4,'0'),
-    date: daysAgo(i),
-    supplier: SUPPLIERS[i % SUPPLIERS.length].name,
-    supplier_id: SUPPLIERS[i % SUPPLIERS.length]._id,
-    items_count: 1 + (i % 4),
-    total_qty: 1 + (i % 4),
-    total_value: 1,
-    status,
-    created_by: 'demo.admin',
-    expected_delivery: daysAgo(-(SUPPLIERS[i % SUPPLIERS.length].lead_time_days)),
-  }));
-  const RM_CRITICAL = INVENTORY.filter(i => i.short).map(i => ({
-    item_code: i.item_code, description: i.description, on_hand: i.on_hand, reorder_point: i.reorder_point,
-    suggested_qty: i.reorder_point * 2 - i.on_hand, supplier: 'Demo Supplier Co', lead_time_days: 3, uom: i.uom, unit_cost: 1, total_cost: 1, severity: 'high',
-  }));
+  const RM_ORDERS = RMO_STATUSES.map((status, i) => {
+    const itemsCount = 1 + (i % 4);
+    const totalQty = 1500 + ((i * 1850) % 9500);
+    // ~3.50 AED weighted-average across mixed RM lines.
+    const totalValue = Math.round(totalQty * 3.50);
+    return {
+      _id: 'rmo-' + (i+1),
+      order_number: 'RMO-2026-' + String(i+1).padStart(4,'0'),
+      date: daysAgo(i),
+      supplier: SUPPLIERS[i % SUPPLIERS.length].name,
+      supplier_id: SUPPLIERS[i % SUPPLIERS.length]._id,
+      items_count: itemsCount,
+      total_qty: totalQty,
+      total_value: totalValue,
+      status,
+      created_by: 'demo.admin',
+      expected_delivery: daysAgo(-(SUPPLIERS[i % SUPPLIERS.length].lead_time_days)),
+    };
+  });
+  const RM_CRITICAL = INVENTORY.filter(i => i.short).map(i => {
+    const suggested = i.reorder_point * 2 - i.on_hand;
+    return {
+      item_code: i.item_code, description: i.description, on_hand: i.on_hand, reorder_point: i.reorder_point,
+      suggested_qty: suggested, supplier: 'Demo Supplier Co', lead_time_days: 3, uom: i.uom,
+      unit_cost: i.unit_cost,
+      total_cost: Math.round(suggested * i.unit_cost * 100) / 100,
+      severity: 'high',
+    };
+  });
 
   // ---- Allocations / Job-orders flow ----
   const ALLOCATIONS_PENDING = [
@@ -684,11 +751,16 @@
   const STOCK_RES_TOTALS = INVENTORY.filter(i=>i.category==='FG').reduce((m,i)=>{ m[i.item_code]= i.reserved; return m; }, {});
 
   // ---- Price list ----
-  const PRICE_LIST = INVENTORY.filter(i => i.category === 'FG').map(i => ({
-    item_code: i.item_code, description: i.description, uom: i.uom,
-    unit_price: 1, selling_price: 1, cost_price: 1, gtin: '1234567890123',
-    last_updated: todayISO,
-  }));
+  // Selling prices use a 1.55x cost-plus markup; unit_price tracks selling_price.
+  const PRICE_LIST = INVENTORY.filter(i => i.category === 'FG').map(i => {
+    const sell = Math.round(i.unit_cost * 1.55 * 100) / 100;
+    return {
+      item_code: i.item_code, description: i.description, uom: i.uom,
+      unit_price: sell, selling_price: sell, cost_price: i.unit_cost,
+      gtin: '1234567890123',
+      last_updated: todayISO,
+    };
+  });
 
   // ---- Recipe item map ----
   const RECIPE_ITEM_MAP = {
@@ -697,11 +769,20 @@
 
   // ---- GL Sales (analytics input) ----
   function genGLSales(type) {
-    return Array.from({length:10}, (_,i) => ({
-      date: ymd(daysAgo(i)),
-      product: ['FG-500ML','FG-1L','FG-250ML'][i % 3],
-      qty: 1, transaction_value: 1, total_qty_in_value: type==='in' ? 1 : 0, total_qty_out_value: type==='out' ? 1 : 0,
-    }));
+    return Array.from({length:10}, (_,i) => {
+      const code = ['FG-500ML','FG-1L','FG-250ML'][i % 3];
+      const fg = INVENTORY.find(x => x.item_code === code) || INVENTORY[12];
+      const sell = fg.unit_cost * 1.55;
+      const qty = 80 + ((i * 37) % 320);
+      const value = Math.round(qty * sell);
+      return {
+        date: ymd(daysAgo(i)),
+        product: code,
+        qty, transaction_value: value,
+        total_qty_in_value: type === 'in' ? value : 0,
+        total_qty_out_value: type === 'out' ? value : 0,
+      };
+    });
   }
 
   // ---- Reception ----
@@ -774,7 +855,8 @@
 
   // ---- Sage entries items ----
   const SAGE_ENTRY_ITEMS = INVENTORY.map(i => ({
-    code: i.item_code, description: i.description, uom: i.uom, ave_unit_cost: 1, unit_cost: 1,
+    code: i.item_code, description: i.description, uom: i.uom,
+    ave_unit_cost: i.ave_unit_cost, unit_cost: i.unit_cost,
   }));
 
   /* =========================================================
@@ -905,7 +987,7 @@
           rm_code: ing.rm_code,
           description: ing.description,
           uom: ing.uom,
-          unit_cost: 1,
+          unit_cost: (INVENTORY.find(x => x.item_code === ing.rm_code) || {}).unit_cost || 1,
           calculated_qty: required,
           required_qty: required,
           base_qty: ing.qty,
@@ -1018,19 +1100,32 @@
       const id = parts[2];
       const batch = PRODUCTION_BATCHES.find(b => b._id === id || b.batch_no === id) || PRODUCTION_BATCHES[0];
       if (parts[3] === 'raw-materials') {
+        // Allocated / used quantities scale with the batch's planned qty.
+        const scale = (batch.planned_qty || 50) * 1.2;
         return jsonResponse({
           batch_no: batch.batch_no,
-          items: RECIPES[0].ingredients.map(i => ({ ...i, allocated_qty: 1, used_qty: 1, returned_qty: 0 })),
+          items: RECIPES[0].ingredients.map(i => ({
+            ...i,
+            allocated_qty: +(i.qty * scale).toFixed(2),
+            used_qty: +(i.qty * scale * 0.96).toFixed(2),
+            returned_qty: +(i.qty * scale * 0.04).toFixed(2),
+          })),
         });
       }
       if (parts[3] === 'ingredient-batch-numbers' && method === 'GET') {
         return jsonResponse(RECIPES[0].ingredients.map(i => ({ rm_code: i.rm_code, batch_number: 'B-' + Math.floor(1000+Math.random()*9000) })));
       }
       if (parts[3] === 'picking-sheet-data') {
+        const scale = (batch.planned_qty || 50) * 1.2;
         return jsonResponse({
           batch_no: batch.batch_no, recipe_name: batch.recipe_name, product_name: batch.product_name,
           planned_qty: batch.planned_qty,
-          items: RECIPES[0].ingredients.map(i => ({ ...i, item_code: i.rm_code, unit_cost: 1, total_cost: i.qty })),
+          items: RECIPES[0].ingredients.map(i => {
+            const inv = INVENTORY.find(x => x.item_code === i.rm_code) || {};
+            const uc = inv.unit_cost || 0;
+            const requiredQty = +(i.qty * scale).toFixed(2);
+            return { ...i, item_code: i.rm_code, unit_cost: uc, required_qty: requiredQty, total_cost: +(requiredQty * uc).toFixed(2) };
+          }),
         });
       }
       return jsonResponse(batch);
@@ -1130,8 +1225,8 @@
     if (path === '/accounting/clients')        return jsonResponse(CUSTOMERS);
     if (path === '/accounting/vendors')        return jsonResponse(SUPPLIERS);
     if (path === '/accounting/bank-accounts')  return jsonResponse([
-      { code: 'BANK-DEMO', name: 'Bank Demo · ****0001', balance: 1 },
-      { code: 'CASH-1',    name: 'Petty Cash',           balance: 1 },
+      { code: 'BANK-DEMO', name: 'Bank Demo · ****0001', balance: 387450 },
+      { code: 'CASH-1',    name: 'Petty Cash',           balance: 4280 },
     ]);
     if (path === '/accounting/cb-tr-codes')    return jsonResponse([
       { code: 'TR-01', name: 'Supplier payment' },
@@ -1153,17 +1248,20 @@
     if (path === '/accounting/pending-drafts') return jsonResponse(ACCOUNTING_DRAFTS.filter(d => d.status === 'pending'));
     if (path.startsWith('/accounting/aging/')) return jsonResponse({
       buckets: [
-        { bucket: '0-30',  amount: 1, count: 1 },
-        { bucket: '31-60', amount: 1, count: 1 },
-        { bucket: '61-90', amount: 1, count: 1 },
-        { bucket: '90+',   amount: 1, count: 1 },
+        { bucket: '0-30',  amount: 184600, count: 7 },
+        { bucket: '31-60', amount:  72400, count: 4 },
+        { bucket: '61-90', amount:  38200, count: 2 },
+        { bucket: '90+',   amount:  12800, count: 1 },
       ],
     });
     if (path.startsWith('/accounting/vat/')) return jsonResponse({
-      summary: { net: 1, vat: 1, total: 1, output_vat: 1, input_vat: 1 },
+      summary: { net: 482300, vat: 24115, total: 506415, output_vat: 31420, input_vat: 7305 },
       rows: [
-        { date: ymd(today), kind: 'output', ref: 'PI-2026-0001', net: 1, vat: 1, total: 1 },
-        { date: ymd(daysAgo(1)), kind: 'input', ref: 'INV-SUP-0001', net: 1, vat: 1, total: 1 },
+        { date: ymd(today),       kind: 'output', ref: 'PI-2026-0001', net: 18400, vat: 920, total: 19320 },
+        { date: ymd(daysAgo(1)),  kind: 'input',  ref: 'INV-SUP-0001', net:  4200, vat: 210, total:  4410 },
+        { date: ymd(daysAgo(2)),  kind: 'output', ref: 'PI-2026-0002', net: 26800, vat:1340, total: 28140 },
+        { date: ymd(daysAgo(4)),  kind: 'input',  ref: 'INV-SUP-0002', net:  9650, vat: 483, total: 10133 },
+        { date: ymd(daysAgo(6)),  kind: 'output', ref: 'PI-2026-0003', net: 14200, vat: 710, total: 14910 },
       ],
     });
     if (path.startsWith('/accounting/drafts/')) {
@@ -1255,8 +1353,8 @@
     if (path === '/rm-orders/critical-materials') return jsonResponse(RM_CRITICAL);
     if (path === '/rm-orders/search-materials')   return jsonResponse(INVENTORY.filter(i=>i.category==='RM').slice(0, 8));
     if (path === '/rm-orders/grn-documents')      return jsonResponse([
-      { _id: oid('grndoc-'), grn_number: 'GRN-2026-0001', order_number: 'RMO-2026-0003', supplier: 'Demo Supplier Co', date: daysAgo(1), items: 2, value: 1 },
-      { _id: oid('grndoc-'), grn_number: 'GRN-2026-0002', order_number: 'RMO-2026-0004', supplier: 'Placeholder Supply', date: daysAgo(5), items: 1, value: 1 },
+      { _id: oid('grndoc-'), grn_number: 'GRN-2026-0001', order_number: 'RMO-2026-0003', supplier: 'Demo Supplier Co',   date: daysAgo(1), items: 2, value: 18450 },
+      { _id: oid('grndoc-'), grn_number: 'GRN-2026-0002', order_number: 'RMO-2026-0004', supplier: 'Placeholder Supply', date: daysAgo(5), items: 1, value:  6280 },
     ]);
     if (path.startsWith('/rm-orders/')) {
       const parts = path.split('/');
@@ -1267,8 +1365,8 @@
       return jsonResponse({
         ...(RM_ORDERS.find(o => o._id === id) || RM_ORDERS[0]),
         items: [
-          { rm_code: 'RM-SUGAR',  description: 'Demo Sugar',  qty: 1, uom: 'kg', unit_cost: 1, total_cost: 1 },
-          { rm_code: 'RM-FLAVOR', description: 'Demo Flavor X', qty: 1, uom: 'L', unit_cost: 1, total_cost: 1 },
+          { rm_code: 'RM-SUGAR',  description: 'Demo Sugar',    qty: 2400, uom: 'kg', unit_cost: 4.20,  total_cost: 10080 },
+          { rm_code: 'RM-FLAVOR', description: 'Demo Flavor X', qty:  180, uom: 'L',  unit_cost: 28.50, total_cost:  5130 },
         ],
       });
     }
@@ -1361,13 +1459,13 @@
         });
       }
       if (section === 'cover-page') {
-        return jsonResponse({ batch_no: bn, data: { product_name: batch.product, recipe_name: batch.recipe, mfg_date: batch.date, best_before: ymd(daysAgo(-365)), batch_size: 1 } });
+        return jsonResponse({ batch_no: bn, data: { product_name: batch.product, recipe_name: batch.recipe, mfg_date: batch.date, best_before: ymd(daysAgo(-365)), batch_size: 2400 } });
       }
       if (section === 'mixing') {
         return jsonResponse({ batch_no: bn, data: { mixing_steps: [
-          { step: 1, ingredient: 'Demo Water',  qty: 1, uom: 'L', time: '08:00', operator: 'demo.user', ok: true },
-          { step: 2, ingredient: 'Demo Sugar',  qty: 1, uom: 'kg', time: '08:10', operator: 'demo.user', ok: true },
-          { step: 3, ingredient: 'Demo Flavor', qty: 1, uom: 'L', time: '08:20', operator: 'demo.user', ok: true },
+          { step: 1, ingredient: 'Demo Water',  qty: 1800, uom: 'L',  time: '08:00', operator: 'demo.user', ok: true },
+          { step: 2, ingredient: 'Demo Sugar',  qty:  420, uom: 'kg', time: '08:10', operator: 'demo.user', ok: true },
+          { step: 3, ingredient: 'Demo Flavor', qty:   35, uom: 'L',  time: '08:20', operator: 'demo.user', ok: true },
         ] } });
       }
       if (section === 'tank-cip') {
@@ -1456,7 +1554,7 @@
     // -------- PO upload / extraction --------
     if (path === '/extract-po-for-editing')         return jsonResponse({
       customer: 'Demo Customer Ltd', po_number: 'PO-IN-' + Math.floor(1000+Math.random()*9000),
-      items: [{ product_code: 'FG-500ML', description: 'Sample Beverage 500 mL', qty: 1, unit: 'case' }],
+      items: [{ product_code: 'FG-500ML', description: 'Sample Beverage 500 mL', qty: 240, unit: 'case' }],
     });
     if (path === '/upload-po')                      return jsonResponse({ success: true, _id: oid('po-') });
 
