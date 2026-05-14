@@ -12,6 +12,9 @@
 /take-demo     /demo.html       302
 
 # Manzil Properties demo aliases
+# Note: do NOT add /property/admin → /property/admin.html — Cloudflare Pages
+# already serves admin.html when /property/admin is requested, and adding a
+# redirect causes a loop (CF strips .html → 307 to /admin, our rule sent it
+# back to /admin.html → loop).
 /manzil        /property/index.html   302
 /properties    /property/index.html   302
-/property/admin  /property/admin.html 302

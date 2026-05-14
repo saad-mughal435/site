@@ -126,7 +126,19 @@
 
     var html = ''
       + '<section class="m-container" style="padding-top:24px;">'
-      +   '<nav style="font-size:12px;color:var(--manzil-muted);margin-bottom:12px;">'
+
+      // Print-only brochure header (hidden on screen).
+      + '<div class="m-print-header">'
+      +   '<h1>Manzil Properties</h1>'
+      +   '<div class="meta">'
+      +     '<span>Listing ' + listing.id + '</span>'
+      +     '<span>' + ManzilApp.escapeHtml(area.name) + '</span>'
+      +     '<span>Generated ' + new Date().toLocaleDateString('en-AE', { year: 'numeric', month: 'long', day: 'numeric' }) + '</span>'
+      +     '<span>saadm.dev/property</span>'
+      +   '</div>'
+      + '</div>'
+
+      +   '<nav style="font-size:12px;color:var(--manzil-muted);margin-bottom:12px;" class="m-print-hide">'
       +     '<a href="search.html?transaction=' + listing.transaction + '">' + (listing.transaction === 'rent' ? 'Rent' : listing.transaction === 'off-plan' ? 'Off-plan' : 'Buy') + '</a>'
       +     ' / <a href="search.html?type=' + listing.type + '">' + listing.type[0].toUpperCase() + listing.type.slice(1) + 's</a>'
       +     ' / <a href="area.html?slug=' + area.slug + '">' + area.name + '</a>'
@@ -204,8 +216,22 @@
       +     '<div class="m-mt-3">' + mortgageWidget() + '</div>'
 
       +     (similar && similar.length
-                ? '<div class="m-mt-3"><h3>Similar in ' + area.name + '</h3><div class="m-grid m-grid-2" id="similar-grid">' + similar.map(ManzilApp.listingCard).join('') + '</div></div>'
+                ? '<div class="m-mt-3 m-print-hide"><h3>Similar in ' + area.name + '</h3><div class="m-grid m-grid-2" id="similar-grid">' + similar.map(ManzilApp.listingCard).join('') + '</div></div>'
                 : '')
+
+      +     // Print-only agent card (hidden on screen — the sticky rail handles screen)
+      +     '<div class="m-print-agent">'
+      +       '<h3>Listed by ' + ManzilApp.escapeHtml(agent.name || 'Manzil agent') + '</h3>'
+      +       '<div class="row"><strong>Agency:</strong> ' + ManzilApp.escapeHtml(agency.name || '') + ' · Permit ' + ManzilApp.escapeHtml(agency.license_no || '') + '</div>'
+      +       '<div class="row"><strong>Phone:</strong> ' + ManzilApp.escapeHtml(agent.phone || '') + '</div>'
+      +       '<div class="row"><strong>WhatsApp:</strong> ' + ManzilApp.escapeHtml(agent.whatsapp || '') + '</div>'
+      +       '<div class="row"><strong>Email:</strong> ' + ManzilApp.escapeHtml(agent.email || '') + '</div>'
+      +       '<div class="row"><strong>Languages:</strong> ' + (agent.languages || []).join(', ') + '</div>'
+      +     '</div>'
+      +     '<div class="m-print-footer">'
+      +       '<span>Manzil Properties · Demo by Saad Mughal · saadm.dev</span>'
+      +       '<span>All listings, agents and prices fabricated for portfolio demonstration.</span>'
+      +     '</div>'
 
       +   '</div>'
 

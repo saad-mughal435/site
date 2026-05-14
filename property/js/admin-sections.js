@@ -199,6 +199,7 @@
       + '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;"><h2 style="margin:0;">Listings</h2>'
       +   '<div class="m-flex-wrap">'
       +     '<button class="m-btn m-btn--primary m-btn--sm" onclick="ManzilAdminActions.newListing()">+ New listing</button>'
+      +     '<button class="m-btn m-btn--gold m-btn--sm" onclick="ManzilAdminActions.bulkImport()">⤒ Bulk import CSV</button>'
       +     '<button class="m-btn m-btn--ghost m-btn--sm" onclick="ManzilAdminActions.bulk(\'publish\')">▶ Publish</button>'
       +     '<button class="m-btn m-btn--ghost m-btn--sm" onclick="ManzilAdminActions.bulk(\'unpublish\')">⏸ Unpublish</button>'
       +     '<button class="m-btn m-btn--ghost m-btn--sm" onclick="ManzilAdminActions.bulk(\'feature\')">⭐ Feature</button>'
@@ -302,73 +303,232 @@
         window.toast(op + ' applied to ' + ids.length, 'success'); refresh();
       });
     };
+
+    // ---------- Bulk CSV import ----------
+    window.ManzilAdminActions.bulkImport = function () {
+      var sample = ''
+        + 'title,transaction,type,area_id,agent_id,price_aed,beds,baths,sqft,address,furnished,featured,verified\n'
+        + 'Ocean Heights — 2BR Marina View,buy,apartment,a-marina,ag01,1850000,2,3,1240,Marina Walk,false,true,true\n'
+        + 'Reem Townhouse — 4BR Family,buy,townhouse,a-ranches,ag13,4200000,4,5,3100,Reem 5,false,false,true\n'
+        + 'Burj Vista 2 — 1BR Furnished,rent,apartment,a-downtown,ag06,140000,1,2,820,Downtown Blvd,true,false,true\n';
+      ManzilApp.showModal({
+        title: 'Bulk import listings from CSV',
+        size: 'xl',
+        body: ''
+          + '<p style="font-size:13px;color:var(--manzil-muted);">Paste CSV rows below. First row is the header. Required columns: <strong>title, transaction, type, area_id, agent_id, price_aed, beds, baths, sqft</strong>. Optional: address, furnished, featured, verified, completion_status, description.</p>'
+          + '<textarea id="csv-text" class="m-textarea" rows="10" style="font-family:var(--font-mono);font-size:12px;">' + sample + '</textarea>'
+          + '<div class="m-flex m-mt-2"><button class="m-btn m-btn--ghost m-btn--sm" id="csv-preview">Preview rows</button><button class="m-btn m-btn--primary m-btn--sm" id="csv-import">Import</button></div>'
+          + '<div id="csv-out" class="m-mt-2"></div>',
+        foot: '<button class="m-btn" data-modal-close>Close</button>',
+        onMount: function (h, close) {
+          function parse() {
+            var txt = h.querySelector('#csv-text').value.trim();
+            var lines = txt.split(/\r?\n/).filter(Boolean);
+            if (lines.length < 2) return { rows: [], errors: ['Need at least a header + one data row.'] };
+            var header = splitCsv(lines[0]);
+            var errors = [];
+            var rows = [];
+            for (var i = 1; i < lines.length; i++) {
+              var fields = splitCsv(lines[i]);
+              var row = {};
+              for (var k = 0; k < header.length; k++) row[header[k]] = fields[k];
+              ['title','transaction','type','area_id','agent_id','price_aed','beds','baths','sqft'].forEach(function (k) {
+                if (!row[k]) errors.push('Row ' + i + ': missing ' + k);
+              });
+              ['price_aed','beds','baths','sqft'].forEach(function (k) {
+                if (row[k] != null && row[k] !== '') row[k] = Number(row[k]);
+              });
+              ['furnished','featured','verified'].forEach(function (k) {
+                if (row[k] != null && row[k] !== '') row[k] = String(row[k]).toLowerCase() === 'true';
+              });
+              rows.push(row);
+            }
+            return { rows: rows, errors: errors };
+          }
+          function splitCsv(line) {
+            var out = []; var cur = ''; var inQuote = false;
+            for (var i = 0; i < line.length; i++) {
+              var ch = line[i];
+              if (ch === '"') { inQuote = !inQuote; continue; }
+              if (ch === ',' && !inQuote) { out.push(cur.trim()); cur = ''; continue; }
+              cur += ch;
+            }
+            out.push(cur.trim());
+            return out;
+          }
+          h.querySelector('#csv-preview').addEventListener('click', function () {
+            var p = parse();
+            var out = h.querySelector('#csv-out');
+            if (p.errors.length) {
+              out.innerHTML = '<div style="background:rgba(217,107,92,.10);padding:10px;border-radius:8px;color:var(--manzil-rose-2);font-size:12px;"><strong>Validation issues:</strong><ul style="margin:6px 0 0 16px;">' + p.errors.slice(0, 12).map(function (e) { return '<li>' + esc(e) + '</li>'; }).join('') + '</ul></div>';
+              return;
+            }
+            out.innerHTML = '<div style="font-size:13px;"><strong>' + p.rows.length + ' rows parsed.</strong> Sample:</div>'
+              + '<table class="m-table m-mt-1"><thead><tr><th>Title</th><th>Tx</th><th>Type</th><th>Area</th><th>Agent</th><th>Price</th><th>Beds</th></tr></thead><tbody>'
+              + p.rows.slice(0, 5).map(function (r) {
+                  return '<tr><td>' + esc(r.title) + '</td><td>' + esc(r.transaction) + '</td><td>' + esc(r.type) + '</td><td>' + esc(r.area_id) + '</td><td>' + esc(r.agent_id) + '</td><td>' + (r.price_aed || 0).toLocaleString() + '</td><td>' + (r.beds || 0) + '</td></tr>';
+                }).join('')
+              + '</tbody></table>';
+          });
+          h.querySelector('#csv-import').addEventListener('click', function () {
+            var p = parse();
+            if (p.errors.length) { window.toast('Fix validation errors first', 'error'); return; }
+            if (!p.rows.length) { window.toast('No rows to import'); return; }
+            var done = 0, total = p.rows.length;
+            p.rows.forEach(function (row) {
+              ManzilApp.api('/admin/listings', { method: 'POST', body: row }).then(function () {
+                done++;
+                if (done === total) {
+                  window.toast('Imported ' + total + ' listings', 'success');
+                  close(); refresh();
+                }
+              });
+            });
+          });
+        }
+      });
+    };
   }
 
   // ====================== 3. INQUIRIES ======================
   function inquiries(host) {
     var statusFilter = '';
+    var scoreFilter = ''; // '', 'hot' (4-5), 'warm' (3), 'cold' (1-2)
     var activeId = null;
+
+    function scoreClass(s) { return s >= 4 ? 'hot' : s === 3 ? 'warm' : 'cold'; }
+    function scoreLabel(s) { return s >= 4 ? '🔥 hot' : s === 3 ? '◐ warm' : '🧊 cold'; }
+    function scoreBg(s) {
+      if (s >= 4) return 'background:rgba(217,107,92,.18);color:var(--manzil-rose-2)';
+      if (s === 3) return 'background:rgba(201,160,73,.20);color:var(--manzil-accent-2)';
+      return 'background:rgba(58,123,213,.18);color:var(--manzil-sky-2)';
+    }
+
     function refresh() {
       var qs = {};
       if (statusFilter) qs.status = statusFilter;
       ManzilApp.api('/admin/inquiries' + ManzilApp.buildQs(qs)).then(function (r) {
         var rows = r.items;
+        if (scoreFilter) {
+          rows = rows.filter(function (q) {
+            var s = q.lead_score || 3;
+            if (scoreFilter === 'hot')  return s >= 4;
+            if (scoreFilter === 'warm') return s === 3;
+            if (scoreFilter === 'cold') return s <= 2;
+            return true;
+          });
+        }
+        document.getElementById('iq-count').textContent = rows.length + ' inquiries';
         document.getElementById('iq-list').innerHTML = rows.length ? rows.map(function (q) {
           var l = d.LISTINGS.find(function (x) { return x.id === q.listing_id; }) || {};
+          var s = q.lead_score || 3;
           return '<div class="m-inbox-item' + (q.id === activeId ? ' active' : '') + '" data-id="' + q.id + '">'
-            + '<div class="name">' + esc(q.name || 'Anonymous') + ' <span class="m-chip ' + q.status + '" style="margin-inline-start:6px;">' + q.status + '</span></div>'
+            + '<div class="name">' + esc(q.name || 'Anonymous')
+            +   ' <span class="m-chip ' + q.status + '" style="margin-inline-start:6px;">' + q.status + '</span>'
+            +   ' <span class="m-chip" style="' + scoreBg(s) + '">' + scoreLabel(s) + '</span>'
+            + '</div>'
             + '<div class="preview m-truncate">' + esc(l.title || '—') + ' · ' + q.kind + '</div>'
             + '<div class="when">' + ManzilApp.relDate(q.created_at) + '</div>'
             + '</div>';
-        }).join('') : '<div class="m-empty"><p>No inquiries.</p></div>';
+        }).join('') : '<div class="m-empty"><p>No inquiries match.</p></div>';
         document.querySelectorAll('#iq-list [data-id]').forEach(function (el) {
           el.addEventListener('click', function () { activeId = el.getAttribute('data-id'); refresh(); openDetail(); });
         });
         if (activeId) openDetail();
       });
     }
+
     function openDetail() {
       ManzilApp.api('/admin/inquiries').then(function (r) {
         var q = r.items.find(function (x) { return x.id === activeId; });
         if (!q) return;
         var l = d.LISTINGS.find(function (x) { return x.id === q.listing_id; }) || {};
         var ag = d.AGENTS.find(function (x) { return x.id === q.agent_id; }) || {};
-        var c = d.CUSTOMERS.find(function (x) { return x.id === q.customer_id; }) || {};
         var pipe = ['new','contacted','scheduled','negotiating','won','lost'];
         var idx = pipe.indexOf(q.status);
+        var score = q.lead_score || 3;
+
+        // Build the unified activity timeline.
+        var events = [];
+        events.push({ when: q.created_at, icon: '📩', title: 'Inquiry received', body: 'Via ' + q.kind + (q.message ? ': ' + q.message : '') });
+        (q.messages || []).forEach(function (m) {
+          events.push({ when: m.when, icon: m.from === 'agent' ? '📤' : '💬', title: m.from === 'agent' ? 'Agent replied' : 'Customer message', body: m.body });
+        });
+        (q.notes || []).forEach(function (n) {
+          events.push({ when: n.when, icon: '📝', title: 'Internal note', body: n.body, internal: true });
+        });
+        (q.history || []).forEach(function (h) {
+          if (h.kind === 'status_change') events.push({ when: h.when, icon: '🔄', title: 'Status changed', body: h.from + ' → ' + h.to });
+          else if (h.kind === 'assign')   events.push({ when: h.when, icon: '👤', title: 'Reassigned', body: 'To ' + ((d.AGENTS.find(function (a) { return a.id === h.agent_id; }) || {}).name || h.agent_id) });
+          else if (h.kind === 'score')    events.push({ when: h.when, icon: '🌡', title: 'Lead score updated', body: 'Set to ' + h.value + '/5' });
+        });
+        events.sort(function (a, b) { return new Date(b.when) - new Date(a.when); });
 
         document.getElementById('iq-detail').innerHTML = ''
           + '<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">'
-          +   '<div><h3 style="margin:0;">' + esc(q.name) + '</h3><div class="m-text-muted" style="font-size:12px;">' + esc(q.email || '') + ' · ' + esc(q.phone || '') + '</div></div>'
-          +   '<div style="display:flex;gap:6px;">'
+          +   '<div><h3 style="margin:0;">' + esc(q.name) + '</h3>'
+          +   '<div class="m-text-muted" style="font-size:12px;">' + esc(q.email || '') + ' · ' + esc(q.phone || '') + '</div></div>'
+          +   '<div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;">'
           +     '<select class="m-select" id="iq-status">' + pipe.map(function (s) { return '<option value="' + s + '"' + (s === q.status ? ' selected' : '') + '>' + s + '</option>'; }).join('') + '</select>'
           +     '<select class="m-select" id="iq-assign">' + d.AGENTS.map(function (a) { return '<option value="' + a.id + '"' + (a.id === q.agent_id ? ' selected' : '') + '>' + a.name + '</option>'; }).join('') + '</select>'
           +   '</div>'
           + '</div>'
+
+          + '<div class="m-mt-2" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">'
+          +   '<span class="m-text-muted" style="font-size:12px;">Lead score:</span>'
+          +   [1,2,3,4,5].map(function (n) {
+              return '<button type="button" class="m-btn m-btn--sm' + (n === score ? '' : ' m-btn--ghost') + '" data-score="' + n + '" style="' + (n === score ? scoreBg(n) : '') + '">' + n + '</button>';
+            }).join('')
+          +   '<span style="margin-inline-start:6px;font-size:12px;font-weight:600;color:' + (score >= 4 ? 'var(--manzil-rose-2)' : score === 3 ? 'var(--manzil-accent-2)' : 'var(--manzil-sky-2)') + ';">' + scoreLabel(score) + '</span>'
+          + '</div>'
+
           + '<div class="m-pipeline m-mt-2">' + pipe.map(function (s, i) {
               var cls = i === idx ? 'active' : (i < idx ? 'done' : '');
               return '<div class="m-pipe-step ' + cls + '">' + s + '</div>';
             }).join('') + '</div>'
-          + '<div class="m-mt-2"><strong>Listing:</strong> <a href="listing.html?id=' + q.listing_id + '" target="_blank">' + esc(l.title || '') + '</a> · ' + fmtAED(l.price_aed || 0) + '</div>'
-          + '<div class="m-mt-2"><strong>Agent:</strong> ' + esc(ag.name || '') + '</div>'
-          + '<div class="m-thread m-mt-2">' + (q.messages || []).map(function (m) {
-              return '<div class="m-msg ' + (m.from === 'agent' ? 'out' : 'in') + '">' + esc(m.body) + '<div class="meta">' + ManzilApp.relDate(m.when) + '</div></div>';
-            }).join('') + '</div>'
-          + '<div class="m-flex m-mt-2"><input class="m-input" id="iq-note" placeholder="Add an internal note..." /><button class="m-btn m-btn--primary m-btn--sm" id="iq-note-add">Save note</button></div>'
-          + (q.notes && q.notes.length
-              ? '<div class="m-mt-2" style="background:#fafaf6;padding:10px;border-radius:8px;font-size:12px;"><strong>Internal notes</strong>' + q.notes.map(function (n) { return '<div style="margin-top:4px;">— ' + esc(n.body) + ' <span class="m-text-muted">' + ManzilApp.relDate(n.when) + '</span></div>'; }).join('') + '</div>'
-              : '');
+
+          + '<div class="m-mt-2" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px;background:#fafaf6;border-radius:8px;font-size:13px;">'
+          +   '<div><strong>Listing:</strong><br/><a href="listing.html?id=' + q.listing_id + '" target="_blank" rel="noopener">' + esc(l.title || '—') + '</a><br/><span class="m-text-muted">' + fmtAED(l.price_aed || 0) + '</span></div>'
+          +   '<div><strong>Agent:</strong><br/>' + esc(ag.name || '—') + '<br/><span class="m-text-muted">' + esc(ag.specialisation || '') + '</span></div>'
+          + '</div>'
+
+          + '<div class="m-mt-3"><strong style="font-size:14px;">Activity timeline</strong><div style="margin-top:8px;border-inline-start:2px solid var(--manzil-line);padding-inline-start:14px;display:grid;gap:10px;max-height:280px;overflow-y:auto;">'
+          +   events.map(function (ev) {
+              return '<div style="position:relative;font-size:13px;">'
+                + '<span style="position:absolute;inset-inline-start:-23px;top:2px;width:18px;height:18px;background:white;border:2px solid var(--manzil-primary);border-radius:999px;display:grid;place-items:center;font-size:10px;">' + ev.icon + '</span>'
+                + '<div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;">'
+                +   '<strong>' + esc(ev.title) + '</strong>'
+                +   '<span class="m-text-muted" style="font-size:11px;font-family:var(--font-mono);">' + ManzilApp.relDate(ev.when) + '</span>'
+                + '</div>'
+                + '<div class="' + (ev.internal ? 'm-text-muted' : '') + '" style="margin-top:2px;font-size:12px;">' + esc(ev.body) + '</div>'
+                + '</div>';
+            }).join('')
+          + '</div></div>'
+
+          + '<div class="m-flex m-mt-3"><input class="m-input" id="iq-note" placeholder="Add an internal note..." style="flex:1;" /><button class="m-btn m-btn--primary m-btn--sm" id="iq-note-add">Save note</button></div>'
+
+          + '<div class="m-mt-2" style="display:flex;gap:8px;flex-wrap:wrap;">'
+          +   '<a class="m-btn m-btn--ghost m-btn--sm" href="mailto:' + esc(q.email || '') + '?subject=' + encodeURIComponent('Re: ' + (l.title || 'your inquiry')) + '">✉ Email customer</a>'
+          +   '<a class="m-btn m-btn--ghost m-btn--sm" href="tel:' + esc(q.phone || '') + '">📞 Call</a>'
+          +   (q.phone ? '<a class="m-btn m-btn--ghost m-btn--sm" href="https://wa.me/' + (q.phone || '').replace(/[^0-9]/g,'') + '" target="_blank" rel="noopener">💬 WhatsApp</a>' : '')
+          + '</div>';
 
         document.getElementById('iq-status').addEventListener('change', function (e) {
-          ManzilApp.api('/admin/inquiries/' + q.id, { method: 'PUT', body: { status: e.target.value } }).then(function () { window.toast('Status updated', 'success'); refresh(); });
+          ManzilApp.api('/admin/inquiries/' + q.id, { method: 'PUT', body: { status: e.target.value } }).then(function () { window.toast('Status updated', 'success'); refresh(); openDetail(); });
         });
         document.getElementById('iq-assign').addEventListener('change', function (e) {
-          ManzilApp.api('/admin/inquiries/' + q.id, { method: 'PUT', body: { agent_id: e.target.value } }).then(function () { window.toast('Reassigned', 'success'); refresh(); });
+          ManzilApp.api('/admin/inquiries/' + q.id, { method: 'PUT', body: { agent_id: e.target.value } }).then(function () { window.toast('Reassigned', 'success'); refresh(); openDetail(); });
         });
         document.getElementById('iq-note-add').addEventListener('click', function () {
           var v = document.getElementById('iq-note').value.trim();
           if (!v) return;
           ManzilApp.api('/admin/inquiries/' + q.id, { method: 'PUT', body: { note: v } }).then(function () { window.toast('Note saved', 'success'); refresh(); openDetail(); });
+        });
+        document.querySelectorAll('#iq-detail [data-score]').forEach(function (b) {
+          b.addEventListener('click', function () {
+            var v = Number(b.getAttribute('data-score'));
+            ManzilApp.api('/admin/inquiries/' + q.id, { method: 'PUT', body: { lead_score: v } }).then(function () { window.toast('Lead scored ' + v + '/5', 'success'); refresh(); openDetail(); });
+          });
         });
       });
     }
@@ -377,15 +537,18 @@
       + '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;"><h2 style="margin:0;">Inquiries</h2>'
       +   '<div class="m-flex-wrap">'
       +     '<select id="iq-filter" class="m-select"><option value="">All statuses</option><option value="new">New</option><option value="contacted">Contacted</option><option value="scheduled">Scheduled</option><option value="negotiating">Negotiating</option><option value="won">Won</option><option value="lost">Lost</option></select>'
+      +     '<select id="iq-score" class="m-select"><option value="">Any score</option><option value="hot">🔥 Hot (4–5)</option><option value="warm">◐ Warm (3)</option><option value="cold">🧊 Cold (1–2)</option></select>'
+      +     '<span id="iq-count" class="m-text-muted" style="font-size:13px;align-self:center;"></span>'
       +     '<button class="m-btn m-btn--ghost m-btn--sm" onclick="ManzilAdminActions.exportInquiries()">⤓ CSV</button>'
       +   '</div>'
       + '</div>'
       + '<div class="m-inbox m-mt-2">'
       +   '<div class="m-inbox-list" id="iq-list"></div>'
-      +   '<div class="m-inbox-detail" id="iq-detail"><div class="m-empty"><p>Select an inquiry on the left.</p></div></div>'
+      +   '<div class="m-inbox-detail" id="iq-detail"><div class="m-empty"><p>Select an inquiry on the left to see its timeline and reply tools.</p></div></div>'
       + '</div>';
 
     document.getElementById('iq-filter').addEventListener('change', function (e) { statusFilter = e.target.value; refresh(); });
+    document.getElementById('iq-score').addEventListener('change', function (e) { scoreFilter = e.target.value; refresh(); });
     refresh();
 
     window.ManzilAdminActions = window.ManzilAdminActions || {};
