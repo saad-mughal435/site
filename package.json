@@ -1,15 +1,18 @@
 {
   "name": "saadm.dev",
-  "version": "1.0.0",
+  "version": "1.4.0",
   "private": true,
-  "description": "Personal portfolio for Saad - Full-Stack Developer in Dubai. Static site (HTML + React via CDN + Vanilla CSS), deployed on Cloudflare Pages.",
+  "description": "Personal portfolio for Muhammad Saad - Electrical & Automation Engineer / ERP-OEE Developer / Full-Stack. Currently UAE-based, open to relocate worldwide. Static site (HTML + React via CDN + Vanilla CSS), deployed on Cloudflare Pages.",
   "homepage": "https://saadm.dev/",
   "repository": {
     "type": "git",
     "url": "https://github.com/saad-mughal435/site.git"
   },
+  "bugs": {
+    "url": "https://github.com/saad-mughal435/site/issues"
+  },
   "author": {
-    "name": "Saad",
+    "name": "Muhammad Saad",
     "email": "saad@saadm.dev",
     "url": "https://saadm.dev/"
   },
@@ -22,8 +25,14 @@
     "python",
     "fastapi",
     "mongodb",
-    "dubai-developer",
-    "saad"
+    "automation-engineer",
+    "erp",
+    "mes",
+    "oee",
+    "manufacturing-software",
+    "uae-developer",
+    "open-to-relocate",
+    "saad-mughal"
   ],
   "scripts": {
     "dev": "python -m http.server 8000 --bind 127.0.0.1",

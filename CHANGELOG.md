@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `.gitattributes` normalising line endings to LF (and CRLF only for
+  `.bat`/`.ps1`), eliminating the LF→CRLF warnings on every Windows commit.
+- `404.html` — branded not-found page with quick links back to home,
+  demos, marketplace, storefront, wholesale, contact.
+- `humans.txt` at `/humans.txt` — team, thanks, tooling notes.
+- `.well-known/security.txt` (RFC 9116) — machine-readable security
+  contact pointing at `SECURITY.md`.
+- README badge: "Open to relocate worldwide".
+- README file-tree entries for the new `property/` folder + new
+  hygiene files.
+
+### Changed
+- `package.json` description and keywords no longer hard-code Dubai —
+  now lead with "Electrical & Automation Engineer · ERP-OEE Developer"
+  and "currently UAE-based, open to relocate worldwide". Version
+  bumped from `1.0.0` (stale placeholder) to `1.4.0` to match the
+  CHANGELOG. Added `bugs.url` field.
+- README intro + footer rewritten to match new positioning.
+- `_headers`: serve `humans.txt` and `.well-known/security.txt` with
+  proper `text/plain; charset=utf-8` content type and 1-day cache.
+
 ## [1.4.0] - 2026-05-14
 
 ### Added

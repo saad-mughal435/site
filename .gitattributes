@@ -1,0 +1,35 @@
+# Auto-detect text files and normalise to LF on commit.
+* text=auto eol=lf
+
+# Force these explicitly to LF so the lint workflow on Linux runners stays clean.
+*.html   text eol=lf
+*.css    text eol=lf
+*.js     text eol=lf
+*.json   text eol=lf
+*.md     text eol=lf
+*.yml    text eol=lf
+*.yaml   text eol=lf
+*.xml    text eol=lf
+*.svg    text eol=lf
+
+# Windows-specific helpers keep CRLF so double-click still works.
+*.bat    text eol=crlf
+*.ps1    text eol=crlf
+
+# Treat these as binary — no diff, no line-ending munging.
+*.png    binary
+*.jpg    binary
+*.jpeg   binary
+*.gif    binary
+*.ico    binary
+*.pdf    binary
+*.woff   binary
+*.woff2  binary
+
+# Exclude generated/derived files from `git archive` and stats counts.
+.github          export-ignore
+.gitattributes   export-ignore
+.gitignore       export-ignore
+.editorconfig    export-ignore
+.prettierrc      export-ignore
+CONTRIBUTING.md  export-ignore
