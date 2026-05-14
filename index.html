@@ -911,19 +911,24 @@ function Experience({ view }) {
 const PROJECTS = [
   {
     domain: 'all', featured: true, kind: 'Production system · Live interactive demo', year: '2025 - Present',
-    title: 'Enterprise MES/ERP System',
-    desc: <Fragment>A full-stack manufacturing system that replaces manual workflows - spreadsheets, paper logs,
-      copy-paste reports - with automation. Production planning, inventory, QC, accounts, and live reporting.
-      Sole developer, end-to-end, in production today. The "Launch live app" demo is interactive - all data
-      fabricated for privacy.</Fragment>,
+    sectionEyebrow: 'Featured manufacturing system',
+    sectionHeading: 'The platform behind the factory floor',
+    sectionBlurb: 'One operations platform replacing Excel + paper across production planning, QC seam-check, batch tracking + expiry, inventory + FIFO, dispatch, accounts, Sage Evolution integration, OEE monitoring — plus 6 print-ready PDF document templates. Sole developer, end-to-end, running in production today at an automated beverage plant.',
+    title: 'Kingsley MES / ERP / OEE Platform',
+    desc: <Fragment>A full-stack manufacturing operations platform that ends manual workflows — spreadsheets, paper
+      logs, copy-paste reports, ticket prep — across production planning, QC, batch tracking, inventory, dispatch,
+      accounts, and Sage integration. <strong>Sole developer</strong>, end-to-end, currently running in production.
+      The &quot;Launch live app&quot; demo is interactive with the same UI and workflows — every value is fabricated
+      for privacy but the structure is faithful to the real system.</Fragment>,
     bullets: [
-      <Fragment><strong>~60%</strong> faster production reporting, <strong>5 departments</strong> on one system</Fragment>,
-      <Fragment><strong>20+</strong> integrated modules: PPC, inventory, QC, accounts, OEE, batch traceability, 6 PDF templates</Fragment>,
-      <Fragment>Full stack ownership: data model → API → UI → infra → deployment</Fragment>,
+      <Fragment><strong>20+ integrated modules</strong>: PPC · job orders · inventory · recipes/BOM · QC seam-check · batch &amp; expiry tracking · dispatch · accounts · OEE · GRN · customs · Sage Evolution integration</Fragment>,
+      <Fragment><strong>6 print-ready PDF templates</strong>: performa invoice, packing list, picking sheet, batch report, GRN, recipe sheet — all generated server-side from live data</Fragment>,
+      <Fragment><strong>Full stack ownership</strong> (data model → API → UI → infra → deployment): Python/FastAPI service, MongoDB + SQL Server, React/vanilla JS frontends, Docker, Nginx, JWT auth with row-level RBAC</Fragment>,
+      <Fragment><strong>~60%</strong> faster production reporting · <strong>5 departments</strong> on one system · operators, QC, stores, finance and management each have their own workflow</Fragment>,
     ],
-    tags: ['Python', 'FastAPI', 'MongoDB', 'SQL Server', 'Docker', 'Nginx', 'TLS', 'JWT', 'RBAC', 'Sage ERP', 'OpenPyXL', 'OEE', 'Manufacturing'],
+    tags: ['Python', 'FastAPI', 'MongoDB', 'SQL Server', 'Docker', 'Nginx', 'TLS', 'JWT', 'RBAC', 'Sage Evolution', 'pandas', 'openpyxl', 'fpdf', 'OEE', 'Manufacturing'],
     showCode: true,
-    ctaSubtitle: 'Live interactive demo — all data fabricated for privacy',
+    ctaSubtitle: 'Live interactive demo — every value fabricated for privacy, every workflow faithful to the real system',
     ctas: [
       { label: 'Launch live interactive demo ↗', href: 'app/index.html', target: '_blank', primary: true, prominent: true },
       { label: 'Static walkthrough', href: 'demo.html', target: '_blank' },
@@ -931,9 +936,9 @@ const PROJECTS = [
   },
   {
     domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
-    sectionEyebrow: 'B2C',
-    sectionHeading: 'Direct-to-consumer storefront demo',
-    sectionBlurb: 'A full DTC commerce flow — storefront, cart, multi-step checkout, customer account, and admin panel. Disconnected mock API, runs entirely in-browser.',
+    sectionEyebrow: 'Other software demos',
+    sectionHeading: 'Other shapes of software I can ship',
+    sectionBlurb: 'Three additional product-shaped demos — a DTC storefront, a B2B wholesale portal, and a Dubai real-estate marketplace. Each runs end-to-end in the browser via a mock API. They are not the headline of this portfolio (the MES platform above is) — they exist to show that the engineering-plus-software hybrid above can also build general product software.',
     title: 'Pebble & Co. - DTC storefront',
     desc: <Fragment>A full direct-to-consumer storefront built end-to-end as a portfolio piece - storefront, catalog,
       product detail, cart, multi-step checkout, customer account, and a Shopify-style admin panel with
@@ -952,9 +957,6 @@ const PROJECTS = [
   },
   {
     domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
-    sectionEyebrow: 'B2B',
-    sectionHeading: 'Wholesale portal demo',
-    sectionBlurb: 'A wholesale/industrial portal with tier pricing, MOQs, contract discounts, quote requests, and an approval workflow — multi-user roles and a data-dense admin panel.',
     title: 'Anvil Supply Co. - B2B wholesale portal',
     desc: <Fragment>A wholesale/industrial portal with tier pricing, MOQs, contract discounts, quote requests, and an
       approval workflow for large orders. Multi-user accounts with purchaser / approver / viewer roles, recurring
@@ -973,9 +975,6 @@ const PROJECTS = [
   },
   {
     domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
-    sectionEyebrow: 'Marketplace',
-    sectionHeading: 'Dubai real-estate marketplace demo',
-    sectionBlurb: 'A two-sided property marketplace patterned on Property Finder / Bayut — map-and-list search across 15 Dubai communities, agent profiles, mortgage calculator, and a 13-section admin SPA.',
     title: 'Manzil Properties — Dubai marketplace',
     desc: <Fragment>A Dubai real-estate marketplace demo with 65+ listings across Marina, Downtown,
       Palm Jumeirah, JBR, Business Bay, DIFC, Arabian Ranches and more. Map-and-list search using
