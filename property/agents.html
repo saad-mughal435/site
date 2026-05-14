@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Agents & agencies — Manzil</title>
+<meta name="description" content="Browse 24 licensed Dubai real-estate agents across 10 agencies. Filter by language, specialisation and area." />
+<meta name="theme-color" content="#1f7a55" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2064%2064'%3E%3Crect%20width%3D'64'%20height%3D'64'%20rx%3D'14'%20fill%3D'%231f7a55'/%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20font-family%3D'serif'%20font-weight%3D'700'%20font-size%3D'30'%20fill%3D'%23c9a049'%20text-anchor%3D'middle'%3Eم%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/property.css?v=20260514" />
+</head>
+<body class="manzil">
+<div data-shell-nav></div>
+
+<section class="m-container m-section">
+  <span class="m-eyebrow">Licensed brokers</span>
+  <h1>Find your agent.</h1>
+  <p class="m-text-muted">24 agents · 10 agencies · all displaying RERA-style permit numbers and public ratings.</p>
+
+  <div class="m-flex-wrap m-mt-3">
+    <button class="m-pill" data-tab="agents">Agents</button>
+    <button class="m-pill" data-tab="agencies">Agencies</button>
+    <input id="search" class="m-input" placeholder="Search by name, agency, language..." style="margin-inline-start:auto;max-width:280px;" />
+    <select id="filter-lang" class="m-select">
+      <option value="">Any language</option>
+      <option value="English">English</option>
+      <option value="Arabic">Arabic</option>
+      <option value="Russian">Russian</option>
+      <option value="French">French</option>
+      <option value="Hindi">Hindi</option>
+      <option value="Urdu">Urdu</option>
+      <option value="Spanish">Spanish</option>
+    </select>
+    <select id="filter-spec" class="m-select">
+      <option value="">Any specialisation</option>
+    </select>
+  </div>
+
+  <div id="agents-pane" class="m-grid m-grid-3 m-mt-3"></div>
+  <div id="agencies-pane" class="m-grid m-grid-3 m-mt-3" style="display:none;"></div>
+</section>
+
+<div data-shell-foot></div>
+
+<script src="js/data.js"></script>
+<script src="js/mock-api.js"></script>
+<script src="js/notifications.js"></script>
+<script src="js/app.js"></script>
+<script>
+ManzilApp.mountShell('agents');
+
+var qs = ManzilApp.qs();
+var tab = qs.tab || 'agents';
+var d = MANZIL_DATA;
+
+// Build specialisation filter from data
+var specs = Array.from(new Set(d.AGENTS.map(function (a) { return a.specialisation; }))).sort();
+var specSel = document.getElementById('filter-spec');
+specs.forEach(function (s) { var o = document.createElement('option'); o.value = s; o.textContent = s; specSel.appendChild(o); });
+
+function activeTab(t) {
+  tab = t;
+  document.querySelectorAll('[data-tab]').forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-tab') === t); });
+  document.getElementById('agents-pane').style.display = t === 'agents' ? '' : 'none';
+  document.getElementById('agencies-pane').style.display = t === 'agencies' ? '' : 'none';
+}
+document.querySelectorAll('[data-tab]').forEach(function (b) { b.addEventListener('click', function () { activeTab(b.getAttribute('data-tab')); }); });
+activeTab(tab);
+
+function applyFilters() {
+  var q = document.getElementById('search').value.toLowerCase();
+  var lang = document.getElementById('filter-lang').value;
+  var spec = document.getElementById('filter-spec').value;
+  var agents = d.AGENTS.filter(function (a) {
+    if (lang && a.languages.indexOf(lang) === -1) return false;
+    if (spec && a.specialisation !== spec) return false;
+    if (q) {
+      var ag = d.AGENCIES.find(function (g) { return g.id === a.agency_id; });
+      var hay = (a.name + ' ' + (ag ? ag.name : '') + ' ' + a.languages.join(' ') + ' ' + a.specialisation + ' ' + a.bio).toLowerCase();
+      if (hay.indexOf(q) === -1) return false;
+    }
+    return true;
+  });
+  var agencies = d.AGENCIES.filter(function (g) {
+    if (q && (g.name + ' ' + g.specialties.join(' ')).toLowerCase().indexOf(q) === -1) return false;
+    return true;
+  });
+  document.getElementById('agents-pane').innerHTML = agents.length
+    ? agents.map(function (a) {
+        var ag = d.AGENCIES.find(function (g) { return g.id === a.agency_id; }) || {};
+        var lst = d.LISTINGS.filter(function (l) { return l.agent_id === a.id && l.status === 'active'; }).length;
+        return ''
+          + '<a class="m-card" href="agent.html?id=' + a.id + '" style="padding:20px;display:block;text-decoration:none;color:inherit;">'
+          +   '<div style="display:flex;gap:12px;align-items:center;">'
+          +     '<img src="' + a.photo_url + '" alt="" style="width:64px;height:64px;border-radius:999px;object-fit:cover;" />'
+          +     '<div><h3 style="margin:0;">' + a.name + '</h3><div class="m-text-muted" style="font-size:12px;">' + (ag.name || '') + '</div><div class="m-stars">' + ManzilApp.stars(a.rating) + ' <span class="m-text-muted" style="font-size:11px;">' + a.rating + '</span></div></div>'
+          +   '</div>'
+          +   '<div class="m-text-muted" style="font-size:12px;margin-top:12px;">' + a.specialisation + ' · ' + a.years_exp + ' yrs · ' + a.languages.join(' · ') + '</div>'
+          +   '<div style="display:flex;gap:8px;margin-top:10px;font-size:12px;">'
+          +     '<span class="m-chip">' + lst + ' active</span>'
+          +     '<span class="m-chip">' + a.deals_closed + ' deals</span>'
+          +   '</div>'
+          + '</a>';
+      }).join('')
+    : '<div class="m-empty"><h3>No agents match</h3></div>';
+
+  document.getElementById('agencies-pane').innerHTML = agencies.length
+    ? agencies.map(function (g) {
+        var agentCount = d.AGENTS.filter(function (a) { return a.agency_id === g.id; }).length;
+        var lst = d.LISTINGS.filter(function (l) { return l.agency_id === g.id && l.status === 'active'; }).length;
+        return ''
+          + '<a class="m-card" href="agent.html?agency=' + g.id + '" style="display:block;text-decoration:none;color:inherit;overflow:hidden;">'
+          +   '<div style="aspect-ratio:16/8;background:#eee;"><img src="' + g.hero + '" alt="" style="width:100%;height:100%;object-fit:cover;" /></div>'
+          +   '<div style="padding:16px;">'
+          +     '<h3 style="margin:0;">' + g.name + '</h3>'
+          +     '<div class="m-text-muted" style="font-size:12px;">Permit ' + g.license_no + ' · Since ' + g.founded + '</div>'
+          +     '<div class="m-flex-wrap m-mt-1">' + g.specialties.map(function (s) { return '<span class="m-chip">' + s + '</span>'; }).join('') + '</div>'
+          +     '<div class="m-flex-wrap m-mt-2"><span class="m-chip">' + agentCount + ' agents</span><span class="m-chip">' + lst + ' active listings</span></div>'
+          +   '</div>'
+          + '</a>';
+      }).join('')
+    : '<div class="m-empty"><h3>No agencies match</h3></div>';
+}
+['search','filter-lang','filter-spec'].forEach(function (id) {
+  document.getElementById(id).addEventListener('input', applyFilters);
+});
+applyFilters();
+</script>
+</body>
+</html>

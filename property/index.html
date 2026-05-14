@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Manzil Properties — Find your destination in the UAE</title>
+<meta name="description" content="Dubai's modern real-estate marketplace. Find apartments, villas, off-plan and rentals across 15 UAE communities with verified listings, licensed agents and transparent pricing. Demo by Saad Mughal." />
+<meta name="robots" content="index, follow" />
+<meta name="theme-color" content="#1f7a55" />
+<link rel="canonical" href="https://saadm.dev/property/" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2064%2064'%3E%3Crect%20width%3D'64'%20height%3D'64'%20rx%3D'14'%20fill%3D'%231f7a55'/%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20font-family%3D'serif'%20font-weight%3D'700'%20font-size%3D'30'%20fill%3D'%23c9a049'%20text-anchor%3D'middle'%3Eم%3C/text%3E%3C/svg%3E" />
+
+<meta property="og:title" content="Manzil Properties — Find your destination in the UAE" />
+<meta property="og:description" content="A demo Dubai real-estate marketplace by Saad Mughal — verified listings, licensed agents, transparent pricing." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://saadm.dev/property/" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/property.css?v=20260514" />
+</head>
+<body class="manzil">
+<div data-shell-nav></div>
+
+<!-- Hero with search composer -->
+<section class="m-hero">
+  <div class="m-hero-inner">
+    <span class="m-eyebrow">Manzil · Real-estate marketplace</span>
+    <h1>Find your destination<br/>in the UAE.</h1>
+    <p class="m-tagline">65+ live listings across 15 Dubai communities. Verified agents, transparent pricing, real photos.</p>
+
+    <form class="m-search" id="hero-search" onsubmit="event.preventDefault();goSearch()">
+      <div class="m-search-tabs" role="tablist">
+        <button type="button" class="m-search-tab active" data-tab="buy"     data-i18n="tab.buy">Buy</button>
+        <button type="button" class="m-search-tab"        data-tab="rent"    data-i18n="tab.rent">Rent</button>
+        <button type="button" class="m-search-tab"        data-tab="off-plan"data-i18n="tab.offplan">Off-plan</button>
+      </div>
+      <div class="m-search-fields">
+        <div class="m-search-field">
+          <label data-i18n="search.location">Location</label>
+          <input id="h-loc" list="h-loc-list" placeholder="Area, building, project..." data-i18n-placeholder="search.placeholder.location" />
+          <datalist id="h-loc-list"></datalist>
+        </div>
+        <div class="m-search-field">
+          <label data-i18n="search.type">Property type</label>
+          <select id="h-type">
+            <option value="" data-i18n="search.type.any">Any type</option>
+            <option value="apartment">Apartment</option>
+            <option value="villa">Villa</option>
+            <option value="townhouse">Townhouse</option>
+            <option value="penthouse">Penthouse</option>
+            <option value="studio">Studio</option>
+            <option value="office">Office</option>
+          </select>
+        </div>
+        <div class="m-search-field">
+          <label data-i18n="search.beds">Beds</label>
+          <select id="h-beds">
+            <option value="" data-i18n="search.beds.any">Any</option>
+            <option value="studio" data-i18n="search.beds.studio">Studio</option>
+            <option value="1">1 Bed</option>
+            <option value="2">2 Beds</option>
+            <option value="3">3 Beds</option>
+            <option value="4+">4+ Beds</option>
+          </select>
+        </div>
+        <div class="m-search-field">
+          <label data-i18n="search.price">Max price (AED)</label>
+          <select id="h-price">
+            <option value="">Any</option>
+            <option value="500000">Up to 500K</option>
+            <option value="1000000">Up to 1M</option>
+            <option value="2000000">Up to 2M</option>
+            <option value="5000000">Up to 5M</option>
+            <option value="10000000">Up to 10M</option>
+            <option value="50000000">Up to 50M</option>
+          </select>
+        </div>
+        <button class="m-search-submit" type="submit"><span data-i18n="search.cta">Search</span> →</button>
+      </div>
+    </form>
+
+    <div class="m-search-chips">
+      <span class="m-search-chip" data-area="dubai-marina">Dubai Marina</span>
+      <span class="m-search-chip" data-area="downtown">Downtown</span>
+      <span class="m-search-chip" data-area="palm-jumeirah">Palm Jumeirah</span>
+      <span class="m-search-chip" data-area="jbr">JBR</span>
+      <span class="m-search-chip" data-area="business-bay">Business Bay</span>
+      <span class="m-search-chip" data-area="difc">DIFC</span>
+      <span class="m-search-chip" data-area="arabian-ranches">Arabian Ranches</span>
+    </div>
+  </div>
+</section>
+
+<!-- Featured listings -->
+<section class="m-section m-container">
+  <div class="m-section-head">
+    <div>
+      <span class="m-eyebrow">Hand-picked</span>
+      <h2 data-i18n="home.featured">Featured listings</h2>
+    </div>
+    <a class="more" href="search.html?sort=featured">View all featured →</a>
+  </div>
+  <div class="m-grid m-grid-4" id="featured-grid"></div>
+</section>
+
+<!-- Trending searches -->
+<section class="m-section--tight m-container">
+  <div class="m-section-head">
+    <div><h2 data-i18n="home.trending">Trending searches</h2></div>
+  </div>
+  <div class="m-pills" id="trending-pills">
+    <a class="m-pill" href="search.html?transaction=buy&amp;area=a-marina&amp;beds=2&amp;price_max=2000000">2BR Marina under 2M AED</a>
+    <a class="m-pill" href="search.html?transaction=rent&amp;area=a-downtown&amp;beds=1">1BR Downtown rentals</a>
+    <a class="m-pill" href="search.html?transaction=buy&amp;area=a-palm&amp;type=villa">Palm Jumeirah villas</a>
+    <a class="m-pill" href="search.html?transaction=buy&amp;area=a-hills-em">Emirates Hills mansions</a>
+    <a class="m-pill" href="search.html?transaction=off-plan">All off-plan</a>
+    <a class="m-pill" href="search.html?transaction=rent&amp;area=a-jlt&amp;price_max=100000">JLT rentals under 100K</a>
+    <a class="m-pill" href="search.html?transaction=buy&amp;type=penthouse">Penthouses</a>
+    <a class="m-pill" href="search.html?transaction=buy&amp;area=a-ranches&amp;type=villa">Arabian Ranches villas</a>
+  </div>
+</section>
+
+<!-- Browse by area -->
+<section class="m-section m-container">
+  <div class="m-section-head">
+    <div>
+      <span class="m-eyebrow">15 communities</span>
+      <h2 data-i18n="home.areas">Browse by area</h2>
+    </div>
+    <a class="more" href="areas.html">All areas →</a>
+  </div>
+  <div class="m-grid m-grid-4" id="areas-grid"></div>
+</section>
+
+<!-- Top agents -->
+<section class="m-section m-container">
+  <div class="m-section-head">
+    <div>
+      <span class="m-eyebrow">Licensed brokers</span>
+      <h2 data-i18n="home.agents">Top agents</h2>
+    </div>
+    <a class="more" href="agents.html">All agents →</a>
+  </div>
+  <div class="m-grid m-grid-3" id="agents-grid"></div>
+</section>
+
+<!-- Why Manzil -->
+<section class="m-section">
+  <div class="m-container">
+    <div class="m-section-head"><div><span class="m-eyebrow">The Manzil promise</span><h2 data-i18n="home.why">Why Manzil</h2></div></div>
+    <div class="m-grid m-grid-4">
+      <div class="m-card" style="padding:20px;"><div style="font-size:28px;">✅</div><h3 style="margin-top:8px;">Verified listings</h3><p>Every listing reviewed for accurate photos, price, and availability before going live.</p></div>
+      <div class="m-card" style="padding:20px;"><div style="font-size:28px;">🪪</div><h3 style="margin-top:8px;">Licensed agents</h3><p>All brokers display their RERA-style permit number with public ratings and reviews.</p></div>
+      <div class="m-card" style="padding:20px;"><div style="font-size:28px;">📷</div><h3 style="margin-top:8px;">Real photography</h3><p>Listings show actual photographs of the unit — not stock imagery from the developer.</p></div>
+      <div class="m-card" style="padding:20px;"><div style="font-size:28px;">💰</div><h3 style="margin-top:8px;">Transparent pricing</h3><p>Price history visible; price drops badged automatically when sellers reduce the ask.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Recently viewed -->
+<section class="m-section--tight m-container" id="recent-wrap" style="display:none;">
+  <div class="m-section-head"><div><h2 data-i18n="home.recent">Recently viewed</h2></div></div>
+  <div class="m-grid m-grid-4" id="recent-grid"></div>
+</section>
+
+<!-- CTA -->
+<section class="m-section" style="background:linear-gradient(135deg,#14202b,#1f3344);color:white;">
+  <div class="m-container" style="display:grid;grid-template-columns:1fr;gap:24px;align-items:center;">
+    <div>
+      <span class="m-eyebrow" style="background:rgba(201,160,73,.18);color:var(--manzil-accent);">For developers &amp; agencies</span>
+      <h2 style="color:white;font-size:clamp(24px,3vw,32px);margin:8px 0 8px;">List your project on Manzil</h2>
+      <p style="color:rgba(255,255,255,.7);max-width:640px;">Reach buyers and tenants across the UAE. Featured slots, off-plan campaigns, and analytics built in.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;">
+        <a class="m-btn m-btn--gold" href="contact.html">Talk to sales (demo)</a>
+        <a class="m-btn m-btn--ghost" style="color:white;border-color:rgba(255,255,255,.3);" href="admin.html">See the admin panel</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div data-shell-foot></div>
+
+<script src="js/data.js"></script>
+<script src="js/mock-api.js"></script>
+<script src="js/notifications.js"></script>
+<script src="js/app.js"></script>
+<script>
+ManzilApp.mountShell('home');
+
+// Hero tab toggling
+document.querySelectorAll('.m-search-tab').forEach(function (t) {
+  t.addEventListener('click', function () {
+    document.querySelectorAll('.m-search-tab').forEach(function (x) { x.classList.remove('active'); });
+    t.classList.add('active');
+  });
+});
+
+// Location datalist
+var locList = document.getElementById('h-loc-list');
+MANZIL_DATA.AREAS.forEach(function (a) {
+  var o = document.createElement('option'); o.value = a.name; locList.appendChild(o);
+});
+
+// Quick chips
+document.querySelectorAll('.m-search-chip').forEach(function (ch) {
+  ch.addEventListener('click', function () {
+    var slug = ch.getAttribute('data-area');
+    var area = MANZIL_DATA.AREAS.find(function (a) { return a.slug === slug; });
+    location.href = 'search.html?area=' + (area ? area.id : '');
+  });
+});
+
+function goSearch() {
+  var tab = document.querySelector('.m-search-tab.active').getAttribute('data-tab');
+  var loc = document.getElementById('h-loc').value;
+  var type = document.getElementById('h-type').value;
+  var beds = document.getElementById('h-beds').value;
+  var price = document.getElementById('h-price').value;
+  // map location text → area id if matches
+  var area = '';
+  if (loc) {
+    var a = MANZIL_DATA.AREAS.find(function (x) { return x.name.toLowerCase() === loc.toLowerCase(); });
+    if (a) area = a.id;
+  }
+  var qs = ManzilApp.buildQs({ transaction: tab, area: area, type: type, beds: beds, price_max: price, q: area ? '' : loc });
+  location.href = 'search.html' + qs;
+}
+
+// Render featured
+ManzilApp.api('/listings/featured').then(function (r) {
+  document.getElementById('featured-grid').innerHTML = r.items.map(ManzilApp.listingCard).join('');
+  ManzilApp.updateAllPrices();
+});
+
+// Render areas
+var areasGrid = document.getElementById('areas-grid');
+areasGrid.innerHTML = MANZIL_DATA.AREAS.slice(0, 8).map(function (a) {
+  var count = MANZIL_DATA.LISTINGS.filter(function (l) { return l.area_id === a.id && l.status === 'active'; }).length;
+  return ''
+    + '<a href="area.html?slug=' + a.slug + '" class="m-area-card">'
+    +   '<img src="' + a.hero + '" alt="' + a.name + '" loading="lazy" />'
+    +   '<div class="cap"><h3>' + a.name + '</h3><div class="sub">' + count + ' listings · AED ' + a.avg_aed_sqft.toLocaleString() + '/ft² avg</div></div>'
+    + '</a>';
+}).join('');
+
+// Render agents (top by rating)
+var agentsGrid = document.getElementById('agents-grid');
+var topAgents = MANZIL_DATA.AGENTS.slice().sort(function (a, b) { return b.rating - a.rating; }).slice(0, 6);
+agentsGrid.innerHTML = topAgents.map(ManzilApp.agentCard).join('');
+
+// Recently viewed
+var recentIds = ManzilApp.getRecentlyViewed();
+if (recentIds.length) {
+  var rg = document.getElementById('recent-grid');
+  var recent = recentIds.map(function (id) { return MANZIL_DATA.LISTINGS.find(function (l) { return l.id === id; }); }).filter(Boolean).slice(0, 4);
+  if (recent.length) {
+    rg.innerHTML = recent.map(ManzilApp.listingCard).join('');
+    document.getElementById('recent-wrap').style.display = 'block';
+    ManzilApp.updateAllPrices();
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Agent profile — Manzil</title>
+<meta name="description" content="View an agent profile, active listings, reviews and contact details on Manzil." />
+<meta name="theme-color" content="#1f7a55" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2064%2064'%3E%3Crect%20width%3D'64'%20height%3D'64'%20rx%3D'14'%20fill%3D'%231f7a55'/%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20font-family%3D'serif'%20font-weight%3D'700'%20font-size%3D'30'%20fill%3D'%23c9a049'%20text-anchor%3D'middle'%3Eم%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/property.css?v=20260514" />
+</head>
+<body class="manzil">
+<div data-shell-nav></div>
+
+<section class="m-container m-section" id="profile-host"></section>
+
+<div data-shell-foot></div>
+
+<script src="js/data.js"></script>
+<script src="js/mock-api.js"></script>
+<script src="js/notifications.js"></script>
+<script src="js/app.js"></script>
+<script>
+ManzilApp.mountShell('agents');
+
+var qs = ManzilApp.qs();
+var d = MANZIL_DATA;
+var host = document.getElementById('profile-host');
+
+if (qs.agency) {
+  var agency = d.AGENCIES.find(function (g) { return g.id === qs.agency; });
+  if (!agency) { host.innerHTML = '<div class="m-empty"><h3>Agency not found</h3></div>'; }
+  else {
+    var agents = d.AGENTS.filter(function (a) { return a.agency_id === agency.id; });
+    var listings = d.LISTINGS.filter(function (l) { return l.agency_id === agency.id && l.status === 'active'; });
+    host.innerHTML = ''
+      + '<nav style="font-size:12px;color:var(--manzil-muted);margin-bottom:12px;"><a href="agents.html?tab=agencies">Agencies</a> / <span>' + agency.name + '</span></nav>'
+      + '<div style="position:relative;border-radius:var(--radius-lg);overflow:hidden;aspect-ratio:16/5;background:#222;">'
+      +   '<img src="' + agency.hero + '" alt="" style="width:100%;height:100%;object-fit:cover;opacity:.55;" />'
+      +   '<div style="position:absolute;left:24px;bottom:18px;color:white;"><h1 style="color:white;margin:0;font-size:clamp(22px,3vw,32px);">' + agency.name + '</h1>'
+      +     '<div style="font-size:13px;opacity:.85;">RERA Permit ' + agency.license_no + ' · Since ' + agency.founded + '</div>'
+      +   '</div>'
+      + '</div>'
+      + '<div class="m-grid m-grid-4 m-mt-2">'
+      +   '<div class="m-kpi"><div class="m-kpi-label">Active listings</div><div class="m-kpi-value">' + listings.length + '</div></div>'
+      +   '<div class="m-kpi"><div class="m-kpi-label">Agents</div><div class="m-kpi-value">' + agents.length + '</div></div>'
+      +   '<div class="m-kpi"><div class="m-kpi-label">Specialties</div><div class="m-kpi-value" style="font-size:14px;font-family:var(--font-ui);font-weight:600;">' + agency.specialties.join(', ') + '</div></div>'
+      +   '<div class="m-kpi"><div class="m-kpi-label">Founded</div><div class="m-kpi-value">' + agency.founded + '</div></div>'
+      + '</div>'
+      + '<h2 class="m-mt-3">Agents at ' + agency.name + '</h2>'
+      + '<div class="m-grid m-grid-3 m-mt-2">' + agents.map(ManzilApp.agentCard).join('') + '</div>'
+      + '<h2 class="m-mt-3">Active listings (' + listings.length + ')</h2>'
+      + '<div class="m-grid m-grid-3 m-mt-2">' + listings.slice(0, 9).map(ManzilApp.listingCard).join('') + '</div>'
+      + (listings.length > 9 ? '<div class="m-mt-2 m-text-center"><a class="m-btn m-btn--ghost" href="search.html?agency=' + agency.id + '">View all ' + listings.length + ' listings →</a></div>' : '');
+    ManzilApp.updateAllPrices();
+  }
+} else if (qs.id) {
+  ManzilApp.api('/agents/' + qs.id).then(function (r) {
+    if (!r.ok) { host.innerHTML = '<div class="m-empty"><h3>Agent not found</h3></div>'; return; }
+    var a = r.agent;
+    var ag = d.AGENCIES.find(function (g) { return g.id === a.agency_id; }) || {};
+    var listings = r.listings;
+    var reviews = r.reviews;
+    var avg = reviews.length ? (reviews.reduce(function (s, v) { return s + v.rating; }, 0) / reviews.length).toFixed(1) : a.rating;
+
+    host.innerHTML = ''
+      + '<nav style="font-size:12px;color:var(--manzil-muted);margin-bottom:12px;"><a href="agents.html">Agents</a> / <span>' + a.name + '</span></nav>'
+      + '<div class="m-flex" style="gap:16px;flex-wrap:wrap;">'
+      +   '<img src="' + a.photo_url + '" alt="" style="width:96px;height:96px;border-radius:999px;object-fit:cover;" />'
+      +   '<div>'
+      +     '<h1 style="margin:0;">' + a.name + '</h1>'
+      +     '<div class="m-text-muted">' + ag.name + ' · ' + a.specialisation + '</div>'
+      +     '<div class="m-stars m-mt-1">' + ManzilApp.stars(a.rating) + ' <span class="m-text-muted" style="font-size:13px;">' + avg + ' from ' + reviews.length + ' reviews</span></div>'
+      +     '<div class="m-text-muted m-mt-1" style="font-size:13px;">Languages: ' + a.languages.join(', ') + '</div>'
+      +   '</div>'
+      +   '<div style="margin-inline-start:auto;display:grid;gap:6px;">'
+      +     '<button class="m-btn m-btn--primary" onclick="contactAgent()">📞 Contact agent</button>'
+      +     '<a class="m-btn m-btn--ghost m-btn--sm" href="agent.html?agency=' + ag.id + '">Visit agency →</a>'
+      +   '</div>'
+      + '</div>'
+      + '<div class="m-grid m-grid-4 m-mt-3">'
+      +   '<div class="m-kpi"><div class="m-kpi-label">Active listings</div><div class="m-kpi-value">' + listings.length + '</div></div>'
+      +   '<div class="m-kpi"><div class="m-kpi-label">Deals closed</div><div class="m-kpi-value">' + a.deals_closed + '</div></div>'
+      +   '<div class="m-kpi"><div class="m-kpi-label">Experience</div><div class="m-kpi-value">' + a.years_exp + ' yrs</div></div>'
+      +   '<div class="m-kpi"><div class="m-kpi-label">Rating</div><div class="m-kpi-value">' + avg + '<span style="font-size:14px;color:var(--manzil-accent);">★</span></div></div>'
+      + '</div>'
+      + (a.bio ? '<div class="m-panel m-mt-3"><h3 style="margin-top:0;">About</h3><p>' + ManzilApp.escapeHtml(a.bio) + '</p></div>' : '')
+      + '<h2 class="m-mt-3">Active listings</h2>'
+      + (listings.length ? '<div class="m-grid m-grid-3 m-mt-2">' + listings.map(ManzilApp.listingCard).join('') + '</div>' : '<div class="m-empty"><p>No active listings.</p></div>')
+      + '<h2 class="m-mt-3">Reviews</h2>'
+      + (reviews.length ? '<div class="m-grid m-grid-2 m-mt-2">' + reviews.slice(0, 8).map(function (rv) {
+            var c = d.CUSTOMERS.find(function (x) { return x.id === rv.customer_id; }) || { name: 'Verified user' };
+            return '<div class="m-card" style="padding:16px;"><div class="m-stars">' + ManzilApp.stars(rv.rating) + '</div><strong>' + rv.title + '</strong><p>' + rv.body + '</p><div class="m-text-muted" style="font-size:12px;">— ' + c.name + ', ' + ManzilApp.fmtDate(rv.date) + '</div></div>';
+          }).join('') + '</div>' : '<div class="m-empty"><p>No reviews yet.</p></div>');
+    ManzilApp.updateAllPrices();
+
+    window.contactAgent = function () {
+      ManzilApp.showModal({
+        title: 'Contact ' + a.name,
+        body: '<p>Choose a contact method below. All actions are demo-only — messages are stored locally.</p><div style="display:grid;gap:8px;"><a class="m-btn m-btn--primary" href="tel:' + a.phone + '">📞 ' + a.phone + '</a><a class="m-btn m-btn--ghost" href="https://wa.me/' + a.whatsapp.replace(/\\D/g,'') + '" target="_blank" rel="noopener">💬 WhatsApp</a><a class="m-btn m-btn--ghost" href="mailto:' + a.email + '">✉ ' + a.email + '</a></div>'
+      });
+    };
+  });
+} else {
+  host.innerHTML = '<div class="m-empty"><h3>No agent specified</h3></div>';
+}
+</script>
+</body>
+</html>

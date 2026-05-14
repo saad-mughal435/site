@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dubai areas — Manzil</title>
+<meta name="description" content="Area guides for 15 Dubai communities including Marina, Downtown, Palm Jumeirah, JBR, Arabian Ranches, Dubai Hills and more — with average prices and listing counts." />
+<meta name="theme-color" content="#1f7a55" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2064%2064'%3E%3Crect%20width%3D'64'%20height%3D'64'%20rx%3D'14'%20fill%3D'%231f7a55'/%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20font-family%3D'serif'%20font-weight%3D'700'%20font-size%3D'30'%20fill%3D'%23c9a049'%20text-anchor%3D'middle'%3Eم%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/property.css?v=20260514" />
+</head>
+<body class="manzil">
+<div data-shell-nav></div>
+
+<section class="m-container m-section">
+  <span class="m-eyebrow">15 communities</span>
+  <h1>Dubai areas.</h1>
+  <p class="m-text-muted">Average prices, schools, malls and transit links for every community on Manzil.</p>
+  <div class="m-grid m-grid-3 m-mt-3" id="areas-grid"></div>
+</section>
+
+<div data-shell-foot></div>
+
+<script src="js/data.js"></script>
+<script src="js/mock-api.js"></script>
+<script src="js/notifications.js"></script>
+<script src="js/app.js"></script>
+<script>
+ManzilApp.mountShell('areas');
+
+var d = MANZIL_DATA;
+document.getElementById('areas-grid').innerHTML = d.AREAS.map(function (a) {
+  var lst = d.LISTINGS.filter(function (l) { return l.area_id === a.id && l.status === 'active'; });
+  var avgPrice = lst.length ? Math.round(lst.reduce(function (s, l) { return s + l.price_aed; }, 0) / lst.length) : 0;
+  return ''
+    + '<a class="m-card" href="area.html?slug=' + a.slug + '" style="display:block;color:inherit;text-decoration:none;overflow:hidden;">'
+    +   '<div style="aspect-ratio:16/9;background:#222;"><img src="' + a.hero + '" alt="' + a.name + '" loading="lazy" style="width:100%;height:100%;object-fit:cover;" /></div>'
+    +   '<div style="padding:16px;">'
+    +     '<h3 style="margin:0;">' + a.name + '</h3>'
+    +     '<div class="m-text-muted" style="font-size:12px;">' + lst.length + ' listings · AED ' + a.avg_aed_sqft.toLocaleString() + ' /ft²</div>'
+    +     '<p style="font-size:13px;margin:8px 0 0;">' + a.blurb.slice(0, 120) + '…</p>'
+    +     '<div class="m-flex-wrap m-mt-2">'
+    +       (a.schools && a.schools.length ? '<span class="m-chip">🎓 ' + a.schools.length + ' schools</span>' : '')
+    +       (a.malls && a.malls.length ? '<span class="m-chip">🛍 ' + a.malls.length + ' malls</span>' : '')
+    +       (a.metros && a.metros.length ? '<span class="m-chip">🚇 ' + a.metros.length + ' metro</span>' : '')
+    +     '</div>'
+    +   '</div>'
+    + '</a>';
+}).join('');
+</script>
+</body>
+</html>

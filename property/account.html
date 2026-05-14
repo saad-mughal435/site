@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>My account — Manzil</title>
+<meta name="description" content="Manage favorites, saved searches, scheduled viewings, mortgage scenarios and notifications on Manzil." />
+<meta name="theme-color" content="#1f7a55" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2064%2064'%3E%3Crect%20width%3D'64'%20height%3D'64'%20rx%3D'14'%20fill%3D'%231f7a55'/%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20font-family%3D'serif'%20font-weight%3D'700'%20font-size%3D'30'%20fill%3D'%23c9a049'%20text-anchor%3D'middle'%3Eم%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/property.css?v=20260514" />
+</head>
+<body class="manzil">
+<div data-shell-nav></div>
+
+<section class="m-container m-section">
+  <span class="m-eyebrow">Logged in as Demo Customer</span>
+  <h1>My account.</h1>
+
+  <div class="m-flex-wrap m-mt-2" id="tabs">
+    <a class="m-pill" href="#favorites">❤ Favorites</a>
+    <a class="m-pill" href="#searches">⭐ Saved searches</a>
+    <a class="m-pill" href="#viewings">📅 Viewings</a>
+    <a class="m-pill" href="#inquiries">📨 Inquiries</a>
+    <a class="m-pill" href="#mortgage">💰 Mortgage scenarios</a>
+    <a class="m-pill" href="#profile">👤 Profile</a>
+  </div>
+
+  <div class="m-mt-3" id="section-host"></div>
+</section>
+
+<div data-shell-foot></div>
+
+<script src="js/data.js"></script>
+<script src="js/mock-api.js"></script>
+<script src="js/notifications.js"></script>
+<script src="js/app.js"></script>
+<script>
+ManzilApp.mountShell('account');
+
+var d = MANZIL_DATA;
+var host = document.getElementById('section-host');
+
+function tab() { return (location.hash || '#favorites').slice(1); }
+
+function activate() {
+  var t = tab();
+  document.querySelectorAll('#tabs a').forEach(function (a) {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + t);
+  });
+  if (t === 'favorites')     return renderFavorites();
+  if (t === 'searches')      return renderSearches();
+  if (t === 'viewings')      return renderViewings();
+  if (t === 'inquiries')     return renderInquiries();
+  if (t === 'mortgage')      return renderMortgage();
+  if (t === 'profile')       return renderProfile();
+  renderFavorites();
+}
+window.addEventListener('hashchange', activate);
+
+function renderFavorites() {
+  ManzilApp.api('/favorites').then(function (r) {
+    host.innerHTML = '<h2 style="margin-top:0;">Favorites</h2>'
+      + (r.items.length
+          ? '<div class="m-grid m-grid-3">' + r.items.map(ManzilApp.listingCard).join('') + '</div>'
+          : '<div class="m-empty"><div class="m-empty-icon">♡</div><h3>No favorites yet</h3><p>Click the heart on any listing to save it here.</p><a class="m-btn m-btn--primary" href="search.html">Browse listings →</a></div>');
+    ManzilApp.updateAllPrices();
+  });
+}
+
+function renderSearches() {
+  ManzilApp.api('/saved-searches').then(function (r) {
+    host.innerHTML = '<h2 style="margin-top:0;">Saved searches</h2>'
+      + (r.items.length
+          ? '<table class="m-table"><thead><tr><th>Query</th><th>Saved</th><th>Alerts</th><th></th></tr></thead><tbody>'
+            + r.items.map(function (s) {
+                return '<tr>'
+                  + '<td><strong>' + s.q + '</strong></td>'
+                  + '<td>' + ManzilApp.fmtDate(s.when) + '</td>'
+                  + '<td><button class="m-btn m-btn--ghost m-btn--sm" onclick="toggleAlert(\'' + s.id + '\')">' + (s.alerts ? '🔔 On' : '🔕 Off') + '</button></td>'
+                  + '<td><a class="m-btn m-btn--ghost m-btn--sm" href="search.html' + ManzilApp.buildQs(s.params || {}) + '">Run</a> <button class="m-btn m-btn--ghost m-btn--sm" onclick="removeSearch(\'' + s.id + '\')">× Remove</button></td>'
+                + '</tr>';
+              }).join('')
+            + '</tbody></table>'
+          : '<div class="m-empty"><div class="m-empty-icon">⭐</div><h3>No saved searches</h3><p>Run a search and click "Save search" to keep it here with optional alerts.</p><a class="m-btn m-btn--primary" href="search.html">Search →</a></div>');
+  });
+}
+window.toggleAlert = function (id) {
+  ManzilApp.api('/saved-searches', { method: 'POST', body: { action: 'toggle_alert', id: id } }).then(renderSearches);
+};
+window.removeSearch = function (id) {
+  ManzilApp.api('/saved-searches', { method: 'POST', body: { action: 'remove', id: id } }).then(renderSearches);
+};
+
+function renderViewings() {
+  ManzilApp.api('/viewings').then(function (r) {
+    host.innerHTML = '<h2 style="margin-top:0;">Scheduled viewings</h2>'
+      + (r.items.length
+          ? '<div class="m-grid m-grid-2">' + r.items.map(function (v) {
+              var l = d.LISTINGS.find(function (x) { return x.id === v.listing_id; }) || {};
+              return '<div class="m-card" style="padding:14px;display:flex;gap:12px;align-items:center;">'
+                + '<img src="' + ((l.photos || [])[0]) + '" alt="" style="width:80px;height:80px;border-radius:8px;object-fit:cover;" />'
+                + '<div style="flex:1;">'
+                +   '<strong>' + (l.title || v.listing_id) + '</strong>'
+                +   '<div class="m-text-muted" style="font-size:12px;">📅 ' + ManzilApp.fmtDateTime(v.scheduled_at) + '</div>'
+                +   '<span class="m-chip ' + v.status + '">' + v.status + '</span>'
+                + '</div></div>';
+            }).join('') + '</div>'
+          : '<div class="m-empty"><div class="m-empty-icon">📅</div><h3>No viewings booked</h3><p>Schedule a viewing from any listing detail page.</p></div>');
+  });
+}
+
+function renderInquiries() {
+  ManzilApp.api('/inquiries').then(function (r) {
+    host.innerHTML = '<h2 style="margin-top:0;">My inquiries</h2>'
+      + (r.items.length
+          ? '<table class="m-table"><thead><tr><th>Listing</th><th>Kind</th><th>Status</th><th>Sent</th></tr></thead><tbody>'
+            + r.items.map(function (q) {
+                var l = d.LISTINGS.find(function (x) { return x.id === q.listing_id; }) || {};
+                return '<tr><td><a href="listing.html?id=' + q.listing_id + '">' + (l.title || q.listing_id) + '</a></td><td>' + q.kind + '</td><td><span class="m-chip ' + q.status + '">' + q.status + '</span></td><td>' + ManzilApp.fmtDate(q.created_at) + '</td></tr>';
+              }).join('')
+            + '</tbody></table>'
+          : '<div class="m-empty"><div class="m-empty-icon">📨</div><h3>No inquiries sent</h3></div>');
+  });
+}
+
+function renderMortgage() {
+  ManzilApp.api('/mortgage-scenarios').then(function (r) {
+    host.innerHTML = '<h2 style="margin-top:0;">Mortgage scenarios</h2>'
+      + (r.items.length
+          ? '<div class="m-grid m-grid-2">' + r.items.map(function (s) {
+              return '<div class="m-card" style="padding:16px;">'
+                +   '<strong>' + s.label + '</strong>'
+                +   '<div class="m-text-muted" style="font-size:12px;">Saved ' + ManzilApp.fmtDate(s.when) + '</div>'
+                +   '<div class="m-mt-1"><a class="m-btn m-btn--ghost m-btn--sm" href="mortgage.html?price=' + s.price + '">Open in calculator →</a></div>'
+                + '</div>';
+            }).join('') + '</div>'
+          : '<div class="m-empty"><div class="m-empty-icon">💰</div><h3>No saved scenarios</h3><p>Use the mortgage calculator to save scenarios for comparison.</p><a class="m-btn m-btn--primary" href="mortgage.html">Open calculator →</a></div>');
+  });
+}
+
+function renderProfile() {
+  ManzilApp.api('/account').then(function (r) {
+    var u = r.user;
+    host.innerHTML = '<h2 style="margin-top:0;">Profile</h2>'
+      + '<div class="m-panel">'
+      +   '<div class="m-grid m-grid-2">'
+      +     '<div class="m-kpi"><div class="m-kpi-label">Name</div><div class="m-kpi-value" style="font-size:20px;">' + u.name + '</div></div>'
+      +     '<div class="m-kpi"><div class="m-kpi-label">Email</div><div class="m-kpi-value" style="font-size:16px;">' + u.email + '</div></div>'
+      +     '<div class="m-kpi"><div class="m-kpi-label">Member since</div><div class="m-kpi-value" style="font-size:18px;">' + u.joined + '</div></div>'
+      +     '<div class="m-kpi"><div class="m-kpi-label">Locale</div><div class="m-kpi-value" style="font-size:18px;">' + u.locale.toUpperCase() + ' · ' + u.currency + '</div></div>'
+      +   '</div>'
+      +   '<div class="m-mt-2"><button class="m-btn m-btn--ghost m-btn--sm" onclick="signOut()">Sign out</button></div>'
+      + '</div>'
+      + '<div class="m-panel m-mt-2"><h3 style="margin-top:0;">Notification preferences</h3>'
+      +   '<label style="display:flex;gap:8px;align-items:center;padding:6px 0;"><input type="checkbox" checked />Email alerts for saved searches</label>'
+      +   '<label style="display:flex;gap:8px;align-items:center;padding:6px 0;"><input type="checkbox" checked />Push notifications</label>'
+      +   '<label style="display:flex;gap:8px;align-items:center;padding:6px 0;"><input type="checkbox" />SMS reminders before viewings</label>'
+      + '</div>';
+  });
+}
+window.signOut = function () {
+  ManzilApp.api('/auth/logout', { method: 'POST' }).then(function () { window.toast('Signed out — but this is a demo, you\'ll be auto-logged-in again.', 'warn', 3000); setTimeout(function () { location.reload(); }, 1500); });
+};
+
+activate();
+</script>
+</body>
+</html>

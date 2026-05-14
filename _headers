@@ -24,6 +24,10 @@
   Cache-Control: public, max-age=300, must-revalidate
 /b2b/js/*
   Cache-Control: public, max-age=300, must-revalidate
+/property/css/*
+  Cache-Control: public, max-age=300, must-revalidate
+/property/js/*
+  Cache-Control: public, max-age=300, must-revalidate
 
 # HTML — short cache so updates surface quickly
 /*.html

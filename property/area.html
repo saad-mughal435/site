@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Area guide — Manzil</title>
+<meta name="description" content="Area guide on Manzil with average prices, popular projects, schools and malls." />
+<meta name="theme-color" content="#1f7a55" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2064%2064'%3E%3Crect%20width%3D'64'%20height%3D'64'%20rx%3D'14'%20fill%3D'%231f7a55'/%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20font-family%3D'serif'%20font-weight%3D'700'%20font-size%3D'30'%20fill%3D'%23c9a049'%20text-anchor%3D'middle'%3Eم%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/property.css?v=20260514" />
+</head>
+<body class="manzil" data-map>
+<div data-shell-nav></div>
+<section class="m-container m-section" id="host"></section>
+<div data-shell-foot></div>
+
+<script src="js/data.js"></script>
+<script src="js/mock-api.js"></script>
+<script src="js/notifications.js"></script>
+<script src="js/app.js"></script>
+<script>
+ManzilApp.mountShell('areas');
+
+var qs = ManzilApp.qs();
+var slug = qs.slug;
+var host = document.getElementById('host');
+
+ManzilApp.api('/areas/' + slug).then(function (r) {
+  if (!r.ok) { host.innerHTML = '<div class="m-empty"><h3>Area not found</h3></div>'; return; }
+  var a = r.area;
+  var top = r.top_listings;
+  var d = MANZIL_DATA;
+  var lst = d.LISTINGS.filter(function (l) { return l.area_id === a.id && l.status === 'active'; });
+  var rent = lst.filter(function (l) { return l.transaction === 'rent'; });
+  var buy = lst.filter(function (l) { return l.transaction === 'buy'; });
+  var avgBuy = buy.length ? Math.round(buy.reduce(function (s, l) { return s + l.price_aed; }, 0) / buy.length) : 0;
+  var avgRent = rent.length ? Math.round(rent.reduce(function (s, l) { return s + l.price_aed; }, 0) / rent.length) : 0;
+
+  host.innerHTML = ''
+    + '<nav style="font-size:12px;color:var(--manzil-muted);margin-bottom:12px;"><a href="areas.html">Areas</a> / <span>' + a.name + '</span></nav>'
+    + '<div style="position:relative;border-radius:var(--radius-lg);overflow:hidden;aspect-ratio:16/6;background:#222;">'
+    +   '<img src="' + a.hero + '" alt="" style="width:100%;height:100%;object-fit:cover;opacity:.7;" />'
+    +   '<div style="position:absolute;left:24px;bottom:18px;color:white;">'
+    +     '<h1 style="color:white;margin:0;font-size:clamp(28px,4vw,42px);">' + a.name + '</h1>'
+    +     '<div style="font-size:14px;opacity:.85;max-width:540px;">' + a.blurb + '</div>'
+    +   '</div>'
+    + '</div>'
+
+    + '<div class="m-grid m-grid-4 m-mt-3">'
+    +   '<div class="m-kpi"><div class="m-kpi-label">Listings</div><div class="m-kpi-value">' + lst.length + '</div></div>'
+    +   '<div class="m-kpi"><div class="m-kpi-label">Avg sale price</div><div class="m-kpi-value" style="font-size:20px;">' + (avgBuy ? ManzilApp.formatPrice(avgBuy) : '—') + '</div></div>'
+    +   '<div class="m-kpi"><div class="m-kpi-label">Avg rent / year</div><div class="m-kpi-value" style="font-size:20px;">' + (avgRent ? ManzilApp.formatPrice(avgRent) : '—') + '</div></div>'
+    +   '<div class="m-kpi"><div class="m-kpi-label">AED / ft²</div><div class="m-kpi-value">' + a.avg_aed_sqft.toLocaleString() + '</div></div>'
+    + '</div>'
+
+    + '<div class="m-grid m-grid-2 m-mt-3">'
+    +   '<div class="m-panel"><h3 style="margin-top:0;">Schools & education</h3>' + (a.schools.length ? '<ul>' + a.schools.map(function (s) { return '<li>🎓 ' + s + '</li>'; }).join('') + '</ul>' : '<p class="m-text-muted">Walking-distance options vary.</p>') + '</div>'
+    +   '<div class="m-panel"><h3 style="margin-top:0;">Malls & retail</h3>' + (a.malls.length ? '<ul>' + a.malls.map(function (s) { return '<li>🛍 ' + s + '</li>'; }).join('') + '</ul>' : '<p class="m-text-muted">Nearby malls TBD.</p>') + '</div>'
+    +   '<div class="m-panel"><h3 style="margin-top:0;">Public transit</h3>' + (a.metros.length ? '<ul>' + a.metros.map(function (s) { return '<li>🚇 ' + s + '</li>'; }).join('') + '</ul>' : '<p class="m-text-muted">Mostly car-dependent.</p>') + '</div>'
+    +   '<div class="m-panel"><h3 style="margin-top:0;">Location</h3><div class="m-map m-map--detail" id="area-map" data-map></div></div>'
+    + '</div>'
+
+    + '<div class="m-mt-3" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;"><h2>Top in ' + a.name + '</h2><a class="m-btn m-btn--ghost m-btn--sm" href="search.html?area=' + a.id + '">View all ' + lst.length + ' →</a></div>'
+    + '<div class="m-grid m-grid-3 m-mt-2">' + top.map(ManzilApp.listingCard).join('') + '</div>';
+
+  ManzilApp.updateAllPrices();
+
+  // Mount map
+  function mountMap() {
+    var map = L.map('area-map').setView([a.lat, a.lng], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap' }).addTo(map);
+    L.circle([a.lat, a.lng], { radius: 1500, color: '#1f7a55', fillColor: '#1f7a55', fillOpacity: 0.18, weight: 2 }).addTo(map);
+    lst.forEach(function (l) {
+      var icon = L.divIcon({ className: '', html: '<div class="m-map-pin' + (l.featured ? ' featured' : '') + '">' + ManzilApp.formatPrice(l.price_aed) + '</div>', iconSize: [80, 28], iconAnchor: [40, 28] });
+      L.marker([l.lat, l.lng], { icon: icon }).addTo(map).bindPopup('<a href="listing.html?id=' + l.id + '">' + l.title + '</a>');
+    });
+  }
+  if (!window.L) {
+    var css = document.createElement('link'); css.rel = 'stylesheet'; css.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'; document.head.appendChild(css);
+    var js = document.createElement('script'); js.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'; js.onload = mountMap; document.head.appendChild(js);
+  } else { mountMap(); }
+});
+</script>
+</body>
+</html>
