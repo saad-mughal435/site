@@ -6,9 +6,9 @@
 <meta name="theme-color" content="#07080d" />
 <meta name="color-scheme" content="dark light" />
 
-<title>Saad M. - Full-Stack Developer | Python, FastAPI, JavaScript Engineer in Dubai</title>
-<meta name="description" content="Saad - Full-stack developer and automation engineer in Dubai. Builds software that replaces manual work - reports, spreadsheets, ticket prep, reconciliations - with automation that runs itself. Python, FastAPI, MongoDB, React, Docker, Linux. Sole developer of an enterprise MES/ERP. B.Sc. Electrical Engineering, Computer Engineering Major. Open to backend, frontend, full-stack, and automation roles in the UAE and remote." />
-<meta name="keywords" content="Saad, Saad developer, Saad Dubai, full stack developer Dubai, software developer Dubai, backend developer Dubai, frontend developer Dubai, Python developer Dubai, React developer Dubai, FastAPI developer, MongoDB developer, ERP developer Dubai, MES developer, Docker developer, Linux developer, REST API developer, web developer UAE, software engineer UAE, JavaScript developer Dubai, automation engineer, Python engineer, React engineer, Node alternative Python, manufacturing software, Sage integration, IT administrator Dubai, freelance developer Dubai, hire developer UAE, COMSATS Computer Engineering, Saad portfolio, saadm.dev" />
+<title>Saad — Automation Engineer & Full-Stack Developer | Dubai</title>
+<meta name="description" content="Automation Engineer and full-stack developer based in Dubai. Sole developer of a production enterprise MES/ERP system — Python, FastAPI, MongoDB, SQL Server, Sage ERP, JavaScript, Docker, Nginx, Linux. 2 years professional experience shipping production systems. Open to backend, full-stack, automation, and AI engineering roles in UAE and globally." />
+<meta name="keywords" content="Saad, Saad developer, Saad Dubai, automation engineer Dubai, Python backend developer Dubai, FastAPI developer, MES ERP developer, enterprise automation UAE, full stack developer Dubai, software developer Dubai, backend developer Dubai, frontend developer Dubai, Python developer Dubai, MongoDB developer, SQL Server developer, Docker developer, Linux developer, REST API developer, web developer UAE, software engineer UAE, JavaScript developer Dubai, automation engineer, Python engineer, manufacturing software, Sage integration, IT administrator Dubai, freelance developer Dubai, hire developer UAE, COMSATS Computer Engineering, Saad portfolio, saadm.dev" />
 <meta name="author" content="Saad" />
 <link rel="canonical" href="https://saadm.dev/" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2064%2064'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0%25'%20stop-color%3D'%237c9cff'/%3E%3Cstop%20offset%3D'100%25'%20stop-color%3D'%235eead4'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D'64'%20height%3D'64'%20rx%3D'14'%20fill%3D'url(%23g)'/%3E%3Ctext%20x%3D'50%25'%20y%3D'56%25'%20font-family%3D'monospace'%20font-weight%3D'700'%20font-size%3D'22'%20fill%3D'%2307080d'%20text-anchor%3D'middle'%3ES%3C/text%3E%3C/svg%3E" />
@@ -17,8 +17,8 @@
 <!-- Open Graph -->
 <meta property="og:type" content="profile" />
 <meta property="og:site_name" content="Saad - saadm.dev" />
-<meta property="og:title" content="Saad - Full-Stack Developer, Python & FastAPI Engineer in Dubai" />
-<meta property="og:description" content="Full-stack developer in Dubai. Python, FastAPI, MongoDB, React, Docker, Linux. Sole developer of an enterprise MES/ERP. Open to backend, frontend, full-stack, and automation roles." />
+<meta property="og:title" content="Saad — Automation Engineer | Python, FastAPI, MongoDB, Docker | Dubai" />
+<meta property="og:description" content="Automation Engineer in Dubai. Sole developer of a production enterprise MES/ERP — Python, FastAPI, MongoDB, SQL Server, Sage ERP, Docker, Nginx, Linux. Open to backend, full-stack, automation, and AI engineering roles." />
 <meta property="og:url" content="https://saadm.dev/" />
 <meta property="og:image" content="https://saadm.dev/saad.png" />
 <meta property="og:image:alt" content="Portrait of Saad - software engineer based in Dubai" />
@@ -27,8 +27,8 @@
 
 <!-- Twitter / X -->
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Saad - Full-Stack Developer, Python & FastAPI Engineer in Dubai" />
-<meta name="twitter:description" content="Python, FastAPI, MongoDB, React, Docker. Sole developer of an enterprise MES/ERP. Backend, frontend, full-stack, automation." />
+<meta name="twitter:title" content="Saad — Automation Engineer | Python, FastAPI, MongoDB, Docker | Dubai" />
+<meta name="twitter:description" content="Automation Engineer in Dubai. Sole developer of a production enterprise MES/ERP — Python, FastAPI, MongoDB, SQL Server, Sage ERP, Docker, Nginx, Linux. Open to backend, full-stack, automation, AI engineering." />
 <meta name="twitter:image" content="https://saadm.dev/saad.png" />
 
 <!-- Search engine directives -->
@@ -441,7 +441,7 @@ const HERO_COPY = {
       and <strong>IT Administrator</strong> at Kingsley Beverage FZCO. B.Sc. EE with a Computer Engineering major.
       I build software that replaces manual work - spreadsheets, paper logs, copy-paste reports, ticket prep - with
       automation that runs itself. I run the infrastructure end-to-end and operate the automated production lines when shift demands it.</Fragment>,
-    stack: 'Python · FastAPI · MongoDB · Docker · Linux',
+    stack: 'Python · FastAPI · MongoDB · Docker · Linux · Sage',
     cta: { href: 'demo.html', label: 'Take demo ↗', target: '_blank' },
   },
   eng: {
@@ -566,7 +566,10 @@ function Hero({ view, setView }) {
     <section className="hero container" id="top">
       <div className="hero-left">
         <div className="eyebrow"><span className="led"></span> Available for new opportunities · Dubai, UAE</div>
-        <ViewToggle view={view} setView={setView} />
+        <div className="view-toggle-wrap">
+          <span className="view-toggle-hint">Tailored for:</span>
+          <ViewToggle view={view} setView={setView} />
+        </div>
         <h1 className="hero-title view-fade" key={'t-' + view}>
           {copy.title.map((line, i) => (
             <span className="line" key={i}>
@@ -603,7 +606,7 @@ function Hero({ view, setView }) {
 const STATS_ALL = [
   { num: 60,   suffix: '%',    label: 'reduction in production reporting time', domain: 'code' },
   { num: 5,    suffix: '',     label: 'departments digitised by the MES/ERP I built', domain: 'code' },
-  { num: 2,    suffix: ' yrs', label: 'professional experience across software & industrial ops', domain: 'all' },
+  { num: 2,    suffix: ' yrs', label: 'industrial & telecom-ops experience', domain: 'all' },
   { num: 7,    suffix: '',     label: 'Krones subsystems owned end-to-end', domain: 'eng' },
   { num: 2,    suffix: ' yrs', label: 'GPON / PSTN / broadband NOC operations', domain: 'eng' },
   { num: 6,    suffix: '+ yrs',label: 'writing Python — uni projects, internships, and production', domain: 'code' },
@@ -742,8 +745,8 @@ function About() {
             broadband infrastructure, where I shipped a Python tool that auto-generated configuration scripts
             from tickets, eliminating hours of manual ticket prep every day.</p>
           <p>The pattern: I look at slow, manual operational work and rebuild it in code. That&rsquo;s what I&rsquo;m
-            looking to do next - on automation, backend engineering, full-stack, or technical-operations
-            teams where building things that actually run in production is the standard.</p>
+            looking to do next &mdash; on automation, backend engineering, or technical operations teams
+            where building things that actually run is the standard.</p>
           <div className="about-tags">
             {['Python', 'FastAPI', 'React', 'JavaScript (ES6+)', 'HTML / CSS', 'CSS Grid', 'MongoDB',
               'Docker', 'Linux', 'nginx', 'Cloudflare', 'Git', 'REST APIs', 'JWT', 'Pandas',
@@ -810,7 +813,7 @@ const EXPERIENCE = [
     company: 'Omdena · Remote',
     points: [
       <Fragment>Contributed to ML models for <em>accessibility (vision-impaired navigation)</em> and <em>environmental monitoring (air-quality forecasting)</em> on global Omdena collaborations.</Fragment>,
-      'Worked in distributed contributor teams across data cleaning, feature engineering, model training, and evaluation - tools: Python, Pandas, NumPy, scikit-learn, Jupyter.',
+      <Fragment>Built Python ML pipelines using <em>scikit-learn, NumPy, Pandas, Jupyter</em> as part of a globally distributed <strong>50+ contributor team</strong> - data cleaning, feature engineering, training, evaluation.</Fragment>,
     ],
   },
   { domain: 'eng',
@@ -876,10 +879,11 @@ const PROJECTS = [
       <Fragment><strong>20+</strong> integrated modules: PPC, inventory, QC, accounts, OEE, batch traceability, 6 PDF templates</Fragment>,
       <Fragment>Full stack ownership: data model → API → UI → infra → deployment</Fragment>,
     ],
-    tags: ['Python', 'FastAPI', 'MongoDB', 'SQL Server', 'Docker', 'Nginx', 'JWT / RBAC', 'Sage ERP', 'Pandas', 'OEE', 'Manufacturing'],
+    tags: ['Python', 'FastAPI', 'MongoDB', 'SQL Server', 'Docker', 'Nginx', 'TLS', 'JWT', 'RBAC', 'Sage ERP', 'OpenPyXL', 'OEE', 'Manufacturing'],
     showCode: true,
+    ctaSubtitle: 'Live interactive demo — all data fabricated for privacy',
     ctas: [
-      { label: 'Launch live interactive demo ↗', href: 'app/index.html', target: '_blank', primary: true },
+      { label: 'Launch live interactive demo ↗', href: 'app/index.html', target: '_blank', primary: true, prominent: true },
       { label: 'Static walkthrough', href: 'demo.html', target: '_blank' },
     ],
   },
@@ -967,9 +971,11 @@ function ProjectCard({ p }) {
       {p.ctas && (
         <div className="project-cta">
           {p.ctas.map((c) => (
-            <a key={c.label} href={c.href} className={'btn ' + (c.primary ? 'btn-primary' : 'btn-ghost')}
+            <a key={c.label} href={c.href}
+               className={'btn ' + (c.primary ? 'btn-primary' : 'btn-ghost') + (c.prominent ? ' btn-prominent' : '')}
                {...(c.target ? { target: c.target, rel: 'noopener' } : {})}>{c.label}</a>
           ))}
+          {p.ctaSubtitle && <div className="cta-subtitle">{p.ctaSubtitle}</div>}
         </div>
       )}
     </TiltCard>

@@ -1151,3 +1151,52 @@ body.view-all  [data-domain]            { animation: viewFadeIn 0.35s ease-out; 
   a, button, .btn, .btn-mini, .tag, .nav-cta { min-height: 40px; }
   input, select, textarea { font-size: 16px; }   /* prevents iOS zoom on focus */
 }
+
+/* ============================================================
+   VIEW TOGGLE eyebrow + prominent CTA + CTA subtitle
+   ============================================================ */
+.view-toggle-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.view-toggle-wrap .view-toggle { margin-bottom: 0; }
+.view-toggle-hint {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--fg-mute);
+}
+.vt-pill:hover:not([aria-selected="true"]) {
+  background: rgba(124,156,255,0.08);
+  color: var(--fg);
+}
+
+/* Prominent CTA for the featured project */
+.btn.btn-prominent {
+  padding: 14px 24px;
+  font-size: 15px;
+  letter-spacing: 0.3px;
+  background: linear-gradient(135deg, #5eead4, #7c9cff);
+  color: #07080d;
+  box-shadow: 0 10px 28px -10px rgba(94,234,212,0.55);
+  border: 0;
+}
+.btn.btn-prominent:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px -10px rgba(94,234,212,0.65);
+}
+
+/* Small caption under a project CTA */
+.project-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.cta-subtitle {
+  width: 100%;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--fg-mute);
+  margin-top: 4px;
+  letter-spacing: 0.2px;
+}
