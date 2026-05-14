@@ -375,7 +375,25 @@ function Nav() {
           <a href="#experience" className={active === 'experience' ? 'active' : ''} onClick={close}>Experience</a>
           <a href="#projects" className={active === 'projects' ? 'active' : ''} onClick={close}>Projects</a>
           <a href="#skills" className={active === 'skills' ? 'active' : ''} onClick={close}>Skills</a>
-          <a href="demo.html" target="_blank" rel="noopener" onClick={close}>Demo ↗</a>
+          <div className="nav-dropdown">
+            <a href="demo.html" target="_blank" rel="noopener" className="nav-dropdown-trigger" onClick={close}>
+              Demo <span className="dd-chev" aria-hidden="true">▾</span>
+            </a>
+            <div className="nav-dropdown-panel" role="menu" aria-label="Demo projects">
+              <a href="demo.html" target="_blank" rel="noopener" className="dd-item dd-default" onClick={close}>
+                <div className="dd-item-head"><strong>ERP system</strong><span className="dd-tag">default</span></div>
+                <span className="dd-sub">Kingsley MES/ERP — production walkthrough</span>
+              </a>
+              <a href="b2c/index.html" target="_blank" rel="noopener" className="dd-item" onClick={close}>
+                <div className="dd-item-head"><strong>B2C storefront</strong></div>
+                <span className="dd-sub">Pebble &amp; Co. — DTC commerce demo</span>
+              </a>
+              <a href="b2b/index.html" target="_blank" rel="noopener" className="dd-item" onClick={close}>
+                <div className="dd-item-head"><strong>B2B wholesale</strong></div>
+                <span className="dd-sub">Anvil Supply Co. — wholesale portal demo</span>
+              </a>
+            </div>
+          </div>
           <a href="contact.html" onClick={close}>Contact</a>
         </nav>
         <a className="nav-cta" href="contact.html">Get in touch <span className="arrow">→</span></a>
