@@ -144,6 +144,43 @@
     The live app runs the real frontend, fully disconnected - no Mongo, no Sage, no VM, no network.
     Auto-logs you in as admin · all data is placeholder · realistic shortfall and calculator scenarios.
   </p>
+
+  <!-- ================= RECOMMENDED TOUR ================= -->
+  <div class="demo-tour" style="margin-top:36px; padding:24px 28px; background:linear-gradient(135deg, rgba(94,234,212,0.06), rgba(124,156,255,0.05)); border:1px solid rgba(94,234,212,0.22); border-radius:14px; position:relative;">
+    <div style="display:flex; align-items:center; gap:8px; margin-bottom:14px;">
+      <span style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:1.2px; text-transform:uppercase; color:#5eead4; background:rgba(94,234,212,0.12); padding:4px 10px; border-radius:999px; border:1px solid rgba(94,234,212,0.3);">● Recommended 3-minute tour</span>
+      <span style="font-family:var(--mono); font-size:11.5px; color:var(--fg-mute);">Best path through the live app</span>
+    </div>
+    <h3 style="margin:0 0 6px; font-size:18px; color:var(--fg);">If you only have 3 minutes — click these 5 modules in order.</h3>
+    <p style="font-size:13.5px; color:var(--fg-soft); margin:0 0 18px; max-width:720px;">The live app has 20+ modules and it's easy to wander. This is the route that shows the whole MES/ERP/OEE story end-to-end without missing anything important. Each step opens the live app at that module.</p>
+    <ol class="demo-tour-steps" style="list-style:none; padding:0; margin:0; display:grid; gap:10px; grid-template-columns:1fr;">
+      <li style="display:grid; grid-template-columns:32px 1fr auto; gap:14px; align-items:center; padding:12px 14px; background:rgba(0,0,0,0.18); border:1px solid rgba(124,156,255,0.18); border-radius:10px;">
+        <span style="display:grid; place-items:center; width:32px; height:32px; border-radius:999px; background:linear-gradient(135deg,#7c9cff,#5eead4); color:#07080d; font-weight:800; font-family:var(--mono); font-size:14px;">1</span>
+        <div><strong style="color:var(--fg); display:block; font-size:14.5px;">Dashboard</strong><span style="font-size:12.5px; color:var(--fg-soft);">Plant overview — KPIs, alerts, today's batches at a glance.</span></div>
+        <a class="btn btn-ghost btn-sm" href="/app/index.html#dashboard" target="_blank" rel="noopener">Open ↗</a>
+      </li>
+      <li style="display:grid; grid-template-columns:32px 1fr auto; gap:14px; align-items:center; padding:12px 14px; background:rgba(0,0,0,0.18); border:1px solid rgba(124,156,255,0.18); border-radius:10px;">
+        <span style="display:grid; place-items:center; width:32px; height:32px; border-radius:999px; background:linear-gradient(135deg,#7c9cff,#5eead4); color:#07080d; font-weight:800; font-family:var(--mono); font-size:14px;">2</span>
+        <div><strong style="color:var(--fg); display:block; font-size:14.5px;">Job order</strong><span style="font-size:12.5px; color:var(--fg-soft);">Production planning flow — customer PO → job order → batch.</span></div>
+        <a class="btn btn-ghost btn-sm" href="/app/index.html#joborder" target="_blank" rel="noopener">Open ↗</a>
+      </li>
+      <li style="display:grid; grid-template-columns:32px 1fr auto; gap:14px; align-items:center; padding:12px 14px; background:rgba(0,0,0,0.18); border:1px solid rgba(124,156,255,0.18); border-radius:10px;">
+        <span style="display:grid; place-items:center; width:32px; height:32px; border-radius:999px; background:linear-gradient(135deg,#7c9cff,#5eead4); color:#07080d; font-weight:800; font-family:var(--mono); font-size:14px;">3</span>
+        <div><strong style="color:var(--fg); display:block; font-size:14.5px;">Quality control</strong><span style="font-size:12.5px; color:var(--fg-soft);">Batch record + seam check + microbiology — open any QC batch to see the workflow.</span></div>
+        <a class="btn btn-ghost btn-sm" href="/app/index.html#qc" target="_blank" rel="noopener">Open ↗</a>
+      </li>
+      <li style="display:grid; grid-template-columns:32px 1fr auto; gap:14px; align-items:center; padding:12px 14px; background:rgba(0,0,0,0.18); border:1px solid rgba(124,156,255,0.18); border-radius:10px;">
+        <span style="display:grid; place-items:center; width:32px; height:32px; border-radius:999px; background:linear-gradient(135deg,#7c9cff,#5eead4); color:#07080d; font-weight:800; font-family:var(--mono); font-size:14px;">4</span>
+        <div><strong style="color:var(--fg); display:block; font-size:14.5px;">Inventory</strong><span style="font-size:12.5px; color:var(--fg-soft);">Sage-linked stock tracking — raw materials and finished goods with batch + expiry.</span></div>
+        <a class="btn btn-ghost btn-sm" href="/app/index.html#inventory" target="_blank" rel="noopener">Open ↗</a>
+      </li>
+      <li style="display:grid; grid-template-columns:32px 1fr auto; gap:14px; align-items:center; padding:12px 14px; background:rgba(0,0,0,0.18); border:1px solid rgba(124,156,255,0.18); border-radius:10px;">
+        <span style="display:grid; place-items:center; width:32px; height:32px; border-radius:999px; background:linear-gradient(135deg,#7c9cff,#5eead4); color:#07080d; font-weight:800; font-family:var(--mono); font-size:14px;">5</span>
+        <div><strong style="color:var(--fg); display:block; font-size:14.5px;">Reporting / PDF</strong><span style="font-size:12.5px; color:var(--fg-soft);">Click <em>Generate PDF</em> on any record to see a print-ready document.</span></div>
+        <a class="btn btn-ghost btn-sm" href="/app/index.html#reporting" target="_blank" rel="noopener">Open ↗</a>
+      </li>
+    </ol>
+  </div>
 </section>
 
 <!-- ================= APP SHELL ================= -->
