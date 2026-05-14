@@ -32,28 +32,24 @@ if (-not (Get-Command gh -ErrorAction SilentlyContinue)) {
     exit 1
 }
 
-Write-Host "Checking auth + scopes..." -ForegroundColor Cyan
-$status = gh auth status 2>&1
+Write-Host "Checking auth..." -ForegroundColor Cyan
+gh auth status 2>&1 | Out-Null
 if ($LASTEXITCODE -ne 0) {
     Write-Host "ERROR: gh not authenticated. Run:  gh auth login" -ForegroundColor Red
     exit 1
 }
-# Require the `user` scope — without it, PATCH /user and /user/social_accounts return 404.
-if ($status -notmatch "(?ms)Token scopes:.*\buser\b") {
-    Write-Host ""
-    Write-Host "ERROR: gh is authenticated but missing the 'user' scope." -ForegroundColor Red
-    Write-Host "Editing your profile (bio/URL/company/location/social accounts) needs it." -ForegroundColor Red
-    Write-Host ""
-    Write-Host "Run this to add it (approves a browser prompt), then re-run this script:" -ForegroundColor Yellow
-    Write-Host "  gh auth refresh -h github.com -s user" -ForegroundColor Yellow
-    exit 2
-}
+
+# Show current scopes for debugging
+Write-Host ""
+Write-Host "Current gh token scopes:" -ForegroundColor Cyan
+$statusLines = (gh auth status 2>&1) | ForEach-Object { $_.ToString() }
+($statusLines | Select-String -Pattern "Token scopes") | ForEach-Object { Write-Host "  $_" -ForegroundColor Gray }
 
 # --------------------- Patch the user profile ---------------------
 Write-Host ""
 Write-Host "Updating profile fields..." -ForegroundColor Cyan
 
-$null = gh api user `
+$patchOut = gh api user `
     --method PATCH `
     -f "name=$name" `
     -f "bio=$bio" `
@@ -61,10 +57,21 @@ $null = gh api user `
     -f "company=$company" `
     -f "location=$location" `
     -F "hireable=$hireable" 2>&1
-if ($LASTEXITCODE -eq 0) {
+$patchExit = $LASTEXITCODE
+
+if ($patchExit -eq 0) {
     Write-Host "  [ok] name, bio, blog, company, location, hireable" -ForegroundColor Green
 } else {
-    Write-Host "  [FAIL] PATCH /user failed (exit $LASTEXITCODE) — output above" -ForegroundColor Red
+    Write-Host "  [FAIL] PATCH /user failed:" -ForegroundColor Red
+    $patchOut | ForEach-Object { Write-Host "    $_" -ForegroundColor Red }
+    if (($patchOut -join " ") -match "user.+scope|needs the .user. scope|Resource not accessible") {
+        Write-Host ""
+        Write-Host "Your token is missing the 'user' scope. Fix by running:" -ForegroundColor Yellow
+        Write-Host "  gh auth refresh -h github.com -s user" -ForegroundColor Yellow
+        Write-Host ""
+        Write-Host "When the browser opens, click 'Authorize' (don't just close the tab)." -ForegroundColor Yellow
+        Write-Host "Then re-run this script." -ForegroundColor Yellow
+    }
     exit 3
 }
 
@@ -87,11 +94,13 @@ if ($existing) {
 
 # Add the configured set
 $addPayload = @{ account_urls = $socialAccounts } | ConvertTo-Json -Compress
-$null = $addPayload | gh api --method POST /user/social_accounts --input - 2>&1
-if ($LASTEXITCODE -eq 0) {
+$socialOut = $addPayload | gh api --method POST /user/social_accounts --input - 2>&1
+$socialExit = $LASTEXITCODE
+if ($socialExit -eq 0) {
     foreach ($u in $socialAccounts) { Write-Host "  [ok] $u" -ForegroundColor Green }
 } else {
-    Write-Host "  [FAIL] POST /user/social_accounts failed (exit $LASTEXITCODE) — output above" -ForegroundColor Red
+    Write-Host "  [FAIL] POST /user/social_accounts failed:" -ForegroundColor Red
+    $socialOut | ForEach-Object { Write-Host "    $_" -ForegroundColor Red }
     exit 4
 }
 
