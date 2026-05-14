@@ -7,6 +7,82 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-05-14 — positioning rework
+
+### Changed
+- **MES-first identity sweep.** Reordered the portfolio so the
+  manufacturing-systems work reads as the headline and the three web
+  demos (b2c, b2b, property) read as evidence of breadth.
+  - Hero eyebrow: `Available · UAE-based · …` →
+    `Currently available in the UAE · Open to relocate worldwide`.
+  - Noscript H2 (the line that surfaces in LinkedIn / Twitter cards):
+    `… ERP / OEE Developer · Full-Stack` →
+    `Electrical & Automation Engineer building ERP/OEE systems for
+    manufacturing.`
+  - Page `<title>`, meta description, OG title + description, Twitter
+    title + description, JSON-LD Person `jobTitle` + `description`:
+    all lead with the new sentence and end with `UAE-based, open to
+    relocate worldwide`.
+  - Noscript stack line: flat 16-tag run-on → grouped by category
+    (Backend / Frontend / Manufacturing-ERP / Reporting / Deployment)
+    so it matches the React Skills section.
+  - "Computer Engineering major" → "Computer Engineering
+    specialization" in all 5 places it appeared (FAQ JSON-LD, two
+    hero subs, About paragraph, About aside).
+  - `PROJECTS` array: MES card retitled `Kingsley MES / ERP / OEE
+    Platform`, expanded bullets, broader real-stack tags, dedicated
+    section header. Pebble & Co. gets a single umbrella header
+    `Other software demos / Other shapes of software I can ship`
+    above it; Anvil & Manzil drop their per-project section headers
+    so all three web demos flow under one umbrella.
+
+### Added
+- **`What this proves` credibility strip** (new section between
+  About and Experience). Four bullets — production-line ops /
+  cross-department workflows / stack integration / paper→software —
+  with the tagline "I build operations software because I've worked
+  operations." Bridges hero positioning to project evidence.
+- **3 stylized MES "screenshot" mockup cards** rendered above the
+  featured MES project card. Pure CSS/JSX, no images required:
+  Production dashboard (OEE 78%, 9,600 bph, 3,847 cs, 42 rejects +
+  8-bar mini chart), QC batch record (5 PASS rows + verdict footer),
+  Inventory + Sage (4 stock rows with sync ok / 312 short
+  annotations). Swap-replaceable for real Kingsley screenshots later.
+- **demo.html `Recommended 3-minute tour` panel** above the static
+  walkthrough. Numbered 5-step guided path through the live MES app
+  (Dashboard → Job order → QC → Inventory → Reporting), each with a
+  one-line description and a deep-link button.
+
+### Fixed
+- **Realistic seeded data across `app/js/mock-api.js`.** Every screen
+  of the live MES walkthrough was returning literal `1`s for unit
+  costs, totals, debits, credits, balances, VAT, customs values, RM
+  order values — read as "system broken" rather than "fabricated
+  demo". Now derived from realistic AED unit costs (sugar 4.20 /
+  preforms 0.18 / caps 0.045 / labels 0.038 / FG cases 9.60–19.20).
+  Inventory scaled to factory levels (sugar 3.2t, preforms 480k,
+  caps 510k, labels 470k, FG 1.6–3.8k cases). Customers 80k-500k
+  credit limits with believable balances. Quotations / proforma /
+  Sage drafts / accounting drafts / cashbook / AR / AP / customs /
+  FTA / RM orders / price list / GL sales all derive from those
+  unit costs so the math is internally consistent end-to-end. Bank
+  balance, aging buckets, VAT summary, GRN values all replaced.
+
+### Changed (contact page)
+- Headline: `Let's talk. / I reply within 24 hours.` →
+  `Let's discuss engineering, automation, manufacturing systems, or
+  software opportunities.`. The 24-hour-reply line moves into the
+  sub paragraph.
+- Sub paragraph: prepended `Currently available in the UAE and open
+  to relocate worldwide for the right full-time role, technical
+  project, or manufacturing systems opportunity.` to mirror the
+  homepage hero exactly.
+- `Based in` row: `Dubai, United Arab Emirates` →
+  `UAE · Open to relocate worldwide`.
+- `Status` row: `Open to work` →
+  `Open to full-time engineering / automation / software roles ·
+  UAE & worldwide`.
+
 ### Added
 - `.gitattributes` normalising line endings to LF (and CRLF only for
   `.bat`/`.ps1`), eliminating the LF→CRLF warnings on every Windows commit.
