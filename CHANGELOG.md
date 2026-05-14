@@ -7,6 +7,61 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-05-14 — Vacation Homes demo
+
+### Added
+- **Vacation Homes** — fifth interactive demo at `/vacation/`. UAE
+  short-stay booking marketplace with 55 listings across 10 destinations
+  (Dubai Marina, Palm Jumeirah, Hatta Mountains, RAK Beach, AD Corniche,
+  Fujairah Beach, Liwa Desert, etc.). Demonstrates a shape of software
+  the other demos don't have: **date-range booking with conflict
+  checking** and **per-night pricing**.
+  - Guest surface: 9 pages — index (hero with date+guest search,
+    featured stays, destinations, top hosts, why-VH, recently-viewed),
+    search (filter+list+map with date-aware availability filtering),
+    stay (gallery + lightbox + availability calendar + sticky reserve
+    sidebar with live pricing breakdown), checkout (full pricing
+    breakdown + payment + house-rules acceptance + server-side conflict
+    re-check on submit), success (booking confirmation with ref number),
+    trips (guest dashboard: upcoming / in-progress / past / cancelled /
+    saved / profile, with cancel-booking flow), host (become-a-host
+    info + earnings estimator), destinations (10 UAE areas with hero
+    photos + listing counts), 404 (branded).
+  - Admin SPA: 11 hash-routed sections — dashboard (KPIs + booking
+    trend bar chart + alerts), listings (CRUD + bulk feature/verify/
+    instant-toggle/delete + CSV export), bookings (table + status
+    pipeline + refund flow + CSV export), hosts (CRUD + Superhost
+    verification), guests (with trip count + total spent), reviews
+    (moderation queue), payments (revenue/payouts/platform fee KPIs),
+    promotions (seasonal coupons), destinations CMS, settings
+    (currencies + service fee + VAT + danger-zone reset), audit log.
+  - **Custom hand-rolled date-range picker** (`js/calendar.js`) in
+    vanilla JS — no library. Two-month grid, click check-in then
+    check-out, hover preview of range, blocked/booked dates crossed
+    out with diagonal hatch, "available" state, RTL-aware.
+  - **Booking conflict check** in the mock API: POST /bookings runs
+    `isAvailable()` against current bookings + blocked dates before
+    creating; returns `{ok:false, error:'conflict', status:409}` on
+    overlap. Client bounces user back to the stay page with a toast.
+  - **Pricing engine** computes nightly subtotal (with weekend
+    surcharge), cleaning fee, 10% service fee, 5% VAT, and total —
+    live as the date range changes in the reserve sidebar.
+  - **Realistic seed data**: 10 destinations, 26 amenities, 22 hosts
+    (3 superhosts), 55 listings, 16 guests, 42 bookings spanning
+    past-completed / in-progress / upcoming / pending / cancelled /
+    disputed / refunded, 90 reviews tied to completed bookings.
+    Photos via curated 40-URL Unsplash pool.
+  - Sitemap entries for `/vacation/index.html`, `/vacation/search.html`,
+    `/vacation/destinations.html`, `/vacation/admin.html`.
+  - `_headers` cache rules for `/vacation/css/*` and `/vacation/js/*`.
+  - `_redirects` aliases: `/vacation-homes`, `/stays`.
+  - Fifth card on `demo.html` chooser (Four → Five different shapes).
+  - New PROJECTS entry on the homepage under the existing "Other
+    software demos" umbrella (no new featured section — keeps MES-first
+    positioning intact).
+- Warm sand + terracotta + teal design palette (`vacation.css`),
+  distinct from Manzil's emerald + gold.
+
 ## [1.5.0] - 2026-05-14 — positioning rework
 
 ### Changed

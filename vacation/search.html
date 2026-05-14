@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Find your stay — Vacation Homes</title>
+<meta name="description" content="Browse UAE vacation homes by destination, dates, guests, type, and price. List + map view, instant availability check." />
+<meta name="theme-color" content="#c66b3d" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2064%2064'%3E%3Crect%20width%3D'64'%20height%3D'64'%20rx%3D'14'%20fill%3D'%23c66b3d'/%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20font-family%3D'sans-serif'%20font-weight%3D'700'%20font-size%3D'30'%20fill%3D'%23fff'%20text-anchor%3D'middle'%3EV%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/vacation.css?v=20260514" />
+</head>
+<body class="vacation" data-map>
+<div data-shell-nav></div>
+
+<div class="v-filter-bar">
+  <div class="v-container">
+    <form id="filterForm" class="v-filter-row" onsubmit="event.preventDefault()">
+      <input id="f-q" class="v-input" placeholder="Search by title or area" style="max-width:240px;min-width:180px;" />
+      <select id="f-dest" class="v-select" style="max-width:200px;"></select>
+      <input id="f-ci" class="v-input" type="date" style="max-width:160px;" />
+      <input id="f-co" class="v-input" type="date" style="max-width:160px;" />
+      <select id="f-g" class="v-select">
+        <option value="">Any guests</option>
+        <option value="1">1+ guests</option>
+        <option value="2">2+ guests</option>
+        <option value="4">4+ guests</option>
+        <option value="6">6+ guests</option>
+        <option value="8">8+ guests</option>
+      </select>
+      <select id="f-type" class="v-select">
+        <option value="">Any type</option>
+        <option value="villa">Villa</option>
+        <option value="apartment">Apartment</option>
+        <option value="townhouse">Townhouse</option>
+        <option value="penthouse">Penthouse</option>
+        <option value="cabin">Cabin</option>
+        <option value="glamping">Glamping</option>
+      </select>
+      <select id="f-beds" class="v-select">
+        <option value="">Any beds</option>
+        <option value="1">1+ beds</option>
+        <option value="2">2+ beds</option>
+        <option value="3">3+ beds</option>
+        <option value="4">4+ beds</option>
+      </select>
+      <input id="f-pmin" class="v-input" type="number" placeholder="Min /night" style="max-width:120px;" />
+      <input id="f-pmax" class="v-input" type="number" placeholder="Max /night" style="max-width:120px;" />
+      <label style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--vacation-ink-2);">
+        <input id="f-instant" type="checkbox" /> ⚡ Instant
+      </label>
+      <select id="f-sort" class="v-select" style="margin-inline-start:auto;">
+        <option value="featured">Featured</option>
+        <option value="cheapest">Price: low → high</option>
+        <option value="priciest">Price: high → low</option>
+        <option value="highest-rated">Top rated</option>
+        <option value="newest">Newest</option>
+      </select>
+      <button class="v-btn v-btn--ghost v-btn--sm" id="openFiltersBtn" type="button">More filters</button>
+      <button class="v-btn v-btn--ghost v-btn--sm" id="resetBtn" type="button">Reset</button>
+    </form>
+  </div>
+</div>
+
+<section class="v-container" style="padding-top:18px;">
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+    <h2 id="count" style="margin:0;font-size:18px;">…</h2>
+    <div style="display:flex;gap:6px;">
+      <button class="v-btn v-btn--ghost v-btn--sm v-btn--primary" data-view-btn="list">List</button>
+      <button class="v-btn v-btn--ghost v-btn--sm" data-view-btn="map">Map</button>
+    </div>
+  </div>
+  <div id="listWrap" style="margin-top:16px;">
+    <div class="v-grid v-grid-3" id="results"></div>
+    <div id="pagination" style="display:flex;gap:6px;justify-content:center;margin:28px 0;"></div>
+  </div>
+  <div id="mapWrap" style="display:none;margin-top:16px;">
+    <div class="v-split">
+      <div id="mapEl" class="v-map"></div>
+      <div class="v-grid v-grid-2" style="max-height:560px;overflow-y:auto;padding-right:6px;" id="mapList"></div>
+    </div>
+  </div>
+</section>
+
+<div class="v-filter-drawer-backdrop" id="mobileFiltersBd"></div>
+<aside class="v-filter-drawer" id="mobileFilters">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+    <h3 style="margin:0;">More filters</h3>
+    <button class="v-pill" id="closeFiltersBtn">×</button>
+  </div>
+  <div><h4 style="font-size:13px;margin:8px 0;">Amenities</h4><div id="f-amenities" class="v-pills"></div></div>
+</aside>
+
+<div data-shell-foot></div>
+
+<script src="js/data.js"></script>
+<script src="js/mock-api.js"></script>
+<script src="js/notifications.js"></script>
+<script src="js/app.js"></script>
+<script src="js/search.js"></script>
+<script>
+VacationApp.mountShell('nav.stays');
+SearchPage.init();
+</script>
+</body>
+</html>
