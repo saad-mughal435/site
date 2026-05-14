@@ -1,0 +1,12 @@
+# RFC 9116 machine-readable security policy.
+# Full policy at /SECURITY.md.
+
+Contact: mailto:saad@saadm.dev
+Expires: 2027-12-31T23:59:59+04:00
+Preferred-Languages: en
+Canonical: https://saadm.dev/.well-known/security.txt
+Policy: https://github.com/saad-mughal435/site/blob/main/SECURITY.md
+
+# Out of scope:
+#   - Third-party services (Cloudflare, Formsubmit, GitHub, Google Fonts)
+#   - Anything in _kingsley_private_DO_NOT_PUBLISH/ (excluded from this repo)

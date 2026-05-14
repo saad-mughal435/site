@@ -2,13 +2,15 @@
 
 # saadm.dev
 
-**Personal portfolio for Saad — Full-Stack Developer in Dubai.**
+**Portfolio for Muhammad Saad — Electrical & Automation Engineer · ERP/OEE Developer · Full-Stack.**
+**Currently UAE-based · Open to relocate worldwide.**
 
-[![Live](https://img.shields.io/badge/live-saadm.dev-6e8eff?style=flat-square)](https://saadm.dev/)
+[![Live](https://img.shields.io/badge/live-saadm.dev-7c9cff?style=flat-square)](https://saadm.dev/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-5eead4?style=flat-square)](LICENSE)
-[![Cloudflare Pages](https://img.shields.io/badge/deploy-Cloudflare-f6821f?style=flat-square&logo=cloudflare&logoColor=white)](https://pages.cloudflare.com/)
+[![Cloudflare Pages](https://img.shields.io/badge/deploy-Cloudflare%20Pages-f6821f?style=flat-square&logo=cloudflare&logoColor=white)](https://pages.cloudflare.com/)
 [![Built with](https://img.shields.io/badge/built%20with-React%20%2B%20Vanilla%20CSS-c4b5fd?style=flat-square&logo=react&logoColor=white)](#tech-stack)
 [![Lint](https://github.com/saad-mughal435/site/actions/workflows/lint.yml/badge.svg)](https://github.com/saad-mughal435/site/actions/workflows/lint.yml)
+[![Open to relocate](https://img.shields.io/badge/open%20to-relocate%20worldwide-1f7a55?style=flat-square)](https://saadm.dev/contact.html)
 
 </div>
 
@@ -16,8 +18,9 @@
 
 ## Overview
 
-A fast, accessible, dark-themed portfolio with a working contact form and an
-interactive walkthrough of a real-world MES/ERP project.
+A fast, accessible, dark-themed portfolio with four interactive demos (an MES/ERP
+walkthrough, a DTC storefront, a B2B wholesale portal, and a Dubai real-estate
+marketplace), structured data for search engines, and a working contact form.
 
 | Page | What it does |
 |------|--------------|
@@ -75,8 +78,19 @@ interactive walkthrough of a real-world MES/ERP project.
 │   ├── account.html  admin.html
 │   ├── css/shop.css       # Navy/slate light design system
 │   └── js/                # data, mock-api, catalog (bulk paste), checkout (approval), admin
+├── property/                # Manzil Properties — Dubai real-estate marketplace
+│   ├── index.html  search.html  listing.html
+│   ├── agents.html  agent.html  areas.html  area.html
+│   ├── mortgage.html  compare.html  account.html
+│   ├── admin.html           # 13-section hash-routed admin SPA
+│   ├── css/property.css     # Emerald/gold light design system
+│   └── js/                  # data, mock-api, search, listing-detail, admin sections (~5.4k LOC)
+├── 404.html                 # Branded not-found page
+├── humans.txt               # /humans.txt — team, thanks, tooling
+├── .well-known/
+│   └── security.txt         # RFC 9116 machine-readable security contact
 └── .github/
-    ├── workflows/lint.yml # Prettier + HTML validate + link check
+    ├── workflows/lint.yml   # Prettier + HTML validate + link check
     ├── ISSUE_TEMPLATE/
     └── PULL_REQUEST_TEMPLATE.md
 ```
@@ -146,7 +160,7 @@ Security disclosures → [SECURITY.md](SECURITY.md).
 
 <div align="center">
 
-Built by [Saad](https://saadm.dev) · Dubai, UAE
+Built by [Muhammad Saad](https://saadm.dev) · UAE · Open to relocate worldwide
 
 [saad@saadm.dev](mailto:saad@saadm.dev) · [LinkedIn](https://www.linkedin.com/in/muhammadsaad435/) · [GitHub](https://github.com/saad-mughal435)
 
