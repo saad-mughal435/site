@@ -127,7 +127,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="home.css?v=20260514m5" />
+<link rel="stylesheet" href="home.css?v=20260514m6" />
 </head>
 <body>
 
@@ -1045,6 +1045,101 @@ function ProjectCard({ p }) {
   );
 }
 
+/* What this proves — credibility strip between About and Projects. */
+function WhatThisProves() {
+  const items = [
+    { icon: '⚙', title: 'I understand production-line operations', body: 'Machinery, utilities, shift workflows, downtime causes — not only the code that sits above them.' },
+    { icon: '👷', title: 'I design workflows for every role on the plant', body: 'Operators, QC, stores, finance and management each have different friction points and screens.' },
+    { icon: '🔗', title: 'I connect the whole stack', body: 'Frontend screens, backend APIs, MongoDB + SQL Server, Sage/ERP data and print-ready PDF reports — end-to-end in one head.' },
+    { icon: '📊', title: 'I turn paper + Excel into software', body: 'My job is converting messy spreadsheets and paper logs into structured, audit-able, fast operational tools.' },
+  ];
+  return (
+    <section id="proves" className="section container">
+      <Reveal className="section-head">
+        <span className="section-tag">What this proves</span>
+        <h2><WordReveal>I build operations software because I&rsquo;ve worked operations.</WordReveal></h2>
+      </Reveal>
+      <Reveal stagger className="proves-grid">
+        {items.map((it, i) => (
+          <Reveal as="div" key={i} className="proves-card">
+            <div className="proves-icon" aria-hidden="true">{it.icon}</div>
+            <h3>{it.title}</h3>
+            <p>{it.body}</p>
+          </Reveal>
+        ))}
+      </Reveal>
+    </section>
+  );
+}
+
+/* MES thumbnail mockup cards — rendered above the featured MES project card.
+   Pure CSS/JSX, no images required. Swap with real Kingsley screenshots
+   later by dropping a PNG into site/screenshots/ and replacing one card
+   with <img src="…">. */
+function MesThumbnails() {
+  return (
+    <div className="mes-thumbs">
+      <div className="mes-thumb">
+        <div className="mes-thumb-head">
+          <span className="mes-thumb-dot"></span><span className="mes-thumb-dot y"></span><span className="mes-thumb-dot g"></span>
+          <span className="mes-thumb-title">Production dashboard</span>
+          <span className="mes-thumb-badge">DEMO</span>
+        </div>
+        <div className="mes-thumb-meta">Line A · Shift A · 14:32</div>
+        <div className="mes-thumb-kpis">
+          <div><span className="mes-kpi-k">OEE</span><span className="mes-kpi-v">78%</span></div>
+          <div><span className="mes-kpi-k">Speed</span><span className="mes-kpi-v">9,600 bph</span></div>
+          <div><span className="mes-kpi-k">Output</span><span className="mes-kpi-v">3,847 cs</span></div>
+          <div><span className="mes-kpi-k">Rejects</span><span className="mes-kpi-v">42</span></div>
+        </div>
+        <div className="mes-thumb-bars">
+          <div style={{height:'62%'}}></div>
+          <div style={{height:'74%'}}></div>
+          <div style={{height:'48%'}}></div>
+          <div style={{height:'85%'}}></div>
+          <div style={{height:'70%'}}></div>
+          <div style={{height:'92%'}}></div>
+          <div style={{height:'78%'}}></div>
+          <div style={{height:'66%'}}></div>
+        </div>
+      </div>
+
+      <div className="mes-thumb">
+        <div className="mes-thumb-head">
+          <span className="mes-thumb-dot"></span><span className="mes-thumb-dot y"></span><span className="mes-thumb-dot g"></span>
+          <span className="mes-thumb-title">QC batch record</span>
+          <span className="mes-thumb-badge">DEMO</span>
+        </div>
+        <div className="mes-thumb-meta">Batch BR-2026-0418 · 500 ml PET</div>
+        <ul className="mes-thumb-checks">
+          <li><span>Seam thickness</span><span className="mes-thumb-pass">✓ PASS</span></li>
+          <li><span>Drop test</span><span className="mes-thumb-pass">✓ PASS</span></li>
+          <li><span>Brix &amp; carbonation</span><span className="mes-thumb-pass">✓ PASS</span></li>
+          <li><span>Fill weight</span><span className="mes-thumb-pass">✓ PASS</span></li>
+          <li><span>Microbiology</span><span className="mes-thumb-pass">✓ PASS</span></li>
+        </ul>
+        <div className="mes-thumb-footer">Verdict <strong>PASS</strong> · 36 samples · approved by demo.qc</div>
+      </div>
+
+      <div className="mes-thumb">
+        <div className="mes-thumb-head">
+          <span className="mes-thumb-dot"></span><span className="mes-thumb-dot y"></span><span className="mes-thumb-dot g"></span>
+          <span className="mes-thumb-title">Inventory + Sage</span>
+          <span className="mes-thumb-badge">DEMO</span>
+        </div>
+        <div className="mes-thumb-meta">Stock vs Sage reconciliation</div>
+        <ul className="mes-thumb-rows">
+          <li><span>Sugar</span><span className="mes-thumb-qty">12,500 kg</span><span className="mes-thumb-ok">sync ok</span></li>
+          <li><span>Preforms 500 ml</span><span className="mes-thumb-qty">480,000 pcs</span><span className="mes-thumb-ok">sync ok</span></li>
+          <li><span>Caps</span><span className="mes-thumb-qty">510,000 pcs</span><span className="mes-thumb-warn">312 short</span></li>
+          <li><span>Labels 500 ml</span><span className="mes-thumb-qty">470,000 pcs</span><span className="mes-thumb-ok">sync ok</span></li>
+        </ul>
+        <div className="mes-thumb-footer">Last Sage sync · 11 minutes ago · 0 errors</div>
+      </div>
+    </div>
+  );
+}
+
 function Projects({ view }) {
   const items = PROJECTS.filter((p) => view === 'all' || p.domain === view || p.domain === 'all');
   return (
@@ -1063,6 +1158,7 @@ function Projects({ view }) {
                 {p.sectionBlurb && <p>{p.sectionBlurb}</p>}
               </div>
             )}
+            {p.featured && <MesThumbnails />}
             <ProjectCard p={p} />
           </Fragment>
         ))}
@@ -1213,6 +1309,7 @@ function App() {
         <MarqueeStrip />
         <StackChips />
         <About />
+        <WhatThisProves />
         <Experience view={view} />
         <Projects view={view} />
         <Skills view={view} />
