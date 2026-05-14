@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>404 — page not found · Manzil</title>
+<meta name="robots" content="noindex, follow" />
+<meta name="theme-color" content="#1f7a55" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2064%2064'%3E%3Crect%20width%3D'64'%20height%3D'64'%20rx%3D'14'%20fill%3D'%231f7a55'/%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20font-family%3D'serif'%20font-weight%3D'700'%20font-size%3D'30'%20fill%3D'%23c9a049'%20text-anchor%3D'middle'%3Eم%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/property.css?v=20260514" />
+<style>
+  .m-404 { min-height: 70vh; display: grid; place-items: center; padding: 48px 20px; }
+  .m-404-card {
+    max-width: 720px; text-align: center;
+    background: white; border-radius: var(--radius-lg);
+    border: 1px solid var(--manzil-line);
+    box-shadow: var(--manzil-shadow-lg);
+    padding: 56px 36px;
+  }
+  .m-404 .code { font-family: var(--font-mono); font-size: 13px; letter-spacing: .14em; color: var(--manzil-primary); text-transform: uppercase; margin-bottom: 18px; }
+  .m-404 h1 { font-size: clamp(36px, 6vw, 56px); margin: 0 0 14px; line-height: 1.05; }
+  .m-404 h1 .accent { color: var(--manzil-primary); font-family: var(--font-display); font-style: italic; }
+  .m-404 p { color: var(--manzil-muted); margin-bottom: 28px; font-size: 15px; }
+  .m-404-grid { display: grid; gap: 8px; grid-template-columns: 1fr; max-width: 440px; margin: 0 auto; }
+  @media (min-width: 480px) { .m-404-grid { grid-template-columns: 1fr 1fr; } }
+  .m-404-tip { margin-top: 28px; font-family: var(--font-mono); font-size: 11px; color: var(--manzil-muted-2); }
+</style>
+</head>
+<body class="manzil">
+<div data-shell-nav></div>
+
+<section class="m-404">
+  <div class="m-404-card">
+    <div class="code">● 404 · not found</div>
+    <h1>That property has <span class="accent">left the market.</span></h1>
+    <p>The listing or page you tried to reach has moved, been sold, or never existed. Try one of the routes below — the live search and admin are the most useful entry points.</p>
+    <div class="m-404-grid">
+      <a class="m-btn m-btn--primary" href="index.html">🏠 Marketplace home</a>
+      <a class="m-btn m-btn--ghost" href="search.html">🔍 Search listings</a>
+      <a class="m-btn m-btn--ghost" href="areas.html">📍 Browse areas</a>
+      <a class="m-btn m-btn--ghost" href="agents.html">👤 Find an agent</a>
+      <a class="m-btn m-btn--ghost" href="mortgage.html">💰 Mortgage</a>
+      <a class="m-btn m-btn--ghost" href="admin.html">⚙ Admin panel</a>
+    </div>
+    <div class="m-404-tip">Got here from a saved bookmark? <a href="mailto:saad@saadm.dev?subject=Broken%20link%20on%20Manzil" style="color:var(--manzil-primary);">Let me know</a> which one and I'll fix it.</div>
+  </div>
+</section>
+
+<div data-shell-foot></div>
+
+<script src="js/data.js"></script>
+<script src="js/mock-api.js"></script>
+<script src="js/notifications.js"></script>
+<script src="js/app.js"></script>
+<script>ManzilApp.mountShell('home');</script>
+</body>
+</html>

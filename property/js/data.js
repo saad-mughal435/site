@@ -460,7 +460,7 @@
   // ===================== I18N =====================
   var I18N = {
     en: {
-      'nav.buy': 'Buy', 'nav.rent': 'Rent', 'nav.offplan': 'New Projects', 'nav.agents': 'Agents', 'nav.areas': 'Areas', 'nav.mortgage': 'Mortgage',
+      'nav.buy': 'Buy', 'nav.rent': 'Rent', 'nav.offplan': 'Off-plan', 'nav.agents': 'Agents', 'nav.areas': 'Areas', 'nav.valuation': 'Valuation', 'nav.mortgage': 'Mortgage', 'nav.invest': 'Invest',
       'search.placeholder.location': 'Area, building, project...',
       'search.cta': 'Search',
       'search.type.any': 'Any type', 'search.beds.any': 'Beds', 'search.beds.studio': 'Studio',
@@ -470,7 +470,7 @@
       'fav.added': 'Saved to favorites', 'fav.removed': 'Removed from favorites'
     },
     ar: {
-      'nav.buy': 'شراء', 'nav.rent': 'إيجار', 'nav.offplan': 'مشاريع جديدة', 'nav.agents': 'الوكلاء', 'nav.areas': 'المناطق', 'nav.mortgage': 'تمويل',
+      'nav.buy': 'شراء', 'nav.rent': 'إيجار', 'nav.offplan': 'على المخطط', 'nav.agents': 'الوكلاء', 'nav.areas': 'المناطق', 'nav.valuation': 'تقييم', 'nav.mortgage': 'تمويل', 'nav.invest': 'استثمار',
       'search.placeholder.location': 'منطقة، مبنى، مشروع...',
       'search.cta': 'بحث',
       'search.type.any': 'أي نوع', 'search.beds.any': 'غرف نوم', 'search.beds.studio': 'استوديو',

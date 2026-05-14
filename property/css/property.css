@@ -676,13 +676,55 @@ p { margin: 0 0 .8em; color: var(--manzil-ink-2); }
 .m-floor-legend { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; font-size: 11px; color: var(--manzil-muted); }
 .m-floor-legend .sq { width: 12px; height: 12px; border-radius: 3px; display: inline-block; margin-inline-end: 4px; vertical-align: middle; }
 
-/* Print */
+/* Print — turns the listing detail page into a one-page A4 brochure. */
 @media print {
-  .m-nav, .m-foot, .m-demo-banner, .m-detail-rail, .m-agent-card-rail, .m-search, .m-filter-bar { display: none !important; }
-  body.manzil { background: white; }
-  .m-detail-grid { grid-template-columns: 1fr !important; }
-  .m-card, .m-panel { box-shadow: none !important; border-color: #ddd !important; }
+  @page { size: A4; margin: 12mm 14mm; }
+  /* Hide all chrome and noisy widgets */
+  .m-nav, .m-foot, .m-demo-banner, .m-detail-rail, .m-search, .m-filter-bar,
+  .m-toast-stack, .m-modal-backdrop, [data-no-print],
+  .m-mortgage, #similar-grid, .m-amenity-grid + *, .m-listing-card .m-fav,
+  .m-listing-card .m-carousel-nav, button { display: none !important; }
+  /* Background to white, ink black */
+  body.manzil { background: white !important; color: black !important; font-size: 11pt; }
+  /* Make the detail grid single-column */
+  .m-detail-grid { grid-template-columns: 1fr !important; gap: 12px !important; margin-top: 10mm !important; }
+  /* Print-only brochure header — injected via .m-print-header on the page */
+  .m-print-header { display: block !important; margin-bottom: 8mm; padding-bottom: 4mm; border-bottom: 2px solid var(--manzil-primary); }
+  .m-print-header h1 { font-size: 18pt !important; margin: 0 0 2mm; color: var(--manzil-primary); font-family: var(--font-display); }
+  .m-print-header .meta { font-size: 9pt; color: #555; font-family: var(--font-mono); display: flex; gap: 12px; }
+  /* Gallery: collapse to single hero + 2 thumbs */
+  .m-detail-gallery { display: grid !important; grid-template-columns: 2fr 1fr !important; grid-template-rows: auto auto !important; gap: 4px !important; max-height: 80mm; }
+  .m-detail-gallery .m-gallery-cell { aspect-ratio: auto !important; max-height: 80mm; overflow: hidden; }
+  .m-detail-gallery .m-gallery-cell:first-child { grid-row: 1 / span 2; }
+  .m-detail-gallery .m-gallery-cell:nth-child(n+4) { display: none !important; }
+  .m-gallery-more { display: none !important; }
+  /* Cards/panels lose shadows, get tight borders */
+  .m-card, .m-panel { box-shadow: none !important; border: 1px solid #ddd !important; padding: 6mm !important; break-inside: avoid; }
+  .m-stat-row { grid-template-columns: repeat(4, 1fr) !important; padding: 4mm !important; }
+  .m-stat-v { font-size: 12pt !important; }
+  /* Amenities: 4-up to fit */
+  .m-amenity-grid { grid-template-columns: repeat(4, 1fr) !important; gap: 3mm !important; }
+  .m-amenity { padding: 3mm 4mm !important; font-size: 9pt !important; }
+  /* Map: hidden (no value in print) */
+  .m-map { display: none !important; }
+  /* Floor plan: visible but smaller */
+  .m-floor svg { max-height: 60mm; }
+  /* Print-only agent card — injected from the page */
+  .m-print-agent { display: block !important; margin-top: 8mm; padding: 5mm; border: 1px solid #ccc; background: #fafaf6; break-inside: avoid; }
+  .m-print-agent h3 { margin: 0 0 2mm; font-size: 12pt; color: var(--manzil-primary); }
+  .m-print-agent .row { display: flex; gap: 14mm; font-size: 10pt; margin-top: 2mm; }
+  /* Print footer */
+  .m-print-footer { display: block !important; margin-top: 8mm; padding-top: 3mm; border-top: 1px solid #ccc; font-size: 8pt; color: #777; display: flex; justify-content: space-between; }
+  /* Hide elements only meant for screen */
+  .m-print-hide { display: none !important; }
+  a { color: inherit; text-decoration: none; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 8pt; color: #888; }
+  /* Don't let URL hover hint leak onto listing.html internal links */
+  a[href^="listing.html"]::after, a[href^="agent.html"]::after, a[href^="area.html"]::after, a[href^="search.html"]::after, a[href^="mortgage.html"]::after { content: ""; }
 }
+
+/* Hide print-only elements when on screen */
+.m-print-header, .m-print-agent, .m-print-footer { display: none; }
 
 /* RTL flips */
 body.manzil.rtl .m-listing-media .m-fav { left: 10px; right: auto; }

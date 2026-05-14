@@ -147,12 +147,14 @@
     var locale = getLocale();
     var currency = getCurrency();
     var links = [
-      { href: 'search.html?transaction=buy',     i18n: 'nav.buy',     en: 'Buy',          ar: 'شراء' },
-      { href: 'search.html?transaction=rent',    i18n: 'nav.rent',    en: 'Rent',         ar: 'إيجار' },
-      { href: 'search.html?transaction=off-plan',i18n: 'nav.offplan', en: 'New Projects', ar: 'مشاريع جديدة' },
-      { href: 'agents.html',                     i18n: 'nav.agents',  en: 'Agents',       ar: 'الوكلاء' },
-      { href: 'areas.html',                      i18n: 'nav.areas',   en: 'Areas',        ar: 'المناطق' },
-      { href: 'mortgage.html',                   i18n: 'nav.mortgage',en: 'Mortgage',     ar: 'تمويل' }
+      { href: 'search.html?transaction=buy',     i18n: 'nav.buy',       en: 'Buy',         ar: 'شراء' },
+      { href: 'search.html?transaction=rent',    i18n: 'nav.rent',      en: 'Rent',        ar: 'إيجار' },
+      { href: 'search.html?transaction=off-plan',i18n: 'nav.offplan',   en: 'Off-plan',    ar: 'على المخطط' },
+      { href: 'agents.html',                     i18n: 'nav.agents',    en: 'Agents',      ar: 'الوكلاء' },
+      { href: 'areas.html',                      i18n: 'nav.areas',     en: 'Areas',       ar: 'المناطق' },
+      { href: 'valuation.html',                  i18n: 'nav.valuation', en: 'Valuation',   ar: 'تقييم' },
+      { href: 'mortgage.html',                   i18n: 'nav.mortgage',  en: 'Mortgage',    ar: 'تمويل' },
+      { href: 'yield.html',                      i18n: 'nav.invest',    en: 'Invest',      ar: 'استثمار' }
     ];
     return ''
       + '<div class="m-demo-banner"><div class="m-container"><strong>DEMO MODE</strong>All listings, agents and inquiries are fabricated. Photos via <a href="https://unsplash.com" rel="noopener" target="_blank" class="credit">Unsplash</a>.</div></div>'
@@ -188,6 +190,8 @@
             }).join('')
       +     '<a href="account.html">' + (locale === 'ar' ? 'حسابي' : 'My account') + '</a>'
       +     '<a href="compare.html">' + (locale === 'ar' ? 'قارن' : 'Compare') + '</a>'
+      +     '<a href="valuation.html">' + (locale === 'ar' ? 'تقييم' : 'Valuation tool') + '</a>'
+      +     '<a href="yield.html">' + (locale === 'ar' ? 'حاسبة الاستثمار' : 'Investment calculator') + '</a>'
       +     '<a href="admin.html">' + (locale === 'ar' ? 'لوحة الإدارة' : 'Admin panel') + '</a>'
       +   '</div>'
       + '</aside>';

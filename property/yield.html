@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Investment yield calculator — Manzil</title>
+<meta name="description" content="Calculate gross and net rental yield, cash flow, and 5/10-year ROI for Dubai investment property. Includes capital appreciation and full cost breakdown." />
+<meta name="theme-color" content="#1f7a55" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2064%2064'%3E%3Crect%20width%3D'64'%20height%3D'64'%20rx%3D'14'%20fill%3D'%231f7a55'/%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20font-family%3D'serif'%20font-weight%3D'700'%20font-size%3D'30'%20fill%3D'%23c9a049'%20text-anchor%3D'middle'%3Eم%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/property.css?v=20260514" />
+</head>
+<body class="manzil">
+<div data-shell-nav></div>
+
+<section class="m-container m-section">
+  <span class="m-eyebrow">For investors</span>
+  <h1>Investment yield calculator.</h1>
+  <p class="m-text-muted" style="max-width:740px;">For buy-to-let investors — calculate gross and net yield, year-by-year cash flow, capital appreciation, and total return over a 5 or 10-year hold. Defaults are reasonable for Dubai apartments; adjust to your scenario.</p>
+
+  <div class="m-grid m-grid-2 m-mt-3" style="grid-template-columns:1fr;">
+    <div class="m-panel">
+      <h3 style="margin-top:0;">Inputs</h3>
+      <h4 style="margin:14px 0 8px;font-size:13px;color:var(--manzil-muted);text-transform:uppercase;letter-spacing:.06em;">Purchase</h4>
+      <div class="m-mortgage-row">
+        <label class="m-field"><span>Purchase price (AED)</span><input class="m-input" id="i-price" type="number" value="2400000" step="50000"></label>
+        <label class="m-field"><span>Down payment %</span><input class="m-input" id="i-down" type="number" value="25" min="0" max="100"></label>
+      </div>
+      <div class="m-mortgage-row">
+        <label class="m-field"><span>Mortgage rate %</span><input class="m-input" id="i-rate" type="number" step="0.1" value="4.5"></label>
+        <label class="m-field"><span>Tenure (years)</span><input class="m-input" id="i-years" type="number" value="25"></label>
+      </div>
+
+      <h4 style="margin:18px 0 8px;font-size:13px;color:var(--manzil-muted);text-transform:uppercase;letter-spacing:.06em;">Rental income</h4>
+      <div class="m-mortgage-row">
+        <label class="m-field"><span>Expected annual rent (AED)</span><input class="m-input" id="i-rent" type="number" value="160000" step="5000"></label>
+        <label class="m-field"><span>Occupancy %</span><input class="m-input" id="i-occ" type="number" value="92" min="0" max="100"></label>
+      </div>
+
+      <h4 style="margin:18px 0 8px;font-size:13px;color:var(--manzil-muted);text-transform:uppercase;letter-spacing:.06em;">Costs (annual)</h4>
+      <div class="m-mortgage-row">
+        <label class="m-field"><span>Service charge (AED)</span><input class="m-input" id="i-svc" type="number" value="14000"></label>
+        <label class="m-field"><span>Property management %</span><input class="m-input" id="i-mgmt" type="number" step="0.5" value="5"></label>
+      </div>
+      <div class="m-mortgage-row">
+        <label class="m-field"><span>Maintenance (AED)</span><input class="m-input" id="i-maint" type="number" value="6000"></label>
+        <label class="m-field"><span>Insurance + other (AED)</span><input class="m-input" id="i-misc" type="number" value="2500"></label>
+      </div>
+
+      <h4 style="margin:18px 0 8px;font-size:13px;color:var(--manzil-muted);text-transform:uppercase;letter-spacing:.06em;">Assumptions</h4>
+      <div class="m-mortgage-row">
+        <label class="m-field"><span>Capital appreciation % / year</span><input class="m-input" id="i-app" type="number" step="0.5" value="5"></label>
+        <label class="m-field"><span>Rent growth % / year</span><input class="m-input" id="i-rg" type="number" step="0.5" value="3"></label>
+      </div>
+      <label class="m-field"><span>One-off upfront fees % (DLD 4% + 2% agency + ~1% misc)</span><input class="m-input" id="i-upfront" type="number" step="0.5" value="7"></label>
+    </div>
+
+    <div class="m-panel" id="result">
+      <h3 style="margin-top:0;">Results</h3>
+      <div class="m-grid m-grid-2">
+        <div class="m-kpi"><div class="m-kpi-label">Gross yield</div><div class="m-kpi-value" id="o-gross">—</div><div class="m-kpi-delta" id="o-gross-h">vs Dubai avg ~6%</div></div>
+        <div class="m-kpi"><div class="m-kpi-label">Net yield</div><div class="m-kpi-value" id="o-net">—</div><div class="m-kpi-delta" id="o-net-h">after costs</div></div>
+        <div class="m-kpi"><div class="m-kpi-label">Annual net cash flow</div><div class="m-kpi-value" id="o-cash" style="font-size:20px;">—</div></div>
+        <div class="m-kpi"><div class="m-kpi-label">5-year total return</div><div class="m-kpi-value" id="o-5y" style="font-size:20px;">—</div></div>
+        <div class="m-kpi"><div class="m-kpi-label">10-year total return</div><div class="m-kpi-value" id="o-10y" style="font-size:20px;">—</div></div>
+        <div class="m-kpi"><div class="m-kpi-label">Cash-on-cash (Y1)</div><div class="m-kpi-value" id="o-coc" style="font-size:20px;">—</div></div>
+      </div>
+
+      <h4 class="m-mt-2" style="font-size:13px;">Year-by-year cumulative net profit</h4>
+      <div class="m-bars" id="bars" style="height:140px;"></div>
+      <div class="m-bars-labels" id="bars-lbl"></div>
+
+      <h4 class="m-mt-3" style="font-size:13px;">Cost & income breakdown (year 1)</h4>
+      <div id="break"></div>
+    </div>
+  </div>
+</section>
+
+<div data-shell-foot></div>
+
+<script src="js/data.js"></script>
+<script src="js/mock-api.js"></script>
+<script src="js/notifications.js"></script>
+<script src="js/app.js"></script>
+<script>
+ManzilApp.mountShell('yield');
+
+function val(id) { return Number(document.getElementById(id).value); }
+function fmt(n) { return ManzilApp.formatPriceExact(n); }
+
+function compute() {
+  var price = val('i-price');
+  var downPct = val('i-down');
+  var rate = val('i-rate') / 100;
+  var years = val('i-years');
+  var rentY1 = val('i-rent');
+  var occ = val('i-occ') / 100;
+  var svc = val('i-svc');
+  var mgmtPct = val('i-mgmt') / 100;
+  var maint = val('i-maint');
+  var misc = val('i-misc');
+  var appr = val('i-app') / 100;
+  var rg = val('i-rg') / 100;
+  var upfront = val('i-upfront') / 100;
+
+  var down = price * downPct / 100;
+  var loan = price - down;
+  var monthlyRate = rate / 12;
+  var n = years * 12;
+  var monthly = monthlyRate === 0 ? loan / n : (loan * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -n));
+  var annualMortgage = monthly * 12;
+  var upfrontFees = price * upfront;
+  var cashIn = down + upfrontFees;
+
+  var effRentY1 = rentY1 * occ;
+  var mgmtY1 = effRentY1 * mgmtPct;
+  var costsY1 = svc + mgmtY1 + maint + misc;
+  var noi = effRentY1 - costsY1;  // net operating income
+  var cashFlowY1 = noi - annualMortgage;
+  var grossY = (rentY1 / price) * 100;
+  var netY = (noi / price) * 100;
+  var coc = (cashFlowY1 / cashIn) * 100;
+
+  // Year-by-year cumulative net profit (cash flow + capital appreciation - upfront fees, recovered over time)
+  var rows = [];
+  var balance = loan;
+  var monthlyR = rate / 12;
+  var cumProfit = -upfrontFees;
+  for (var y = 1; y <= 10; y++) {
+    var rentY = rentY1 * Math.pow(1 + rg, y - 1);
+    var effRent = rentY * occ;
+    var mgmtY = effRent * mgmtPct;
+    var costsY = svc * Math.pow(1.03, y - 1) + mgmtY + maint * Math.pow(1.03, y - 1) + misc * Math.pow(1.03, y - 1);
+    var noiY = effRent - costsY;
+
+    // Mortgage principal + interest split for the year
+    var principalY = 0, interestY = 0;
+    for (var m = 0; m < 12; m++) {
+      var iY = balance * monthlyR;
+      var pY = monthly - iY;
+      balance -= pY;
+      interestY += iY;
+      principalY += pY;
+    }
+    var cfY = noiY - (monthly * 12);
+    var valY = price * Math.pow(1 + appr, y);
+    var equity = valY - balance;
+    cumProfit += cfY;
+
+    rows.push({ y: y, rent: rentY, effRent: effRent, costs: costsY, noi: noiY, mortgage: monthly * 12, cashFlow: cfY, capValue: valY, equity: equity, cumProfit: cumProfit });
+  }
+
+  // 5y / 10y total return = cumulative cash flow + (sale price after appreciation - remaining loan) - cashIn
+  function totalReturn(yIdx) {
+    var r = rows[yIdx - 1];
+    var saleNet = r.equity - upfrontFees * 0; // upfront already in cumProfit
+    return (r.cumProfit + saleNet - cashIn) / cashIn * 100; // % return on cash invested
+  }
+  var r5  = totalReturn(5);
+  var r10 = totalReturn(10);
+
+  document.getElementById('o-gross').textContent = grossY.toFixed(1) + '%';
+  document.getElementById('o-net').textContent   = netY.toFixed(1) + '%';
+  document.getElementById('o-cash').textContent  = fmt(cashFlowY1);
+  document.getElementById('o-5y').textContent    = r5.toFixed(0) + '%';
+  document.getElementById('o-10y').textContent   = r10.toFixed(0) + '%';
+  document.getElementById('o-coc').textContent   = coc.toFixed(1) + '%';
+
+  // Colour deltas
+  document.getElementById('o-gross-h').className = 'm-kpi-delta ' + (grossY >= 6 ? 'up' : 'down');
+  document.getElementById('o-net-h').className   = 'm-kpi-delta ' + (netY  >= 4 ? 'up' : 'down');
+
+  // Bars: cumulative profit per year
+  var maxBar = Math.max.apply(null, rows.map(function (r) { return Math.abs(r.cumProfit); }));
+  document.getElementById('bars').innerHTML = rows.map(function (r) {
+    var h = maxBar ? Math.max(4, Math.abs(r.cumProfit) / maxBar * 130) : 4;
+    var color = r.cumProfit >= 0 ? 'linear-gradient(180deg,var(--manzil-primary-2),var(--manzil-primary))' : 'linear-gradient(180deg,var(--manzil-rose),var(--manzil-rose-2))';
+    return '<div class="bar" style="height:' + h + 'px;background:' + color + ';"><span class="v">' + (r.cumProfit / 1000).toFixed(0) + 'k</span></div>';
+  }).join('');
+  document.getElementById('bars-lbl').innerHTML = rows.map(function (r) { return '<span>Y' + r.y + '</span>'; }).join('');
+
+  // Year-1 breakdown table
+  document.getElementById('break').innerHTML = ''
+    + '<table class="m-table" style="font-size:13px;"><tbody>'
+    +   '<tr><td>Gross rent (full year)</td><td style="text-align:right;color:var(--manzil-primary)">+' + fmt(rentY1) + '</td></tr>'
+    +   '<tr><td>Effective rent at ' + (occ*100).toFixed(0) + '% occupancy</td><td style="text-align:right;">' + fmt(effRentY1) + '</td></tr>'
+    +   '<tr><td>− Service charge</td><td style="text-align:right;color:var(--manzil-rose-2)">−' + fmt(svc) + '</td></tr>'
+    +   '<tr><td>− Property management (' + (mgmtPct*100).toFixed(1) + '%)</td><td style="text-align:right;color:var(--manzil-rose-2)">−' + fmt(mgmtY1) + '</td></tr>'
+    +   '<tr><td>− Maintenance</td><td style="text-align:right;color:var(--manzil-rose-2)">−' + fmt(maint) + '</td></tr>'
+    +   '<tr><td>− Insurance + other</td><td style="text-align:right;color:var(--manzil-rose-2)">−' + fmt(misc) + '</td></tr>'
+    +   '<tr style="border-top:2px solid var(--manzil-line);font-weight:700;"><td>Net operating income</td><td style="text-align:right;">' + fmt(noi) + '</td></tr>'
+    +   '<tr><td>− Mortgage payments</td><td style="text-align:right;color:var(--manzil-rose-2)">−' + fmt(annualMortgage) + '</td></tr>'
+    +   '<tr style="font-weight:700;"><td>Annual net cash flow</td><td style="text-align:right;color:' + (cashFlowY1 >= 0 ? 'var(--manzil-primary)' : 'var(--manzil-rose-2)') + ';">' + (cashFlowY1 >= 0 ? '+' : '') + fmt(cashFlowY1) + '</td></tr>'
+    + '</tbody></table>'
+    + '<p class="m-text-muted m-mt-2" style="font-size:12px;">Cash invested: ' + fmt(cashIn) + ' (down ' + fmt(down) + ' + upfront fees ' + fmt(upfrontFees) + ').</p>';
+}
+
+['i-price','i-down','i-rate','i-years','i-rent','i-occ','i-svc','i-mgmt','i-maint','i-misc','i-app','i-rg','i-upfront'].forEach(function (id) {
+  document.getElementById(id).addEventListener('input', compute);
+  document.getElementById(id).addEventListener('change', compute);
+});
+
+// Prefill from URL
+var qs = ManzilApp.qs();
+if (qs.price) document.getElementById('i-price').value = qs.price;
+if (qs.rent)  document.getElementById('i-rent').value = qs.rent;
+compute();
+</script>
+</body>
+</html>

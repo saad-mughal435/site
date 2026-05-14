@@ -19,6 +19,8 @@
     inquiries_status:   'manzil.inquiries.status',
     inquiries_notes:    'manzil.inquiries.notes',
     inquiries_assign:   'manzil.inquiries.assign',
+    inquiries_score:    'manzil.inquiries.score',
+    inquiries_history:  'manzil.inquiries.history',
     viewings_created:   'manzil.viewings.created',
     viewings_status:    'manzil.viewings.status',
     listings_created:   'manzil.listings.created',
@@ -83,13 +85,29 @@
     var status = jget(LS.inquiries_status, {});
     var notes  = jget(LS.inquiries_notes, {});
     var assign = jget(LS.inquiries_assign, {});
+    var score  = jget(LS.inquiries_score, {});
+    var hist   = jget(LS.inquiries_history, {});
     return seed.concat(created).map(function (q) {
       var copy = Object.assign({}, q);
       if (status[q.id]) copy.status = status[q.id];
       if (notes[q.id])  copy.notes  = (q.notes || []).concat(notes[q.id]);
       if (assign[q.id]) copy.agent_id = assign[q.id];
+      copy.lead_score = score[q.id] != null ? score[q.id] : (q.lead_score != null ? q.lead_score : computeAutoScore(copy));
+      copy.history = hist[q.id] || [];
       return copy;
     });
+  }
+  // Heuristic auto-score for inquiries that haven't been manually scored.
+  // 1 = cold, 5 = hot. Looks at status + how recent + whether they sent a viewing.
+  function computeAutoScore(q) {
+    var s = 3;
+    if (q.kind === 'viewing') s += 1;
+    if (q.status === 'scheduled' || q.status === 'negotiating') s += 1;
+    if (q.status === 'won') s = 5;
+    if (q.status === 'lost') s = 1;
+    var ageDays = (Date.now() - new Date(q.created_at).getTime()) / 86400000;
+    if (ageDays > 30) s -= 1;
+    return Math.max(1, Math.min(5, s));
   }
   function viewings() {
     var seed = window.MANZIL_DATA.VIEWINGS.slice();
@@ -453,10 +471,29 @@
       var status = jget(LS.inquiries_status, {});
       var notes  = jget(LS.inquiries_notes, {});
       var assign = jget(LS.inquiries_assign, {});
-      if (body.status)  status[m[1]] = body.status;
-      if (body.note)    { notes[m[1]] = notes[m[1]] || []; notes[m[1]].push({ author: 'admin', body: body.note, when: new Date().toISOString() }); }
-      if (body.agent_id) assign[m[1]] = body.agent_id;
+      var score  = jget(LS.inquiries_score, {});
+      var hist   = jget(LS.inquiries_history, {});
+      hist[m[1]] = hist[m[1]] || [];
+      var now = new Date().toISOString();
+      if (body.status)  {
+        var prev = status[m[1]];
+        status[m[1]] = body.status;
+        hist[m[1]].push({ kind: 'status_change', from: prev || 'new', to: body.status, when: now });
+      }
+      if (body.note)    {
+        notes[m[1]] = notes[m[1]] || []; notes[m[1]].push({ author: 'admin', body: body.note, when: now });
+        hist[m[1]].push({ kind: 'note', body: body.note, when: now });
+      }
+      if (body.agent_id) {
+        assign[m[1]] = body.agent_id;
+        hist[m[1]].push({ kind: 'assign', agent_id: body.agent_id, when: now });
+      }
+      if (body.lead_score != null) {
+        score[m[1]] = Number(body.lead_score);
+        hist[m[1]].push({ kind: 'score', value: Number(body.lead_score), when: now });
+      }
       jset(LS.inquiries_status, status); jset(LS.inquiries_notes, notes); jset(LS.inquiries_assign, assign);
+      jset(LS.inquiries_score, score); jset(LS.inquiries_history, hist);
       audit('inquiry.update', m[1], JSON.stringify(body));
       return { ok: true };
     }

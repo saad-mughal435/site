@@ -122,6 +122,33 @@
   </div>
 </section>
 
+<!-- Recent closings ticker -->
+<section class="m-section--tight m-container">
+  <div class="m-section-head">
+    <div><span class="m-eyebrow" style="background:rgba(31,122,85,.12);color:var(--manzil-primary);">● Live · last 30 days</span><h2>Recent closings on Manzil</h2></div>
+    <a class="more" href="search.html?status=sold">All closed deals →</a>
+  </div>
+  <div style="overflow-x:auto;padding-bottom:6px;"><div id="closings-strip" style="display:flex;gap:12px;min-width:fit-content;"></div></div>
+</section>
+
+<!-- Investor / valuation CTAs -->
+<section class="m-container m-section--tight">
+  <div class="m-grid m-grid-2">
+    <a href="valuation.html" class="m-card" style="display:block;padding:24px;text-decoration:none;color:inherit;background:linear-gradient(135deg,rgba(31,122,85,.06),rgba(201,160,73,.08));border:1px solid rgba(31,122,85,.18);">
+      <span class="m-eyebrow" style="background:rgba(31,122,85,.12);">Free · instant</span>
+      <h3 style="margin:8px 0 4px;font-size:22px;">What's your property worth?</h3>
+      <p class="m-text-muted" style="margin:0;font-size:13px;">Comparable-based estimate with confidence read, then see live comparables on the map.</p>
+      <span class="m-btn m-btn--primary m-btn--sm m-mt-2">Estimate now →</span>
+    </a>
+    <a href="yield.html" class="m-card" style="display:block;padding:24px;text-decoration:none;color:inherit;background:linear-gradient(135deg,rgba(58,123,213,.05),rgba(196,181,253,.08));border:1px solid rgba(58,123,213,.18);">
+      <span class="m-eyebrow" style="background:rgba(58,123,213,.12);color:var(--manzil-sky-2);">For investors</span>
+      <h3 style="margin:8px 0 4px;font-size:22px;">Run the yield on any deal.</h3>
+      <p class="m-text-muted" style="margin:0;font-size:13px;">Gross/net yield, 10-year ROI, cash flow per year — with realistic Dubai cost assumptions baked in.</p>
+      <span class="m-btn m-btn--dark m-btn--sm m-mt-2">Open calculator →</span>
+    </a>
+  </div>
+</section>
+
 <!-- Browse by area -->
 <section class="m-section m-container">
   <div class="m-section-head">
@@ -261,6 +288,39 @@ if (recentIds.length) {
     ManzilApp.updateAllPrices();
   }
 }
+
+// Recent closings strip — deterministic synthesis from seed listings.
+(function buildClosings() {
+  var pool = MANZIL_DATA.LISTINGS.filter(function (l) { return l.status === 'active'; }).slice();
+  // Pick 12 deterministically, mix sale/rent
+  var picks = [];
+  for (var i = 0; i < 12; i++) {
+    var l = pool[(i * 7 + 3) % pool.length];
+    if (!l) continue;
+    var closed = ((i * 13 + 5) % 28) + 1;  // 1..28 days ago
+    var closePct = l.transaction === 'rent' ? 1.0 : (0.93 + ((i * 11) % 7) / 100);  // 93-99% of list
+    var closeAed = Math.round(l.price_aed * closePct);
+    picks.push({ l: l, daysAgo: closed, closeAed: closeAed, label: l.transaction === 'rent' ? 'Rented' : 'Sold' });
+  }
+  picks.sort(function (a, b) { return a.daysAgo - b.daysAgo; });
+  var d = MANZIL_DATA;
+  var strip = document.getElementById('closings-strip');
+  strip.innerHTML = picks.map(function (p) {
+    var area = d.AREAS.find(function (a) { return a.id === p.l.area_id; }) || {};
+    var labelBg = p.label === 'Sold' ? 'background:rgba(31,122,85,.16);color:var(--manzil-primary);'
+                                     : 'background:rgba(58,123,213,.16);color:var(--manzil-sky-2);';
+    return '<a href="listing.html?id=' + p.l.id + '" class="m-card" style="text-decoration:none;color:inherit;width:280px;min-width:280px;display:block;overflow:hidden;">'
+      + '<div style="aspect-ratio:16/9;background:#eee;position:relative;">'
+      +   '<img src="' + p.l.photos[0] + '" alt="" style="width:100%;height:100%;object-fit:cover;" />'
+      +   '<span class="m-chip" style="position:absolute;top:8px;left:8px;' + labelBg + '">' + p.label + ' · ' + p.daysAgo + 'd ago</span>'
+      + '</div>'
+      + '<div style="padding:12px 14px 14px;">'
+      +   '<div style="font-weight:800;font-size:15px;">' + ManzilApp.formatPriceExact(p.closeAed) + (p.l.transaction === 'rent' ? '<span style="font-size:11px;color:var(--manzil-muted);font-weight:600;"> /year</span>' : '') + '</div>'
+      +   '<div style="font-size:12px;color:var(--manzil-muted);margin-top:2px;">' + p.l.title.slice(0, 38) + (p.l.title.length > 38 ? '…' : '') + '</div>'
+      +   '<div style="font-size:11px;color:var(--manzil-muted-2);margin-top:4px;">📍 ' + area.name + ' · ' + p.l.beds + 'BR · ' + p.l.sqft.toLocaleString() + ' ft²</div>'
+      + '</div></a>';
+  }).join('');
+})();
 </script>
 </body>
 </html>
