@@ -1245,3 +1245,141 @@ a:focus-visible, button:focus-visible, .btn:focus-visible {
   .back-to-top.visible { transform: none; }
   .back-to-top:hover { transform: none; }
 }
+
+/* ============================================================
+   What this proves — credibility strip between About and Projects.
+   ============================================================ */
+.proves-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin-top: 22px;
+}
+@media (min-width: 700px) { .proves-grid { grid-template-columns: 1fr 1fr; } }
+.proves-card {
+  background: linear-gradient(135deg, rgba(124,156,255,0.06), rgba(94,234,212,0.05));
+  border: 1px solid rgba(124,156,255,0.20);
+  border-radius: 14px;
+  padding: 20px 22px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color .2s ease, transform .25s ease;
+}
+.proves-card:hover { border-color: rgba(124,156,255,0.42); transform: translateY(-2px); }
+.proves-card::before {
+  content: "";
+  position: absolute; inset: 0 auto auto 0;
+  width: 4px; height: 100%;
+  background: linear-gradient(180deg, #7c9cff, #5eead4);
+  border-radius: 14px 0 0 14px;
+  opacity: .9;
+}
+.proves-icon {
+  font-size: 22px;
+  margin-bottom: 8px;
+  opacity: .9;
+  filter: drop-shadow(0 0 6px rgba(124,156,255,0.4));
+}
+.proves-card h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #edf1f8;
+  margin: 0 0 6px;
+  line-height: 1.3;
+}
+.proves-card p { font-size: 13.5px; line-height: 1.55; color: #b5bdcc; margin: 0; }
+
+/* ============================================================
+   MES screenshot thumbnails — rendered above the featured MES
+   project card. Pure CSS/JSX mockups, no images needed.
+   Replace with real Kingsley screenshots later by swapping a
+   card's contents for an <img>.
+   ============================================================ */
+.mes-thumbs {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin: 0 0 22px;
+}
+@media (min-width: 780px) { .mes-thumbs { grid-template-columns: 1fr 1fr 1fr; } }
+.mes-thumb {
+  background: linear-gradient(180deg, #0c1018, #0f1320);
+  border: 1px solid rgba(124,156,255,0.22);
+  border-radius: 12px;
+  padding: 14px 16px 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  color: #d3dae7;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.35);
+  position: relative;
+  min-height: 200px;
+}
+.mes-thumb-head {
+  display: flex; align-items: center; gap: 6px;
+  padding-bottom: 10px; margin-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.mes-thumb-dot {
+  width: 8px; height: 8px; border-radius: 999px;
+  background: #f87171; flex: 0 0 8px;
+}
+.mes-thumb-dot.y { background: #f5c451; }
+.mes-thumb-dot.g { background: #34d399; }
+.mes-thumb-title {
+  flex: 1; text-align: center; font-size: 11px;
+  color: #cfd6e3; letter-spacing: 0.4px;
+  text-transform: uppercase; font-weight: 600;
+}
+.mes-thumb-badge {
+  font-size: 9px; letter-spacing: 1.2px;
+  padding: 2px 6px; border-radius: 4px;
+  background: rgba(94,234,212,0.15); color: #5eead4;
+  border: 1px solid rgba(94,234,212,0.3);
+}
+.mes-thumb-meta {
+  font-size: 10.5px; color: #7f8a9d;
+  margin-bottom: 12px; letter-spacing: 0.3px;
+}
+.mes-thumb-kpis {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+  margin-bottom: 14px;
+}
+.mes-thumb-kpis > div {
+  display: flex; flex-direction: column;
+  padding: 8px 10px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
+}
+.mes-kpi-k { font-size: 10px; color: #7f8a9d; letter-spacing: 0.5px; text-transform: uppercase; }
+.mes-kpi-v { font-size: 15px; color: #edf1f8; font-weight: 700; margin-top: 2px; font-family: 'Inter', sans-serif; }
+.mes-thumb-bars {
+  display: flex; align-items: flex-end; gap: 6px;
+  height: 60px; padding: 0 2px;
+}
+.mes-thumb-bars > div {
+  flex: 1; border-radius: 3px 3px 0 0;
+  background: linear-gradient(180deg, #5eead4, #7c9cff);
+  min-height: 4px;
+}
+.mes-thumb-checks, .mes-thumb-rows {
+  list-style: none; padding: 0; margin: 0 0 12px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.mes-thumb-checks li {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 12px;
+}
+.mes-thumb-rows li {
+  display: grid; grid-template-columns: 1.1fr 1fr auto; gap: 8px; align-items: center;
+  font-size: 11.5px;
+}
+.mes-thumb-qty { color: #cfd6e3; font-weight: 600; }
+.mes-thumb-pass { color: #34d399; font-weight: 700; letter-spacing: 0.4px; font-size: 11px; }
+.mes-thumb-ok { color: #5eead4; font-size: 10.5px; }
+.mes-thumb-warn { color: #f5c451; font-size: 10.5px; font-weight: 600; }
+.mes-thumb-footer {
+  font-size: 10.5px; color: #7f8a9d;
+  padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.06);
+  margin-top: auto;
+}
