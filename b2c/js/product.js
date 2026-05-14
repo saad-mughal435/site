@@ -199,21 +199,24 @@
 
       // Add to cart
       const atc = document.getElementById('add-to-cart');
-      if (atc) atc.addEventListener('click', async () => {
-        atc.disabled = true;
-        atc.textContent = 'Adding...';
-        await window.addToCart(product.id, selectedVariant, qty);
-        atc.disabled = false;
-        atc.textContent = 'View cart →';
-        atc.onclick = () => window.location.href = 'cart.html';
-        setTimeout(() => {
-          if (atc.textContent === 'View cart →') {
-            atc.onclick = null;
-            atc.innerHTML = `Add to cart - ${window.formatMoney(product.price)}`;
-            atc.addEventListener('click', arguments.callee);
-          }
-        }, 4000);
-      });
+      if (atc) {
+        const handleAddClick = async () => {
+          atc.disabled = true;
+          atc.textContent = 'Adding...';
+          await window.addToCart(product.id, selectedVariant, qty);
+          atc.disabled = false;
+          atc.textContent = 'View cart →';
+          atc.onclick = () => window.location.href = 'cart.html';
+          setTimeout(() => {
+            if (atc.textContent === 'View cart →') {
+              atc.onclick = null;
+              atc.innerHTML = `Add to cart - ${window.formatMoney(product.price)}`;
+              atc.addEventListener('click', handleAddClick);
+            }
+          }, 4000);
+        };
+        atc.addEventListener('click', handleAddClick);
+      }
 
       // Tabs
       root.querySelectorAll('.tab-button').forEach(btn => {

@@ -25,6 +25,14 @@
     });
     window.addEventListener('hashchange', () => render(currentSection()));
     render(currentSection());
+
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-demo]');
+      if (!btn) return;
+      e.preventDefault();
+      e.stopPropagation();
+      if (window.toast) window.toast(btn.dataset.demo, 'success');
+    });
   }
 
   function currentSection() {

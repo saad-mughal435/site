@@ -147,6 +147,10 @@
       }
       const p = findP(body.product_id || body.sku);
       if (!p) return json({ error: 'sku_not_found', sku: body.sku || body.product_id });
+      if (body.action === 'set' && Number(body.qty) === 0) {
+        writeLS(LS.cart, cart.filter(l => l.product_id !== p.id));
+        return json(cartTotals());
+      }
       let qty = Number(body.qty) || p.moq;
       qty = Math.max(p.moq, Math.ceil(qty / p.pack_multiple) * p.pack_multiple);
       const existing = cart.find(l => l.product_id === p.id);

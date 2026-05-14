@@ -23,7 +23,7 @@
             <p class="admin-sub">A live view of orders, quotes, approvals, and AR.</p>
           </div>
           <div class="admin-page-actions">
-            <button class="btn btn-ghost btn-sm">Export</button>
+            <button class="btn btn-ghost btn-sm" data-demo="Dashboard export coming soon (demo)">Export</button>
             <button class="btn btn-orange btn-sm" onclick="window.location.hash='#orders'">View order queue</button>
           </div>
         </header>
@@ -65,7 +65,7 @@
                     <div style="font-weight:600;">${esc(q.company_name)}</div>
                     <div style="font-size:12px; color:var(--ink-soft);">${q.id} &middot; ${q.items_count} item(s) &middot; ${esc((q.notes || '').slice(0, 50))}</div>
                   </div>
-                  <button class="btn btn-primary btn-sm">Respond</button>
+                  <a href="#quotes" class="btn btn-primary btn-sm" style="text-decoration:none;">Respond</a>
                 </div>
               `).join('') || '<div style="color:var(--ink-soft); padding:18px 0;">All quotes responded to.</div>'}
             </div>
@@ -141,8 +141,8 @@
             <p class="admin-sub" id="orders-count">Loading...</p>
           </div>
           <div class="admin-page-actions">
-            <button class="btn btn-ghost btn-sm">Export CSV</button>
-            <button class="btn btn-orange btn-sm">Create order</button>
+            <button class="btn btn-ghost btn-sm" data-demo="Orders CSV export coming soon (demo)">Export CSV</button>
+            <button class="btn btn-orange btn-sm" data-demo="Manual order creation coming soon (demo)">Create order</button>
           </div>
         </header>
 
@@ -227,10 +227,10 @@
         <div class="summary-row total"><span>Total</span><span>${fm(o.total)}</span></div>
       </div>
       <div style="margin-top:14px; display:flex; gap:8px; flex-wrap:wrap;">
-        <button class="btn btn-primary btn-sm">Mark shipped</button>
-        <button class="btn btn-ghost btn-sm">Pick list</button>
-        <button class="btn btn-ghost btn-sm">Invoice</button>
-        <button class="btn btn-ghost btn-sm" style="color:var(--red); border-color:#f4c4b8;">Cancel</button>
+        <button class="btn btn-primary btn-sm" data-demo="Order marked as shipped (demo)">Mark shipped</button>
+        <button class="btn btn-ghost btn-sm" data-demo="Pick list generated (demo)">Pick list</button>
+        <button class="btn btn-ghost btn-sm" data-demo="Invoice generated (demo)">Invoice</button>
+        <button class="btn btn-ghost btn-sm" style="color:var(--red); border-color:#f4c4b8;" data-demo="Order cancelled (demo)">Cancel</button>
       </div>
     `, { large: true });
   }
@@ -248,7 +248,7 @@
             <p class="admin-sub">${items.filter(q => q.status === 'pending').length} pending response &middot; ${items.length} total</p>
           </div>
           <div class="admin-page-actions">
-            <button class="btn btn-orange btn-sm">+ New quote</button>
+            <button class="btn btn-orange btn-sm" data-demo="Quote creation coming soon (demo)">+ New quote</button>
           </div>
         </header>
 
@@ -287,9 +287,9 @@
       ${q.notes ? `<div style="background:var(--surface-2); padding:10px 12px; border-radius:var(--r-sm); font-size:13px; margin-bottom:14px;"><strong>Notes:</strong> ${esc(q.notes)}</div>` : ''}
       <p style="font-size:13.5px; color:var(--ink-2); margin-bottom:12px;">In the full version this would show each line, let you enter your unit price + freight, and email a PDF quote to the customer.</p>
       <div style="display:flex; gap:8px;">
-        <button class="btn btn-primary btn-sm">Send quote</button>
-        <button class="btn btn-ghost btn-sm">Save draft</button>
-        <button class="btn btn-ghost btn-sm" style="color:var(--red); border-color:#f4c4b8;">Decline</button>
+        <button class="btn btn-primary btn-sm" data-demo="Quote sent to customer (demo)">Send quote</button>
+        <button class="btn btn-ghost btn-sm" data-demo="Draft saved (demo)">Save draft</button>
+        <button class="btn btn-ghost btn-sm" style="color:var(--red); border-color:#f4c4b8;" data-demo="Quote declined (demo)">Decline</button>
       </div>
     `, { large: true });
   }
@@ -350,8 +350,8 @@
             <p class="admin-sub">${items.length} active SKUs &middot; ${items.filter(p => p.stock < 50).length} low</p>
           </div>
           <div class="admin-page-actions">
-            <button class="btn btn-ghost btn-sm">Import CSV</button>
-            <button class="btn btn-orange btn-sm">+ New SKU</button>
+            <button class="btn btn-ghost btn-sm" data-demo="SKU CSV import coming soon (demo)">Import CSV</button>
+            <button class="btn btn-orange btn-sm" data-demo="SKU creation coming soon (demo)">+ New SKU</button>
           </div>
         </header>
         <div class="admin-card" style="padding:0;">
@@ -367,7 +367,7 @@
                   <td><span class="badge ${p.stock < 30 ? 'badge-red' : p.stock < 80 ? 'badge-amber' : 'badge-green'}">${p.stock}</span></td>
                   <td style="font-family:var(--mono);">${fm(p.unit_price)}</td>
                   <td style="font-family:var(--mono);">${p.moq}</td>
-                  <td><button class="btn-link">Edit</button></td>
+                  <td><button class="btn-link" data-demo="Product editor coming soon (demo)">Edit</button></td>
                 </tr>
               `).join('')}
             </tbody>
@@ -390,7 +390,7 @@
             <p class="admin-sub">${items.length} companies &middot; ${items.filter(c => c.tier === 'Contract').length} on contract</p>
           </div>
           <div class="admin-page-actions">
-            <button class="btn btn-orange btn-sm">+ Add customer</button>
+            <button class="btn btn-orange btn-sm" data-demo="Customer onboarding coming soon (demo)">+ Add customer</button>
           </div>
         </header>
         <div class="admin-card" style="padding:0;">
@@ -639,6 +639,11 @@
               <div class="admin-list-row"><div>Local pickup (Jebel Ali)</div><span style="font-family:var(--mono); font-size:12.5px;">Free</span></div>
             </div>
           </div>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:18px;">
+          <button class="btn btn-ghost btn-sm" data-demo="Settings reset to defaults (demo)">Reset</button>
+          <button class="btn btn-orange btn-sm" data-demo="Settings saved (demo)">Save changes</button>
         </div>
       </div>
     `;
