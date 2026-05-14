@@ -130,8 +130,8 @@
             <p class="admin-sub" id="orders-count">Loading...</p>
           </div>
           <div class="admin-page-actions">
-            <button class="btn btn-ghost btn-sm">Export CSV (demo)</button>
-            <button class="btn btn-primary btn-sm">Create order</button>
+            <button class="btn btn-ghost btn-sm" data-demo="CSV export coming soon (demo)">Export CSV (demo)</button>
+            <button class="btn btn-primary btn-sm" data-demo="Manual order creation coming soon (demo)">Create order</button>
           </div>
         </header>
 
@@ -198,8 +198,8 @@
   }
 
   async function openOrderModal(id) {
-    const o = await fetch('/b2c/api/admin/orders/' + encodeURIComponent(id)).then(r => r.json());
-    if (!o) return;
+    const o = await fetch('/b2c/api/orders/' + encodeURIComponent(id)).then(r => r.ok ? r.json() : null);
+    if (!o) { window.toast('Order not found', 'error'); return; }
     showAdminModal(`Order ${o.number || o.id}`, `
       <div class="admin-modal-grid">
         <div>
@@ -236,9 +236,9 @@
           <p><span class="badge ${statusBadge(o.status)}">${o.status}</span></p>
 
           <div style="margin-top:18px; display:flex; flex-direction:column; gap:8px;">
-            <button class="btn btn-primary btn-sm">Mark as shipped</button>
-            <button class="btn btn-ghost btn-sm">Print packing slip</button>
-            <button class="btn btn-ghost btn-sm" style="color:var(--red); border-color:#f4c4b8;">Refund (demo)</button>
+            <button class="btn btn-primary btn-sm" data-demo="Order marked as shipped (demo)">Mark as shipped</button>
+            <button class="btn btn-ghost btn-sm" data-demo="Packing slip generated (demo)">Print packing slip</button>
+            <button class="btn btn-ghost btn-sm" style="color:var(--red); border-color:#f4c4b8;" data-demo="Refund initiated (demo - no real money moves)">Refund (demo)</button>
           </div>
         </div>
       </div>
@@ -258,8 +258,8 @@
             <p class="admin-sub">${items.length} products &middot; ${items.filter(p => p.stock < 15).length} low stock</p>
           </div>
           <div class="admin-page-actions">
-            <button class="btn btn-ghost btn-sm">Import CSV</button>
-            <button class="btn btn-primary btn-sm">+ New product</button>
+            <button class="btn btn-ghost btn-sm" data-demo="CSV import coming soon (demo)">Import CSV</button>
+            <button class="btn btn-primary btn-sm" data-demo="Product creation coming soon (demo)">+ New product</button>
           </div>
         </header>
 
@@ -320,8 +320,8 @@
             <p class="admin-sub">${items.length} accounts &middot; ${segments.vip} VIP, ${segments.returning} returning, ${segments.new} new</p>
           </div>
           <div class="admin-page-actions">
-            <button class="btn btn-ghost btn-sm">Export</button>
-            <button class="btn btn-primary btn-sm">+ Add customer</button>
+            <button class="btn btn-ghost btn-sm" data-demo="Customer export coming soon (demo)">Export</button>
+            <button class="btn btn-primary btn-sm" data-demo="Customer creation coming soon (demo)">+ Add customer</button>
           </div>
         </header>
 
@@ -336,7 +336,7 @@
             <thead><tr><th>Name</th><th>Email</th><th>Joined</th><th>Orders</th><th>Lifetime value</th><th>Segment</th><th>Points</th></tr></thead>
             <tbody>
               ${items.map(c => `
-                <tr data-cust="${c.id}">
+                <tr data-cust="${c.id}" style="cursor:pointer;">
                   <td>
                     <div style="display:flex; align-items:center; gap:10px;">
                       <div class="cust-avatar">${initials(c.name)}</div>
@@ -356,6 +356,43 @@
         </div>
       </div>
     `;
+    host.querySelectorAll('[data-cust]').forEach(row => {
+      row.addEventListener('click', () => {
+        const c = items.find(x => x.id === row.dataset.cust);
+        if (!c) return;
+        showAdminModal(c.name, `
+          <div style="display:flex; flex-wrap:wrap; gap:14px; margin-bottom:14px; font-size:13.5px;">
+            <span><strong>Email:</strong> <code>${esc(c.email)}</code></span>
+            <span><strong>Segment:</strong> <span class="badge ${c.segment === 'vip' ? 'badge-coral' : c.segment === 'returning' ? 'badge-sage' : 'badge-amber'}">${c.segment}</span></span>
+            <span><strong>Joined:</strong> ${new Date(c.joined).toLocaleDateString()}</span>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; margin-bottom:14px;">
+            <div style="background:var(--surface-2); border-radius:var(--r-sm); padding:12px;">
+              <div style="font-size:11px; text-transform:uppercase; color:var(--ink-mute); letter-spacing:0.6px;">Orders</div>
+              <div style="font-family:var(--mono); font-size:22px; font-weight:700;">${c.orders_count}</div>
+            </div>
+            <div style="background:var(--surface-2); border-radius:var(--r-sm); padding:12px;">
+              <div style="font-size:11px; text-transform:uppercase; color:var(--ink-mute); letter-spacing:0.6px;">Lifetime value</div>
+              <div style="font-family:var(--mono); font-size:22px; font-weight:700;">${fm(c.lifetime_value)}</div>
+            </div>
+            <div style="background:var(--surface-2); border-radius:var(--r-sm); padding:12px;">
+              <div style="font-size:11px; text-transform:uppercase; color:var(--ink-mute); letter-spacing:0.6px;">Points</div>
+              <div style="font-family:var(--mono); font-size:22px; font-weight:700;">${c.points}</div>
+            </div>
+          </div>
+          ${c.addresses && c.addresses.length ? `
+            <h4 style="font-size:11px; text-transform:uppercase; letter-spacing:0.6px; color:var(--ink-mute); margin:14px 0 8px;">Addresses</h4>
+            <ul style="padding-left:18px; font-size:13.5px; line-height:1.7;">
+              ${c.addresses.map(a => `<li><strong>${esc(a.label || 'Address')}:</strong> ${esc(a.line1)}, ${esc(a.city)}, ${esc(a.country)}</li>`).join('')}
+            </ul>
+          ` : ''}
+          <div style="margin-top:18px; display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="btn btn-primary btn-sm" data-demo="Email composer coming soon (demo)">Email customer</button>
+            <button class="btn btn-ghost btn-sm" data-demo="Customer edit coming soon (demo)">Edit profile</button>
+          </div>
+        `);
+      });
+    });
   };
 
   function initials(name) {
@@ -375,7 +412,7 @@
             <p class="admin-sub">${items.length} active codes &middot; banner schedule below</p>
           </div>
           <div class="admin-page-actions">
-            <button class="btn btn-primary btn-sm">+ New promo code</button>
+            <button class="btn btn-primary btn-sm" data-demo="Promo creation coming soon (demo)">+ New promo code</button>
           </div>
         </header>
 
@@ -400,7 +437,7 @@
         <div class="admin-card" style="margin-top:24px;">
           <div class="admin-card-head">
             <h3>Banner schedule</h3>
-            <button class="btn btn-ghost btn-sm">+ Add banner</button>
+            <button class="btn btn-ghost btn-sm" data-demo="Banner scheduling coming soon (demo)">+ Add banner</button>
           </div>
           <div class="admin-list">
             <div class="admin-list-row">
@@ -521,8 +558,8 @@
             <p class="admin-sub">Outbound transactional emails (mock - no real emails sent)</p>
           </div>
           <div class="admin-page-actions">
-            <button class="btn btn-ghost btn-sm">Resend last</button>
-            <button class="btn btn-primary btn-sm">Compose</button>
+            <button class="btn btn-ghost btn-sm" data-demo="Last email resent (demo)">Resend last</button>
+            <button class="btn btn-primary btn-sm" data-demo="Email composer coming soon (demo)">Compose</button>
           </div>
         </header>
 
@@ -635,6 +672,11 @@
             </div>
           </div>
         </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:18px;">
+          <button class="btn btn-ghost btn-sm" data-demo="Settings reset to defaults (demo)">Reset</button>
+          <button class="btn btn-primary btn-sm" data-demo="Settings saved (demo)">Save changes</button>
+        </div>
       </div>
     `;
   };
@@ -656,7 +698,10 @@
         <div class="modal-body">${html}</div>
       </div>`;
     document.body.appendChild(m);
-    m.addEventListener('click', (e) => { if (e.target === m) m.remove(); });
-    m.querySelector('.modal-close').addEventListener('click', () => m.remove());
+    const onKey = (e) => { if (e.key === 'Escape') close(); };
+    const close = () => { m.remove(); document.removeEventListener('keydown', onKey); };
+    document.addEventListener('keydown', onKey);
+    m.addEventListener('click', (e) => { if (e.target === m) close(); });
+    m.querySelector('.modal-close').addEventListener('click', close);
   }
 })();

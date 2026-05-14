@@ -376,7 +376,9 @@
       const id = parts[3];
       if (method === 'PUT' || method === 'PATCH') return jsonResponse({ success: true });
       const allOrders = [...readLS(LS.orders, []), ...D.orders];
-      return jsonResponse(allOrders.find(o => o.number === id || o.id === id) || allOrders[0]);
+      const found = allOrders.find(o => o.number === id || o.id === id);
+      if (!found) return jsonResponse({ error: 'not_found' }, 404);
+      return jsonResponse(found);
     }
     if (path === '/admin/products') {
       if (method === 'GET') return jsonResponse({ items: D.products });

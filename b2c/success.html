@@ -108,11 +108,11 @@
 
         <div class="success-card">
           <h3>Shipping to</h3>
-          <p>${esc(order.shipping.first_name)} ${esc(order.shipping.last_name)}</p>
-          <p>${esc(order.shipping.address1)}${order.shipping.address2 ? ', ' + esc(order.shipping.address2) : ''}</p>
-          <p>${esc(order.shipping.city)}, ${esc(order.shipping.state)} ${esc(order.shipping.postal)}</p>
-          <p>${esc(order.shipping.country)}</p>
-          <p style="margin-top:10px; color:var(--ink-soft); font-size:13px;">${esc(order.shipping.email)}</p>
+          <p>${esc([order.shipping.first_name, order.shipping.last_name].filter(Boolean).join(' ') || order.customer_name || '')}</p>
+          <p>${esc(order.shipping.address1 || order.shipping.line1 || '')}${order.shipping.address2 ? ', ' + esc(order.shipping.address2) : ''}</p>
+          <p>${esc(order.shipping.city || '')}${order.shipping.state ? ', ' + esc(order.shipping.state) : ''} ${esc(order.shipping.postal || order.shipping.zip || '')}</p>
+          <p>${esc(order.shipping.country || '')}</p>
+          <p style="margin-top:10px; color:var(--ink-soft); font-size:13px;">${esc(order.shipping.email || order.customer_email || '')}</p>
 
           <h3 style="margin-top:22px;">Payment</h3>
           <p>${order.payment.kind === 'card'

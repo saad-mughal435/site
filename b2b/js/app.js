@@ -219,8 +219,11 @@
         <div class="modal-body">${html}</div>
       </div>`;
     document.body.appendChild(m);
-    m.addEventListener('click', (e) => { if (e.target === m) m.remove(); });
-    m.querySelector('.modal-close').addEventListener('click', () => m.remove());
+    const onKey = (e) => { if (e.key === 'Escape') close(); };
+    const close = () => { m.remove(); document.removeEventListener('keydown', onKey); };
+    document.addEventListener('keydown', onKey);
+    m.addEventListener('click', (e) => { if (e.target === m) close(); });
+    m.querySelector('.modal-close').addEventListener('click', close);
     return m;
   };
 })();
