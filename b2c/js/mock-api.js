@@ -14,21 +14,30 @@
 
   /* ---- Auto-login + persistent state ---- */
   const LS = {
-    user:     'pebble.user',
-    cart:     'pebble.cart',
-    wishlist: 'pebble.wishlist',
-    orders:   'pebble.orders.created',
-    notif:    'pebble.notifications',
+    user:            'pebble.user',
+    cart:            'pebble.cart',
+    wishlist:        'pebble.wishlist',
+    orders:          'pebble.orders.created',
+    notif:           'pebble.notifications',
+    statusOverrides: 'pebble.orders.status_overrides',
   };
   try {
     if (!localStorage.getItem(LS.user)) {
       localStorage.setItem(LS.user, JSON.stringify(D.current_user));
     }
-    if (!localStorage.getItem(LS.cart))     localStorage.setItem(LS.cart, '[]');
-    if (!localStorage.getItem(LS.wishlist)) localStorage.setItem(LS.wishlist, '[]');
-    if (!localStorage.getItem(LS.orders))   localStorage.setItem(LS.orders, '[]');
-    if (!localStorage.getItem(LS.notif))    localStorage.setItem(LS.notif, '[]');
+    if (!localStorage.getItem(LS.cart))            localStorage.setItem(LS.cart, '[]');
+    if (!localStorage.getItem(LS.wishlist))        localStorage.setItem(LS.wishlist, '[]');
+    if (!localStorage.getItem(LS.orders))          localStorage.setItem(LS.orders, '[]');
+    if (!localStorage.getItem(LS.notif))           localStorage.setItem(LS.notif, '[]');
+    if (!localStorage.getItem(LS.statusOverrides)) localStorage.setItem(LS.statusOverrides, '{}');
   } catch (_) {}
+
+  function applyStatusOverride(order) {
+    if (!order) return order;
+    const overrides = readLS(LS.statusOverrides, {});
+    const ov = overrides[order.id] || overrides[order.number];
+    return ov ? { ...order, status: ov } : order;
+  }
 
   function readLS(key, fallback) {
     try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch (_) { return fallback; }
@@ -283,7 +292,8 @@
     // ---- orders (customer) ----
     if (path === '/orders') {
       const created = readLS(LS.orders, []);
-      const mine = [...created, ...D.orders.filter(o => o.customer_id === D.current_user.id)];
+      const mine = [...created, ...D.orders.filter(o => o.customer_id === D.current_user.id)]
+        .map(applyStatusOverride);
       return jsonResponse({ items: mine });
     }
     if (path.startsWith('/orders/')) {
@@ -306,7 +316,7 @@
           eta: order.eta || new Date(new Date(order.placed_at).getTime() + 4 * 24 * 3600 * 1000).toISOString(),
         };
       }
-      return jsonResponse(order);
+      return jsonResponse(applyStatusOverride(order));
     }
 
     // ---- newsletter ----
@@ -365,7 +375,7 @@
       });
     }
     if (path === '/admin/orders') {
-      const allOrders = [...readLS(LS.orders, []), ...D.orders];
+      const allOrders = [...readLS(LS.orders, []), ...D.orders].map(applyStatusOverride);
       let out = allOrders;
       if (q.status && q.status !== 'all') out = out.filter(o => o.status === q.status);
       if (q.search) out = out.filter(o => o.number.toLowerCase().includes(q.search.toLowerCase()) || o.customer_name.toLowerCase().includes(q.search.toLowerCase()));
@@ -373,12 +383,17 @@
     }
     if (path.startsWith('/admin/orders/')) {
       const parts = path.split('/');
-      const id = parts[3];
-      if (method === 'PUT' || method === 'PATCH') return jsonResponse({ success: true });
+      const id = decodeURIComponent(parts[3]);
+      if (method === 'PUT' || method === 'PATCH') {
+        const overrides = readLS(LS.statusOverrides, {});
+        if (payload && payload.status) overrides[id] = payload.status;
+        writeLS(LS.statusOverrides, overrides);
+        return jsonResponse({ success: true, status: payload?.status || null });
+      }
       const allOrders = [...readLS(LS.orders, []), ...D.orders];
       const found = allOrders.find(o => o.number === id || o.id === id);
       if (!found) return jsonResponse({ error: 'not_found' }, 404);
-      return jsonResponse(found);
+      return jsonResponse(applyStatusOverride(found));
     }
     if (path === '/admin/products') {
       if (method === 'GET') return jsonResponse({ items: D.products });

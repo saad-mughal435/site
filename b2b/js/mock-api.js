@@ -12,21 +12,30 @@
   const log = (...a) => console.debug('[anvil-api]', ...a);
 
   const LS = {
-    user:    'anvil.user',
-    company: 'anvil.company',
-    cart:    'anvil.cart',
-    orders:  'anvil.orders.created',
-    notif:   'anvil.notifications',
-    quotes:  'anvil.quotes.created',
+    user:            'anvil.user',
+    company:         'anvil.company',
+    cart:            'anvil.cart',
+    orders:          'anvil.orders.created',
+    notif:           'anvil.notifications',
+    quotes:          'anvil.quotes.created',
+    statusOverrides: 'anvil.orders.status_overrides',
   };
   try {
-    if (!localStorage.getItem(LS.user))    localStorage.setItem(LS.user, JSON.stringify(D.current_user));
-    if (!localStorage.getItem(LS.company)) localStorage.setItem(LS.company, JSON.stringify(D.current_company));
-    if (!localStorage.getItem(LS.cart))    localStorage.setItem(LS.cart, '[]');
-    if (!localStorage.getItem(LS.orders))  localStorage.setItem(LS.orders, '[]');
-    if (!localStorage.getItem(LS.notif))   localStorage.setItem(LS.notif, '[]');
-    if (!localStorage.getItem(LS.quotes))  localStorage.setItem(LS.quotes, '[]');
+    if (!localStorage.getItem(LS.user))            localStorage.setItem(LS.user, JSON.stringify(D.current_user));
+    if (!localStorage.getItem(LS.company))         localStorage.setItem(LS.company, JSON.stringify(D.current_company));
+    if (!localStorage.getItem(LS.cart))            localStorage.setItem(LS.cart, '[]');
+    if (!localStorage.getItem(LS.orders))          localStorage.setItem(LS.orders, '[]');
+    if (!localStorage.getItem(LS.notif))           localStorage.setItem(LS.notif, '[]');
+    if (!localStorage.getItem(LS.quotes))          localStorage.setItem(LS.quotes, '[]');
+    if (!localStorage.getItem(LS.statusOverrides)) localStorage.setItem(LS.statusOverrides, '{}');
   } catch (_) {}
+
+  function applyStatusOverride(order) {
+    if (!order) return order;
+    const overrides = readLS(LS.statusOverrides, {});
+    const ov = overrides[order.id] || overrides[order.number];
+    return ov ? { ...order, status: ov } : order;
+  }
 
   const readLS  = (k, f) => { try { return JSON.parse(localStorage.getItem(k)) ?? f; } catch (_) { return f; } };
   const writeLS = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (_) {} };
@@ -249,7 +258,8 @@
     if (path === '/orders') {
       const created = readLS(LS.orders, []);
       const company = readLS(LS.company, D.current_company);
-      const mine = [...created, ...D.orders.filter(o => o.company_id === company.id)];
+      const mine = [...created, ...D.orders.filter(o => o.company_id === company.id)]
+        .map(applyStatusOverride);
       return json({ items: mine });
     }
     if (path.startsWith('/orders/')) {
@@ -271,7 +281,7 @@
           ship_to: order.ship_to || readLS(LS.company, D.current_company).ship_to[0],
         };
       }
-      return json(order);
+      return json(applyStatusOverride(order));
     }
 
     /* --- Invoices, Recurring --- */
@@ -323,11 +333,20 @@
       });
     }
     if (path === '/admin/orders') {
-      const allOrders = [...readLS(LS.orders, []), ...D.orders];
+      const allOrders = [...readLS(LS.orders, []), ...D.orders].map(applyStatusOverride);
       let out = allOrders;
       if (q.status && q.status !== 'all') out = out.filter(o => o.status === q.status);
       if (q.search) out = out.filter(o => o.id.toLowerCase().includes(q.search.toLowerCase()) || o.company_name.toLowerCase().includes(q.search.toLowerCase()));
       return json({ items: out });
+    }
+    if (path.startsWith('/admin/orders/')) {
+      const id = decodeURIComponent(path.split('/')[3]);
+      if (method === 'PUT' || method === 'PATCH') {
+        const overrides = readLS(LS.statusOverrides, {});
+        if (payload && payload.status) overrides[id] = payload.status;
+        writeLS(LS.statusOverrides, overrides);
+        return json({ success: true, status: payload?.status || null });
+      }
     }
     if (path === '/admin/products') return json({ items: D.products });
     if (path === '/admin/customers') return json({ items: D.companies });
