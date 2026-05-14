@@ -10,6 +10,7 @@ One-shot generators and setup helpers for `saadm.dev`. None of these run in CI
 | `setup-github-repo.ps1` | Apply the GitHub **repo** About/topics/website via `gh`. | `pwsh -File scripts/setup-github-repo.ps1` |
 | `setup-github-profile.ps1` | Patch your GitHub **user profile** — bio, URL, company, location, hireable, social accounts — via `gh`. | `pwsh -File scripts/setup-github-profile.ps1` |
 | `setup-profile-readme.ps1` | Create / refresh the `saad-mughal435/saad-mughal435` profile-README repo from `profile-readme/README.md`. | `pwsh -File scripts/setup-profile-readme.ps1` |
+| `setup-demo-repos.ps1` | Create / refresh four standalone demo repos (kingsley-mes-demo, pebble-storefront, anvil-wholesale, manzil-marketplace) using `git subtree split` from `site/{app,b2c,b2b,property}/`. Re-runnable to sync updates. | `pwsh -File scripts/setup-demo-repos.ps1` |
 
 Prereqs for the `.ps1` scripts: `winget install GitHub.cli` then `gh auth login`.
 
