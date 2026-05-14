@@ -7,9 +7,20 @@ One-shot generators and setup helpers for `saadm.dev`. None of these run in CI
 |---|---|---|
 | `build-og.py` | Render the OpenGraph card (`../og.png`, 1200×630). | `python scripts/build-og.py` |
 | `build-cv-stubs.py` | Render the three placeholder CV PDFs into `../cv/`. | `python scripts/build-cv-stubs.py` |
-| `setup-github-repo.ps1` | Apply the GitHub repo About/topics/website via `gh`. Requires `winget install GitHub.cli` then `gh auth login`. | `pwsh -File scripts/setup-github-repo.ps1` |
+| `setup-github-repo.ps1` | Apply the GitHub **repo** About/topics/website via `gh`. | `pwsh -File scripts/setup-github-repo.ps1` |
+| `setup-github-profile.ps1` | Patch your GitHub **user profile** — bio, URL, company, location, hireable, social accounts — via `gh`. | `pwsh -File scripts/setup-github-profile.ps1` |
+| `setup-profile-readme.ps1` | Create / refresh the `saad-mughal435/saad-mughal435` profile-README repo from `profile-readme/README.md`. | `pwsh -File scripts/setup-profile-readme.ps1` |
+
+Prereqs for the `.ps1` scripts: `winget install GitHub.cli` then `gh auth login`.
 
 > All paths above are relative to the repo root (`site/`). Run from there.
+
+## profile-readme/
+
+Source of truth for the README that appears at the top of
+[github.com/saad-mughal435](https://github.com/saad-mughal435). Edit
+`profile-readme/README.md` here, then run `setup-profile-readme.ps1` to push it
+to the magic same-name repo.
 
 ## Requirements
 
