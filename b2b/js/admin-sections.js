@@ -9,6 +9,110 @@
   const fm = (n) => window.formatMoney(n);
   const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
+  /* Shared helpers — CSV, form modal, refresh */
+  function exportCSV(filename, rows, columns) {
+    const cell = (v) => {
+      if (v == null) return '';
+      const s = String(v);
+      return /[,"\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+    };
+    const headers = columns.map(c => c.label);
+    const lines = [headers.join(',')];
+    rows.forEach(r => lines.push(columns.map(c => cell(typeof c.get === 'function' ? c.get(r) : r[c.key])).join(',')));
+    const blob = new Blob(['﻿' + lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 200);
+    window.toast(`Exported ${rows.length} row(s) to ${filename}`, 'success');
+  }
+
+  function formModal({ title, fields, submitLabel = 'Save', cancelLabel = 'Cancel', onSubmit, large = true }) {
+    const fieldHTML = (f) => {
+      const id = 'fld-' + f.name;
+      const val = f.value == null ? '' : f.value;
+      const req = f.required ? 'required' : '';
+      const ph = f.placeholder ? `placeholder="${esc(f.placeholder)}"` : '';
+      const hint = f.hint ? `<div class="form-hint">${esc(f.hint)}</div>` : '';
+      const lblExtra = f.required ? ' <span style="color:var(--red, #c33);">*</span>' : '';
+      if (f.type === 'textarea') {
+        return `<div class="form-field"><label for="${id}">${esc(f.label)}${lblExtra}</label>
+          <textarea id="${id}" name="${esc(f.name)}" rows="${f.rows || 3}" ${req} ${ph}>${esc(val)}</textarea>${hint}</div>`;
+      }
+      if (f.type === 'select') {
+        return `<div class="form-field"><label for="${id}">${esc(f.label)}${lblExtra}</label>
+          <select id="${id}" name="${esc(f.name)}" ${req}>
+            ${(f.options || []).map(o => `<option value="${esc(o.value)}" ${String(o.value) === String(val) ? 'selected' : ''}>${esc(o.label)}</option>`).join('')}
+          </select>${hint}</div>`;
+      }
+      if (f.type === 'file') {
+        return `<div class="form-field"><label for="${id}">${esc(f.label)}${lblExtra}</label>
+          <input id="${id}" name="${esc(f.name)}" type="file" ${f.accept ? `accept="${esc(f.accept)}"` : ''} ${req} />${hint}</div>`;
+      }
+      return `<div class="form-field"><label for="${id}">${esc(f.label)}${lblExtra}</label>
+        <input id="${id}" name="${esc(f.name)}" type="${f.type || 'text'}" value="${esc(val)}" ${ph} ${req} ${f.min != null ? `min="${f.min}"` : ''} ${f.max != null ? `max="${f.max}"` : ''} ${f.step ? `step="${f.step}"` : ''} ${f.maxlength ? `maxlength="${f.maxlength}"` : ''} />${hint}</div>`;
+    };
+    window.showModal(title, `
+      <form class="admin-form" id="admin-form-inner" novalidate>
+        <div class="form-grid ${large ? 'form-grid-2' : ''}">${fields.map(fieldHTML).join('')}</div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-ghost btn-sm" data-cancel>${esc(cancelLabel)}</button>
+          <button type="submit" class="btn btn-orange btn-sm">${esc(submitLabel)}</button>
+        </div>
+      </form>
+    `, { large: true });
+    const modal = document.querySelector('.modal-backdrop');
+    const form = modal.querySelector('#admin-form-inner');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = {};
+      fields.forEach(f => {
+        const el = form.querySelector(`[name="${f.name}"]`);
+        if (!el) return;
+        if (f.type === 'file') data[f.name] = el.files;
+        else data[f.name] = el.value;
+      });
+      for (const f of fields) {
+        if (f.required && f.type !== 'file' && !String(data[f.name] || '').trim()) {
+          window.toast(`"${f.label}" is required`, 'error');
+          form.querySelector(`[name="${f.name}"]`)?.focus();
+          return;
+        }
+      }
+      try { await onSubmit(data, modal); }
+      catch (err) { console.error(err); window.toast(err.message || 'Save failed', 'error'); }
+    });
+    modal.querySelector('[data-cancel]').addEventListener('click', () => modal.remove());
+  }
+
+  function parseCSV(text) {
+    const lines = text.replace(/\r/g, '').split('\n').filter(Boolean);
+    if (lines.length < 2) return [];
+    const split = (line) => {
+      const out = []; let cur = ''; let inQ = false;
+      for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (inQ) { if (ch === '"' && line[i+1] === '"') { cur += '"'; i++; } else if (ch === '"') inQ = false; else cur += ch; }
+        else { if (ch === '"') inQ = true; else if (ch === ',') { out.push(cur); cur = ''; } else cur += ch; }
+      }
+      out.push(cur);
+      return out;
+    };
+    const headers = split(lines[0]).map(h => h.trim());
+    return lines.slice(1).map(line => {
+      const cells = split(line);
+      const row = {};
+      headers.forEach((h, i) => row[h] = (cells[i] || '').trim());
+      return row;
+    });
+  }
+
+  function rerenderSection(section) {
+    const main = document.getElementById('admin-main');
+    if (main && AA[section]) AA[section](main);
+  }
+
   /* =========================================================
      DASHBOARD
      ========================================================= */
@@ -23,7 +127,7 @@
             <p class="admin-sub">A live view of orders, quotes, approvals, and AR.</p>
           </div>
           <div class="admin-page-actions">
-            <button class="btn btn-ghost btn-sm" data-demo="Dashboard export coming soon (demo)">Export</button>
+            <button class="btn btn-ghost btn-sm" data-action="dash-export">Export snapshot</button>
             <button class="btn btn-orange btn-sm" onclick="window.location.hash='#orders'">View order queue</button>
           </div>
         </header>
@@ -101,6 +205,20 @@
         </div>
       </div>
     `;
+
+    host.querySelector('[data-action="dash-export"]').addEventListener('click', () => {
+      const rows = [
+        { metric: 'Revenue (all time)',     value: k.revenue_total },
+        { metric: 'Orders today',           value: k.orders_today },
+        { metric: 'Open quotes',            value: k.open_quotes },
+        { metric: 'Pending approvals',      value: k.pending_approvals },
+        { metric: 'Overdue invoices (AED)', value: k.overdue_invoices },
+        { metric: 'Avg order value',        value: k.avg_order },
+      ];
+      exportCSV(`anvil-dashboard-snapshot-${new Date().toISOString().slice(0,10)}.csv`, rows, [
+        { label: 'Metric', key: 'metric' }, { label: 'Value', key: 'value' },
+      ]);
+    });
   };
 
   function kpi(label, value, delta, kind) {
@@ -120,12 +238,14 @@
   AA.orders = async function (host) {
     let filter = 'all';
     let search = '';
+    let lastItems = [];
 
     async function refresh() {
       const q = new URLSearchParams();
       if (filter !== 'all') q.set('status', filter);
       if (search) q.set('search', search);
       const { items } = await fetch('/b2b/api/admin/orders?' + q).then(r => r.json());
+      lastItems = items;
       document.getElementById('orders-body').innerHTML = ordersTable(items);
       document.getElementById('orders-count').textContent = `${items.length} order(s)`;
       document.querySelectorAll('#orders-body [data-order]').forEach(r => {
@@ -141,8 +261,8 @@
             <p class="admin-sub" id="orders-count">Loading...</p>
           </div>
           <div class="admin-page-actions">
-            <button class="btn btn-ghost btn-sm" data-demo="Orders CSV export coming soon (demo)">Export CSV</button>
-            <button class="btn btn-orange btn-sm" data-demo="Manual order creation coming soon (demo)">Create order</button>
+            <button class="btn btn-ghost btn-sm" data-action="orders-export">Export CSV</button>
+            <button class="btn btn-orange btn-sm" data-action="orders-create">Create order</button>
           </div>
         </header>
 
@@ -169,8 +289,92 @@
         refresh();
       });
     });
+
+    host.querySelector('[data-action="orders-export"]').addEventListener('click', () => {
+      if (!lastItems.length) { window.toast('Nothing to export', 'error'); return; }
+      exportCSV(`anvil-orders-${new Date().toISOString().slice(0,10)}.csv`, lastItems, [
+        { label: 'Order #', key: 'id' },
+        { label: 'Company', key: 'company_name' },
+        { label: 'Submitted by', key: 'customer_name' },
+        { label: 'PO', key: 'po_number' },
+        { label: 'Placed', get: r => new Date(r.placed_at).toISOString() },
+        { label: 'Status', key: 'status' },
+        { label: 'Lines', get: r => (r.lines || []).length },
+        { label: 'Subtotal', key: 'subtotal' },
+        { label: 'Discount', key: 'discount' },
+        { label: 'Freight', key: 'freight' },
+        { label: 'Tax', key: 'tax' },
+        { label: 'Total', key: 'total' },
+        { label: 'Payment terms', key: 'payment_terms' },
+      ]);
+    });
+
+    host.querySelector('[data-action="orders-create"]').addEventListener('click', () => openB2BCreateOrder(refresh));
+
     refresh();
   };
+
+  async function openB2BCreateOrder(onSaved) {
+    const [{ items: companies }, { items: products }] = await Promise.all([
+      fetch('/b2b/api/admin/customers').then(r => r.json()),
+      fetch('/b2b/api/admin/products').then(r => r.json()),
+    ]);
+    formModal({
+      title: 'Create order',
+      submitLabel: 'Create order',
+      fields: [
+        { name: 'company_id', label: 'Customer company', type: 'select', required: true,
+          options: companies.map(c => ({ value: c.id, label: `${c.name} · ${c.tier} · ${c.payment_terms}` })) },
+        { name: 'product_id', label: 'Product / SKU', type: 'select', required: true,
+          options: products.map(p => ({ value: p.id, label: `${p.sku} — ${p.name} · MOQ ${p.moq} · ${fm(p.unit_price)}` })) },
+        { name: 'qty', label: 'Quantity', type: 'number', required: true, value: 10, min: 1 },
+        { name: 'po_number', label: 'PO number', value: 'PO-' + Math.floor(2026000 + Math.random()*9999) },
+        { name: 'notes', label: 'Notes', type: 'textarea', rows: 2 },
+      ],
+      onSubmit: async (data, modal) => {
+        const co = companies.find(c => c.id === data.company_id);
+        const prod = products.find(p => p.id === data.product_id);
+        let qty = Math.max(prod.moq, Number(data.qty) || prod.moq);
+        qty = Math.ceil(qty / prod.pack_multiple) * prod.pack_multiple;
+        const tier = prod.tier_pricing.slice().reverse().find(t => qty >= t.min) || prod.tier_pricing[0];
+        const unit_price = tier.price;
+        const line_total = +(unit_price * qty).toFixed(2);
+        const subtotal = line_total;
+        const discount = +(subtotal * (co.contract_discount || 0)).toFixed(2);
+        const after = subtotal - discount;
+        const freight = after >= 500 ? 0 : 35;
+        const tax = +(after * 0.05).toFixed(2);
+        const total = +(after + freight + tax).toFixed(2);
+        const orderNum = 'PO-' + Math.floor(40000 + Math.random() * 9999);
+        const placed = new Date();
+        const order = {
+          id: orderNum, number: orderNum,
+          company_id: co.id, company_name: co.name,
+          customer_name: co.users[0]?.name || 'Admin', customer_email: co.users[0]?.email || '',
+          placed_at: placed.toISOString(),
+          eta: new Date(placed.getTime() + 5 * 24 * 3600 * 1000).toISOString(),
+          status: total >= 1000 ? 'awaiting_approval' : 'submitted',
+          requires_approval: total >= 1000,
+          po_number: data.po_number || '',
+          payment_terms: co.payment_terms,
+          ship_to: co.ship_to[0],
+          notes: data.notes || '',
+          lines: [{
+            product_id: prod.id, sku: prod.sku, name: prod.name, qty,
+            unit_price, line_total,
+            product: { id: prod.id, name: prod.name, sku: prod.sku, industry: prod.industry },
+          }],
+          subtotal, discount, freight, tax, total,
+        };
+        const existing = JSON.parse(localStorage.getItem('anvil.orders.created') || '[]');
+        existing.unshift(order);
+        localStorage.setItem('anvil.orders.created', JSON.stringify(existing));
+        modal.remove();
+        window.toast(`Order ${orderNum} created`, 'success');
+        if (onSaved) onSaved();
+      },
+    });
+  }
 
   function ordersTable(items) {
     if (!items.length) return '<div style="padding:36px; text-align:center; color:var(--ink-soft);">No orders match.</div>';
@@ -426,7 +630,8 @@
             <p class="admin-sub">${items.filter(q => q.status === 'pending').length} pending response &middot; ${items.length} total</p>
           </div>
           <div class="admin-page-actions">
-            <button class="btn btn-orange btn-sm" data-demo="Quote creation coming soon (demo)">+ New quote</button>
+            <button class="btn btn-ghost btn-sm" data-action="quotes-export">Export CSV</button>
+            <button class="btn btn-orange btn-sm" data-action="quotes-create">+ New quote</button>
           </div>
         </header>
 
@@ -453,6 +658,36 @@
     host.querySelectorAll('[data-quote]').forEach(b => {
       b.addEventListener('click', () => respondQuote(b.dataset.quote, items));
     });
+
+    host.querySelector('[data-action="quotes-export"]').addEventListener('click', () => {
+      exportCSV(`anvil-quotes-${new Date().toISOString().slice(0,10)}.csv`, items, [
+        { label: 'Quote', key: 'id' }, { label: 'Company', key: 'company_name' }, { label: 'Requester', key: 'requester' },
+        { label: 'Requested', get: r => new Date(r.requested_at).toISOString() },
+        { label: 'Items', key: 'items_count' }, { label: 'Status', key: 'status' },
+        { label: 'Notes', key: 'notes' },
+      ]);
+    });
+    host.querySelector('[data-action="quotes-create"]').addEventListener('click', async () => {
+      const { items: companies } = await fetch('/b2b/api/admin/customers').then(r => r.json());
+      formModal({
+        title: 'New quote request',
+        submitLabel: 'Create quote',
+        fields: [
+          { name: 'company_id', label: 'Company', type: 'select', required: true,
+            options: companies.map(c => ({ value: c.id, label: c.name })) },
+          { name: 'items_count', label: 'Number of line items', type: 'number', value: 3, min: 1 },
+          { name: 'notes', label: 'Notes from requester', type: 'textarea', rows: 3 },
+        ],
+        onSubmit: async (data, modal) => {
+          const co = companies.find(c => c.id === data.company_id);
+          const res = await fetch('/b2b/api/admin/quotes', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...data, company_name: co?.name }) }).then(r => r.json());
+          if (!res.success) { window.toast('Save failed', 'error'); return; }
+          modal.remove();
+          window.toast(`Quote ${res.quote.id} created`, 'success');
+          rerenderSection('quotes');
+        },
+      });
+    });
   };
 
   function respondQuote(id, items) {
@@ -465,11 +700,26 @@
       ${q.notes ? `<div style="background:var(--surface-2); padding:10px 12px; border-radius:var(--r-sm); font-size:13px; margin-bottom:14px;"><strong>Notes:</strong> ${esc(q.notes)}</div>` : ''}
       <p style="font-size:13.5px; color:var(--ink-2); margin-bottom:12px;">In the full version this would show each line, let you enter your unit price + freight, and email a PDF quote to the customer.</p>
       <div style="display:flex; gap:8px;">
-        <button class="btn btn-primary btn-sm" data-demo="Quote sent to customer (demo)">Send quote</button>
-        <button class="btn btn-ghost btn-sm" data-demo="Draft saved (demo)">Save draft</button>
-        <button class="btn btn-ghost btn-sm" style="color:var(--red); border-color:#f4c4b8;" data-demo="Quote declined (demo)">Decline</button>
+        <button class="btn btn-primary btn-sm" data-action="quote-send">Send quote</button>
+        <button class="btn btn-ghost btn-sm" data-action="quote-draft">Save draft</button>
+        <button class="btn btn-ghost btn-sm" style="color:var(--red); border-color:#f4c4b8;" data-action="quote-decline">Decline</button>
       </div>
     `, { large: true });
+    const modal = document.querySelector('.modal-backdrop');
+    const setStatus = async (next) => {
+      const r = await fetch('/b2b/api/admin/quotes/' + encodeURIComponent(q.id), { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status: next }) }).then(x => x.json());
+      if (!r?.success) { window.toast('Could not update', 'error'); return; }
+      // Add an email log entry to make it visible
+      await fetch('/b2b/api/admin/email-log', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ to: `${q.company_id}@demo.local`, subject: `Quote ${q.id} — ${next}`, kind: 'quote', body: `Status changed to ${next} for ${q.company_name}.` }) });
+      modal.remove();
+      window.toast(`Quote ${q.id} → ${next}`, 'success');
+      rerenderSection('quotes');
+    };
+    modal.querySelector('[data-action="quote-send"]').addEventListener('click', () => setStatus('quoted'));
+    modal.querySelector('[data-action="quote-draft"]').addEventListener('click', () => setStatus('draft'));
+    modal.querySelector('[data-action="quote-decline"]').addEventListener('click', () => {
+      if (confirm(`Decline quote ${q.id}?`)) setStatus('declined');
+    });
   }
 
   /* =========================================================
@@ -511,8 +761,21 @@
         `}
       </div>
     `;
-    host.querySelectorAll('[data-approve]').forEach(b => b.addEventListener('click', () => window.toast(`Order ${b.dataset.approve} approved`, 'success')));
-    host.querySelectorAll('[data-reject]').forEach(b => b.addEventListener('click', () => window.toast(`Order ${b.dataset.reject} rejected`, 'error')));
+    host.querySelectorAll('[data-approve]').forEach(b => b.addEventListener('click', async () => {
+      const id = b.dataset.approve;
+      const res = await fetch('/b2b/api/admin/orders/' + encodeURIComponent(id), { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status: 'approved' }) }).then(r => r.json());
+      if (!res?.success) { window.toast('Could not approve', 'error'); return; }
+      window.toast(`Order ${id} approved`, 'success');
+      rerenderSection('approvals');
+    }));
+    host.querySelectorAll('[data-reject]').forEach(b => b.addEventListener('click', async () => {
+      const id = b.dataset.reject;
+      if (!confirm(`Reject order ${id}? (Demo)`)) return;
+      const res = await fetch('/b2b/api/admin/orders/' + encodeURIComponent(id), { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status: 'cancelled' }) }).then(r => r.json());
+      if (!res?.success) { window.toast('Could not reject', 'error'); return; }
+      window.toast(`Order ${id} rejected`, 'error');
+      rerenderSection('approvals');
+    }));
   };
 
   /* =========================================================
@@ -528,8 +791,9 @@
             <p class="admin-sub">${items.length} active SKUs &middot; ${items.filter(p => p.stock < 50).length} low</p>
           </div>
           <div class="admin-page-actions">
-            <button class="btn btn-ghost btn-sm" data-demo="SKU CSV import coming soon (demo)">Import CSV</button>
-            <button class="btn btn-orange btn-sm" data-demo="SKU creation coming soon (demo)">+ New SKU</button>
+            <button class="btn btn-ghost btn-sm" data-action="products-export">Export CSV</button>
+            <button class="btn btn-ghost btn-sm" data-action="products-import">Import CSV</button>
+            <button class="btn btn-orange btn-sm" data-action="products-create">+ New SKU</button>
           </div>
         </header>
         <div class="admin-card" style="padding:0;">
@@ -545,7 +809,7 @@
                   <td><span class="badge ${p.stock < 30 ? 'badge-red' : p.stock < 80 ? 'badge-amber' : 'badge-green'}">${p.stock}</span></td>
                   <td style="font-family:var(--mono);">${fm(p.unit_price)}</td>
                   <td style="font-family:var(--mono);">${p.moq}</td>
-                  <td><button class="btn-link" data-demo="Product editor coming soon (demo)">Edit</button></td>
+                  <td><button class="btn-link" data-edit data-id="${p.id}">Edit</button></td>
                 </tr>
               `).join('')}
             </tbody>
@@ -553,7 +817,104 @@
         </div>
       </div>
     `;
+
+    host.querySelectorAll('[data-edit]').forEach(b => {
+      b.addEventListener('click', () => {
+        const p = items.find(x => x.id === b.dataset.id);
+        if (p) openB2BProductEditor(p, () => rerenderSection('products'));
+      });
+    });
+    host.querySelector('[data-action="products-export"]').addEventListener('click', () => {
+      exportCSV(`anvil-products-${new Date().toISOString().slice(0,10)}.csv`, items, [
+        { label: 'ID', key: 'id' }, { label: 'SKU', key: 'sku' }, { label: 'Name', key: 'name' },
+        { label: 'Industry', key: 'industry' }, { label: 'Manufacturer', key: 'manufacturer' },
+        { label: 'Unit price', key: 'unit_price' }, { label: 'Stock', key: 'stock' },
+        { label: 'MOQ', key: 'moq' }, { label: 'Pack size', key: 'pack_size' }, { label: 'Lead time', key: 'lead_time' },
+      ]);
+    });
+    host.querySelector('[data-action="products-import"]').addEventListener('click', () => {
+      openB2BImportCSV('products', () => rerenderSection('products'));
+    });
+    host.querySelector('[data-action="products-create"]').addEventListener('click', () => {
+      openB2BProductEditor(null, () => rerenderSection('products'));
+    });
   };
+
+  function openB2BProductEditor(existing, onSaved) {
+    const isEdit = !!existing;
+    formModal({
+      title: isEdit ? `Edit ${existing.sku}` : 'New SKU',
+      submitLabel: isEdit ? 'Save changes' : 'Create SKU',
+      fields: [
+        { name: 'sku', label: 'SKU', value: existing?.sku, required: true, placeholder: 'BR-6204' },
+        { name: 'name', label: 'Product name', value: existing?.name, required: true },
+        { name: 'industry', label: 'Industry', type: 'select', value: existing?.industry || 'consumables',
+          options: ['packaging','chemicals','parts','consumables'].map(s => ({ value: s, label: s })) },
+        { name: 'manufacturer', label: 'Manufacturer', value: existing?.manufacturer || 'Anvil House Brand' },
+        { name: 'unit_price', label: 'Unit price (USD)', type: 'number', value: existing?.unit_price, required: true, min: 0, step: '0.01' },
+        { name: 'stock', label: 'Stock', type: 'number', value: existing?.stock ?? 100, min: 0 },
+        { name: 'moq', label: 'MOQ', type: 'number', value: existing?.moq ?? 1, min: 1 },
+        { name: 'pack_size', label: 'Pack size', value: existing?.pack_size || '1 unit' },
+        { name: 'lead_time', label: 'Lead time', value: existing?.lead_time || '3-5 days' },
+        { name: 'short_desc', label: 'Short description', type: 'textarea', rows: 2, value: existing?.short_desc },
+      ],
+      onSubmit: async (data, modal) => {
+        const url = isEdit ? `/b2b/api/admin/products/${encodeURIComponent(existing.id)}` : '/b2b/api/admin/products';
+        const method = isEdit ? 'PUT' : 'POST';
+        const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }).then(r => r.json());
+        if (!res.success) { window.toast('Save failed', 'error'); return; }
+        modal.remove();
+        window.toast(isEdit ? 'SKU updated' : 'SKU created', 'success');
+        if (onSaved) onSaved();
+      },
+    });
+  }
+
+  function openB2BImportCSV(kind, onDone) {
+    formModal({
+      title: `Import ${kind} from CSV`,
+      large: false,
+      fields: [
+        { name: 'file', label: 'CSV file', type: 'file', accept: '.csv,text/csv', required: true,
+          hint: 'Expected columns: sku, name, industry, manufacturer, unit_price, stock, moq, pack_size, lead_time' },
+      ],
+      submitLabel: 'Preview & import',
+      onSubmit: async (data, modal) => {
+        const file = data.file && data.file[0];
+        if (!file) { window.toast('Pick a CSV', 'error'); return; }
+        const text = await file.text();
+        const rows = parseCSV(text);
+        if (!rows.length) { window.toast('CSV is empty', 'error'); return; }
+        modal.remove();
+        const headers = Object.keys(rows[0]);
+        window.showModal(`Import preview — ${rows.length} row(s)`, `
+          <div style="max-height:380px; overflow:auto;">
+            <table class="product-table">
+              <thead><tr>${headers.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead>
+              <tbody>${rows.slice(0,20).map(r => `<tr>${headers.map(h => `<td>${esc(r[h])}</td>`).join('')}</tr>`).join('')}</tbody>
+            </table>
+          </div>
+          ${rows.length > 20 ? `<p style="color:var(--ink-mute); font-size:12.5px; margin-top:8px;">+ ${rows.length - 20} more row(s) hidden</p>` : ''}
+          <div class="form-actions" style="margin-top:14px;">
+            <button class="btn btn-ghost btn-sm" data-cancel-imp>Cancel</button>
+            <button class="btn btn-orange btn-sm" data-confirm-imp>Import ${rows.length} row(s)</button>
+          </div>
+        `, { large: true });
+        const m2 = document.querySelector('.modal-backdrop');
+        m2.querySelector('[data-cancel-imp]').addEventListener('click', () => m2.remove());
+        m2.querySelector('[data-confirm-imp]').addEventListener('click', async () => {
+          let ok = 0;
+          for (const r of rows) {
+            const x = await fetch(`/b2b/api/admin/${kind}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(r) }).then(y => y.json()).catch(() => null);
+            if (x?.success) ok++;
+          }
+          m2.remove();
+          window.toast(`Imported ${ok} of ${rows.length} row(s)`, 'success');
+          if (onDone) onDone();
+        });
+      },
+    });
+  }
 
   /* =========================================================
      CUSTOMERS
@@ -568,7 +929,8 @@
             <p class="admin-sub">${items.length} companies &middot; ${items.filter(c => c.tier === 'Contract').length} on contract</p>
           </div>
           <div class="admin-page-actions">
-            <button class="btn btn-orange btn-sm" data-demo="Customer onboarding coming soon (demo)">+ Add customer</button>
+            <button class="btn btn-ghost btn-sm" data-action="customers-export">Export CSV</button>
+            <button class="btn btn-orange btn-sm" data-action="customers-create">+ Add customer</button>
           </div>
         </header>
         <div class="admin-card" style="padding:0;">
@@ -592,6 +954,41 @@
       </div>
     `;
     host.querySelectorAll('[data-open]').forEach(b => b.addEventListener('click', () => openCustomer(b.dataset.open)));
+
+    host.querySelector('[data-action="customers-export"]').addEventListener('click', () => {
+      exportCSV(`anvil-customers-${new Date().toISOString().slice(0,10)}.csv`, items, [
+        { label: 'ID', key: 'id' }, { label: 'Name', key: 'name' }, { label: 'Tier', key: 'tier' },
+        { label: 'Terms', key: 'payment_terms' }, { label: 'Credit limit', key: 'credit_limit' },
+        { label: 'Open balance', key: 'open_balance' }, { label: 'Contract discount', get: r => (r.contract_discount * 100).toFixed(1) + '%' },
+        { label: 'Users', get: r => r.users.length },
+      ]);
+    });
+    host.querySelector('[data-action="customers-create"]').addEventListener('click', () => {
+      formModal({
+        title: 'Add company',
+        submitLabel: 'Create company',
+        fields: [
+          { name: 'name', label: 'Company name', required: true },
+          { name: 'tier', label: 'Tier', type: 'select', value: 'Standard',
+            options: [{ value: 'Standard', label: 'Standard' }, { value: 'Contract', label: 'Contract' }] },
+          { name: 'payment_terms', label: 'Payment terms', type: 'select', value: 'Net 30',
+            options: ['Net 30','Net 60','Advance','Card on file'].map(s => ({ value: s, label: s })) },
+          { name: 'credit_limit', label: 'Credit limit (USD)', type: 'number', value: 25000, min: 0 },
+          { name: 'contract_discount', label: 'Contract discount (%)', type: 'number', value: 0, min: 0, max: 30, step: '0.1' },
+          { name: 'contact_name', label: 'Primary contact name' },
+          { name: 'contact_email', label: 'Primary contact email', type: 'email' },
+          { name: 'address', label: 'Ship-to address line 1' },
+          { name: 'city', label: 'City', value: 'Dubai' },
+        ],
+        onSubmit: async (data, modal) => {
+          const res = await fetch('/b2b/api/admin/customers', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }).then(r => r.json());
+          if (!res.success) { window.toast('Save failed', 'error'); return; }
+          modal.remove();
+          window.toast(`Company ${res.company.name} added`, 'success');
+          rerenderSection('customers');
+        },
+      });
+    });
   };
 
   async function openCustomer(id) {
@@ -820,10 +1217,34 @@
         </div>
 
         <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:18px;">
-          <button class="btn btn-ghost btn-sm" data-demo="Settings reset to defaults (demo)">Reset</button>
-          <button class="btn btn-orange btn-sm" data-demo="Settings saved (demo)">Save changes</button>
+          <button class="btn btn-ghost btn-sm" data-action="settings-reset">Reset</button>
+          <button class="btn btn-orange btn-sm" data-action="settings-save">Save changes</button>
         </div>
       </div>
     `;
+
+    host.querySelector('[data-action="settings-save"]').addEventListener('click', async () => {
+      const inputs = host.querySelectorAll('.checkout-form-grid input');
+      const payload = {};
+      payload.store_name = inputs[0]?.value || s.store_name;
+      payload.free_freight_threshold = Number((inputs[1]?.value || '').replace(/[^0-9.]/g, '')) || s.free_freight_threshold;
+      const rateRaw = (inputs[2]?.value || '').replace(/[^0-9.]/g, '');
+      payload.tax_rate = rateRaw ? Number(rateRaw) / 100 : s.tax_rate;
+      payload.approval_threshold = Number((inputs[3]?.value || '').replace(/[^0-9.]/g, '')) || 1000;
+      const integToggles = host.querySelectorAll('.admin-card:nth-of-type(2) .toggle input');
+      const integ = {};
+      ['sap','sage','quickbooks','freightos'].forEach((k, i) => integ[k] = !!(integToggles[i]?.checked));
+      payload.integrations = integ;
+      const res = await fetch('/b2b/api/admin/settings', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }).then(r => r.json());
+      if (!res.success) { window.toast('Save failed', 'error'); return; }
+      window.toast('Settings saved', 'success');
+    });
+    host.querySelector('[data-action="settings-reset"]').addEventListener('click', async () => {
+      if (!confirm('Reset settings to defaults? (Demo)')) return;
+      const res = await fetch('/b2b/api/admin/settings', { method: 'DELETE' }).then(r => r.json());
+      if (!res.success) { window.toast('Reset failed', 'error'); return; }
+      window.toast('Settings reset', 'success');
+      rerenderSection('settings');
+    });
   };
 })();

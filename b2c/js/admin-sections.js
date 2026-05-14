@@ -13,6 +13,95 @@
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
   /* =========================================================
+     Shared helpers — CSV export, form modal, list refresh
+     ========================================================= */
+  function exportCSV(filename, rows, columns) {
+    const cell = (v) => {
+      if (v == null) return '';
+      const s = String(v);
+      return /[,"\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+    };
+    const headers = columns.map(c => c.label);
+    const lines = [headers.join(',')];
+    rows.forEach(r => lines.push(columns.map(c => cell(typeof c.get === 'function' ? c.get(r) : r[c.key])).join(',')));
+    const blob = new Blob(['﻿' + lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 200);
+    window.toast(`Exported ${rows.length} row(s) to ${filename}`, 'success');
+  }
+
+  function formModal({ title, fields, submitLabel = 'Save', cancelLabel = 'Cancel', onSubmit, large = false }) {
+    const fieldHTML = (f) => {
+      const id = 'fld-' + f.name;
+      const val = f.value == null ? '' : f.value;
+      const req = f.required ? 'required' : '';
+      const ph = f.placeholder ? `placeholder="${esc(f.placeholder)}"` : '';
+      const hint = f.hint ? `<div class="form-hint">${esc(f.hint)}</div>` : '';
+      const lblExtra = f.required ? ' <span style="color:var(--red, #c33);">*</span>' : '';
+      if (f.type === 'textarea') {
+        return `<div class="form-field"><label for="${id}">${esc(f.label)}${lblExtra}</label>
+          <textarea id="${id}" name="${esc(f.name)}" rows="${f.rows || 3}" ${req} ${ph}>${esc(val)}</textarea>${hint}</div>`;
+      }
+      if (f.type === 'select') {
+        return `<div class="form-field"><label for="${id}">${esc(f.label)}${lblExtra}</label>
+          <select id="${id}" name="${esc(f.name)}" ${req}>
+            ${(f.options || []).map(o => `<option value="${esc(o.value)}" ${String(o.value) === String(val) ? 'selected' : ''}>${esc(o.label)}</option>`).join('')}
+          </select>${hint}</div>`;
+      }
+      if (f.type === 'file') {
+        return `<div class="form-field"><label for="${id}">${esc(f.label)}${lblExtra}</label>
+          <input id="${id}" name="${esc(f.name)}" type="file" ${f.accept ? `accept="${esc(f.accept)}"` : ''} ${req} />${hint}</div>`;
+      }
+      return `<div class="form-field"><label for="${id}">${esc(f.label)}${lblExtra}</label>
+        <input id="${id}" name="${esc(f.name)}" type="${f.type || 'text'}" value="${esc(val)}" ${ph} ${req} ${f.min != null ? `min="${f.min}"` : ''} ${f.max != null ? `max="${f.max}"` : ''} ${f.step ? `step="${f.step}"` : ''} ${f.maxlength ? `maxlength="${f.maxlength}"` : ''} />${hint}</div>`;
+    };
+    showAdminModal(title, `
+      <form class="admin-form" id="admin-form-inner" novalidate>
+        <div class="form-grid ${large ? 'form-grid-2' : ''}">${fields.map(fieldHTML).join('')}</div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-ghost btn-sm" data-cancel>${esc(cancelLabel)}</button>
+          <button type="submit" class="btn btn-primary btn-sm">${esc(submitLabel)}</button>
+        </div>
+      </form>
+    `);
+    const modal = document.querySelector('.modal-backdrop');
+    const form = modal.querySelector('#admin-form-inner');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = {};
+      fields.forEach(f => {
+        const el = form.querySelector(`[name="${f.name}"]`);
+        if (!el) return;
+        if (f.type === 'file') data[f.name] = el.files;
+        else data[f.name] = el.value;
+      });
+      // Basic required check
+      for (const f of fields) {
+        if (f.required && f.type !== 'file' && !String(data[f.name] || '').trim()) {
+          window.toast(`"${f.label}" is required`, 'error');
+          form.querySelector(`[name="${f.name}"]`)?.focus();
+          return;
+        }
+      }
+      try {
+        await onSubmit(data, modal);
+      } catch (err) {
+        console.error(err);
+        window.toast(err.message || 'Save failed', 'error');
+      }
+    });
+    modal.querySelector('[data-cancel]').addEventListener('click', () => modal.remove());
+  }
+
+  function rerenderSection(section) {
+    const main = document.getElementById('admin-main');
+    if (main && PA[section]) PA[section](main);
+  }
+
+  /* =========================================================
      DASHBOARD
      ========================================================= */
   PA.dashboard = async function (host) {
@@ -105,12 +194,14 @@
   PA.orders = async function (host) {
     let filter = 'all';
     let search = '';
+    let lastItems = [];
 
     async function refresh() {
       const params = new URLSearchParams();
       if (filter !== 'all') params.set('status', filter);
       if (search) params.set('search', search);
       const { items } = await fetch('/b2c/api/admin/orders?' + params).then(r => r.json());
+      lastItems = items;
       document.getElementById('orders-body').innerHTML = ordersTable(items, false);
       document.getElementById('orders-count').textContent = `${items.length} order(s)`;
       wireRowClicks();
@@ -130,8 +221,8 @@
             <p class="admin-sub" id="orders-count">Loading...</p>
           </div>
           <div class="admin-page-actions">
-            <button class="btn btn-ghost btn-sm" data-demo="CSV export coming soon (demo)">Export CSV (demo)</button>
-            <button class="btn btn-primary btn-sm" data-demo="Manual order creation coming soon (demo)">Create order</button>
+            <button class="btn btn-ghost btn-sm" data-action="orders-export">Export CSV</button>
+            <button class="btn btn-primary btn-sm" data-action="orders-create">Create order</button>
           </div>
         </header>
 
@@ -162,8 +253,84 @@
       });
     });
 
+    host.querySelector('[data-action="orders-export"]').addEventListener('click', () => {
+      if (!lastItems.length) { window.toast('Nothing to export', 'error'); return; }
+      exportCSV(`pebble-orders-${new Date().toISOString().slice(0,10)}.csv`, lastItems, [
+        { label: 'Order #', key: 'number' },
+        { label: 'Customer', key: 'customer_name' },
+        { label: 'Email', key: 'customer_email' },
+        { label: 'Placed', get: r => new Date(r.placed_at).toISOString() },
+        { label: 'Status', key: 'status' },
+        { label: 'Items', get: r => (r.lines || []).length },
+        { label: 'Subtotal', key: 'subtotal' },
+        { label: 'Discount', key: 'discount' },
+        { label: 'Shipping', get: r => r.shipping_cost ?? r.shipping ?? 0 },
+        { label: 'Tax', key: 'tax' },
+        { label: 'Total', key: 'total' },
+      ]);
+    });
+
+    host.querySelector('[data-action="orders-create"]').addEventListener('click', () => {
+      openCreateOrderModal(() => refresh());
+    });
+
     refresh();
   };
+
+  async function openCreateOrderModal(onSaved) {
+    const { items: products } = await fetch('/b2c/api/admin/products').then(r => r.json());
+    const { items: customers } = await fetch('/b2c/api/admin/customers').then(r => r.json());
+    formModal({
+      title: 'Create order',
+      large: true,
+      submitLabel: 'Create order',
+      fields: [
+        { name: 'customer_id', label: 'Customer', type: 'select', required: true,
+          options: customers.map(c => ({ value: c.id, label: `${c.name} · ${c.email}` })) },
+        { name: 'product_id', label: 'Product', type: 'select', required: true,
+          options: products.map(p => ({ value: p.id, label: `${p.name} — ${fm(p.price)} · stock ${p.stock}` })) },
+        { name: 'qty', label: 'Quantity', type: 'number', value: 1, required: true, min: 1, max: 99 },
+        { name: 'notes', label: 'Internal notes (optional)', type: 'textarea', rows: 2 },
+      ],
+      onSubmit: async (data, modal) => {
+        const cust = customers.find(c => c.id === data.customer_id);
+        const prod = products.find(p => p.id === data.product_id);
+        const qty = Math.max(1, Number(data.qty) || 1);
+        const orderNum = 'PBL-' + Math.floor(11000 + Math.random() * 8999);
+        const placed = new Date();
+        const subtotal = +(prod.price * qty).toFixed(2);
+        const shipping = subtotal >= 75 ? 0 : 8;
+        const tax = +(subtotal * 0.05).toFixed(2);
+        const total = +(subtotal + shipping + tax).toFixed(2);
+        const order = {
+          id: orderNum, number: orderNum,
+          customer_id: cust.id, customer_name: cust.name, customer_email: cust.email,
+          placed_at: placed.toISOString(),
+          eta: new Date(placed.getTime() + 4 * 24 * 3600 * 1000).toISOString(),
+          status: 'paid',
+          lines: [{
+            product_id: prod.id,
+            product: { id: prod.id, name: prod.name, slug: prod.slug, palette: prod.palette },
+            product_name: prod.name, qty,
+            unit_price: prod.price, line_total: +(prod.price * qty).toFixed(2),
+            variant_id: null, variant_name: null,
+          }],
+          subtotal, discount: 0, shipping_cost: shipping, shipping: {},
+          tax, total,
+          payment: { kind: 'card', last4: '4242' },
+          payment_method: 'Card ****4242',
+          promo_code: null,
+          notes: data.notes || '',
+        };
+        const existing = JSON.parse(localStorage.getItem('pebble.orders.created') || '[]');
+        existing.unshift(order);
+        localStorage.setItem('pebble.orders.created', JSON.stringify(existing));
+        modal.remove();
+        window.toast(`Order ${orderNum} created`, 'success');
+        if (onSaved) onSaved();
+      },
+    });
+  }
 
   function ordersTable(items, compact) {
     if (!items.length) return '<div style="padding:40px; text-align:center; color:var(--ink-soft);">No orders match.</div>';
@@ -416,8 +583,9 @@
             <p class="admin-sub">${items.length} products &middot; ${items.filter(p => p.stock < 15).length} low stock</p>
           </div>
           <div class="admin-page-actions">
-            <button class="btn btn-ghost btn-sm" data-demo="CSV import coming soon (demo)">Import CSV</button>
-            <button class="btn btn-primary btn-sm" data-demo="Product creation coming soon (demo)">+ New product</button>
+            <button class="btn btn-ghost btn-sm" data-action="products-export">Export CSV</button>
+            <button class="btn btn-ghost btn-sm" data-action="products-import">Import CSV</button>
+            <button class="btn btn-primary btn-sm" data-action="products-create">+ New product</button>
           </div>
         </header>
 
@@ -455,10 +623,132 @@
     host.querySelectorAll('[data-edit]').forEach(b => {
       b.addEventListener('click', (e) => {
         e.stopPropagation();
-        window.toast('Product editor coming soon (demo)', 'success');
+        const tr = b.closest('tr[data-prod]');
+        const id = tr?.dataset.prod;
+        const p = items.find(x => x.id === id);
+        if (p) openProductEditor(p, () => rerenderSection('products'));
       });
     });
+
+    host.querySelector('[data-action="products-export"]').addEventListener('click', () => {
+      exportCSV(`pebble-products-${new Date().toISOString().slice(0,10)}.csv`, items, [
+        { label: 'ID', key: 'id' }, { label: 'Name', key: 'name' }, { label: 'Category', key: 'category' },
+        { label: 'Price', key: 'price' }, { label: 'Compare at', key: 'compare_at' },
+        { label: 'Stock', key: 'stock' }, { label: 'Rating', key: 'rating' }, { label: 'Reviews', key: 'review_count' },
+      ]);
+    });
+    host.querySelector('[data-action="products-import"]').addEventListener('click', () => {
+      openImportCSVModal('products', ['name','category','price','stock','short_desc'], () => rerenderSection('products'));
+    });
+    host.querySelector('[data-action="products-create"]').addEventListener('click', () => {
+      openProductEditor(null, () => rerenderSection('products'));
+    });
   };
+
+  function openProductEditor(existing, onSaved) {
+    const isEdit = !!existing;
+    formModal({
+      title: isEdit ? `Edit ${existing.name}` : 'New product',
+      large: true,
+      submitLabel: isEdit ? 'Save changes' : 'Create product',
+      fields: [
+        { name: 'name', label: 'Product name', value: existing?.name, required: true },
+        { name: 'category', label: 'Category', type: 'select', value: existing?.category || 'audio',
+          options: ['audio','wearables','home','accessories'].map(s => ({ value: s, label: s })) },
+        { name: 'price', label: 'Price (USD)', type: 'number', value: existing?.price, required: true, min: 0, step: '0.01' },
+        { name: 'compare_at', label: 'Compare-at price (optional)', type: 'number', value: existing?.compare_at || '', min: 0, step: '0.01' },
+        { name: 'stock', label: 'Stock on hand', type: 'number', value: existing?.stock ?? 25, required: true, min: 0 },
+        { name: 'short_desc', label: 'Short description', value: existing?.short_desc },
+        { name: 'description', label: 'Full description', type: 'textarea', value: existing?.description, rows: 4 },
+      ],
+      onSubmit: async (data, modal) => {
+        const url = isEdit ? `/b2c/api/admin/products/${encodeURIComponent(existing.id)}` : '/b2c/api/admin/products';
+        const method = isEdit ? 'PUT' : 'POST';
+        const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }).then(r => r.json());
+        if (!res.success) { window.toast('Save failed', 'error'); return; }
+        modal.remove();
+        window.toast(isEdit ? 'Product updated' : 'Product created', 'success');
+        if (onSaved) onSaved();
+      },
+    });
+  }
+
+  function openImportCSVModal(kind, expectedColumns, onDone) {
+    formModal({
+      title: `Import ${kind} from CSV`,
+      fields: [
+        { name: 'file', label: 'CSV file', type: 'file', accept: '.csv,text/csv', required: true,
+          hint: 'Headers expected: ' + expectedColumns.join(', ') + '. Missing fields will be defaulted.' },
+      ],
+      submitLabel: 'Preview & import',
+      onSubmit: async (data, modal) => {
+        const file = data.file && data.file[0];
+        if (!file) { window.toast('Pick a CSV file', 'error'); return; }
+        const text = await file.text();
+        const parsed = parseCSV(text);
+        if (!parsed.length) { window.toast('CSV is empty', 'error'); return; }
+        modal.remove();
+        // Show preview modal
+        const headers = Object.keys(parsed[0]);
+        showAdminModal(`Import preview — ${parsed.length} row(s)`, `
+          <div style="max-height:380px; overflow:auto; border:1px solid var(--line); border-radius:8px;">
+            <table class="admin-table" style="width:100%;">
+              <thead><tr>${headers.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead>
+              <tbody>
+                ${parsed.slice(0, 20).map(r => `<tr>${headers.map(h => `<td>${esc(r[h])}</td>`).join('')}</tr>`).join('')}
+              </tbody>
+            </table>
+          </div>
+          ${parsed.length > 20 ? `<p style="color:var(--ink-mute); font-size:12.5px; margin-top:8px;">+ ${parsed.length - 20} more row(s) hidden</p>` : ''}
+          <div class="form-actions" style="margin-top:14px;">
+            <button class="btn btn-ghost btn-sm" data-cancel-imp>Cancel</button>
+            <button class="btn btn-primary btn-sm" data-confirm-imp>Import ${parsed.length} row(s)</button>
+          </div>
+        `);
+        const m2 = document.querySelector('.modal-backdrop');
+        m2.querySelector('[data-cancel-imp]').addEventListener('click', () => m2.remove());
+        m2.querySelector('[data-confirm-imp]').addEventListener('click', async () => {
+          let ok = 0;
+          for (const row of parsed) {
+            const r = await fetch(`/b2c/api/admin/${kind}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(row) }).then(x => x.json()).catch(() => null);
+            if (r && r.success) ok++;
+          }
+          m2.remove();
+          window.toast(`Imported ${ok} of ${parsed.length} row(s)`, 'success');
+          if (onDone) onDone();
+        });
+      },
+    });
+  }
+
+  function parseCSV(text) {
+    const lines = text.replace(/\r/g, '').split('\n').filter(Boolean);
+    if (lines.length < 2) return [];
+    const split = (line) => {
+      const out = []; let cur = ''; let inQ = false;
+      for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (inQ) {
+          if (ch === '"' && line[i+1] === '"') { cur += '"'; i++; }
+          else if (ch === '"') inQ = false;
+          else cur += ch;
+        } else {
+          if (ch === '"') inQ = true;
+          else if (ch === ',') { out.push(cur); cur = ''; }
+          else cur += ch;
+        }
+      }
+      out.push(cur);
+      return out;
+    };
+    const headers = split(lines[0]).map(h => h.trim());
+    return lines.slice(1).map(line => {
+      const cells = split(line);
+      const row = {};
+      headers.forEach((h, i) => row[h] = (cells[i] || '').trim());
+      return row;
+    });
+  }
 
   /* =========================================================
      CUSTOMERS
@@ -478,8 +768,8 @@
             <p class="admin-sub">${items.length} accounts &middot; ${segments.vip} VIP, ${segments.returning} returning, ${segments.new} new</p>
           </div>
           <div class="admin-page-actions">
-            <button class="btn btn-ghost btn-sm" data-demo="Customer export coming soon (demo)">Export</button>
-            <button class="btn btn-primary btn-sm" data-demo="Customer creation coming soon (demo)">+ Add customer</button>
+            <button class="btn btn-ghost btn-sm" data-action="customers-export">Export</button>
+            <button class="btn btn-primary btn-sm" data-action="customers-create">+ Add customer</button>
           </div>
         </header>
 
@@ -545,13 +835,86 @@
             </ul>
           ` : ''}
           <div style="margin-top:18px; display:flex; gap:8px; flex-wrap:wrap;">
-            <button class="btn btn-primary btn-sm" data-demo="Email composer coming soon (demo)">Email customer</button>
-            <button class="btn btn-ghost btn-sm" data-demo="Customer edit coming soon (demo)">Edit profile</button>
+            <button class="btn btn-primary btn-sm" data-action="cust-email">Email customer</button>
+            <button class="btn btn-ghost btn-sm" data-action="cust-edit">Edit profile</button>
           </div>
         `);
+        const modal = document.querySelector('.modal-backdrop');
+        modal.querySelector('[data-action="cust-email"]').addEventListener('click', () => {
+          modal.remove();
+          openComposeEmailModal({ to: c.email, kind: 'welcome', subjectHint: `Re: your Pebble & Co. account` });
+        });
+        modal.querySelector('[data-action="cust-edit"]').addEventListener('click', () => {
+          modal.remove();
+          openCustomerEditor(c, () => rerenderSection('customers'));
+        });
       });
     });
+
+    host.querySelector('[data-action="customers-export"]').addEventListener('click', () => {
+      exportCSV(`pebble-customers-${new Date().toISOString().slice(0,10)}.csv`, items, [
+        { label: 'ID', key: 'id' }, { label: 'Name', key: 'name' }, { label: 'Email', key: 'email' },
+        { label: 'Joined', get: r => new Date(r.joined).toISOString() },
+        { label: 'Orders', key: 'orders_count' }, { label: 'Lifetime value', key: 'lifetime_value' },
+        { label: 'Points', key: 'points' }, { label: 'Segment', key: 'segment' },
+      ]);
+    });
+    host.querySelector('[data-action="customers-create"]').addEventListener('click', () => {
+      openCustomerEditor(null, () => rerenderSection('customers'));
+    });
   };
+
+  function openCustomerEditor(existing, onSaved) {
+    const isEdit = !!existing;
+    formModal({
+      title: isEdit ? `Edit ${existing.name}` : 'New customer',
+      submitLabel: isEdit ? 'Save changes' : 'Create customer',
+      fields: [
+        { name: 'name', label: 'Full name', value: existing?.name, required: true },
+        { name: 'email', label: 'Email', type: 'email', value: existing?.email, required: true },
+        { name: 'segment', label: 'Segment', type: 'select', value: existing?.segment || 'new',
+          options: [{ value: 'new', label: 'New' }, { value: 'returning', label: 'Returning' }, { value: 'vip', label: 'VIP' }] },
+      ],
+      onSubmit: async (data, modal) => {
+        const url = isEdit ? `/b2c/api/admin/customers/${encodeURIComponent(existing.id)}` : '/b2c/api/admin/customers';
+        const method = isEdit ? 'PUT' : 'POST';
+        const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }).then(r => r.json());
+        if (!res.success) { window.toast('Save failed', 'error'); return; }
+        modal.remove();
+        window.toast(isEdit ? 'Customer updated' : 'Customer added', 'success');
+        if (onSaved) onSaved();
+      },
+    });
+  }
+
+  function openComposeEmailModal({ to = '', subjectHint = '', kind = 'welcome' } = {}, onSent) {
+    formModal({
+      title: 'Compose email',
+      large: true,
+      submitLabel: 'Send email',
+      fields: [
+        { name: 'to', label: 'To', type: 'email', value: to, required: true },
+        { name: 'subject', label: 'Subject', value: subjectHint, required: true },
+        { name: 'kind', label: 'Type', type: 'select', value: kind,
+          options: [
+            { value: 'welcome', label: 'Welcome' },
+            { value: 'order_confirmation', label: 'Order confirmation' },
+            { value: 'shipping', label: 'Shipping update' },
+            { value: 'stock_alert', label: 'Stock alert' },
+            { value: 'abandoned_cart', label: 'Abandoned cart' },
+          ] },
+        { name: 'body', label: 'Body', type: 'textarea', rows: 6, required: true,
+          placeholder: 'Hey there — quick note about your order…' },
+      ],
+      onSubmit: async (data, modal) => {
+        const res = await fetch('/b2c/api/admin/email-log', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }).then(r => r.json());
+        if (!res.success) { window.toast('Send failed', 'error'); return; }
+        modal.remove();
+        window.toast(`Email sent to ${data.to} (demo)`, 'success');
+        if (onSent) onSent();
+      },
+    });
+  }
 
   function initials(name) {
     return name.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase();
@@ -570,7 +933,7 @@
             <p class="admin-sub">${items.length} active codes &middot; banner schedule below</p>
           </div>
           <div class="admin-page-actions">
-            <button class="btn btn-primary btn-sm" data-demo="Promo creation coming soon (demo)">+ New promo code</button>
+            <button class="btn btn-primary btn-sm" data-action="promos-create">+ New promo code</button>
           </div>
         </header>
 
@@ -595,7 +958,7 @@
         <div class="admin-card" style="margin-top:24px;">
           <div class="admin-card-head">
             <h3>Banner schedule</h3>
-            <button class="btn btn-ghost btn-sm" data-demo="Banner scheduling coming soon (demo)">+ Add banner</button>
+            <button class="btn btn-ghost btn-sm" data-action="banner-create">+ Add banner</button>
           </div>
           <div class="admin-list">
             <div class="admin-list-row">
@@ -614,6 +977,52 @@
         </div>
       </div>
     `;
+
+    host.querySelector('[data-action="promos-create"]').addEventListener('click', () => {
+      formModal({
+        title: 'New promo code',
+        large: true,
+        submitLabel: 'Create promo',
+        fields: [
+          { name: 'code', label: 'Code (uppercase, no spaces)', required: true, placeholder: 'SUMMER25', maxlength: 24 },
+          { name: 'description', label: 'Description', required: true, placeholder: '25% off summer collection' },
+          { name: 'type', label: 'Type', type: 'select', value: 'percent',
+            options: [
+              { value: 'percent', label: 'Percent off' },
+              { value: 'fixed',   label: 'Fixed amount off' },
+              { value: 'shipping',label: 'Free shipping' },
+            ] },
+          { name: 'value', label: 'Value (% or $)', type: 'number', value: 10, min: 0, step: '0.01' },
+          { name: 'min_subtotal', label: 'Minimum subtotal (optional)', type: 'number', min: 0, step: '0.01' },
+          { name: 'max_uses', label: 'Max uses (optional)', type: 'number', min: 1 },
+        ],
+        onSubmit: async (data, modal) => {
+          const res = await fetch('/b2c/api/admin/promotions', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }).then(r => r.json());
+          if (!res.success) { window.toast(res.error === 'code_required' ? 'Code is required' : 'Save failed', 'error'); return; }
+          modal.remove();
+          window.toast(`Promo ${res.promo.code} created`, 'success');
+          rerenderSection('promotions');
+        },
+      });
+    });
+
+    host.querySelector('[data-action="banner-create"]').addEventListener('click', () => {
+      formModal({
+        title: 'Schedule a banner',
+        submitLabel: 'Schedule',
+        fields: [
+          { name: 'title', label: 'Banner title', required: true, placeholder: 'Spring drop is live' },
+          { name: 'blurb', label: 'Subtitle', placeholder: 'Active · appears in hero eyebrow' },
+        ],
+        onSubmit: async (data, modal) => {
+          const res = await fetch('/b2c/api/admin/banners', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }).then(r => r.json());
+          if (!res.success) { window.toast('Save failed', 'error'); return; }
+          modal.remove();
+          window.toast('Banner scheduled', 'success');
+          rerenderSection('promotions');
+        },
+      });
+    });
   };
 
   /* =========================================================
@@ -716,8 +1125,8 @@
             <p class="admin-sub">Outbound transactional emails (mock - no real emails sent)</p>
           </div>
           <div class="admin-page-actions">
-            <button class="btn btn-ghost btn-sm" data-demo="Last email resent (demo)">Resend last</button>
-            <button class="btn btn-primary btn-sm" data-demo="Email composer coming soon (demo)">Compose</button>
+            <button class="btn btn-ghost btn-sm" data-action="email-resend-last">Resend last</button>
+            <button class="btn btn-primary btn-sm" data-action="email-compose">Compose</button>
           </div>
         </header>
 
@@ -739,6 +1148,18 @@
         </div>
       </div>
     `;
+
+    host.querySelector('[data-action="email-compose"]').addEventListener('click', () => {
+      openComposeEmailModal({}, () => rerenderSection('emaillog'));
+    });
+    host.querySelector('[data-action="email-resend-last"]').addEventListener('click', async () => {
+      if (!items.length) { window.toast('No emails to resend', 'error'); return; }
+      const last = items[0];
+      const res = await fetch('/b2c/api/admin/email-log', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ to: last.to, subject: '(Resent) ' + last.subject, kind: last.kind, body: last.preview }) }).then(r => r.json());
+      if (!res.success) { window.toast('Resend failed', 'error'); return; }
+      window.toast(`Resent to ${last.to}`, 'success');
+      rerenderSection('emaillog');
+    });
   };
 
   function emailBadge(k) {
@@ -832,11 +1253,35 @@
         </div>
 
         <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:18px;">
-          <button class="btn btn-ghost btn-sm" data-demo="Settings reset to defaults (demo)">Reset</button>
-          <button class="btn btn-primary btn-sm" data-demo="Settings saved (demo)">Save changes</button>
+          <button class="btn btn-ghost btn-sm" data-action="settings-reset">Reset</button>
+          <button class="btn btn-primary btn-sm" data-action="settings-save">Save changes</button>
         </div>
       </div>
     `;
+
+    host.querySelector('[data-action="settings-save"]').addEventListener('click', async () => {
+      const inputs = host.querySelectorAll('form.checkout-form input');
+      const payload = {};
+      payload.store_name = inputs[0]?.value || s.store_name;
+      payload.email = inputs[1]?.value || s.email;
+      payload.free_shipping_threshold = Number((inputs[2]?.value || '').replace(/[^0-9.]/g, '')) || s.free_shipping_threshold;
+      const rateRaw = (inputs[3]?.value || '').replace(/[^0-9.]/g, '');
+      payload.tax_rate = rateRaw ? Number(rateRaw) / 100 : s.tax_rate;
+      const toggles = host.querySelectorAll('.admin-card:nth-of-type(2) .toggle input');
+      const integ = {};
+      ['mailchimp','klaviyo','googleAnalytics','metaPixel'].forEach((k, i) => integ[k] = !!(toggles[i]?.checked));
+      payload.integrations = integ;
+      const res = await fetch('/b2c/api/admin/settings', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }).then(r => r.json());
+      if (!res.success) { window.toast('Save failed', 'error'); return; }
+      window.toast('Settings saved', 'success');
+    });
+    host.querySelector('[data-action="settings-reset"]').addEventListener('click', async () => {
+      if (!confirm('Reset all settings to defaults? (Demo)')) return;
+      const res = await fetch('/b2c/api/admin/settings', { method: 'DELETE' }).then(r => r.json());
+      if (!res.success) { window.toast('Reset failed', 'error'); return; }
+      window.toast('Settings reset to defaults', 'success');
+      rerenderSection('settings');
+    });
   };
 
   /* =========================================================

@@ -19,15 +19,31 @@
     notif:           'anvil.notifications',
     quotes:          'anvil.quotes.created',
     statusOverrides: 'anvil.orders.status_overrides',
+    quoteStatusOver: 'anvil.quotes.status_overrides',
+    productsCreated: 'anvil.products.created',
+    productEdits:    'anvil.products.edits',
+    productsDeleted: 'anvil.products.deleted',
+    companiesCreated:'anvil.companies.created',
+    companyEdits:    'anvil.companies.edits',
+    emailLog:        'anvil.email_log',
+    settings:        'anvil.settings.overrides',
   };
   try {
-    if (!localStorage.getItem(LS.user))            localStorage.setItem(LS.user, JSON.stringify(D.current_user));
-    if (!localStorage.getItem(LS.company))         localStorage.setItem(LS.company, JSON.stringify(D.current_company));
-    if (!localStorage.getItem(LS.cart))            localStorage.setItem(LS.cart, '[]');
-    if (!localStorage.getItem(LS.orders))          localStorage.setItem(LS.orders, '[]');
-    if (!localStorage.getItem(LS.notif))           localStorage.setItem(LS.notif, '[]');
-    if (!localStorage.getItem(LS.quotes))          localStorage.setItem(LS.quotes, '[]');
-    if (!localStorage.getItem(LS.statusOverrides)) localStorage.setItem(LS.statusOverrides, '{}');
+    if (!localStorage.getItem(LS.user))             localStorage.setItem(LS.user, JSON.stringify(D.current_user));
+    if (!localStorage.getItem(LS.company))          localStorage.setItem(LS.company, JSON.stringify(D.current_company));
+    if (!localStorage.getItem(LS.cart))             localStorage.setItem(LS.cart, '[]');
+    if (!localStorage.getItem(LS.orders))           localStorage.setItem(LS.orders, '[]');
+    if (!localStorage.getItem(LS.notif))            localStorage.setItem(LS.notif, '[]');
+    if (!localStorage.getItem(LS.quotes))           localStorage.setItem(LS.quotes, '[]');
+    if (!localStorage.getItem(LS.statusOverrides))  localStorage.setItem(LS.statusOverrides, '{}');
+    if (!localStorage.getItem(LS.quoteStatusOver))  localStorage.setItem(LS.quoteStatusOver, '{}');
+    if (!localStorage.getItem(LS.productsCreated))  localStorage.setItem(LS.productsCreated, '[]');
+    if (!localStorage.getItem(LS.productEdits))     localStorage.setItem(LS.productEdits, '{}');
+    if (!localStorage.getItem(LS.productsDeleted))  localStorage.setItem(LS.productsDeleted, '[]');
+    if (!localStorage.getItem(LS.companiesCreated)) localStorage.setItem(LS.companiesCreated, '[]');
+    if (!localStorage.getItem(LS.companyEdits))     localStorage.setItem(LS.companyEdits, '{}');
+    if (!localStorage.getItem(LS.emailLog))         localStorage.setItem(LS.emailLog, '[]');
+    if (!localStorage.getItem(LS.settings))         localStorage.setItem(LS.settings, '{}');
   } catch (_) {}
 
   function applyStatusOverride(order) {
@@ -36,11 +52,29 @@
     const ov = overrides[order.id] || overrides[order.number];
     return ov ? { ...order, status: ov } : order;
   }
+  function applyQuoteStatus(qt) {
+    if (!qt) return qt;
+    const ov = readLS(LS.quoteStatusOver, {})[qt.id];
+    return ov ? { ...qt, status: ov } : qt;
+  }
+  function effectiveProducts() {
+    const created = readLS(LS.productsCreated, []);
+    const edits = readLS(LS.productEdits, {});
+    const deleted = new Set(readLS(LS.productsDeleted, []));
+    return [...D.products, ...created]
+      .filter(p => !deleted.has(p.id))
+      .map(p => edits[p.id] ? { ...p, ...edits[p.id] } : p);
+  }
+  function effectiveCompanies() {
+    const created = readLS(LS.companiesCreated, []);
+    const edits = readLS(LS.companyEdits, {});
+    return [...D.companies, ...created].map(c => edits[c.id] ? { ...c, ...edits[c.id] } : c);
+  }
 
   const readLS  = (k, f) => { try { return JSON.parse(localStorage.getItem(k)) ?? f; } catch (_) { return f; } };
   const writeLS = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (_) {} };
   const json    = (b, s = 200) => new Response(JSON.stringify(b), { status: s, headers: { 'Content-Type': 'application/json' } });
-  const findP   = (id) => D.products.find(p => p.id === id || p.sku === id);
+  const findP   = (id) => effectiveProducts().find(p => p.id === id || p.sku === id);
 
   function tierFor(p, qty) {
     const t = p.tier_pricing.slice().reverse().find(x => qty >= x.min);
@@ -117,15 +151,17 @@
     });
 
     if (path === '/products') {
-      const filtered = applyFilters(D.products, q);
+      const all = effectiveProducts();
+      const filtered = applyFilters(all, q);
       return json({ items: filtered, total: filtered.length });
     }
-    if (path === '/products/featured') return json({ items: D.products.filter(p => (p.tags||[]).includes('bestseller')) });
+    if (path === '/products/featured') return json({ items: effectiveProducts().filter(p => (p.tags||[]).includes('bestseller')) });
     if (path.startsWith('/products/')) {
-      const id = path.split('/')[2];
-      const p = findP(id);
+      const id = decodeURIComponent(path.split('/')[2]);
+      const all = effectiveProducts();
+      const p = all.find(x => x.id === id || x.sku === id);
       if (!p) return json({ error: 'not_found' }, 404);
-      const related = (p.related || []).map(findP).filter(Boolean);
+      const related = (p.related || []).map(rid => all.find(x => x.id === rid || x.sku === rid)).filter(Boolean);
       return json({ product: p, related });
     }
 
@@ -348,20 +384,128 @@
         return json({ success: true, status: payload?.status || null });
       }
     }
-    if (path === '/admin/products') return json({ items: D.products });
-    if (path === '/admin/customers') return json({ items: D.companies });
+    if (path === '/admin/products') {
+      if (method === 'GET') return json({ items: effectiveProducts() });
+      if (method === 'POST') {
+        const body = payload || {};
+        const id = body.id || 'p-new-' + Math.random().toString(36).slice(2, 7);
+        const created = readLS(LS.productsCreated, []);
+        const price = Number(body.unit_price) || Number(body.price) || 0;
+        const newProd = {
+          id,
+          sku: (body.sku || 'NEW-' + Math.floor(Math.random()*9000+1000)).toUpperCase(),
+          name: body.name || 'New SKU',
+          industry: body.industry || 'consumables',
+          manufacturer: body.manufacturer || 'Anvil House Brand',
+          short_desc: body.short_desc || '',
+          description: body.description || '',
+          unit_price: price,
+          stock: Number(body.stock) || 0,
+          moq: Number(body.moq) || 1,
+          pack_size: body.pack_size || '1 unit',
+          pack_multiple: Number(body.pack_multiple) || 1,
+          lead_time: body.lead_time || '3-5 days',
+          tier_pricing: [{ min: 1, price: price }, { min: 10, price: +(price * 0.95).toFixed(2) }, { min: 50, price: +(price * 0.9).toFixed(2) }, { min: 100, price: +(price * 0.85).toFixed(2) }],
+          related: [], tags: [], specs: { ships_from: 'Central DC, Jebel Ali' },
+        };
+        created.unshift(newProd);
+        writeLS(LS.productsCreated, created);
+        return json({ success: true, product: newProd });
+      }
+    }
+    if (path.startsWith('/admin/products/')) {
+      const id = decodeURIComponent(path.split('/')[3]);
+      if (method === 'PUT' || method === 'PATCH') {
+        const body = payload || {};
+        const edits = readLS(LS.productEdits, {});
+        edits[id] = { ...(edits[id] || {}), ...body };
+        if (body.unit_price != null) edits[id].unit_price = Number(body.unit_price);
+        if (body.stock != null) edits[id].stock = Number(body.stock);
+        if (body.moq != null) edits[id].moq = Number(body.moq);
+        writeLS(LS.productEdits, edits);
+        return json({ success: true });
+      }
+      if (method === 'DELETE') {
+        const deleted = readLS(LS.productsDeleted, []);
+        if (!deleted.includes(id)) deleted.push(id);
+        writeLS(LS.productsDeleted, deleted);
+        const created = readLS(LS.productsCreated, []).filter(p => p.id !== id);
+        writeLS(LS.productsCreated, created);
+        return json({ success: true });
+      }
+    }
+    if (path === '/admin/customers') {
+      if (method === 'GET') return json({ items: effectiveCompanies() });
+      if (method === 'POST') {
+        const body = payload || {};
+        const id = body.id || 'co-new-' + Math.random().toString(36).slice(2, 7);
+        const created = readLS(LS.companiesCreated, []);
+        const newCo = {
+          id,
+          name: body.name || 'New Company',
+          slug: (body.name || id).toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+          tier: body.tier || 'Standard',
+          payment_terms: body.payment_terms || 'Net 30',
+          credit_limit: Number(body.credit_limit) || 25000,
+          open_balance: 0,
+          contract_discount: Number(body.contract_discount || 0) / 100,
+          ship_to: [{ id: 'sa-' + Math.random().toString(36).slice(2, 6), label: 'HQ', line1: body.address || 'Address pending', city: body.city || 'Dubai', country: 'UAE', default: true }],
+          users: [{ id: 'u-' + Math.random().toString(36).slice(2, 6), name: body.contact_name || 'New Contact', email: body.contact_email || 'contact@demo.local', role: 'purchaser' }],
+        };
+        created.unshift(newCo);
+        writeLS(LS.companiesCreated, created);
+        return json({ success: true, company: newCo });
+      }
+    }
     if (path.startsWith('/admin/customers/')) {
-      const id = path.split('/')[3];
-      const co = D.companies.find(c => c.id === id) || D.companies[0];
+      const id = decodeURIComponent(path.split('/')[3]);
+      if (method === 'PUT' || method === 'PATCH') {
+        const body = payload || {};
+        const edits = readLS(LS.companyEdits, {});
+        edits[id] = { ...(edits[id] || {}), ...body };
+        if (body.credit_limit != null) edits[id].credit_limit = Number(body.credit_limit);
+        if (body.contract_discount != null) edits[id].contract_discount = Number(body.contract_discount) / 100;
+        writeLS(LS.companyEdits, edits);
+        return json({ success: true });
+      }
+      const all = effectiveCompanies();
+      const co = all.find(c => c.id === id) || all[0];
       return json({
         ...co,
-        orders: [...readLS(LS.orders, []), ...D.orders].filter(o => o.company_id === co.id),
+        orders: [...readLS(LS.orders, []), ...D.orders].filter(o => o.company_id === co.id).map(applyStatusOverride),
         invoices: D.invoices.filter(i => i.company_id === co.id),
       });
     }
     if (path === '/admin/quotes') {
+      if (method === 'POST') {
+        const body = payload || {};
+        const created = readLS(LS.quotes, []);
+        const newQ = {
+          id: 'q-new-' + Math.random().toString(36).slice(2, 7),
+          status: 'pending',
+          company_id: body.company_id || readLS(LS.company, D.current_company).id,
+          company_name: body.company_name || (effectiveCompanies().find(c => c.id === body.company_id)?.name) || 'Demo Co.',
+          requester: body.requester || readLS(LS.user, D.current_user).name,
+          requested_at: new Date().toISOString(),
+          items_count: Number(body.items_count) || 1,
+          notes: body.notes || '',
+        };
+        created.unshift(newQ);
+        writeLS(LS.quotes, created);
+        return json({ success: true, quote: newQ });
+      }
       const created = readLS(LS.quotes, []);
-      return json({ items: [...created, ...D.quotes] });
+      return json({ items: [...created, ...D.quotes].map(applyQuoteStatus) });
+    }
+    if (path.startsWith('/admin/quotes/')) {
+      const id = decodeURIComponent(path.split('/')[3]);
+      if (method === 'PUT' || method === 'PATCH') {
+        const body = payload || {};
+        const overrides = readLS(LS.quoteStatusOver, {});
+        if (body.status) overrides[id] = body.status;
+        writeLS(LS.quoteStatusOver, overrides);
+        return json({ success: true, status: body.status || null });
+      }
     }
     if (path === '/admin/approvals') {
       const all = [...readLS(LS.orders, []), ...D.orders];
@@ -385,22 +529,45 @@
       });
     }
     if (path === '/admin/settings') {
-      return json({
+      const overrides = readLS(LS.settings, {});
+      const base = {
         store_name: D.brand.name,
         free_freight_threshold: D.brand.free_freight_threshold,
         tax_rate: D.brand.tax_rate,
         approval_threshold: 1000,
         integrations: { sap: true, sage: false, quickbooks: true, freightos: false },
-      });
+      };
+      if (method === 'GET') return json({ ...base, ...overrides, integrations: { ...base.integrations, ...(overrides.integrations || {}) } });
+      if (method === 'POST' || method === 'PUT') {
+        writeLS(LS.settings, { ...overrides, ...(payload || {}) });
+        return json({ success: true });
+      }
+      if (method === 'DELETE') {
+        writeLS(LS.settings, {});
+        return json({ success: true });
+      }
+      return json({ success: true });
     }
-    if (path === '/admin/email-log') return json({ items: [
-      { id: 'em-1', kind: 'order',     to: 'purchaser@acme.demo',   subject: 'Order PO-40128 confirmed',           preview: 'Your order is in the queue. Expected ship date: in 5 business days.', sent_at: new Date(Date.now() - 1000*60*8).toISOString() },
-      { id: 'em-2', kind: 'quote',     to: 'maint@gamma.demo',      subject: 'Quote Q-04 ready to view',           preview: 'Pricing locked for 14 days. Click to view the line-by-line breakdown.', sent_at: new Date(Date.now() - 1000*60*55).toISOString() },
-      { id: 'em-3', kind: 'invoice',   to: 'ap@gamma.demo',         subject: 'Invoice INV-2013 is overdue',        preview: 'Net 30 expired on Mar 18. Please remit at your earliest convenience.', sent_at: new Date(Date.now() - 1000*60*120).toISOString() },
-      { id: 'em-4', kind: 'approval',  to: 'approver@acme.demo',    subject: 'Order PO-40131 awaiting approval',   preview: 'Demo Purchaser submitted an order for $1,840. Review and approve.', sent_at: new Date(Date.now() - 1000*60*240).toISOString() },
-      { id: 'em-5', kind: 'shipment',  to: 'foreman@kilo.demo',     subject: 'PO-40104 has shipped',               preview: 'Tracking TRACK-X-882. Expected delivery in 3 business days.', sent_at: new Date(Date.now() - 1000*60*420).toISOString() },
-      { id: 'em-6', kind: 'restock',   to: 'eng@tau.demo',          subject: 'BR-6204 is back in stock',           preview: 'You signed up for a restock alert. 240 units available.', sent_at: new Date(Date.now() - 1000*60*620).toISOString() },
-    ]});
+    if (path === '/admin/email-log') {
+      const seed = [
+        { id: 'em-1', kind: 'order',     to: 'purchaser@acme.demo',   subject: 'Order PO-40128 confirmed',           preview: 'Your order is in the queue. Expected ship date: in 5 business days.', sent_at: new Date(Date.now() - 1000*60*8).toISOString() },
+        { id: 'em-2', kind: 'quote',     to: 'maint@gamma.demo',      subject: 'Quote Q-04 ready to view',           preview: 'Pricing locked for 14 days. Click to view the line-by-line breakdown.', sent_at: new Date(Date.now() - 1000*60*55).toISOString() },
+        { id: 'em-3', kind: 'invoice',   to: 'ap@gamma.demo',         subject: 'Invoice INV-2013 is overdue',        preview: 'Net 30 expired on Mar 18. Please remit at your earliest convenience.', sent_at: new Date(Date.now() - 1000*60*120).toISOString() },
+        { id: 'em-4', kind: 'approval',  to: 'approver@acme.demo',    subject: 'Order PO-40131 awaiting approval',   preview: 'Demo Purchaser submitted an order for $1,840. Review and approve.', sent_at: new Date(Date.now() - 1000*60*240).toISOString() },
+        { id: 'em-5', kind: 'shipment',  to: 'foreman@kilo.demo',     subject: 'PO-40104 has shipped',               preview: 'Tracking TRACK-X-882. Expected delivery in 3 business days.', sent_at: new Date(Date.now() - 1000*60*420).toISOString() },
+        { id: 'em-6', kind: 'restock',   to: 'eng@tau.demo',          subject: 'BR-6204 is back in stock',           preview: 'You signed up for a restock alert. 240 units available.', sent_at: new Date(Date.now() - 1000*60*620).toISOString() },
+      ];
+      if (method === 'POST') {
+        const body = payload || {};
+        const sent = readLS(LS.emailLog, []);
+        const em = { id: 'em-' + Date.now(), to: body.to || 'unknown@demo.local', subject: body.subject || '(no subject)', kind: body.kind || 'order', preview: (body.body || body.preview || '').slice(0, 200), sent_at: new Date().toISOString() };
+        sent.unshift(em);
+        writeLS(LS.emailLog, sent.slice(0, 100));
+        return json({ success: true, email: em });
+      }
+      const sent = readLS(LS.emailLog, []);
+      return json({ items: [...sent, ...seed].slice(0, 50) });
+    }
 
     if (method === 'GET') return json([]);
     return json({ success: true });
