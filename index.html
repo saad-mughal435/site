@@ -45,7 +45,7 @@
   "url": "https://saadm.dev/",
   "image": "https://saadm.dev/saad.png",
   "jobTitle": "Automation Engineer, ERP Developer, IT Administrator",
-  "description": "ERP Developer and Python software engineer in Dubai, UAE. Builds full-stack MES/ERP systems for automated beverage manufacturing using Python, FastAPI, MongoDB, and Sage.",
+  "description": "Automation Engineer, ERP Developer, and IT Administrator in Dubai, UAE. Builds full-stack MES/ERP systems for automated beverage manufacturing using Python, FastAPI, MongoDB, Docker, and Sage Evolution.",
   "email": "mailto:saad@saadm.dev",
   "telephone": "+971502578065",
   "worksFor": {
@@ -66,7 +66,7 @@
   },
   "knowsAbout": [
     "Software Development", "Full-Stack Development", "Backend Development", "Frontend Development",
-    "Python", "JavaScript", "React", "TypeScript", "HTML5", "CSS3", "Tailwind CSS",
+    "Python", "JavaScript", "React", "HTML5", "CSS3", "Tailwind CSS",
     "FastAPI", "REST APIs", "JSON", "JWT Authentication",
     "MongoDB", "SQL Server", "SQLite", "Motor", "pymongo", "pyodbc",
     "Pandas", "NumPy", "scikit-learn", "Matplotlib", "OpenPyXL",
@@ -84,7 +84,8 @@
   ],
   "knowsLanguage": ["English", "Urdu"],
   "sameAs": [
-    "https://www.linkedin.com/in/muhammadsaad435/"
+    "https://www.linkedin.com/in/muhammadsaad435/",
+    "https://github.com/saad-mughal435"
   ]
 }
 </script>
@@ -96,7 +97,7 @@
   "@type": "FAQPage",
   "mainEntity": [
     { "@type": "Question", "name": "Who is Saad M?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Saad M. (full name Muhammad Saad) is a full-stack developer in Dubai, UAE. B.Sc. Electrical Engineering with a Computer Engineering major from COMSATS Islamabad. He builds production software with Python, FastAPI, React, and MongoDB, and currently works as ERP Developer and IT Administrator at Kingsley Beverage FZCO." } },
+      "acceptedAnswer": { "@type": "Answer", "text": "Saad M. (full name Muhammad Saad) is a full-stack developer in Dubai, UAE. B.Sc. Electrical Engineering with a Computer Engineering major from COMSATS Islamabad. He builds production software with Python, FastAPI, and MongoDB, and currently works as Automation Engineer, ERP Developer, and IT Administrator at Kingsley Beverage FZCO." } },
     { "@type": "Question", "name": "What does Saad work on?",
       "acceptedAnswer": { "@type": "Answer", "text": "Saad designed and shipped an enterprise MES/ERP from scratch covering production planning, inventory, QC, accounts, and live production reporting across 5 departments. He also runs the Linux VM, MongoDB instance, Sage integration, and Cloudflare-fronted nginx that serves it." } },
     { "@type": "Question", "name": "Is Saad available for hire?",
@@ -366,7 +367,7 @@ function Nav() {
     <header className={'nav' + (scrolled ? ' scrolled' : '') + (open ? ' menu-open' : '')}>
       <div className="container nav-inner">
         <a className="logo" href="#top" onClick={close}>
-          <img className="logo-photo" src="saad.png" alt="Saad - ERP Developer in Dubai" />
+          <img className="logo-photo" src="saad.png" alt="Saad - Automation Engineer and ERP Developer in Dubai" />
           <span>Saad</span>
         </a>
         <nav className={'nav-links' + (open ? ' open' : '')}>
@@ -436,29 +437,28 @@ function ViewToggle({ view, setView }) {
 const HERO_COPY = {
   all: {
     title: ['Software on the line.', 'Automation around it.'],
-    sub: <Fragment>I&rsquo;m <strong>Saad</strong> - <strong>ERP Developer</strong>, <strong>IT Administrator</strong>,
-      and <strong>Production Assistant</strong> at Kingsley Beverage FZCO. B.Sc. EE with a Computer Engineering major.
+    sub: <Fragment>I&rsquo;m <strong>Saad</strong> - <strong>Automation Engineer</strong>, <strong>ERP Developer</strong>,
+      and <strong>IT Administrator</strong> at Kingsley Beverage FZCO. B.Sc. EE with a Computer Engineering major.
       I build software that replaces manual work - spreadsheets, paper logs, copy-paste reports, ticket prep - with
-      automation that runs itself. I also keep the infrastructure honest and back up the floor team when it matters.</Fragment>,
+      automation that runs itself. I run the infrastructure end-to-end and operate the automated production lines when shift demands it.</Fragment>,
     stack: 'Python · FastAPI · MongoDB · Docker · Linux',
     cta: { href: 'demo.html', label: 'Take demo ↗', target: '_blank' },
   },
   eng: {
     title: ['Hands on the line.', 'Eyes on the OEE.'],
-    sub: <Fragment>I&rsquo;m <strong>Saad</strong> - B.Sc. EE with a Computer Engineering major.
-      <strong> Production Assistant</strong> on fully automated Krones beverage lines - blow molding, filling, Checkmate,
-      Variopac FS, palletizing. Two prior years as NOC Engineer on GPON / PSTN / broadband. RCA, commissioning support,
-      preventive maintenance.</Fragment>,
+    sub: <Fragment>I&rsquo;m <strong>Saad</strong> - <strong>Automation Engineer</strong> with a B.Sc. EE / Computer Engineering major.
+      Day-to-day on fully automated Krones beverage lines - blow molding, filling, Checkmate, Variopac FS, palletizing.
+      Two prior years as NOC Engineer on GPON / PSTN / broadband. RCA, commissioning support, preventive maintenance.</Fragment>,
     stack: 'Krones · PLC concepts · RCA · GPON',
     cta: { href: '#projects', label: 'See work →' },
   },
   code: {
     title: ['I write code', 'that ends manual work.'],
-    sub: <Fragment>I&rsquo;m <strong>Saad</strong> - <strong>ERP Developer</strong> and <strong>IT Administrator</strong>
-      at Kingsley Beverage FZCO. I take work people are still doing by hand - spreadsheets, ticket prep, copy-paste
-      reports, manual reconciliations - and rebuild it as automation that runs itself. Sole developer of a full-stack
-      MES/ERP used in production across 5 departments. I also run the Linux VM, MongoDB, Sage integration, and the
-      Cloudflare-fronted nginx that serve it.</Fragment>,
+    sub: <Fragment>I&rsquo;m <strong>Saad</strong> - <strong>Automation Engineer</strong>, <strong>ERP Developer</strong>,
+      and <strong>IT Administrator</strong> at Kingsley Beverage FZCO. I take work people are still doing by hand - spreadsheets,
+      ticket prep, copy-paste reports, manual reconciliations - and rebuild it as automation that runs itself. Sole developer
+      of a full-stack MES/ERP used in production across 5 departments. I also run the Linux VM, MongoDB, Sage integration,
+      and the Cloudflare-fronted nginx that serve it.</Fragment>,
     stack: 'Python · FastAPI · MongoDB · Docker · Linux · React',
     cta: { href: 'app/index.html', label: 'Launch live app ↗', target: '_blank' },
   },
@@ -674,7 +674,7 @@ function StackChips() {
 const FAQ_ITEMS = [
   {
     q: 'Who is Saad M?',
-    a: <Fragment>Saad M. (full name Muhammad Saad) is a full-stack developer based in Dubai, UAE. B.Sc. Electrical Engineering with a Computer Engineering major from COMSATS Islamabad. He builds production software in Python, FastAPI, React, and MongoDB, and currently works as ERP Developer + IT Administrator at Kingsley Beverage FZCO.</Fragment>,
+    a: <Fragment>Saad M. (full name Muhammad Saad) is a full-stack developer based in Dubai, UAE. B.Sc. Electrical Engineering with a Computer Engineering major from COMSATS Islamabad. He builds production software in Python, FastAPI, and MongoDB, and currently works as Automation Engineer, ERP Developer, and IT Administrator at Kingsley Beverage FZCO.</Fragment>,
   },
   {
     q: 'What does Saad work on?',
