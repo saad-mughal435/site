@@ -76,7 +76,7 @@
                 <input id="qty-input" type="number" value="${qty}" min="${product.moq}" step="${product.pack_multiple}">
                 <button data-step="+1">+</button>
               </div>
-              <button class="btn btn-primary btn-lg" id="add-btn">Add ${qty} to cart - ${window.formatMoney(tier.price * qty)}</button>
+              <button class="btn btn-primary btn-lg" id="add-btn" ${product.stock <= 0 ? 'disabled' : ''}>${product.stock <= 0 ? 'Out of stock' : `Add ${qty} to cart - ${window.formatMoney(tier.price * qty)}`}</button>
               <a href="quote-request.html?sku=${encodeURIComponent(product.sku)}" class="btn btn-ghost btn-lg">Request volume quote</a>
             </div>
             <div style="font-size:12px; color:var(--ink-mute); margin-top:-8px; margin-bottom:14px; font-family:var(--mono);">

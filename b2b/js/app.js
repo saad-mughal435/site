@@ -165,12 +165,20 @@
       body: JSON.stringify({ product_id: sku, sku, qty, action: 'add' }),
     });
     const totals = await res.json();
-    if (totals.error) {
+    if (totals.error === 'sku_not_found') {
       window.toast(`SKU ${sku} not found`, 'error');
       return null;
     }
+    if (totals.error === 'out_of_stock') {
+      window.toast(`${totals.sku} (${totals.name}) is out of stock`, 'error');
+      return null;
+    }
     updateCartIcon(totals);
-    window.toast(`Added ${sku}`, 'success');
+    if (totals.warning === 'capped_to_stock') {
+      window.toast(`Only ${totals.stock} units of ${totals.sku} in stock — capped`, 'error', 3500);
+    } else {
+      window.toast(`Added ${sku}`, 'success');
+    }
     return totals;
   };
 

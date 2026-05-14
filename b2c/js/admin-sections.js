@@ -133,15 +133,36 @@
           <div class="admin-card">
             <div class="admin-card-head">
               <h3>Revenue, last 7 days</h3>
-              <span class="admin-card-sub">${fm(data.revenue_trend.reduce((s, d) => s + d.revenue, 0))} total</span>
+              <span class="admin-card-sub">${fm(data.revenue_trend.reduce((s, d) => s + d.revenue, 0))} total · ${(() => {
+                const half = Math.floor(data.revenue_trend.length / 2);
+                const recent = data.revenue_trend.slice(half).reduce((s, d) => s + d.revenue, 0);
+                const earlier = data.revenue_trend.slice(0, half).reduce((s, d) => s + d.revenue, 0) || 1;
+                const delta = ((recent - earlier) / earlier) * 100;
+                const sign = delta >= 0 ? '+' : '';
+                const color = delta >= 0 ? 'var(--green)' : 'var(--red)';
+                return `<span style="color:${color}; font-weight:700;">${sign}${delta.toFixed(1)}%</span> vs prev period`;
+              })()}</span>
             </div>
             <div class="bar-chart">
-              ${data.revenue_trend.map(d => {
+              ${(() => {
+                const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
                 const max = Math.max(...data.revenue_trend.map(x => x.revenue));
-                const h = Math.round((d.revenue / max) * 100);
-                const lbl = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'][d.day % 7];
-                return `<div class="bar-wrap"><div class="bar" style="height:${h}%;" title="${fm(d.revenue)}"></div><div class="bar-label">${lbl}</div></div>`;
-              }).join('')}
+                const today = new Date();
+                const len = data.revenue_trend.length;
+                return data.revenue_trend.map((d, idx) => {
+                  const daysAgo = len - 1 - idx;
+                  const dt = new Date(today.getTime() - daysAgo * 86400000);
+                  const isToday = daysAgo === 0;
+                  const lbl = isToday ? 'Today' : dayNames[dt.getDay()];
+                  const h = Math.max(8, Math.round((d.revenue / max) * 100));
+                  return `<div class="bar-wrap" title="${lbl}: ${fm(d.revenue)}">
+                    <div class="bar ${isToday ? 'bar-today' : ''}" style="height:${h}%;">
+                      <span class="bar-value">${'$' + Math.round(d.revenue).toLocaleString()}</span>
+                    </div>
+                    <div class="bar-label">${lbl}</div>
+                  </div>`;
+                }).join('');
+              })()}
             </div>
           </div>
 
@@ -1041,13 +1062,21 @@
         </header>
 
         <div class="admin-card">
-          <div class="admin-card-head"><h3>Revenue, last 30 days</h3></div>
+          <div class="admin-card-head">
+            <h3>Revenue, last 30 days</h3>
+            <span class="admin-card-sub">${fm(data.revenue_trend.reduce((s, d) => s + d.revenue, 0))} total · avg ${fm(data.revenue_trend.reduce((s, d) => s + d.revenue, 0) / data.revenue_trend.length)}/day</span>
+          </div>
           <div class="bar-chart bar-chart-tall">
-            ${data.revenue_trend.map(d => {
+            ${(() => {
               const max = Math.max(...data.revenue_trend.map(x => x.revenue));
-              const h = Math.round((d.revenue / max) * 100);
-              return `<div class="bar-wrap"><div class="bar" style="height:${h}%;" title="${fm(d.revenue)}"></div></div>`;
-            }).join('')}
+              const len = data.revenue_trend.length;
+              return data.revenue_trend.map((d, idx) => {
+                const h = Math.max(6, Math.round((d.revenue / max) * 100));
+                const daysAgo = len - 1 - idx;
+                const isToday = daysAgo === 0;
+                return `<div class="bar-wrap" title="${daysAgo === 0 ? 'Today' : daysAgo + 'd ago'}: ${fm(d.revenue)}"><div class="bar ${isToday ? 'bar-today' : ''}" style="height:${h}%;"></div></div>`;
+              }).join('');
+            })()}
           </div>
         </div>
 

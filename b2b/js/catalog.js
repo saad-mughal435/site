@@ -169,7 +169,7 @@
               </td>
               <td><input class="qty-input" type="number" min="0" step="${p.pack_multiple}" placeholder="${p.moq}"></td>
               <td style="text-align:right;">
-                <button class="btn btn-primary btn-sm" data-add>Add</button>
+                <button class="btn btn-primary btn-sm" data-add ${p.stock <= 0 ? 'disabled title="Out of stock"' : ''}>${p.stock <= 0 ? 'Out of stock' : 'Add'}</button>
               </td>
             </tr>
           `).join('')}

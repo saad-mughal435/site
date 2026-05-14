@@ -31,10 +31,12 @@
 
     function render() {
       const save = product.compare_at ? Math.round((1 - product.price / product.compare_at) * 100) : 0;
-      const stockState = product.stock <= 0 ? 'out' : (product.stock < 10 ? 'low' : 'in');
+      const variantStock = (selectedVariant && selectedVariant.stock != null) ? selectedVariant.stock : product.stock;
+      const stockState = variantStock <= 0 ? 'out' : (variantStock < 10 ? 'low' : 'in');
       const stockLabel = stockState === 'out' ? 'Out of stock'
-                        : stockState === 'low' ? `Only ${product.stock} left`
+                        : stockState === 'low' ? `Only ${variantStock} left`
                         : 'In stock';
+      if (qty > variantStock && variantStock > 0) qty = variantStock;
       root.innerHTML = `
         <div class="product-page">
           <div class="product-gallery">
@@ -87,12 +89,12 @@
 
             <div class="add-to-cart-row">
               <div class="qty-stepper" role="group" aria-label="Quantity">
-                <button class="qty-btn" data-qty="-1" aria-label="Decrease">-</button>
-                <input class="qty-input" id="qty-input" type="text" value="1" inputmode="numeric" aria-label="Quantity">
-                <button class="qty-btn" data-qty="+1" aria-label="Increase">+</button>
+                <button class="qty-btn" data-qty="-1" aria-label="Decrease" ${stockState === 'out' ? 'disabled' : ''}>-</button>
+                <input class="qty-input" id="qty-input" type="text" value="1" inputmode="numeric" aria-label="Quantity" ${stockState === 'out' ? 'disabled' : ''}>
+                <button class="qty-btn" data-qty="+1" aria-label="Increase" ${stockState === 'out' ? 'disabled' : ''}>+</button>
               </div>
-              <button class="btn btn-primary btn-lg" id="add-to-cart" style="flex:1;">
-                Add to cart - ${window.formatMoney(product.price)}
+              <button class="btn btn-primary btn-lg" id="add-to-cart" style="flex:1;" ${stockState === 'out' ? 'disabled' : ''}>
+                ${stockState === 'out' ? 'Out of stock' : `Add to cart - ${window.formatMoney(product.price)}`}
               </button>
               <button class="product-wishlist" data-wishlist="${product.id}" aria-label="Save to wishlist" style="position:relative; top:0; right:0; box-shadow:0 0 0 1px var(--line);">
                 <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
@@ -182,18 +184,25 @@
           render();
         });
       });
-      // Qty
+      // Qty (variant-aware stock cap)
+      const maxQty = Math.min(99, variantStock || 0);
       root.querySelectorAll('[data-qty]').forEach(b => {
         b.addEventListener('click', () => {
+          if (maxQty <= 0) return;
           const d = Number(b.dataset.qty);
-          qty = Math.max(1, Math.min(99, qty + d));
+          const next = qty + d;
+          if (next > maxQty) { window.toast(`Only ${maxQty} in stock`, 'error'); qty = maxQty; }
+          else qty = Math.max(1, next);
           const input = document.getElementById('qty-input');
           if (input) input.value = qty;
         });
       });
       const qtyInput = document.getElementById('qty-input');
       if (qtyInput) qtyInput.addEventListener('change', () => {
-        qty = Math.max(1, Math.min(99, Number(qtyInput.value) || 1));
+        if (maxQty <= 0) { qtyInput.value = 0; return; }
+        let n = Math.max(1, Number(qtyInput.value) || 1);
+        if (n > maxQty) { window.toast(`Only ${maxQty} in stock`, 'error'); n = maxQty; }
+        qty = n;
         qtyInput.value = qty;
       });
 

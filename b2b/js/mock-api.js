@@ -196,16 +196,28 @@
         writeLS(LS.cart, cart.filter(l => l.product_id !== p.id));
         return json(cartTotals());
       }
+      if (p.stock <= 0) {
+        return json({ ...cartTotals(), error: 'out_of_stock', sku: p.sku, name: p.name });
+      }
       let qty = Number(body.qty) || p.moq;
       qty = Math.max(p.moq, Math.ceil(qty / p.pack_multiple) * p.pack_multiple);
       const existing = cart.find(l => l.product_id === p.id);
-      if (existing) {
-        existing.qty = body.action === 'set' ? qty : existing.qty + qty;
-      } else {
-        cart.push({ product_id: p.id, sku: p.sku, qty, added_at: new Date().toISOString() });
+      const targetQty = existing ? (body.action === 'set' ? qty : existing.qty + qty) : qty;
+      let capped = false;
+      let finalQty = targetQty;
+      if (finalQty > p.stock) {
+        // Cap to highest pack multiple <= stock
+        finalQty = Math.floor(p.stock / p.pack_multiple) * p.pack_multiple;
+        if (finalQty < p.moq) finalQty = p.moq; // still respect MOQ even if it pushes a bit over
+        finalQty = Math.min(finalQty, p.stock);
+        capped = true;
       }
+      if (existing) existing.qty = finalQty;
+      else cart.push({ product_id: p.id, sku: p.sku, qty: finalQty, added_at: new Date().toISOString() });
       writeLS(LS.cart, cart);
-      return json(cartTotals());
+      const totals = cartTotals();
+      if (capped) return json({ ...totals, warning: 'capped_to_stock', stock: p.stock, sku: p.sku, name: p.name });
+      return json(totals);
     }
 
     /* --- Quotes --- */

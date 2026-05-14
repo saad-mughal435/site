@@ -159,8 +159,16 @@
       }),
     });
     const totals = await res.json();
+    if (totals.error === 'out_of_stock') {
+      window.toast(`${totals.product_name || 'Item'} is out of stock`, 'error');
+      return null;
+    }
     updateCartIcon(totals);
-    window.toast('Added to cart', 'success');
+    if (totals.warning === 'capped_to_stock') {
+      window.toast(`Only ${totals.stock} of ${totals.product_name || 'this item'} in stock — quantity capped`, 'error', 3500);
+    } else {
+      window.toast('Added to cart', 'success');
+    }
     return totals;
   };
 
