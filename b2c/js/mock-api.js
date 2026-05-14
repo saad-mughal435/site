@@ -227,26 +227,42 @@
         writeLS(LS.cart, next);
         return jsonResponse(cartTotals());
       }
+      // Stock validation
+      const product = effectiveProducts().find(p => p.id === body.product_id);
+      if (!product) return jsonResponse({ ...cartTotals(), error: 'product_not_found' });
+      const variant = body.variant_id && product.variants ? product.variants.find(v => v.id === body.variant_id) : null;
+      const availStock = variant ? (variant.stock ?? product.stock) : product.stock;
+      if (availStock <= 0) {
+        return jsonResponse({ ...cartTotals(), error: 'out_of_stock', stock: 0, product_name: product.name });
+      }
       // add or set qty
       const existing = cart.find(l => l.product_id === body.product_id && l.variant_id === body.variant_id);
+      let capped = false;
       if (existing) {
-        if (body.action === 'set') existing.qty = Math.max(0, body.qty);
-        else                       existing.qty = Math.min(99, existing.qty + (body.qty || 1));
+        let nextQty;
+        if (body.action === 'set') nextQty = Math.max(0, body.qty);
+        else                       nextQty = existing.qty + (body.qty || 1);
+        if (nextQty > availStock) { nextQty = availStock; capped = true; }
+        existing.qty = Math.min(99, nextQty);
         if (existing.qty === 0) {
           const idx = cart.indexOf(existing);
           cart.splice(idx, 1);
         }
       } else if (body.qty !== 0) {
+        let qty = Math.max(1, body.qty || 1);
+        if (qty > availStock) { qty = availStock; capped = true; }
         cart.push({
           product_id: body.product_id,
           variant_id: body.variant_id || null,
           variant_name: body.variant_name || null,
-          qty: Math.max(1, body.qty || 1),
+          qty: Math.min(99, qty),
           added_at: new Date().toISOString(),
         });
       }
       writeLS(LS.cart, cart);
-      return jsonResponse(cartTotals());
+      const totals = cartTotals();
+      if (capped) return jsonResponse({ ...totals, warning: 'capped_to_stock', stock: availStock, product_name: product.name });
+      return jsonResponse(totals);
     }
 
     // ---- promo ----
