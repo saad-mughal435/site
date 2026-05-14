@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mortgage calculator — Manzil</title>
+<meta name="description" content="UAE mortgage calculator with full amortisation schedule. Estimate monthly payments, total interest, and DLD fees for any Dubai property." />
+<meta name="theme-color" content="#1f7a55" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2064%2064'%3E%3Crect%20width%3D'64'%20height%3D'64'%20rx%3D'14'%20fill%3D'%231f7a55'/%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20font-family%3D'serif'%20font-weight%3D'700'%20font-size%3D'30'%20fill%3D'%23c9a049'%20text-anchor%3D'middle'%3Eم%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/property.css?v=20260514" />
+</head>
+<body class="manzil">
+<div data-shell-nav></div>
+
+<section class="m-container m-section">
+  <span class="m-eyebrow">Estimate the monthly cost</span>
+  <h1>Mortgage calculator.</h1>
+  <p class="m-text-muted">UAE banks typically require 20–25% down for residents, 25–35% for non-residents. The 4% DLD fee and 2% agent commission are not included in the loan.</p>
+
+  <div class="m-grid m-grid-2 m-mt-3" style="grid-template-columns:1fr;">
+    <div class="m-panel">
+      <h3 style="margin-top:0;">Inputs</h3>
+      <div class="m-mortgage-row">
+        <label class="m-field"><span>Property price (AED)</span><input class="m-input" id="i-price" type="number" value="2400000" min="100000" step="50000"></label>
+        <label class="m-field"><span>Down payment %</span><input class="m-input" id="i-down" type="number" value="25" min="10" max="80"></label>
+      </div>
+      <div class="m-mortgage-row">
+        <label class="m-field"><span>Interest rate %</span><input class="m-input" id="i-rate" type="number" step="0.1" value="4.5" min="1" max="15"></label>
+        <label class="m-field"><span>Tenure (years)</span><input class="m-input" id="i-years" type="number" value="25" min="5" max="30"></label>
+      </div>
+      <label class="m-field"><span>Include DLD fee (4%) & agent commission (2%)?</span>
+        <select class="m-select" id="i-fees">
+          <option value="0">Loan only</option>
+          <option value="1" selected>Include fees (paid upfront)</option>
+        </select>
+      </label>
+      <div class="m-mortgage-row m-mt-2">
+        <button class="m-btn m-btn--primary" id="save-scenario">⭐ Save scenario</button>
+        <button class="m-btn m-btn--ghost" id="reset">Reset</button>
+      </div>
+    </div>
+
+    <div class="m-panel">
+      <h3 style="margin-top:0;">Result</h3>
+      <div class="m-mortgage-result" style="margin:0;">
+        <div class="m-stat-k">Monthly payment</div>
+        <div class="big" id="o-monthly">—</div>
+      </div>
+      <div class="m-grid m-grid-2 m-mt-2">
+        <div class="m-kpi"><div class="m-kpi-label">Loan amount</div><div class="m-kpi-value" id="o-loan" style="font-size:18px;">—</div></div>
+        <div class="m-kpi"><div class="m-kpi-label">Down payment</div><div class="m-kpi-value" id="o-down" style="font-size:18px;">—</div></div>
+        <div class="m-kpi"><div class="m-kpi-label">Total interest</div><div class="m-kpi-value" id="o-int" style="font-size:18px;">—</div></div>
+        <div class="m-kpi"><div class="m-kpi-label">Total payable</div><div class="m-kpi-value" id="o-total" style="font-size:18px;">—</div></div>
+      </div>
+      <div class="m-kpi m-mt-2"><div class="m-kpi-label">Upfront fees (DLD 4% + 2% commission)</div><div class="m-kpi-value" id="o-fees" style="font-size:18px;">—</div></div>
+    </div>
+  </div>
+
+  <h2 class="m-mt-3">Yearly amortisation</h2>
+  <div class="m-panel m-mt-1" style="overflow-x:auto;">
+    <table class="m-table">
+      <thead><tr><th>Year</th><th>Principal paid</th><th>Interest paid</th><th>Total paid</th><th>Balance</th></tr></thead>
+      <tbody id="amort-rows"></tbody>
+    </table>
+  </div>
+
+  <h2 class="m-mt-3">Saved scenarios</h2>
+  <div class="m-panel m-mt-1"><div id="saved-list">Loading...</div></div>
+</section>
+
+<div data-shell-foot></div>
+
+<script src="js/data.js"></script>
+<script src="js/mock-api.js"></script>
+<script src="js/notifications.js"></script>
+<script src="js/app.js"></script>
+<script>
+ManzilApp.mountShell('mortgage');
+
+var qs = ManzilApp.qs();
+if (qs.price) document.getElementById('i-price').value = qs.price;
+
+function calc() {
+  var price = Number(document.getElementById('i-price').value);
+  var down = Number(document.getElementById('i-down').value);
+  var rate = Number(document.getElementById('i-rate').value);
+  var years = Number(document.getElementById('i-years').value);
+  var withFees = document.getElementById('i-fees').value === '1';
+  var r = ManzilApp.computeMortgage(price, down, rate, years);
+  document.getElementById('o-monthly').textContent = ManzilApp.formatPriceExact(r.monthly);
+  document.getElementById('o-loan').textContent = ManzilApp.formatPriceExact(r.loan);
+  document.getElementById('o-down').textContent = ManzilApp.formatPriceExact(r.down);
+  document.getElementById('o-int').textContent = ManzilApp.formatPriceExact(r.totalInt);
+  document.getElementById('o-total').textContent = ManzilApp.formatPriceExact(r.totalPay);
+  var fees = withFees ? price * 0.06 : 0;
+  document.getElementById('o-fees').textContent = ManzilApp.formatPriceExact(fees);
+
+  // Amortisation per year
+  var balance = r.loan;
+  var monthlyRate = (rate / 100) / 12;
+  var rows = '';
+  for (var y = 1; y <= years; y++) {
+    var startBal = balance;
+    var yIntPaid = 0, yPrinPaid = 0;
+    for (var m = 0; m < 12; m++) {
+      var interest = balance * monthlyRate;
+      var principal = r.monthly - interest;
+      balance -= principal;
+      yIntPaid += interest;
+      yPrinPaid += principal;
+    }
+    rows += '<tr>'
+      + '<td>Year ' + y + '</td>'
+      + '<td>' + ManzilApp.formatPriceExact(yPrinPaid) + '</td>'
+      + '<td>' + ManzilApp.formatPriceExact(yIntPaid) + '</td>'
+      + '<td>' + ManzilApp.formatPriceExact(yPrinPaid + yIntPaid) + '</td>'
+      + '<td>' + ManzilApp.formatPriceExact(Math.max(0, balance)) + '</td>'
+      + '</tr>';
+  }
+  document.getElementById('amort-rows').innerHTML = rows;
+}
+['i-price','i-down','i-rate','i-years','i-fees'].forEach(function (id) {
+  document.getElementById(id).addEventListener('input', calc);
+  document.getElementById(id).addEventListener('change', calc);
+});
+calc();
+
+document.getElementById('save-scenario').addEventListener('click', function () {
+  var price = Number(document.getElementById('i-price').value);
+  var down = Number(document.getElementById('i-down').value);
+  var rate = Number(document.getElementById('i-rate').value);
+  var years = Number(document.getElementById('i-years').value);
+  var label = 'AED ' + price.toLocaleString() + ' · ' + down + '% down · ' + rate + '% · ' + years + 'y';
+  ManzilApp.api('/mortgage-scenarios', { method: 'POST', body: { action: 'add', label: label, price: price, down: down, rate: rate, years: years } }).then(function () {
+    window.toast('Scenario saved', 'success');
+    loadScenarios();
+  });
+});
+document.getElementById('reset').addEventListener('click', function () {
+  document.getElementById('i-price').value = 2400000;
+  document.getElementById('i-down').value = 25;
+  document.getElementById('i-rate').value = 4.5;
+  document.getElementById('i-years').value = 25;
+  calc();
+});
+
+function loadScenarios() {
+  ManzilApp.api('/mortgage-scenarios').then(function (r) {
+    var host = document.getElementById('saved-list');
+    if (!r.items.length) { host.innerHTML = '<div class="m-empty"><p>No saved scenarios yet — adjust the inputs and click Save.</p></div>'; return; }
+    host.innerHTML = '<table class="m-table"><thead><tr><th>Scenario</th><th>Saved</th><th></th></tr></thead><tbody>'
+      + r.items.map(function (s) {
+          return '<tr><td>' + s.label + '</td><td>' + ManzilApp.fmtDate(s.when) + '</td><td><button class="m-btn m-btn--ghost m-btn--sm" onclick="loadScenario(\'' + s.id + '\',' + s.price + ',' + s.down + ',' + s.rate + ',' + s.years + ')">Load</button> <button class="m-btn m-btn--ghost m-btn--sm" onclick="removeScenario(\'' + s.id + '\')">×</button></td></tr>';
+        }).join('') + '</tbody></table>';
+  });
+}
+window.loadScenario = function (id, p, d, r, y) {
+  document.getElementById('i-price').value = p;
+  document.getElementById('i-down').value = d;
+  document.getElementById('i-rate').value = r;
+  document.getElementById('i-years').value = y;
+  calc();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+window.removeScenario = function (id) {
+  ManzilApp.api('/mortgage-scenarios', { method: 'POST', body: { action: 'remove', id: id } }).then(function () { window.toast('Removed'); loadScenarios(); });
+};
+loadScenarios();
+</script>
+</body>
+</html>

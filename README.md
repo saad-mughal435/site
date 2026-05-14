@@ -27,6 +27,7 @@ interactive walkthrough of a real-world MES/ERP project.
 | [`/app/`](https://saadm.dev/app/) | Disconnected live demo: the real frontend running entirely in the browser with a fetch interceptor. Auto-logs in as admin. |
 | [`/b2c/`](https://saadm.dev/b2c/) | **Pebble & Co.** — full DTC storefront demo. Storefront, catalog, product detail, cart, multi-step checkout, customer account, Shopify-style admin panel. Mock API runs in-browser. |
 | [`/b2b/`](https://saadm.dev/b2b/) | **Anvil Supply Co.** — full B2B wholesale portal demo. Tier pricing, MOQ, contract discounts, quote workflow, approval workflow for orders over $1,000, admin with order/quote/approval queues. |
+| [`/property/`](https://saadm.dev/property/) | **Manzil Properties** — Dubai real-estate marketplace demo. 65+ listings across 15 communities, map + list search (Leaflet/OpenStreetMap), agent and agency profiles, area guides, mortgage calculator with amortisation, 13-section admin SPA (listings, inquiries pipeline, viewings calendar, agents, agencies, customers, analytics, promotions, content CMS, moderation, settings, audit). EN/AR locale and AED/USD/GBP/EUR currency switcher. |
 
 ## Tech stack
 

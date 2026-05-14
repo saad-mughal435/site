@@ -10,3 +10,8 @@
 /cv            /contact.html    302
 /resume        /contact.html    302
 /take-demo     /demo.html       302
+
+# Manzil Properties demo aliases
+/manzil        /property/index.html   302
+/properties    /property/index.html   302
+/property/admin  /property/admin.html 302

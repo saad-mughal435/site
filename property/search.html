@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Search properties — Manzil</title>
+<meta name="description" content="Browse 65+ Dubai properties for sale, rent and off-plan across Marina, Downtown, Palm, JBR, Arabian Ranches and more. Filter by price, beds, amenities and verified status." />
+<meta name="theme-color" content="#1f7a55" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2064%2064'%3E%3Crect%20width%3D'64'%20height%3D'64'%20rx%3D'14'%20fill%3D'%231f7a55'/%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20font-family%3D'serif'%20font-weight%3D'700'%20font-size%3D'30'%20fill%3D'%23c9a049'%20text-anchor%3D'middle'%3Eم%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/property.css?v=20260514" />
+</head>
+<body class="manzil" data-map>
+<div data-shell-nav></div>
+
+<!-- Sticky filter bar -->
+<div class="m-filter-bar">
+  <div class="m-container">
+    <form id="filterForm" class="m-filter-row" onsubmit="event.preventDefault()">
+      <input id="f-q" class="m-input" placeholder="Search title or address" style="max-width:260px;min-width:180px;" />
+      <select id="f-area" class="m-select" style="max-width:200px;"></select>
+      <select id="f-type" class="m-select">
+        <option value="">Any type</option>
+        <option value="apartment">Apartment</option>
+        <option value="villa">Villa</option>
+        <option value="townhouse">Townhouse</option>
+        <option value="penthouse">Penthouse</option>
+        <option value="studio">Studio</option>
+        <option value="office">Office</option>
+      </select>
+      <select id="f-beds" class="m-select">
+        <option value="">Any beds</option>
+        <option value="studio">Studio</option>
+        <option value="1">1 Bed</option>
+        <option value="2">2 Beds</option>
+        <option value="3">3 Beds</option>
+        <option value="4+">4+ Beds</option>
+      </select>
+      <select id="f-baths" class="m-select">
+        <option value="">Any baths</option>
+        <option value="1">1+</option>
+        <option value="2">2+</option>
+        <option value="3">3+</option>
+        <option value="4">4+</option>
+      </select>
+      <div class="m-range">
+        <input id="f-price-min" class="m-input" type="number" placeholder="Min AED" style="max-width:120px;" />
+        <span>—</span>
+        <input id="f-price-max" class="m-input" type="number" placeholder="Max AED" style="max-width:120px;" />
+      </div>
+      <select id="f-furnished" class="m-select">
+        <option value="">Furnished?</option>
+        <option value="true">Furnished</option>
+        <option value="false">Unfurnished</option>
+      </select>
+      <select id="f-completion" class="m-select">
+        <option value="">Status</option>
+        <option value="ready">Ready</option>
+        <option value="off-plan">Off-plan</option>
+      </select>
+      <div class="m-pills" style="margin-inline-start:8px;">
+        <label class="m-pill"><input type="radio" name="transaction" value="buy" checked style="margin-inline-end:4px;" />Buy</label>
+        <label class="m-pill"><input type="radio" name="transaction" value="rent" style="margin-inline-end:4px;" />Rent</label>
+        <label class="m-pill"><input type="radio" name="transaction" value="off-plan" style="margin-inline-end:4px;" />Off-plan</label>
+      </div>
+      <select id="f-sort" class="m-select" style="margin-inline-start:auto;">
+        <option value="featured">Featured</option>
+        <option value="newest">Newest</option>
+        <option value="price_asc">Price: low → high</option>
+        <option value="price_desc">Price: high → low</option>
+      </select>
+      <button class="m-btn m-btn--ghost m-btn--sm" id="openFiltersBtn" type="button">More filters</button>
+      <button class="m-btn m-btn--ghost m-btn--sm" id="resetBtn" type="button">Reset</button>
+    </form>
+  </div>
+</div>
+
+<section class="m-container" style="padding-top:18px;">
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+    <h2 id="count" style="margin:0;font-size:18px;">…</h2>
+    <div style="display:flex;gap:6px;">
+      <button class="m-btn m-btn--ghost m-btn--sm" id="saveSearchBtn">⭐ Save search</button>
+      <button class="m-btn m-btn--ghost m-btn--sm m-btn--primary" data-view-btn="list">List</button>
+      <button class="m-btn m-btn--ghost m-btn--sm" data-view-btn="map">Map</button>
+    </div>
+  </div>
+
+  <div id="listWrap" style="margin-top:16px;">
+    <div class="m-grid m-grid-3" id="results"></div>
+    <div id="pagination" style="display:flex;gap:6px;justify-content:center;margin:28px 0;"></div>
+  </div>
+
+  <div id="mapWrap" style="display:none;margin-top:16px;">
+    <div class="m-split">
+      <div id="mapEl" class="m-map"></div>
+      <div class="m-grid m-grid-2" id="mapList" style="max-height:560px;overflow-y:auto;padding-right:6px;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Mobile filter drawer (mounted but hidden by default) -->
+<div class="m-filter-drawer-backdrop" id="mobileFiltersBd"></div>
+<aside class="m-filter-drawer" id="mobileFilters">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+    <h3 style="margin:0;">More filters</h3>
+    <button class="m-pill" id="closeFiltersBtn">×</button>
+  </div>
+  <div>
+    <h4 style="font-size:13px;margin:8px 0;">Amenities</h4>
+    <div id="f-amenities" class="m-pills"></div>
+  </div>
+</aside>
+
+<div data-shell-foot></div>
+
+<script src="js/data.js"></script>
+<script src="js/mock-api.js"></script>
+<script src="js/notifications.js"></script>
+<script src="js/app.js"></script>
+<script src="js/search.js"></script>
+<script>
+ManzilApp.mountShell('search');
+SearchPage.init();
+</script>
+</body>
+</html>

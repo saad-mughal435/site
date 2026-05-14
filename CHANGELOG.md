@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-05-14
+
+### Added
+- **Manzil Properties** — Dubai real-estate marketplace demo at `/property/`.
+  65+ listings across 15 UAE communities (Marina, Downtown, Palm, JBR,
+  Business Bay, DIFC, JLT, Arabian Ranches, Emirates Hills, Springs, Meadows,
+  Dubai Hills, DAMAC Hills, Mirdif, Al Barsha). 10 customer-facing pages
+  including hero search, map-and-list results (Leaflet + OpenStreetMap),
+  property detail with gallery lightbox, agent/agency profiles, area guides,
+  mortgage calculator with full amortisation schedule, side-by-side compare,
+  and customer dashboard. Admin SPA with 13 sections: dashboard, listings
+  CRUD with bulk operations, inquiries inbox with pipeline, viewings
+  calendar, agents, agencies, customers, analytics (line chart, funnel,
+  leads-by-source), promotions, content CMS for area guides, moderation
+  queue, settings, audit log. All API calls intercepted in-browser; all
+  state in localStorage.
+- AED/USD/GBP/EUR currency switcher and EN/AR locale toggle.
+- Real Unsplash photography hot-linked into listings (curated 40-URL pool).
+- Sitemap entries for `/property/index.html`, `/property/search.html`,
+  `/property/areas.html`, `/property/mortgage.html`, `/property/admin.html`.
+- `_headers` cache rules for `/property/css/*` and `/property/js/*`.
+- `_redirects` aliases: `/manzil`, `/properties`, `/property/admin`.
+
 ## [1.3.0] - 2026-05-14
 
 ### Added
