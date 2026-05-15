@@ -1,4 +1,4 @@
-/* portfolio-banner.css — top strip styling. Non-sticky so it doesn't fight
+/* portfolio-banner.css - top strip styling. Non-sticky so it doesn't fight
    sub-site navs; recruiters see it above the fold on cold load then it scrolls. */
 .portfolio-demo-banner {
   background: linear-gradient(90deg, #1a1d2b 0%, #232742 100%);

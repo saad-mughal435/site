@@ -1,4 +1,4 @@
-/* notifications.js — Toast stack + bell dropdown for Vacation Homes */
+/* notifications.js - Toast stack + bell dropdown for Vacation Homes */
 (function () {
   'use strict';
 
@@ -43,8 +43,8 @@
     if (list.length) return list;
     var now = Date.now();
     list = [
-      { id: 'n1', title: 'Welcome to Vacation Homes — demo mode', body: 'All listings and bookings fabricated. Photos via Unsplash.', when: now - 60_000, unread: true },
-      { id: 'n2', title: 'New summer promotion live', body: 'DUBAISUMMER25 — 25% off Marina villas, June–August.', when: now - 30 * 60_000, unread: true },
+      { id: 'n1', title: 'Welcome to Vacation Homes - demo mode', body: 'All listings and bookings fabricated. Photos via Unsplash.', when: now - 60_000, unread: true },
+      { id: 'n2', title: 'New summer promotion live', body: 'DUBAISUMMER25 - 25% off Marina villas, June–August.', when: now - 30 * 60_000, unread: true },
       { id: 'n3', title: 'Your saved search ran', body: '3 new Hatta cabins match your "weekend escape" alert.', when: now - 4 * 60 * 60_000, unread: false }
     ];
     saveNotifications(list);

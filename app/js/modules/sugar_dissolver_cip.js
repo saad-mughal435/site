@@ -1,9 +1,9 @@
 /**
- * Sugar Dissolver — CIP records (full editor with QC-style fields).
+ * Sugar Dissolver - CIP records (full editor with QC-style fields).
  *
  * Two views (in-place panel swap):
- *   LIST    — table of saved records for sugar-tank + dissolver, with New / Edit / Print / Delete.
- *   EDITOR  — full QC-parity form: procedure (date/time/solution rows/sign names) +
+ *   LIST    - table of saved records for sugar-tank + dissolver, with New / Edit / Print / Delete.
+ *   EDITOR  - full QC-parity form: procedure (date/time/solution rows/sign names) +
  *             swab tests + RO pH table + observations + oxonia strip + rinser filter
  *             change/type + rinsing + comments.
  *
@@ -80,7 +80,7 @@ function _esc(s) {
     return t.innerHTML;
 }
 function _fmtDate(iso) {
-    if (!iso) return '—';
+    if (!iso) return '-';
     const d = new Date(iso);
     if (Number.isNaN(d.getTime())) return _esc(iso);
     return d.toISOString().slice(0, 10);
@@ -194,7 +194,7 @@ function _renderListShell() {
     root.innerHTML = `
         <div class="mb-4 flex items-end justify-between gap-3 flex-wrap">
             <div>
-                <h2 class="text-2xl font-bold text-slate-900">Sugar Dissolver — CIP</h2>
+                <h2 class="text-2xl font-bold text-slate-900">Sugar Dissolver - CIP</h2>
                 <p class="text-slate-500 text-sm mt-1">
                     Sugar Tank and Dissolver CIP records with full QC-style detail
                     (procedure, swab tests, pH, oxonia, rinser filter, observations).
@@ -249,14 +249,14 @@ function _renderListBody() {
                 ${rows.map(r => {
                     const flow = Array.isArray(r.process_flow) && r.process_flow.length
                         ? r.process_flow.map(s => _esc(s)).join(', ')
-                        : '<span class="text-slate-400">—</span>';
+                        : '<span class="text-slate-400">-</span>';
                     return `
                         <tr class="border-b border-slate-100 hover:bg-slate-50">
                             <td class="px-4 py-2 font-medium text-slate-800">${_esc(_fmtDate(r.entry_date))}</td>
                             <td class="px-4 py-2 text-slate-700">${_esc(r.tank_name || r.tank_no)}</td>
                             <td class="px-4 py-2 text-slate-600">${flow}</td>
-                            <td class="px-4 py-2 text-slate-600">${_esc(r.saved_by || '—')}</td>
-                            <td class="px-4 py-2 text-slate-500 text-xs">${_esc(r.saved_at ? _fmtDate(r.saved_at) : '—')}</td>
+                            <td class="px-4 py-2 text-slate-600">${_esc(r.saved_by || '-')}</td>
+                            <td class="px-4 py-2 text-slate-500 text-xs">${_esc(r.saved_at ? _fmtDate(r.saved_at) : '-')}</td>
                             <td class="px-4 py-2 text-right whitespace-nowrap">
                                 <button class="sdcip-print px-2 py-1 text-xs font-semibold rounded-full border border-blue-300 bg-blue-50 text-blue-800 hover:bg-blue-100"
                                         data-tank="${_esc(r.tank_no)}" data-id="${_esc(r.id)}">Print</button>
@@ -345,7 +345,7 @@ function _renderEditorShell() {
             <div class="flex flex-wrap items-center gap-2">
                 <label class="text-xs font-semibold text-slate-700">Tank</label>
                 <select id="sdcip-edit-tank" class="px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white max-w-[220px]" ${e.entry_id ? 'disabled' : ''}>
-                    <option value="">— Select tank —</option>
+                    <option value="">- Select tank -</option>
                     ${SD_CIP_TANKS.map(t => `<option value="${_esc(t.key)}" ${e.tank === t.key ? 'selected' : ''}>${_esc(t.label)}</option>`).join('')}
                 </select>
                 ${showAddButtons ? `<div class="flex gap-2 ml-auto flex-wrap">
@@ -399,7 +399,7 @@ function _renderBlocks() {
     const blocks = _state.editing.blocks;
     if (!blocks.length) {
         wrap.innerHTML = `<div class="bg-slate-50 border border-dashed border-slate-300 rounded-xl p-8 text-center text-slate-500 text-sm">
-            ${_state.editing.tank ? 'No blocks yet — click an "Add ... CIP" button above to start.' : 'Pick a tank above to begin.'}
+            ${_state.editing.tank ? 'No blocks yet - click an "Add ... CIP" button above to start.' : 'Pick a tank above to begin.'}
         </div>`;
         return;
     }
@@ -701,7 +701,7 @@ async function _onSaveClick() {
         }
         const data = await r.json();
         showToast(e.entry_id ? 'CIP record updated' : 'CIP record created', 'success');
-        // For new records, server returns the assigned id — switch to edit mode for that id
+        // For new records, server returns the assigned id - switch to edit mode for that id
         // so subsequent saves use PUT.
         if (!e.entry_id && data?.id) {
             e.entry_id = data.id;

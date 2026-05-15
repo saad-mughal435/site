@@ -272,7 +272,7 @@ function renderRMDashboard(data) {
     const summaries = data.lpo_summaries || [];
     const totalLPOValue = data.total_value || 0;
 
-    // Summary cards — 5 cards in a responsive grid
+    // Summary cards - 5 cards in a responsive grid
     let html = `<div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
         <div class="bg-white rounded-xl shadow-lg p-5 border-l-4 border-indigo-500">
             <div class="text-sm text-gray-500 mb-1">Active LPOs</div>
@@ -586,7 +586,7 @@ function renderSearchResultsTable(items, searchTerm) {
 
     let html = `<div class="bg-yellow-50 border-l-4 border-yellow-400 px-4 py-2.5 text-sm">
         <span class="font-semibold text-yellow-700">Search Results</span>
-        <span class="text-yellow-600 ml-1">— ${items.length} items matching "${searchTerm}" (not in forecast)</span>
+        <span class="text-yellow-600 ml-1">- ${items.length} items matching "${searchTerm}" (not in forecast)</span>
         <span class="text-gray-400 ml-2">Select items and set order qty to add them to your requisition</span>
     </div>
     <table class="w-full text-sm">
@@ -822,7 +822,7 @@ function renderRMOrdersList() {
 
 export async function deleteRMOrder(orderId, orderNumber) {
     const label = orderNumber || orderId;
-    if (!confirm(`Delete order ${label}? This cannot be undone.\n\nNote: any Sage entries / stock lots already created from completed GRNs will remain — only the order record is removed.`)) {
+    if (!confirm(`Delete order ${label}? This cannot be undone.\n\nNote: any Sage entries / stock lots already created from completed GRNs will remain - only the order record is removed.`)) {
         return;
     }
     try {
@@ -857,7 +857,7 @@ export async function viewRMOrderDetail(orderId) {
             <div class="flex items-center gap-3 mb-4">
                 <span class="px-3 py-1 rounded-full text-sm font-bold ${statusBadge}">${getStatusLabel(order.status)}</span>
                 <span class="text-gray-500">Supplier: <strong>${order.supplier_name || 'N/A'}</strong></span>
-                ${order.status === 'pending_grn' ? '<span class="text-amber-600 text-sm font-medium">— Awaiting Sage GRN approval on Sage Entries page</span>' : ''}
+                ${order.status === 'pending_grn' ? '<span class="text-amber-600 text-sm font-medium">- Awaiting Sage GRN approval on Sage Entries page</span>' : ''}
             </div>`;
 
         // If LPO or partially_received, show enriched table with Sage + LPO qty
@@ -895,7 +895,7 @@ export async function viewRMOrderDetail(orderId) {
                 html += `<div class="text-sm text-gray-500 mb-3">Expected Delivery: <strong>${ed}</strong></div>`;
             }
         } else if (order.status === 'requisition') {
-            // Editable table for requisitions — user can set unit cost & lead time before approval
+            // Editable table for requisitions - user can set unit cost & lead time before approval
             html += `<div class="overflow-x-auto mb-4">
                 <table class="w-full text-sm border" id="requisition-edit-table">
                     <thead>

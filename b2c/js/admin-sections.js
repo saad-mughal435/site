@@ -13,7 +13,7 @@
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
   /* =========================================================
-     Shared helpers — CSV export, form modal, list refresh
+     Shared helpers - CSV export, form modal, list refresh
      ========================================================= */
   function exportCSV(filename, rows, columns) {
     const cell = (v) => {
@@ -309,7 +309,7 @@
         { name: 'customer_id', label: 'Customer', type: 'select', required: true,
           options: customers.map(c => ({ value: c.id, label: `${c.name} · ${c.email}` })) },
         { name: 'product_id', label: 'Product', type: 'select', required: true,
-          options: products.map(p => ({ value: p.id, label: `${p.name} — ${fm(p.price)} · stock ${p.stock}` })) },
+          options: products.map(p => ({ value: p.id, label: `${p.name} - ${fm(p.price)} · stock ${p.stock}` })) },
         { name: 'qty', label: 'Quantity', type: 'number', value: 1, required: true, min: 1, max: 99 },
         { name: 'notes', label: 'Internal notes (optional)', type: 'textarea', rows: 2 },
       ],
@@ -479,7 +479,7 @@
     if (slipBtn) slipBtn.addEventListener('click', () => printPackingSlip(order));
 
     if (refundBtn) refundBtn.addEventListener('click', async () => {
-      if (!confirm(`Refund ${order.number || order.id}? (Demo — no real money moves.)`)) return;
+      if (!confirm(`Refund ${order.number || order.id}? (Demo - no real money moves.)`)) return;
       refundBtn.disabled = true;
       refundBtn.textContent = 'Refunding…';
       const res = await setOrderStatus(order.number || order.id, 'refunded');
@@ -539,7 +539,7 @@
       </style>
     </head><body>
       <div class="toolbar">
-        <span class="meta">Pebble &amp; Co. — Packing Slip</span>
+        <span class="meta">Pebble &amp; Co. - Packing Slip</span>
         <button onclick="window.print()">Print / Save as PDF</button>
       </div>
       <div class="header">
@@ -581,12 +581,12 @@
         <div class="row grand"><span>Total</span><span>$${Number(o.total || 0).toFixed(2)}</span></div>
       </div>
       <div class="footer">
-        Thank you for ordering from Pebble &amp; Co. — questions? hello@pebbleandco.demo<br>
+        Thank you for ordering from Pebble &amp; Co. - questions? hello@pebbleandco.demo<br>
         <span class="stamp">Demo · fabricated data · no real shipment</span>
       </div>
     </body></html>`;
     const w = window.open('', '_blank', 'width=900,height=1100');
-    if (!w) { window.toast('Popup blocked — allow popups to print', 'error'); return; }
+    if (!w) { window.toast('Popup blocked - allow popups to print', 'error'); return; }
     w.document.write(html);
     w.document.close();
   }
@@ -711,7 +711,7 @@
         modal.remove();
         // Show preview modal
         const headers = Object.keys(parsed[0]);
-        showAdminModal(`Import preview — ${parsed.length} row(s)`, `
+        showAdminModal(`Import preview - ${parsed.length} row(s)`, `
           <div style="max-height:380px; overflow:auto; border:1px solid var(--line); border-radius:8px;">
             <table class="admin-table" style="width:100%;">
               <thead><tr>${headers.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead>
@@ -925,7 +925,7 @@
             { value: 'abandoned_cart', label: 'Abandoned cart' },
           ] },
         { name: 'body', label: 'Body', type: 'textarea', rows: 6, required: true,
-          placeholder: 'Hey there — quick note about your order…' },
+          placeholder: 'Hey there - quick note about your order…' },
       ],
       onSubmit: async (data, modal) => {
         const res = await fetch('/b2c/api/admin/email-log', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }).then(r => r.json());

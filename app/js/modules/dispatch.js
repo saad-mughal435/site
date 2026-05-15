@@ -1,5 +1,5 @@
 /**
- * Demo Plant LLC — Dispatch Module
+ * Demo Plant LLC - Dispatch Module
  *
  * One dispatch row per stock_reservation (one per JO line / per JO number /
  * per item). Each row dispatches independently:
@@ -316,7 +316,7 @@ function openProcessModal(reservationId) {
     const root = document.getElementById('disp-modal-root');
     if (!row) {
         root.innerHTML = modalShell('Item not found', `
-            <div class="text-sm text-slate-600 mb-4">Reservation no longer in the pending list — refresh and try again.</div>
+            <div class="text-sm text-slate-600 mb-4">Reservation no longer in the pending list - refresh and try again.</div>
             <div class="flex justify-end pt-4 border-t border-slate-100">
                 <button id="disp-modal-cancel" class="px-4 py-2 text-sm font-medium border border-slate-300 rounded-md text-slate-700 hover:bg-slate-50 transition-colors">Close</button>
             </div>`);
@@ -334,11 +334,11 @@ function openProcessModal(reservationId) {
     const statusHtml = row.ok
         ? `<div class="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-            Available — ready to dispatch
+            Available - ready to dispatch
         </div>`
         : `<div class="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md bg-red-50 text-red-700 border border-red-200">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            Short ${FMT_QTY(row.shortfall)} — move stock in Sage first
+            Short ${FMT_QTY(row.shortfall)} - move stock in Sage first
         </div>`;
 
     const fieldLabel = 'text-[10px] font-semibold uppercase tracking-wider text-slate-500 mb-1';
@@ -390,7 +390,7 @@ function openProcessModal(reservationId) {
             </button>
         </div>
     `;
-    root.innerHTML = modalShell(`Dispatch — ${escapeHtml(row.jo_number || '')} · ${escapeHtml(row.item_code)}`, body);
+    root.innerHTML = modalShell(`Dispatch - ${escapeHtml(row.jo_number || '')} · ${escapeHtml(row.item_code)}`, body);
     bindModalClose();
     document.getElementById('disp-modal-process')?.addEventListener('click', () => processReservation(reservationId));
 }
@@ -410,7 +410,7 @@ async function processReservation(reservationId) {
             if (detail && typeof detail === 'object' && detail.shortfall) {
                 const s = detail.shortfall;
                 showErrorInModal('Insufficient stock', `<div class="text-sm">
-                    <span class="font-mono">${escapeHtml(s.sage_item_code)}</span> — required ${FMT_QTY(s.required)}, available ${FMT_QTY(s.available)} (short ${FMT_QTY(s.shortfall)}).
+                    <span class="font-mono">${escapeHtml(s.sage_item_code)}</span> - required ${FMT_QTY(s.required)}, available ${FMT_QTY(s.available)} (short ${FMT_QTY(s.shortfall)}).
                 </div>`);
             } else {
                 let msg;
@@ -526,7 +526,7 @@ function renderDispatchTable(items, emptyMsg, opts = {}) {
                             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                             PDF
                        </a>`
-                    : '<span class="text-slate-300">—</span>'}</td>
+                    : '<span class="text-slate-300">-</span>'}</td>
                 ${showRevert ? `<td class="px-6 py-4 text-center">
                     <button class="disp-revert-btn inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-lg border border-amber-300 text-amber-700 bg-white hover:bg-amber-50 transition-colors"
                             data-dispatch-id="${escapeAttr(d.dispatch_id)}"
@@ -617,7 +617,7 @@ function openRevertModal(info) {
             </button>
         </div>
     `;
-    root.innerHTML = modalShell(`Revert dispatch — ${escapeHtml(info.dn_number || '')}`, body);
+    root.innerHTML = modalShell(`Revert dispatch - ${escapeHtml(info.dn_number || '')}`, body);
     bindModalClose();
     document.getElementById('disp-modal-revert')?.addEventListener('click', () => revertDispatch(info.dispatch_id));
 }
@@ -683,7 +683,7 @@ function typeBadge(t) {
     const base = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium';
     if (t === 'local')  return `<span class="${base} bg-rose-100 text-rose-800">LOCAL</span>`;
     if (t === 'export') return `<span class="${base} bg-blue-100 text-blue-800">EXPORT</span>`;
-    return `<span class="${base} bg-slate-100 text-slate-600">—</span>`;
+    return `<span class="${base} bg-slate-100 text-slate-600">-</span>`;
 }
 
 function sageStatusBadge(s) {

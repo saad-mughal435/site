@@ -241,7 +241,7 @@ function _renderGroup(rows) {
             ? `<span class="ml-2 px-2 py-0.5 text-[10px] font-bold rounded bg-amber-100 text-amber-800 border border-amber-200 cursor-pointer hover:bg-amber-200" title="Click to change order type" onclick="editJOType('${_escape(summaryRef)}', '${orderType}')">LOCAL ✎</span>`
             : (orderType === 'export'
                 ? `<span class="ml-2 px-2 py-0.5 text-[10px] font-bold rounded bg-blue-100 text-blue-700 border border-blue-200 cursor-pointer hover:bg-blue-200" title="Click to change order type" onclick="editJOType('${_escape(summaryRef)}', '${orderType}')">EXPORT ✎</span>`
-                : `<span class="ml-2 px-2 py-0.5 text-[10px] font-bold rounded bg-slate-200 text-slate-700 border border-slate-300 cursor-pointer hover:bg-slate-300" title="Untyped legacy JO — click to flag" onclick="editJOType('${_escape(summaryRef)}', null)">UNTYPED ✎</span>`))
+                : `<span class="ml-2 px-2 py-0.5 text-[10px] font-bold rounded bg-slate-200 text-slate-700 border border-slate-300 cursor-pointer hover:bg-slate-300" title="Untyped legacy JO - click to flag" onclick="editJOType('${_escape(summaryRef)}', null)">UNTYPED ✎</span>`))
         : '';
     const dateBadge = dateStr
         ? `<span class="ml-2 px-2 py-0.5 text-[10px] font-semibold rounded bg-slate-200 text-slate-700">${_escape(dateStr)}</span>`

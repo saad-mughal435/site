@@ -1,6 +1,6 @@
-/* app.js — Shared shell for Manzil customer pages
+/* app.js - Shared shell for Manzil customer pages
    Nav, footer, currency, language, favorites, compare, recently-viewed, formatters, helpers. */
-// Cross-site portfolio-demo banner — appears above the fold on every page so
+// Cross-site portfolio-demo banner - appears above the fold on every page so
 // recruiters landing via a deep link see this is a demo, not a real brokerage.
 (function () { var s = document.createElement('script'); s.src = '/assets/portfolio-banner.js?v=20260514'; s.async = true; document.head.appendChild(s); })();
 (function () {
@@ -467,13 +467,13 @@
             var time = host.querySelector('#iq-time').value;
             payload.scheduled_at = date + 'T' + time;
             api('/viewings', { method: 'POST', body: payload }).then(function () {
-              toast('Viewing scheduled — agent will confirm', 'success');
+              toast('Viewing scheduled - agent will confirm', 'success');
               if (window.ManzilNotifications) window.ManzilNotifications.push('Viewing booked', l.title + ' on ' + date + ' at ' + time);
               close();
             });
           } else {
             api('/inquiries', { method: 'POST', body: payload }).then(function () {
-              toast(kind === 'whatsapp' ? 'WhatsApp message sent (demo)' : 'Inquiry sent — agent will respond soon', 'success');
+              toast(kind === 'whatsapp' ? 'WhatsApp message sent (demo)' : 'Inquiry sent - agent will respond soon', 'success');
               if (window.ManzilNotifications) window.ManzilNotifications.push('Inquiry sent', l.title);
               close();
             });
@@ -489,7 +489,7 @@
     var l = d.LISTINGS.find(function (x) { return x.id === id; });
     if (!l) return;
     var url = location.origin + '/property/listing.html?id=' + id;
-    var msg = encodeURIComponent(l.title + ' — ' + formatPriceExact(l.price_aed) + ' · ' + url);
+    var msg = encodeURIComponent(l.title + ' - ' + formatPriceExact(l.price_aed) + ' · ' + url);
     showModal({
       title: 'Share this listing',
       body: ''

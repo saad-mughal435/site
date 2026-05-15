@@ -1,4 +1,4 @@
-/* admin.js — Admin SPA shell: sidebar, hash router, topbar */
+/* admin.js - Admin SPA shell: sidebar, hash router, topbar */
 (function () {
   'use strict';
 

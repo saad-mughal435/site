@@ -15,7 +15,7 @@ let currentCategory = 'All';
 let currentPage = 1;
 const rowsPerPage = 500;
 
-// GL Sales (AR) state — when non-null, the AR tab is active
+// GL Sales (AR) state - when non-null, the AR tab is active
 let currentGLType = null;   // 'local' | 'export' | null
 let allGLSalesData = [];    // full GL dataset for client-side date/search filtering
 
@@ -28,7 +28,7 @@ let allGLSalesData = [];    // full GL dataset for client-side date/search filte
  */
 export async function loadGRNData() {
     try {
-        // Reset GL/AR mode — we are loading regular inventory data
+        // Reset GL/AR mode - we are loading regular inventory data
         currentGLType = null;
         allGLSalesData = [];
         restoreStatLabels();
@@ -188,7 +188,7 @@ export async function refreshGRNData() {
         return;
     }
     
-    // Reset GL/AR mode — refresh always loads inventory data
+    // Reset GL/AR mode - refresh always loads inventory data
     currentGLType = null;
     allGLSalesData = [];
     restoreStatLabels();
@@ -531,7 +531,7 @@ let glSalesCache = { local: null, export: null };
  * Called when "Local Sales (AR)" or "Export Sales (AR)" tabs are clicked
  */
 export async function loadGLSalesData(type) {
-    // Set GL/AR mode — this tells filterGRNTable to work on GL data
+    // Set GL/AR mode - this tells filterGRNTable to work on GL data
     currentGLType = type;
     currentPage = 1;
     

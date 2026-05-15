@@ -1,5 +1,5 @@
 /* =========================================================================
-   Manzil Properties — Design System
+   Manzil Properties - Design System
    Scoped CSS for /property/ marketplace demo.
    Sits on top of the dark portfolio shell; cards live on a warm cream canvas.
    ========================================================================= */
@@ -676,7 +676,7 @@ p { margin: 0 0 .8em; color: var(--manzil-ink-2); }
 .m-floor-legend { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; font-size: 11px; color: var(--manzil-muted); }
 .m-floor-legend .sq { width: 12px; height: 12px; border-radius: 3px; display: inline-block; margin-inline-end: 4px; vertical-align: middle; }
 
-/* Print — turns the listing detail page into a one-page A4 brochure. */
+/* Print - turns the listing detail page into a one-page A4 brochure. */
 @media print {
   @page { size: A4; margin: 12mm 14mm; }
   /* Hide all chrome and noisy widgets */
@@ -688,7 +688,7 @@ p { margin: 0 0 .8em; color: var(--manzil-ink-2); }
   body.manzil { background: white !important; color: black !important; font-size: 11pt; }
   /* Make the detail grid single-column */
   .m-detail-grid { grid-template-columns: 1fr !important; gap: 12px !important; margin-top: 10mm !important; }
-  /* Print-only brochure header — injected via .m-print-header on the page */
+  /* Print-only brochure header - injected via .m-print-header on the page */
   .m-print-header { display: block !important; margin-bottom: 8mm; padding-bottom: 4mm; border-bottom: 2px solid var(--manzil-primary); }
   .m-print-header h1 { font-size: 18pt !important; margin: 0 0 2mm; color: var(--manzil-primary); font-family: var(--font-display); }
   .m-print-header .meta { font-size: 9pt; color: #555; font-family: var(--font-mono); display: flex; gap: 12px; }
@@ -709,7 +709,7 @@ p { margin: 0 0 .8em; color: var(--manzil-ink-2); }
   .m-map { display: none !important; }
   /* Floor plan: visible but smaller */
   .m-floor svg { max-height: 60mm; }
-  /* Print-only agent card — injected from the page */
+  /* Print-only agent card - injected from the page */
   .m-print-agent { display: block !important; margin-top: 8mm; padding: 5mm; border: 1px solid #ccc; background: #fafaf6; break-inside: avoid; }
   .m-print-agent h3 { margin: 0 0 2mm; font-size: 12pt; color: var(--manzil-primary); }
   .m-print-agent .row { display: flex; gap: 14mm; font-size: 10pt; margin-top: 2mm; }

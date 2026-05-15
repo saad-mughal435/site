@@ -1,6 +1,6 @@
 <div align="center">
 
-# Pebble & Co. — DTC storefront demo
+# Pebble & Co. - DTC storefront demo
 
 **A direct-to-consumer e-commerce demo with a Shopify-style admin panel. Vanilla stack, mock API, runs entirely in your browser.**
 
@@ -14,7 +14,7 @@
 
 ## What this is
 
-A complete direct-to-consumer commerce demo — storefront, catalog, product detail, cart, multi-step checkout, customer account, and a 7-section admin panel — all running in the browser with a fetch-interceptor mock API. Built to show what shipping a self-contained commerce surface looks like without leaning on Shopify, Stripe, or any other SaaS.
+A complete direct-to-consumer commerce demo - storefront, catalog, product detail, cart, multi-step checkout, customer account, and a 7-section admin panel - all running in the browser with a fetch-interceptor mock API. Built to show what shipping a self-contained commerce surface looks like without leaning on Shopify, Stripe, or any other SaaS.
 
 ## Quick links
 
@@ -28,25 +28,25 @@ A complete direct-to-consumer commerce demo — storefront, catalog, product det
 - Browse a 24-product catalog with category filters, search, and featured carousels.
 - View product detail with reviews (~80 fabricated), variants (colour / size), specs, related products.
 - Add to cart, apply promo codes (`SUMMER15`, `FREESHIP`, etc.), proceed to multi-step checkout.
-- Pay via fabricated card / Apple Pay / Google Pay — order confirmation page, order email log entry.
+- Pay via fabricated card / Apple Pay / Google Pay - order confirmation page, order email log entry.
 - Manage account: order history, addresses, loyalty points, wishlist, password / email update.
 
 ### Admin side
-- **Dashboard** — KPIs, revenue trend, recent orders, low-stock alerts.
-- **Orders** — table + detail, status overrides (paid / fulfilled / shipped / delivered / cancelled / refunded), print packing slip + refund.
-- **Products** — CRUD with variant pricing, bulk publish / unpublish / feature, CSV export.
-- **Customers** — segment view, lifetime value, order history per customer.
-- **Promotions** — promo-code editor (percent / fixed / shipping).
-- **Banners** — homepage hero editor.
-- **Email log** — every transactional email rendered in-app.
-- **Settings** — currencies, FX rates, contact, danger-zone reset.
+- **Dashboard** - KPIs, revenue trend, recent orders, low-stock alerts.
+- **Orders** - table + detail, status overrides (paid / fulfilled / shipped / delivered / cancelled / refunded), print packing slip + refund.
+- **Products** - CRUD with variant pricing, bulk publish / unpublish / feature, CSV export.
+- **Customers** - segment view, lifetime value, order history per customer.
+- **Promotions** - promo-code editor (percent / fixed / shipping).
+- **Banners** - homepage hero editor.
+- **Email log** - every transactional email rendered in-app.
+- **Settings** - currencies, FX rates, contact, danger-zone reset.
 
 ## Tech
 
 | Layer | Tools |
 |-------|-------|
 | Markup / styles | Semantic HTML5 · modern CSS3 (Grid + Flexbox + custom properties) |
-| Frontend | Vanilla JavaScript (ES6+) — no framework, no build step |
+| Frontend | Vanilla JavaScript (ES6+) - no framework, no build step |
 | State | `localStorage` (cart, orders, customer overrides, banners, settings) |
 | Mock backend | `fetch` + `XMLHttpRequest` shim under `js/mock-api.js` |
 | Notifications | Hand-rolled toast stack + bell dropdown |

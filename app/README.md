@@ -1,6 +1,6 @@
 <div align="center">
 
-# Kingsley MES / ERP — disconnected demo
+# Kingsley MES / ERP - disconnected demo
 
 **A faithful, sanitised walkthrough of the production MES/ERP system I designed and built at Kingsley Beverage FZCO.**
 
@@ -14,7 +14,7 @@
 
 ## What this is
 
-A **disconnected, in-browser** version of the manufacturing-floor MES / ERP system I built — production planning, inventory, quality control, OEE monitoring, accounts, Sage integration, and 6 print-ready PDF templates. The full application runs in your browser with a `fetch`-interceptor returning fabricated demo data; the actual production code (`_kingsley_private_DO_NOT_PUBLISH/`) is intentionally not in this repo.
+A **disconnected, in-browser** version of the manufacturing-floor MES / ERP system I built - production planning, inventory, quality control, OEE monitoring, accounts, Sage integration, and 6 print-ready PDF templates. The full application runs in your browser with a `fetch`-interceptor returning fabricated demo data; the actual production code (`_kingsley_private_DO_NOT_PUBLISH/`) is intentionally not in this repo.
 
 Built solo as Automation Engineer / ERP Developer / IT Administrator at Kingsley Beverage FZCO, Dubai.
 
@@ -26,10 +26,10 @@ Built solo as Automation Engineer / ERP Developer / IT Administrator at Kingsley
 
 ## What you can see
 
-- **20+ integrated modules** — production planning, job orders, inventory, recipes / BOM, QC seam check, batch tracking, dispatch, accounts, customs, equipment, PO status, GRN, yield reporting, analytics.
-- **6 print-ready PDF document templates** — performa invoice, packing list, picking sheet, batch report, GRN, recipe sheet.
-- **Auto-login as admin** — every module unlocked.
-- **Mock-API interceptor** — every `fetch()` to `/api/*` is captured and answered from in-memory fabricated data. Realistic shortfalls, downtime causes, OEE math, batch numbers — but nothing real.
+- **20+ integrated modules** - production planning, job orders, inventory, recipes / BOM, QC seam check, batch tracking, dispatch, accounts, customs, equipment, PO status, GRN, yield reporting, analytics.
+- **6 print-ready PDF document templates** - performa invoice, packing list, picking sheet, batch report, GRN, recipe sheet.
+- **Auto-login as admin** - every module unlocked.
+- **Mock-API interceptor** - every `fetch()` to `/api/*` is captured and answered from in-memory fabricated data. Realistic shortfalls, downtime causes, OEE math, batch numbers - but nothing real.
 
 ## Tech stack (in production)
 
@@ -62,7 +62,7 @@ No build step. Edit a file, refresh.
 
 ```
 .
-├── index.html          # Demo shell — auto-login + module loader
+├── index.html          # Demo shell - auto-login + module loader
 ├── css/                # Scoped styles
 ├── js/
 │   ├── mock-api.js     # Fetch interceptor returning fabricated data
@@ -73,7 +73,7 @@ No build step. Edit a file, refresh.
 
 ## Canonical source
 
-This repository is a **mirror** of `site/app/` from the main portfolio repo, split out for visibility. The canonical source — including the changelog, CI workflows, and deploy configuration — lives at:
+This repository is a **mirror** of `site/app/` from the main portfolio repo, split out for visibility. The canonical source - including the changelog, CI workflows, and deploy configuration - lives at:
 
 📦 **[saad-mughal435/site](https://github.com/saad-mughal435/site)** (under `app/`)
 

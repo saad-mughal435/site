@@ -1,11 +1,11 @@
-/* mock-api.js — Intercepts fetch to /vacation/api/* and serves from
+/* mock-api.js - Intercepts fetch to /vacation/api/* and serves from
    VACATION_DATA + localStorage. Implements public booking flow with
    conflict-check and full admin surface. All writes are local-only. */
 (function () {
   'use strict';
 
   if (!window.VACATION_DATA) {
-    console.error('mock-api: VACATION_DATA not loaded — include data.js first');
+    console.error('mock-api: VACATION_DATA not loaded - include data.js first');
     return;
   }
 
@@ -86,7 +86,7 @@
     var created = jget(LS.reviews_created, []);
     return seed.concat(created);
   }
-  // Merged view of host applications — seed + per-host overrides from localStorage.
+  // Merged view of host applications - seed + per-host overrides from localStorage.
   function applications() {
     var seed = (window.VACATION_DATA.HOST_APPLICATIONS || []).slice();
     var overrides = jget(LS.host_applications, {});
@@ -407,7 +407,7 @@
 
     /* ================== HOST (public producer side) ================== */
 
-    // Sign up as a host — creates a host record + sets session.
+    // Sign up as a host - creates a host record + sets session.
     if (path === '/auth/host-signup' && method === 'POST') {
       var hid = 'h' + Date.now();
       var newHost = {
@@ -451,7 +451,7 @@
       var sess1 = jget(LS.host_session, null);
       if (!sess1) return { ok: false, error: 'not_authenticated', status: 401 };
       var existing = getApplication(sess1.host_id) || { host_id: sess1.host_id, submitted_at: null, status: 'draft', documents: [], notes_from_admin: '' };
-      // Merge new documents — each body.documents[i] is { type, filename, thumb, mime } and we mark status: 'submitted'.
+      // Merge new documents - each body.documents[i] is { type, filename, thumb, mime } and we mark status: 'submitted'.
       var docs = (body.documents || []).map(function (doc) {
         return Object.assign({ status: 'submitted' }, doc);
       });
@@ -482,7 +482,7 @@
       return { ok: true, application: app };
     }
 
-    // Public host listings — create / list / update / delete own listings.
+    // Public host listings - create / list / update / delete own listings.
     if (path === '/host/listings' && method === 'POST') {
       var sess3 = jget(LS.host_session, null);
       if (!sess3) return { ok: false, error: 'not_authenticated', status: 401 };
@@ -513,7 +513,7 @@
       var lc2 = jget(LS.listings_created, []); lc2.unshift(newL); jset(LS.listings_created, lc2);
       audit('listing.host.create', nid2, newL.title + ' (' + initialStatus + ')');
       pushNotification({
-        title: hostVerified ? 'New listing pending review' : 'New listing — awaiting host verification',
+        title: hostVerified ? 'New listing pending review' : 'New listing - awaiting host verification',
         body: newL.title,
         kind: 'review'
       });
@@ -632,7 +632,7 @@
       var alertsList = [];
       if (pendingApps.length)     alertsList.push({ kind: 'verify',  msg: pendingApps.length + ' host application' + (pendingApps.length === 1 ? '' : 's') + ' awaiting review', count: pendingApps.length, link: '#host_approvals' });
       if (pendingListings.length) alertsList.push({ kind: 'listing', msg: pendingListings.length + ' listing' + (pendingListings.length === 1 ? '' : 's') + ' pending approval',     count: pendingListings.length, link: '#listing_approvals' });
-      alertsList.push({ kind: 'review', msg: '3 reviews under 3★ — review for moderation', count: 3, link: '#reviews' });
+      alertsList.push({ kind: 'review', msg: '3 reviews under 3★ - review for moderation', count: 3, link: '#reviews' });
       alertsList.push({ kind: 'payout', msg: '14 host payouts in queue', count: 14, link: '#payments' });
       return {
         ok: true,
@@ -735,7 +735,7 @@
       if (action === 'reject') { leds[lid].status = 'rejected'; leds[lid].review_note = body.reason || ''; }
       jset(LS.listings_edits, leds);
       audit('listing.' + action, lid, body.reason || '');
-      pushNotification({ title: 'Listing ' + action, body: l_target.title + (body.reason ? ' — ' + body.reason : ''), kind: 'review' });
+      pushNotification({ title: 'Listing ' + action, body: l_target.title + (body.reason ? ' - ' + body.reason : ''), kind: 'review' });
       return { ok: true };
     }
 
@@ -845,7 +845,7 @@
         if (cascaded) {
           jset(LS.listings_edits, le_v);
           audit('listing.cascade.host_approved', hid_v, cascaded + ' listing(s) → pending_review');
-          pushNotification({ title: cascaded + ' listing' + (cascaded === 1 ? '' : 's') + ' ready for review', body: 'Host ' + hid_v + ' was approved — their listings are now in the review queue.', kind: 'review' });
+          pushNotification({ title: cascaded + ' listing' + (cascaded === 1 ? '' : 's') + ' ready for review', body: 'Host ' + hid_v + ' was approved - their listings are now in the review queue.', kind: 'review' });
         }
       } else if (act === 'reject') {
         nextApp_v.documents = (app_v.documents || []).map(function (d) {
@@ -854,7 +854,7 @@
       }
       saveApplication(hid_v, nextApp_v);
       audit('verification.' + act, hid_v, body.reason || '');
-      pushNotification({ title: 'Host verification ' + act, body: hid_v + (body.reason ? ' — ' + body.reason : ''), kind: 'verify' });
+      pushNotification({ title: 'Host verification ' + act, body: hid_v + (body.reason ? ' - ' + body.reason : ''), kind: 'verify' });
       return { ok: true, application: nextApp_v };
     }
     if (m = path.match(/^\/admin\/verifications\/([^\/]+)\/docs\/([^\/]+)\/(approve|reject)$/) && method === 'POST') {
@@ -872,7 +872,7 @@
       // If any doc is rejected, application status auto-shifts to changes_requested.
       if (dact === 'reject' && app_d2.status !== 'changes_requested') nextApp_d.status = 'changes_requested';
       saveApplication(hid_d2, nextApp_d);
-      audit('verification.doc.' + dact, hid_d2, dtype + (body.reason ? ' — ' + body.reason : ''));
+      audit('verification.doc.' + dact, hid_d2, dtype + (body.reason ? ' - ' + body.reason : ''));
       return { ok: true };
     }
 
@@ -1012,5 +1012,5 @@
     });
   };
 
-  console.log('Vacation mock-api ready — fetch intercepted for /vacation/api/*');
+  console.log('Vacation mock-api ready - fetch intercepted for /vacation/api/*');
 })();

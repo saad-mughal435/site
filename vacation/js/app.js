@@ -1,7 +1,7 @@
-/* app.js — Shared shell for Vacation Homes
+/* app.js - Shared shell for Vacation Homes
    Nav, footer, currency, locale, favorites, recently-viewed, formatters,
    date helpers, listing card renderer, modal helper, booking helpers. */
-// Cross-site portfolio-demo banner — appears above the fold on every page so
+// Cross-site portfolio-demo banner - appears above the fold on every page so
 // recruiters landing via a deep link see this is a demo, not a real booking site.
 (function () { var s = document.createElement('script'); s.src = '/assets/portfolio-banner.js?v=20260514'; s.async = true; document.head.appendChild(s); })();
 (function () {
@@ -140,7 +140,7 @@
 
   /* ---------- Quote / price breakdown ---------- */
   function isWeekend(d) {
-    // UAE weekend: Saturday + Sunday (modern) — getDay() 0=Sun, 6=Sat
+    // UAE weekend: Saturday + Sunday (modern) - getDay() 0=Sun, 6=Sat
     var x = typeof d === 'string' ? new Date(d) : d;
     var dy = x.getDay();
     return dy === 0 || dy === 6;
@@ -226,7 +226,7 @@
       +     '<div class="v-foot-grid">'
       +       '<div>'
       +         '<div class="v-logo" style="color:white;"><span class="v-logo-mark">V</span><span>Vacation Homes</span></div>'
-      +         '<p style="color:rgba(255,255,255,.6);margin-top:8px;max-width:340px;">A UAE short-stay booking demo. 55 vacation homes across 10 destinations — Marina, Palm, Hatta, RAK, Fujairah, Liwa and more. Book by the night.</p>'
+      +         '<p style="color:rgba(255,255,255,.6);margin-top:8px;max-width:340px;">A UAE short-stay booking demo. 55 vacation homes across 10 destinations - Marina, Palm, Hatta, RAK, Fujairah, Liwa and more. Book by the night.</p>'
       +         '<p style="font-size:11px;color:rgba(255,255,255,.5);margin-top:8px;">Listings, hosts, bookings and prices are fabricated. Photos via <a href="https://unsplash.com" rel="noopener" target="_blank">Unsplash</a>.</p>'
       +       '</div>'
       +       '<div><h4>Explore</h4><ul>'

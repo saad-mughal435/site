@@ -1,6 +1,6 @@
 <div align="center">
 
-# Manzil Properties — Dubai real-estate marketplace
+# Manzil Properties - Dubai real-estate marketplace
 
 **A two-sided property marketplace patterned on Property Finder / Bayut. Map + list search across 15 Dubai communities, mortgage / valuation / yield tools, and a 13-section admin SPA.**
 
@@ -14,7 +14,7 @@
 
 ## What this is
 
-A complete real-estate marketplace demo — buyer side, agent side, and admin — running entirely in the browser. 65 listings, 24 agents, 10 agencies, 18 customers, 40 inquiries, 20 viewings across 15 Dubai communities. Real Unsplash photography. Leaflet + OpenStreetMap tiles. Full CRUD, leads pipeline, viewings calendar, analytics, moderation, and audit log.
+A complete real-estate marketplace demo - buyer side, agent side, and admin - running entirely in the browser. 65 listings, 24 agents, 10 agencies, 18 customers, 40 inquiries, 20 viewings across 15 Dubai communities. Real Unsplash photography. Leaflet + OpenStreetMap tiles. Full CRUD, leads pipeline, viewings calendar, analytics, moderation, and audit log.
 
 Built to show what a marketplace-shaped product looks like when you're responsible for both the customer experience and the operator tooling.
 
@@ -32,18 +32,18 @@ Built to show what a marketplace-shaped product looks like when you're responsib
 ### Customer surface (10 pages)
 - **Hero search** with Buy / Rent / Off-plan tabs, location autocomplete, type + beds + price.
 - **Search results** with filter bar, list ↔ map toggle (Leaflet + OSM, price-pinned markers, hover sync), pagination, saved searches.
-- **Listing detail** — gallery + lightbox (keyboard nav), amenities grid, schematic floor plan SVG, location map, inline mortgage widget, agent contact rail (call / WhatsApp / email / schedule viewing / request callback modals), similar listings, share, print-as-brochure.
-- **Agent + agency profiles** — stats, active listings, reviews.
-- **Area guides** — 15 Dubai communities with hero, blurb, avg AED/ft², schools, malls, transit, area map.
-- **Valuation tool** — comparable-based estimate, confidence read.
-- **Mortgage calculator** — full amortisation, save scenarios.
-- **Investment yield calculator** — gross + net yield, 5/10-year ROI, year-by-year cash flow.
-- **Compare** — side-by-side up to 3 listings.
-- **Customer dashboard** — favorites, saved searches, viewings, inquiries, mortgage scenarios.
+- **Listing detail** - gallery + lightbox (keyboard nav), amenities grid, schematic floor plan SVG, location map, inline mortgage widget, agent contact rail (call / WhatsApp / email / schedule viewing / request callback modals), similar listings, share, print-as-brochure.
+- **Agent + agency profiles** - stats, active listings, reviews.
+- **Area guides** - 15 Dubai communities with hero, blurb, avg AED/ft², schools, malls, transit, area map.
+- **Valuation tool** - comparable-based estimate, confidence read.
+- **Mortgage calculator** - full amortisation, save scenarios.
+- **Investment yield calculator** - gross + net yield, 5/10-year ROI, year-by-year cash flow.
+- **Compare** - side-by-side up to 3 listings.
+- **Customer dashboard** - favorites, saved searches, viewings, inquiries, mortgage scenarios.
 - **AED / USD / GBP / EUR** currency switcher.
 - **EN / AR** locale with RTL layout.
 
-### Admin SPA — 13 hash-routed sections
+### Admin SPA - 13 hash-routed sections
 | Section | What it does |
 |---------|--------------|
 | Dashboard | KPIs, monthly views/leads bar chart, inquiry status mix, top listings, recent inquiries, expiring listings, alerts |
@@ -63,7 +63,7 @@ Built to show what a marketplace-shaped product looks like when you're responsib
 | Layer | Tools |
 |-------|-------|
 | Markup / styles | Semantic HTML5 · modern CSS3 with custom-property design system |
-| Frontend | Vanilla JavaScript (ES6+) — no framework |
+| Frontend | Vanilla JavaScript (ES6+) - no framework |
 | Maps | Leaflet + OpenStreetMap tiles (lazy-loaded only on map pages) |
 | Photography | Curated Unsplash CDN pool, deterministic per-listing |
 | State | `localStorage` (favorites, compare, searches, mortgage scenarios, every admin write) |

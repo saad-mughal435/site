@@ -1,10 +1,10 @@
-/* portfolio-banner.js — injects a small "Portfolio demo · fabricated data" strip
+/* portfolio-banner.js - injects a small "Portfolio demo · fabricated data" strip
    at the very top of every sub-demo page. Loaded by each sub-site's app.js so
    the marker appears consistently across b2c/, b2b/, property/, vacation/.
    Dismissible; preference stored in localStorage so the banner doesn't keep
    reappearing across page navigations.
 
-   Also injects its own CSS link relative to the requesting page — saves having
+   Also injects its own CSS link relative to the requesting page - saves having
    to add a <link> tag to every sub-demo HTML file. */
 (function () {
   'use strict';
@@ -14,7 +14,7 @@
     var l = document.createElement('link');
     l.id = 'portfolio-demo-banner-css';
     l.rel = 'stylesheet';
-    // Match the location of the loading script — same /assets/ folder.
+    // Match the location of the loading script - same /assets/ folder.
     l.href = '/assets/portfolio-banner.css?v=20260514';
     document.head.appendChild(l);
   }

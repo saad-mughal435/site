@@ -4,14 +4,14 @@ Site: https://saadm.dev
 Contact: saad@saadm.dev
 LinkedIn: https://www.linkedin.com/in/muhammadsaad435/
 GitHub: https://github.com/saad-mughal435
-From: UAE — open to relocate worldwide
+From: UAE - open to relocate worldwide
 
 /* THANKS */
-Cloudflare Pages — for the free, fast hosting and atomic deploys.
-Formsubmit.co — for the no-backend contact-form relay.
-Google Fonts (Inter, JetBrains Mono, Fraunces) — for the typography.
-Unsplash photographers — for the real-estate marketplace imagery in /property/.
-The CSS / web platform working groups — for shipping the platform.
+Cloudflare Pages - for the free, fast hosting and atomic deploys.
+Formsubmit.co - for the no-backend contact-form relay.
+Google Fonts (Inter, JetBrains Mono, Fraunces) - for the typography.
+Unsplash photographers - for the real-estate marketplace imagery in /property/.
+The CSS / web platform working groups - for shipping the platform.
 
 /* SITE */
 Last update: 2026-05-14
@@ -19,6 +19,6 @@ Language: English
 Doctype: HTML5
 Frameworks: React 18 via CDN (homepage only); vanilla everywhere else.
 Standards: WCAG 2.1 AA targets, prefers-reduced-motion respected.
-Build: none — push to main, Cloudflare Pages deploys.
+Build: none - push to main, Cloudflare Pages deploys.
 Components: hand-written, no UI library.
 Software: VS Code, Git, Cloudflare Pages, GitHub Actions, Prettier.

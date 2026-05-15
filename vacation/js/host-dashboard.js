@@ -1,4 +1,4 @@
-/* host-dashboard.js — Host-side SPA for managing listings, bookings, calendar, earnings, profile, verification.
+/* host-dashboard.js - Host-side SPA for managing listings, bookings, calendar, earnings, profile, verification.
    Mirrors admin.html shell but scoped to a single signed-in host. If no session exists, shows a host-picker
    so reviewers can impersonate any seed host to see different verification states. */
 (function () {
@@ -38,7 +38,7 @@
         'approved': 'Approved · verified host',
         'submitted': 'Submitted · awaiting admin review',
         'changes_requested': 'Changes requested by admin',
-        'rejected': 'Rejected — needs new documents',
+        'rejected': 'Rejected - needs new documents',
         'no application': 'No application on file'
       }[status] || status;
       return { host: h, status: status, sub: sub };
@@ -52,7 +52,7 @@
       +   '</div>'
       +   '<div class="v-panel" style="padding:24px;">'
       +     '<h2 style="margin-top:0;font-family:var(--font-display);">Sign in to your host dashboard</h2>'
-      +     '<p class="v-text-muted">Pick a demo host to sign in as — each one shows a different state of the verification pipeline.</p>'
+      +     '<p class="v-text-muted">Pick a demo host to sign in as - each one shows a different state of the verification pipeline.</p>'
       +     '<div style="display:grid;gap:10px;margin-top:18px;">'
       +       preview.map(function (p) {
               return '<button class="v-doc-card" data-imp="' + esc(p.host.id) + '" style="text-align:start;cursor:pointer;width:100%;padding:14px;background:var(--vacation-card);border:1.5px solid var(--vacation-line);">'
@@ -142,7 +142,7 @@
         +   '<div class="v-kpi"><div class="v-kpi-label">Pending review</div><div class="v-kpi-value" style="color:var(--vacation-accent-2);">' + (k.listings_pending || 0) + '</div></div>'
         +   '<div class="v-kpi"><div class="v-kpi-label">Upcoming bookings</div><div class="v-kpi-value">' + (k.bookings_upcoming || 0) + '</div></div>'
         +   '<div class="v-kpi"><div class="v-kpi-label">Revenue 30d</div><div class="v-kpi-value" style="font-size:18px;">' + aed(k.revenue_30d) + '</div></div>'
-        +   '<div class="v-kpi"><div class="v-kpi-label">Avg rating</div><div class="v-kpi-value">' + (k.avg_rating || '—') + ' <span class="v-text-muted" style="font-size:12px;">(' + (k.review_count || 0) + ')</span></div></div>'
+        +   '<div class="v-kpi"><div class="v-kpi-label">Avg rating</div><div class="v-kpi-value">' + (k.avg_rating || '-') + ' <span class="v-text-muted" style="font-size:12px;">(' + (k.review_count || 0) + ')</span></div></div>'
         + '</div>'
         + (items.length
           ? '<div class="v-panel v-mt-3" style="padding:0;overflow:auto;">'
@@ -210,7 +210,7 @@
     VacationApp.api('/host/listings').then(function (r) {
       var items = (r.body.items || []).filter(function (l) { return l.status === 'live' || !l.status; });
       if (!items.length) {
-        host.innerHTML = '<h2 style="font-family:var(--font-display);">Calendar</h2><div class="v-empty-illustration"><div class="v-empty-illustration-mark">📅</div><p>No live listings yet — add one to manage its calendar.</p></div>';
+        host.innerHTML = '<h2 style="font-family:var(--font-display);">Calendar</h2><div class="v-empty-illustration"><div class="v-empty-illustration-mark">📅</div><p>No live listings yet - add one to manage its calendar.</p></div>';
         return;
       }
       var selected = items[0].id;
@@ -297,7 +297,7 @@
         +   '</div>'
         +   '<div class="v-bars-labels">' + monthly.map(function (m) { return '<span>' + m.label + '</span>'; }).join('') + '</div>'
         + '</div>'
-        + '<div class="v-panel v-mt-3"><div class="v-panel-head"><h3>Payout history</h3></div><p class="v-text-muted">Demo only — in the live product this would list every payout with date, amount, and reference.</p></div>';
+        + '<div class="v-panel v-mt-3"><div class="v-panel-head"><h3>Payout history</h3></div><p class="v-text-muted">Demo only - in the live product this would list every payout with date, amount, and reference.</p></div>';
     });
   };
 
@@ -354,7 +354,7 @@
       }
       var banner = {
         submitted:         { cls: 'pending',  icon: '⏳', title: 'Documents under review', text: 'Our team is reviewing your documents. This usually takes under 24 hours.' },
-        changes_requested: { cls: 'changes',  icon: '↻',  title: 'Action needed',         text: 'Please re-upload the highlighted documents below. ' + (a.notes_from_admin ? '— ' + esc(a.notes_from_admin) : '') },
+        changes_requested: { cls: 'changes',  icon: '↻',  title: 'Action needed',         text: 'Please re-upload the highlighted documents below. ' + (a.notes_from_admin ? '- ' + esc(a.notes_from_admin) : '') },
         approved:          { cls: 'approved', icon: '✓',  title: 'Verified',              text: 'All documents approved. You\'re a verified host on Vacation Homes.' },
         rejected:          { cls: 'rejected', icon: '✕',  title: 'Application rejected',  text: a.notes_from_admin ? esc(a.notes_from_admin) : 'Your application was rejected. Contact support to re-apply.' }
       }[a.status] || { cls: 'pending', icon: '⏳', title: a.status, text: '' };
@@ -382,11 +382,11 @@
           if (!file) return;
           if (!/^image\//.test(file.type)) {
             var doc = { type: type, filename: file.name, mime: file.type || 'application/pdf', thumb: null };
-            VacationApp.api('/host/applications', { method: 'POST', body: { documents: [doc] } }).then(function () { window.toast && window.toast('Re-uploaded — status reset to submitted','success'); renderMain(); });
+            VacationApp.api('/host/applications', { method: 'POST', body: { documents: [doc] } }).then(function () { window.toast && window.toast('Re-uploaded - status reset to submitted','success'); renderMain(); });
           } else {
             var fr = new FileReader();
             fr.onload = function () {
-              VacationApp.api('/host/applications', { method: 'POST', body: { documents: [{ type: type, filename: file.name, mime: file.type, thumb: fr.result }] } }).then(function () { window.toast && window.toast('Re-uploaded — status reset to submitted','success'); renderMain(); });
+              VacationApp.api('/host/applications', { method: 'POST', body: { documents: [{ type: type, filename: file.name, mime: file.type, thumb: fr.result }] } }).then(function () { window.toast && window.toast('Re-uploaded - status reset to submitted','success'); renderMain(); });
             };
             fr.readAsDataURL(file);
           }

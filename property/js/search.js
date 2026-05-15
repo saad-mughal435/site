@@ -1,4 +1,4 @@
-/* search.js — Filters + list/map view for search.html */
+/* search.js - Filters + list/map view for search.html */
 (function () {
   'use strict';
 
@@ -69,7 +69,7 @@
   function renderList() {
     var host = document.getElementById('results');
     if (!state.items.length) {
-      host.innerHTML = '<div class="m-empty"><div class="m-empty-icon">🔍</div><h3>No matches</h3><p>Try widening your filters — clear price or remove the beds constraint.</p><button class="m-btn m-btn--primary" onclick="window.SearchPage.clearAll()">Reset filters</button></div>';
+      host.innerHTML = '<div class="m-empty"><div class="m-empty-icon">🔍</div><h3>No matches</h3><p>Try widening your filters - clear price or remove the beds constraint.</p><button class="m-btn m-btn--primary" onclick="window.SearchPage.clearAll()">Reset filters</button></div>';
       return;
     }
     host.innerHTML = state.items.map(ManzilApp.listingCard).join('');

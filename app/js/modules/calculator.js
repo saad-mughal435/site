@@ -7,7 +7,7 @@ import { showToast, state } from '../utils.js?v=20260125h';
 import { authenticatedFetch } from '../auth.js?v=20260428b';
 import { getRtdRatio, getBottleSizeInfo } from './recipes.js?v=20260216b';
 
-let _calcSource = 'qty'; // 'qty' | 'volume' — tracks which field the user last typed in
+let _calcSource = 'qty'; // 'qty' | 'volume' - tracks which field the user last typed in
 
 const _calcTankStorageKey = (batchNo) => `demoplant_calc_tank:${String(batchNo || '').trim()}`;
 const _CALC_CIP_RECENT_DAYS = 7;
@@ -41,7 +41,7 @@ function _renderTankCipWarning(result, tankNo) {
         el.textContent = '';
         return;
     }
-    el.textContent = `No mixing CIP found for Tank ${tankNo} in the last ${_CALC_CIP_RECENT_DAYS} days — create one in Mixing Section before pushing to production.`;
+    el.textContent = `No mixing CIP found for Tank ${tankNo} in the last ${_CALC_CIP_RECENT_DAYS} days - create one in Mixing Section before pushing to production.`;
     el.classList.remove('hidden');
 }
 
@@ -327,7 +327,7 @@ export function applyCalcEditModeToSuccessPanel() {
         const banner = document.createElement('div');
         banner.id = 'calc-edit-banner';
         banner.className = 'mb-3 rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-800';
-        banner.textContent = `Editing batch ${window._calcEditBatchNo || ''} — change volume/cases only; same batch number and tank will be reused.`;
+        banner.textContent = `Editing batch ${window._calcEditBatchNo || ''} - change volume/cases only; same batch number and tank will be reused.`;
         sumDiv.prepend(banner);
     }
 }
@@ -675,7 +675,7 @@ export async function calculateMaterials() {
                         : '(no description in inventory)';
                     summaryHtml += `
                         <li class="text-sm text-red-700 flex justify-between gap-4 border-b border-red-100 py-1">
-                            <span>• <b>${item.item_code}</b> — <span class="font-normal text-red-600">${desc}</span></span>
+                            <span>• <b>${item.item_code}</b> - <span class="font-normal text-red-600">${desc}</span></span>
                             <span class="shrink-0">Need <b>${item.to_order.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})}</b> more units</span>
                         </li>
                     `;

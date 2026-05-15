@@ -202,7 +202,7 @@ function renderDeclarationDetail() {
 
     const d = currentDeclaration;
     document.getElementById('customs-detail-title').textContent =
-        `${d.declaration_number} — ${TYPE_LABELS[d.declaration_type] || d.declaration_type}`;
+        `${d.declaration_number} - ${TYPE_LABELS[d.declaration_type] || d.declaration_type}`;
     document.getElementById('customs-detail-subtitle').textContent =
         `${MONTH_NAMES[d.month] || d.month} ${d.year} | Status: ${(d.status || 'draft').replace('_', ' ')}`;
 

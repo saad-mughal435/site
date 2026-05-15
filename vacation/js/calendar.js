@@ -1,6 +1,6 @@
-/* calendar.js — Hand-rolled date-range picker + availability display.
+/* calendar.js - Hand-rolled date-range picker + availability display.
    Modes:
-     - 'picker'  : interactive — click check-in, click check-out, hover preview
+     - 'picker'  : interactive - click check-in, click check-out, hover preview
      - 'display' : read-only, shows blocked/booked/available states
 */
 (function () {
@@ -114,7 +114,7 @@
                 if (!clean) {
                   state.checkIn = d;
                   state.checkOut = null;
-                  if (window.toast) window.toast('Some dates in that range are unavailable — picking new check-in.', 'warn', 2400);
+                  if (window.toast) window.toast('Some dates in that range are unavailable - picking new check-in.', 'warn', 2400);
                 } else {
                   state.checkOut = d;
                 }

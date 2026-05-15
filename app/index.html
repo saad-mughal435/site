@@ -56,7 +56,7 @@
             if (!token || !user) {
                 window.location.replace('/login');
             } else {
-                // Authenticated — reveal body as soon as it exists
+                // Authenticated - reveal body as soon as it exists
                 document.addEventListener('DOMContentLoaded', function() {
                     document.body.style.display = '';
                 });
@@ -68,7 +68,7 @@
         #sidebar:not(.collapsed) .nav-tooltip { display: none !important; }
 
         /* ============================================================
-           Demo Plant — ERP Home Dashboard
+           Demo Plant - ERP Home Dashboard
            Sleek, minimalist. Red / White / Black. Scoped under .kbe-home.
            ============================================================ */
         .kbe-home {
@@ -479,7 +479,7 @@
         <div class="flex-1 flex flex-col overflow-hidden min-w-0">
             <!-- Top Header Bar -->
             <header id="top-header" class="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between">
-                <!-- Mobile hamburger button — hidden on desktop -->
+                <!-- Mobile hamburger button - hidden on desktop -->
                 <button id="mobile-menu-btn" class="hidden mr-3 p-2 rounded-lg hover:bg-slate-100" onclick="toggleMobileSidebar()">
                     <svg class="w-6 h-6 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
@@ -546,7 +546,7 @@
             <!-- Default home (KPI dashboard for non-mixing roles) -->
             <div id="kbe-home-default">
 
-            <!-- Demo guide banner — points reviewers at the 5 best pages to open
+            <!-- Demo guide banner - points reviewers at the 5 best pages to open
                  since this disconnected app intentionally shows empty states on
                  less-trafficked modules. Dismissible via the × button. -->
             <div id="kbe-demo-guide" style="margin: 0 0 18px; padding: 14px 18px; border-radius: 12px; background: linear-gradient(135deg, rgba(124,156,255,.10), rgba(94,234,212,.08)); border: 1px solid rgba(124,156,255,.22); display:flex; align-items:flex-start; gap:14px; font-family: 'Inter', system-ui, sans-serif;">
@@ -554,7 +554,7 @@
                 <div style="flex:1; min-width:0;">
                     <div style="font-weight:700; color:#0a0d18; margin-bottom:4px;">Demo guide</div>
                     <div style="font-size:13.5px; color:#1a2640; line-height:1.5;">
-                        This is a sanitised version of the production MES — disconnected from the real database, so some modules show empty states by design. For the best walkthrough, open these five pages first:
+                        This is a sanitised version of the production MES - disconnected from the real database, so some modules show empty states by design. For the best walkthrough, open these five pages first:
                         <strong style="color:#0a0d18;">Dashboard · Job Orders · Quality Control · Inventory · Reporting / PDF</strong>.
                     </div>
                 </div>
@@ -574,7 +574,7 @@
                         <span class="kbe-brand-loc">Dubai · UAE</span>
                     </div>
                     <h2 id="greeting-text" class="kbe-greeting">Good afternoon, <em>Operator</em>.</h2>
-                    <p class="kbe-tagline"><span id="kbe-today-long">Today</span> — operational overview across inventory, production, procurement and quality.</p>
+                    <p class="kbe-tagline"><span id="kbe-today-long">Today</span> - operational overview across inventory, production, procurement and quality.</p>
                 </div>
                 <div class="kbe-meta">
                     <div class="kbe-status">
@@ -582,7 +582,7 @@
                         <span id="kbe-shift-label">Plant Running · Afternoon Shift</span>
                     </div>
                     <div class="kbe-clock">
-                        <div id="kbe-clock-date" class="kbe-clock-date kbe-mono">— — — —</div>
+                        <div id="kbe-clock-date" class="kbe-clock-date kbe-mono">- - - -</div>
                         <div id="kbe-clock-time" class="kbe-clock-time kbe-mono">--:--</div>
                     </div>
                 </div>
@@ -1153,7 +1153,7 @@
                                         oninput="window.__recipeUpdateCasesFromVolume && window.__recipeUpdateCasesFromVolume()"
                                         class="w-24 border-0 border-l border-gray-200 pl-2 text-sm font-bold text-gray-800 focus:ring-0 outline-none bg-transparent text-center">
                                 </div>
-                                <div class="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-3 py-1.5" title="GTIN/Barcode for the finished product — carried forward to Production Report">
+                                <div class="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-3 py-1.5" title="GTIN/Barcode for the finished product - carried forward to Production Report">
                                     <label for="recipe-gtin" class="text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">GTIN</label>
                                     <input type="text" id="recipe-gtin" placeholder="Barcode / GTIN"
                                         oninput="markRecipeDirty()"
@@ -1476,7 +1476,7 @@
                     <div class="flex flex-wrap items-end justify-between gap-4">
                         <div>
                             <h2 class="text-lg font-bold text-gray-900">Consolidated Materials to Order</h2>
-                            <p class="text-sm text-gray-500 mt-1">From latest forecast report — select materials to create a procurement requisition</p>
+                            <p class="text-sm text-gray-500 mt-1">From latest forecast report - select materials to create a procurement requisition</p>
                         </div>
                         <div class="flex items-center gap-3">
                             <div class="relative">
@@ -2561,7 +2561,7 @@
             </div>
             <!-- End Allocation Panel -->
 
-            <!-- Status Panel — flat list of active pending JOs with priority + reason + bulk PDF -->
+            <!-- Status Panel - flat list of active pending JOs with priority + reason + bulk PDF -->
             <div id="po-status-panel" class="hidden">
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6">
                     <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
@@ -3369,7 +3369,7 @@
                 </button>
             </div>
 
-            <!-- Grouped Job Orders Container — each group renders as its own card -->
+            <!-- Grouped Job Orders Container - each group renders as its own card -->
             <div id="documents-table-body">
                 <div class="px-6 py-12 text-center text-slate-400">
                     <div class="loader mx-auto mb-4"></div>

@@ -1,4 +1,4 @@
-/* admin-sections.js — 11 admin sections under window.VacationAdmin */
+/* admin-sections.js - 11 admin sections under window.VacationAdmin */
 (function () {
   'use strict';
 
@@ -197,7 +197,7 @@
       var l = d.LISTINGS.find(function (x) { return x.id === id; }) || (VacationApp.jget('vacation.listings.created', []).find(function (x) { return x.id === id; }));
       if (!l) return;
       formModal({
-        title: 'Edit listing — ' + l.id,
+        title: 'Edit listing - ' + l.id,
         fields: [
           { name: 'title', label: 'Title', value: l.title },
           { name: 'base_nightly_aed', label: 'Base nightly (AED)', type: 'number', value: l.base_nightly_aed },
@@ -342,7 +342,7 @@
         + '<h2>Guests</h2>'
         + '<div class="v-panel v-mt-2" style="padding:0;overflow:auto;">'
         +   '<table class="v-table"><thead><tr><th>Name</th><th>Email</th><th>Joined</th><th>Locale</th><th>Trips</th><th>Total spent</th><th>Last booking</th></tr></thead><tbody>'
-        +     r.body.items.map(function (g) { return '<tr><td>' + esc(g.name) + '</td><td>' + esc(g.email) + '</td><td>' + g.joined + '</td><td>' + g.locale.toUpperCase() + '</td><td>' + g.trip_count + '</td><td>' + aed(g.total_spent) + '</td><td>' + (g.last_booking ? g.last_booking.slice(0,10) : '—') + '</td></tr>'; }).join('')
+        +     r.body.items.map(function (g) { return '<tr><td>' + esc(g.name) + '</td><td>' + esc(g.email) + '</td><td>' + g.joined + '</td><td>' + g.locale.toUpperCase() + '</td><td>' + g.trip_count + '</td><td>' + aed(g.total_spent) + '</td><td>' + (g.last_booking ? g.last_booking.slice(0,10) : '-') + '</td></tr>'; }).join('')
         +   '</tbody></table>'
         + '</div>';
     });
@@ -493,12 +493,12 @@
     window.VacationAdminActions.resetDemo = function () {
       modal({
         title: 'Reset demo data',
-        body: '<p>This clears all local overrides — created listings, bookings, edits, audit log. Seed data is untouched.</p>',
+        body: '<p>This clears all local overrides - created listings, bookings, edits, audit log. Seed data is untouched.</p>',
         foot: '<button class="v-btn" data-modal-close>Cancel</button><button class="v-btn" style="background:var(--vacation-coral-2);color:white;" id="r-go">Reset</button>',
         onMount: function (h, close) {
           h.querySelector('#r-go').addEventListener('click', function () {
             Object.keys(localStorage).forEach(function (k) { if (k.indexOf('vacation.') === 0) localStorage.removeItem(k); });
-            window.toast('Reset complete — reloading...','success'); close();
+            window.toast('Reset complete - reloading...','success'); close();
             setTimeout(function () { location.reload(); }, 800);
           });
         }
@@ -523,7 +523,7 @@
     });
   }
 
-  /* ====================== 12. HOST APPROVALS — identity + documents queue ====================== */
+  /* ====================== 12. HOST APPROVALS - identity + documents queue ====================== */
   function hostApprovals(host) {
     var statusFilter = '';
     function refresh() {
@@ -537,7 +537,7 @@
           return '<tr>'
             + '<td>' + (a.host_photo ? '<img src="' + a.host_photo + '" alt="" style="width:36px;height:36px;border-radius:999px;object-fit:cover;">' : '👤') + '</td>'
             + '<td><strong>' + esc(a.host_name) + '</strong><div class="v-text-muted" style="font-size:11px;">' + esc(a.host_id) + '</div></td>'
-            + '<td>' + esc(a.submitted_at || '—') + '</td>'
+            + '<td>' + esc(a.submitted_at || '-') + '</td>'
             + '<td>' + a.document_count + ' docs · ' + a.submitted_doc_count + ' awaiting</td>'
             + '<td><span class="v-status-chip ' + esc(a.status) + '">' + esc(a.status.replace('_',' ')) + '</span></td>'
             + '<td class="v-table-actions"><button class="v-btn v-btn--ghost v-btn--sm" onclick="VacationAdminActions.openVerification(\'' + a.host_id + '\')">Review →</button></td>'
@@ -555,7 +555,7 @@
     function paint() {
       host.innerHTML = ''
         + '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">'
-        +   '<div><h2 style="margin:0;">Host approvals</h2><p class="v-text-muted" style="margin:4px 0 0;font-size:13.5px;">Review identity documents — Emirates ID, ownership/tenancy, DTCM permit, IBAN. Once approved, the host\'s listings move into the listing-approval queue.</p></div>'
+        +   '<div><h2 style="margin:0;">Host approvals</h2><p class="v-text-muted" style="margin:4px 0 0;font-size:13.5px;">Review identity documents - Emirates ID, ownership/tenancy, DTCM permit, IBAN. Once approved, the host\'s listings move into the listing-approval queue.</p></div>'
         +   '<span id="vf-count" class="v-text-muted" style="font-size:13px;"></span>'
         + '</div>'
         + '<div class="v-flex-wrap" style="margin-top:14px;gap:6px;">' + statusChips() + '</div>'
@@ -568,11 +568,11 @@
     refresh();
   }
 
-  /* ====================== 13. LISTING APPROVALS — only listings whose host is verified ====================== */
+  /* ====================== 13. LISTING APPROVALS - only listings whose host is verified ====================== */
   function listingApprovals(host) {
     var statusFilter = 'pending_review';  // default to the queue
     function refresh() {
-      // Show only listings that have cleared host verification — i.e., NOT
+      // Show only listings that have cleared host verification - i.e., NOT
       // awaiting_host_verification. Default filter is pending_review.
       VacationApp.api('/admin/listings' + (statusFilter ? '?status=' + statusFilter : '')).then(function (r) {
         var items = (r.body.items || []).filter(function (l) {
@@ -590,7 +590,7 @@
             + '<td><img src="' + (l.photos && l.photos[0]) + '" alt="" style="width:54px;height:36px;object-fit:cover;border-radius:4px;"></td>'
             + '<td><strong>' + esc(l.title) + '</strong><div class="v-text-muted" style="font-size:11px;">' + esc(l.id) + ' · ' + esc(ho.name) + '</div></td>'
             + '<td>' + aed(l.base_nightly_aed) + '/night</td>'
-            + '<td>' + (l.listed_at || '—') + '</td>'
+            + '<td>' + (l.listed_at || '-') + '</td>'
             + '<td><span class="v-status-chip ' + esc(s) + '">' + esc(s.replace('_',' ')) + '</span></td>'
             + '<td class="v-table-actions"><button class="v-btn v-btn--ghost v-btn--sm" onclick="VacationAdminActions.openListingReview(\'' + l.id + '\')">Review →</button></td>'
             + '</tr>';
@@ -598,7 +598,7 @@
       });
     }
     function statusChips() {
-      // No "awaiting_host_verification" here — those belong on host approvals.
+      // No "awaiting_host_verification" here - those belong on host approvals.
       var statuses = [['pending_review','Pending review'],['changes_requested','Changes requested'],['live','Live'],['paused','Paused'],['rejected','Rejected'],['','All']];
       return statuses.map(function (entry) {
         var s = entry[0]; var label = entry[1];
@@ -621,7 +621,7 @@
     refresh();
   }
 
-  /* ====================== Drawer modals — host-approval + listing-approval ====================== */
+  /* ====================== Drawer modals - host-approval + listing-approval ====================== */
   // Registered once at module init so they're available regardless of which
   // section is currently open. Close() triggers a `hashchange` event to make
   // the active admin section re-render itself.
@@ -631,20 +631,20 @@
   window.VacationAdminActions.openVerification = function (host_id) {
     VacationApp.api('/admin/verifications/' + host_id).then(function (r) {
       var a = r.body.application; var h = r.body.host; var listings = r.body.listings || [];
-      if (!a) return;  // silently skip — table may have just refreshed
+      if (!a) return;  // silently skip - table may have just refreshed
         var drawer = document.createElement('div');
         drawer.className = 'v-drawer-backdrop';
         drawer.innerHTML = ''
           + '<div class="v-drawer">'
           +   '<div class="v-drawer-head">'
           +     '<div style="display:flex;gap:12px;align-items:center;">' + (h && h.photo ? '<img src="' + h.photo + '" style="width:44px;height:44px;border-radius:999px;object-fit:cover;">' : '👤')
-          +       '<div><h3 style="margin:0;">' + esc(h ? h.name : '(unknown)') + '</h3><div class="v-text-muted" style="font-size:12px;">' + esc(a.host_id) + ' · submitted ' + (a.submitted_at || '—') + ' · <span class="v-status-chip ' + esc(a.status) + '">' + esc(a.status.replace('_',' ')) + '</span></div></div>'
+          +       '<div><h3 style="margin:0;">' + esc(h ? h.name : '(unknown)') + '</h3><div class="v-text-muted" style="font-size:12px;">' + esc(a.host_id) + ' · submitted ' + (a.submitted_at || '-') + ' · <span class="v-status-chip ' + esc(a.status) + '">' + esc(a.status.replace('_',' ')) + '</span></div></div>'
           +     '</div>'
           +     '<button class="v-btn v-btn--ghost v-btn--sm" data-drawer-close>×</button>'
           +   '</div>'
           +   '<div class="v-drawer-body">'
           +     (a.notes_from_admin ? '<div class="v-doc-reject-reason" style="margin-bottom:14px;"><strong>Admin notes:</strong> ' + esc(a.notes_from_admin) + '</div>' : '')
-          +     '<p class="v-text-muted" style="font-size:13px;">Property setup: ' + (a.resident ? 'UAE resident' : 'Non-resident owner') + ' · ' + esc(VacationApp.escapeHtml((d.DESTINATIONS.find(function (x) { return x.id === a.destination_id; }) || {}).name || '—')) + '</p>'
+          +     '<p class="v-text-muted" style="font-size:13px;">Property setup: ' + (a.resident ? 'UAE resident' : 'Non-resident owner') + ' · ' + esc(VacationApp.escapeHtml((d.DESTINATIONS.find(function (x) { return x.id === a.destination_id; }) || {}).name || '-')) + '</p>'
           +     '<h4 style="margin-top:18px;">Documents</h4>'
           +     '<div class="v-doc-grid" style="margin-bottom:18px;">' + (a.documents || []).map(function (doc) {
                 var dt = (d.DOCUMENT_TYPES || []).find(function (t) { return t.id === doc.type; }) || { icon: '📎', label: doc.type };
@@ -722,14 +722,14 @@
         drawer.className = 'v-drawer-backdrop';
         drawer.innerHTML = ''
           + '<div class="v-drawer">'
-          +   '<div class="v-drawer-head"><h3 style="margin:0;">Review listing — ' + esc(l.title) + '</h3><button class="v-btn v-btn--ghost v-btn--sm" data-drawer-close>×</button></div>'
+          +   '<div class="v-drawer-head"><h3 style="margin:0;">Review listing - ' + esc(l.title) + '</h3><button class="v-btn v-btn--ghost v-btn--sm" data-drawer-close>×</button></div>'
           +   '<div class="v-drawer-body">'
           +     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px;">' + (l.photos || []).slice(0, 6).map(function (u) { return '<img src="' + esc(u) + '" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:6px;">'; }).join('') + '</div>'
           +     '<p>' + esc(l.description) + '</p>'
           +     '<table class="v-table" style="margin-top:14px;">'
           +       '<tr><td><strong>Type</strong></td><td>' + esc(l.type) + '</td></tr>'
-          +       '<tr><td><strong>Destination</strong></td><td>' + esc(((d.DESTINATIONS.find(function (x) { return x.id === l.destination_id; }) || {}).name) || '—') + '</td></tr>'
-          +       '<tr><td><strong>Host</strong></td><td>' + esc(h.name || '—') + '</td></tr>'
+          +       '<tr><td><strong>Destination</strong></td><td>' + esc(((d.DESTINATIONS.find(function (x) { return x.id === l.destination_id; }) || {}).name) || '-') + '</td></tr>'
+          +       '<tr><td><strong>Host</strong></td><td>' + esc(h.name || '-') + '</td></tr>'
           +       '<tr><td><strong>Nightly</strong></td><td>' + aed(l.base_nightly_aed) + '</td></tr>'
           +       '<tr><td><strong>Sleeps</strong></td><td>' + l.max_guests + ' · ' + l.bedrooms + 'BR · ' + l.baths + ' bath</td></tr>'
           +       '<tr><td><strong>Amenities</strong></td><td>' + (l.amenities || []).map(esc).join(', ') + '</td></tr>'

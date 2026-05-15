@@ -204,7 +204,7 @@ export function renderRMInventory() {
         row.innerHTML = `
             <td class="px-6 py-4 text-sm font-medium text-slate-900">${code}</td>
             <td class="px-6 py-4 text-sm text-slate-600">${desc}</td>
-            <td class="px-6 py-4 text-sm text-slate-600 uppercase">${uom || '—'}</td>
+            <td class="px-6 py-4 text-sm text-slate-600 uppercase">${uom || '-'}</td>
             <td class="px-6 py-4 text-sm text-right text-slate-900 font-semibold tabular-nums">${qtyNum.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})}</td>
             <td class="px-6 py-4 text-center">${statusBadge}</td>
         `;
@@ -438,7 +438,7 @@ export function renderFGInventory() {
         row.innerHTML = `
             <td class="px-6 py-4 text-sm font-medium text-slate-900">${code}</td>
             <td class="px-6 py-4 text-sm text-slate-600">${desc}</td>
-            <td class="px-6 py-4 text-sm text-slate-600 uppercase">${uom || '—'}</td>
+            <td class="px-6 py-4 text-sm text-slate-600 uppercase">${uom || '-'}</td>
             <td class="px-6 py-4 text-sm text-right text-slate-900 font-semibold tabular-nums">${qtyNum.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})}</td>
             <td class="px-6 py-4 text-center">${statusBadge}</td>
         `;
@@ -533,7 +533,7 @@ function renderFGExpandedPanel(d) {
 
     const overbookBanner = d.is_overbooked ? `
         <div class="mt-3 px-3 py-2 rounded-md bg-red-50 border border-red-200 text-sm text-red-800">
-            <strong>Overbooked by ${fmt(d.overbook_qty)} ${uom}</strong> — active bookings exceed current Sage stock.
+            <strong>Overbooked by ${fmt(d.overbook_qty)} ${uom}</strong> - active bookings exceed current Sage stock.
             Likely cause: stock was dispatched / moved to ET after reservation. Review stale bookings.
         </div>` : '';
 
@@ -568,7 +568,7 @@ function renderFGExpandedPanel(d) {
     const orderTypeBadge = (t) => {
         if (t === 'local') return '<span class="text-xs px-1.5 py-0.5 rounded bg-amber-100 text-amber-800">Local</span>';
         if (t === 'export') return '<span class="text-xs px-1.5 py-0.5 rounded bg-blue-100 text-blue-700">Export</span>';
-        return '<span class="text-xs px-1.5 py-0.5 rounded bg-slate-200 text-slate-700" title="Legacy JO with no Local/Export flag — open Admin → Untyped JOs to flag it">Untyped</span>';
+        return '<span class="text-xs px-1.5 py-0.5 rounded bg-slate-200 text-slate-700" title="Legacy JO with no Local/Export flag - open Admin → Untyped JOs to flag it">Untyped</span>';
     };
     const renderAllocRow = (a) => `
         <tr class="border-t border-slate-100 ${a.source === 'shortfall' ? 'bg-red-50' : ''}">
@@ -601,7 +601,7 @@ function renderFGExpandedPanel(d) {
                     </thead>
                     <tbody>
                         <tr class="bg-slate-100">
-                            <td colspan="8" class="px-4 py-1 text-xs font-semibold uppercase tracking-wide text-slate-600">Sage on-hand (${fmt(sageQty)}) — Export + Untyped bookings</td>
+                            <td colspan="8" class="px-4 py-1 text-xs font-semibold uppercase tracking-wide text-slate-600">Sage on-hand (${fmt(sageQty)}) - Export + Untyped bookings</td>
                         </tr>
                         ${sageAllocs.length === 0 ? `
                             <tr><td colspan="8" class="px-4 py-2 italic text-slate-400 text-center">No Export bookings against Sage stock.</td></tr>
@@ -619,7 +619,7 @@ function renderFGExpandedPanel(d) {
                                 <td class="px-4 py-1.5 font-semibold text-red-800">Overbook</td>
                                 <td class="px-4 py-1.5 text-red-700 italic">bookings exceed Sage</td>
                                 <td class="px-4 py-1.5 text-right tabular-nums font-bold text-red-700">−${fmt(sageShortfall)}</td>
-                                <td colspan="4" class="px-4 py-1.5 text-xs text-red-700 italic">Export + Untyped bookings exceed Sage on-hand — stale reservations</td>
+                                <td colspan="4" class="px-4 py-1.5 text-xs text-red-700 italic">Export + Untyped bookings exceed Sage on-hand - stale reservations</td>
                                 <td class="px-4 py-1.5 text-center"><span class="text-xs px-1.5 py-0.5 rounded bg-red-100 text-red-700">Overbook</span></td>
                             </tr>` : ''}
                         <tr class="border-t-2 border-slate-300 bg-slate-100">
@@ -630,7 +630,7 @@ function renderFGExpandedPanel(d) {
 
                         ${etQty > 0 || etAllocs.length > 0 ? `
                             <tr class="bg-amber-100">
-                                <td colspan="8" class="px-4 py-1 text-xs font-semibold uppercase tracking-wide text-amber-800">ET- SKU (${fmt(etQty)}) — Local bookings</td>
+                                <td colspan="8" class="px-4 py-1 text-xs font-semibold uppercase tracking-wide text-amber-800">ET- SKU (${fmt(etQty)}) - Local bookings</td>
                             </tr>
                             ${etAllocs.length === 0 ? `
                                 <tr><td colspan="8" class="px-4 py-2 italic text-amber-400 text-center bg-amber-50">No Local bookings against ET stock.</td></tr>
@@ -702,7 +702,7 @@ function renderFGExpandedPanel(d) {
     const bookedDivider = hasShortfall ? 'border-red-200' : 'border-blue-200';
     const bookedHtml = unalloc.length === 0 ? '' : `
         <div class="mt-3 px-3 py-2 rounded-md border ${bookedPanelClass}">
-            <div class="text-sm font-semibold ${bookedHeaderClass} mb-1">Booked stock — by batch (${unalloc.length})</div>
+            <div class="text-sm font-semibold ${bookedHeaderClass} mb-1">Booked stock - by batch (${unalloc.length})</div>
             <div class="text-xs ${bookedSubClass} mb-2 italic">FIFO-matched to completed production batches (no <code>stock_lots</code> entries exist for this item).</div>
             <table class="min-w-full text-sm">
                 <thead class="text-xs uppercase ${bookedSubClass}">
@@ -740,7 +740,7 @@ function renderFGExpandedPanel(d) {
                             <tr>
                                 <td></td><td></td>
                                 <td class="text-right tabular-nums pr-3 py-1 text-red-700 font-semibold">${fmt(sf)}</td>
-                                <td colspan="3" class="py-1 text-xs text-red-700 italic">No matching production qty — likely overbook</td>
+                                <td colspan="3" class="py-1 text-xs text-red-700 italic">No matching production qty - likely overbook</td>
                             </tr>` : '';
                         return baseRows + sfRow;
                     }).join('')}
@@ -751,7 +751,7 @@ function renderFGExpandedPanel(d) {
     const free = d.free_stock_by_batch || [];
     const freeHtml = free.length === 0 ? '' : `
         <div class="mt-3 px-3 py-2 rounded-md border bg-emerald-50 border-emerald-200">
-            <div class="text-sm font-semibold text-emerald-800 mb-1">Free stock — by batch (${free.length})</div>
+            <div class="text-sm font-semibold text-emerald-800 mb-1">Free stock - by batch (${free.length})</div>
             <div class="text-xs text-emerald-700 mb-2 italic">Remaining unbooked qty per production batch (FIFO leftover after booking match).</div>
             <table class="min-w-full text-sm">
                 <thead class="text-xs uppercase text-emerald-700">
@@ -806,7 +806,7 @@ function renderFGExpandedPanel(d) {
                                 <td class="px-4 py-1.5">${unk(h.batch_no)}</td>
                                 <td class="px-4 py-1.5 text-slate-600">${h.recipe_name || '<span class="italic text-slate-400">Unknown</span>'}</td>
                                 <td class="px-4 py-1.5 text-right tabular-nums text-slate-600">${fmt(h.planned_qty)}</td>
-                                <td class="px-4 py-1.5 text-right tabular-nums">${h.actual_qty == null ? '<span class="italic text-slate-400">—</span>' : fmt(h.actual_qty)}</td>
+                                <td class="px-4 py-1.5 text-right tabular-nums">${h.actual_qty == null ? '<span class="italic text-slate-400">-</span>' : fmt(h.actual_qty)}</td>
                                 <td class="px-4 py-1.5">${fmtDate(h.production_date)}</td>
                                 <td class="px-4 py-1.5">${fmtDate(h.expiry_date)}</td>
                                 <td class="px-4 py-1.5"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${batchStatusColor(h.batch_status)}">${h.batch_status || 'unknown'}</span></td>
@@ -817,7 +817,7 @@ function renderFGExpandedPanel(d) {
             </div>
             ${history.some(h => !h.has_fg_in_lot && (h.actual_qty || 0) > 0) ? `
                 <div class="mt-2 text-xs text-slate-500 italic">
-                    Rows with ✗ in FG-IN Lot column: production completed but no FG-IN Sage Entry was created in this app — that's why "Physical lots" above appears empty even though Sage shows on-hand stock.
+                    Rows with ✗ in FG-IN Lot column: production completed but no FG-IN Sage Entry was created in this app - that's why "Physical lots" above appears empty even though Sage shows on-hand stock.
                 </div>` : ''}
         </div>`;
 
@@ -1090,7 +1090,7 @@ export function renderETInventory() {
         row.innerHTML = `
             <td class="px-6 py-4 text-sm font-medium text-slate-900">${code}</td>
             <td class="px-6 py-4 text-sm text-slate-600">${desc}</td>
-            <td class="px-6 py-4 text-sm text-slate-600 uppercase">${uom || '—'}</td>
+            <td class="px-6 py-4 text-sm text-slate-600 uppercase">${uom || '-'}</td>
             <td class="px-6 py-4 text-sm text-right text-slate-900 font-semibold tabular-nums">${qtyNum.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})}</td>
             <td class="px-6 py-4 text-center">${statusBadge}</td>
         `;
@@ -1172,7 +1172,7 @@ function renderETExpandedPanel(d) {
 
     const overbookBanner = isOver ? `
         <div class="mt-3 px-3 py-2 rounded-md bg-red-50 border border-red-200 text-sm text-red-800">
-            <strong>ET overbooked by ${fmt(d.et_overbook_qty)}</strong> — Local bookings exceed ET on-hand.
+            <strong>ET overbooked by ${fmt(d.et_overbook_qty)}</strong> - Local bookings exceed ET on-hand.
             Likely cause: stock not yet moved base→ET in Sage. Move it manually or flip JO to Export.
         </div>` : '';
 
@@ -1300,7 +1300,7 @@ function _openPrintWindow({ title, filterKey, searchTerm, rows, lowStockThreshol
             <td class="sn">${idx + 1}</td>
             <td class="code">${code}</td>
             <td>${desc}</td>
-            <td class="uom">${uom || '&mdash;'}</td>
+            <td class="uom">${uom || '-'}</td>
             <td class="num">${qtyStr}</td>
             <td class="${statusClass}">${statusText}</td>
         </tr>`;
@@ -1308,7 +1308,7 @@ function _openPrintWindow({ title, filterKey, searchTerm, rows, lowStockThreshol
 
     const letterheadUrl = `${window.location.origin}/app/demoplant.jpg`;
 
-    const html = `<!doctype html><html><head><meta charset="utf-8"><title>Demo Plant &mdash; ${_escapeHtml(title)}</title>
+    const html = `<!doctype html><html><head><meta charset="utf-8"><title>Demo Plant - ${_escapeHtml(title)}</title>
 <style>
     /* Margin: 0 on @page suppresses the browser-injected URL/title/page-number overlays.
        Visible margins are reproduced by padding on .content. */
@@ -1336,7 +1336,7 @@ function _openPrintWindow({ title, filterKey, searchTerm, rows, lowStockThreshol
     h1 { font-size: 15px; margin: 0 0 3px; color: #0f172a; }
     .meta { font-size: 10px; color: #475569; margin-bottom: 10px; border-bottom: 1px solid #cbd5e1; padding-bottom: 6px; }
 
-    /* Table — stronger borders + zebra rows for legibility.
+    /* Table - stronger borders + zebra rows for legibility.
        print-color-adjust: exact forces backgrounds to print even when the user
        has Chrome's "Print backgrounds" checkbox off. */
     table { width: 100%; border-collapse: collapse; font-size: 10px; table-layout: fixed; border: 1.5px solid #334155; background: rgba(255,255,255,0.92); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
