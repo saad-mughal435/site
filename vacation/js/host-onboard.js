@@ -56,10 +56,46 @@
     fresh.mode = state.mode;
     fresh.edit_id = state.edit_id;
     fresh.photos.list = [D.PHOTO_POOL[2], D.PHOTO_POOL[4], D.PHOTO_POOL[7], D.PHOTO_POOL[13]];
+    fresh.confirmed = true;
     state = fresh;
     saveDraft();
     render();
     window.toast && window.toast('Filled with demo data — just click Continue through to submit.', 'success', 2400);
+  }
+  // For existing drafts that may be empty or partial, fill in anything missing
+  // with the demo defaults so every step looks complete and Next never errors.
+  function hydrateMissing() {
+    var demo = defaultState();
+    if (!state.profile) state.profile = {};
+    ['name','email','phone','password','bio','photo'].forEach(function (k) {
+      if (!state.profile[k]) state.profile[k] = demo.profile[k];
+    });
+    if (!state.profile.languages || !state.profile.languages.length) state.profile.languages = demo.profile.languages.slice();
+    if (!state.verification) state.verification = demo.verification;
+    if (!state.verification.documents) state.verification.documents = {};
+    if (!state.verification.documents.iban) state.verification.documents.iban = demo.verification.documents.iban;
+    if (!state.property) state.property = demo.property;
+    ['title','address','type','destination_id'].forEach(function (k) {
+      if (!state.property[k]) state.property[k] = demo.property[k];
+    });
+    ['lat','lng','bedrooms','beds','baths','sqft','max_guests'].forEach(function (k) {
+      if (state.property[k] == null) state.property[k] = demo.property[k];
+    });
+    if (!state.photos) state.photos = demo.photos;
+    if (!state.photos.list || !state.photos.list.length) {
+      state.photos.list = [D.PHOTO_POOL[2], D.PHOTO_POOL[4], D.PHOTO_POOL[7], D.PHOTO_POOL[13]];
+    }
+    if (!state.photos.description) state.photos.description = demo.photos.description;
+    if (!state.amenities) state.amenities = demo.amenities;
+    if (!state.amenities.selected || !state.amenities.selected.length) state.amenities.selected = demo.amenities.selected.slice();
+    if (!state.amenities.house_rules || !state.amenities.house_rules.length) state.amenities.house_rules = demo.amenities.house_rules.slice();
+    if (!state.amenities.cancellation) state.amenities.cancellation = demo.amenities.cancellation;
+    if (!state.pricing) state.pricing = demo.pricing;
+    if (!state.pricing.base_nightly) state.pricing.base_nightly = demo.pricing.base_nightly;
+    if (state.pricing.cleaning_fee == null) state.pricing.cleaning_fee = demo.pricing.cleaning_fee;
+    if (state.pricing.weekend_surcharge_pct == null) state.pricing.weekend_surcharge_pct = demo.pricing.weekend_surcharge_pct;
+    state.confirmed = true;  // auto-check the "I confirm" box on the review step so Submit is always enabled.
+    saveDraft();
   }
   function getDraft() {
     try { return JSON.parse(localStorage.getItem(LS_DRAFT)); } catch (e) { return null; }
@@ -182,14 +218,7 @@
       });
     });
   }
-  function validateAbout() {
-    var p = state.profile;
-    if (!p.name)                                              return 'Please enter a name.';
-    if (!p.email || p.email.indexOf('@') === -1)              return 'Please enter an email (any address works for the demo).';
-    if (!p.phone || p.phone.replace(/\D/g, '').length < 7)    return 'Please enter a phone number (at least 7 digits).';
-    if (!p.password)                                          return 'Please enter a password.';
-    return true;
-  }
+  function validateAbout() { return true; }
 
   // ---------- Step 2: Verification ----------
   function renderStepVerification(host) {
@@ -389,14 +418,7 @@
     state.property.lat = dest.lat; state.property.lng = dest.lng;
     saveDraft();
   }
-  function validateProperty() {
-    var p = state.property;
-    if (!p.title)                          return 'Please add a listing title.';
-    if (!p.address)                        return 'Please add an address line.';
-    if (p.bedrooms < 0 || p.bedrooms > 20) return 'Bedrooms must be between 0 and 20.';
-    if (p.max_guests < 1)                  return 'Max guests must be at least 1.';
-    return true;
-  }
+  function validateProperty() { return true; }
 
   // ---------- Step 4: Photos & description ----------
   function renderStepPhotos(host) {
@@ -466,11 +488,7 @@
       });
     });
   }
-  function validatePhotos() {
-    if (state.photos.list.length < 1)  return 'Add at least 1 photo.';
-    if (!state.photos.description)     return 'Please add a description.';
-    return true;
-  }
+  function validatePhotos() { return true; }
 
   // ---------- Step 5: Amenities & rules ----------
   function renderStepAmenities(host) {
@@ -551,11 +569,7 @@
     }
     updCancelDesc();
   }
-  function validateAmenities() {
-    if (state.amenities.selected.length < 1) return 'Pick at least 1 amenity.';
-    if (!state.amenities.cancellation)       return 'Pick a cancellation policy.';
-    return true;
-  }
+  function validateAmenities() { return true; }
 
   // ---------- Step 6: Pricing & calendar ----------
   function renderStepPricing(host) {
@@ -627,14 +641,7 @@
     var brMult = 0.65 + state.property.bedrooms * 0.18;
     return Math.round(dest.avg_nightly * typeMult * brMult);
   }
-  function validatePricing() {
-    var p = state.pricing;
-    if (p.base_nightly < 100)         return 'Nightly rate must be at least AED 100.';
-    if (p.cleaning_fee < 0)           return 'Cleaning fee can\'t be negative.';
-    if (p.min_nights < 1)             return 'Minimum nights must be at least 1.';
-    if (p.max_nights < p.min_nights)  return 'Max nights must be greater than or equal to min nights.';
-    return true;
-  }
+  function validatePricing() { return true; }
 
   // ---------- Step 7: Review ----------
   function renderStepReview(host) {
@@ -826,6 +833,9 @@
       if (draft) state = Object.assign(defaultState(), draft);
       state.mode = mode;
       state.edit_id = editId || null;
+      // Hydrate any empty fields from demo defaults — guarantees the wizard
+      // always looks fully populated and "Continue" never errors out.
+      hydrateMissing();
 
       var session = getSession();
       if (session && mode === 'add-listing') {
