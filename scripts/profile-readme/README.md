@@ -84,17 +84,6 @@ My engineering background helps me run and support Krones beverage production li
 
 ---
 
-## 📊 GitHub at a glance
-
-<div align="center">
-
-![Saad's GitHub stats](https://github-readme-stats.vercel.app/api?username=saad-mughal435&show_icons=true&theme=tokyonight&hide_border=true&count_private=true&include_all_commits=true)
-![Saad's top languages](https://github-readme-stats.vercel.app/api/top-langs/?username=saad-mughal435&layout=compact&theme=tokyonight&hide_border=true&langs_count=8)
-
-</div>
-
----
-
 ## 🎯 Currently open to
 
 > **Software · Automation · ERP / MES · Backend · Web Development · Technical Operations**
