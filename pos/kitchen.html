@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kitchen Display - Qahwa POS</title>
+<meta name="robots" content="noindex" />
+<meta name="theme-color" content="#1a1410" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2064%2064'%3E%3Crect%20width%3D'64'%20height%3D'64'%20rx%3D'14'%20fill%3D'%231a1410'/%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20font-family%3D'serif'%20font-weight%3D'700'%20font-size%3D'30'%20fill%3D'%23d4a574'%20text-anchor%3D'middle'%3EK%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/pos.css?v=20260516a" />
+</head>
+<body class="pos">
+
+<div class="pos-kds">
+  <div class="pos-kds-top">
+    <a href="index.html" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:10px;">
+      <span class="pos-topbar-mark" style="width:32px;height:32px;">K</span>
+      <h2>Kitchen · Qahwa Café</h2>
+    </a>
+    <div class="pos-kds-stats">
+      <div class="pos-kds-stat"><strong id="k-active">0</strong>Active</div>
+      <div class="pos-kds-stat"><strong id="k-completed">0</strong>Completed today</div>
+      <div class="pos-kds-stat"><strong id="k-avg">—</strong>Avg ticket time</div>
+      <div class="pos-kds-stat"><strong id="k-clock">--:--</strong>Time</div>
+    </div>
+  </div>
+  <div class="pos-kds-grid" id="k-grid"></div>
+  <div class="pos-kds-completed-strip" id="k-strip"><span style="color:var(--pos-muted);">Recently served · </span></div>
+</div>
+
+<script src="js/data.js?v=20260516a"></script>
+<script src="js/mock-api.js?v=20260516a"></script>
+<script src="js/notifications.js?v=20260516a"></script>
+<script src="js/app.js?v=20260516a"></script>
+<script src="js/kitchen.js?v=20260516a"></script>
+</body>
+</html>

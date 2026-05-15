@@ -27,3 +27,8 @@
 /list-property   /vacation/host-onboard.html   302
 /become-a-host   /vacation/host.html           302
 /host-dashboard  /vacation/host-dashboard.html 302
+
+# Qahwa POS friendly aliases
+/qahwa     /pos/index.html     302
+/cashier   /pos/terminal.html  302
+/kds       /pos/kitchen.html   302

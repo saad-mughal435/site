@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Qahwa POS — counter-side POS for UAE cafés and quick-service</title>
+<meta name="description" content="Demo café POS with cashier terminal, kitchen display, and 14-section admin. Modifier-driven menus, shift cash reconciliation, hourly heatmaps." />
+<meta name="theme-color" content="#1a1410" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2064%2064'%3E%3Crect%20width%3D'64'%20height%3D'64'%20rx%3D'14'%20fill%3D'%231a1410'/%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20font-family%3D'serif'%20font-weight%3D'700'%20font-size%3D'30'%20fill%3D'%23d4a574'%20text-anchor%3D'middle'%3EQ%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/pos.css?v=20260516a" />
+</head>
+<body class="pos landing">
+
+<div class="pos-landing">
+
+  <header class="pos-flex" style="margin-bottom:48px;">
+    <a href="index.html" style="display:flex;align-items:center;gap:10px;color:var(--pos-card-ink);font-family:var(--font-display);font-weight:700;font-size:20px;">
+      <span class="pos-topbar-mark">Q</span> Qahwa POS
+    </a>
+    <a href="/" style="margin-inline-start:auto;font-size:13.5px;color:var(--pos-muted-light);">← saadm.dev</a>
+  </header>
+
+  <section class="pos-landing-hero">
+    <div>
+      <span style="display:inline-block;padding:4px 12px;background:rgba(212,165,116,.18);color:var(--pos-accent-2);border-radius:999px;font-size:12px;font-weight:600;letter-spacing:.04em;margin-bottom:14px;">Demo · café / quick-service POS</span>
+      <h1>Counter-side POS for UAE cafés and quick-service.</h1>
+      <p>Modifier-driven menus, kitchen display, shift cash reconciliation, hourly heatmaps. Vanilla JS demo running entirely in your browser — no backend, all writes land in localStorage.</p>
+      <div class="pos-landing-ctas">
+        <a class="pos-btn pos-btn--primary pos-btn--lg" href="terminal.html">Open cashier terminal →</a>
+        <a class="pos-btn pos-btn--lg" href="kitchen.html">Kitchen display</a>
+        <a class="pos-btn pos-btn--lg" href="admin.html">Back office</a>
+      </div>
+      <div class="pos-text-muted" style="margin-top:14px;font-size:12.5px;">Demo PINs · <strong>1234</strong> manager · <strong>5678</strong> supervisor · <strong>1111</strong> / <strong>2222</strong> cashiers</div>
+    </div>
+    <div class="pos-landing-mock">
+      <div style="text-align:center;">
+        <div style="font-size:64px;margin-bottom:14px;">☕</div>
+        <div style="font-family:var(--font-display);font-size:22px;font-weight:700;margin-bottom:6px;">Qahwa Café</div>
+        <div style="font-size:13px;color:var(--pos-ink-2);">Downtown Dubai · TRN 100123456700003</div>
+        <div style="margin-top:24px;display:inline-flex;gap:6px;flex-wrap:wrap;justify-content:center;">
+          <span class="pos-status-chip open">open</span>
+          <span class="pos-status-chip kitchen">in kitchen</span>
+          <span class="pos-status-chip ready">ready</span>
+          <span class="pos-status-chip completed">completed</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 style="text-align:center;margin-bottom:24px;">What's inside</h2>
+    <div class="pos-landing-grid">
+      <div class="pos-landing-card">
+        <h3>☕ Cashier terminal</h3>
+        <p>Touch-optimized product grid with categories, search, modifiers (size · milk · syrup · extras), cart with qty steppers, and cash / card / split payment flows. PIN lock between cashiers.</p>
+      </div>
+      <div class="pos-landing-card">
+        <h3>🍳 Kitchen display</h3>
+        <p>Counter-mounted screen polls for new orders, marks lines ready one by one, with elapsed-time amber / red warnings and audio chime on new tickets.</p>
+      </div>
+      <div class="pos-landing-card">
+        <h3>📊 14-section admin</h3>
+        <p>Dashboard, live orders, products (CRUD + bulk), categories, modifiers, discounts, tables floor plan, staff RBAC, shifts with Z-reports, reports, inventory, receipt template, settings, audit log.</p>
+      </div>
+      <div class="pos-landing-card">
+        <h3>🧮 Real operations math</h3>
+        <p>5% VAT applied after discounts, payment splits, change calculation, shift cash variance, inventory deduction via product → ingredient recipes, CSV export of orders and audit log.</p>
+      </div>
+      <div class="pos-landing-card">
+        <h3>🛡 Role-based access</h3>
+        <p>Three roles — cashier, supervisor, manager — with PIN auth. Supervisor overrides for discounts &gt;20%. Manager-only shift close + Z-report.</p>
+      </div>
+      <div class="pos-landing-card">
+        <h3>🧰 Vanilla JS, no build</h3>
+        <p>No frameworks, no bundler, no backend. ~5,000 LOC of plain ES5+ behind a fetch interceptor that serves <code>/pos/api/*</code> from localStorage. Reset to seed any time from Settings.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="pos-card pos-mt-4">
+    <h3 style="margin-bottom:10px;">Try it end-to-end</h3>
+    <ol style="margin:0;padding-inline-start:22px;line-height:1.85;font-size:14.5px;">
+      <li>Open the <a href="terminal.html">cashier terminal</a>, enter PIN <strong>1111</strong>.</li>
+      <li>Tap Coffee → Cappuccino → pick Size Large, Oat milk, Vanilla syrup. Confirm.</li>
+      <li>Add a Croissant + Iced latte. Apply <strong>10%</strong> discount.</li>
+      <li>Tap <strong>Send to Kitchen</strong>. Open <a href="kitchen.html">the KDS</a> in a second tab — the ticket appears within five seconds with an audio chime.</li>
+      <li>Mark lines ready in the KDS, then "Mark all served". Back in the terminal: take payment in cash.</li>
+      <li>Open the <a href="admin.html">back office</a> → Dashboard updates, your order is on the recent list, inventory shows beans + milk deducted.</li>
+    </ol>
+  </section>
+
+  <footer class="pos-landing-foot">
+    Demo built by Muhammad Saad · part of <a href="/" style="color:var(--pos-accent-2);">saadm.dev</a> portfolio · all data lives in your browser
+  </footer>
+
+</div>
+
+<script>
+  (function () { var s = document.createElement('script'); s.src = '/assets/portfolio-banner.js?v=20260514'; s.async = true; document.head.appendChild(s); })();
+</script>
+</body>
+</html>

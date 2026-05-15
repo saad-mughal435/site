@@ -32,6 +32,10 @@
   Cache-Control: public, max-age=300, must-revalidate
 /vacation/js/*
   Cache-Control: public, max-age=300, must-revalidate
+/pos/css/*
+  Cache-Control: public, max-age=300, must-revalidate
+/pos/js/*
+  Cache-Control: public, max-age=300, must-revalidate
 
 # HTML — short cache so updates surface quickly
 /*.html
