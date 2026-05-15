@@ -7,6 +7,81 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-05-15 - Qahwa POS: café & quick-service POS demo (sixth demo)
+
+### Added
+- **Qahwa POS** at `/pos/` - sixth interactive demo. Café and
+  quick-service point-of-sale system covering the in-person retail /
+  F&B vertical that the previous five demos did not.
+  ~5,000 LOC across 6 HTML pages + 1 CSS file + 7 JS modules.
+- **Cashier terminal** (`pos/terminal.html`) - touch-optimized layout
+  with PIN lock screen, category tabs + product grid + search, cart
+  pane with qty steppers and modifier preview, modifier modal
+  (size / milk / syrup / extras with per-option price deltas),
+  payment flows (cash with numpad + change calculation, card with
+  simulated approval, split cash + card), discount modal with %/AED/
+  coupon, hold/void/KOT, receipt preview with print and email.
+- **Kitchen Display System** (`pos/kitchen.html`) - polls
+  `/orders/kitchen` every 5 seconds, big card layout with elapsed-
+  time warnings (amber > 5 min, red > 8 min), per-line ready
+  checkboxes, "Mark all served" buttons, Web Audio API chime on new
+  orders, completed-strip at the bottom.
+- **14-section admin SPA** (`pos/admin.html`) - hash-routed:
+  Dashboard (KPIs, weekly bar chart, hourly heatmap, top products,
+  payment-method breakdown, recent orders), Live orders (filter
+  pipeline + per-order modal with status override + refund),
+  Products (CRUD + bulk activate / deactivate / delete + modifier-
+  group multi-link + margin calc), Categories, Modifiers (groups +
+  options with price deltas), Discounts, Tables (floor plan with
+  status-cycle on click), Staff (RBAC with permission matrix),
+  Shifts (open / close with cash-denomination count + variance +
+  Z-report), Reports (date-range bar chart, top products, by
+  cashier, hourly distribution, payment methods, CSV export),
+  Inventory (low-stock alerts + manual adjust), Receipt template
+  (live preview with editable header / footer / TRN / VAT note),
+  Settings (business + tax + ops + reset-demo), Audit log (CSV
+  export).
+- **Landing page** (`pos/index.html`) - hero with three big CTAs
+  (terminal / KDS / admin), demo-PIN reference, "What's inside" 6-
+  card grid, end-to-end try-it walkthrough.
+- **Receipt page** (`pos/receipt.html`) - public receipt view with
+  `?order=ID`, print stylesheet, copy-link button.
+- **404 page** (`pos/404.html`) - branded not-found in the espresso /
+  caramel palette.
+- **Mock API surface** (`pos/js/mock-api.js`) - fetch interceptor
+  serving `/pos/api/*` from `POS_DATA` + localStorage. ~30 routes
+  covering auth (PIN-based), catalogue (products / categories /
+  modifiers), orders (full state machine open → kitchen → ready →
+  served → completed plus refunded / held / voided), kitchen
+  polling, tables / shifts / inventory, and full admin CRUD. Pricing
+  helper recomputes subtotal / 5% VAT / total on every mutation;
+  inventory deducts via product → ingredient recipes on payment.
+  Audit log + notifications persisted to localStorage.
+- **Seed data** (`pos/js/data.js`) - 8 categories, 4 modifier
+  groups, 49 products, 4 staff (PINs 1234 / 5678 / 1111 / 2222),
+  12 tables with floor positions, 30 orders spanning every status,
+  3 shifts, 4 discounts, 20 inventory items, settings (5% VAT, AED,
+  Qahwa Café · Downtown Dubai).
+- **Design system** (`pos/css/pos.css`) - espresso / caramel / cream
+  palette distinct from prior demos. Dark surfaces for the terminal
+  (cafés are often dim), light surfaces for admin. Touch-friendly
+  sizing throughout (≥ 44 px tap targets, ≥ 60 px action buttons,
+  ≥ 16 px primary text).
+
+### Portfolio integration
+- `demo.html` - sixth demo card added (Café POS) between Vacation
+  Homes and the close of the chooser. Intro copy bumped from
+  "Five demos" → "Six demos".
+- `index.html` PROJECTS list - new Qahwa POS entry between
+  Vacation Homes and Pebble & Co.
+- `_headers` - cache rules for `/pos/css/*` and `/pos/js/*`.
+- `_redirects` - friendly aliases `/qahwa`, `/cashier`, `/kds`.
+- `sitemap.xml` - 4 new entries (index / terminal / kitchen / admin).
+
+### Changed
+- Bumped to **2.0.0** to mark the new vertical. The portfolio now
+  ships six full interactive demos plus the MES walkthrough.
+
 ## [1.9.0] - 2026-05-16 - Manzil owner onboarding wizard + admin verification queue
 
 ### Added

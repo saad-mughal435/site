@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Receipt — Qahwa POS</title>
+<meta name="robots" content="noindex" />
+<meta name="theme-color" content="#faf6ef" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2064%2064'%3E%3Crect%20width%3D'64'%20height%3D'64'%20rx%3D'14'%20fill%3D'%23faf6ef'/%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20font-family%3D'serif'%20font-weight%3D'700'%20font-size%3D'30'%20fill%3D'%232a1f17'%20text-anchor%3D'middle'%3ER%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/pos.css?v=20260516a" />
+</head>
+<body class="pos receipt">
+
+<div class="pos-receipt-no-print" style="text-align:center;padding:24px 18px 0;">
+  <a href="index.html" style="font-size:13px;color:var(--pos-accent-2);">← Qahwa POS</a>
+</div>
+
+<div class="pos-receipt-paper" id="receipt-host">
+  <div class="pos-text-muted" style="text-align:center;padding:40px 0;">Loading receipt…</div>
+</div>
+
+<div class="pos-receipt-no-print" style="text-align:center;padding:0 18px 36px;">
+  <button class="pos-btn pos-btn--primary" onclick="window.print()">Print</button>
+  <button class="pos-btn" onclick="navigator.clipboard && navigator.clipboard.writeText(location.href) && window.toast && window.toast('Link copied','success')">Copy link</button>
+</div>
+
+<script src="js/data.js?v=20260516a"></script>
+<script src="js/mock-api.js?v=20260516a"></script>
+<script src="js/notifications.js?v=20260516a"></script>
+<script src="js/app.js?v=20260516a"></script>
+<script>
+(function () {
+  'use strict';
+  var esc = PosApp.escapeHtml;
+  var money = PosApp.fmtMoney;
+  var q = PosApp.qs();
+  var oid = q.order;
+  var host = document.getElementById('receipt-host');
+  if (!oid) {
+    host.innerHTML = '<div class="pos-text-muted" style="text-align:center;padding:30px 0;">No receipt requested. Append <code>?order=ORDER_ID</code> to the URL.</div>';
+    return;
+  }
+  Promise.all([PosApp.api('/orders/' + oid), PosApp.api('/admin/settings')]).then(function (results) {
+    if (!results[0].body.ok) { host.innerHTML = '<div style="text-align:center;padding:30px 0;">Receipt not found.</div>'; return; }
+    var o = results[0].body.order;
+    var s = results[1].body.settings;
+    var prodMap = {}; window.POS_DATA.PRODUCTS.forEach(function (p) { prodMap[p.id] = p; });
+    var staffMap = {}; window.POS_DATA.STAFF.forEach(function (st) { staffMap[st.id] = st.name; });
+    host.innerHTML =
+      '<div class="pos-receipt-head">'
+      +   '<h2>' + esc(s.business_name || 'Qahwa Café') + '</h2>'
+      +   '<div class="pos-receipt-meta">' + esc(s.address || 'Downtown Dubai') + '</div>'
+      +   (s.trn ? '<div class="pos-receipt-meta">TRN: ' + esc(s.trn) + '</div>' : '')
+      + '</div>'
+      + '<div class="pos-receipt-meta" style="margin-bottom:8px;">Order ' + esc(o.order_no) + ' · ' + PosApp.fmtDateTime(o.created_at) + (o.cashier_id ? ' · ' + esc(staffMap[o.cashier_id] || '') : '') + '</div>'
+      + (o.lines || []).map(function (l) {
+          var p = prodMap[l.product_id] || { name: l.product_id };
+          var mods = '';
+          if (l.modifiers && l.modifiers.length) {
+            mods = l.modifiers.map(function (oid) {
+              var found;
+              window.POS_DATA.MODIFIER_GROUPS.forEach(function (g) { var opt = g.options.find(function (o) { return o.id === oid; }); if (opt) found = opt.label; });
+              return found || '';
+            }).filter(Boolean).join(', ');
+            mods = mods ? '<div style="font-size:11px;color:var(--pos-muted-light);padding-inline-start:18px;">— ' + esc(mods) + '</div>' : '';
+          }
+          return '<div class="pos-receipt-line"><span>' + l.qty + '× ' + esc(p.name) + '</span><span>' + money(l.line_total || l.unit_price * l.qty).replace('AED ', '') + '</span></div>' + mods;
+        }).join('')
+      + '<div class="pos-receipt-line" style="margin-top:6px;"><span>Subtotal</span><span>' + money(o.subtotal).replace('AED ', '') + '</span></div>'
+      + (o.discount ? '<div class="pos-receipt-line"><span>Discount</span><span>−' + money(o.discount).replace('AED ', '') + '</span></div>' : '')
+      + '<div class="pos-receipt-line"><span>VAT 5%</span><span>' + money(o.vat).replace('AED ', '') + '</span></div>'
+      + '<div class="pos-receipt-line tot"><span>Total</span><span>' + money(o.total) + '</span></div>'
+      + (o.payments || []).map(function (p) { return '<div class="pos-receipt-line"><span>Paid (' + esc(p.method) + ')</span><span>' + money(p.amount).replace('AED ', '') + '</span></div>'; }).join('')
+      + '<div class="pos-receipt-foot">'
+      +   '<div>' + esc(s.receipt_footer || 'Thank you for visiting Qahwa Café') + '</div>'
+      +   '<div>' + esc(s.receipt_vat_note || 'All prices include 5% VAT') + '</div>'
+      + '</div>';
+  });
+})();
+</script>
+</body>
+</html>
