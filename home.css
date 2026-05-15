@@ -67,7 +67,7 @@ img, video, iframe, pre, table { max-width: 100%; }
 /* Every grid child can shrink — kills overflow from long pre/code/text content. */
 .hero > *, .stats > *, .about-grid > *, .projects-grid > *,
 .skills-grid > *, .contact-box > *, .hero-meta > *,
-.skill-card > ul > li > .skill-name, .project > * { min-width: 0; }
+.skill-card > .skill-chips > .skill-chip, .project > * { min-width: 0; }
 
 a { color: var(--blue); text-decoration: none; transition: color var(--t-fast) ease; }
 a:hover { color: #a8b8ff; }
@@ -736,25 +736,25 @@ img, svg { display: block; max-width: 100%; }
   letter-spacing: 1.2px;
   color: var(--teal);
 }
-.skill-card ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
-.skill-card li { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.skill-name { font-size: 13.5px; color: var(--fg); flex: 1 1 auto; min-width: 0; }
-.skill-tier {
-  flex: 0 0 auto;
-  font-size: 10.5px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 3px 8px;
+.skill-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.skill-chip {
+  display: inline-flex;
+  align-items: center;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--fg);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
   border-radius: 999px;
-  border: 1px solid transparent;
+  padding: 5px 11px;
   white-space: nowrap;
-  font-family: var(--mono);
+  transition: all var(--t-fast, 120ms) var(--easing);
 }
-.skill-tier--production  { color: #5eead4; background: rgba(94,234,212,.10);  border-color: rgba(94,234,212,.22); }
-.skill-tier--comfortable { color: #93b3ff; background: rgba(124,156,255,.10); border-color: rgba(124,156,255,.22); }
-.skill-tier--working     { color: #f5cf81; background: rgba(245,207,129,.10); border-color: rgba(245,207,129,.22); }
-.skill-tier--learning    { color: #c9b6ff; background: rgba(201,182,255,.08); border-color: rgba(201,182,255,.20); }
+.skill-chip:hover {
+  border-color: rgba(124,156,255,0.35);
+  background: rgba(124,156,255,0.06);
+  color: #d8e2ff;
+}
 
 /* =========================================================
    CONTACT
