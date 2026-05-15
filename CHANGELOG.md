@@ -7,6 +7,59 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.8.1] - 2026-05-15 — Wording polish + skills bars → tier pills
+
+### Changed
+- **Static `<noscript>` fallback** — "Other software demos" list now
+  matches the React PROJECTS order: **Anvil → Manzil → Vacation Homes
+  → Pebble**. Added Vacation Homes (previously missing). Matters for
+  SEO crawlers, LinkedIn previews, and corporate networks that strip
+  JavaScript.
+- **FAQ** — public salary question removed. Replaced with "What type
+  of roles is Saad open to?" covering automation / ERP-MES /
+  manufacturing systems / backend / IT ops / NOC / industrial
+  maintenance / Python-heavy. FAQ heading "About Saad M…" →
+  **"About Muhammad Saad…"**. "Who is Saad M?" → "Who is Muhammad
+  Saad?".
+- **Hero / code card** — primary CTA "Hire me →" → "Contact me →"
+  (less assertive, better for recruiter audiences). Code-card role
+  line "Systems Builder" → **"Operations Software Builder"**.
+- **Metrics** — "departments digitised by the MES/ERP I built" →
+  "departments digitized through MES/ERP workflows" (US spelling +
+  clearer). "Krones subsystems owned end-to-end" → "Krones
+  subsystems supported end-to-end" (more accurate for machinery
+  context).
+- **About** — second-paragraph next-goal sentence rewritten:
+  "...That's what I want to do next — build automation, backend,
+  ERP/MES, or technical operations systems for teams where
+  reliability and real workflows matter."
+- **Contact** — role list rewritten to centre on the strongest
+  identity: "...automation, ERP/MES, manufacturing systems, backend
+  engineering, IT operations, or Python-heavy technical roles..."
+- **"Other software demos" section heading** — "Other shapes of
+  software I can ship" → **"Other product demos I can ship"**.
+- **Kingsley experience bullets** — reordered + tightened from 6
+  bullets to 5 so the strongest two points (MES/ERP shipped + ~60%
+  reporting-time cut) land at the top for fast scanners.
+- **Skills section** — percentage progress bars **replaced with
+  status-tier pills**. New 4-tier taxonomy:
+  - `production` (teal) — shipping real production code with it today
+  - `comfortable` (blue) — used in significant projects, can debug end-to-end
+  - `working` (sand) — solid working knowledge, productive but not deep
+  - `learning` (lavender) — actively learning / academic / in-progress
+  Every skill row in the `SKILLS` array converted from `[name, percent]`
+  to `[name, tier]`. New `.skill-tier--*` CSS variants in `home.css`;
+  deprecated `.bar` / `.bar-lbl` rules removed from `home.css` (still
+  present in `styles.css` for other pages that use them). React
+  `SkillCard` renderer rewritten to paint the new pill.
+
+### Added
+- **MES featured card — "Best first view" hint.** New `ctaTip`
+  field renders a small panel under the two CTA buttons telling
+  reviewers to open the static walkthrough first (3-min tour), then
+  the live interactive demo. Helps avoid the "open live → bounce off
+  empty modules" failure mode.
+
 ## [1.8.0] - 2026-05-15 — Portfolio credibility polish (deep-scan round)
 
 ### Changed

@@ -127,7 +127,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="home.css?v=20260514m6" />
+<link rel="stylesheet" href="home.css?v=20260515a" />
 </head>
 <body>
 
@@ -158,9 +158,10 @@
 
     <h3 style="color:#edf1f8; margin:18px 0 8px; font-size:16px;">Other software demos</h3>
     <ul style="padding-left:18px; margin:0 0 18px;">
+      <li><strong>Anvil Supply Co.</strong> — B2B wholesale portal demo. Tier pricing, MOQ, contract discounts, quote workflow, approval workflow for orders over $1,000, admin with order/quote/approval queues. <a href="b2b/index.html" style="color:#6e8eff;">Open →</a></li>
       <li><strong>Manzil Properties</strong> — Dubai real-estate marketplace demo. Map + list search, agent profiles, mortgage / valuation / yield calculators, 13-section admin SPA. <a href="property/index.html" style="color:#6e8eff;">Open →</a></li>
+      <li><strong>Vacation Homes</strong> — UAE short-stay booking demo. Hand-rolled date-range picker, conflict-checked bookings, 6-step host onboarding wizard with document upload, admin verification queue. <a href="vacation/index.html" style="color:#6e8eff;">Open →</a></li>
       <li><strong>Pebble &amp; Co.</strong> — direct-to-consumer storefront demo with admin panel. <a href="b2c/index.html" style="color:#6e8eff;">Open →</a></li>
-      <li><strong>Anvil Supply Co.</strong> — B2B wholesale portal demo with quote &amp; approval workflow. <a href="b2b/index.html" style="color:#6e8eff;">Open →</a></li>
     </ul>
 
     <h3 style="color:#edf1f8; margin:18px 0 8px; font-size:16px;">Stack</h3>
@@ -512,7 +513,7 @@ const CODE_SNIPPETS = {
       {'    '}<span className="v">name</span>      = <span className="s">"Saad"</span>{'\n'}
       {'    '}<span className="v">based_in</span>  = <span className="s">"Dubai, UAE"</span>{'\n'}
       {'    '}<span className="v">open_to</span>   = <span className="s">"relocate worldwide"</span>{'\n'}
-      {'    '}<span className="v">role</span>      = <span className="s">"Automation Engineer / ERP-OEE Developer / Systems Builder"</span>{'\n'}
+      {'    '}<span className="v">role</span>      = <span className="s">"Automation Engineer / ERP-OEE Developer / Operations Software Builder"</span>{'\n'}
       {'    '}<span className="v">does</span> = [{'\n'}
       {'        '}<span className="s">"Build MES/ERP from scratch"</span>,{'\n'}
       {'        '}<span className="s">"Replace manual workflows with automation"</span>,{'\n'}
@@ -621,7 +622,7 @@ function Hero({ view, setView }) {
         </h1>
         <p className="hero-sub view-fade" key={'s-' + view}>{copy.sub}</p>
         <div className="hero-cta">
-          <MagneticBtn as="a" href="contact.html" className="btn btn-primary">Hire me <span className="arrow">→</span></MagneticBtn>
+          <MagneticBtn as="a" href="contact.html" className="btn btn-primary">Contact me <span className="arrow">→</span></MagneticBtn>
           <a className="btn btn-ghost view-fade" key={'c-' + view}
              href={copy.cta.href}
              {...(copy.cta.target ? { target: copy.cta.target, rel: 'noopener' } : {})}
@@ -647,9 +648,9 @@ function Hero({ view, setView }) {
    ========================================================= */
 const STATS_ALL = [
   { num: 60,   suffix: '%',    label: 'reduction in production reporting time', domain: 'code' },
-  { num: 5,    suffix: '',     label: 'departments digitised by the MES/ERP I built', domain: 'code' },
+  { num: 5,    suffix: '',     label: 'departments digitized through MES/ERP workflows', domain: 'code' },
   { num: 2,    suffix: ' yrs', label: 'industrial & telecom-ops experience', domain: 'all' },
-  { num: 7,    suffix: '',     label: 'Krones subsystems owned end-to-end', domain: 'eng' },
+  { num: 7,    suffix: '',     label: 'Krones subsystems supported end-to-end', domain: 'eng' },
   { num: 2,    suffix: ' yrs', label: 'GPON / PSTN / broadband NOC operations', domain: 'eng' },
   { num: 6,    suffix: '+ yrs',label: 'writing Python — uni projects, internships, and production', domain: 'code' },
 ];
@@ -718,8 +719,8 @@ function StackChips() {
    ========================================================= */
 const FAQ_ITEMS = [
   {
-    q: 'Who is Saad M?',
-    a: <Fragment>Saad M. (full name Muhammad Saad) is an Electrical &amp; Automation Engineer and full-stack developer, currently based in the UAE and open to relocate worldwide. B.Sc. Electrical Engineering with a Computer Engineering specialization from COMSATS Islamabad. He builds production software in Python, FastAPI, MongoDB, and JavaScript, and currently works as Automation Engineer, ERP Developer, and IT Administrator at Kingsley Beverage FZCO.</Fragment>,
+    q: 'Who is Muhammad Saad?',
+    a: <Fragment>Muhammad Saad (Saad for short) is an Electrical &amp; Automation Engineer and full-stack developer, currently based in the UAE and open to relocate worldwide. B.Sc. Electrical Engineering with a Computer Engineering specialization from COMSATS Islamabad. He builds production software in Python, FastAPI, MongoDB, and JavaScript, and currently works as Automation Engineer, ERP Developer, and IT Administrator at Kingsley Beverage FZCO.</Fragment>,
   },
   {
     q: 'What does Saad work on?',
@@ -730,8 +731,8 @@ const FAQ_ITEMS = [
     a: <Fragment>Yes - open to backend, full-stack, automation, NOC engineering, IT infrastructure, and MES/ERP roles. On-site in the UAE, hybrid, or fully remote. Available immediately. Reach out via the <a href="contact.html">contact form</a>, email <a href="mailto:saad@saadm.dev">saad@saadm.dev</a>, or WhatsApp <a href="https://wa.me/971502578065" target="_blank" rel="noopener">+971 50 257 8065</a>.</Fragment>,
   },
   {
-    q: 'What salary is Saad looking for?',
-    a: <Fragment>Open to discuss. Indicative range for a full-time role in the UAE: <strong>AED 10,000 - 15,000 / month</strong> depending on the role, scope, and benefits. Happy to align with the right team and project.</Fragment>,
+    q: 'What type of roles is Saad open to?',
+    a: <Fragment>Automation, ERP / MES, manufacturing systems, backend engineering, IT operations, NOC engineering, industrial maintenance, and Python-heavy technical roles. Currently UAE-based; open to relocate worldwide. Open to on-site, hybrid, or fully remote.</Fragment>,
   },
   {
     q: 'What is Saad\'s tech stack?',
@@ -752,7 +753,7 @@ function FAQ() {
     <section id="faq" className="section container">
       <Reveal className="section-head">
         <span className="section-tag">FAQ</span>
-        <h2>About Saad M — engineer who ships software.</h2>
+        <h2>About Muhammad Saad — engineer who ships software.</h2>
       </Reveal>
       <Reveal stagger className="faq-list">
         {FAQ_ITEMS.map((f, i) => (
@@ -786,9 +787,9 @@ function About() {
           <p>Before that I spent two years as a <strong>NOC Engineer at PTCL</strong> running GPON / PSTN /
             broadband infrastructure, where I shipped a Python tool that auto-generated configuration scripts
             from tickets, eliminating hours of manual ticket prep every day.</p>
-          <p>The pattern: I look at slow, manual operational work and rebuild it in code. That&rsquo;s what I&rsquo;m
-            looking to do next &mdash; on automation, backend engineering, or technical operations teams
-            where building things that actually run is the standard.</p>
+          <p>The pattern: I look at slow, manual operational work and rebuild it in code. That&rsquo;s what I want to do next
+            &mdash; build automation, backend, ERP/MES, or technical operations systems for teams where reliability
+            and real workflows matter.</p>
           <div className="about-tags">
             {['Python', 'FastAPI', 'React', 'JavaScript (ES6+)', 'HTML / CSS', 'CSS Grid', 'MongoDB',
               'Docker', 'Linux', 'nginx', 'Cloudflare', 'Git', 'REST APIs', 'JWT', 'Pandas',
@@ -821,12 +822,11 @@ const EXPERIENCE = [
     when: 'Jul 2025 - Present',
     company: 'Kingsley Beverage FZCO · Dubai, UAE',
     points: [
-      <Fragment><strong>Designed and shipped an enterprise MES/ERP from scratch</strong> covering PPC, inventory, QC, accounts, and live production reporting across <strong>5 departments</strong>.</Fragment>,
-      <Fragment>Cut production reporting time by an estimated <strong>~60%</strong>; built OEE monitoring, batch tracking, and automated reporting modules.</Fragment>,
-      <Fragment>Administer the underlying stack end-to-end - <em>Linux VM, MongoDB, Sage integration, Cloudflare-fronted nginx</em>, user accounts, backups.</Fragment>,
-      'Took on expanding technical ownership within 12 months: IT infrastructure administration, full-stack ERP development, and end-to-end system architecture — from database schema through deployment and ops.',
-      <Fragment>Operate and troubleshoot the fully automated <em>Krones</em> beverage lines - blow molding, filling, Checkmate inspection, Variopac FS packaging, palletizing, PET preform.</Fragment>,
-      'Electrical troubleshooting, root cause analysis, and commissioning support across interconnected line machines.',
+      <Fragment><strong>Designed and shipped a full MES/ERP platform from scratch</strong> across PPC, inventory, QC, accounts, production reporting, and Sage integration — sole developer, currently running in production.</Fragment>,
+      <Fragment><strong>Reduced production reporting time by an estimated ~60%</strong> through automated OEE monitoring, batch tracking, PDF reports, and centralised workflows across <strong>5 departments</strong>.</Fragment>,
+      <Fragment>Administer the underlying stack end-to-end — <em>Linux VM, MongoDB, Sage integration, Cloudflare-fronted nginx</em>, user accounts, backups, and deployment.</Fragment>,
+      <Fragment>Operate and troubleshoot the fully automated <em>Krones</em> beverage lines — blow molding, filling, Checkmate inspection, Variopac FS packaging, palletizing, PET preform handling.</Fragment>,
+      'Support electrical troubleshooting, root-cause analysis, and commissioning across interconnected line machines.',
     ],
   },
   { domain: 'all',
@@ -929,6 +929,7 @@ const PROJECTS = [
     tags: ['Python', 'FastAPI', 'MongoDB', 'SQL Server', 'Docker', 'Nginx', 'TLS', 'JWT', 'RBAC', 'Sage Evolution', 'pandas', 'openpyxl', 'fpdf', 'OEE', 'Manufacturing'],
     showCode: true,
     ctaSubtitle: 'Live interactive demo — every value fabricated for privacy, every workflow faithful to the real system',
+    ctaTip: <Fragment><strong>Best first view:</strong> open the <em>static walkthrough</em> for the 3-minute tour, then jump into the <em>live interactive demo</em>.</Fragment>,
     ctas: [
       { label: 'Launch live interactive demo ↗', href: 'app/index.html', target: '_blank', primary: true, prominent: true },
       { label: 'Static walkthrough', href: 'demo.html', target: '_blank' },
@@ -937,7 +938,7 @@ const PROJECTS = [
   {
     domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
     sectionEyebrow: 'Other software demos',
-    sectionHeading: 'Other shapes of software I can ship',
+    sectionHeading: 'Other product demos I can ship',
     sectionBlurb: 'Four additional product-shaped demos — a B2B wholesale portal closest to the manufacturing brand above, a Dubai real-estate marketplace, a UAE short-stay booking platform, and a DTC storefront. Each runs end-to-end in the browser via a mock API. They are not the headline of this portfolio (the MES platform above is) — they exist to show that the engineering-plus-software hybrid above can also build general product software.',
     title: 'Anvil Supply Co. - B2B wholesale portal',
     desc: <Fragment>A wholesale/industrial portal with tier pricing, MOQs, contract discounts, quote requests, and an
@@ -1061,6 +1062,7 @@ function ProjectCard({ p }) {
                {...(c.target ? { target: c.target, rel: 'noopener' } : {})}>{c.label}</a>
           ))}
           {p.ctaSubtitle && <div className="cta-subtitle">{p.ctaSubtitle}</div>}
+          {p.ctaTip && <div className="cta-tip">{p.ctaTip}</div>}
         </div>
       )}
     </TiltCard>
@@ -1192,39 +1194,63 @@ function Projects({ view }) {
 /* =========================================================
    SKILLS
    ========================================================= */
+// Skill tiers (replacing the old percentage bars — percentages on subjective
+// skills invite scrutiny. Tier labels read as honest self-assessment.)
+//   production  — shipping real production code with it today
+//   comfortable — used in significant projects, can debug end-to-end
+//   working     — solid working knowledge, productive but not deep
+//   learning    — actively learning / academic / in-progress
 const SKILLS = [
   { domain: 'code', title: 'Programming', items: [
-    ['Python', 92], ['JavaScript (ES6+)', 86], ['HTML5 / CSS3', 84], ['SQL', 60], ['Bash', 55], ['C++ (academic)', 65],
+    ['Python', 'production'], ['JavaScript (ES6+)', 'production'], ['HTML5 / CSS3', 'comfortable'],
+    ['SQL', 'working'], ['Bash', 'working'], ['C++ (academic)', 'learning'],
   ]},
   { domain: 'code', title: 'Web & Frameworks', items: [
-    ['FastAPI', 88], ['Vanilla JS / DOM', 88], ['CSS Grid / Flexbox', 86], ['React (learning)', 70], ['Tailwind CSS', 72], ['REST APIs', 88], ['JSON / JWT auth', 82], ['Responsive design', 84],
+    ['FastAPI', 'production'], ['Vanilla JS / DOM', 'production'], ['CSS Grid / Flexbox', 'production'],
+    ['React', 'learning'], ['Tailwind CSS', 'comfortable'], ['REST APIs', 'production'],
+    ['JSON / JWT auth', 'comfortable'], ['Responsive design', 'comfortable'],
   ]},
   { domain: 'code', title: 'Frontend Architecture', items: [
-    ['Multi-step forms / wizards', 88], ['SPA hash routing', 85], ['Admin dashboards / KPIs', 85],
-    ['Modal / toast / notification systems', 84], ['Event delegation', 82], ['localStorage / session state', 86],
-    ['Role-based UI', 80], ['Mock-driven prototyping', 86], ['Design systems', 80],
+    ['Multi-step forms / wizards', 'production'], ['SPA hash routing', 'production'], ['Admin dashboards / KPIs', 'production'],
+    ['Modal / toast / notification systems', 'comfortable'], ['Event delegation', 'comfortable'],
+    ['localStorage / session state', 'production'], ['Role-based UI', 'comfortable'],
+    ['Mock-driven prototyping', 'production'], ['Design systems', 'comfortable'],
   ]},
   { domain: 'code', title: 'DevOps & Infrastructure', items: [
-    ['Docker / Compose', 78], ['Linux administration', 80], ['nginx', 72], ['Cloudflare (DNS / Pages / Workers)', 82], ['Git / GitHub', 85], ['SSH / Cron', 70], ['GitHub Actions', 65],
+    ['Docker / Compose', 'comfortable'], ['Linux administration', 'comfortable'], ['nginx', 'comfortable'],
+    ['Cloudflare (DNS / Pages / Workers)', 'comfortable'], ['Git / GitHub', 'production'],
+    ['SSH / Cron', 'comfortable'], ['GitHub Actions', 'working'],
   ]},
   { domain: 'code', title: 'Databases & Data', items: [
-    ['MongoDB / motor', 82], ['SQL Server (pyodbc)', 70], ['SQLite', 75], ['Pandas', 85], ['OpenPyXL', 80], ['NumPy', 72], ['scikit-learn', 60],
+    ['MongoDB / motor', 'comfortable'], ['SQL Server (pyodbc)', 'comfortable'], ['SQLite', 'comfortable'],
+    ['Pandas', 'production'], ['OpenPyXL', 'comfortable'], ['NumPy', 'comfortable'], ['scikit-learn', 'working'],
   ]},
   { domain: 'all', title: 'MES / ERP', items: [
-    ['Production Planning (PPC)', 88], ['Inventory & Batch Tracking', 85], ['OEE Monitoring', 80],
-    ['Quality Control Workflows', 78], ['Reporting Pipelines', 75],
+    ['Production Planning (PPC)', 'production'], ['Inventory & Batch Tracking', 'production'],
+    ['OEE Monitoring', 'comfortable'], ['Quality Control Workflows', 'comfortable'],
+    ['Reporting Pipelines', 'comfortable'],
   ]},
   { domain: 'eng', title: 'Industrial / Controls', items: [
-    ['Krones lines (end-to-end)', 85], ['Electrical troubleshooting / RCA', 82], ['Commissioning & Validation', 75],
-    ['Signal flow & interlocks', 65], ['PLC (Siemens - in progress)', 50],
+    ['Krones lines (end-to-end)', 'production'], ['Electrical troubleshooting / RCA', 'comfortable'],
+    ['Commissioning & Validation', 'comfortable'], ['Signal flow & interlocks', 'working'],
+    ['PLC (Siemens — in progress)', 'learning'],
   ]},
   { domain: 'eng', title: 'Networks & Ops', items: [
-    ['GPON / PSTN / Broadband', 80], ['Huawei / Nokia tooling', 72], ['Oracle CRM', 70], ['Incident response', 65],
+    ['GPON / PSTN / Broadband', 'comfortable'], ['Huawei / Nokia tooling', 'comfortable'],
+    ['Oracle CRM', 'comfortable'], ['Incident response', 'working'],
   ]},
   { domain: 'all', title: 'Soft', items: [
-    ['Cross-team communication', 90], ['Documentation / SOPs', 85], ['Ownership & reliability', 80], ['Learning velocity', 78],
+    ['Cross-team communication', 'production'], ['Documentation / SOPs', 'production'],
+    ['Ownership & reliability', 'comfortable'], ['Learning velocity', 'comfortable'],
   ]},
 ];
+
+const TIER_LABEL = {
+  production:  'Production',
+  comfortable: 'Comfortable',
+  working:     'Working',
+  learning:    'Learning',
+};
 
 function SkillCard({ s }) {
   const ref = useRef(null);
@@ -1233,10 +1259,10 @@ function SkillCard({ s }) {
     <div ref={ref} className={'skill-card' + (inView ? ' inView' : '')}>
       <h4>{s.title}</h4>
       <ul>
-        {s.items.map(([name, w]) => (
+        {s.items.map(([name, tier]) => (
           <li key={name}>
-            <span className="bar"><span style={{ '--w': w + '%' }}></span></span>
-            <span className="bar-lbl">{name}</span>
+            <span className="skill-name">{name}</span>
+            <span className={'skill-tier skill-tier--' + tier}>{TIER_LABEL[tier] || tier}</span>
           </li>
         ))}
       </ul>
@@ -1269,8 +1295,8 @@ function Contact() {
         <div className="contact-left">
           <span className="section-tag">05 - Contact</span>
           <h2>Let&rsquo;s build something that ships.</h2>
-          <p>If you&rsquo;re hiring for automation, backend engineering, IT operations, NOC engineering, or
-            Python-heavy roles in the UAE or remote, I&rsquo;d love to talk.</p>
+          <p>If you&rsquo;re hiring for automation, ERP/MES, manufacturing systems, backend engineering, IT operations, or
+            Python-heavy technical roles in the UAE or remote, I&rsquo;d love to talk.</p>
           <MagneticBtn as="a" href="contact.html" className="btn btn-primary">
             Open contact form <span className="arrow">→</span>
           </MagneticBtn>
