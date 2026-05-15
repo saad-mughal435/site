@@ -127,7 +127,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="home.css?v=20260515a" />
+<link rel="stylesheet" href="home.css?v=20260515b" />
 </head>
 <body>
 
@@ -1194,63 +1194,24 @@ function Projects({ view }) {
 /* =========================================================
    SKILLS
    ========================================================= */
-// Skill tiers (replacing the old percentage bars — percentages on subjective
-// skills invite scrutiny. Tier labels read as honest self-assessment.)
-//   production  — shipping real production code with it today
-//   comfortable — used in significant projects, can debug end-to-end
-//   working     — solid working knowledge, productive but not deep
-//   learning    — actively learning / academic / in-progress
+// Grouped chip cards — no tier badges, no percentages. Each card shows the
+// areas the section title implies. Lets the viewer scan instead of judge.
 const SKILLS = [
-  { domain: 'code', title: 'Programming', items: [
-    ['Python', 'production'], ['JavaScript (ES6+)', 'production'], ['HTML5 / CSS3', 'comfortable'],
-    ['SQL', 'working'], ['Bash', 'working'], ['C++ (academic)', 'learning'],
-  ]},
-  { domain: 'code', title: 'Web & Frameworks', items: [
-    ['FastAPI', 'production'], ['Vanilla JS / DOM', 'production'], ['CSS Grid / Flexbox', 'production'],
-    ['React', 'learning'], ['Tailwind CSS', 'comfortable'], ['REST APIs', 'production'],
-    ['JSON / JWT auth', 'comfortable'], ['Responsive design', 'comfortable'],
-  ]},
-  { domain: 'code', title: 'Frontend Architecture', items: [
-    ['Multi-step forms / wizards', 'production'], ['SPA hash routing', 'production'], ['Admin dashboards / KPIs', 'production'],
-    ['Modal / toast / notification systems', 'comfortable'], ['Event delegation', 'comfortable'],
-    ['localStorage / session state', 'production'], ['Role-based UI', 'comfortable'],
-    ['Mock-driven prototyping', 'production'], ['Design systems', 'comfortable'],
-  ]},
-  { domain: 'code', title: 'DevOps & Infrastructure', items: [
-    ['Docker / Compose', 'comfortable'], ['Linux administration', 'comfortable'], ['nginx', 'comfortable'],
-    ['Cloudflare (DNS / Pages / Workers)', 'comfortable'], ['Git / GitHub', 'production'],
-    ['SSH / Cron', 'comfortable'], ['GitHub Actions', 'working'],
-  ]},
-  { domain: 'code', title: 'Databases & Data', items: [
-    ['MongoDB / motor', 'comfortable'], ['SQL Server (pyodbc)', 'comfortable'], ['SQLite', 'comfortable'],
-    ['Pandas', 'production'], ['OpenPyXL', 'comfortable'], ['NumPy', 'comfortable'], ['scikit-learn', 'working'],
-  ]},
-  { domain: 'all', title: 'MES / ERP', items: [
-    ['Production Planning (PPC)', 'production'], ['Inventory & Batch Tracking', 'production'],
-    ['OEE Monitoring', 'comfortable'], ['Quality Control Workflows', 'comfortable'],
-    ['Reporting Pipelines', 'comfortable'],
-  ]},
-  { domain: 'eng', title: 'Industrial / Controls', items: [
-    ['Krones lines (end-to-end)', 'production'], ['Electrical troubleshooting / RCA', 'comfortable'],
-    ['Commissioning & Validation', 'comfortable'], ['Signal flow & interlocks', 'working'],
-    ['PLC (Siemens — in progress)', 'learning'],
-  ]},
-  { domain: 'eng', title: 'Networks & Ops', items: [
-    ['GPON / PSTN / Broadband', 'comfortable'], ['Huawei / Nokia tooling', 'comfortable'],
-    ['Oracle CRM', 'comfortable'], ['Incident response', 'working'],
-  ]},
-  { domain: 'all', title: 'Soft', items: [
-    ['Cross-team communication', 'production'], ['Documentation / SOPs', 'production'],
-    ['Ownership & reliability', 'comfortable'], ['Learning velocity', 'comfortable'],
-  ]},
+  { domain: 'code', title: 'Backend & APIs', items:
+    ['Python', 'FastAPI', 'REST APIs', 'JWT Auth', 'Pydantic', 'Motor', 'pyodbc', 'async I/O'] },
+  { domain: 'all', title: 'Manufacturing Systems', items:
+    ['MES', 'ERP', 'OEE', 'PPC', 'QC Workflows', 'Batch Tracking', 'Inventory / FIFO', 'Sage Evolution'] },
+  { domain: 'code', title: 'Frontend & UI', items:
+    ['JavaScript ES6+', 'HTML5 / CSS3', 'Admin Dashboards', 'Multi-step Forms', 'Role-based UI', 'Responsive Design', 'SPA hash routing', 'Mock-driven prototyping'] },
+  { domain: 'code', title: 'Data & Reporting', items:
+    ['MongoDB', 'SQL Server', 'Pandas', 'OpenPyXL', 'Excel Automation', 'PDF Generation', 'Report Pipelines'] },
+  { domain: 'code', title: 'Infrastructure', items:
+    ['Docker', 'Docker Compose', 'Linux', 'nginx', 'Cloudflare', 'SSH / Cron', 'Git / GitHub', "Let's Encrypt"] },
+  { domain: 'eng', title: 'Industrial Operations', items:
+    ['Krones Lines', 'Electrical Troubleshooting', 'RCA', 'Commissioning Support', 'SOPs', 'GPON / PSTN', 'Oracle CRM'] },
+  { domain: 'all', title: 'Learning / Expanding', items:
+    ['React', 'Tailwind CSS', 'PLC / Siemens basics', 'scikit-learn', 'GitHub Actions'] },
 ];
-
-const TIER_LABEL = {
-  production:  'Production',
-  comfortable: 'Comfortable',
-  working:     'Working',
-  learning:    'Learning',
-};
 
 function SkillCard({ s }) {
   const ref = useRef(null);
@@ -1258,14 +1219,11 @@ function SkillCard({ s }) {
   return (
     <div ref={ref} className={'skill-card' + (inView ? ' inView' : '')}>
       <h4>{s.title}</h4>
-      <ul>
-        {s.items.map(([name, tier]) => (
-          <li key={name}>
-            <span className="skill-name">{name}</span>
-            <span className={'skill-tier skill-tier--' + tier}>{TIER_LABEL[tier] || tier}</span>
-          </li>
+      <div className="skill-chips">
+        {s.items.map((name) => (
+          <span className="skill-chip" key={name}>{name}</span>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
@@ -1276,7 +1234,7 @@ function Skills({ view }) {
     <section id="skills" className="section container">
       <Reveal className="section-head">
         <span className="section-tag">04 - Skills</span>
-        <h2><WordReveal>What I bring to a team.</WordReveal></h2>
+        <h2><WordReveal>Skills I use to build and run operations software.</WordReveal></h2>
       </Reveal>
       <Reveal stagger className="skills-grid">
         {items.map((s) => <SkillCard key={s.title} s={s} />)}
