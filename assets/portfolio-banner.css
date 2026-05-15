@@ -1,0 +1,57 @@
+/* portfolio-banner.css — top strip styling. Non-sticky so it doesn't fight
+   sub-site navs; recruiters see it above the fold on cold load then it scrolls. */
+.portfolio-demo-banner {
+  background: linear-gradient(90deg, #1a1d2b 0%, #232742 100%);
+  color: rgba(255,255,255,.92);
+  font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-size: 13px;
+  line-height: 1.35;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.portfolio-demo-banner .pdb-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 8px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.portfolio-demo-banner .pdb-pill {
+  background: linear-gradient(135deg, #7c9cff, #5eead4);
+  color: #0a0d18;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.portfolio-demo-banner .pdb-text { color: rgba(255,255,255,.85); }
+.portfolio-demo-banner .pdb-text strong { color: #fff; font-weight: 600; }
+.portfolio-demo-banner .pdb-back {
+  margin-inline-start: auto;
+  color: #93b3ff;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+.portfolio-demo-banner .pdb-back:hover { color: #b8caff; text-decoration: underline; }
+.portfolio-demo-banner .pdb-close {
+  background: transparent;
+  border: 0;
+  color: rgba(255,255,255,.55);
+  font-size: 20px;
+  line-height: 1;
+  padding: 0 4px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.portfolio-demo-banner .pdb-close:hover { color: #fff; background: rgba(255,255,255,.06); }
+@media (max-width: 540px) {
+  .portfolio-demo-banner .pdb-inner { padding: 6px 12px; gap: 8px; }
+  .portfolio-demo-banner .pdb-text { font-size: 12px; }
+  .portfolio-demo-banner .pdb-back { font-size: 12px; }
+}

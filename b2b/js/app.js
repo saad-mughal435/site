@@ -1,6 +1,9 @@
 /* =========================================================
    Anvil Supply Co. - shared app shell
    ========================================================= */
+// Cross-site portfolio-demo banner — appears above the fold on every page so
+// recruiters landing via a deep link see this is a demo, not a real wholesaler.
+(function () { var s = document.createElement('script'); s.src = '/assets/portfolio-banner.js?v=20260514'; s.async = true; document.head.appendChild(s); })();
 (function () {
   'use strict';
 
