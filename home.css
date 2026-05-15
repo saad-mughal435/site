@@ -662,9 +662,14 @@ img, svg { display: block; max-width: 100%; }
    ========================================================= */
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 22px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  align-items: stretch;
 }
+/* Full-width umbrella heading + blurb so it never sits beside a card */
+.projects-grid > .project-section-heading { grid-column: 1 / -1; }
+/* The MES dashboard mock-up is a full-width strip above the featured card */
+.projects-grid > .mes-thumbs { grid-column: 1 / -1; }
 .project {
   position: relative;
   background: var(--surface);
@@ -672,6 +677,9 @@ img, svg { display: block; max-width: 100%; }
   border-radius: var(--r);
   padding: 26px;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   transition: border-color var(--t) ease, transform var(--t) var(--easing), background var(--t) ease;
 }
 .project::before {
@@ -706,7 +714,7 @@ img, svg { display: block; max-width: 100%; }
   padding-top: 14px;
 }
 .mini-code { margin: 0; font-family: var(--mono); font-size: 12.5px; line-height: 1.6; color: var(--fg); white-space: pre; overflow-x: auto; }
-.project-cta { margin-top: 14px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.project-cta { margin-top: auto; padding-top: 14px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 .project-cta .cta-subtitle { flex-basis: 100%; font-size: 12.5px; color: var(--fg-mute); margin-top: 4px; }
 .project-cta .cta-tip { flex-basis: 100%; font-size: 12.5px; color: var(--accent); margin-top: 2px; padding: 8px 12px; background: rgba(94,234,212,.06); border: 1px solid rgba(94,234,212,.18); border-radius: 8px; }
 .project-cta .cta-tip strong { color: var(--fg); font-weight: 600; }
