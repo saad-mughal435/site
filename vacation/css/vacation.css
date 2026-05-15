@@ -804,6 +804,8 @@ body.vacation.rtl .v-listing-media .v-badges { right: 10px; left: auto; align-it
 .v-status-chip.approved          { background: #e0f0ee; color: var(--vacation-teal-2); }
 .v-status-chip.approved::before  { background: var(--vacation-teal); }
 .v-status-chip.draft             { background: var(--vacation-bg-2); color: var(--vacation-muted); }
+.v-status-chip.awaiting_host_verification         { background: #ebe6f5; color: #4f3a8a; }
+.v-status-chip.awaiting_host_verification::before { background: #8268d1; }
 
 /* Host dashboard shell (mirrors admin layout but in warm palette) */
 .v-host-shell { display: grid; min-height: 100vh; grid-template-columns: 240px 1fr; background: var(--vacation-bg); }

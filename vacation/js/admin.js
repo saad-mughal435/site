@@ -18,14 +18,23 @@
       { id: 'promotions',    icon: '🎟',  label: 'Promotions' },
       { id: 'destinations',  icon: '📍', label: 'Destinations' }
     ] },
+    { group: 'Approvals', items: [
+      { id: 'host_approvals',    icon: '🛡',  label: 'Host approvals' },
+      { id: 'listing_approvals', icon: '✅', label: 'Listing approvals' }
+    ] },
     { group: 'Govern', items: [
-      { id: 'verifications', icon: '🛡',  label: 'Verifications' },
       { id: 'settings',      icon: '⚙',  label: 'Settings' },
       { id: 'audit',         icon: '🧾', label: 'Audit log' }
     ] }
   ];
 
-  function current() { return (location.hash || '#dashboard').slice(1); }
+  function current() {
+    var h = (location.hash || '#dashboard').slice(1);
+    // Backward-compat: the old single `#verifications` route redirects to the
+    // new host-approvals area.
+    if (h === 'verifications') { location.hash = '#host_approvals'; return 'host_approvals'; }
+    return h;
+  }
 
   function renderSide() {
     var cur = current();

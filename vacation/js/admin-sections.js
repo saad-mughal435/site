@@ -75,7 +75,7 @@
         +   '<div class="v-kpi"><div class="v-kpi-label">Occupancy</div><div class="v-kpi-value">' + k.occupancy_pct + '%</div></div>'
         +   '<div class="v-kpi"><div class="v-kpi-label">ADR</div><div class="v-kpi-value" style="font-size:20px;">' + aed(k.adr) + '</div></div>'
         +   '<div class="v-kpi"><div class="v-kpi-label">Revenue 30d</div><div class="v-kpi-value" style="font-size:20px;">' + aed(k.revenue_30d) + '</div></div>'
-        +   '<a class="v-kpi" href="#verifications" style="text-decoration:none;color:inherit;' + ((k.pending_verifications || 0) > 0 ? 'background:#faf2dd;' : '') + '"><div class="v-kpi-label">Pending verifications</div><div class="v-kpi-value" style="color:var(--vacation-accent-2);">' + (k.pending_verifications || 0) + '</div></a>'
+        +   '<a class="v-kpi" href="#host_approvals" style="text-decoration:none;color:inherit;' + ((k.pending_verifications || 0) > 0 ? 'background:#faf2dd;' : '') + '"><div class="v-kpi-label">Pending host approvals</div><div class="v-kpi-value" style="color:var(--vacation-accent-2);">' + (k.pending_verifications || 0) + '</div></a>'
         + '</div>'
         + '<div class="v-grid v-grid-2 v-mt-3">'
         +   '<div class="v-panel">'
@@ -523,19 +523,17 @@
     });
   }
 
-  /* ====================== 12. VERIFICATIONS (host application + listing review queues) ====================== */
-  function verifications(host) {
-    var tab = 'host';        // 'host' | 'listing'
-    var statusFilter = '';   // submitted | changes_requested | approved | rejected
+  /* ====================== 12. HOST APPROVALS — identity + documents queue ====================== */
+  function hostApprovals(host) {
+    var statusFilter = '';
     function refresh() {
-      if (tab === 'host') refreshHostTab();
-      else refreshListingTab();
-    }
-    function refreshHostTab() {
       var qs = statusFilter ? '?status=' + statusFilter : '';
       VacationApp.api('/admin/verifications' + qs).then(function (r) {
-        document.getElementById('vf-count').textContent = r.body.items.length + ' applications';
-        document.getElementById('vf-tbody').innerHTML = r.body.items.length ? r.body.items.map(function (a) {
+        var countEl = document.getElementById('vf-count');
+        if (countEl) countEl.textContent = r.body.items.length + ' applications';
+        var tbody = document.getElementById('vf-tbody');
+        if (!tbody) return;
+        tbody.innerHTML = r.body.items.length ? r.body.items.map(function (a) {
           return '<tr>'
             + '<td>' + (a.host_photo ? '<img src="' + a.host_photo + '" alt="" style="width:36px;height:36px;border-radius:999px;object-fit:cover;">' : '👤') + '</td>'
             + '<td><strong>' + esc(a.host_name) + '</strong><div class="v-text-muted" style="font-size:11px;">' + esc(a.host_id) + '</div></td>'
@@ -547,12 +545,45 @@
         }).join('') : '<tr><td colspan="6" class="v-table-empty">No applications match this filter.</td></tr>';
       });
     }
-    function refreshListingTab() {
-      var url = '/admin/listings' + (statusFilter ? '?status=' + statusFilter : '?status=pending_review');
-      VacationApp.api(url).then(function (r) {
-        var items = r.body.items;
-        document.getElementById('vf-count').textContent = items.length + ' listings';
-        document.getElementById('vf-tbody').innerHTML = items.length ? items.map(function (l) {
+    function statusChips() {
+      var statuses = ['','submitted','changes_requested','approved','rejected'];
+      return statuses.map(function (s) {
+        var label = s === '' ? 'All' : s.replace('_',' ');
+        return '<button class="v-chip" data-vfstatus="' + s + '" style="' + (statusFilter === s ? 'background:var(--vacation-primary);color:white;' : '') + 'border:1px solid var(--vacation-line);padding:4px 10px;font-size:12px;cursor:pointer;">' + label + '</button>';
+      }).join('');
+    }
+    function paint() {
+      host.innerHTML = ''
+        + '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">'
+        +   '<div><h2 style="margin:0;">Host approvals</h2><p class="v-text-muted" style="margin:4px 0 0;font-size:13.5px;">Review identity documents — Emirates ID, ownership/tenancy, DTCM permit, IBAN. Once approved, the host\'s listings move into the listing-approval queue.</p></div>'
+        +   '<span id="vf-count" class="v-text-muted" style="font-size:13px;"></span>'
+        + '</div>'
+        + '<div class="v-flex-wrap" style="margin-top:14px;gap:6px;">' + statusChips() + '</div>'
+        + '<div class="v-panel v-mt-2" style="padding:0;overflow:auto;"><table class="v-table"><thead><tr><th></th><th>Host</th><th>Submitted</th><th>Docs</th><th>Status</th><th></th></tr></thead><tbody id="vf-tbody"></tbody></table></div>';
+      document.querySelectorAll('[data-vfstatus]').forEach(function (b) {
+        b.addEventListener('click', function () { statusFilter = b.getAttribute('data-vfstatus'); paint(); refresh(); });
+      });
+    }
+    paint();
+    refresh();
+  }
+
+  /* ====================== 13. LISTING APPROVALS — only listings whose host is verified ====================== */
+  function listingApprovals(host) {
+    var statusFilter = 'pending_review';  // default to the queue
+    function refresh() {
+      // Show only listings that have cleared host verification — i.e., NOT
+      // awaiting_host_verification. Default filter is pending_review.
+      VacationApp.api('/admin/listings' + (statusFilter ? '?status=' + statusFilter : '')).then(function (r) {
+        var items = (r.body.items || []).filter(function (l) {
+          if (statusFilter) return true;  // explicit filter respected
+          return (l.status || 'live') !== 'awaiting_host_verification';
+        });
+        var countEl = document.getElementById('la-count');
+        if (countEl) countEl.textContent = items.length + ' listings';
+        var tbody = document.getElementById('la-tbody');
+        if (!tbody) return;
+        tbody.innerHTML = items.length ? items.map(function (l) {
           var ho = d.HOSTS.find(function (h) { return h.id === l.host_id; }) || { name: '(unknown)' };
           var s = l.status || 'live';
           return '<tr>'
@@ -561,53 +592,46 @@
             + '<td>' + aed(l.base_nightly_aed) + '/night</td>'
             + '<td>' + (l.listed_at || '—') + '</td>'
             + '<td><span class="v-status-chip ' + esc(s) + '">' + esc(s.replace('_',' ')) + '</span></td>'
-            + '<td class="v-table-actions">'
-            +   '<button class="v-btn v-btn--ghost v-btn--sm" onclick="VacationAdminActions.openListingReview(\'' + l.id + '\')">Review →</button>'
-            + '</td>'
+            + '<td class="v-table-actions"><button class="v-btn v-btn--ghost v-btn--sm" onclick="VacationAdminActions.openListingReview(\'' + l.id + '\')">Review →</button></td>'
             + '</tr>';
-        }).join('') : '<tr><td colspan="6" class="v-table-empty">No listings match this filter.</td></tr>';
+        }).join('') : '<tr><td colspan="6" class="v-table-empty">No listings in this queue.</td></tr>';
       });
     }
-    function buildHeader() {
-      var hostHead = '<th></th><th>Host</th><th>Submitted</th><th>Docs</th><th>Status</th><th></th>';
-      var listHead = '<th>Photo</th><th>Listing</th><th>Nightly</th><th>Listed</th><th>Status</th><th></th>';
-      return tab === 'host' ? hostHead : listHead;
-    }
     function statusChips() {
-      var statuses = tab === 'host' ? ['','submitted','changes_requested','approved','rejected'] : ['','pending_review','changes_requested','live','paused','rejected'];
-      return statuses.map(function (s) {
-        var label = s === '' ? 'All' : s.replace('_',' ');
-        return '<button class="v-chip ' + (statusFilter === s ? 'active' : '') + '" data-vfstatus="' + s + '" style="' + (statusFilter === s ? 'background:var(--vacation-primary);color:white;' : '') + 'border:1px solid var(--vacation-line);padding:4px 10px;font-size:12px;cursor:pointer;">' + label + '</button>';
+      // No "awaiting_host_verification" here — those belong on host approvals.
+      var statuses = [['pending_review','Pending review'],['changes_requested','Changes requested'],['live','Live'],['paused','Paused'],['rejected','Rejected'],['','All']];
+      return statuses.map(function (entry) {
+        var s = entry[0]; var label = entry[1];
+        return '<button class="v-chip" data-lastatus="' + s + '" style="' + (statusFilter === s ? 'background:var(--vacation-primary);color:white;' : '') + 'border:1px solid var(--vacation-line);padding:4px 10px;font-size:12px;cursor:pointer;">' + label + '</button>';
       }).join('');
     }
     function paint() {
       host.innerHTML = ''
         + '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">'
-        +   '<h2 style="margin:0;">Verifications</h2>'
-        +   '<span id="vf-count" class="v-text-muted" style="font-size:13px;"></span>'
-        + '</div>'
-        + '<div class="v-flex-wrap" style="margin-top:10px;">'
-        +   '<button class="v-chip ' + (tab === 'host' ? 'active' : '') + '" data-vftab="host" style="' + (tab === 'host' ? 'background:var(--vacation-primary);color:white;' : '') + 'border:1px solid var(--vacation-line);padding:6px 14px;font-size:13px;cursor:pointer;font-weight:600;">Host applications</button>'
-        +   '<button class="v-chip ' + (tab === 'listing' ? 'active' : '') + '" data-vftab="listing" style="' + (tab === 'listing' ? 'background:var(--vacation-primary);color:white;' : '') + 'border:1px solid var(--vacation-line);padding:6px 14px;font-size:13px;cursor:pointer;font-weight:600;">Listing reviews</button>'
+        +   '<div><h2 style="margin:0;">Listing approvals</h2><p class="v-text-muted" style="margin:4px 0 0;font-size:13.5px;">Approve listings once their host is verified. Listings waiting on host verification are over in <a href="#host_approvals">Host approvals</a>.</p></div>'
+        +   '<span id="la-count" class="v-text-muted" style="font-size:13px;"></span>'
         + '</div>'
         + '<div class="v-flex-wrap" style="margin-top:14px;gap:6px;">' + statusChips() + '</div>'
-        + '<div class="v-panel v-mt-2" style="padding:0;overflow:auto;"><table class="v-table"><thead><tr>' + buildHeader() + '</tr></thead><tbody id="vf-tbody"></tbody></table></div>';
-      document.querySelectorAll('[data-vftab]').forEach(function (b) {
-        b.addEventListener('click', function () { tab = b.getAttribute('data-vftab'); statusFilter = ''; paint(); refresh(); });
-      });
-      document.querySelectorAll('[data-vfstatus]').forEach(function (b) {
-        b.addEventListener('click', function () { statusFilter = b.getAttribute('data-vfstatus'); paint(); refresh(); });
+        + '<div class="v-panel v-mt-2" style="padding:0;overflow:auto;"><table class="v-table"><thead><tr><th>Photo</th><th>Listing</th><th>Nightly</th><th>Listed</th><th>Status</th><th></th></tr></thead><tbody id="la-tbody"></tbody></table></div>';
+      document.querySelectorAll('[data-lastatus]').forEach(function (b) {
+        b.addEventListener('click', function () { statusFilter = b.getAttribute('data-lastatus'); paint(); refresh(); });
       });
     }
     paint();
     refresh();
+  }
 
-    // ---------- Drawer modal for host application review ----------
-    window.VacationAdminActions = window.VacationAdminActions || {};
-    window.VacationAdminActions.openVerification = function (host_id) {
-      VacationApp.api('/admin/verifications/' + host_id).then(function (r) {
-        var a = r.body.application; var h = r.body.host; var listings = r.body.listings || [];
-        if (!a) return window.toast && window.toast('Application not found', 'warn');
+  /* ====================== Drawer modals — host-approval + listing-approval ====================== */
+  // Registered once at module init so they're available regardless of which
+  // section is currently open. Close() triggers a `hashchange` event to make
+  // the active admin section re-render itself.
+  function reRenderAdmin() { window.dispatchEvent(new Event('hashchange')); }
+
+  window.VacationAdminActions = window.VacationAdminActions || {};
+  window.VacationAdminActions.openVerification = function (host_id) {
+    VacationApp.api('/admin/verifications/' + host_id).then(function (r) {
+      var a = r.body.application; var h = r.body.host; var listings = r.body.listings || [];
+      if (!a) return;  // silently skip — table may have just refreshed
         var drawer = document.createElement('div');
         drawer.className = 'v-drawer-backdrop';
         drawer.innerHTML = ''
@@ -645,7 +669,7 @@
           + '</div>';
         document.body.appendChild(drawer);
         setTimeout(function () { drawer.classList.add('show'); }, 10);
-        function close() { drawer.classList.remove('show'); setTimeout(function () { drawer.remove(); }, 200); refresh(); }
+        function close() { drawer.classList.remove('show'); setTimeout(function () { drawer.remove(); }, 200); reRenderAdmin(); }
         drawer.addEventListener('click', function (e) {
           if (e.target === drawer || e.target.hasAttribute('data-drawer-close')) close();
         });
@@ -721,7 +745,7 @@
           + '</div>';
         document.body.appendChild(drawer);
         setTimeout(function () { drawer.classList.add('show'); }, 10);
-        function close() { drawer.classList.remove('show'); setTimeout(function () { drawer.remove(); }, 200); refresh(); }
+        function close() { drawer.classList.remove('show'); setTimeout(function () { drawer.remove(); }, 200); reRenderAdmin(); }
         drawer.addEventListener('click', function (e) {
           if (e.target === drawer || e.target.hasAttribute('data-drawer-close')) close();
         });
@@ -740,12 +764,11 @@
         });
       });
     };
-  }
 
   window.VacationAdmin = {
     dashboard: dashboard, listings: listings, bookings: bookings, hosts: hosts,
     guests: guests, reviews: reviews, payments: payments, promotions: promotions,
     destinations: destinations, settings: settings, audit: audit,
-    verifications: verifications
+    host_approvals: hostApprovals, listing_approvals: listingApprovals
   };
 })();
