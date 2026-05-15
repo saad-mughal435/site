@@ -13,20 +13,53 @@
   var DUBAI_DESTINATIONS = ['d-marina','d-downtown','d-palm','d-jbr','d-business','d-hatta'];
 
   // ---------- State ----------
+  // Demo-friendly defaults — every field pre-populated with plausible values so
+  // the wizard renders fully filled-in for client demos. Real users can edit
+  // anything before they continue.
   function defaultState() {
     return {
       step: 0,
       mode: 'signup',
       edit_id: null,
       submitted_ref: null,
-      profile: { name: '', email: '', phone: '', password: '', languages: [], photo: '', bio: '' },
-      verification: { resident: true, ownership_kind: 'own', documents: {} },
-      property: { type: 'apartment', title: '', destination_id: 'd-marina', address: '', lat: null, lng: null, bedrooms: 2, beds: 3, baths: 2, sqft: 1200, max_guests: 4 },
-      photos: { list: [], description: '', listing_permit: null },
-      amenities: { selected: [], house_rules: ['No smoking indoors','No parties','Check-in 3 PM','Check-out 11 AM'], custom_rule: '', cancellation: 'moderate' },
-      pricing: { base_nightly: 0, weekend_surcharge_pct: 20, cleaning_fee: 200, instant_book: true, blocked_dates: [], min_nights: 2, max_nights: 30, advance_notice: 'same-day' },
+      profile: {
+        name: 'Ahmed Al-Falasi',
+        email: 'demo@example.ae',
+        phone: '50123456',
+        password: '12345678',
+        languages: ['English', 'Arabic'],
+        photo: '',
+        bio: 'I host weekend stays across Dubai — quick replies, easy check-in, and local tips on tap. Family-friendly building with rooftop pool.'
+      },
+      verification: { resident: true, ownership_kind: 'own', documents: {
+        iban: { type: 'iban', filename: 'AE070331234567890123456', status: 'submitted' }
+      } },
+      property: {
+        type: 'apartment',
+        title: 'Marina Pearl Tower — Modern 2BR with Sea View',
+        destination_id: 'd-marina',
+        address: 'Dubai Marina',
+        lat: 25.0805, lng: 55.1407,
+        bedrooms: 2, beds: 3, baths: 2, sqft: 1200, max_guests: 4
+      },
+      photos: { list: [], description: 'A modern 2-bedroom apartment in the heart of Dubai Marina. Floor-to-ceiling windows with sea views, fully equipped kitchen, fast WiFi, and walking distance to JBR Beach. Building has rooftop pool, gym, and 24/7 concierge.', listing_permit: null },
+      amenities: { selected: ['wifi','ac','kitchen','sea-view','pool-shared','gym','washer','parking','self-checkin'], house_rules: ['No smoking indoors','No parties','Check-in 3 PM','Check-out 11 AM'], custom_rule: '', cancellation: 'moderate' },
+      pricing: { base_nightly: 750, weekend_surcharge_pct: 20, cleaning_fee: 200, instant_book: true, blocked_dates: [], min_nights: 2, max_nights: 30, advance_notice: 'same-day' },
       confirmed: false
     };
+  }
+  // Wipes the wizard back to demo defaults plus a few stock photos so the
+  // photos step isn't empty. Bound to the "Use demo data" button in the header.
+  function fillDemoData() {
+    var fresh = defaultState();
+    fresh.step = state.step;
+    fresh.mode = state.mode;
+    fresh.edit_id = state.edit_id;
+    fresh.photos.list = [D.PHOTO_POOL[2], D.PHOTO_POOL[4], D.PHOTO_POOL[7], D.PHOTO_POOL[13]];
+    state = fresh;
+    saveDraft();
+    render();
+    window.toast && window.toast('Filled with demo data — just click Continue through to submit.', 'success', 2400);
   }
   function getDraft() {
     try { return JSON.parse(localStorage.getItem(LS_DRAFT)); } catch (e) { return null; }
@@ -110,8 +143,8 @@
       +     '<label class="v-field"><span>Email</span><input class="v-input" id="p-email" type="email" value="' + esc(state.profile.email) + '" placeholder="you@email.com" /></label>'
       +   '</div>'
       +   '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">'
-      +     '<label class="v-field"><span>UAE mobile</span><input class="v-input" id="p-phone" value="' + esc(state.profile.phone) + '" placeholder="+971 50 123 4567" /></label>'
-      +     '<label class="v-field"><span>Password</span><input class="v-input" id="p-password" type="password" value="' + esc(state.profile.password) + '" placeholder="At least 8 characters" /></label>'
+      +     '<label class="v-field"><span>Mobile</span><input class="v-input" id="p-phone" value="' + esc(state.profile.phone) + '" placeholder="8 digits, any format works" /></label>'
+      +     '<label class="v-field"><span>Password</span><input class="v-input" id="p-password" type="password" value="' + esc(state.profile.password) + '" placeholder="12345678 works for the demo" /></label>'
       +   '</div>'
       +   '<label class="v-field"><span>Languages you speak</span>'
       +     '<div class="v-pills" id="p-langs">'
@@ -151,12 +184,10 @@
   }
   function validateAbout() {
     var p = state.profile;
-    if (!p.name || p.name.length < 2) return 'Please enter your full name.';
-    if (!isValidEmail(p.email))         return 'Please enter a valid email.';
-    if (!isValidPhone(p.phone))         return 'Please enter a UAE mobile (e.g., +971 50 123 4567).';
-    if (!p.password || p.password.length < 8) return 'Password must be at least 8 characters.';
-    if (!p.languages.length)            return 'Pick at least one language you speak.';
-    if (!p.bio || p.bio.length < 60)    return 'Bio should be at least 60 characters — tell travellers a little about you.';
+    if (!p.name)                                              return 'Please enter a name.';
+    if (!p.email || p.email.indexOf('@') === -1)              return 'Please enter an email (any address works for the demo).';
+    if (!p.phone || p.phone.replace(/\D/g, '').length < 7)    return 'Please enter a phone number (at least 7 digits).';
+    if (!p.password)                                          return 'Please enter a password.';
     return true;
   }
 
@@ -172,7 +203,7 @@
     }
     host.innerHTML = ''
       + '<h2>Verify your identity &amp; property</h2>'
-      + '<p class="v-step-intro">Documents are reviewed manually by our team within 24 hours. Your listing will not go live until verification clears.</p>'
+      + '<p class="v-step-intro">Upload as many documents as you have on hand — for this demo none are required, just click <strong>Continue</strong> to skip ahead. In the live product, our team reviews everything manually within 24 hours and your listing stays off-market until verification clears.</p>'
       + '<div class="v-panel" style="padding:16px;margin-bottom:18px;">'
       +   '<strong>Are you a UAE resident?</strong>'
       +   '<div class="v-pills" style="margin-top:10px;">'
@@ -259,18 +290,8 @@
       + '</div>';
   }
   function validateVerification() {
-    var v = state.verification;
-    var docs = D.DOCUMENT_TYPES;
-    var isDubai = isDubaiDestination(state.property.destination_id);
-    var missing = [];
-    docs.forEach(function (doc) {
-      if (doc.required === 'always')       { if (!v.documents[doc.id]) missing.push(doc.label); }
-      else if (doc.required === 'non_resident' && !v.resident) { if (!v.documents[doc.id]) missing.push(doc.label); }
-      else if (doc.required === 'dubai_only' && isDubai)       { if (!v.documents[doc.id]) missing.push(doc.label); }
-    });
-    if (missing.length) return 'Please upload: ' + missing.join(', ') + '.';
-    var iban = v.documents.iban && v.documents.iban.filename;
-    if (!isValidIban(iban)) return 'IBAN must be AE followed by 21 digits.';
+    // Demo-friendly: documents are optional so the user can click through.
+    // In a real product these would be enforced server-side anyway.
     return true;
   }
 
@@ -370,12 +391,10 @@
   }
   function validateProperty() {
     var p = state.property;
-    if (!p.title || p.title.length < 20)         return 'Listing title must be at least 20 characters.';
-    if (!p.address)                              return 'Please add an address line.';
-    if (!p.lat || !p.lng)                        return 'Drop a pin on the map to set the location.';
-    if (p.bedrooms < 0 || p.bedrooms > 10)       return 'Bedrooms must be between 0 and 10.';
-    if (p.beds < 1)                              return 'At least 1 bed is required.';
-    if (p.max_guests < 1)                        return 'Max guests must be at least 1.';
+    if (!p.title)                          return 'Please add a listing title.';
+    if (!p.address)                        return 'Please add an address line.';
+    if (p.bedrooms < 0 || p.bedrooms > 20) return 'Bedrooms must be between 0 and 20.';
+    if (p.max_guests < 1)                  return 'Max guests must be at least 1.';
     return true;
   }
 
@@ -448,8 +467,8 @@
     });
   }
   function validatePhotos() {
-    if (state.photos.list.length < 3) return 'Add at least 3 photos.';
-    if (!state.photos.description || state.photos.description.length < 100) return 'Description must be at least 100 characters.';
+    if (state.photos.list.length < 1)  return 'Add at least 1 photo.';
+    if (!state.photos.description)     return 'Please add a description.';
     return true;
   }
 
@@ -533,8 +552,8 @@
     updCancelDesc();
   }
   function validateAmenities() {
-    if (state.amenities.selected.length < 4) return 'Pick at least 4 amenities.';
-    if (!state.amenities.cancellation)        return 'Pick a cancellation policy.';
+    if (state.amenities.selected.length < 1) return 'Pick at least 1 amenity.';
+    if (!state.amenities.cancellation)       return 'Pick a cancellation policy.';
     return true;
   }
 
@@ -818,6 +837,7 @@
         on(el('wz-next'), 'click', goNext);
         on(el('wz-back'), 'click', goBack);
         on(el('wz-save-exit'), 'click', saveAndExit);
+        on(el('wz-demo-fill'), 'click', fillDemoData);
         render();
       }
 

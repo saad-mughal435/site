@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/vacation.css?v=20260514c" />
+<link rel="stylesheet" href="css/vacation.css?v=20260514d" />
 </head>
 <body class="vacation">
 
@@ -21,7 +21,10 @@
         <span class="v-wizard-brand-mark">V</span>
         <span>Vacation Homes</span>
       </a>
-      <button class="v-wizard-save-exit" id="wz-save-exit">Save &amp; exit</button>
+      <div style="display:flex;gap:8px;">
+        <button class="v-wizard-save-exit" id="wz-demo-fill" style="background:var(--vacation-bg-2);color:var(--vacation-primary);">⚡ Use demo data</button>
+        <button class="v-wizard-save-exit" id="wz-save-exit">Save &amp; exit</button>
+      </div>
     </div>
     <div class="v-wizard-progress">
       <div class="v-stepper" id="wz-stepper"></div>
@@ -43,12 +46,12 @@
   </footer>
 </div>
 
-<script src="js/data.js?v=20260514c"></script>
-<script src="js/mock-api.js?v=20260514c"></script>
-<script src="js/notifications.js?v=20260514c"></script>
-<script src="js/app.js?v=20260514c"></script>
-<script src="js/calendar.js?v=20260514c"></script>
-<script src="js/host-onboard.js?v=20260514c"></script>
+<script src="js/data.js?v=20260514d"></script>
+<script src="js/mock-api.js?v=20260514d"></script>
+<script src="js/notifications.js?v=20260514d"></script>
+<script src="js/app.js?v=20260514d"></script>
+<script src="js/calendar.js?v=20260514d"></script>
+<script src="js/host-onboard.js?v=20260514d"></script>
 <script>
   HostOnboard.start();
 </script>
