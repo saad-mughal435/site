@@ -14,7 +14,7 @@ $ErrorActionPreference = "Stop"
 
 # --------------------- Field values (edit if needed) ---------------------
 $name        = "Muhammad Saad"
-$bio         = "Electrical & Automation Engineer · ERP/OEE Developer · Full-Stack. UAE-based, open to relocate worldwide."
+$bio         = "Automation & Software Developer · ERP / OEE · Backend & Web Apps. UAE-based, open to relocate worldwide."
 $url         = "https://saadm.dev"
 $company     = "Kingsley Beverage FZCO"
 $location    = "Dubai, UAE · Open to relocate worldwide"

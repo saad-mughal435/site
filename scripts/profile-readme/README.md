@@ -7,7 +7,7 @@
 
 # Hi, I'm Muhammad Saad 👋
 
-### Electrical & Automation Engineer · ERP/OEE Developer · Full-Stack Builder
+### Automation & Software Developer · ERP / OEE · Backend & Web Apps
 
 🇦🇪 &nbsp;Currently **UAE-based** &nbsp;·&nbsp; 🌍 &nbsp;**Open to relocate worldwide**
 
@@ -21,7 +21,9 @@
 
 ## 🛠 What I actually do
 
-I build the software that ends manual work in manufacturing - **ERP, OEE, QC, batch tracking, inventory, and PDF reporting**. My edge is that I work **both sides**: I can troubleshoot a Krones beverage line in the morning and ship the FastAPI service that reports its downtime by afternoon. Hardware and software, same engineer.
+I build software that replaces manual work — **ERP systems, dashboards, admin panels, backend tools, and web applications**. My focus is operations software: production planning, OEE reporting, QC workflows, batch tracking, inventory, PDF generation, and Sage Evolution integration.
+
+My engineering background helps me run and support Krones beverage production lines and coordinate operators during shifts — the software I build sits **around** the production workflow (Krones machine automation is OEM-locked; I work on the operator-, QC-, stores-, and finance-side systems).
 
 **Currently:** Automation Engineer · ERP Developer · IT Administrator at **Kingsley Beverage FZCO**, Dubai 🇦🇪
 **Education:** B.Sc. Electrical Engineering · Computer Engineering major · COMSATS Islamabad
@@ -34,10 +36,11 @@ I build the software that ends manual work in manufacturing - **ERP, OEE, QC, ba
 
 | Demo | What it is | Stack |
 |------|-----------|-------|
-| 🏠 **[Manzil Properties](https://saadm.dev/property/)** | Dubai real-estate marketplace. Map+list search, agent profiles, mortgage + valuation + yield calculators, 13-section admin SPA. | Leaflet · localStorage · Mock API |
-| 🏭 **[Kingsley MES/ERP walkthrough](https://saadm.dev/demo.html)** | The real production system, sanitised. 20+ modules, PDF templates, OEE, QC, Sage integration. | Python · FastAPI · MongoDB · SQL Server |
-| 🛒 **[Pebble & Co.](https://saadm.dev/b2c/)** | DTC storefront with admin panel - products, cart, checkout, customer accounts. | HTML5 · Vanilla JS · Mock API |
-| 🏢 **[Anvil Supply Co.](https://saadm.dev/b2b/)** | B2B wholesale portal with tier pricing, MOQ, quote + approval workflows. | Role-based UI · Approval queue |
+| 🏭 **[Kingsley MES/ERP walkthrough](https://saadm.dev/demo.html)** | The real internal operations platform, sanitised. 20+ modules, 6 PDF templates, OEE, QC, Sage integration. Sole developer, end-to-end. | Python · FastAPI · MongoDB · SQL Server |
+| 🏢 **[Anvil Supply Co.](https://saadm.dev/b2b/)** | B2B wholesale portal with tier pricing, MOQ, quote + approval workflows, multi-user roles. | Role-based UI · Approval queue · Mock API |
+| 🏠 **[Manzil Properties](https://saadm.dev/property/)** | Dubai real-estate marketplace. Map + list search, agent profiles, mortgage / valuation / yield calculators, 13-section admin SPA. | Leaflet · localStorage · Mock API |
+| 🏖️ **[Vacation Homes](https://saadm.dev/vacation/)** | UAE short-stay booking platform. Custom date-range picker, 6-step host onboarding with document upload, admin verification queue. | Vanilla JS · Custom calendar · Mock API |
+| 🛒 **[Pebble & Co.](https://saadm.dev/b2c/)** | DTC storefront with admin panel — products, cart, checkout, customer accounts. | HTML5 · Vanilla JS · Mock API |
 
 ---
 
@@ -94,9 +97,9 @@ I build the software that ends manual work in manufacturing - **ERP, OEE, QC, ba
 
 ## 🎯 Currently open to
 
-> **Engineering · Automation · Industrial Maintenance · IT Operations · Full-Stack Development**
+> **Software · Automation · ERP / MES · Backend · Web Development · Technical Operations**
 
-Currently in the UAE. Happy to relocate worldwide for the right role - particularly drawn to roles where the engineering-plus-software combination matters (manufacturing, energy, logistics, smart-building, industrial IoT).
+Currently in the UAE. Happy to relocate worldwide. Particularly drawn to roles where software meets operations — manufacturing systems, business platforms, internal tools, dashboards, and ERP/MES products.
 
 📫 &nbsp; Best way to reach me: **[saad@saadm.dev](mailto:saad@saadm.dev)**
 🌐 &nbsp; Full portfolio: **[saadm.dev](https://saadm.dev/)**
@@ -106,6 +109,6 @@ Currently in the UAE. Happy to relocate worldwide for the right role - particula
 
 <div align="center">
 
-*"Software on the line. Automation around it."*
+*"Software for operations. Automation behind it."*
 
 </div>
