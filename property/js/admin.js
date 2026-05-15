@@ -17,14 +17,22 @@
       { id: 'promotions',  icon: '⭐', label: 'Promotions' },
       { id: 'content',     icon: '📝', label: 'Content' }
     ] },
+    { group: 'Approvals', items: [
+      { id: 'owner_approvals',   icon: '🛡', label: 'Owner approvals' },
+      { id: 'listing_approvals', icon: '✅', label: 'Listing approvals' }
+    ] },
     { group: 'Govern', items: [
-      { id: 'moderation',  icon: '🛡', label: 'Moderation' },
+      { id: 'moderation',  icon: '🚩', label: 'Moderation' },
       { id: 'settings',    icon: '⚙',  label: 'Settings' },
       { id: 'audit',       icon: '🧾', label: 'Audit log' }
     ] }
   ];
 
-  function current() { return (location.hash || '#dashboard').slice(1); }
+  function current() {
+    var h = (location.hash || '#dashboard').slice(1);
+    // Backward-compat — old moderation routes still resolve.
+    return h;
+  }
 
   function renderSide() {
     var cur = current();

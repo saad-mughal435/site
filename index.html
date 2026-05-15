@@ -982,12 +982,14 @@ const PROJECTS = [
     bullets: [
       <Fragment>10 customer pages: home, search (list/map), listing detail, agents, agencies, areas, mortgage, compare, account</Fragment>,
       <Fragment>Map view with price-labelled pins, hover sync with list, single-pin detail map</Fragment>,
-      <Fragment>13-section admin SPA: dashboard, listings, inquiries pipeline, viewings calendar, agents, agencies, customers, analytics, promotions, content CMS, moderation, settings, audit</Fragment>,
+      <Fragment><strong>Owner-side: 6-step listing wizard</strong> (save-and-resume drafts, map-pin selector, transaction-type branching for buy/rent/off-plan, document upload - Emirates ID + Title Deed + DLD permit + NOC + IBAN) feeding an <strong>admin verification queue</strong> with approve / request-changes / reject</Fragment>,
+      <Fragment>15-section admin SPA: dashboard, listings, inquiries pipeline, viewings calendar, agents, agencies, customers, analytics, promotions, content CMS, moderation, settings, audit, <strong>owner approvals, listing approvals</strong></Fragment>,
       <Fragment>AED/USD/GBP/EUR currency switcher, EN/AR locale toggle with RTL layout</Fragment>,
     ],
-    tags: ['HTML5', 'CSS Grid', 'Vanilla JS (ES6+)', 'Leaflet · OpenStreetMap', 'localStorage', 'Mock API', 'Hash-routed SPA', 'i18n EN/AR', 'Multi-currency', 'Admin dashboard'],
+    tags: ['HTML5', 'CSS Grid', 'Vanilla JS (ES6+)', 'Owner onboarding wizard', 'Document upload', 'Verification queue', 'Leaflet · OpenStreetMap', 'localStorage', 'Mock API', 'Hash-routed SPA', 'i18n EN/AR', 'Multi-currency'],
     ctas: [
       { label: 'Open marketplace ↗', href: 'property/index.html', target: '_blank', primary: true },
+      { label: 'List a property ↗', href: 'property/owner-onboard.html', target: '_blank' },
       { label: 'Open admin ↗', href: 'property/admin.html', target: '_blank' },
     ],
   },

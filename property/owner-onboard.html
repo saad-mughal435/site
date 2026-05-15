@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>List your property - Manzil Properties</title>
+<meta name="description" content="List your Dubai property on Manzil. 6-step wizard with document upload, title deed + DLD permit verification, manual review in 24-48h." />
+<meta name="theme-color" content="#1f7a55" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2064%2064'%3E%3Crect%20width%3D'64'%20height%3D'64'%20rx%3D'14'%20fill%3D'%231f7a55'/%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20font-family%3D'serif'%20font-weight%3D'700'%20font-size%3D'30'%20fill%3D'%23c9a049'%20text-anchor%3D'middle'%3E%D9%85%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/property.css?v=20260516a" />
+</head>
+<body class="manzil">
+
+<div class="m-wizard" id="wizard">
+  <header class="m-wizard-head">
+    <div class="m-wizard-head-inner">
+      <a href="index.html" class="m-wizard-brand">
+        <span class="m-wizard-brand-mark">م</span>
+        <span>Manzil Properties</span>
+      </a>
+      <div style="display:flex;gap:8px;">
+        <button class="m-wizard-save-exit" id="wz-demo-fill" style="background:var(--manzil-bg-2);color:var(--manzil-primary);">⚡ Use demo data</button>
+        <button class="m-wizard-save-exit" id="wz-save-exit">Save &amp; exit</button>
+      </div>
+    </div>
+    <div class="m-wizard-progress">
+      <div class="m-stepper" id="wz-stepper"></div>
+    </div>
+  </header>
+
+  <main class="m-wizard-body" id="wz-body">
+    <div class="m-wizard-step"><div class="m-skel m-skel--card" style="height:240px;"></div></div>
+  </main>
+
+  <footer class="m-wizard-foot">
+    <div class="m-wizard-foot-inner">
+      <button class="m-btn m-btn--ghost" id="wz-back">← Back</button>
+      <div class="m-wizard-foot-progress"><div class="bar" id="wz-bar" style="width:0%"></div></div>
+      <button class="m-btn m-btn--primary" id="wz-next">Continue →</button>
+    </div>
+  </footer>
+</div>
+
+<script src="js/data.js?v=20260516a"></script>
+<script src="js/mock-api.js?v=20260516a"></script>
+<script src="js/notifications.js?v=20260516a"></script>
+<script src="js/app.js?v=20260516a"></script>
+<script src="js/owner-onboard.js?v=20260516a"></script>
+<script>OwnerOnboard.start();</script>
+</body>
+</html>
