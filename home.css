@@ -971,7 +971,6 @@ a.contact-v:hover { color: var(--blue); }
 .faq-list {
   display: flex; flex-direction: column;
   gap: 10px;
-  max-width: 860px;
 }
 .faq-item {
   background: var(--surface);
