@@ -1,5 +1,5 @@
 /* =========================================================
-   Saad — Homepage (React build)
+   Saad - Homepage (React build)
    Modern dark theme + seamless animation system.
    ========================================================= */
 
@@ -64,7 +64,7 @@ body {
 }
 /* Defensive: nothing should ever be wider than the viewport. */
 img, video, iframe, pre, table { max-width: 100%; }
-/* Every grid child can shrink — kills overflow from long pre/code/text content. */
+/* Every grid child can shrink - kills overflow from long pre/code/text content. */
 .hero > *, .stats > *, .about-grid > *, .projects-grid > *,
 .skills-grid > *, .contact-box > *, .hero-meta > *,
 .skill-card > .skill-chips > .skill-chip, .project > * { min-width: 0; }
@@ -119,7 +119,7 @@ img, svg { display: block; max-width: 100%; }
 }
 
 /* =========================================================
-   Reveal — scroll-triggered fade + slide
+   Reveal - scroll-triggered fade + slide
    ========================================================= */
 .reveal {
   opacity: 0;
@@ -181,7 +181,7 @@ img, svg { display: block; max-width: 100%; }
 }
 .logo:hover .logo-mark { transform: rotate(-8deg) scale(1.05); }
 
-/* Headshot avatar — replaces the MS gradient mark */
+/* Headshot avatar - replaces the MS gradient mark */
 .logo-photo {
   width: 38px; height: 38px;
   border-radius: 50%;
@@ -228,7 +228,7 @@ img, svg { display: block; max-width: 100%; }
 }
 .nav-cta:hover { background: #fff; transform: translateY(-1px); }
 
-/* Hamburger — hidden on desktop, shown on small screens */
+/* Hamburger - hidden on desktop, shown on small screens */
 .nav-burger {
   display: none;
   background: transparent;
@@ -331,7 +331,7 @@ img, svg { display: block; max-width: 100%; }
   z-index: 0;
 }
 
-/* Hero title — gradient & reveal */
+/* Hero title - gradient & reveal */
 .hero-title {
   font-size: clamp(38px, 5.4vw, 64px);
   line-height: 1.04;
@@ -528,7 +528,7 @@ img, svg { display: block; max-width: 100%; }
 .stat-lbl { font-size: 13.5px; color: var(--fg-soft); line-height: 1.45; }
 
 /* =========================================================
-   SECTIONS — heads
+   SECTIONS - heads
    ========================================================= */
 .section {
   padding: 96px 28px;
@@ -855,7 +855,7 @@ a.contact-v:hover { color: var(--blue); }
 }
 
 /* =========================================================
-   MARQUEE — infinite-scrolling tech strip
+   MARQUEE - infinite-scrolling tech strip
    ========================================================= */
 .marquee {
   overflow: hidden;
@@ -1100,11 +1100,11 @@ a.contact-v:hover { color: var(--blue); }
   .view-toggle { font-size: 12px; }
   .vt-pill { padding: 6px 12px; }
 
-  /* Code window — shrink font to fit narrow screens */
+  /* Code window - shrink font to fit narrow screens */
   .code-window { transform: none !important; }
   .code-window-body { font-size: 10.5px; padding: 14px 14px; line-height: 1.55; }
 
-  /* Stats — single column for the smallest screens */
+  /* Stats - single column for the smallest screens */
   .stats { grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 18px 20px 56px; }
   .stat { padding: 18px 16px; }
   .stat-num { font-size: 24px; }
@@ -1146,7 +1146,7 @@ a.contact-v:hover { color: var(--blue); }
   .contact-k { font-size: 11px; }
   .contact-v { font-size: 13.5px; }
 
-  /* Orbs — softer on small screens, less visual noise */
+  /* Orbs - softer on small screens, less visual noise */
   .orb-1, .orb-2, .orb-3 { opacity: 0.22; }
 
   /* Footer */
@@ -1164,7 +1164,7 @@ a.contact-v:hover { color: var(--blue); }
   .vt-pill { flex: 1; text-align: center; }
 }
 
-/* Touch-target sizing — applies on touch devices */
+/* Touch-target sizing - applies on touch devices */
 @media (hover: none) and (pointer: coarse) {
   a, button, .btn, .vt-pill, .tag, .nav-links a {
     min-height: 40px;
@@ -1193,7 +1193,7 @@ a:focus-visible, button:focus-visible, .btn:focus-visible {
 }
 
 /* ============================================================
-   Back-to-top button — fixed bottom-right, appears past 240px.
+   Back-to-top button - fixed bottom-right, appears past 240px.
    Mirror of the rule in styles.css since the homepage doesn't
    load styles.css (only home.css).
    ============================================================ */
@@ -1249,7 +1249,7 @@ a:focus-visible, button:focus-visible, .btn:focus-visible {
 }
 
 /* ============================================================
-   What this proves — credibility strip between About and Projects.
+   What this proves - credibility strip between About and Projects.
    ============================================================ */
 .proves-grid {
   display: grid;
@@ -1292,7 +1292,7 @@ a:focus-visible, button:focus-visible, .btn:focus-visible {
 .proves-card p { font-size: 13.5px; line-height: 1.55; color: #b5bdcc; margin: 0; }
 
 /* ============================================================
-   MES screenshot thumbnails — rendered above the featured MES
+   MES screenshot thumbnails - rendered above the featured MES
    project card. Pure CSS/JSX mockups, no images needed.
    Replace with real Kingsley screenshots later by swapping a
    card's contents for an <img>.

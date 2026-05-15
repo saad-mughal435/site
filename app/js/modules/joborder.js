@@ -140,7 +140,7 @@ let wizardState = {
     date: new Date().toISOString().split('T')[0],
     currency: 'AED',
     market: 'ae',
-    localExportType: null, // 'local' | 'export' — compulsory pick on Step 1
+    localExportType: null, // 'local' | 'export' - compulsory pick on Step 1
     uploadedPOFilenames: [],
     draftId: null,
     notes: '',
@@ -512,7 +512,7 @@ export async function extractPOForEditing() {
     }
 
     if (files.length > 1) {
-        const ok = confirm(`You are uploading ${files.length} POs. Ensure they are all from the SAME customer — quantities will be summed per item code. Continue?`);
+        const ok = confirm(`You are uploading ${files.length} POs. Ensure they are all from the SAME customer - quantities will be summed per item code. Continue?`);
         if (!ok) return;
     }
 
@@ -1536,7 +1536,7 @@ export function updateStockFromProduction(index, requested, available) {
 }
 
 // ============================================================================
-// Final Save (Step 3 Confirm) — persists draft only; allocation & processing
+// Final Save (Step 3 Confirm) - persists draft only; allocation & processing
 // happen downstream from the Allocation sub-tab.
 // ============================================================================
 
@@ -1556,7 +1556,7 @@ export async function wizardSave() {
     if (saveBtn) { saveBtn.disabled = true; saveBtn.innerHTML = '<svg class="animate-spin h-5 w-5 mr-2 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Saving...'; }
 
     try {
-        // Save draft only — no PI, no Summary, no JO PDFs, no document_links, no reservations.
+        // Save draft only - no PI, no Summary, no JO PDFs, no document_links, no reservations.
         // All PDFs + side effects are deferred to Process (approve draft).
         const payload = {
             jo_number: '', date: wizardState.date, customer: wizardState.customer,
@@ -1669,7 +1669,7 @@ function _buildActionToolbar(jo, { includeEdit }) {
     const joSummaryBtn = `<button onclick="downloadJOSummaryPDF('${id}')" class="${_ICON_BTN_CLS}" title="Download JO Summary (per-PO breakdown)">${_SVG.docText}</button>`;
     const mergedBtn = isDraft ? '' : `<button onclick="downloadDraftMergedPDF('${id}')" class="${_ICON_BTN_CLS}" title="Download All (merged PDF)">${_SVG.docDuplicate}</button>`;
     const editBtn = includeEdit ? `<button onclick="editDraft('${id}')" class="${_ICON_BTN_PRIMARY}" title="Edit in wizard">${_SVG.pencil}</button>` : '';
-    const processBtn = isDraft ? `<button onclick="processDraftToAllocation('${id}')" class="${_ICON_BTN_SUCCESS}" title="Process Draft — move to Allocation">${_SVG.play}</button>` : '';
+    const processBtn = isDraft ? `<button onclick="processDraftToAllocation('${id}')" class="${_ICON_BTN_SUCCESS}" title="Process Draft - move to Allocation">${_SVG.play}</button>` : '';
     const deleteBtn = hasAnyRole(['admin', 'manager']) ? `<button onclick="deleteJobOrder('${id}')" class="${_ICON_BTN_DANGER}" title="Delete">${_SVG.trash}</button>` : '';
     return `<div class="flex items-center justify-center gap-1 flex-wrap">${viewBtn}${joSummaryBtn}${mergedBtn}${editBtn}${processBtn}${deleteBtn}</div>`;
 }
@@ -1709,7 +1709,7 @@ export async function renderSavedJobOrders() {
                 <td class="px-4 py-3 text-sm text-slate-500 whitespace-nowrap">${date}</td>
                 <td class="px-4 py-3 text-sm text-slate-500">${jo.customer_name || '-'}</td>
                 <td class="px-4 py-3 text-sm text-slate-700 font-semibold">${items.length} items (${totalCases.toLocaleString(undefined, { minimumFractionDigits: 2 })} cs)</td>
-                <td class="px-4 py-3 text-center text-sm font-bold ${produceColor}">${totalToProduce > 0 ? totalToProduce.toLocaleString(undefined, { minimumFractionDigits: 2 }) + ' cs' : '—'}</td>
+                <td class="px-4 py-3 text-center text-sm font-bold ${produceColor}">${totalToProduce > 0 ? totalToProduce.toLocaleString(undefined, { minimumFractionDigits: 2 }) + ' cs' : '-'}</td>
                 <td class="px-4 py-3 text-center"><span class="px-2 py-0.5 rounded-full text-xs font-medium ${statusCls}"${closedTitle}>${jo.status}</span></td>
                 <td class="px-4 py-3 text-center text-sm">${toolbar}</td>
             </tr>` + _buildItemsRow(jo, itemsRowId, 7);
@@ -1751,7 +1751,7 @@ export async function loadDraftsList() {
                 <td class="px-4 py-3 text-sm text-slate-500 whitespace-nowrap">${date}</td>
                 <td class="px-4 py-3 text-sm text-slate-500">${jo.customer_name || '-'}</td>
                 <td class="px-4 py-3 text-sm text-slate-700 font-semibold">${items.length} items (${totalCases.toLocaleString(undefined, { minimumFractionDigits: 2 })} cs)</td>
-                <td class="px-4 py-3 text-center text-sm font-bold ${produceColor}">${totalToProduce > 0 ? totalToProduce.toLocaleString(undefined, { minimumFractionDigits: 2 }) + ' cs' : '—'}</td>
+                <td class="px-4 py-3 text-center text-sm font-bold ${produceColor}">${totalToProduce > 0 ? totalToProduce.toLocaleString(undefined, { minimumFractionDigits: 2 }) + ' cs' : '-'}</td>
                 <td class="px-4 py-3 text-center text-sm">${toolbar}</td>
             </tr>` + _buildItemsRow(jo, itemsRowId, 6);
         }).join('');

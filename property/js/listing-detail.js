@@ -1,4 +1,4 @@
-/* listing-detail.js — Single property detail page logic */
+/* listing-detail.js - Single property detail page logic */
 (function () {
   'use strict';
 
@@ -79,13 +79,13 @@
       +   '</div>'
       +   '<div class="m-mortgage-row">'
       +     '<label class="m-field"><span>Tenure (years)</span><input class="m-input" id="mw-years" type="number" min="5" max="30" value="' + defaultYears + '"></label>'
-      +     '<label class="m-field"><span>Loan amount</span><input class="m-input" id="mw-loan" value="—" readonly></label>'
+      +     '<label class="m-field"><span>Loan amount</span><input class="m-input" id="mw-loan" value="-" readonly></label>'
       +   '</div>'
       +   '<div class="m-mortgage-result">'
       +     '<div class="m-stat-k">Monthly payment</div>'
-      +     '<div class="big" id="mw-monthly">—</div>'
+      +     '<div class="big" id="mw-monthly">-</div>'
       +     '<div class="m-mortgage-rows">'
-      +       '<div><span class="m-text-muted">Total interest over tenure</span><strong id="mw-total-int">—</strong></div>'
+      +       '<div><span class="m-text-muted">Total interest over tenure</span><strong id="mw-total-int">-</strong></div>'
       +     '</div>'
       +   '</div>'
       +   '<a class="m-btn m-btn--ghost m-btn--sm" href="mortgage.html?price=' + price + '" style="margin-top:8px;">Open full calculator →</a>'
@@ -219,7 +219,7 @@
                 ? '<div class="m-mt-3 m-print-hide"><h3>Similar in ' + area.name + '</h3><div class="m-grid m-grid-2" id="similar-grid">' + similar.map(ManzilApp.listingCard).join('') + '</div></div>'
                 : '')
 
-      +     // Print-only agent card (hidden on screen — the sticky rail handles screen)
+      +     // Print-only agent card (hidden on screen - the sticky rail handles screen)
       +     '<div class="m-print-agent">'
       +       '<h3>Listed by ' + ManzilApp.escapeHtml(agent.name || 'Manzil agent') + '</h3>'
       +       '<div class="row"><strong>Agency:</strong> ' + ManzilApp.escapeHtml(agency.name || '') + ' · Permit ' + ManzilApp.escapeHtml(agency.license_no || '') + '</div>'

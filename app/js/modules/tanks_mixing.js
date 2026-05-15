@@ -315,10 +315,10 @@ async function loadBatchOptions() {
             return nb - na;
         });
         sel.innerHTML =
-            '<option value="">— Select batch —</option>' +
+            '<option value="">- Select batch -</option>' +
             batches
                 .map((b) => {
-                    const label = `${_esc(b.batch_no || '')} — ${_esc(b.recipe_name || b.description || '')}`;
+                    const label = `${_esc(b.batch_no || '')} - ${_esc(b.recipe_name || b.description || '')}`;
                     return `<option value="${_esc(b.batch_no || '')}">${label}</option>`;
                 })
                 .join('');
@@ -349,7 +349,7 @@ async function loadRawMaterialInspection() {
         document.getElementById('tm-rmi-issue').value = data.issue_no || '';
         document.getElementById('tm-rmi-effective').value = data.effective_date || '';
         if (metaEl) {
-            metaEl.textContent = `Recipe: ${data.recipe_name || '—'}`;
+            metaEl.textContent = `Recipe: ${data.recipe_name || '-'}`;
         }
         const rows = data.rows || [];
         tbody.innerHTML = rows
@@ -475,8 +475,8 @@ async function loadOps(panelKey) {
         const doc = await _jsonOrThrow(r, 'Load failed');
         ta.value = JSON.stringify(doc.data || {}, null, 2);
         if (st) {
-            const u = doc.updated_at ? new Date(doc.updated_at).toLocaleString() : '—';
-            st.textContent = `Last updated: ${u}  ·  ${doc.updated_by || '—'}`;
+            const u = doc.updated_at ? new Date(doc.updated_at).toLocaleString() : '-';
+            st.textContent = `Last updated: ${u}  ·  ${doc.updated_by || '-'}`;
         }
     } catch (e) {
         console.error(e);

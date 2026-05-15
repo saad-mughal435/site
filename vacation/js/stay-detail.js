@@ -1,4 +1,4 @@
-/* stay-detail.js — Single listing page: gallery + reserve sidebar + calendar */
+/* stay-detail.js - Single listing page: gallery + reserve sidebar + calendar */
 (function () {
   'use strict';
 
@@ -81,7 +81,7 @@
     } else {
       box.innerHTML += '<button class="v-btn v-btn--primary v-btn--block v-mt-2" id="reserve-btn" disabled style="opacity:.6;cursor:not-allowed;">Pick dates first</button>';
     }
-    box.innerHTML += '<p class="v-text-muted v-mt-1" style="font-size:11.5px;text-align:center;">You won\'t be charged in this demo — clicking Reserve writes the booking to localStorage.</p>';
+    box.innerHTML += '<p class="v-text-muted v-mt-1" style="font-size:11.5px;text-align:center;">You won\'t be charged in this demo - clicking Reserve writes the booking to localStorage.</p>';
 
     // Open calendar on date click
     box.querySelectorAll('#r-ci, #r-co').forEach(function (b) { b.addEventListener('click', openDateModal); });
@@ -173,7 +173,7 @@
       + '<div class="v-detail-grid">'
       +   '<div>'
       +     '<div class="v-host-card"><div class="v-host-head"><img src="' + host.photo + '" alt="" /><div><h4>Hosted by ' + VacationApp.escapeHtml(host.name) + '</h4>'
-      +       '<div class="v-meta">Joined ' + (host.joined || '—') + ' · ' + (host.response_rate || 0) + '% response · ~' + (host.response_time_hrs || 0) + 'h reply</div></div>'
+      +       '<div class="v-meta">Joined ' + (host.joined || '-') + ' · ' + (host.response_rate || 0) + '% response · ~' + (host.response_time_hrs || 0) + 'h reply</div></div>'
       +       '<div style="margin-inline-start:auto;display:flex;gap:6px;">' + (host.superhost ? '<span class="v-chip superhost">★ Superhost</span>' : '') + '</div>'
       +     '</div>'
       +     '<p style="margin-top:12px;font-size:13px;">' + VacationApp.escapeHtml(host.bio || '') + '</p>'
@@ -206,7 +206,7 @@
       +       '<div class="v-grid v-grid-2 v-mt-1">'
       +         (reviews.length ? reviews.slice(0, 6).map(function (rv) {
                   var g = d.GUESTS.find(function (x) { return x.id === rv.guest_id; }) || { name: 'Guest' };
-                  return '<div style="padding:14px;border:1px solid var(--vacation-line);border-radius:12px;background:#fcfaf3;"><div class="v-stars">' + VacationApp.stars(rv.rating_overall) + ' <span class="v-text-muted" style="font-size:12px;">' + rv.rating_overall.toFixed(1) + '</span></div><strong>' + VacationApp.escapeHtml(rv.title) + '</strong><p style="margin:6px 0 0;font-size:13px;">' + VacationApp.escapeHtml(rv.body) + '</p><div class="v-text-muted" style="font-size:11px;margin-top:6px;">— ' + g.name + ', ' + rv.date + '</div></div>';
+                  return '<div style="padding:14px;border:1px solid var(--vacation-line);border-radius:12px;background:#fcfaf3;"><div class="v-stars">' + VacationApp.stars(rv.rating_overall) + ' <span class="v-text-muted" style="font-size:12px;">' + rv.rating_overall.toFixed(1) + '</span></div><strong>' + VacationApp.escapeHtml(rv.title) + '</strong><p style="margin:6px 0 0;font-size:13px;">' + VacationApp.escapeHtml(rv.body) + '</p><div class="v-text-muted" style="font-size:11px;margin-top:6px;">- ' + g.name + ', ' + rv.date + '</div></div>';
                 }).join('') : '<div class="v-empty">No reviews yet.</div>')
       +       '</div>'
       +     '</div>'

@@ -1,4 +1,4 @@
-/* admin-sections.js — All 13 admin sections under window.ManzilAdmin */
+/* admin-sections.js - All 13 admin sections under window.ManzilAdmin */
 (function () {
   'use strict';
 
@@ -271,7 +271,7 @@
       ManzilApp.api('/admin/listings/' + id).then(function (r) {
         var l = r.listing;
         formModal({
-          title: 'Edit listing — ' + l.id,
+          title: 'Edit listing - ' + l.id,
           fields: [
             { name: 'title', label: 'Title', value: l.title },
             { name: 'price_aed', label: 'Price (AED)', type: 'number', value: l.price_aed },
@@ -308,9 +308,9 @@
     window.ManzilAdminActions.bulkImport = function () {
       var sample = ''
         + 'title,transaction,type,area_id,agent_id,price_aed,beds,baths,sqft,address,furnished,featured,verified\n'
-        + 'Ocean Heights — 2BR Marina View,buy,apartment,a-marina,ag01,1850000,2,3,1240,Marina Walk,false,true,true\n'
-        + 'Reem Townhouse — 4BR Family,buy,townhouse,a-ranches,ag13,4200000,4,5,3100,Reem 5,false,false,true\n'
-        + 'Burj Vista 2 — 1BR Furnished,rent,apartment,a-downtown,ag06,140000,1,2,820,Downtown Blvd,true,false,true\n';
+        + 'Ocean Heights - 2BR Marina View,buy,apartment,a-marina,ag01,1850000,2,3,1240,Marina Walk,false,true,true\n'
+        + 'Reem Townhouse - 4BR Family,buy,townhouse,a-ranches,ag13,4200000,4,5,3100,Reem 5,false,false,true\n'
+        + 'Burj Vista 2 - 1BR Furnished,rent,apartment,a-downtown,ag06,140000,1,2,820,Downtown Blvd,true,false,true\n';
       ManzilApp.showModal({
         title: 'Bulk import listings from CSV',
         size: 'xl',
@@ -427,7 +427,7 @@
             +   ' <span class="m-chip ' + q.status + '" style="margin-inline-start:6px;">' + q.status + '</span>'
             +   ' <span class="m-chip" style="' + scoreBg(s) + '">' + scoreLabel(s) + '</span>'
             + '</div>'
-            + '<div class="preview m-truncate">' + esc(l.title || '—') + ' · ' + q.kind + '</div>'
+            + '<div class="preview m-truncate">' + esc(l.title || '-') + ' · ' + q.kind + '</div>'
             + '<div class="when">' + ManzilApp.relDate(q.created_at) + '</div>'
             + '</div>';
         }).join('') : '<div class="m-empty"><p>No inquiries match.</p></div>';
@@ -488,8 +488,8 @@
             }).join('') + '</div>'
 
           + '<div class="m-mt-2" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px;background:#fafaf6;border-radius:8px;font-size:13px;">'
-          +   '<div><strong>Listing:</strong><br/><a href="listing.html?id=' + q.listing_id + '" target="_blank" rel="noopener">' + esc(l.title || '—') + '</a><br/><span class="m-text-muted">' + fmtAED(l.price_aed || 0) + '</span></div>'
-          +   '<div><strong>Agent:</strong><br/>' + esc(ag.name || '—') + '<br/><span class="m-text-muted">' + esc(ag.specialisation || '') + '</span></div>'
+          +   '<div><strong>Listing:</strong><br/><a href="listing.html?id=' + q.listing_id + '" target="_blank" rel="noopener">' + esc(l.title || '-') + '</a><br/><span class="m-text-muted">' + fmtAED(l.price_aed || 0) + '</span></div>'
+          +   '<div><strong>Agent:</strong><br/>' + esc(ag.name || '-') + '<br/><span class="m-text-muted">' + esc(ag.specialisation || '') + '</span></div>'
           + '</div>'
 
           + '<div class="m-mt-3"><strong style="font-size:14px;">Activity timeline</strong><div style="margin-top:8px;border-inline-start:2px solid var(--manzil-line);padding-inline-start:14px;display:grid;gap:10px;max-height:280px;overflow-y:auto;">'
@@ -617,7 +617,7 @@
     host.innerHTML = ''
       + '<h2>Viewings</h2>'
       + '<div class="m-grid m-grid-2 m-mt-2">'
-      +   '<div class="m-panel"><h3 style="margin-top:0;">Calendar — ' + new Date().toLocaleString('en', { month: 'long', year: 'numeric' }) + '</h3><div id="vw-cal"></div></div>'
+      +   '<div class="m-panel"><h3 style="margin-top:0;">Calendar - ' + new Date().toLocaleString('en', { month: 'long', year: 'numeric' }) + '</h3><div id="vw-cal"></div></div>'
       +   '<div class="m-panel" style="padding:0;overflow:auto;"><div style="padding:16px;"><h3 style="margin:0;">Schedule</h3></div><table class="m-table"><thead><tr><th>When</th><th>Listing</th><th>Agent</th><th>Status</th><th></th></tr></thead><tbody id="vw-tbody"></tbody></table></div>'
       + '</div>';
     refresh();
@@ -829,7 +829,7 @@
       host.innerHTML = ''
         + '<h2>Analytics</h2>'
 
-        + '<div class="m-panel m-mt-2"><div class="m-panel-head"><h3>Views — last 30 days</h3></div>'
+        + '<div class="m-panel m-mt-2"><div class="m-panel-head"><h3>Views - last 30 days</h3></div>'
         +   '<svg viewBox="0 0 ' + W + ' ' + H + '" class="m-line-chart" preserveAspectRatio="xMidYMid meet">'
         +     '<line class="axis" x1="' + pad + '" y1="' + (H - pad) + '" x2="' + (W - pad) + '" y2="' + (H - pad) + '"/>'
         +     '<line class="axis" x1="' + pad + '" y1="' + pad + '" x2="' + pad + '" y2="' + (H - pad) + '"/>'
@@ -943,7 +943,7 @@
       ManzilApp.api('/admin/content/areas').then(function (r) {
         var overrides = r.overrides || {};
         host.innerHTML = ''
-          + '<h2>Content — area guides</h2>'
+          + '<h2>Content - area guides</h2>'
           + '<p class="m-text-muted">Edit the area blurbs, schools and malls shown on customer-facing area pages. Originals are seed-data; overrides persist locally.</p>'
           + '<div class="m-grid m-grid-2 m-mt-2">'
           +   d.AREAS.map(function (a) {
@@ -964,7 +964,7 @@
     window.ManzilAdminActions.editArea = function (id) {
       var a = d.AREAS.find(function (x) { return x.id === id; });
       formModal({
-        title: 'Edit content — ' + a.name,
+        title: 'Edit content - ' + a.name,
         fields: [
           { name: 'blurb', label: 'Blurb', type: 'textarea', rows: 4, value: a.blurb },
           { name: 'schools', label: 'Schools (comma)', value: (a.schools || []).join(', ') },
@@ -1066,12 +1066,12 @@
     window.ManzilAdminActions.resetDemo = function () {
       modal({
         title: 'Reset demo data',
-        body: '<p>This clears all local overrides — created listings, edits, status changes, inquiries, viewings, banners and audit log.</p><p><strong>Seed data is untouched.</strong></p>',
+        body: '<p>This clears all local overrides - created listings, edits, status changes, inquiries, viewings, banners and audit log.</p><p><strong>Seed data is untouched.</strong></p>',
         foot: '<button class="m-btn" data-modal-close>Cancel</button><button class="m-btn" style="background:var(--manzil-rose);color:white;" id="r-go">Reset</button>',
         onMount: function (h, close) {
           h.querySelector('#r-go').addEventListener('click', function () {
             Object.keys(localStorage).forEach(function (k) { if (k.indexOf('manzil.') === 0) localStorage.removeItem(k); });
-            window.toast('Reset complete — reloading...', 'success'); close();
+            window.toast('Reset complete - reloading...', 'success'); close();
             setTimeout(function () { location.reload(); }, 800);
           });
         }
@@ -1089,7 +1089,7 @@
         +   '<table class="m-table"><thead><tr><th>When</th><th>Actor</th><th>Action</th><th>Target</th><th>Details</th></tr></thead><tbody>'
         +     (r.items.length ? r.items.map(function (a) {
                 return '<tr><td>' + fmtDT(a.when) + '</td><td>' + esc(a.actor) + '</td><td><span class="m-chip">' + esc(a.action) + '</span></td><td>' + esc(a.target) + '</td><td>' + esc(a.details) + '</td></tr>';
-              }).join('') : '<tr><td colspan="5" class="m-table-empty">No actions yet — perform any admin operation to populate.</td></tr>')
+              }).join('') : '<tr><td colspan="5" class="m-table-empty">No actions yet - perform any admin operation to populate.</td></tr>')
         +   '</tbody></table>'
         + '</div>'
         + '<div class="m-mt-2"><button class="m-btn m-btn--ghost m-btn--sm" onclick="ManzilAdminActions.exportAudit()">⤓ Export CSV</button></div>';

@@ -39,7 +39,7 @@ function _matchesTypeVolume(desc) {
 }
 
 // ============================================================================
-// Draft sub-tab — Process Draft action (flips draft -> allocation_pending)
+// Draft sub-tab - Process Draft action (flips draft -> allocation_pending)
 // ============================================================================
 
 export async function processDraftToAllocation(id) {
@@ -58,7 +58,7 @@ export async function processDraftToAllocation(id) {
 }
 
 // ============================================================================
-// Allocation sub-tab — unified view (pushed PO items grouped by parent PO)
+// Allocation sub-tab - unified view (pushed PO items grouped by parent PO)
 // ============================================================================
 
 export async function loadAllocationPending() {
@@ -268,7 +268,7 @@ function _renderProcessedJOBlock(jo, allocsOverride) {
         <div class="px-4 py-3 bg-green-50 border-b border-slate-200 flex items-center justify-between gap-3 flex-wrap">
             <div>
                 <div class="font-semibold text-slate-900">${ref}</div>
-                <div class="text-xs text-slate-500">${customer}${date ? ' — ' + date : ''}</div>
+                <div class="text-xs text-slate-500">${customer}${date ? ' - ' + date : ''}</div>
             </div>
             <div class="flex items-center gap-2">
                 <span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-green-100 text-green-700">Processed</span>
@@ -301,7 +301,7 @@ function _renderProcessedJOBlock(jo, allocsOverride) {
                     <td class="px-3 py-2 text-right">
                         ${canReturn
                             ? `<button onclick="returnJOItemToAllocation('${childId}', '${code.replace(/'/g, "&#39;")}')" class="text-xs font-semibold py-1 px-2 rounded bg-amber-100 hover:bg-amber-200 text-amber-800 border border-amber-200">Return</button>`
-                            : '<span class="text-xs text-slate-300">—</span>'}
+                            : '<span class="text-xs text-slate-300">-</span>'}
                     </td>
                 </tr>`;
                 }).join('')}
@@ -369,7 +369,7 @@ function _renderAllocationGroup(group) {
         <div class="px-4 py-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
             <div>
                 <div class="font-semibold text-slate-900">${h.summary_ref}</div>
-                <div class="text-xs text-slate-500">${h.customer} — ${h.jo_date}</div>
+                <div class="text-xs text-slate-500">${h.customer} - ${h.jo_date}</div>
             </div>
             <label class="flex items-center gap-2 text-xs font-semibold text-slate-700 cursor-pointer select-none">
                 <input type="checkbox" ${allActive ? 'checked' : ''} ${indet}

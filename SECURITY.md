@@ -20,7 +20,7 @@ In-scope:
 - `saadm.dev` and any subdomain
 - Anything served from this repository
 - The live demo at `/app/` (note: it's a disconnected demo with auto-admin
-  login and mocked API responses — no real backend or data exists there, but
+  login and mocked API responses - no real backend or data exists there, but
   if you find a way to make it phone home or load real data, please report)
 
 Out of scope:

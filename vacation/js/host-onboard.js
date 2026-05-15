@@ -1,4 +1,4 @@
-/* host-onboard.js — 6-step "List your property" wizard.
+/* host-onboard.js - 6-step "List your property" wizard.
    Steps: About you → Verification (docs) → Property → Photos & description
         → Amenities & rules → Pricing & calendar → Review → Submit.
    Modes (via ?mode=): signup (default, full flow) · add-listing (skip step 1)
@@ -13,7 +13,7 @@
   var DUBAI_DESTINATIONS = ['d-marina','d-downtown','d-palm','d-jbr','d-business','d-hatta'];
 
   // ---------- State ----------
-  // Demo-friendly defaults — every field pre-populated with plausible values so
+  // Demo-friendly defaults - every field pre-populated with plausible values so
   // the wizard renders fully filled-in for client demos. Real users can edit
   // anything before they continue.
   function defaultState() {
@@ -29,14 +29,14 @@
         password: '12345678',
         languages: ['English', 'Arabic'],
         photo: '',
-        bio: 'I host weekend stays across Dubai — quick replies, easy check-in, and local tips on tap. Family-friendly building with rooftop pool.'
+        bio: 'I host weekend stays across Dubai - quick replies, easy check-in, and local tips on tap. Family-friendly building with rooftop pool.'
       },
       verification: { resident: true, ownership_kind: 'own', documents: {
         iban: { type: 'iban', filename: 'AE070331234567890123456', status: 'submitted' }
       } },
       property: {
         type: 'apartment',
-        title: 'Marina Pearl Tower — Modern 2BR with Sea View',
+        title: 'Marina Pearl Tower - Modern 2BR with Sea View',
         destination_id: 'd-marina',
         address: 'Dubai Marina',
         lat: 25.0805, lng: 55.1407,
@@ -60,7 +60,7 @@
     state = fresh;
     saveDraft();
     render();
-    window.toast && window.toast('Filled with demo data — just click Continue through to submit.', 'success', 2400);
+    window.toast && window.toast('Filled with demo data - just click Continue through to submit.', 'success', 2400);
   }
   // For existing drafts that may be empty or partial, fill in anything missing
   // with the demo defaults so every step looks complete and Next never errors.
@@ -191,9 +191,9 @@
       +     '</div>'
       +   '</label>'
       +   '<label class="v-field"><span>Profile photo URL <span class="v-text-muted" style="font-weight:400;">(optional)</span></span><input class="v-input" id="p-photo" value="' + esc(state.profile.photo) + '" placeholder="https://..." /></label>'
-      +   '<label class="v-field"><span>Short bio <span class="v-text-muted" style="font-weight:400;" id="p-bio-count">(0/500)</span></span><textarea class="v-textarea" id="p-bio" rows="4" placeholder="Hi, I\'m Ahmed — I host weekends on Palm Jumeirah. I love showing guests the best brunch spots…">' + esc(state.profile.bio) + '</textarea></label>'
+      +   '<label class="v-field"><span>Short bio <span class="v-text-muted" style="font-weight:400;" id="p-bio-count">(0/500)</span></span><textarea class="v-textarea" id="p-bio" rows="4" placeholder="Hi, I\'m Ahmed - I host weekends on Palm Jumeirah. I love showing guests the best brunch spots…">' + esc(state.profile.bio) + '</textarea></label>'
       + '</div>'
-      + '<p class="v-text-muted" style="font-size:12px;margin-top:18px;">For the live product, passwords would be hashed server-side. This demo stores them in localStorage only — don\'t use a real password.</p>';
+      + '<p class="v-text-muted" style="font-size:12px;margin-top:18px;">For the live product, passwords would be hashed server-side. This demo stores them in localStorage only - don\'t use a real password.</p>';
     bindInput('#p-name', 'profile.name');
     bindInput('#p-email', 'profile.email');
     bindInput('#p-phone', 'profile.phone');
@@ -232,12 +232,12 @@
     }
     host.innerHTML = ''
       + '<h2>Verify your identity &amp; property</h2>'
-      + '<p class="v-step-intro">Upload as many documents as you have on hand — for this demo none are required, just click <strong>Continue</strong> to skip ahead. In the live product, our team reviews everything manually within 24 hours and your listing stays off-market until verification clears.</p>'
+      + '<p class="v-step-intro">Upload as many documents as you have on hand - for this demo none are required, just click <strong>Continue</strong> to skip ahead. In the live product, our team reviews everything manually within 24 hours and your listing stays off-market until verification clears.</p>'
       + '<div class="v-panel" style="padding:16px;margin-bottom:18px;">'
       +   '<strong>Are you a UAE resident?</strong>'
       +   '<div class="v-pills" style="margin-top:10px;">'
-      +     '<button type="button" class="v-pill ' + (resident ? 'active' : '') + '" data-res="1">Yes — Emirates ID only</button>'
-      +     '<button type="button" class="v-pill ' + (!resident ? 'active' : '') + '" data-res="0">No — I\'ll also upload my passport</button>'
+      +     '<button type="button" class="v-pill ' + (resident ? 'active' : '') + '" data-res="1">Yes - Emirates ID only</button>'
+      +     '<button type="button" class="v-pill ' + (!resident ? 'active' : '') + '" data-res="0">No - I\'ll also upload my passport</button>'
       +   '</div>'
       + '</div>'
       + '<div class="v-panel" style="padding:16px;margin-bottom:18px;">'
@@ -250,7 +250,7 @@
       + '<div class="v-doc-grid" id="doc-grid">'
       +   docs.filter(isDocVisible).map(renderDocCard).join('')
       + '</div>'
-      + '<p class="v-text-muted" style="font-size:12px;margin-top:18px;">All files are stored locally in this demo — they never leave your browser. In the live product they would be encrypted in transit and at rest.</p>';
+      + '<p class="v-text-muted" style="font-size:12px;margin-top:18px;">All files are stored locally in this demo - they never leave your browser. In the live product they would be encrypted in transit and at rest.</p>';
     document.querySelectorAll('[data-res]').forEach(function (b) {
       on(b, 'click', function () { state.verification.resident = b.getAttribute('data-res') === '1'; saveDraft(); render(); });
     });
@@ -262,7 +262,7 @@
         var type = input.getAttribute('data-doc-input');
         var file = ev.target.files && ev.target.files[0];
         if (!file) return;
-        if (file.size > 5 * 1024 * 1024) { window.toast && window.toast('File too large — max 5MB','warn'); return; }
+        if (file.size > 5 * 1024 * 1024) { window.toast && window.toast('File too large - max 5MB','warn'); return; }
         readFileAsBase64(file, function (doc) {
           if (!doc) return;
           state.verification.documents[type] = Object.assign({ type: type, status: 'submitted' }, doc);
@@ -339,7 +339,7 @@
       +       D.DESTINATIONS.map(function (d) { return '<option value="' + d.id + '" ' + (p.destination_id === d.id ? 'selected' : '') + '>' + esc(d.name) + '</option>'; }).join('')
       +     '</select></label>'
       +   '</div>'
-      +   '<label class="v-field"><span>Listing title <span class="v-text-muted" style="font-weight:400;" id="pr-title-count">(0/80)</span></span><input class="v-input" id="pr-title" maxlength="80" value="' + esc(p.title) + '" placeholder="e.g., Marina Heights — Skyline Penthouse" /></label>'
+      +   '<label class="v-field"><span>Listing title <span class="v-text-muted" style="font-weight:400;" id="pr-title-count">(0/80)</span></span><input class="v-input" id="pr-title" maxlength="80" value="' + esc(p.title) + '" placeholder="e.g., Marina Heights - Skyline Penthouse" /></label>'
       +   '<label class="v-field"><span>Address line</span><input class="v-input" id="pr-addr" value="' + esc(p.address) + '" placeholder="Tower / building / area" /></label>'
       +   '<div>'
       +     '<label class="v-field"><span>Drop pin where the property is</span></label>'
@@ -594,7 +594,7 @@
               }).join('')
       +     '</select></label>'
       +   '</div>'
-      +   '<label class="v-check"><input type="checkbox" id="pc-instant" ' + (p.instant_book ? 'checked' : '') + '> <span><strong>Instant Book</strong> — let guests book without your approval. Strongly recommended for higher placement.</span></label>'
+      +   '<label class="v-check"><input type="checkbox" id="pc-instant" ' + (p.instant_book ? 'checked' : '') + '> <span><strong>Instant Book</strong> - let guests book without your approval. Strongly recommended for higher placement.</span></label>'
       + '</div>'
       + '<div style="margin-top:24px;">'
       +   '<strong>Block dates</strong>'
@@ -785,7 +785,7 @@
       .catch(function (e) {
         console.error(e);
         if (savedSubmit) { savedSubmit.disabled = false; savedSubmit.textContent = 'Submit listing for review'; }
-        window.toast && window.toast('Submission failed — please try again.', 'error');
+        window.toast && window.toast('Submission failed - please try again.', 'error');
       });
   }
 
@@ -833,7 +833,7 @@
       if (draft) state = Object.assign(defaultState(), draft);
       state.mode = mode;
       state.edit_id = editId || null;
-      // Hydrate any empty fields from demo defaults — guarantees the wizard
+      // Hydrate any empty fields from demo defaults - guarantees the wizard
       // always looks fully populated and "Continue" never errors out.
       hydrateMissing();
 

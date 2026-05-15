@@ -472,7 +472,7 @@ export function switchForecastSubTab(subTab) {
 }
 
 // ============================================================================
-// Past Forecast — aggregated inventory transactions view
+// Past Forecast - aggregated inventory transactions view
 // ============================================================================
 
 let pastForecastRows = [];          // server-returned individual transactions

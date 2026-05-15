@@ -11,7 +11,7 @@ cd site
 npm run dev          # serves on http://127.0.0.1:8000
 ```
 
-No build step — edit files, refresh the browser.
+No build step - edit files, refresh the browser.
 
 ## Commit message convention
 

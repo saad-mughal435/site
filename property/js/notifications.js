@@ -1,4 +1,4 @@
-/* notifications.js — Toast stack + bell dropdown for Manzil */
+/* notifications.js - Toast stack + bell dropdown for Manzil */
 (function () {
   'use strict';
 
@@ -44,7 +44,7 @@
     if (list.length) return list;
     var now = Date.now();
     list = [
-      { id: 'n1', title: 'Welcome to Manzil — demo mode', body: 'All data is fabricated. Photos via Unsplash.', when: now - 60_000, unread: true },
+      { id: 'n1', title: 'Welcome to Manzil - demo mode', body: 'All data is fabricated. Photos via Unsplash.', when: now - 60_000, unread: true },
       { id: 'n2', title: 'New listing in Dubai Marina', body: '2BR apartment at The Address Residences just listed.', when: now - 30 * 60_000, unread: true },
       { id: 'n3', title: 'Saved search update', body: '4 new villas in Arabian Ranches match your alert.', when: now - 4 * 60 * 60_000, unread: false }
     ];

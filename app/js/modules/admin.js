@@ -12,7 +12,7 @@ let currentSageHistory = [];
 let sageHistoryIncludeMismatched = false;
 
 /**
- * Load and render the "Untyped Job Orders" admin panel — every JO whose
+ * Load and render the "Untyped Job Orders" admin panel - every JO whose
  * local_export_type is still null (legacy data). Each row has Local/Export
  * buttons that PATCH the JO via window.editJOType.
  */
@@ -25,14 +25,14 @@ export async function loadUntypedJOs() {
         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
         const jos = await resp.json();
         if (!Array.isArray(jos) || jos.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="5" class="px-4 py-8 text-center text-emerald-600">All job orders are flagged — nothing to triage.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="5" class="px-4 py-8 text-center text-emerald-600">All job orders are flagged - nothing to triage.</td></tr>`;
             return;
         }
         tbody.innerHTML = jos.map(jo => {
             const ref = (jo.summary_ref || '').replace(/"/g, '&quot;');
-            const date = jo.jo_date ? String(jo.jo_date).slice(0, 10) : '—';
-            const customer = (jo.customer_name || '—').replace(/</g, '&lt;');
-            const status = (jo.status || '—').replace(/</g, '&lt;');
+            const date = jo.jo_date ? String(jo.jo_date).slice(0, 10) : '-';
+            const customer = (jo.customer_name || '-').replace(/</g, '&lt;');
+            const status = (jo.status || '-').replace(/</g, '&lt;');
             return `<tr>
                 <td class="px-4 py-2 text-sm font-mono">${ref}</td>
                 <td class="px-4 py-2 text-sm">${date}</td>
@@ -675,10 +675,10 @@ export async function refreshSageDrafts() {
             const n = data.updated ?? 0;
             showToast(n > 0 ? `${n} draft(s) marked as posted in Sage` : 'All drafts up to date', 'success');
         } else {
-            showToast('Could not reach Sage — draft list may be stale', 'warning');
+            showToast('Could not reach Sage - draft list may be stale', 'warning');
         }
     } catch (e) {
-        showToast('Sage connection unavailable — draft list may be stale', 'warning');
+        showToast('Sage connection unavailable - draft list may be stale', 'warning');
     } finally {
         if (btn) btn.disabled = false;
         if (btnLabel) btnLabel.textContent = 'Refresh';
@@ -749,7 +749,7 @@ function renderSageDraftsTable() {
             ? `${draft.rm_order_number || draft.production_batch_no || '-'}<br><span class="text-xs text-slate-400">${draft.recipe_name || ''}</span>`
             : `${draft.production_batch_no || '-'}<br><span class="text-xs text-slate-400">${draft.recipe_name || ''}</span>`;
 
-        let linkCell = '<span class="text-xs text-slate-400">—</span>';
+        let linkCell = '<span class="text-xs text-slate-400">-</span>';
         if (!isRM) {
             if (draft.sage_product_match === false) {
                 linkCell = `<span class="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-200" title="${(draft.sage_mismatch_reason || '').replace(/"/g, '&quot;')}">Mismatch</span>`;
@@ -774,7 +774,7 @@ function renderSageDraftsTable() {
             : '';
 
         const approveTitle = mismatchProd
-            ? `Blocked: ${draft.sage_mismatch_reason || 'Sage batch does not match this product'} — use Reset & RM or Reject`
+            ? `Blocked: ${draft.sage_mismatch_reason || 'Sage batch does not match this product'} - use Reset & RM or Reject`
             : 'Approve & Post to Sage';
         const approveCls = mismatchProd
             ? 'px-3 py-1 text-xs bg-slate-300 text-slate-500 rounded cursor-not-allowed'
@@ -851,7 +851,7 @@ export async function loadSagePostedHistory() {
         if (note) {
             const n = data.excluded_mismatch_count;
             if (n > 0 && !sageHistoryIncludeMismatched) {
-                note.textContent = `${n} posted row(s) hidden — Sage link does not match product. Enable “Show mismatched” to audit.`;
+                note.textContent = `${n} posted row(s) hidden - Sage link does not match product. Enable “Show mismatched” to audit.`;
                 note.classList.remove('hidden');
             } else {
                 note.textContent = '';
@@ -900,7 +900,7 @@ function renderSageHistoryTable() {
         const processedAt = isPosted ? batch.posted_at : batch.rejected_at;
         const op = batch.operation || '';
         const isProd = op === 'PRODUCTION_BATCH_IS' || op === 'PRODUCTION_BATCH_FGIN';
-        let linkCol = '—';
+        let linkCol = '-';
         if (isProd) {
             if (batch.sage_product_match === false) {
                 linkCol = `<span class="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-800" title="${(batch.sage_mismatch_reason || '').replace(/"/g, '&quot;')}">Mismatch</span>`;
@@ -1372,7 +1372,7 @@ function formatNumber(value) {
 }
 
 // =============================================================================
-// DATABASE MAINTENANCE — FORCE FULL SYNC
+// DATABASE MAINTENANCE - FORCE FULL SYNC
 // =============================================================================
 
 /**
@@ -1418,7 +1418,7 @@ export async function forceFullSync() {
             }
         }
 
-        if (statusEl) statusEl.textContent = 'Sync started — fetching from Sage...';
+        if (statusEl) statusEl.textContent = 'Sync started - fetching from Sage...';
 
         const pollUntilDone = () => new Promise((resolve, reject) => {
             const interval = setInterval(async () => {
@@ -1445,7 +1445,7 @@ export async function forceFullSync() {
         }
 
         showToast(`Full re-sync complete`, 'success');
-        if (statusEl) statusEl.textContent = `${finalMsg} — ${new Date().toLocaleTimeString()}`;
+        if (statusEl) statusEl.textContent = `${finalMsg} - ${new Date().toLocaleTimeString()}`;
 
     } catch (error) {
         console.error('Force full sync error:', error);
@@ -1460,7 +1460,7 @@ export async function forceFullSync() {
 
 
 // =============================================================================
-// ACCOUNTING DRAFTS — Cashbook / AR / AP Batch Approval
+// ACCOUNTING DRAFTS - Cashbook / AR / AP Batch Approval
 // =============================================================================
 
 let currentAcctDrafts = [];
@@ -1847,7 +1847,7 @@ export function viewReceptionPhotos(frontId, backId, name) {
     const frontDl = document.getElementById('reception-photo-front-dl');
     const backDl = document.getElementById('reception-photo-back-dl');
 
-    title.textContent = `ID Document — ${name}`;
+    title.textContent = `ID Document - ${name}`;
     frontImg.src = `/api/reception/photos/${frontId}`;
     backImg.src = `/api/reception/photos/${backId}`;
     frontDl.href = `/api/reception/photos/${frontId}`;

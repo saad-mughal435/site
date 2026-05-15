@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Mortgage calculator — Manzil</title>
+<title>Mortgage calculator - Manzil</title>
 <meta name="description" content="UAE mortgage calculator with full amortisation schedule. Estimate monthly payments, total interest, and DLD fees for any Dubai property." />
 <meta name="theme-color" content="#1f7a55" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2064%2064'%3E%3Crect%20width%3D'64'%20height%3D'64'%20rx%3D'14'%20fill%3D'%231f7a55'/%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20font-family%3D'serif'%20font-weight%3D'700'%20font-size%3D'30'%20fill%3D'%23c9a049'%20text-anchor%3D'middle'%3Eم%3C/text%3E%3C/svg%3E" />
@@ -47,15 +47,15 @@
       <h3 style="margin-top:0;">Result</h3>
       <div class="m-mortgage-result" style="margin:0;">
         <div class="m-stat-k">Monthly payment</div>
-        <div class="big" id="o-monthly">—</div>
+        <div class="big" id="o-monthly">-</div>
       </div>
       <div class="m-grid m-grid-2 m-mt-2">
-        <div class="m-kpi"><div class="m-kpi-label">Loan amount</div><div class="m-kpi-value" id="o-loan" style="font-size:18px;">—</div></div>
-        <div class="m-kpi"><div class="m-kpi-label">Down payment</div><div class="m-kpi-value" id="o-down" style="font-size:18px;">—</div></div>
-        <div class="m-kpi"><div class="m-kpi-label">Total interest</div><div class="m-kpi-value" id="o-int" style="font-size:18px;">—</div></div>
-        <div class="m-kpi"><div class="m-kpi-label">Total payable</div><div class="m-kpi-value" id="o-total" style="font-size:18px;">—</div></div>
+        <div class="m-kpi"><div class="m-kpi-label">Loan amount</div><div class="m-kpi-value" id="o-loan" style="font-size:18px;">-</div></div>
+        <div class="m-kpi"><div class="m-kpi-label">Down payment</div><div class="m-kpi-value" id="o-down" style="font-size:18px;">-</div></div>
+        <div class="m-kpi"><div class="m-kpi-label">Total interest</div><div class="m-kpi-value" id="o-int" style="font-size:18px;">-</div></div>
+        <div class="m-kpi"><div class="m-kpi-label">Total payable</div><div class="m-kpi-value" id="o-total" style="font-size:18px;">-</div></div>
       </div>
-      <div class="m-kpi m-mt-2"><div class="m-kpi-label">Upfront fees (DLD 4% + 2% commission)</div><div class="m-kpi-value" id="o-fees" style="font-size:18px;">—</div></div>
+      <div class="m-kpi m-mt-2"><div class="m-kpi-label">Upfront fees (DLD 4% + 2% commission)</div><div class="m-kpi-value" id="o-fees" style="font-size:18px;">-</div></div>
     </div>
   </div>
 
@@ -150,7 +150,7 @@ document.getElementById('reset').addEventListener('click', function () {
 function loadScenarios() {
   ManzilApp.api('/mortgage-scenarios').then(function (r) {
     var host = document.getElementById('saved-list');
-    if (!r.items.length) { host.innerHTML = '<div class="m-empty"><p>No saved scenarios yet — adjust the inputs and click Save.</p></div>'; return; }
+    if (!r.items.length) { host.innerHTML = '<div class="m-empty"><p>No saved scenarios yet - adjust the inputs and click Save.</p></div>'; return; }
     host.innerHTML = '<table class="m-table"><thead><tr><th>Scenario</th><th>Saved</th><th></th></tr></thead><tbody>'
       + r.items.map(function (s) {
           return '<tr><td>' + s.label + '</td><td>' + ManzilApp.fmtDate(s.when) + '</td><td><button class="m-btn m-btn--ghost m-btn--sm" onclick="loadScenario(\'' + s.id + '\',' + s.price + ',' + s.down + ',' + s.rate + ',' + s.years + ')">Load</button> <button class="m-btn m-btn--ghost m-btn--sm" onclick="removeScenario(\'' + s.id + '\')">×</button></td></tr>';

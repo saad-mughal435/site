@@ -1,5 +1,5 @@
 /**
- * Sugar Dissolver — Sugar Issuance Record
+ * Sugar Dissolver - Sugar Issuance Record
  *
  * - Operator enters Production No + Date.
  * - Suggested sugar (Kg) is summed from RM-ready pending JOs.
@@ -38,7 +38,7 @@ function _renderShell(root) {
             <h2 class="text-2xl font-bold text-slate-900">Sugar Dissolver</h2>
             <p class="text-slate-500 text-sm mt-1">
                 Suggested sugar quantity is summed from pending job orders whose raw materials
-                are currently available. The suggestion is informational — enter your own final
+                are currently available. The suggestion is informational - enter your own final
                 quantity below before printing.
             </p>
         </div>
@@ -90,7 +90,7 @@ function _renderShell(root) {
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
                 <div>
                     <div class="text-xs font-semibold text-slate-500 uppercase">Suggested Sugar Qty</div>
-                    <div id="sd-suggested" class="text-3xl font-bold text-blue-700 mt-1">— Kg</div>
+                    <div id="sd-suggested" class="text-3xl font-bold text-blue-700 mt-1">- Kg</div>
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-700 mb-1">Final Qty Required (Kg)</label>
@@ -177,12 +177,12 @@ function _renderSkipped(skipped) {
     const lis = skipped.map(s => `<li>
         <span class="font-mono">${s.item_code || ''}</span>
         ${s.cases ? `(${_fmtNum(s.cases, 0)} cases)` : ''}
-        — ${s.reason || 'skipped'}
+        - ${s.reason || 'skipped'}
     </li>`).join('');
     wrap.innerHTML = `
         <details>
             <summary class="cursor-pointer hover:text-slate-700">
-                Skipped ${skipped.length} pending JO(s) — click to expand
+                Skipped ${skipped.length} pending JO(s) - click to expand
             </summary>
             <ul class="list-disc list-inside mt-2 space-y-0.5">${lis}</ul>
         </details>

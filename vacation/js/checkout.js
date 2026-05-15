@@ -1,4 +1,4 @@
-/* checkout.js — Booking confirmation flow with conflict re-check */
+/* checkout.js - Booking confirmation flow with conflict re-check */
 (function () {
   'use strict';
 

@@ -1,5 +1,5 @@
 /* ============================================================
-   Saad — Portfolio
+   Saad - Portfolio
    Clean professional dark theme. Coding identity via content,
    not chrome.
    ============================================================ */
@@ -119,7 +119,7 @@ img, svg { display: block; max-width: 100%; }
 }
 .logo-text { font-family: var(--sans); }
 
-/* Headshot avatar — replaces the gradient mark on contact + demo pages */
+/* Headshot avatar - replaces the gradient mark on contact + demo pages */
 .logo-photo {
   width: 36px; height: 36px;
   border-radius: 50%;
@@ -170,7 +170,7 @@ img, svg { display: block; max-width: 100%; }
   background: var(--grad);
 }
 
-/* Dropdown menu — Demo submenu */
+/* Dropdown menu - Demo submenu */
 .nav-dropdown { position: relative; display: inline-block; }
 .nav-dropdown-trigger {
   display: inline-flex; align-items: center; gap: 4px;
@@ -452,7 +452,7 @@ img, svg { display: block; max-width: 100%; }
 }
 
 /* ============================================================
-   SECTIONS — common
+   SECTIONS - common
    ============================================================ */
 .section {
   padding: 80px 28px;
@@ -911,7 +911,7 @@ a:focus-visible, button:focus-visible, .btn:focus-visible {
   font-weight: 700;
 }
 
-/* Hero panes — only the matching variant is visible per view */
+/* Hero panes - only the matching variant is visible per view */
 .view-pane                  { display: none; }
 body.view-all .view-pane[data-view="all"],
 body.view-eng .view-pane[data-view="eng"],
@@ -1309,7 +1309,7 @@ body.view-all  [data-domain]            { animation: viewFadeIn 0.35s ease-out; 
 }
 
 /* ============================================================
-   Back-to-top button — fixed bottom-right, appears past 400px.
+   Back-to-top button - fixed bottom-right, appears past 400px.
    Used on index, contact, demo. The button is hidden by default
    and gets the .visible class from the inline IIFE script.
    ============================================================ */

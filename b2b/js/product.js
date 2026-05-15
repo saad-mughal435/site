@@ -116,7 +116,7 @@
               <div class="tab-panel" data-panel="related">
                 <p style="color:var(--ink-soft); font-size:13.5px; margin-bottom:10px;">Customers who bought ${product.sku} often bought:</p>
                 <ul style="padding-left:18px; line-height:1.9;">
-                  ${(related || []).map(r => `<li><a href="product.html?sku=${encodeURIComponent(r.sku)}"><code>${r.sku}</code></a> &mdash; ${r.name}</li>`).join('')}
+                  ${(related || []).map(r => `<li><a href="product.html?sku=${encodeURIComponent(r.sku)}"><code>${r.sku}</code></a> - ${r.name}</li>`).join('')}
                 </ul>
               </div>
             </div>

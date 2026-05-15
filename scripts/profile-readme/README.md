@@ -21,7 +21,7 @@
 
 ## 🛠 What I actually do
 
-I build the software that ends manual work in manufacturing — **ERP, OEE, QC, batch tracking, inventory, and PDF reporting**. My edge is that I work **both sides**: I can troubleshoot a Krones beverage line in the morning and ship the FastAPI service that reports its downtime by afternoon. Hardware and software, same engineer.
+I build the software that ends manual work in manufacturing - **ERP, OEE, QC, batch tracking, inventory, and PDF reporting**. My edge is that I work **both sides**: I can troubleshoot a Krones beverage line in the morning and ship the FastAPI service that reports its downtime by afternoon. Hardware and software, same engineer.
 
 **Currently:** Automation Engineer · ERP Developer · IT Administrator at **Kingsley Beverage FZCO**, Dubai 🇦🇪
 **Education:** B.Sc. Electrical Engineering · Computer Engineering major · COMSATS Islamabad
@@ -30,13 +30,13 @@ I build the software that ends manual work in manufacturing — **ERP, OEE, QC, 
 
 ## 🚀 Featured live demos
 
-> All four open in the browser — fabricated data, real workflows.
+> All four open in the browser - fabricated data, real workflows.
 
 | Demo | What it is | Stack |
 |------|-----------|-------|
 | 🏠 **[Manzil Properties](https://saadm.dev/property/)** | Dubai real-estate marketplace. Map+list search, agent profiles, mortgage + valuation + yield calculators, 13-section admin SPA. | Leaflet · localStorage · Mock API |
 | 🏭 **[Kingsley MES/ERP walkthrough](https://saadm.dev/demo.html)** | The real production system, sanitised. 20+ modules, PDF templates, OEE, QC, Sage integration. | Python · FastAPI · MongoDB · SQL Server |
-| 🛒 **[Pebble & Co.](https://saadm.dev/b2c/)** | DTC storefront with admin panel — products, cart, checkout, customer accounts. | HTML5 · Vanilla JS · Mock API |
+| 🛒 **[Pebble & Co.](https://saadm.dev/b2c/)** | DTC storefront with admin panel - products, cart, checkout, customer accounts. | HTML5 · Vanilla JS · Mock API |
 | 🏢 **[Anvil Supply Co.](https://saadm.dev/b2b/)** | B2B wholesale portal with tier pricing, MOQ, quote + approval workflows. | Role-based UI · Approval queue |
 
 ---
@@ -96,7 +96,7 @@ I build the software that ends manual work in manufacturing — **ERP, OEE, QC, 
 
 > **Engineering · Automation · Industrial Maintenance · IT Operations · Full-Stack Development**
 
-Currently in the UAE. Happy to relocate worldwide for the right role — particularly drawn to roles where the engineering-plus-software combination matters (manufacturing, energy, logistics, smart-building, industrial IoT).
+Currently in the UAE. Happy to relocate worldwide for the right role - particularly drawn to roles where the engineering-plus-software combination matters (manufacturing, energy, logistics, smart-building, industrial IoT).
 
 📫 &nbsp; Best way to reach me: **[saad@saadm.dev](mailto:saad@saadm.dev)**
 🌐 &nbsp; Full portfolio: **[saadm.dev](https://saadm.dev/)**

@@ -2,7 +2,7 @@
 
 # saadm.dev
 
-**Portfolio for Muhammad Saad — Electrical & Automation Engineer · ERP/OEE Developer · Full-Stack.**
+**Portfolio for Muhammad Saad - Electrical & Automation Engineer · ERP/OEE Developer · Full-Stack.**
 **Currently UAE-based · Open to relocate worldwide.**
 
 [![Live](https://img.shields.io/badge/live-saadm.dev-7c9cff?style=flat-square)](https://saadm.dev/)
@@ -28,10 +28,10 @@ marketplace), structured data for search engines, and a working contact form.
 | [`/contact.html`](https://saadm.dev/contact.html) | Contact form, posts to [Formsubmit.co](https://formsubmit.co) → email inbox. |
 | [`/demo.html`](https://saadm.dev/demo.html) | Static screenshot-style walkthrough of the MES/ERP project (fabricated data). |
 | [`/app/`](https://saadm.dev/app/) | Disconnected live demo: the real frontend running entirely in the browser with a fetch interceptor. Auto-logs in as admin. |
-| [`/b2c/`](https://saadm.dev/b2c/) | **Pebble & Co.** — full DTC storefront demo. Storefront, catalog, product detail, cart, multi-step checkout, customer account, Shopify-style admin panel. Mock API runs in-browser. |
-| [`/b2b/`](https://saadm.dev/b2b/) | **Anvil Supply Co.** — full B2B wholesale portal demo. Tier pricing, MOQ, contract discounts, quote workflow, approval workflow for orders over $1,000, admin with order/quote/approval queues. |
-| [`/property/`](https://saadm.dev/property/) | **Manzil Properties** — Dubai real-estate marketplace demo. 65+ listings across 15 communities, map + list search (Leaflet/OpenStreetMap), agent and agency profiles, area guides, mortgage calculator with amortisation, 13-section admin SPA (listings, inquiries pipeline, viewings calendar, agents, agencies, customers, analytics, promotions, content CMS, moderation, settings, audit). EN/AR locale and AED/USD/GBP/EUR currency switcher. |
-| [`/vacation/`](https://saadm.dev/vacation/) | **Vacation Homes** — UAE short-stay booking demo. 56 stays across 10 destinations (Marina, Palm, Hatta, RAK, Liwa, etc.), custom hand-rolled date-range picker + availability calendar with conflict check, per-night pricing breakdown (nightly + weekend surcharge + cleaning + service + 5% VAT). **Host-side: 6-step listing wizard** (save-and-resume drafts, map-pin selector, document upload — Emirates ID + ownership + DTCM permit + IBAN) feeding an **admin verification queue** with approve / request-changes / reject. 12-section admin SPA + host dashboard with listings / bookings / calendar / earnings / profile / verification. EN/AR + 4-currency switcher. |
+| [`/b2c/`](https://saadm.dev/b2c/) | **Pebble & Co.** - full DTC storefront demo. Storefront, catalog, product detail, cart, multi-step checkout, customer account, Shopify-style admin panel. Mock API runs in-browser. |
+| [`/b2b/`](https://saadm.dev/b2b/) | **Anvil Supply Co.** - full B2B wholesale portal demo. Tier pricing, MOQ, contract discounts, quote workflow, approval workflow for orders over $1,000, admin with order/quote/approval queues. |
+| [`/property/`](https://saadm.dev/property/) | **Manzil Properties** - Dubai real-estate marketplace demo. 65+ listings across 15 communities, map + list search (Leaflet/OpenStreetMap), agent and agency profiles, area guides, mortgage calculator with amortisation, 13-section admin SPA (listings, inquiries pipeline, viewings calendar, agents, agencies, customers, analytics, promotions, content CMS, moderation, settings, audit). EN/AR locale and AED/USD/GBP/EUR currency switcher. |
+| [`/vacation/`](https://saadm.dev/vacation/) | **Vacation Homes** - UAE short-stay booking demo. 56 stays across 10 destinations (Marina, Palm, Hatta, RAK, Liwa, etc.), custom hand-rolled date-range picker + availability calendar with conflict check, per-night pricing breakdown (nightly + weekend surcharge + cleaning + service + 5% VAT). **Host-side: 6-step listing wizard** (save-and-resume drafts, map-pin selector, document upload - Emirates ID + ownership + DTCM permit + IBAN) feeding an **admin verification queue** with approve / request-changes / reject. 12-section admin SPA + host dashboard with listings / bookings / calendar / earnings / profile / verification. EN/AR + 4-currency switcher. |
 
 ## Tech stack
 
@@ -41,7 +41,7 @@ marketplace), structured data for search engines, and a working contact form.
 | **Frontend** | React 18 via CDN + Babel-standalone (no build step) for the homepage; Vanilla JS for `contact.html` / `demo.html` / `app/` |
 | **Animations** | Scroll-triggered `IntersectionObserver` reveals, count-up stats, cursor-tilt 3D code window, magnetic CTAs, sliding view-toggle indicator, gradient orbs |
 | **SEO** | Per-page meta, Open Graph, Twitter Cards, JSON-LD (Person, FAQPage, WebSite), canonical URLs, `sitemap.xml`, `robots.txt` |
-| **Hosting** | Cloudflare Pages — auto-deploy on push to `main` |
+| **Hosting** | Cloudflare Pages - auto-deploy on push to `main` |
 | **CI** | GitHub Actions: Prettier check, HTML validation, link check |
 | **Forms** | Formsubmit.co relay (no backend required) |
 
@@ -79,7 +79,7 @@ marketplace), structured data for search engines, and a working contact form.
 │   ├── account.html  admin.html
 │   ├── css/shop.css       # Navy/slate light design system
 │   └── js/                # data, mock-api, catalog (bulk paste), checkout (approval), admin
-├── property/                # Manzil Properties — Dubai real-estate marketplace
+├── property/                # Manzil Properties - Dubai real-estate marketplace
 │   ├── index.html  search.html  listing.html
 │   ├── agents.html  agent.html  areas.html  area.html
 │   ├── mortgage.html  compare.html  account.html
@@ -87,7 +87,7 @@ marketplace), structured data for search engines, and a working contact form.
 │   ├── css/property.css     # Emerald/gold light design system
 │   └── js/                  # data, mock-api, search, listing-detail, admin sections (~5.4k LOC)
 ├── 404.html                 # Branded not-found page
-├── humans.txt               # /humans.txt — team, thanks, tooling
+├── humans.txt               # /humans.txt - team, thanks, tooling
 ├── .well-known/
 │   └── security.txt         # RFC 9116 machine-readable security contact
 └── .github/
@@ -135,18 +135,18 @@ at <https://saadm.dev>.
 |---------|-------|
 | Framework preset | None |
 | Build command | _(blank)_ |
-| Build output directory | _(blank — repo root is the site)_ |
+| Build output directory | _(blank - repo root is the site)_ |
 | Production branch | `main` |
 
 ## Quality / SEO
 
 The homepage ships with:
 
-- **Person JSON-LD** — name, jobTitle, employer, alumniOf, knowsAbout (50+ skills), knowsLanguage, sameAs. Read by Google's Knowledge Graph.
-- **FAQPage JSON-LD** — drives the expandable Q&A rich result in Google.
-- **WebSite JSON-LD** — enables sitelinks searchbox.
-- **OpenGraph + Twitter Cards** — social-share previews on LinkedIn, X, WhatsApp, Slack.
-- **Lighthouse-friendly** — accessible colour contrast, semantic markup, `prefers-reduced-motion` respected, mobile-first responsive.
+- **Person JSON-LD** - name, jobTitle, employer, alumniOf, knowsAbout (50+ skills), knowsLanguage, sameAs. Read by Google's Knowledge Graph.
+- **FAQPage JSON-LD** - drives the expandable Q&A rich result in Google.
+- **WebSite JSON-LD** - enables sitelinks searchbox.
+- **OpenGraph + Twitter Cards** - social-share previews on LinkedIn, X, WhatsApp, Slack.
+- **Lighthouse-friendly** - accessible colour contrast, semantic markup, `prefers-reduced-motion` respected, mobile-first responsive.
 
 ## Contributing
 

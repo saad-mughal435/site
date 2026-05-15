@@ -1,5 +1,5 @@
 /*
- * mock-api.js — disconnected backend for the standalone demo.
+ * mock-api.js - disconnected backend for the standalone demo.
  *
  * Wraps window.fetch + XMLHttpRequest. Every /api/* and /auth/* request is
  * intercepted and answered locally with rich placeholder data. No request
@@ -14,7 +14,7 @@
   const log = (...a) => console.debug('[mock-api]', ...a);
 
   /* =========================================================
-     0. Auto-admin login — set tokens BEFORE the app boots
+     0. Auto-admin login - set tokens BEFORE the app boots
      ========================================================= */
   const ADMIN_USER = {
     _id: 'demo-admin-1', id: 'demo-admin-1',
@@ -173,7 +173,7 @@
     { item_code: 'FG-250ML',      description: 'Sample Beverage 250 mL', category: 'FG', uom: 'case', on_hand: 2240, reserved: 480,  reorder_point: 900,  unit_cost: 9.60,  ave_unit_cost: 9.45,  stock_value: 21504, transaction_value: 21504 },
   ];
 
-  // ---- Inventory transactions log (GRN view) — synthesise 80 entries ----
+  // ---- Inventory transactions log (GRN view) - synthesise 80 entries ----
   function genInventoryTxns() {
     const out = [];
     const reasons = ['GRN', 'Production OUT', 'Production IN', 'Dispatch', 'Adjustment', 'Transfer'];
@@ -209,7 +209,7 @@
   }
   const INVENTORY_TXNS = genInventoryTxns();
 
-  // ---- Customers — 14 records, mix of UAE / Export / inactive ----
+  // ---- Customers - 14 records, mix of UAE / Export / inactive ----
   const CUSTOMER_NAMES = [
     'Demo Customer Ltd', 'Acme Beverages', 'Placeholder FZE', 'Sample Distrib Co',
     'Test Trader LLC',   'Sigma Foodstuff', 'Demo Retail Group', 'Beta Wholesale Co',
@@ -235,7 +235,7 @@
     balance:      [ 48200, 167400,  31900, 215000, 12300,  62500, 198200,  41700,  74100, 28800, 312000,  87600,  54900,  93400][i],
   }));
 
-  // ---- Suppliers — 8 records ----
+  // ---- Suppliers - 8 records ----
   const SUPPLIER_NAMES = [
     'Demo Supplier Co', 'Acme Materials', 'Placeholder Supply', 'Sample Packaging LLC',
     'Sigma Ingredients', 'Beta Logistics', 'Demo Chemicals', 'Gamma Flexibles',
@@ -269,7 +269,7 @@
     on_time_pct: 95 - (i * 3),
   }));
 
-  // ---- Job orders — 16 records across all statuses ----
+  // ---- Job orders - 16 records across all statuses ----
   const PRODUCTS = [
     { code: 'FG-500ML', name: 'Sample Beverage 500 mL', recipe: 'REC-A1' },
     { code: 'FG-1L',    name: 'Sample Beverage 1 L',    recipe: 'REC-B2' },
@@ -290,7 +290,7 @@
       line: ['Line A', 'Line B', 'Line C'][i % 3],
       recipe_code: p.recipe, recipe_name: p.recipe,
       planned_start: daysAgo(i % 10),
-      // Cost of goods for this batch — qty × FG unit_cost (use 500ml as the proxy).
+      // Cost of goods for this batch - qty × FG unit_cost (use 500ml as the proxy).
       total_cost: Math.round((40 + (i*10)) * 14.40), unit_cost: 14.40,
       source: i % 2 === 0 ? 'po_processing' : 'manual',
       po_number: 'PO-IN-' + String(1001 + i).padStart(4,'0'),
@@ -301,7 +301,7 @@
     };
   });
 
-  // ---- Production batches — 12 records ----
+  // ---- Production batches - 12 records ----
   const PB_STATUSES = ['closed','in_progress','closed','planned','closed','closed','closed','in_progress','closed','planned','closed','closed'];
   const PRODUCTION_BATCHES = PB_STATUSES.map((status, i) => {
     const p = PRODUCTS[i % 3];
@@ -326,7 +326,7 @@
     };
   });
 
-  // ---- Production control reports — 14 records (2 weeks); mix of pending/completed ----
+  // ---- Production control reports - 14 records (2 weeks); mix of pending/completed ----
   function genProductionReports() {
     const reports = [];
     // 4 pending (so post-push flow has rows to click), 8 completed, 2 partial
@@ -359,7 +359,7 @@
         ],
         operator: 'demo.user',
         supervisor: 'demo.admin',
-        notes: status === 'pending' ? '' : 'Demo report — placeholder values only.',
+        notes: status === 'pending' ? '' : 'Demo report - placeholder values only.',
         raw_material_cost: actual,
         created_at: daysAgo(dayBack),
       });
@@ -370,7 +370,7 @@
   // In-memory store for reports created during the demo session (e.g. push-to-production)
   const DYNAMIC_REPORTS = [];
 
-  // ---- Quotations — 12 records ----
+  // ---- Quotations - 12 records ----
   const QT_STATUSES = ['draft','sent','sent','accepted','accepted','expired','sent','accepted','draft','sent','rejected','accepted'];
   const QUOTATIONS = QT_STATUSES.map((status, i) => {
     const c = CUSTOMERS[i % CUSTOMERS.length];
@@ -393,7 +393,7 @@
       notes: 'Demo quotation #' + (i+1),
     };
   });
-  // ---- Proforma invoices — 10 records ----
+  // ---- Proforma invoices - 10 records ----
   const PI_STATUSES = ['issued','paid','issued','overdue','paid','issued','paid','issued','draft','paid'];
   const PROFORMA_INVOICES = PI_STATUSES.map((status, i) => {
     const c = CUSTOMERS[i % CUSTOMERS.length];
@@ -412,7 +412,7 @@
     };
   });
 
-  // ---- Sage entries / drafts — 10 drafts + 10 posted ----
+  // ---- Sage entries / drafts - 10 drafts + 10 posted ----
   const SAGE_MODULES = ['JL','AP','AR','JL','AP','JL','AR','JL','AR','AP'];
   const SAGE_ENTRY_TYPES = ['Production batch close','Supplier payment','Customer invoice','Production batch close','Supplier payment','Production batch close','Customer receipt','Production batch close','Customer invoice','Supplier payment'];
   const SAGE_DRAFT_STATUSES = ['draft','draft','approved','posted','draft','approved','draft','posted','draft','approved'];
@@ -460,13 +460,13 @@
       lines: [
         { line: 1, account: '5000', account_name: 'Demo COGS',           description: header.entry_type, debit: a, credit: 0 },
         { line: 2, account: '1300', account_name: 'Demo Inventory',      description: header.entry_type, debit: 0, credit: a },
-        { line: 3, account: '2100', account_name: 'Demo AP — Supplier',  description: header.entry_type, debit: b, credit: 0 },
+        { line: 3, account: '2100', account_name: 'Demo AP - Supplier',  description: header.entry_type, debit: b, credit: 0 },
         { line: 4, account: '1010', account_name: 'Demo Bank Account',   description: header.entry_type, debit: 0, credit: b },
       ],
     };
   }
 
-  // ---- Accounting — drafts (12) / cashbook (15) / AR (10) / AP (8) ----
+  // ---- Accounting - drafts (12) / cashbook (15) / AR (10) / AP (8) ----
   const AD_MODULES = ['CB','AR','AP','CB','AR','AP','CB','AR','AP','CB','AR','AP'];
   const AD_STATUSES = ['pending','pending','approved','posted','pending','approved','pending','posted','pending','approved','posted','pending'];
   const ACCOUNTING_DRAFTS = AD_MODULES.map((mod, i) => {
@@ -536,7 +536,7 @@
     };
   });
 
-  // ---- Dispatch — richer ----
+  // ---- Dispatch - richer ----
   const DISPATCH_PENDING = Array.from({length:6}, (_, i) => ({
     _id: 'dp-' + (i+1),
     reservation_id: 'res-' + (i+1),
@@ -571,7 +571,7 @@
     delivered_at: daysAgo(i+1),
   }));
 
-  // ---- QC batches — 12 records ----
+  // ---- QC batches - 12 records ----
   const QC_VERDICTS = ['PASS','REVIEW','PASS','HOLD','PASS','PASS','PASS','REVIEW','PASS','PASS','REVIEW','PASS'];
   const QC_STATUSES = ['approved','pending','approved','rejected','approved','approved','approved','pending','approved','approved','pending','approved'];
   const QC_BATCHES = QC_VERDICTS.map((verdict, i) => ({
@@ -586,7 +586,7 @@
     approver: i % 2 === 0 ? 'demo.qc' : 'demo.admin',
     status: QC_STATUSES[i],
     sample_size: 24 + ((i * 6) % 36),  // 24-60 bottles drawn per batch
-    notes: verdict === 'HOLD' ? 'Demo — held for retest' : '',
+    notes: verdict === 'HOLD' ? 'Demo - held for retest' : '',
   }));
 
   // ---- Forecast (6 SKUs with realistic spread; 4 in shortfall) ----
@@ -599,7 +599,7 @@
     { sku: 'FG-MULTI', product_code: 'FG-MULTI', product_name: 'Sample Beverage Multipack', recipe_name: 'REC-C3', last_month: 60,  forecast: 80,  bookings: 70,  stock_on_hand: 90,  coverage_pct: 112, shortfall: 0, qty: 0 },
   ];
 
-  // ---- Customs / FTA — 12 declarations across types and months ----
+  // ---- Customs / FTA - 12 declarations across types and months ----
   const CD_TYPES = ['EX','IM','TS','EXPORT','EX','IM','TS','EXPORT','EX','IM','TS','EXPORT'];
   const CD_STATUSES = ['draft','submitted','accepted','draft','accepted','accepted','accepted','submitted','draft','accepted','accepted','draft'];
   const CUSTOMS_DECLARATIONS = CD_TYPES.map((type, i) => {
@@ -638,7 +638,7 @@
     };
   });
 
-  // ---- Sugar Dissolver — richer ----
+  // ---- Sugar Dissolver - richer ----
   const SUGAR_PENDING = Array.from({length:5}, (_, i) => {
     // Sugar dissolution batches: 320-680 kg planned, only the in-progress one has partial.
     const planned = 320 + i * 90;
@@ -703,7 +703,7 @@
     ];
   }
 
-  // ---- RM Orders — 10 records across full lifecycle ----
+  // ---- RM Orders - 10 records across full lifecycle ----
   const RMO_STATUSES = ['draft','draft','lpo','lpo','partially_received','partially_received','received','received','received','draft'];
   const RM_ORDERS = RMO_STATUSES.map((status, i) => {
     const itemsCount = 1 + (i % 4);
@@ -833,7 +833,7 @@
   // ---- Sage agent ----
   const SAGE_AGENT_HEALTH = {
     status: 'disconnected', healthy: false, ok: false,
-    message: 'Demo mode — Sage agent not configured for this disconnected demo.',
+    message: 'Demo mode - Sage agent not configured for this disconnected demo.',
     demo_mode: true, last_seen: null,
   };
 
@@ -975,7 +975,7 @@
       const target = Number(body.target_qty || body.batch_size_l || body.scale || body.qty || 1);
       const unit = (body.unit || 'cases').toLowerCase();
       const baseQty = recipe.base_qty || 1;
-      // Treat the target as a multiplier — keep math simple, garbage-data appropriate.
+      // Treat the target as a multiplier - keep math simple, garbage-data appropriate.
       const scale = target / baseQty;
       const items = recipe.ingredients.map(ing => {
         const required = +(ing.qty * scale).toFixed(4);
@@ -1218,7 +1218,7 @@
       { code: '1000', account: '1000', name: 'Cash on hand' },
       { code: '1010', account: '1010', name: 'Bank Demo · ****0001' },
       { code: '1300', account: '1300', name: 'Demo Inventory' },
-      { code: '2100', account: '2100', name: 'Demo AP — Supplier' },
+      { code: '2100', account: '2100', name: 'Demo AP - Supplier' },
       { code: '4000', account: '4000', name: 'Demo Revenue' },
       { code: '5000', account: '5000', name: 'Demo COGS' },
     ]);
@@ -1299,8 +1299,8 @@
     }
     if (path === '/sage-entries/items')              return jsonResponse(SAGE_ENTRY_ITEMS);
     if (path === '/sage-entries/transaction-codes')  return jsonResponse([
-      { code: 'IN-PROD', name: 'Inventory in — production' },
-      { code: 'OUT-PROD',name: 'Inventory out — production' },
+      { code: 'IN-PROD', name: 'Inventory in - production' },
+      { code: 'OUT-PROD',name: 'Inventory out - production' },
       { code: 'GRN',     name: 'Goods receipt' },
       { code: 'DISP',    name: 'Dispatch' },
       { code: 'ADJ',     name: 'Adjustment' },
@@ -1419,7 +1419,7 @@
     // -------- QC --------
     if (path === '/qc/batches' || path === '/qc/batches/') {
       if (method === 'GET') return jsonResponse({ batches: QC_BATCHES });
-      // POST batch (e.g. ensure) — return success
+      // POST batch (e.g. ensure) - return success
       return jsonResponse({ success: true, batch_no: (payload && payload.batch_no) || ('DEMO-' + Math.floor(Math.random()*9000)), demo_mode: true });
     }
     if (path === '/qc/batches/ensure') {

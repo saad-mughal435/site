@@ -120,7 +120,7 @@ function clearSageStatusCache(batchNo = null) {
 
 /**
  * Clear stale sage_outbox link for this batch (app DB only), then open the
- * raw-materials modal and Send to Sage flow — for IJ mismatch rows on Yield.
+ * raw-materials modal and Send to Sage flow - for IJ mismatch rows on Yield.
  */
 export async function yieldResetLinkThenSendToSage(batchId, batchNo) {
     if (

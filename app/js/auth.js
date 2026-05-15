@@ -85,7 +85,7 @@ export function hasRole(role) {
 export function hasAnyRole(roles) {
     const user = getCurrentUser();
     if (!user) return false;
-    // See hasRole — demo passes every role check; writes are blocked server-side.
+    // See hasRole - demo passes every role check; writes are blocked server-side.
     if (user.role === 'demo') return true;
     return roles.includes(user.role);
 }
@@ -289,7 +289,7 @@ function mountDemoBanner() {
     if (document.getElementById(DEMO_BANNER_ID)) return;
     const banner = document.createElement('div');
     banner.id = DEMO_BANNER_ID;
-    banner.textContent = 'DEMO MODE — All actions are simulated. No data is saved. Costs are hidden.';
+    banner.textContent = 'DEMO MODE - All actions are simulated. No data is saved. Costs are hidden.';
     banner.style.cssText = [
         'position:fixed', 'top:0', 'left:0', 'right:0', 'z-index:9999',
         'background:#f59e0b', 'color:#1f2937',

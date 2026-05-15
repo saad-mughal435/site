@@ -299,7 +299,7 @@ function buildGroupCardsHtml(groups, { showCompletedChildren = true, idSuffix = 
             const activeHandler = isPO ? 'onStatusActiveToggle' : 'setJOStatus';
             const activeArgs = isPO ? `'${cid}', this.checked, this` : `'${cid}', 'is_active', this.checked`;
             const activeCell = isDone
-                ? `<input type="checkbox" ${isActive ? 'checked' : ''} disabled title="Completed — cannot deactivate" class="w-4 h-4 rounded border-slate-300 text-slate-400 cursor-not-allowed">`
+                ? `<input type="checkbox" ${isActive ? 'checked' : ''} disabled title="Completed - cannot deactivate" class="w-4 h-4 rounded border-slate-300 text-slate-400 cursor-not-allowed">`
                 : `<input type="checkbox" ${isActive ? 'checked' : ''} onchange="${activeHandler}(${activeArgs})" class="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer">`;
             const prioNormal = !isUrgent ? 'selected' : '';
             const prioUrgent = isUrgent ? 'selected' : '';
@@ -604,7 +604,7 @@ function buildProductionSummary(groups) {
             const isAlloc = c.source === 'alloc';
             const joBadgeClass = isAlloc ? 'bg-amber-50 text-amber-700 border border-amber-200' : 'bg-green-50 text-green-700';
             const allocBadge = isAlloc
-                ? `<span class="px-1.5 py-0.5 text-[10px] font-bold rounded bg-slate-200 text-slate-700" title="Item is still in the Allocation queue — not yet activated into a Job Order">QUEUED</span>`
+                ? `<span class="px-1.5 py-0.5 text-[10px] font-bold rounded bg-slate-200 text-slate-700" title="Item is still in the Allocation queue - not yet activated into a Job Order">QUEUED</span>`
                 : '';
             return `<div class="flex items-center justify-between gap-4 py-0.5">
                 <div class="flex items-center gap-2 min-w-0">
@@ -786,7 +786,7 @@ export async function onStatusActiveToggle(childId, checked, el) {
 
 export async function savePendingReason(childId, value) {
     const reason = (value || '').trim();
-    // Avoid spamming API when input lost focus without changes — find local state
+    // Avoid spamming API when input lost focus without changes - find local state
     const group = allGroups.find(g => (g.children || []).some(c => c.child_id === childId));
     const child = group ? group.children.find(c => c.child_id === childId) : null;
     const prev = child ? (child.pending_reason_manual || '') : '';

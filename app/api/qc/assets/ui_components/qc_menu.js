@@ -322,7 +322,7 @@ const QC_REPORT_UV_LIGHT_OPTIONS = ['-', '100%', '98%', 'NOT OK'];
 
 const QC_REPORT_NET_CONTENT_OPTIONS = ['300 ml', '330 ml', '500 ml', '2.5 L'];
 const QC_REPORT_DEFAULT_NET_CONTENT = '300 ml';
-// Sticky default for fresh QC Reports — refreshed from the server on page load.
+// Sticky default for fresh QC Reports - refreshed from the server on page load.
 // Last-saved 98%/100% from the chronologically newest batch wins; falls back to '100%'.
 let QC_REPORT_DEFAULT_UV_LIGHT = '100%';
 
@@ -334,7 +334,7 @@ async function loadQcReportDefaultUv() {
       QC_REPORT_DEFAULT_UV_LIGHT = value;
     }
   } catch (_err) {
-    // Best-effort — fall back to the existing in-memory default.
+    // Best-effort - fall back to the existing in-memory default.
   }
 }
 const QC_REPORT_ROW_TEXT_PLACEHOLDER = '-';
@@ -756,7 +756,7 @@ async function ensureViewMarkup() {
   document.getElementById('qc-cover-page-pdf-btn')?.addEventListener('click', onDownloadCoverPagePdf);
 
   // Refetch tank-cip / filler-mixer-cip data when the user comes back to this
-  // tab — picks up changes propagated from the mixing section without forcing
+  // tab - picks up changes propagated from the mixing section without forcing
   // a manual reload. Skipped while autosaves are pending or in flight so we
   // never overwrite live typing.
   window.addEventListener('focus', () => { void refreshActiveCipFromServerOnFocus(); });
@@ -776,7 +776,7 @@ async function refreshActiveCipFromServerOnFocus() {
   if (getCipAutoSaveInFlight(section)) return;
   if (getCipAutoSaveQueued(section)) return;
   // Bail if the rendered DOM has unsaved local edits relative to the last
-  // saved snapshot — collectTankCipPayload reads from the live form.
+  // saved snapshot - collectTankCipPayload reads from the live form.
   try {
     const livePayload = collectTankCipPayload(section);
     const liveSnapshot = serializeMixingSnapshot(livePayload);
@@ -1065,7 +1065,7 @@ function updateSeamSubmenuVisibility() {
   }
 }
 
-// Item-code prefix → canonical size. Source of truth — names/regex are fallback only.
+// Item-code prefix → canonical size. Source of truth - names/regex are fallback only.
 //   202 → 500 ml CAN, 204 → 300 ml CAN,
 //   301 → 2.5 L PET,  302 → 500 ml PET, 303 → 330 ml PET
 const QC_REPORT_ITEM_CODE_SIZE_MAP = {
@@ -1310,7 +1310,7 @@ function qcReportSampleCellHtml(col, rawValue, dayIndex, dataRowIndex, batchMeta
 }
 
 function isQcReport25LItemCode(itemCode) {
-  // 2.5 L PET items use item codes that start with "301-" — bar_code defaults to "-" for these.
+  // 2.5 L PET items use item codes that start with "301-" - bar_code defaults to "-" for these.
   return String(itemCode || '').trim().toUpperCase().startsWith('301-');
 }
 
@@ -1394,7 +1394,7 @@ function normalizeQcReportRows(value, line, itemCode = '') {
 function qcReportRowHasEnteredBrix(row) {
   const raw = String((row && row.brix) || '').trim();
   if (!raw) return false;
-  if (raw === '-' || raw === '—' || raw === '–') return false;
+  if (raw === '-' || raw === '-' || raw === '–') return false;
   return true;
 }
 
@@ -1411,10 +1411,10 @@ function qcReportSummaryCellDisplay(col, row) {
     const tv = normalizeTimeForInput(raw);
     if (tv) return tv;
     const s = String(raw || '').trim();
-    return s || '—';
+    return s || '-';
   }
   const s = String(raw || '').trim();
-  if (!s) return '—';
+  if (!s) return '-';
   if (col.key === 'comments' && s.length > QC_REPORT_SUMMARY_COMMENTS_MAX) {
     return `${s.slice(0, QC_REPORT_SUMMARY_COMMENTS_MAX)}…`;
   }
@@ -1434,7 +1434,7 @@ function buildQcReportSampleSummaryHtml(columns, rows) {
     .map((col) => `<th scope="col">${escapeHtml(col.label).replace(/\n/g, ' ')}</th>`)
     .join('');
   const colCount = 1 + cols.length;
-  const placeholderRow = `<tr><td colspan="${colCount}" class="qc-muted qc-wizard-sample-summary__placeholder">No sample rows yet. Enter <strong>Brix</strong> on a row below — it will appear here.</td></tr>`;
+  const placeholderRow = `<tr><td colspan="${colCount}" class="qc-muted qc-wizard-sample-summary__placeholder">No sample rows yet. Enter <strong>Brix</strong> on a row below - it will appear here.</td></tr>`;
 
   let body;
   if (lastBrixIdx < 1) {
@@ -1515,7 +1515,7 @@ function normalizeQcReportData(raw, batchMeta) {
   const normalizedDays = days
     .filter((day) => day && typeof day === 'object')
     .map((day, idx) => {
-      // autoLine is derived from item_code on the batch meta, which is authoritative —
+      // autoLine is derived from item_code on the batch meta, which is authoritative -
       // prefer it over day.line so legacy days stored with the wrong line get corrected.
       const line = autoLine || normalizeQcReportLine(day.line) || inferTankCipLineFromRecipe(day.product || autoProduct) || 'PET';
       const docCfg = getQcReportDocConfig(line);
@@ -1648,7 +1648,7 @@ function buildSeamCheckSampleSummaryHtml(rows) {
     .map((col) => `<th scope="col">${escapeHtml(String(col.label || '').replace(/<br\s*\/?>/gi, ' '))}</th>`)
     .join('');
   const colCount = 1 + cols.length;
-  const placeholderRow = `<tr><td colspan="${colCount}" class="qc-muted qc-wizard-sample-summary__placeholder">No seam-check rows yet. Fill all measurements on a row below — it will appear here.</td></tr>`;
+  const placeholderRow = `<tr><td colspan="${colCount}" class="qc-muted qc-wizard-sample-summary__placeholder">No seam-check rows yet. Fill all measurements on a row below - it will appear here.</td></tr>`;
 
   let body;
   if (lastTouchedIdx < 0) {
@@ -4649,7 +4649,7 @@ async function loadSelectedTankCip() {
     resetTankCipAutoSaveState(cipSection);
     // Render BEFORE computing the snapshot. collectTankCipPayload truncates
     // payloadBlocks to the rendered .qc-cip-block count when the section is
-    // visible — if we snapshot first, the DOM is still empty and the snapshot
+    // visible - if we snapshot first, the DOM is still empty and the snapshot
     // ends up as `{blocks: []}`, so every later autosave compares non-empty
     // payload to empty snapshot and fires, pushing stale QC data back into
     // the mixing record via propagate_qc_blocks_to_mixing.
@@ -6039,9 +6039,9 @@ function updateCurrentBatchContextBar() {
   }
 
   bar.classList.remove('qc-hidden');
-  noEl.textContent = String(row.batch_no || '').trim() || '—';
+  noEl.textContent = String(row.batch_no || '').trim() || '-';
   const recipeLine = String(row.product_name || row.recipe_name || '').trim();
-  recipeEl.textContent = recipeLine || '—';
+  recipeEl.textContent = recipeLine || '-';
 
   if (showAllBtn) {
     const searchEl = document.getElementById('qc-batch-search');
@@ -7037,7 +7037,7 @@ export async function loadQCPage() {
   setActiveSubmenu('picking_sheet');
   updateSeamSubmenuVisibility();
   // Refresh the sticky UV default in the background so fresh QC Reports
-  // pre-fill with the user's last selection. Non-blocking — fallback is '100%'.
+  // pre-fill with the user's last selection. Non-blocking - fallback is '100%'.
   loadQcReportDefaultUv();
   await refreshRecipeSummary();
   await refreshBatches();

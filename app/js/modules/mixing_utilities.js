@@ -477,7 +477,7 @@ function _renderAroPanel() {
   panel.dataset.built = '1';
   panel.innerHTML = `
     <div class="flex items-center justify-between mb-3">
-      <h3 class="text-lg font-bold text-slate-900">CMPD REMIN RO Water Plant — Operation Log Sheet</h3>
+      <h3 class="text-lg font-bold text-slate-900">CMPD REMIN RO Water Plant - Operation Log Sheet</h3>
       <span class="text-[11px] text-slate-500">Doc.Ref: KBF/PRD/80.1</span>
     </div>
     <div id="mu-aro-form"></div>

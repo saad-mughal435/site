@@ -1,4 +1,4 @@
-/* search.js — Filters, list/map, date-aware availability */
+/* search.js - Filters, list/map, date-aware availability */
 (function () {
   'use strict';
 

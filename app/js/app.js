@@ -188,7 +188,7 @@ function switchTab(tab, updateHistory = true) {
         }
         if (selectedNav) selectedNav.className = activeClass;
 
-        // Re-apply permission visibility — className assignments above wipe nav-hidden.
+        // Re-apply permission visibility - className assignments above wipe nav-hidden.
         updateMenuVisibility();
 
         // Update page title
@@ -321,7 +321,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Update user display in header (also mounts the demo banner if applicable)
     updateUserDisplay();
 
-    // Start demo-mode column hider — no-op for non-demo users.
+    // Start demo-mode column hider - no-op for non-demo users.
     startDemoHideObserver();
     
     let initialTab = 'home';

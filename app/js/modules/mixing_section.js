@@ -360,7 +360,7 @@ document.addEventListener('visibilitychange', () => {
   void _flushAllAutosaves().catch(() => {});
 });
 
-// Refresh the CIP form when the user comes back to the tab — picks up
+// Refresh the CIP form when the user comes back to the tab - picks up
 // changes propagated from the QC side without requiring a manual reload.
 // Skipped while autosaves are in flight so we never clobber live typing.
 function _isMixingSectionVisible() {
@@ -484,7 +484,7 @@ function _renderCipPanel() {
     <div class="my-3 flex flex-wrap items-center gap-2">
       <label for="ms-cip-tank-select" class="text-xs font-semibold text-slate-700">Tank</label>
       <select id="ms-cip-tank-select" class="${MS_SELECT_BASE_CLASS} max-w-[220px]">
-        <option value="">— Select tank —</option>
+        <option value="">- Select tank -</option>
         ${CIP_TANKS.map((t) => `<option value="${_esc(t.key)}">${_esc(t.label)}</option>`).join('')}
       </select>
     </div>
@@ -1772,7 +1772,7 @@ function _renderMixingAreaRows(days) {
   const total = _daysInMonthFromInput('ms-ma-date');
   const data = Array.isArray(days) ? days.slice(0, total) : [];
   while (data.length < total) data.push({ day: data.length + 1 });
-  // Weekend rows (Sat/Sun) get an orange tint to flag overtime — Mon-Fri get green.
+  // Weekend rows (Sat/Sun) get an orange tint to flag overtime - Mon-Fri get green.
   const ym = _ymFromDateString(document.getElementById('ms-ma-date')?.value || '') || _defaultYm();
   tbody.innerHTML = data.map((day, i) => {
     const cbCell = (col) => `<td class="border border-slate-300 px-0.5 py-0.5 text-center"><input type="checkbox" ${day[col] ? 'checked' : ''} class="ms-ma-cb h-4 w-4 accent-slate-700" data-di="${i}" data-col="${col}" /></td>`;

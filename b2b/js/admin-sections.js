@@ -9,7 +9,7 @@
   const fm = (n) => window.formatMoney(n);
   const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-  /* Shared helpers — CSV, form modal, refresh */
+  /* Shared helpers - CSV, form modal, refresh */
   function exportCSV(filename, rows, columns) {
     const cell = (v) => {
       if (v == null) return '';
@@ -347,7 +347,7 @@
         { name: 'company_id', label: 'Customer company', type: 'select', required: true,
           options: companies.map(c => ({ value: c.id, label: `${c.name} · ${c.tier} · ${c.payment_terms}` })) },
         { name: 'product_id', label: 'Product / SKU', type: 'select', required: true,
-          options: products.map(p => ({ value: p.id, label: `${p.sku} — ${p.name} · MOQ ${p.moq} · ${fm(p.unit_price)}` })) },
+          options: products.map(p => ({ value: p.id, label: `${p.sku} - ${p.name} · MOQ ${p.moq} · ${fm(p.unit_price)}` })) },
         { name: 'qty', label: 'Quantity', type: 'number', required: true, value: 10, min: 1 },
         { name: 'po_number', label: 'PO number', value: 'PO-' + Math.floor(2026000 + Math.random()*9999) },
         { name: 'notes', label: 'Notes', type: 'textarea', rows: 2 },
@@ -529,7 +529,7 @@
     `).join('');
     const ship = o.ship_to || {};
     const html = `<!DOCTYPE html><html><head>
-      <title>${docTitle} ${esc(o.id)} — Anvil Supply Co.</title>
+      <title>${docTitle} ${esc(o.id)} - Anvil Supply Co.</title>
       <meta charset="UTF-8" />
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -569,7 +569,7 @@
       </style>
     </head><body>
       <div class="toolbar">
-        <span class="meta">Anvil Supply Co. — ${docTitle}</span>
+        <span class="meta">Anvil Supply Co. - ${docTitle}</span>
         <button onclick="window.print()">Print / Save as PDF</button>
       </div>
       <div class="header">
@@ -633,7 +633,7 @@
       </div>
     </body></html>`;
     const w = window.open('', '_blank', 'width=900,height=1100');
-    if (!w) { window.toast('Popup blocked — allow popups to print', 'error'); return; }
+    if (!w) { window.toast('Popup blocked - allow popups to print', 'error'); return; }
     w.document.write(html);
     w.document.close();
   }
@@ -731,7 +731,7 @@
       const r = await fetch('/b2b/api/admin/quotes/' + encodeURIComponent(q.id), { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status: next }) }).then(x => x.json());
       if (!r?.success) { window.toast('Could not update', 'error'); return; }
       // Add an email log entry to make it visible
-      await fetch('/b2b/api/admin/email-log', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ to: `${q.company_id}@demo.local`, subject: `Quote ${q.id} — ${next}`, kind: 'quote', body: `Status changed to ${next} for ${q.company_name}.` }) });
+      await fetch('/b2b/api/admin/email-log', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ to: `${q.company_id}@demo.local`, subject: `Quote ${q.id} - ${next}`, kind: 'quote', body: `Status changed to ${next} for ${q.company_name}.` }) });
       modal.remove();
       window.toast(`Quote ${q.id} → ${next}`, 'success');
       rerenderSection('quotes');
@@ -908,7 +908,7 @@
         if (!rows.length) { window.toast('CSV is empty', 'error'); return; }
         modal.remove();
         const headers = Object.keys(rows[0]);
-        window.showModal(`Import preview — ${rows.length} row(s)`, `
+        window.showModal(`Import preview - ${rows.length} row(s)`, `
           <div style="max-height:380px; overflow:auto;">
             <table class="product-table">
               <thead><tr>${headers.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead>

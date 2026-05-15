@@ -1,10 +1,10 @@
-/* mock-api.js — Intercepts fetch to /property/api/* and serves from MANZIL_DATA + localStorage.
+/* mock-api.js - Intercepts fetch to /property/api/* and serves from MANZIL_DATA + localStorage.
    Implements the full Manzil API surface (customer + admin). All writes are local-only. */
 (function () {
   'use strict';
 
   if (!window.MANZIL_DATA) {
-    console.error('mock-api: MANZIL_DATA not loaded — include data.js first');
+    console.error('mock-api: MANZIL_DATA not loaded - include data.js first');
     return;
   }
 
@@ -748,5 +748,5 @@
     ]);
   }
 
-  console.log('Manzil mock-api ready — fetch intercepted for /property/api/*');
+  console.log('Manzil mock-api ready - fetch intercepted for /property/api/*');
 })();

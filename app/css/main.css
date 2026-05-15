@@ -356,7 +356,7 @@ body.sidebar-collapsed > div.flex.h-screen {
     border: 1px solid transparent;
 }
 
-/* Permission-restricted items — must beat `display: flex !important`
+/* Permission-restricted items - must beat `display: flex !important`
    on #sidebar.collapsed .nav-item and any tablet/mobile overrides. */
 #sidebar .nav-item.nav-hidden,
 #sidebar .sb-section.nav-hidden,
@@ -1397,7 +1397,7 @@ a.nav-item.bg-slate-800:hover span,
 
 /* Phones & small tablets (below 768px) */
 @media (max-width: 767px) {
-    /* Remove fixed left padding — sidebar becomes an overlay */
+    /* Remove fixed left padding - sidebar becomes an overlay */
     body > div.flex.h-screen {
         padding-left: 0 !important;
     }
@@ -1480,7 +1480,7 @@ a.nav-item.bg-slate-800:hover span,
         min-height: 100vh;
     }
 
-    /* Global table scroll fix — any direct parent of a table becomes scrollable */
+    /* Global table scroll fix - any direct parent of a table becomes scrollable */
     *:has(> table) {
         overflow-x: auto !important;
         -webkit-overflow-scrolling: touch;
@@ -1638,7 +1638,7 @@ a.nav-item.bg-slate-800:hover span,
 }
 
 /* ==================================================================
-   Demo Plant — Sidebar (ERP minimalism · white / black / red)
+   Demo Plant - Sidebar (ERP minimalism · white / black / red)
    Appended last so cascade order beats earlier dark-theme rules.
    ================================================================== */
 
@@ -2007,7 +2007,7 @@ a.nav-item.bg-slate-800:hover span,
     background: #ffffff !important;
 }
 
-/* ---- Main header (top bar) — keep in sync with sidebar typography ---- */
+/* ---- Main header (top bar) - keep in sync with sidebar typography ---- */
 #top-header {
     background: #ffffff !important;
     border-bottom: 1px solid #ededed !important;
@@ -2070,12 +2070,12 @@ a.nav-item.bg-slate-800:hover span,
     fill: none !important;
 }
 
-/* ---- Main content area background — neutral canvas ---- */
+/* ---- Main content area background - neutral canvas ---- */
 body { background-color: #ffffff !important; }
 #main-content { background-color: #ffffff !important; }
 
 /* ============================================================================
-   Mixing Section CIP — styled blocks (mirrors QC CIP visual language)
+   Mixing Section CIP - styled blocks (mirrors QC CIP visual language)
    ============================================================================ */
 .ms-cip-block {
   border: 1px solid #dbe2ea;
