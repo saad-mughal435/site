@@ -127,7 +127,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="home.css?v=20260515e" />
+<link rel="stylesheet" href="home.css?v=20260515f" />
 </head>
 <body>
 
@@ -495,8 +495,8 @@ const HERO_COPY = {
   },
   eng: {
     title: ['Hands on the line.', 'Eyes on the OEE.'],
-    sub: <Fragment>I&rsquo;m <strong>Saad</strong> - <strong>Automation Engineer</strong> with an Electrical Engineering background (B.Sc. EE / Computer Engineering specialization). On the operations side I run and support Krones beverage lines, coordinate operators during shifts, and troubleshoot production issues. On the software side I build external ERP/OEE/reporting systems around that workflow. I don&rsquo;t modify locked OEM machine automation - my strength is connecting factory operations with practical software systems.</Fragment>,
-    stack: 'Krones · PLC concepts · RCA · GPON',
+    sub: <Fragment>I&rsquo;m <strong>Saad</strong> - <strong>Automation Engineer</strong> with a software-first approach. I run and support Krones beverage production lines, coordinate operators during shifts, troubleshoot production issues, and build ERP / OEE / reporting tools around the production workflow. My strength is connecting factory operations with practical software systems: dashboards, batch records, downtime tracking, QC workflows, inventory visibility, and management reports.</Fragment>,
+    stack: 'Krones line support · RCA · OEE tracking · GPON / PSTN',
     cta: { href: '#projects', label: 'See work →' },
   },
   code: {
@@ -555,12 +555,16 @@ const CODE_SNIPPETS = {
   eng: { title: 'shift_report.yaml', body: (
     <Fragment>
       <span className="comment"># shift A · line A · 2026-05-13</span>{'\n'}
-      <span className="k">operator</span>:       <span className="s">saad</span>{'\n'}
+      <span className="k">line_support</span>:   <span className="s">saad</span>{'\n'}
       <span className="k">line</span>:           <span className="s">Line A - Krones</span>{'\n'}
+      <span className="k">role</span>:{'\n'}
+      {'  '}- <span className="s">line support</span>{'\n'}
+      {'  '}- <span className="s">operator coordination</span>{'\n'}
+      {'  '}- <span className="s">OEE reporting</span>{'\n'}
       <span className="k">subsystems</span>:{'\n'}
       {'  '}- <span className="s">blow_molder</span>:        <span className="v">✓ running</span>{'\n'}
       {'  '}- <span className="s">filler</span>:             <span className="v">✓ running</span>{'\n'}
-      {'  '}- <span className="s">checkmate_inspect</span>:  <span className="v">⚠ idle</span>   <span className="comment"># sensor flag</span>{'\n'}
+      {'  '}- <span className="s">checkmate_inspection</span>: <span className="v">sensor flag · waiting check</span>{'\n'}
       {'  '}- <span className="s">variopac_fs</span>:        <span className="v">✓ running</span>{'\n'}
       {'  '}- <span className="s">palletizer</span>:         <span className="v">✓ running</span>{'\n\n'}
       <span className="k">recipe</span>:         <span className="s">Demo Beverage 500 mL</span>{'\n'}
@@ -654,7 +658,7 @@ const STATS_ALL = [
   { num: 60,   suffix: '%',    label: 'reduction in production reporting time', domain: 'code' },
   { num: 5,    suffix: '',     label: 'departments digitized through MES/ERP workflows', domain: 'code' },
   { num: 2,    suffix: ' yrs', label: 'industrial & telecom-ops experience', domain: 'all' },
-  { num: 7,    suffix: '',     label: 'Krones subsystems supported end-to-end', domain: 'eng' },
+  { num: 7,    suffix: '',     label: 'Krones subsystems supported in production', domain: 'eng' },
   { num: 2,    suffix: ' yrs', label: 'GPON / PSTN / broadband NOC operations', domain: 'eng' },
   { num: 6,    suffix: '+ yrs',label: 'writing Python - uni projects, internships, and production', domain: 'code' },
 ];
@@ -757,7 +761,7 @@ function FAQ() {
     <section id="faq" className="section container">
       <Reveal className="section-head">
         <span className="section-tag">FAQ</span>
-        <h2>About Muhammad Saad - engineer who ships software.</h2>
+        <h2>About Muhammad Saad - engineering background, software delivery focus.</h2>
       </Reveal>
       <Reveal stagger className="faq-list">
         {FAQ_ITEMS.map((f, i) => (
@@ -784,13 +788,15 @@ function About() {
       <div className="about-grid">
         <Reveal className="about-copy">
           <p>I&rsquo;m an <strong>Automation &amp; Software Developer</strong> focused on ERP systems, dashboards, admin panels,
-            and web applications - currently working as <strong>Automation Engineer</strong>, <strong>ERP Developer</strong>,
-            and <strong>IT Administrator</strong> at Kingsley Beverage FZCO in Dubai. I&rsquo;m the sole developer of the
-            enterprise software running across the plant. My engineering background (B.Sc. Electrical Engineering /
-            Computer Engineering specialization, COMSATS Islamabad) means I also run and support the Krones
-            beverage production lines, coordinate operators during shifts, and troubleshoot production issues across
-            blow molding, filling, Checkmate inspection, Variopac FS packaging, palletizing, and PET preform handling.
-            The Krones machine automation is locked OEM - the software I build sits around the production workflow.</p>
+            and web applications. At Kingsley Beverage FZCO in Dubai I work as <strong>Automation Engineer</strong>,
+            <strong>ERP Developer</strong>, and <strong>IT Administrator</strong>, and I&rsquo;m the sole developer of the
+            enterprise software running across the plant.</p>
+          <p>My engineering background (B.Sc. Electrical Engineering / Computer Engineering specialization, COMSATS
+            Islamabad) helps me run and support the Krones beverage production lines, coordinate operators during
+            shifts, and troubleshoot production issues across blow molding, filling, Checkmate inspection, Variopac FS
+            packaging, palletizing, and PET preform handling.</p>
+          <p>The Krones machine automation is OEM-locked; my software work sits around the production workflow through
+            ERP / MES, OEE reporting, QC records, inventory, and management dashboards.</p>
           <p>Before that I spent two years as a <strong>NOC Engineer at PTCL</strong> running GPON / PSTN /
             broadband infrastructure, where I shipped a Python tool that auto-generated configuration scripts
             from tickets, eliminating hours of manual ticket prep every day.</p>
@@ -825,14 +831,14 @@ function About() {
    ========================================================= */
 const EXPERIENCE = [
   { domain: 'all',
-    title: 'Automation Engineer · ERP Developer · IT Administrator',
+    title: 'Automation & Software Developer · ERP Developer · IT Administrator',
     when: 'Jul 2025 - Present',
     company: 'Kingsley Beverage FZCO · Dubai, UAE',
     points: [
       <Fragment><strong>Designed and shipped a full MES/ERP platform from scratch</strong> across PPC, inventory, QC, accounts, production reporting, and Sage integration - sole developer, currently running in production.</Fragment>,
       <Fragment><strong>Reduced production reporting time by an estimated ~60%</strong> through automated OEE monitoring, batch tracking, PDF reports, and centralised workflows across <strong>5 departments</strong>.</Fragment>,
       <Fragment>Administer the underlying stack end-to-end - <em>Linux VM, MongoDB, Sage integration, Cloudflare-fronted nginx</em>, user accounts, backups, and deployment.</Fragment>,
-      <Fragment>Operate and support the <em>Krones</em> beverage production lines, coordinate operators during shifts, and troubleshoot production issues across blow molding, filling, Checkmate inspection, Variopac FS packaging, palletizing, and PET preform handling. (Krones machine automation is locked OEM - I work around it, not on it.)</Fragment>,
+      <Fragment>Run and support the <em>Krones</em> beverage production lines, coordinate operators during shifts, and troubleshoot production issues across blow molding, filling, Checkmate inspection, Variopac FS packaging, palletizing, and PET preform handling. The Krones machine automation is OEM-locked; my work focuses on line support and the surrounding ERP / OEE / reporting workflows.</Fragment>,
       'Support root-cause analysis and commissioning across interconnected line machines; author SOPs and operator instructions.',
     ],
   },
@@ -920,7 +926,7 @@ const PROJECTS = [
     domain: 'all', featured: true, kind: 'Production system · Live interactive demo', year: '2025 - Present',
     sectionEyebrow: 'Featured manufacturing system',
     sectionHeading: 'The platform behind the factory floor',
-    sectionBlurb: 'Internal operations platform built around the beverage production workflow. Replaces Excel + paper across production planning, QC seam-check, batch tracking + expiry, inventory + FIFO, dispatch, accounts, Sage Evolution integration, OEE monitoring - plus 6 print-ready PDF document templates. Sole developer, end-to-end, running in production today at a beverage plant. The platform does not modify Krones machine automation; it digitises the surrounding work.',
+    sectionBlurb: 'Internal operations platform built around the beverage production workflow. Replaces Excel + paper across production planning, QC seam-check, batch tracking + expiry, inventory + FIFO, dispatch, accounts, Sage Evolution integration, OEE monitoring - plus 6 print-ready PDF document templates. Sole developer, end-to-end, running in production today at a beverage plant. The platform does not modify Krones machine automation; it digitizes the surrounding work.',
     title: 'Kingsley MES / ERP / OEE Platform',
     desc: <Fragment>An internal full-stack operations platform that ends manual workflows - spreadsheets, paper
       logs, copy-paste reports, ticket prep - across production planning, QC, batch tracking, inventory, dispatch,
