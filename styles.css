@@ -808,6 +808,7 @@ img, svg { display: block; max-width: 100%; }
   text-transform: uppercase;
   letter-spacing: 1px;
 }
+.contact-k::after { content: ':'; margin-inline-start: 1px; opacity: .65; }
 .contact-v {
   font-size: 14.5px;
   color: var(--fg);

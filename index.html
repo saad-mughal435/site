@@ -145,7 +145,7 @@
     <p style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:1.2px; text-transform:uppercase; color:#5eead4; margin:0 0 12px;">● Currently available in the UAE · Open to relocate worldwide</p>
 
     <h1 style="font-family:'JetBrains Mono',monospace; color:#edf1f8; font-size:34px; margin:0 0 6px;">Muhammad Saad</h1>
-    <h2 style="color:#7c9cff; font-size:18px; font-weight:600; margin:0 0 18px;">Electrical &amp; Automation Engineer building ERP/OEE systems for manufacturing.</h2>
+    <h2 style="color:#7c9cff; font-size:18px; font-weight:600; margin:0 0 18px;">Electrical &amp; Automation Engineer building ERP/OEE systems for manufacturing</h2>
 
     <p>I build software that removes manual work from factory operations — production planning, OEE, QC records, batch tracking, inventory, Sage integration, Excel automation and PDF reporting. My advantage is operating both sides: I can troubleshoot a Krones production line and also build the system that monitors its downtime, the database that stores it, and the report that lands in the GM&rsquo;s inbox.</p>
 
@@ -180,11 +180,11 @@
 
     <h3 style="color:#edf1f8; margin:18px 0 8px; font-size:16px;">Contact</h3>
     <ul style="padding-left:18px; margin:0 0 8px;">
-      <li>Email · <a href="mailto:saad@saadm.dev" style="color:#6e8eff;">saad@saadm.dev</a></li>
-      <li>LinkedIn · <a href="https://www.linkedin.com/in/muhammadsaad435/" style="color:#6e8eff;">linkedin.com/in/muhammadsaad435</a></li>
-      <li>GitHub · <a href="https://github.com/saad-mughal435" style="color:#6e8eff;">github.com/saad-mughal435</a></li>
-      <li>Phone / WhatsApp · +971 50 257 8065</li>
-      <li>Full contact form &amp; tailored CVs · <a href="contact.html" style="color:#6e8eff;">contact.html</a></li>
+      <li>Email: <a href="mailto:saad@saadm.dev" style="color:#6e8eff;">saad@saadm.dev</a></li>
+      <li>LinkedIn: <a href="https://www.linkedin.com/in/muhammadsaad435/" style="color:#6e8eff;">linkedin.com/in/muhammadsaad435</a></li>
+      <li>GitHub: <a href="https://github.com/saad-mughal435" style="color:#6e8eff;">github.com/saad-mughal435</a></li>
+      <li>Phone / WhatsApp: +971 50 257 8065</li>
+      <li>Full contact form &amp; tailored CVs: <a href="contact.html" style="color:#6e8eff;">contact.html</a></li>
     </ul>
 
     <p style="font-size:12px; color:#7a8294; margin-top:24px;">This page is rendered with React for the interactive experience. The static summary above stays available without JavaScript so search engines, LinkedIn previews and strict networks always see the work.</p>
@@ -938,25 +938,7 @@ const PROJECTS = [
     domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
     sectionEyebrow: 'Other software demos',
     sectionHeading: 'Other shapes of software I can ship',
-    sectionBlurb: 'Three additional product-shaped demos — a DTC storefront, a B2B wholesale portal, and a Dubai real-estate marketplace. Each runs end-to-end in the browser via a mock API. They are not the headline of this portfolio (the MES platform above is) — they exist to show that the engineering-plus-software hybrid above can also build general product software.',
-    title: 'Pebble & Co. - DTC storefront',
-    desc: <Fragment>A full direct-to-consumer storefront built end-to-end as a portfolio piece - storefront, catalog,
-      product detail, cart, multi-step checkout, customer account, and a Shopify-style admin panel with
-      dashboard / orders / products / customers / promotions / analytics. Mock API runs entirely in-browser.</Fragment>,
-    bullets: [
-      <Fragment>Storefront + catalog + filters + product detail + cart + multi-step checkout</Fragment>,
-      <Fragment>Customer account: orders, wishlist, addresses, loyalty points</Fragment>,
-      <Fragment>Shopify-style admin: dashboard, orders, products, customers, promotions, analytics</Fragment>,
-      <Fragment>In-browser notifications (toast + bell + email log + demo event ticker)</Fragment>,
-    ],
-    tags: ['HTML5', 'CSS Grid', 'Vanilla JS (ES6+)', 'localStorage', 'Mock API (fetch+XHR shim)', 'Multi-step checkout', 'Admin dashboard', 'Design system'],
-    ctas: [
-      { label: 'Open storefront ↗', href: 'b2c/index.html', target: '_blank', primary: true },
-      { label: 'Open admin ↗', href: 'b2c/admin.html', target: '_blank' },
-    ],
-  },
-  {
-    domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
+    sectionBlurb: 'Four additional product-shaped demos — a B2B wholesale portal closest to the manufacturing brand above, a Dubai real-estate marketplace, a UAE short-stay booking platform, and a DTC storefront. Each runs end-to-end in the browser via a mock API. They are not the headline of this portfolio (the MES platform above is) — they exist to show that the engineering-plus-software hybrid above can also build general product software.',
     title: 'Anvil Supply Co. - B2B wholesale portal',
     desc: <Fragment>A wholesale/industrial portal with tier pricing, MOQs, contract discounts, quote requests, and an
       approval workflow for large orders. Multi-user accounts with purchaser / approver / viewer roles, recurring
@@ -1013,6 +995,24 @@ const PROJECTS = [
       { label: 'Open marketplace ↗', href: 'vacation/index.html', target: '_blank', primary: true },
       { label: 'List a property ↗', href: 'vacation/host-onboard.html', target: '_blank' },
       { label: 'Open admin ↗', href: 'vacation/admin.html', target: '_blank' },
+    ],
+  },
+  {
+    domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
+    title: 'Pebble & Co. - DTC storefront',
+    desc: <Fragment>A full direct-to-consumer storefront built end-to-end as a portfolio piece - storefront, catalog,
+      product detail, cart, multi-step checkout, customer account, and a Shopify-style admin panel with
+      dashboard / orders / products / customers / promotions / analytics. Mock API runs entirely in-browser.</Fragment>,
+    bullets: [
+      <Fragment>Storefront + catalog + filters + product detail + cart + multi-step checkout</Fragment>,
+      <Fragment>Customer account: orders, wishlist, addresses, loyalty points</Fragment>,
+      <Fragment>Shopify-style admin: dashboard, orders, products, customers, promotions, analytics</Fragment>,
+      <Fragment>In-browser notifications (toast + bell + email log + demo event ticker)</Fragment>,
+    ],
+    tags: ['HTML5', 'CSS Grid', 'Vanilla JS (ES6+)', 'localStorage', 'Mock API (fetch+XHR shim)', 'Multi-step checkout', 'Admin dashboard', 'Design system'],
+    ctas: [
+      { label: 'Open storefront ↗', href: 'b2c/index.html', target: '_blank', primary: true },
+      { label: 'Open admin ↗', href: 'b2c/admin.html', target: '_blank' },
     ],
   },
   {

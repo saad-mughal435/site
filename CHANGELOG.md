@@ -7,6 +7,68 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.8.0] - 2026-05-15 — Portfolio credibility polish (deep-scan round)
+
+### Changed
+- **MES walkthrough `demo.html`** — replaced every placeholder `1` /
+  `AED 1.00` / `1 cpm` / `1%` across Job Orders, picking sheet,
+  production control, batches today, inventory (RM + FG), QC
+  measurements, GRN list, supplier lead times, quotations, performa
+  invoice, dispatch, POs, vouchers, Sage entries, FG yield, forecast,
+  customs/FTA, OEE ring chart, line speeds, and all six PDF templates
+  with realistic fabricated numbers (e.g. 4,800 cs × AED 8.45 =
+  AED 40,560; OEE 82%; speed 9,600 bph; QC measurements with proper
+  spec ranges).
+- **B2C `Pebble & Co.`** — fixed the lone "p" that rendered as garbage
+  before the Trending section (now reads "Pebble" with a fluid
+  `clamp()` font size). Softened the rating line from
+  "★★★★★ 4.7 (2,840 reviews)" to "★★★★★ 4.7 demo rating · seed
+  review data".
+- **B2B `Anvil Supply Co.`** — prefixed hero copy with "Demo catalog
+  with 40+ sample SKUs from 8 fictional manufacturers". Top sellers
+  lead now reads "Sample best-selling SKUs from fictional customer
+  activity".
+- **Property `Manzil Properties`** — rewrote tagline ("Portfolio demo
+  with 65+ sample listings..."), recent-closings eyebrow ("Sample
+  data" / "Sample recent closings"), top-agents eyebrow ("Sample
+  brokers" / "Demo agent profiles"), and the four trust cards:
+  Verified listings → Status pipeline, Licensed agents → Agent
+  profiles, Real photography → Representative imagery, Transparent
+  pricing → Price history. No more "live" / "verified" / "actual
+  photographs" claims.
+- **Homepage `index.html`** — H2 trailing period removed; contact
+  bullets switched from middot to colon; PROJECTS array reordered
+  Anvil (B2B) → Manzil (Property) → Vacation Homes → Pebble (B2C)
+  so the B2B demo closest to the manufacturing brand leads, and the
+  B2C storefront sits last as supporting evidence. "Other software
+  demos" blurb updated from "Three additional" to "Four additional".
+- **Contact `contact.html`** — rewrote the ambiguous "reply within 24
+  hours" sentence so the subject is unambiguously the author, added
+  WhatsApp to the list of channels, appended ` · PDF` to each CV
+  download button. `.contact-k::after` now renders a `:` after every
+  field label (Status now reads "Status:" properly).
+
+### Added
+- `assets/portfolio-banner.js` + `assets/portfolio-banner.css` — a
+  dismissible top strip ("Portfolio demo · fabricated data · ← back
+  to saadm.dev") loaded by each sub-site's `app.js`. Recruiters who
+  land directly on `/b2c/`, `/b2b/`, `/property/`, or `/vacation/`
+  via a shared URL now see the demo framing above the fold instead
+  of having to scroll to the footer. Banner is dismissible with
+  `localStorage.portfolioBannerDismissed = '1'` state.
+- **`/app/` demo guide** — a soft top panel on the live MES app
+  dashboard pointing reviewers at the five most-populated tour pages
+  (Dashboard / Job Orders / Quality Control / Inventory / Reporting)
+  so they don't get lost in modules that intentionally show empty
+  states. Dismissible.
+
+### Deferred
+- MES card thumbnail / synthetic dashboard mock-up on the homepage —
+  flagged in the plan but skipped this round. Can ship as a follow-up.
+- Seeding the `/app/` mock interceptor with realistic demo data for
+  the five tour pages — current round adds the demo guide pointing
+  to them, but the data seed remains a follow-up.
+
 ## [1.7.0] - 2026-05-14 — Vacation Homes host onboarding + verification queue
 
 ### Added

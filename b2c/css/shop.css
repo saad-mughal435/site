@@ -251,8 +251,9 @@ p { margin: 0; }
   display: grid; place-items: center;
   color: var(--coral-deep);
   font-family: var(--display);
-  font-size: 96px;
+  font-size: clamp(48px, 9vw, 96px);
   font-weight: 600;
+  letter-spacing: -0.04em;
   opacity: 0.9;
 }
 .hero-image-blob {

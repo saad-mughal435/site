@@ -546,6 +546,22 @@
             <!-- Default home (KPI dashboard for non-mixing roles) -->
             <div id="kbe-home-default">
 
+            <!-- Demo guide banner — points reviewers at the 5 best pages to open
+                 since this disconnected app intentionally shows empty states on
+                 less-trafficked modules. Dismissible via the × button. -->
+            <div id="kbe-demo-guide" style="margin: 0 0 18px; padding: 14px 18px; border-radius: 12px; background: linear-gradient(135deg, rgba(124,156,255,.10), rgba(94,234,212,.08)); border: 1px solid rgba(124,156,255,.22); display:flex; align-items:flex-start; gap:14px; font-family: 'Inter', system-ui, sans-serif;">
+                <div style="font-size:24px; line-height:1;">🧭</div>
+                <div style="flex:1; min-width:0;">
+                    <div style="font-weight:700; color:#0a0d18; margin-bottom:4px;">Demo guide</div>
+                    <div style="font-size:13.5px; color:#1a2640; line-height:1.5;">
+                        This is a sanitised version of the production MES — disconnected from the real database, so some modules show empty states by design. For the best walkthrough, open these five pages first:
+                        <strong style="color:#0a0d18;">Dashboard · Job Orders · Quality Control · Inventory · Reporting / PDF</strong>.
+                    </div>
+                </div>
+                <button type="button" onclick="(function(b){b.remove();try{localStorage.setItem('kbeDemoGuideDismissed','1');}catch(e){}})(this.parentNode)" style="background:transparent; border:0; color:#5a6680; font-size:22px; line-height:1; padding:0 4px; cursor:pointer; border-radius:4px;" aria-label="Dismiss">×</button>
+            </div>
+            <script>if(localStorage.getItem('kbeDemoGuideDismissed')==='1'){var g=document.getElementById('kbe-demo-guide');if(g)g.remove();}</script>
+
             <div class="kbe-topline"></div>
 
             <!-- ========== Header ========== -->
