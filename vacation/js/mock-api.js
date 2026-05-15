@@ -486,6 +486,12 @@
     if (path === '/host/listings' && method === 'POST') {
       var sess3 = jget(LS.host_session, null);
       if (!sess3) return { ok: false, error: 'not_authenticated', status: 401 };
+      // A listing is allowed into the listing-approval queue only if the host
+      // is already verified. Otherwise it waits in awaiting_host_verification.
+      var hostRec3 = hosts().find(function (x) { return x.id === sess3.host_id; });
+      var hostApp3 = getApplication(sess3.host_id);
+      var hostVerified = (hostRec3 && hostRec3.verified) || (hostApp3 && hostApp3.status === 'approved');
+      var initialStatus = hostVerified ? 'pending_review' : 'awaiting_host_verification';
       var nid2 = body.id || ('L' + Date.now());
       var newL = Object.assign({
         id: nid2,
@@ -499,14 +505,18 @@
         cancellation: body.cancellation || 'flexible',
         instant_book: typeof body.instant_book === 'boolean' ? body.instant_book : false,
         featured: false, verified: false,
-        status: 'pending_review'
+        status: initialStatus
       }, body, {
         // Force-overwrite: server-controlled fields don't trust client input.
-        host_id: sess3.host_id, status: 'pending_review', verified: false, featured: false
+        host_id: sess3.host_id, status: initialStatus, verified: false, featured: false
       });
       var lc2 = jget(LS.listings_created, []); lc2.unshift(newL); jset(LS.listings_created, lc2);
-      audit('listing.host.create', nid2, newL.title + ' (pending review)');
-      pushNotification({ title: 'New listing pending review', body: newL.title, kind: 'review' });
+      audit('listing.host.create', nid2, newL.title + ' (' + initialStatus + ')');
+      pushNotification({
+        title: hostVerified ? 'New listing pending review' : 'New listing — awaiting host verification',
+        body: newL.title,
+        kind: 'review'
+      });
       return { ok: true, listing: newL };
     }
     if (path === '/host/listings' && method === 'GET') {
@@ -620,8 +630,8 @@
       var pendingApps = applications().filter(function (a) { return a.status === 'submitted' || a.status === 'changes_requested'; });
       var pendingListings = listings().filter(function (l) { return l.status === 'pending_review'; });
       var alertsList = [];
-      if (pendingApps.length)     alertsList.push({ kind: 'verify',  msg: pendingApps.length + ' host application' + (pendingApps.length === 1 ? '' : 's') + ' awaiting review', count: pendingApps.length, link: '#verifications' });
-      if (pendingListings.length) alertsList.push({ kind: 'listing', msg: pendingListings.length + ' listing' + (pendingListings.length === 1 ? '' : 's') + ' pending approval',     count: pendingListings.length, link: '#verifications' });
+      if (pendingApps.length)     alertsList.push({ kind: 'verify',  msg: pendingApps.length + ' host application' + (pendingApps.length === 1 ? '' : 's') + ' awaiting review', count: pendingApps.length, link: '#host_approvals' });
+      if (pendingListings.length) alertsList.push({ kind: 'listing', msg: pendingListings.length + ' listing' + (pendingListings.length === 1 ? '' : 's') + ' pending approval',     count: pendingListings.length, link: '#listing_approvals' });
       alertsList.push({ kind: 'review', msg: '3 reviews under 3★ — review for moderation', count: 3, link: '#reviews' });
       alertsList.push({ kind: 'payout', msg: '14 host payouts in queue', count: 14, link: '#payments' });
       return {
@@ -824,6 +834,19 @@
         var he_v = jget(LS.hosts_edits, {});
         he_v[hid_v] = Object.assign({}, he_v[hid_v] || {}, { verified: true, verified_at: new Date().toISOString().slice(0, 10) });
         jset(LS.hosts_edits, he_v);
+        // Cascade: any listings parked at `awaiting_host_verification` now
+        // graduate into the listing-approval queue.
+        var le_v = jget(LS.listings_edits, {});
+        var cascaded = 0;
+        listings().filter(function (l) { return l.host_id === hid_v && l.status === 'awaiting_host_verification'; }).forEach(function (l) {
+          le_v[l.id] = Object.assign({}, le_v[l.id] || {}, { status: 'pending_review' });
+          cascaded++;
+        });
+        if (cascaded) {
+          jset(LS.listings_edits, le_v);
+          audit('listing.cascade.host_approved', hid_v, cascaded + ' listing(s) → pending_review');
+          pushNotification({ title: cascaded + ' listing' + (cascaded === 1 ? '' : 's') + ' ready for review', body: 'Host ' + hid_v + ' was approved — their listings are now in the review queue.', kind: 'review' });
+        }
       } else if (act === 'reject') {
         nextApp_v.documents = (app_v.documents || []).map(function (d) {
           return d.status === 'approved' ? d : Object.assign({}, d, { status: 'rejected' });

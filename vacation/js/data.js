@@ -271,9 +271,13 @@
   L({ title: 'Yas Acres — 4BR Golf Villa',                 destination_id: 'd-corniche', type: 'villa',     max_guests: 8, bedrooms: 4, baths: 5, base_nightly: 1850, host_id: 'h02', must_amenities: ['pool','bbq','kids','workspace'], description: '4BR family villa on Yas Acres — Yas Mall + F1 circuit minutes away.' });
   L({ title: 'Fujairah Coast Glamp — 2 Tents',             destination_id: 'd-fuj',      type: 'glamping',  max_guests: 4, bedrooms: 2, baths: 2, base_nightly: 720, host_id: 'h12', must_amenities: ['sea-view','beach','fireplace','breakfast'], description: 'Coastal glamping — 2 tents with sea view, breakfast included.' });
 
-  // Pending-review listings (created via host wizard, awaiting admin approval).
-  L({ title: 'Bluewaters — 2BR Ain Dubai View',            destination_id: 'd-marina',   type: 'apartment', max_guests: 4, bedrooms: 2, baths: 2, base_nightly: 980, host_id: 'h18', verified: false, status: 'pending_review', must_amenities: ['marina-view','sea-view','pool-shared','gym'], description: 'New listing — 2BR with full Ain Dubai view. Boutique tower, walk to Bluewaters restaurants.' });
-  L({ title: 'JBR Rimal 4 — 1BR Newly Renovated',          destination_id: 'd-jbr',      type: 'apartment', max_guests: 2, bedrooms: 1, baths: 1, base_nightly: 540, host_id: 'h09', verified: false, status: 'pending_review', must_amenities: ['sea-view','beach','wifi'], description: 'Fresh renovation, new kitchen, sea view from balcony. Two-night minimum.' });
+  // Listings whose host application is still being reviewed — these stay
+  // off the listing-approval queue until the host's identity is verified.
+  L({ title: 'Bluewaters — 2BR Ain Dubai View',            destination_id: 'd-marina',   type: 'apartment', max_guests: 4, bedrooms: 2, baths: 2, base_nightly: 980, host_id: 'h18', verified: false, status: 'awaiting_host_verification', must_amenities: ['marina-view','sea-view','pool-shared','gym'], description: 'New listing — 2BR with full Ain Dubai view. Boutique tower, walk to Bluewaters restaurants.' });
+  L({ title: 'JBR Rimal 4 — 1BR Newly Renovated',          destination_id: 'd-jbr',      type: 'apartment', max_guests: 2, bedrooms: 1, baths: 1, base_nightly: 540, host_id: 'h09', verified: false, status: 'awaiting_host_verification', must_amenities: ['sea-view','beach','wifi'], description: 'Fresh renovation, new kitchen, sea view from balcony. Two-night minimum.' });
+  // Listings whose host IS already verified — these go straight into the
+  // listing-approval queue.
+  L({ title: 'Hatta Lodge — 3BR with Hot Tub',             destination_id: 'd-hatta',    type: 'cabin',     max_guests: 6, bedrooms: 3, baths: 3, base_nightly: 880, host_id: 'h01', verified: false, status: 'pending_review', must_amenities: ['mountain-view','jacuzzi','fireplace','bbq'], description: 'Mountain lodge with a hot tub on the deck. Sleeps 6.' });
 
   // ===================== GUESTS =====================
   function guest(id, name, email, joined, locale, currency) {
@@ -525,6 +529,6 @@
     PHOTO_POOL: PHOTO_POOL,
     DOCUMENT_TYPES: DOCUMENT_TYPES,
     HOST_APPLICATIONS: HOST_APPLICATIONS,
-    LISTING_STATUSES: ['live', 'pending_review', 'changes_requested', 'paused', 'rejected']
+    LISTING_STATUSES: ['live', 'pending_review', 'changes_requested', 'paused', 'rejected', 'awaiting_host_verification']
   };
 })();
