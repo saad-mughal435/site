@@ -1098,11 +1098,205 @@
     });
   }
 
+  /* ====================== OWNER APPROVALS - identity + documents queue ====================== */
+  function owner_approvals(host) {
+    var statusFilter = '';
+    function refresh() {
+      var qs = statusFilter ? '?status=' + statusFilter : '';
+      ManzilApp.api('/admin/verifications' + qs).then(function (r) {
+        var countEl = document.getElementById('vf-count');
+        if (countEl) countEl.textContent = r.body.items.length + ' applications';
+        var tbody = document.getElementById('vf-tbody');
+        if (!tbody) return;
+        tbody.innerHTML = r.body.items.length ? r.body.items.map(function (a) {
+          return '<tr>'
+            + '<td>' + (a.owner_photo ? '<img src="' + a.owner_photo + '" style="width:36px;height:36px;border-radius:999px;object-fit:cover;">' : '👤') + '</td>'
+            + '<td><strong>' + esc(a.owner_name) + '</strong><div class="m-text-muted" style="font-size:11px;">' + esc(a.owner_id) + '</div></td>'
+            + '<td>' + esc(a.submitted_at || '—') + '</td>'
+            + '<td>' + a.document_count + ' docs · ' + a.submitted_doc_count + ' awaiting</td>'
+            + '<td><span class="m-status-chip ' + esc(a.status) + '">' + esc(a.status.replace('_',' ')) + '</span></td>'
+            + '<td class="m-table-actions"><button class="m-btn m-btn--ghost m-btn--sm" onclick="ManzilAdminActions.openVerification(\'' + a.owner_id + '\')">Review →</button></td>'
+            + '</tr>';
+        }).join('') : '<tr><td colspan="6" class="m-table-empty">No applications match this filter.</td></tr>';
+      });
+    }
+    function chips() {
+      var statuses = ['','submitted','changes_requested','approved','rejected'];
+      return statuses.map(function (s) {
+        var label = s === '' ? 'All' : s.replace('_',' ');
+        return '<button class="m-chip" data-vfstatus="' + s + '" style="' + (statusFilter === s ? 'background:var(--manzil-primary);color:white;' : '') + 'border:1px solid var(--manzil-line);padding:4px 10px;font-size:12px;cursor:pointer;">' + label + '</button>';
+      }).join('');
+    }
+    function paint() {
+      host.innerHTML = ''
+        + '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">'
+        +   '<div><h2 style="margin:0;">Owner approvals</h2><p class="m-text-muted" style="margin:4px 0 0;font-size:13.5px;">Review identity + ownership documents. Once approved, the owner\'s listings move into the listing-approval queue.</p></div>'
+        +   '<span id="vf-count" class="m-text-muted" style="font-size:13px;"></span>'
+        + '</div>'
+        + '<div class="m-flex-wrap" style="margin-top:14px;gap:6px;">' + chips() + '</div>'
+        + '<div class="m-panel m-mt-2" style="padding:0;overflow:auto;"><table class="m-table"><thead><tr><th></th><th>Owner</th><th>Submitted</th><th>Docs</th><th>Status</th><th></th></tr></thead><tbody id="vf-tbody"></tbody></table></div>';
+      document.querySelectorAll('[data-vfstatus]').forEach(function (b) {
+        b.addEventListener('click', function () { statusFilter = b.getAttribute('data-vfstatus'); paint(); refresh(); });
+      });
+    }
+    paint(); refresh();
+  }
+
+  /* ====================== LISTING APPROVALS - only listings whose owner is verified ====================== */
+  function listing_approvals(host) {
+    var statusFilter = 'pending_review';
+    function refresh() {
+      ManzilApp.api('/admin/listings' + (statusFilter ? '?status=' + statusFilter : '')).then(function (r) {
+        var items = (r.body.items || []).filter(function (l) {
+          if (statusFilter) return true;
+          return (l.status || 'active') !== 'awaiting_owner_verification';
+        });
+        var countEl = document.getElementById('la-count');
+        if (countEl) countEl.textContent = items.length + ' listings';
+        var tbody = document.getElementById('la-tbody');
+        if (!tbody) return;
+        tbody.innerHTML = items.length ? items.map(function (l) {
+          var s = l.status || 'active';
+          return '<tr>'
+            + '<td><img src="' + (l.photos && l.photos[0]) + '" style="width:54px;height:36px;object-fit:cover;border-radius:4px;"></td>'
+            + '<td><strong>' + esc(l.title) + '</strong><div class="m-text-muted" style="font-size:11px;">' + esc(l.id) + '</div></td>'
+            + '<td>' + aed(l.price_aed) + (l.transaction === 'rent' ? '/year' : '') + '</td>'
+            + '<td>' + (l.listed_at ? l.listed_at.slice(0,10) : '—') + '</td>'
+            + '<td><span class="m-status-chip ' + esc(s) + '">' + esc(s.replace('_',' ')) + '</span></td>'
+            + '<td class="m-table-actions"><button class="m-btn m-btn--ghost m-btn--sm" onclick="ManzilAdminActions.openListingReview(\'' + l.id + '\')">Review →</button></td>'
+            + '</tr>';
+        }).join('') : '<tr><td colspan="6" class="m-table-empty">No listings in this queue.</td></tr>';
+      });
+    }
+    function chips() {
+      var statuses = [['pending_review','Pending review'],['changes_requested','Changes requested'],['active','Live'],['paused','Paused'],['rejected','Rejected'],['','All']];
+      return statuses.map(function (e) {
+        return '<button class="m-chip" data-lastatus="' + e[0] + '" style="' + (statusFilter === e[0] ? 'background:var(--manzil-primary);color:white;' : '') + 'border:1px solid var(--manzil-line);padding:4px 10px;font-size:12px;cursor:pointer;">' + e[1] + '</button>';
+      }).join('');
+    }
+    function paint() {
+      host.innerHTML = ''
+        + '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">'
+        +   '<div><h2 style="margin:0;">Listing approvals</h2><p class="m-text-muted" style="margin:4px 0 0;font-size:13.5px;">Approve listings once their owner is verified. Listings waiting on owner verification live in <a href="#owner_approvals">Owner approvals</a>.</p></div>'
+        +   '<span id="la-count" class="m-text-muted" style="font-size:13px;"></span>'
+        + '</div>'
+        + '<div class="m-flex-wrap" style="margin-top:14px;gap:6px;">' + chips() + '</div>'
+        + '<div class="m-panel m-mt-2" style="padding:0;overflow:auto;"><table class="m-table"><thead><tr><th>Photo</th><th>Listing</th><th>Price</th><th>Listed</th><th>Status</th><th></th></tr></thead><tbody id="la-tbody"></tbody></table></div>';
+      document.querySelectorAll('[data-lastatus]').forEach(function (b) {
+        b.addEventListener('click', function () { statusFilter = b.getAttribute('data-lastatus'); paint(); refresh(); });
+      });
+    }
+    paint(); refresh();
+  }
+
+  /* ====================== Drawer modals ====================== */
+  function reRenderAdmin() { window.dispatchEvent(new Event('hashchange')); }
+
+  window.ManzilAdminActions = window.ManzilAdminActions || {};
+  window.ManzilAdminActions.openVerification = function (owner_id) {
+    ManzilApp.api('/admin/verifications/' + owner_id).then(function (r) {
+      var a = r.body.application; var o = r.body.owner; var listings = r.body.listings || [];
+      if (!a) return;
+      var drawer = document.createElement('div');
+      drawer.className = 'm-drawer-backdrop';
+      drawer.innerHTML = ''
+        + '<div class="m-drawer">'
+        +   '<div class="m-drawer-head"><div style="display:flex;gap:12px;align-items:center;">' + (o && o.photo ? '<img src="' + o.photo + '" style="width:44px;height:44px;border-radius:999px;object-fit:cover;">' : '👤')
+        +     '<div><h3 style="margin:0;">' + esc(o ? o.name : '(unknown)') + '</h3><div class="m-text-muted" style="font-size:12px;">' + esc(a.owner_id) + ' · submitted ' + (a.submitted_at || '—') + ' · <span class="m-status-chip ' + esc(a.status) + '">' + esc(a.status.replace('_',' ')) + '</span></div></div></div>'
+        +     '<button class="m-btn m-btn--ghost m-btn--sm" data-drawer-close>×</button></div>'
+        +   '<div class="m-drawer-body">'
+        +     (a.notes_from_admin ? '<div class="m-doc-reject-reason" style="margin-bottom:14px;"><strong>Admin notes:</strong> ' + esc(a.notes_from_admin) + '</div>' : '')
+        +     '<p class="m-text-muted" style="font-size:13px;">' + (a.resident ? 'UAE resident' : 'Non-resident owner') + '</p>'
+        +     '<h4 style="margin-top:18px;">Documents</h4>'
+        +     '<div class="m-doc-grid" style="margin-bottom:18px;">' + (a.documents || []).map(function (doc) {
+              var dt = (d.DOCUMENT_TYPES || []).find(function (t) { return t.id === doc.type; }) || { icon: '📎', label: doc.type };
+              return '<div class="m-doc-card' + (doc.status === 'rejected' ? ' rejected' : '') + '">'
+                +    '<div class="m-doc-head"><div class="m-doc-icon">' + dt.icon + '</div><div class="m-doc-title">' + esc(dt.label) + '</div><span class="m-status-chip ' + esc(doc.status) + '">' + esc(doc.status) + '</span></div>'
+                +    '<div class="m-doc-preview"><div class="m-doc-thumb">' + (doc.thumb ? '<img src="' + doc.thumb + '">' : '<span class="m-doc-thumb-fallback">' + (doc.type === 'iban' || doc.type === 'dld_permit' ? '💳' : '📄') + '</span>') + '</div>'
+                +    '<div class="m-doc-meta"><div class="m-doc-meta-name">' + esc(doc.filename) + '</div></div></div>'
+                +    (doc.rejection_reason ? '<div class="m-doc-reject-reason">' + esc(doc.rejection_reason) + '</div>' : '')
+                +    (doc.status !== 'approved' && doc.status !== 'rejected' ? '<div class="m-doc-actions" style="margin-top:8px;"><button class="m-btn m-btn--ghost m-btn--sm" data-doc-app data-owner="' + a.owner_id + '" data-type="' + doc.type + '">✓ Approve</button><button class="m-btn m-btn--ghost m-btn--sm" data-doc-rej data-owner="' + a.owner_id + '" data-type="' + doc.type + '">✕ Reject</button></div>' : '')
+                +    '</div>';
+            }).join('') + '</div>'
+        +     (listings.length ? '<h4>Listings by this owner (' + listings.length + ')</h4><ul style="font-size:13px;">' + listings.map(function (l) { return '<li>' + esc(l.title) + ' · <span class="m-status-chip ' + esc(l.status || 'active') + '">' + esc((l.status || 'active').replace('_',' ')) + '</span></li>'; }).join('') + '</ul>' : '')
+        +   '</div>'
+        +   '<div class="m-drawer-foot">'
+        +     '<button class="m-btn m-btn--ghost" data-drawer-close>Cancel</button>'
+        +     '<button class="m-btn" data-rev-req style="background:#d96b5c;color:white;">↻ Request changes</button>'
+        +     '<button class="m-btn" data-rev-rej style="background:#9c2a1a;color:white;">✕ Reject</button>'
+        +     '<button class="m-btn m-btn--primary" data-rev-app>✓ Approve all</button>'
+        +   '</div>'
+        + '</div>';
+      document.body.appendChild(drawer);
+      setTimeout(function () { drawer.classList.add('show'); }, 10);
+      function close() { drawer.classList.remove('show'); setTimeout(function () { drawer.remove(); }, 200); reRenderAdmin(); }
+      drawer.addEventListener('click', function (e) { if (e.target === drawer || e.target.hasAttribute('data-drawer-close')) close(); });
+      drawer.querySelector('[data-rev-app]').addEventListener('click', function () { ManzilApp.api('/admin/verifications/' + a.owner_id + '/approve', { method: 'POST', body: {} }).then(function () { window.toast && window.toast('Owner approved', 'success'); close(); }); });
+      drawer.querySelector('[data-rev-req]').addEventListener('click', function () { var reason = prompt('What changes does the owner need to make?'); if (!reason) return; ManzilApp.api('/admin/verifications/' + a.owner_id + '/request-changes', { method: 'POST', body: { reason: reason } }).then(function () { window.toast && window.toast('Changes requested', 'success'); close(); }); });
+      drawer.querySelector('[data-rev-rej]').addEventListener('click', function () { var reason = prompt('Reason for rejection (visible to owner):'); if (!reason) return; ManzilApp.api('/admin/verifications/' + a.owner_id + '/reject', { method: 'POST', body: { reason: reason } }).then(function () { window.toast && window.toast('Owner rejected', 'success'); close(); }); });
+      drawer.querySelectorAll('[data-doc-app]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          ManzilApp.api('/admin/verifications/' + btn.getAttribute('data-owner') + '/docs/' + btn.getAttribute('data-type') + '/approve', { method: 'POST', body: {} }).then(function () {
+            window.toast && window.toast('Document approved', 'success'); close();
+            setTimeout(function () { window.ManzilAdminActions.openVerification(btn.getAttribute('data-owner')); }, 220);
+          });
+        });
+      });
+      drawer.querySelectorAll('[data-doc-rej]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var reason = prompt('Why is this document being rejected? (visible to owner):'); if (!reason) return;
+          ManzilApp.api('/admin/verifications/' + btn.getAttribute('data-owner') + '/docs/' + btn.getAttribute('data-type') + '/reject', { method: 'POST', body: { reason: reason } }).then(function () {
+            window.toast && window.toast('Document rejected', 'success'); close();
+            setTimeout(function () { window.ManzilAdminActions.openVerification(btn.getAttribute('data-owner')); }, 220);
+          });
+        });
+      });
+    });
+  };
+
+  window.ManzilAdminActions.openListingReview = function (lid) {
+    ManzilApp.api('/listings/' + lid).then(function (r) {
+      var l = r.body.listing; if (!l) return;
+      var drawer = document.createElement('div');
+      drawer.className = 'm-drawer-backdrop';
+      drawer.innerHTML = ''
+        + '<div class="m-drawer">'
+        +   '<div class="m-drawer-head"><h3 style="margin:0;">Review listing - ' + esc(l.title) + '</h3><button class="m-btn m-btn--ghost m-btn--sm" data-drawer-close>×</button></div>'
+        +   '<div class="m-drawer-body">'
+        +     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px;">' + (l.photos || []).slice(0, 6).map(function (u) { return '<img src="' + esc(u) + '" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:6px;">'; }).join('') + '</div>'
+        +     '<p>' + esc(l.description) + '</p>'
+        +     '<table class="m-table" style="margin-top:14px;">'
+        +       '<tr><td><strong>Type / Transaction</strong></td><td>' + esc(l.type) + ' · ' + esc(l.transaction) + '</td></tr>'
+        +       '<tr><td><strong>Area</strong></td><td>' + esc(((d.AREAS || []).find(function (a) { return a.id === l.area_id; }) || {}).name || '—') + '</td></tr>'
+        +       '<tr><td><strong>Price</strong></td><td>' + aed(l.price_aed) + (l.transaction === 'rent' ? '/year' : '') + '</td></tr>'
+        +       '<tr><td><strong>Beds / Baths / Sqft</strong></td><td>' + l.beds + ' / ' + l.baths + ' / ' + l.sqft + '</td></tr>'
+        +       '<tr><td><strong>Amenities</strong></td><td>' + (l.amenities || []).map(esc).join(', ') + '</td></tr>'
+        +     '</table>'
+        +     (l.review_note ? '<div class="m-doc-reject-reason" style="margin-top:14px;"><strong>Last admin note:</strong> ' + esc(l.review_note) + '</div>' : '')
+        +   '</div>'
+        +   '<div class="m-drawer-foot">'
+        +     '<button class="m-btn m-btn--ghost" data-drawer-close>Cancel</button>'
+        +     '<button class="m-btn" data-lst-req style="background:#d96b5c;color:white;">↻ Request changes</button>'
+        +     '<button class="m-btn" data-lst-rej style="background:#9c2a1a;color:white;">✕ Reject</button>'
+        +     '<button class="m-btn m-btn--primary" data-lst-app>✓ Approve &amp; publish</button>'
+        +   '</div>'
+        + '</div>';
+      document.body.appendChild(drawer);
+      setTimeout(function () { drawer.classList.add('show'); }, 10);
+      function close() { drawer.classList.remove('show'); setTimeout(function () { drawer.remove(); }, 200); reRenderAdmin(); }
+      drawer.addEventListener('click', function (e) { if (e.target === drawer || e.target.hasAttribute('data-drawer-close')) close(); });
+      drawer.querySelector('[data-lst-app]').addEventListener('click', function () { ManzilApp.api('/admin/listings/' + lid + '/approve', { method: 'POST', body: {} }).then(function () { window.toast && window.toast('Listing approved', 'success'); close(); }); });
+      drawer.querySelector('[data-lst-req]').addEventListener('click', function () { var reason = prompt('What needs to be fixed?'); if (!reason) return; ManzilApp.api('/admin/listings/' + lid + '/request-changes', { method: 'POST', body: { reason: reason } }).then(function () { window.toast && window.toast('Changes requested', 'success'); close(); }); });
+      drawer.querySelector('[data-lst-rej]').addEventListener('click', function () { var reason = prompt('Reason for rejection (visible to owner):'); if (!reason) return; ManzilApp.api('/admin/listings/' + lid + '/reject', { method: 'POST', body: { reason: reason } }).then(function () { window.toast && window.toast('Listing rejected', 'success'); close(); }); });
+    });
+  };
+
   // ---------- Expose ----------
   window.ManzilAdmin = {
     dashboard: dashboard, listings: listings, inquiries: inquiries, viewings: viewings,
     agents: agents, agencies: agencies, customers: customers,
     analytics: analytics, promotions: promotions, content: content,
-    moderation: moderation, settings: settings, audit: audit
+    moderation: moderation, settings: settings, audit: audit,
+    owner_approvals: owner_approvals, listing_approvals: listing_approvals
   };
 })();

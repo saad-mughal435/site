@@ -236,8 +236,9 @@
       photos: photos,
       description: spec.description,
       description_ar: spec.description_ar || spec.description,
-      agent_id: spec.agent_id,
-      agency_id: AGENTS.find(function (a) { return a.id === spec.agent_id; }).agency_id,
+      agent_id: spec.agent_id || null,
+      owner_id: spec.owner_id || null,
+      agency_id: spec.agent_id ? (AGENTS.find(function (a) { return a.id === spec.agent_id; }) || {}).agency_id : null,
       listed_at: listed,
       featured: !!spec.featured,
       verified: spec.verified === undefined ? true : spec.verified,
@@ -352,6 +353,97 @@
   pushListing({ title: 'Akoya Oxygen - 3BR Villa',                                 area_id: 'a-damac',    type: 'villa',      beds: 3, baths: 4, sqft: 2800, price_aed: 3200000, agent_id: 'ag18', amenities: ['m-private-pool','m-garden','m-security','m-aircon'], description: 'Newly handed-over Akoya Oxygen 3BR with private pool.' });
   pushListing({ title: 'Mira Oasis - 3BR Townhouse',                               area_id: 'a-ranches',  type: 'townhouse',  beds: 3, baths: 4, sqft: 2100, price_aed: 2950000, agent_id: 'ag14', amenities: ['m-garden','m-security','m-pool','m-kids','m-aircon'], description: 'Reem-style mira oasis 3BR townhouse, end unit.' });
   pushListing({ title: 'Botanica Tower - 1BR Marina',                              area_id: 'a-marina',   type: 'apartment',  beds: 1, baths: 2, sqft: 960, price_aed: 1550000, agent_id: 'ag01', amenities: ['m-pool','m-gym','m-parking','m-balcony','m-marina-v','m-walkable','m-aircon'], description: 'Mid-floor 1BR with full Marina view and large balcony.' });
+
+  // Owner-submitted listings (in the verification / approval pipeline)
+  pushListing({ title: 'Marina Diamond 4 - 2BR Owner Listing',                      area_id: 'a-marina',   type: 'apartment',  beds: 2, baths: 3, sqft: 1280, price_aed: 2150000, owner_id: 'o02', verified: false, status: 'awaiting_owner_verification', amenities: ['m-pool','m-gym','m-parking','m-balcony','m-marina-v','m-aircon'], description: 'Owner-listed 2BR in Marina Diamond 4. Vacant on transfer.' });
+  pushListing({ title: 'Bayz by Danube - 1BR Off-plan (owner)',                     area_id: 'a-business', type: 'apartment',  beds: 1, baths: 2, sqft: 780,  price_aed: 1380000, owner_id: 'o05', verified: false, status: 'awaiting_owner_verification', completion_status: 'off-plan', amenities: ['m-pool','m-gym','m-parking','m-balcony','m-aircon'], description: 'Off-plan 1BR sold by original buyer; handover Q4 2027. Initial sale contract attached.' });
+  pushListing({ title: 'Park Point - 1BR Renovated (owner)',                        area_id: 'a-hills-est',type: 'apartment',  beds: 1, baths: 2, sqft: 920,  price_aed: 1690000, owner_id: 'o01', verified: false, status: 'pending_review', amenities: ['m-pool','m-gym','m-parking','m-balcony','m-aircon'], description: 'Recently renovated 1BR in Park Point. Park-facing, low floor.' });
+
+  // ===================== OWNERS =====================
+  // Individual owners (separate from AGENTS) who use the public listing wizard.
+  // Their listings flow through an admin-verified pipeline before going live.
+  function hp(id, w) { return 'https://images.unsplash.com/photo-' + id + '?w=' + (w || 200) + '&q=80&auto=format&fit=crop&crop=faces'; }
+  var OWNERS = [
+    { id: 'o01', name: 'Hassan Al-Marri',    photo: hp('1500648767791-00dcc994a43e'), joined: '2025-09-12', languages: ['English','Arabic'],         bio: 'Long-term Dubai resident. Listing my Park Point unit while I travel.',   verified: true,  verified_at: '2025-09-20' },
+    { id: 'o02', name: 'Sofia Chen',         photo: hp('1438761681033-6461ffad8d80'), joined: '2026-05-10', languages: ['English','Mandarin'],       bio: 'Marina apartment owner. First time listing on Manzil.',                   verified: false },
+    { id: 'o03', name: 'Karim El-Bakri',     photo: hp('1507003211169-0a1dd7228f2d'), joined: '2026-05-08', languages: ['Arabic','English','French'],bio: 'Have a townhouse in Arabian Ranches. Open to discuss any reasonable offer.', verified: false },
+    { id: 'o04', name: 'Lena Petrova',       photo: hp('1487412720507-e7ab37603c6f'), joined: '2026-04-25', languages: ['Russian','English'],        bio: 'Investment property in Downtown. Looking to exit.',                         verified: false },
+    { id: 'o05', name: 'Rajiv Krishnan',     photo: hp('1564564321837-a57b7070ac4f'), joined: '2026-05-13', languages: ['English','Hindi'],          bio: 'Selling my off-plan unit from Danube. Initial sale contract attached.',     verified: false }
+  ];
+
+  // ===================== DOCUMENT TYPES =====================
+  var DOCUMENT_TYPES = [
+    { id: 'emirates_id_front', label: 'Emirates ID - front',           icon: '🪪', required: 'always',              tooltip: 'Front of your Emirates ID card. Used for identity verification.' },
+    { id: 'emirates_id_back',  label: 'Emirates ID - back',            icon: '🪪', required: 'always',              tooltip: 'Back of your Emirates ID card.' },
+    { id: 'passport',          label: 'Passport bio page',             icon: '📘', required: 'non_resident',        tooltip: 'Required only if you are a non-resident owner.' },
+    { id: 'title_deed',        label: 'Title Deed (Mulkiya / Oqood)',  icon: '📄', required: 'always',              tooltip: 'Mulkiya for ready properties, or Oqood / Initial Sale Contract for off-plan.' },
+    { id: 'dld_permit',        label: 'DLD permit number',             icon: '🏛️', required: 'dubai_only',          tooltip: 'Dubai Land Department listing permit number, format DLD-XXXX-XXXXX.' },
+    { id: 'noc_developer',     label: 'NOC from developer',            icon: '📝', required: 'off_plan_or_rental',  tooltip: 'No Objection Certificate from the developer (off-plan or rental properties).' },
+    { id: 'poa',               label: 'Power of attorney',             icon: '✍️', required: 'optional',            tooltip: 'Only required if you are listing on behalf of a family member.' },
+    { id: 'iban',              label: 'Bank IBAN',                     icon: '💳', required: 'always',              tooltip: 'For proceeds / rent deposit. UAE format: AE + 21 digits.' }
+  ];
+
+  // ===================== OWNER APPLICATIONS =====================
+  // Seed so the admin verification queue is non-empty on cold start.
+  function todayMinus(days) { var d = new Date(); d.setDate(d.getDate() - days); return d.toISOString().slice(0, 10); }
+  function stockDoc(type, filename) { return { type: type, filename: filename, thumb: PHOTO_POOL[(type.length * 7) % PHOTO_POOL.length], status: 'submitted' }; }
+  var OWNER_APPLICATIONS = [
+    {
+      owner_id: 'o01', submitted_at: todayMinus(45), status: 'approved', resident: true,
+      documents: [
+        Object.assign(stockDoc('emirates_id_front', 'eid-front-o01.jpg'), { status: 'approved' }),
+        Object.assign(stockDoc('emirates_id_back',  'eid-back-o01.jpg'),  { status: 'approved' }),
+        Object.assign(stockDoc('title_deed',        'mulkiya-park-point.pdf'), { status: 'approved' }),
+        Object.assign(stockDoc('dld_permit',        'DLD-2025-A-018421.pdf'), { status: 'approved' }),
+        { type: 'iban', filename: 'AE070331234567890981234', thumb: null, status: 'approved' }
+      ],
+      notes_from_admin: 'All documents verified. Welcome to Manzil.'
+    },
+    {
+      owner_id: 'o02', submitted_at: todayMinus(3), status: 'submitted', resident: true,
+      documents: [
+        stockDoc('emirates_id_front', 'eid-front-o02.jpg'),
+        stockDoc('emirates_id_back',  'eid-back-o02.jpg'),
+        stockDoc('title_deed',        'mulkiya-marina-diamond.pdf'),
+        stockDoc('dld_permit',        'DLD-2026-B-021984.pdf'),
+        { type: 'iban', filename: 'AE140260001234567890145', thumb: null, status: 'submitted' }
+      ],
+      notes_from_admin: ''
+    },
+    {
+      owner_id: 'o03', submitted_at: todayMinus(7), status: 'changes_requested', resident: true,
+      documents: [
+        Object.assign(stockDoc('emirates_id_front', 'eid-front-o03.jpg'), { status: 'approved' }),
+        Object.assign(stockDoc('emirates_id_back',  'eid-back-o03-blurry.jpg'), { status: 'rejected', rejection_reason: 'Back side is too blurry - please re-upload a clearer photo.' }),
+        stockDoc('title_deed',        'mulkiya-ranches-saheel.pdf'),
+        { type: 'iban', filename: 'AE090331234567890987654', thumb: null, status: 'approved' }
+      ],
+      notes_from_admin: 'Please re-upload the back side of your Emirates ID and the DLD permit number for this property.'
+    },
+    {
+      owner_id: 'o04', submitted_at: todayMinus(18), status: 'rejected', resident: false,
+      documents: [
+        Object.assign(stockDoc('emirates_id_front', 'eid-front-o04.jpg'), { status: 'approved' }),
+        Object.assign(stockDoc('emirates_id_back',  'eid-back-o04.jpg'),  { status: 'approved' }),
+        Object.assign(stockDoc('passport',          'passport-petrova.pdf'), { status: 'approved' }),
+        Object.assign(stockDoc('title_deed',        'mulkiya-suspect.pdf'), { status: 'rejected', rejection_reason: 'Title deed name does not match the applicant. Please provide a notarised POA if listing on behalf of the registered owner.' }),
+        { type: 'iban', filename: 'AE150331234567890456789', thumb: null, status: 'approved' }
+      ],
+      notes_from_admin: 'Rejected - name on title deed does not match the applicant. Re-apply with notarised POA or have the registered owner submit directly.'
+    },
+    {
+      owner_id: 'o05', submitted_at: todayMinus(0), status: 'submitted', resident: true,
+      documents: [
+        stockDoc('emirates_id_front', 'eid-front-o05.jpg'),
+        stockDoc('emirates_id_back',  'eid-back-o05.jpg'),
+        stockDoc('title_deed',        'oqood-bayz-by-danube.pdf'),
+        stockDoc('noc_developer',     'noc-danube-bayz.pdf'),
+        stockDoc('dld_permit',        'DLD-2026-C-007732.pdf'),
+        { type: 'iban', filename: 'AE070331234567890456789', thumb: null, status: 'submitted' }
+      ],
+      notes_from_admin: ''
+    }
+  ];
 
   // ===================== CUSTOMERS =====================
   function customer(id, name, email, joined, locale, currency, favs, saved, mortgage) {
@@ -494,6 +586,10 @@
     REVIEWS: REVIEWS,
     CURRENCIES: CURRENCIES,
     I18N: I18N,
-    PHOTO_POOL: PHOTO_POOL
+    PHOTO_POOL: PHOTO_POOL,
+    OWNERS: OWNERS,
+    OWNER_APPLICATIONS: OWNER_APPLICATIONS,
+    DOCUMENT_TYPES: DOCUMENT_TYPES,
+    LISTING_STATUSES: ['active', 'pending_review', 'changes_requested', 'awaiting_owner_verification', 'paused', 'rejected', 'draft', 'sold', 'rented', 'expired']
   };
 })();

@@ -7,6 +7,89 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.0] - 2026-05-16 - Manzil owner onboarding wizard + admin verification queue
+
+### Added
+- **Owner onboarding wizard** at `/property/owner-onboard.html` -
+  full producer side of the Manzil marketplace. 6-step wizard with
+  save-and-resume drafts in localStorage (`manzil.owner_draft`):
+  1. About you - name, email, UAE mobile, languages, password, bio.
+  2. Verification - Emirates ID front + back, passport (if non-
+     resident), Title Deed (Mulkiya or Oqood), DLD permit number,
+     NOC from developer (off-plan / rental), POA (optional), bank
+     IBAN. File uploads stored as base64 thumbnails.
+  3. Property basics - transaction (buy/rent/off-plan), type,
+     community/area dropdown, **map-pin selector** (Leaflet lazy-
+     loaded), beds/baths/sqft/year_built, completion status.
+  4. Photos & description - upload from device or paste URL or
+     stock photo. Cover photo badged.
+  5. Amenities & features - 26-amenity multi-select, parking
+     spots, furnished toggle.
+  6. Pricing & terms - branches by transaction type:
+     - Buy: asking price + previous price + commission % + service
+       charge.
+     - Rent: annual rent + cheques + deposit + contract length.
+     - Off-plan: total price + down payment + handover + payment plan.
+     Plus available-from date, viewings-by-appointment, negotiable
+     toggle.
+  7. Review + submit - section cards with Edit jumps + confirm
+     checkbox.
+  Demo-data button prefills every field so reviewers can click
+  Continue through to submit without typing.
+- **Admin verification queue** at `/property/admin.html` -
+  two new sections under a new **"Approvals"** sidebar group:
+  - **Owner approvals** (`#owner_approvals`) - identity + ownership
+    document review queue with status-filter chips (submitted /
+    changes_requested / approved / rejected). Drawer modal shows
+    all docs as thumbnails with per-doc approve/reject buttons
+    plus overall ✓ Approve · ↻ Request changes · ✕ Reject.
+  - **Listing approvals** (`#listing_approvals`) - listings whose
+    owner is verified. Filter chips (Pending review / Changes
+    requested / Live / Paused / Rejected / All). Drawer modal
+    shows listing details + photos + approve/reject.
+  Audit-log entries on every decision.
+- **Owner dashboard** at `/property/owner-dashboard.html` - 6
+  hash-routed sections: My listings (KPIs + pause/unpause), Inquiries,
+  Availability, Earnings (portfolio value), Profile, Verification.
+  Owner picker on first visit so reviewers can impersonate any of
+  5 seed owners spanning every state (o01 approved, o02 submitted,
+  o03 changes_requested, o04 rejected, o05 just-submitted).
+- **Listing status pipeline** - listings now flow
+  `awaiting_owner_verification` → `pending_review` → `active`,
+  with terminal states `changes_requested` / `paused` / `rejected` /
+  `sold` / `rented` / `expired`. Public marketplace stays filtered to
+  `active` only - pending or rejected listings never appear in
+  search. Direct ID/slug lookup still works for owner preview.
+- **Cascade approval**: when admin approves an owner, all that
+  owner's listings sitting at `awaiting_owner_verification` flip to
+  `pending_review` and surface in the listing-approval queue.
+- **Seed data** (`property/js/data.js`): 5 owners + 5 owner
+  applications spanning every status, 8 DOCUMENT_TYPES taxonomy
+  with required-when rules, 2 new `awaiting_owner_verification`
+  seed listings + 1 `pending_review` listing so both admin queues
+  are non-empty on cold start. `LISTING_STATUSES` const added.
+- **Mock API additions** (`property/js/mock-api.js`): 11 new
+  public owner endpoints (`/auth/owner-signup`, `/owner/session`,
+  `/owner/applications`, `/owner/listings`, `/owner/inquiries`,
+  `/owner/dashboard`, etc.) + 5 admin verification endpoints
+  (`/admin/verifications`, per-owner approve/request-changes/reject,
+  per-doc approve/reject, `/admin/listings/{id}/{approve|request-
+  changes|reject}`). Cascade logic on owner approval.
+- **CSS additions** (`property/css/property.css`): new components
+  `.m-stepper`, `.m-wizard`, `.m-doc-card`, `.m-status-chip` with
+  9 state variants, `.m-host-shell`, `.m-drawer-backdrop` /
+  `.m-drawer`, `.m-empty-illustration`, `.m-photo-strip`,
+  `.m-amenity-grid`, `.m-map-pin`. ~250 LOC added.
+- New "List your property" CTA card on `/property/index.html`
+  (alongside Valuation + Yield calculators).
+- New `_redirects` aliases: `/list-property` → owner-onboard.html,
+  `/owner-dashboard` → owner-dashboard.html.
+- New sitemap entries for owner-onboard.html + owner-dashboard.html.
+- Homepage PROJECTS Manzil entry updated: new "List a property ↗"
+  CTA, bullets describe the owner-side wizard + admin verification
+  queue, and tags include "Owner onboarding wizard", "Document
+  upload", "Verification queue".
+
 ## [1.8.1] - 2026-05-15 - Wording polish + skills bars → tier pills
 
 ### Changed

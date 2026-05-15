@@ -38,7 +38,10 @@
     content_areas:      'manzil.content.areas',
     moderation:         'manzil.moderation',
     settings:           'manzil.settings.overrides',
-    audit:              'manzil.audit'
+    audit:              'manzil.audit',
+    owner_session:      'manzil.owner_session',         // { owner_id, started_at }
+    owner_applications: 'manzil.owner_applications',    // overrides on seed OWNER_APPLICATIONS, keyed by owner_id
+    owner_draft:        'manzil.owner_draft'            // wizard save-and-resume payload
   };
 
   function jget(k, def) { try { return JSON.parse(localStorage.getItem(k)) || def; } catch (e) { return def; } }
@@ -70,6 +73,33 @@
     var deleted = jget(LS.agents_deleted, []);
     return seed.concat(created).filter(function (a) { return deleted.indexOf(a.id) === -1; })
       .map(function (a) { return edits[a.id] ? Object.assign({}, a, edits[a.id]) : a; });
+  }
+  // Owners are the public-onboarding equivalent of AGENTS. They submit listings
+  // via the wizard at /property/owner-onboard.html and live in their own
+  // collection separate from agents.
+  function owners() {
+    var seed = (window.MANZIL_DATA.OWNERS || []).slice();
+    var created = jget('manzil.owners.created', []);
+    var edits = jget('manzil.owners.edits', {});
+    return seed.concat(created).map(function (o) { return edits[o.id] ? Object.assign({}, o, edits[o.id]) : o; });
+  }
+  function applications() {
+    var seed = (window.MANZIL_DATA.OWNER_APPLICATIONS || []).slice();
+    var overrides = jget(LS.owner_applications, {});
+    var byOwner = {};
+    seed.forEach(function (a) { byOwner[a.owner_id] = a; });
+    Object.keys(overrides).forEach(function (oid) {
+      byOwner[oid] = Object.assign({}, byOwner[oid] || {}, overrides[oid]);
+    });
+    return Object.keys(byOwner).map(function (oid) { return byOwner[oid]; });
+  }
+  function getApplication(owner_id) {
+    return applications().find(function (a) { return a.owner_id === owner_id; }) || null;
+  }
+  function saveApplication(owner_id, app) {
+    var o = jget(LS.owner_applications, {});
+    o[owner_id] = app;
+    jset(LS.owner_applications, o);
   }
   function agencies() {
     var seed = window.MANZIL_DATA.AGENCIES.slice();
@@ -346,6 +376,153 @@
       return { ok: true };
     }
 
+    // ================== OWNER (public producer side) ==================
+
+    if (path === '/auth/owner-signup' && method === 'POST') {
+      var oid = 'o' + Date.now();
+      var newOwner = {
+        id: oid,
+        name: body.name || 'New owner',
+        email: body.email || '',
+        phone: body.phone || '',
+        photo: body.photo || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80&auto=format&fit=crop&crop=faces',
+        joined: new Date().toISOString().slice(0, 10),
+        languages: body.languages || ['English'],
+        bio: body.bio || '',
+        verified: false
+      };
+      var oc = jget('manzil.owners.created', []); oc.unshift(newOwner); jset('manzil.owners.created', oc);
+      jset(LS.owner_session, { owner_id: oid, started_at: new Date().toISOString() });
+      audit('owner.signup', oid, newOwner.name);
+      return { ok: true, owner: newOwner };
+    }
+    if (path === '/owner/session' && method === 'GET') {
+      var sess = jget(LS.owner_session, null);
+      if (!sess) return { ok: false, error: 'not_authenticated', status: 401 };
+      var oo = owners().find(function (x) { return x.id === sess.owner_id; });
+      return { ok: true, session: sess, owner: oo };
+    }
+    if (path === '/owner/session' && method === 'DELETE') {
+      localStorage.removeItem(LS.owner_session);
+      return { ok: true };
+    }
+    if (path === '/owner/session/impersonate' && method === 'POST') {
+      jset(LS.owner_session, { owner_id: body.owner_id, started_at: new Date().toISOString() });
+      return { ok: true };
+    }
+    if (path === '/owner/applications' && method === 'POST') {
+      var sess1 = jget(LS.owner_session, null);
+      if (!sess1) return { ok: false, error: 'not_authenticated', status: 401 };
+      var existing = getApplication(sess1.owner_id) || { owner_id: sess1.owner_id, submitted_at: null, status: 'draft', documents: [], notes_from_admin: '' };
+      var docs = (body.documents || []).map(function (doc) { return Object.assign({ status: 'submitted' }, doc); });
+      var merged = existing.documents.slice();
+      docs.forEach(function (newDoc) {
+        var idx = merged.findIndex(function (d) { return d.type === newDoc.type; });
+        if (idx >= 0) merged[idx] = newDoc; else merged.push(newDoc);
+      });
+      var nextApp = Object.assign({}, existing, {
+        documents: merged,
+        resident: typeof body.resident === 'boolean' ? body.resident : existing.resident,
+        status: 'submitted',
+        submitted_at: new Date().toISOString().slice(0, 10),
+        notes_from_admin: ''
+      });
+      saveApplication(sess1.owner_id, nextApp);
+      audit('owner.application.submit', sess1.owner_id, merged.length + ' documents');
+      return { ok: true, application: nextApp };
+    }
+    if (path === '/owner/applications/me' && method === 'GET') {
+      var sess2 = jget(LS.owner_session, null);
+      if (!sess2) return { ok: false, error: 'not_authenticated', status: 401 };
+      return { ok: true, application: getApplication(sess2.owner_id) };
+    }
+    if (path === '/owner/listings' && method === 'POST') {
+      var sess3 = jget(LS.owner_session, null);
+      if (!sess3) return { ok: false, error: 'not_authenticated', status: 401 };
+      var ownerRec = owners().find(function (x) { return x.id === sess3.owner_id; });
+      var ownerApp = getApplication(sess3.owner_id);
+      var ownerVerified = (ownerRec && ownerRec.verified) || (ownerApp && ownerApp.status === 'approved');
+      var initialStatus = ownerVerified ? 'pending_review' : 'awaiting_owner_verification';
+      var nid = body.id || ('L' + Date.now());
+      var newL = Object.assign({
+        id: nid,
+        slug: (body.title || 'new-listing').toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 50),
+        owner_id: sess3.owner_id,
+        agent_id: null,
+        agency_id: null,
+        photos: body.photos && body.photos.length ? body.photos : [window.MANZIL_DATA.PHOTO_POOL[0]],
+        listed_at: new Date().toISOString(),
+        featured: false, premium: false, verified: false,
+        amenities: body.amenities || [],
+        status: initialStatus
+      }, body, {
+        owner_id: sess3.owner_id, status: initialStatus, verified: false, featured: false, premium: false
+      });
+      var lc = jget(LS.listings_created, []); lc.unshift(newL); jset(LS.listings_created, lc);
+      audit('listing.owner.create', nid, newL.title + ' (' + initialStatus + ')');
+      return { ok: true, listing: newL };
+    }
+    if (path === '/owner/listings' && method === 'GET') {
+      var sess4 = jget(LS.owner_session, null);
+      if (!sess4) return { ok: false, error: 'not_authenticated', status: 401 };
+      return { ok: true, items: listings().filter(function (l) { return l.owner_id === sess4.owner_id; }) };
+    }
+    if (m = path.match(/^\/owner\/listings\/([^\/]+)$/)) {
+      var sess5 = jget(LS.owner_session, null);
+      if (!sess5) return { ok: false, error: 'not_authenticated', status: 401 };
+      var lt = listings().find(function (x) { return x.id === m[1]; });
+      if (!lt || lt.owner_id !== sess5.owner_id) return { ok: false, error: 'forbidden', status: 403 };
+      if (method === 'PUT') {
+        var ed = jget(LS.listings_edits, {});
+        var nextEd = Object.assign({}, ed[m[1]] || {}, body);
+        var material = ['title', 'description', 'photos', 'price_aed', 'address'];
+        if (lt.status === 'active' && material.some(function (f) { return body.hasOwnProperty(f); })) nextEd.status = 'pending_review';
+        ed[m[1]] = nextEd; jset(LS.listings_edits, ed);
+        audit('listing.owner.update', m[1], '');
+        return { ok: true };
+      }
+      if (method === 'DELETE') {
+        var del = jget(LS.listings_deleted, []);
+        if (del.indexOf(m[1]) === -1) del.push(m[1]);
+        jset(LS.listings_deleted, del);
+        audit('listing.owner.delete', m[1], '');
+        return { ok: true };
+      }
+    }
+    if (m = path.match(/^\/owner\/listings\/([^\/]+)\/(pause|unpause)$/) && method === 'POST') {
+      var ed2 = jget(LS.listings_edits, {});
+      ed2[m[1]] = Object.assign({}, ed2[m[1]] || {}, { status: m[2] === 'pause' ? 'paused' : 'active' });
+      jset(LS.listings_edits, ed2);
+      audit('listing.owner.' + m[2], m[1], '');
+      return { ok: true };
+    }
+    if (path === '/owner/inquiries' && method === 'GET') {
+      var sess6 = jget(LS.owner_session, null);
+      if (!sess6) return { ok: false, error: 'not_authenticated', status: 401 };
+      var myListingIds = listings().filter(function (l) { return l.owner_id === sess6.owner_id; }).map(function (l) { return l.id; });
+      return { ok: true, items: inquiries().filter(function (q) { return myListingIds.indexOf(q.listing_id) !== -1; }) };
+    }
+    if (path === '/owner/dashboard' && method === 'GET') {
+      var sess7 = jget(LS.owner_session, null);
+      if (!sess7) return { ok: false, error: 'not_authenticated', status: 401 };
+      var myL = listings().filter(function (l) { return l.owner_id === sess7.owner_id; });
+      var liveCount = myL.filter(function (l) { return l.status === 'active'; }).length;
+      var pendingCount = myL.filter(function (l) { return l.status === 'pending_review' || l.status === 'awaiting_owner_verification' || l.status === 'changes_requested'; }).length;
+      var myListingIds = myL.map(function (l) { return l.id; });
+      var myInquiries = inquiries().filter(function (q) { return myListingIds.indexOf(q.listing_id) !== -1; });
+      return {
+        ok: true,
+        kpis: {
+          listings_live: liveCount,
+          listings_pending: pendingCount,
+          inquiries_total: myInquiries.length,
+          inquiries_new: myInquiries.filter(function (q) { return q.status === 'new'; }).length
+        },
+        listings: myL,
+        recent_inquiries: myInquiries.slice(0, 6)
+      };
+    }
+
     // ================== ADMIN ==================
 
     // -------- Dashboard --------
@@ -457,6 +634,97 @@
       jset(LS.listings_edits, edits2);
       jset(LS.listings_deleted, del2);
       audit('listing.bulk', op, ids.length + ' listings');
+      return { ok: true };
+    }
+
+    // -------- Listing approval pipeline (admin) --------
+    if (m = path.match(/^\/admin\/listings\/([^\/]+)\/(approve|request-changes|reject)$/) && method === 'POST') {
+      var lid = m[1]; var act = m[2];
+      var ltarget = listings().find(function (x) { return x.id === lid; });
+      if (!ltarget) return { ok: false, error: 'not_found' };
+      var ledits = jget(LS.listings_edits, {});
+      ledits[lid] = ledits[lid] || {};
+      if (act === 'approve')          { ledits[lid].status = 'active';             ledits[lid].verified = true; }
+      if (act === 'request-changes')  { ledits[lid].status = 'changes_requested';  ledits[lid].review_note = body.reason || ''; }
+      if (act === 'reject')           { ledits[lid].status = 'rejected';           ledits[lid].review_note = body.reason || ''; }
+      jset(LS.listings_edits, ledits);
+      audit('listing.' + act, lid, body.reason || '');
+      return { ok: true };
+    }
+
+    // -------- Owner verification queue (admin) --------
+    if (path === '/admin/verifications' && method === 'GET') {
+      var apps = applications();
+      if (params.status) apps = apps.filter(function (a) { return a.status === params.status; });
+      var withOwner = apps.map(function (a) {
+        var o_app = owners().find(function (x) { return x.id === a.owner_id; });
+        return Object.assign({}, a, {
+          owner_name: o_app ? o_app.name : '(owner removed)',
+          owner_photo: o_app ? o_app.photo : null,
+          document_count: (a.documents || []).length,
+          submitted_doc_count: (a.documents || []).filter(function (d) { return d.status === 'submitted'; }).length
+        });
+      });
+      withOwner.sort(function (a, b) { return (b.submitted_at || '').localeCompare(a.submitted_at || ''); });
+      return { ok: true, items: withOwner };
+    }
+    if (m = path.match(/^\/admin\/verifications\/([^\/]+)$/) && method === 'GET') {
+      var app_d = getApplication(m[1]);
+      if (!app_d) return { ok: false, error: 'not_found' };
+      var o_d = owners().find(function (x) { return x.id === m[1]; });
+      var l_d = listings().filter(function (l) { return l.owner_id === m[1]; });
+      return { ok: true, application: app_d, owner: o_d, listings: l_d };
+    }
+    if (m = path.match(/^\/admin\/verifications\/([^\/]+)\/(approve|request-changes|reject)$/) && method === 'POST') {
+      var oid_v = m[1]; var actV = m[2];
+      var appV = getApplication(oid_v);
+      if (!appV) return { ok: false, error: 'not_found' };
+      var nextStatus = actV === 'approve' ? 'approved' : (actV === 'request-changes' ? 'changes_requested' : 'rejected');
+      var nextAppV = Object.assign({}, appV, {
+        status: nextStatus,
+        notes_from_admin: body.reason || appV.notes_from_admin || ''
+      });
+      if (actV === 'approve') {
+        nextAppV.documents = (appV.documents || []).map(function (d) { return Object.assign({}, d, { status: 'approved' }); });
+        // Mark owner verified
+        var oe = jget('manzil.owners.edits', {});
+        oe[oid_v] = Object.assign({}, oe[oid_v] || {}, { verified: true, verified_at: new Date().toISOString().slice(0, 10) });
+        jset('manzil.owners.edits', oe);
+        // Cascade: awaiting_owner_verification listings flip to pending_review
+        var leC = jget(LS.listings_edits, {});
+        var cascaded = 0;
+        listings().filter(function (l) { return l.owner_id === oid_v && l.status === 'awaiting_owner_verification'; }).forEach(function (l) {
+          leC[l.id] = Object.assign({}, leC[l.id] || {}, { status: 'pending_review' });
+          cascaded++;
+        });
+        if (cascaded) {
+          jset(LS.listings_edits, leC);
+          audit('listing.cascade.owner_approved', oid_v, cascaded + ' listing(s) -> pending_review');
+        }
+      } else if (actV === 'reject') {
+        nextAppV.documents = (appV.documents || []).map(function (d) {
+          return d.status === 'approved' ? d : Object.assign({}, d, { status: 'rejected' });
+        });
+      }
+      saveApplication(oid_v, nextAppV);
+      audit('verification.' + actV, oid_v, body.reason || '');
+      return { ok: true, application: nextAppV };
+    }
+    if (m = path.match(/^\/admin\/verifications\/([^\/]+)\/docs\/([^\/]+)\/(approve|reject)$/) && method === 'POST') {
+      var oidD = m[1]; var dtype = m[2]; var dact = m[3];
+      var appD = getApplication(oidD);
+      if (!appD) return { ok: false, error: 'not_found' };
+      var docs = (appD.documents || []).map(function (d) {
+        if (d.type !== dtype) return d;
+        return Object.assign({}, d, {
+          status: dact === 'approve' ? 'approved' : 'rejected',
+          rejection_reason: dact === 'reject' ? (body.reason || 'Please re-upload') : undefined
+        });
+      });
+      var nextAppD = Object.assign({}, appD, { documents: docs });
+      if (dact === 'reject' && appD.status !== 'changes_requested') nextAppD.status = 'changes_requested';
+      saveApplication(oidD, nextAppD);
+      audit('verification.doc.' + dact, oidD, dtype + (body.reason ? ' - ' + body.reason : ''));
       return { ok: true };
     }
 
