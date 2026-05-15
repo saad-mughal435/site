@@ -67,7 +67,7 @@ img, video, iframe, pre, table { max-width: 100%; }
 /* Every grid child can shrink — kills overflow from long pre/code/text content. */
 .hero > *, .stats > *, .about-grid > *, .projects-grid > *,
 .skills-grid > *, .contact-box > *, .hero-meta > *,
-.skill-card > ul > li, .project > * { min-width: 0; }
+.skill-card > ul > li > .skill-name, .project > * { min-width: 0; }
 
 a { color: var(--blue); text-decoration: none; transition: color var(--t-fast) ease; }
 a:hover { color: #a8b8ff; }
@@ -706,7 +706,11 @@ img, svg { display: block; max-width: 100%; }
   padding-top: 14px;
 }
 .mini-code { margin: 0; font-family: var(--mono); font-size: 12.5px; line-height: 1.6; color: var(--fg); white-space: pre; overflow-x: auto; }
-.project-cta { margin-top: 14px; display: flex; gap: 8px; flex-wrap: wrap; }
+.project-cta { margin-top: 14px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.project-cta .cta-subtitle { flex-basis: 100%; font-size: 12.5px; color: var(--fg-mute); margin-top: 4px; }
+.project-cta .cta-tip { flex-basis: 100%; font-size: 12.5px; color: var(--accent); margin-top: 2px; padding: 8px 12px; background: rgba(94,234,212,.06); border: 1px solid rgba(94,234,212,.18); border-radius: 8px; }
+.project-cta .cta-tip strong { color: var(--fg); font-weight: 600; }
+.project-cta .cta-tip em { font-style: normal; color: var(--accent); font-weight: 500; }
 
 /* =========================================================
    SKILLS
@@ -732,25 +736,25 @@ img, svg { display: block; max-width: 100%; }
   letter-spacing: 1.2px;
   color: var(--teal);
 }
-.skill-card ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
-.skill-card li { display: flex; align-items: center; gap: 12px; }
-.bar {
-  flex: 0 0 92px;
-  height: 6px;
-  background: rgba(255,255,255,0.06);
+.skill-card ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.skill-card li { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.skill-name { font-size: 13.5px; color: var(--fg); flex: 1 1 auto; min-width: 0; }
+.skill-tier {
+  flex: 0 0 auto;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 8px;
   border-radius: 999px;
-  overflow: hidden;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  font-family: var(--mono);
 }
-.bar > span {
-  display: block;
-  height: 100%;
-  width: 0;
-  background: var(--grad);
-  border-radius: 999px;
-  transition: width 1.4s var(--easing);
-}
-.skill-card.inView .bar > span { width: var(--w, 60%); }
-.bar-lbl { font-size: 13.5px; color: var(--fg); }
+.skill-tier--production  { color: #5eead4; background: rgba(94,234,212,.10);  border-color: rgba(94,234,212,.22); }
+.skill-tier--comfortable { color: #93b3ff; background: rgba(124,156,255,.10); border-color: rgba(124,156,255,.22); }
+.skill-tier--working     { color: #f5cf81; background: rgba(245,207,129,.10); border-color: rgba(245,207,129,.22); }
+.skill-tier--learning    { color: #c9b6ff; background: rgba(201,182,255,.08); border-color: rgba(201,182,255,.20); }
 
 /* =========================================================
    CONTACT
@@ -1130,7 +1134,6 @@ a.contact-v:hover { color: var(--blue); }
   /* Skills */
   .skills-grid { grid-template-columns: 1fr; gap: 12px; }
   .skill-card { padding: 18px; }
-  .bar { flex: 0 0 78px; }
 
   /* Contact box */
   .contact-box { padding: 28px 22px; gap: 26px; }
