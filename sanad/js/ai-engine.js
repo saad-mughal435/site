@@ -228,8 +228,88 @@
     gaps: "You are Sanad. Given recent support tickets and the current knowledge base, identify 3-5 article gaps — topics customers ask about that aren't well documented. Output a numbered markdown list with the suggested title in bold and why it's needed."
   };
 
+  /* ===================================================================
+     Local AI (in-browser, real open-source LLM)
+     ===================================================================
+     Loads Qwen 2.5 0.5B Instruct from HuggingFace via transformers.js on
+     demand. The download is ~280MB at q4 quantization; cached in the
+     browser's Cache API so subsequent visits are instant. Pure ES module
+     import, lazy — nothing is downloaded until the user toggles it on.
+     Falls back to the mock dictionary if transformers.js fails to load
+     (e.g. WASM blocked, ad-block on CDN). */
+  var TRANSFORMERS_URL = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.7.5';
+  var LOCAL_MODEL = 'onnx-community/Qwen2.5-0.5B-Instruct';
+  var Local = {
+    ready: false,
+    loading: false,
+    progress: {},          // file -> percent
+    generator: null,
+    TextStreamer: null,
+    err: null,
+
+    async load(onEvent) {
+      if (this.ready || this.loading) return;
+      this.loading = true; this.err = null;
+      try {
+        var mod = await import(/* @vite-ignore */ TRANSFORMERS_URL);
+        // Prefer WebGPU when available; transformers.js falls back to WASM.
+        var device = (typeof navigator !== 'undefined' && navigator.gpu) ? 'webgpu' : 'wasm';
+        var self = this;
+        this.generator = await mod.pipeline('text-generation', LOCAL_MODEL, {
+          dtype: 'q4',
+          device: device,
+          progress_callback: function (data) {
+            if (data && data.file) self.progress[data.file] = data.progress || 0;
+            if (typeof onEvent === 'function') onEvent(data);
+          }
+        });
+        this.TextStreamer = mod.TextStreamer;
+        this.ready = true;
+        this.loading = false;
+        return { device: device };
+      } catch (e) {
+        this.err = e;
+        this.loading = false;
+        if (typeof onEvent === 'function') onEvent({ status: 'error', message: String(e && e.message || e) });
+        throw e;
+      }
+    },
+
+    async generate(opts) {
+      // opts = { system, messages, max_new_tokens?, onToken? }
+      if (!this.ready) throw new Error('local-not-ready');
+      var msgs = [{ role: 'system', content: opts.system }].concat(opts.messages);
+      var streamer = null;
+      if (opts.onToken && this.TextStreamer) {
+        streamer = new this.TextStreamer(this.generator.tokenizer, {
+          skip_prompt: true,
+          skip_special_tokens: true,
+          callback_function: opts.onToken
+        });
+      }
+      var started = Date.now();
+      var out = await this.generator(msgs, {
+        max_new_tokens: opts.max_new_tokens || 200,
+        do_sample: false,
+        streamer: streamer
+      });
+      var text = '';
+      if (out && out[0] && out[0].generated_text) {
+        var gen = out[0].generated_text;
+        if (typeof gen === 'string') text = gen;
+        else if (Array.isArray(gen)) {
+          var last = gen[gen.length - 1];
+          text = last && last.content ? last.content : '';
+        }
+      }
+      return { text: text.trim(), latency_ms: Date.now() - started };
+    }
+  };
+
   var SanadAI = {
     health: health,
+    local: Local,
+    preferLocal: false,        // set by chat.js when user enables local mode
 
     replySuggestion: function (conv) {
       var thread = buildThread(conv);
@@ -287,10 +367,35 @@
     },
 
     kbAnswer: function (opts) {
-      // opts = { question, history?, stream? }
+      // opts = { question, history?, stream?, onToken? }
+      // Smaller KB context for local (token-budget) than for hosted Claude.
+      var localCtx = KB.slice(0, 8).map(function (a) { return '## ' + a.title + '\n' + (a.body_md || '').slice(0, 350); }).join('\n\n');
       var kbCtx = KB.slice(0, 20).map(function (a) { return '## ' + a.title + '\n' + (a.body_md || '').slice(0, 800); }).join('\n\n');
       var msgs = (opts.history || []).slice(-6).map(function (h) { return { role: h.role, content: h.content }; });
       msgs.push({ role: 'user', content: opts.question });
+
+      // 1) Local mode wins when ready
+      if (SanadAI.preferLocal && Local.ready) {
+        var started = Date.now();
+        return Local.generate({
+          system: SYS.kb_answer + '\n\n[Knowledge base]\n' + localCtx,
+          messages: msgs,
+          max_new_tokens: 220,
+          onToken: opts.onToken
+        }).then(function (r) {
+          logCall('kb_answer', { feature: 'kb_answer', model: LOCAL_MODEL, tokens_in: 0, tokens_out: 0, latency_ms: r.latency_ms, fallback: false, cost_usd: 0, local: true });
+          return { text: stripCites(r.text), citations: kbCitations(r.text), model: LOCAL_MODEL, latency_ms: r.latency_ms, fallback: false, local: true };
+        }).catch(function (e) {
+          // Local blew up → fall through to mock
+          var ms = Date.now() - started;
+          return mockReply({ feature: 'kb_answer', messages: msgs }, LOCAL_MODEL, ms);
+        }).then(function (r) {
+          if (r && r.local) return r;
+          return { text: stripCites(r.text), citations: kbCitations(r.text), model: r.model, latency_ms: r.latency_ms, fallback: r.fallback };
+        });
+      }
+
+      // 2) Otherwise: hosted call (Worker proxy) with mock fallback
       return call({
         feature: 'kb_answer',
         system: SYS.kb_answer + '\n\n[Knowledge base]\n' + kbCtx,
