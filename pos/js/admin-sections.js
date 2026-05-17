@@ -560,7 +560,7 @@
                   return '<tr>'
                     + '<td style="font-family:var(--font-mono);font-weight:600;">' + esc(d.code || d.name) + '</td>'
                     + '<td>' + esc(d.type) + '</td>'
-                    + '<td style="font-family:var(--font-mono);">' + (d.type === 'percent' ? d.value + '%' : (d.type === 'aed' ? money(d.value) : esc(d.type))) + '</td>'
+                    + '<td style="font-family:var(--font-mono);">' + (d.type === 'pct' || d.type === 'percent' ? d.value + '%' : (d.type === 'fixed' || d.type === 'aed' ? money(d.value) : esc(d.type))) + '</td>'
                     + '<td style="font-family:var(--font-mono);">' + (d.min_total ? money(d.min_total) : '—') + '</td>'
                     + '<td>' + (d.active ? '<span class="pos-status-chip completed">Active</span>' : '<span class="pos-status-chip voided">Paused</span>') + '</td>'
                     + '<td><button class="pos-btn" data-tog="' + d.id + '" style="padding:5px 10px;min-height:30px;font-size:11px;">' + (d.active ? 'Pause' : 'Resume') + '</button>'
@@ -575,7 +575,7 @@
             body:
               '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">'
               + '<label class="pos-field"><span>Code / Name</span><input class="pos-input" id="df-code" placeholder="OPENING5" /></label>'
-              + '<label class="pos-field"><span>Type</span><select class="pos-select" id="df-type"><option value="percent">% off</option><option value="aed">AED off</option><option value="bogo">BOGO</option></select></label>'
+              + '<label class="pos-field"><span>Type</span><select class="pos-select" id="df-type"><option value="pct">% off</option><option value="fixed">AED off</option><option value="bogo">BOGO</option></select></label>'
               + '<label class="pos-field"><span>Value</span><input class="pos-input" id="df-val" type="number" step="1" value="10" /></label>'
               + '<label class="pos-field"><span>Min total (optional)</span><input class="pos-input" id="df-min" type="number" step="1" placeholder="0" /></label>'
               + '</div>',
@@ -644,7 +644,7 @@
         b.addEventListener('click', function () {
           var t = tbls.find(function (x) { return x.id === b.getAttribute('data-t'); });
           var next = t.status === 'free' ? 'seated' : (t.status === 'seated' ? 'occupied' : (t.status === 'occupied' ? 'dirty' : 'free'));
-          PosApp.api('/tables/' + t.id + '/' + (next === 'free' ? 'free' : 'seat'), { method: 'PUT' }).then(function () {
+          PosApp.api('/tables/' + t.id + '/status', { method: 'PUT', body: { status: next } }).then(function () {
             window.toast(t.label + ' → ' + next, 'success'); Admin.tables(host);
           });
         });
