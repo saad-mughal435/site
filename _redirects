@@ -34,3 +34,8 @@
 /qahwa     /pos/index.html     302
 /cashier   /pos/terminal.html  302
 /kds       /pos/kitchen.html   302
+
+# Sanad friendly aliases
+/sanad-app /sanad/index.html   302
+/copilot   /sanad/inbox.html   302
+/helpdesk  /sanad/index.html   302
