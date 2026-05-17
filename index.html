@@ -162,6 +162,7 @@
       <li><strong>Manzil Properties</strong> - Dubai real-estate marketplace demo. Map + list search, agent profiles, mortgage / valuation / yield calculators, 13-section admin SPA. <a href="property/index.html" style="color:#6e8eff;">Open →</a></li>
       <li><strong>Vacation Homes</strong> - UAE short-stay booking demo. Hand-rolled date-range picker, conflict-checked bookings, 6-step host onboarding wizard with document upload, admin verification queue. <a href="vacation/index.html" style="color:#6e8eff;">Open →</a></li>
       <li><strong>Qahwa POS</strong> - café / quick-service POS demo. Touch cashier terminal, kitchen display, modifier-driven menus, shift cash reconciliation with Z-reports, 14-section admin. <a href="pos/index.html" style="color:#6e8eff;">Open →</a></li>
+      <li><strong>Sanad</strong> - AI customer-support copilot demo. Agent inbox with Claude-powered AI sidebar (reply / summary / sentiment / category / EN↔AR translate), RAG chat widget, knowledge base, 11-section admin with model selector + editable system prompt. <a href="sanad/index.html" style="color:#6e8eff;">Open →</a></li>
       <li><strong>Pebble &amp; Co.</strong> - direct-to-consumer storefront demo with admin panel. <a href="b2c/index.html" style="color:#6e8eff;">Open →</a></li>
     </ul>
 
@@ -1035,6 +1036,25 @@ const PROJECTS = [
       { label: 'Cashier terminal ↗', href: 'pos/terminal.html', target: '_blank' },
       { label: 'Kitchen display ↗', href: 'pos/kitchen.html', target: '_blank' },
       { label: 'Open admin ↗', href: 'pos/admin.html', target: '_blank' },
+    ],
+  },
+  {
+    domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
+    title: 'Sanad - AI customer-support copilot',
+    desc: <Fragment>A SaaS-style helpdesk with Claude integrated at every touchpoint. Built to demonstrate <strong>real LLM wiring</strong> end-to-end — system prompts, streaming, prompt caching, server-side key handling via a Cloudflare Worker proxy, graceful mock fallback when the key isn't set, and cost tracking — not just an OpenAI playground demo. Works offline in deterministic mock mode out of the box.</Fragment>,
+    bullets: [
+      <Fragment><strong>Agent inbox with AI sidebar</strong>: suggested reply (with KB citations), conversation summary, sentiment, auto-category, EN↔AR translation, AI-drafted quick-action reasons. Click "Insert" to push the AI's draft into the composer.</Fragment>,
+      <Fragment><strong>Customer chat widget</strong>: streaming AI replies grounded in the knowledge base with clickable citation chips. "Talk to a human" creates a real ticket in the agent inbox.</Fragment>,
+      <Fragment><strong>Knowledge base</strong>: 77 articles in 6 categories, tiny custom markdown renderer, admin-only AI actions per article (<em>Generate FAQ</em>, <em>Suggest improvements</em>, <em>Translate to Arabic</em>), plus a "Find gaps" feature that clusters recent tickets and proposes new articles.</Fragment>,
+      <Fragment><strong>11-section admin SPA</strong>: dashboard with sentiment split + hourly heatmap + AI-cost ticker, conversations, KB CRUD, categories, agents with permission matrix, customers, <strong>AI Console</strong> (model selector Haiku 4.5 / Sonnet 4.6 / Opus 4.7, editable system prompt with test-with-sample preview, temperature / max-tokens / cache toggles), analytics (daily volume, by-category, fallback rate, latency, cost, CSV export), integrations, settings, audit log.</Fragment>,
+      <Fragment><strong>Live + mock modes</strong>: detects whether a Cloudflare Worker proxy with ANTHROPIC_API_KEY is configured via <code>GET /api/sanad/ai/health</code> and shows a Live/Demo badge in the topbar. Every feature gracefully falls back to a deterministic pattern-matched mock when no key is set — the demo never breaks for visitors.</Fragment>,
+    ],
+    tags: ['Vanilla JS (ES6+)', 'Claude API', 'CF Worker proxy', 'RAG (lite)', 'Streaming', 'Prompt caching', 'Server-side keys', 'Mock fallback', 'EN/AR i18n', 'localStorage'],
+    ctas: [
+      { label: 'Open inbox ↗', href: 'sanad/inbox.html', target: '_blank', primary: true },
+      { label: 'Try chat widget ↗', href: 'sanad/chat.html', target: '_blank' },
+      { label: 'Help centre ↗', href: 'sanad/kb.html', target: '_blank' },
+      { label: 'Open admin ↗', href: 'sanad/admin.html', target: '_blank' },
     ],
   },
   {

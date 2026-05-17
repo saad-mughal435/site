@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Inbox — Sanad</title>
+<meta name="robots" content="noindex" />
+<meta name="theme-color" content="#0b1220" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2064%2064'%3E%3Crect%20width%3D'64'%20height%3D'64'%20rx%3D'14'%20fill%3D'%230b1220'/%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20font-family%3D'serif'%20font-weight%3D'700'%20font-size%3D'30'%20fill%3D'%238b5cf6'%20text-anchor%3D'middle'%3ES%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/sanad.css?v=20260517a" />
+</head>
+<body class="sanad">
+
+<div class="snd-inbox">
+  <div class="snd-topbar">
+    <a class="snd-topbar-brand" href="index.html"><span class="snd-topbar-mark">S</span> Sanad</a>
+    <nav class="snd-topbar-nav">
+      <a href="inbox.html" class="is-active">Inbox</a>
+      <a href="chat.html">Chat widget</a>
+      <a href="kb.html">Knowledge base</a>
+      <a href="admin.html">Admin</a>
+    </nav>
+    <div class="snd-topbar-spacer"></div>
+    <span class="snd-mode-badge" id="mode-badge" title="Loading mode...">…</span>
+  </div>
+
+  <aside class="snd-inbox-list">
+    <div class="snd-inbox-list-head">
+      <input class="snd-inbox-search" id="cv-search" placeholder="Search conversations…" />
+    </div>
+    <div class="snd-inbox-filters" id="cv-filters"></div>
+    <div class="snd-conv-list" id="cv-list"></div>
+  </aside>
+
+  <main class="snd-thread" id="thread"></main>
+
+  <aside class="snd-inbox-side" id="ai-side">
+    <div class="snd-inbox-side-head">
+      <span class="snd-sparkle">✦</span>
+      <h4>AI Copilot</h4>
+    </div>
+    <div id="ai-cards"></div>
+  </aside>
+</div>
+
+<script src="js/data.js?v=20260517a"></script>
+<script src="js/mock-api.js?v=20260517a"></script>
+<script src="js/notifications.js?v=20260517a"></script>
+<script src="js/app.js?v=20260517a"></script>
+<script src="js/ai-engine.js?v=20260517a"></script>
+<script src="js/inbox.js?v=20260517a"></script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sanad — AI customer-support copilot for SaaS teams</title>
+<meta name="description" content="A SaaS-style helpdesk with Claude integrated at every touchpoint — suggested replies, sentiment, KB-grounded chat, translation. Mock + live modes." />
+<meta name="theme-color" content="#0b1220" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2064%2064'%3E%3Crect%20width%3D'64'%20height%3D'64'%20rx%3D'14'%20fill%3D'%230b1220'/%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20font-family%3D'serif'%20font-weight%3D'700'%20font-size%3D'30'%20fill%3D'%238b5cf6'%20text-anchor%3D'middle'%3ES%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/sanad.css?v=20260517a" />
+</head>
+<body class="sanad landing">
+
+<div class="snd-landing">
+  <header class="snd-flex" style="margin-bottom:48px;">
+    <a href="index.html" class="snd-topbar-brand" style="color:var(--snd-card-ink);"><span class="snd-topbar-mark">S</span> Sanad</a>
+    <div style="margin-inline-start:auto;display:flex;align-items:center;gap:14px;">
+      <span class="snd-mode-badge" id="mode-badge">…</span>
+      <a href="/" style="font-size:13.5px;color:var(--snd-muted-light);">← saadm.dev</a>
+    </div>
+  </header>
+
+  <section class="snd-landing-hero">
+    <div>
+      <span style="display:inline-block;padding:4px 12px;background:linear-gradient(135deg,rgba(139,92,246,.18),rgba(52,211,153,.18));color:var(--snd-primary);border-radius:999px;font-size:12px;font-weight:600;letter-spacing:.04em;margin-bottom:14px;">Demo · AI customer-support copilot</span>
+      <h1>Customer support, <span class="grad">augmented by Claude.</span></h1>
+      <p>A SaaS-style helpdesk where every screen has an AI affordance: suggested replies with KB citations, conversation summaries, sentiment + category auto-tagging, RAG chat for end users, and EN ↔ AR translation. Built to demonstrate <strong>real LLM wiring</strong> — system prompts, streaming, caching, fallback, cost tracking — not just an OpenAI playground demo.</p>
+      <div class="snd-landing-ctas">
+        <a class="snd-btn snd-btn--primary snd-btn--lg" href="inbox.html">Open agent inbox →</a>
+        <a class="snd-btn snd-btn--lg" href="chat.html">Try the chat widget</a>
+        <a class="snd-btn snd-btn--lg" href="admin.html">Open admin</a>
+      </div>
+      <div class="snd-text-muted" style="margin-top:14px;font-size:12.5px;">Browse the <a href="kb.html">help centre</a> · ~80 articles · works offline (mock mode) or with a real Anthropic key (<a href="https://github.com/saad-mughal435/site/blob/main/sanad/README.md" target="_blank">live-mode setup</a>)</div>
+    </div>
+    <div class="snd-landing-mock">
+      <div style="text-align:center;width:100%;">
+        <div style="font-size:64px;margin-bottom:14px;background:linear-gradient(135deg,var(--snd-primary),var(--snd-mint-2));-webkit-background-clip:text;background-clip:text;color:transparent;">✦</div>
+        <div style="font-family:var(--font-display);font-size:20px;font-weight:700;margin-bottom:14px;color:var(--snd-ink);">AI Copilot · live</div>
+        <div style="text-align:start;background:var(--snd-bg-2);padding:14px;border-radius:10px;font-size:13px;color:var(--snd-ink-2);line-height:1.55;max-width:340px;margin:0 auto;border:1px solid var(--snd-line-2);">
+          <strong style="color:var(--snd-primary);">Suggested reply</strong><br/>
+          Sorry for the trouble. Try the password reset link from the login screen — it sometimes lands in spam. If it doesn't arrive within 60 seconds, I can manually trigger one via our backup provider.
+          <div style="margin-top:8px;"><span class="snd-ai-cite" style="display:inline-block;">📎 Resetting your password</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 style="text-align:center;margin-bottom:8px;">Every screen has an AI affordance</h2>
+    <p class="snd-text-muted" style="text-align:center;margin-bottom:24px;font-size:15px;">Not a wrapper around a chat widget — Claude is woven into the helpdesk workflow.</p>
+    <div class="snd-landing-grid">
+      <div class="snd-landing-card"><span class="snd-emoji">💬</span><h3>Agent inbox + AI sidebar</h3><p>Suggested reply, conversation summary, sentiment + category auto-tag, EN↔AR translation. Click "Insert" to push the AI's draft into the composer.</p></div>
+      <div class="snd-landing-card"><span class="snd-emoji">🤖</span><h3>Customer chat with RAG</h3><p>End-users chat with an AI that answers from the knowledge base with clickable citations. "Talk to a human" creates a real ticket in the agent inbox.</p></div>
+      <div class="snd-landing-card"><span class="snd-emoji">📚</span><h3>Knowledge base + AI actions</h3><p>Admin-only buttons on each article: <em>Generate FAQ</em>, <em>Suggest improvements</em>, <em>Translate to Arabic</em>. "Find gaps" clusters recent tickets and proposes new articles.</p></div>
+      <div class="snd-landing-card"><span class="snd-emoji">⚙</span><h3>AI Console (admin)</h3><p>Switch between Haiku 4.5 / Sonnet 4.6 / Opus 4.7 live. Edit the system prompt with a test-with-sample preview. Temperature, max-tokens, prompt caching toggles.</p></div>
+      <div class="snd-landing-card"><span class="snd-emoji">📈</span><h3>Cost + fallback tracking</h3><p>Dashboard shows AI calls, latency, fallback %, and dollar cost. Every call (live or mock) is logged so you can see what the LLM is actually being used for.</p></div>
+      <div class="snd-landing-card"><span class="snd-emoji">🛡</span><h3>Server-side key handling</h3><p>API key never touches the browser. Cloudflare Worker proxy at <code>/api/sanad/ai/*</code> holds the secret. Per-IP rate limit. Falls back to mock when key is absent — demo never breaks.</p></div>
+    </div>
+  </section>
+
+  <section class="snd-card snd-mt-4">
+    <h3 style="margin-bottom:10px;">Two-minute walkthrough</h3>
+    <ol style="margin:0;padding-inline-start:22px;line-height:1.85;font-size:14.5px;color:var(--snd-card-ink-2);">
+      <li>Open the <a href="inbox.html">agent inbox</a>. Pick any conversation. Within ~600ms the right sidebar fills with a suggested reply (with KB citations), summary, sentiment, and category.</li>
+      <li>Click "Insert" on the suggested reply → composer fills. Edit if you want, then send (⌘+Enter).</li>
+      <li>Open an Arabic conversation. Click the Translate card → see English in the thread. Send a reply → auto-translates back to Arabic.</li>
+      <li>Open the <a href="chat.html">chat widget</a>. Ask "How do I reset my password?" → streaming reply with a clickable citation chip.</li>
+      <li>Click "Talk to a human" → ticket appears in the agent inbox in a second tab.</li>
+      <li>Open <a href="admin.html#ai_console">admin → AI Console</a>. Switch the model. Edit the system prompt. Click "Test with sample" → see the new prompt in action.</li>
+      <li>Browse <a href="admin.html#analytics">admin → Analytics</a> → see AI calls, fallback %, latency, cost.</li>
+    </ol>
+  </section>
+
+  <footer class="snd-landing-foot">
+    Demo built by Muhammad Saad · part of <a href="/" style="color:var(--snd-primary);">saadm.dev</a> portfolio · works offline (Demo mode) or with a real Claude key (Live mode)
+  </footer>
+</div>
+
+<script src="js/data.js?v=20260517a"></script>
+<script src="js/mock-api.js?v=20260517a"></script>
+<script src="js/ai-engine.js?v=20260517a"></script>
+<script src="js/app.js?v=20260517a"></script>
+<script>
+  SanadAI.health().then(function (h) {
+    var el = document.getElementById('mode-badge');
+    var nm = h.model.indexOf('haiku') !== -1 ? 'Haiku 4.5' : h.model.indexOf('sonnet') !== -1 ? 'Sonnet 4.6' : 'Opus 4.7';
+    el.className = h.live ? 'snd-mode-badge live' : 'snd-mode-badge';
+    el.textContent = h.live ? 'Live · ' + nm : 'Demo mode';
+    el.title = h.live ? 'Connected to Claude' : 'No API key set — running with deterministic mock replies';
+  });
+</script>
+</body>
+</html>

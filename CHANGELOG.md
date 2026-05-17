@@ -7,6 +7,120 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-05-17 - Sanad: AI customer-support copilot demo (seventh demo)
+
+### Added
+- **Sanad** at `/sanad/` - seventh interactive demo and the first one
+  with real LLM integration. A SaaS-style customer-support helpdesk
+  with Claude woven into every screen rather than bolted on as a
+  separate chat widget. ~5,200 LOC across 6 HTML pages + 1 CSS + 10
+  JS modules.
+- **Agent inbox** (`sanad/inbox.html`) - three-column layout:
+  conversation list with filter chips and live search; thread view
+  with day separators, message bubbles, internal-note toggle and
+  agent composer; right-hand **AI Copilot sidebar** with six cards -
+  suggested reply (with knowledge-base citation chips and a one-click
+  Insert into composer), conversation summary with topic tags,
+  sentiment with confidence bar, auto-category with confidence, EN↔AR
+  translation toggle, and quick actions (escalate, snooze, mark
+  resolved). Each AI call shows a loading state and times-out
+  gracefully to a "mock" badge.
+- **Customer chat widget** (`sanad/chat.html`) - two views
+  switchable from the topbar: an "embedded" preview on a fake
+  company website (with the chat bubble in the corner), and a
+  full-screen mode. Streaming-typewriter AI replies with clickable
+  knowledge-base citation chips that open a side drawer.
+  "Talk to a human" creates a real ticket in the agent inbox.
+  Conversation history persists across reloads.
+- **Knowledge base** (`sanad/kb.html`) - sidebar by category, search,
+  77 seeded articles (20 fully written + 57 stubs) across 6
+  categories. Hash-routed: `#/`, `#/category/{id}`,
+  `#/article/{slug}`. Each article has a custom tiny markdown
+  renderer (no library) and a helpful-vote widget. Admin-only AI
+  actions per article: **Generate FAQ**, **Suggest improvements**,
+  **Translate to Arabic**.
+- **11-section admin SPA** (`sanad/admin.html`) - hash-routed:
+  Dashboard (KPIs + 7-day bar + sentiment split + hourly heatmap +
+  recent conversations + AI-cost ticker), Conversations (table with
+  status filters), Knowledge base (CRUD + AI "Find gaps" that
+  clusters recent tickets and proposes new articles), Categories
+  (CRUD with auto-tag toggle), Agents (list + permission matrix for
+  agent / lead / admin), Customers (directory with LTV), **AI
+  Console** (model selector for Haiku 4.5 / Sonnet 4.6 / Opus 4.7,
+  editable system prompt with test-with-sample preview, temperature
+  / max-tokens / cache toggles), Analytics (daily volume bars,
+  by-category split, AI calls by feature, fallback rate, latency,
+  cost, CSV export), Integrations (Slack / Linear / Stripe /
+  Webhook stubs), Settings (business info + reset-demo), Audit log
+  with CSV export.
+- **AI engine** (`sanad/js/ai-engine.js`) - `window.SanadAI` with 8
+  feature methods: `replySuggestion`, `summarize`, `categorize`,
+  `sentiment`, `kbAnswer` (with streaming option), `translate`,
+  `generateFAQ`, `findKbGaps`. Each method builds a feature-specific
+  system prompt and POSTs `{model, system, messages, max_tokens,
+  stream?}` to `/api/sanad/ai/call`. On 503 or network error, falls
+  back transparently to a deterministic pattern-matched response
+  dictionary. Every call is logged to `/sanad/api/admin/ai-logs` so
+  the admin dashboard can track usage, latency, and fallback rate.
+- **Mock API surface** (`sanad/js/mock-api.js`) - fetch interceptor
+  serving `/sanad/api/*` from `SANAD_DATA` + localStorage.
+  Conversations (list / get / create / update / status / assign),
+  messages (create), KB articles (CRUD + helpful-vote), categories
+  (action-based CRUD), agents, customers, admin dashboard, settings,
+  audit log, AI logs. ~375 LOC mirroring the proven POS mock-api
+  pattern (with the operator-precedence parens lesson applied).
+- **Seed data** (`sanad/js/data.js`) - 6 categories, 8 agents, 24
+  customers (mix of EN and AR locales), 80 conversations across 5
+  status buckets (22 open / 18 pending / 6 snoozed / 30 closed in
+  last 7 days / 4 escalated), 227 messages generated from 16
+  scripted conversation templates, 77 knowledge-base articles (20
+  fully written + 57 titled stubs), 120 AI usage logs spread across
+  the 6 features, 4 integrations, settings.
+- **Design system** (`sanad/css/sanad.css`) - slate / charcoal +
+  electric violet + mint accent. Distinct from every existing demo
+  palette. Dark surfaces for the agent inbox and customer chat
+  (where staff and end-users spend hours); light surfaces for the
+  landing, KB, and admin.
+- **Landing** (`sanad/index.html`) with three CTAs (Inbox, Chat,
+  Admin), six-feature explainer grid, two-minute walkthrough.
+- **404** branded not-found.
+- **`sanad/README.md`** documents how to enable live mode (set
+  `ANTHROPIC_API_KEY` as a Cloudflare Worker secret), the cost
+  guardrails, and the file layout. Includes a copy-pasteable Worker
+  reference implementation.
+
+### Live mode vs Demo mode
+- Out of the box, Sanad ships in **Demo mode** - the topbar shows a
+  "Demo mode" badge and all AI features return realistic
+  pattern-matched mock responses. The demo works 100% offline and
+  never breaks for visitors.
+- To enable **Live mode** (real Claude responses), the repo's
+  Cloudflare Worker needs a `_worker.js` at root that proxies
+  `/api/sanad/ai/*` to Anthropic with a server-side secret. The
+  initial attempt to add this Worker (commit 036a7ea) failed the
+  Cloudflare Workers Builds twice in a row - the build config
+  doesn't auto-detect `_worker.js` alongside `assets.directory:
+  "."`. The Worker has been removed from this commit, and
+  `sanad/README.md` includes the copy-pasteable Worker plus the
+  Cloudflare dashboard steps to enable live mode opt-in.
+
+### Portfolio integration
+- `demo.html` - seventh demo card and intro copy bumped "Six" →
+  "Seven different shapes".
+- `index.html` - new PROJECTS entry between Qahwa POS and Pebble &
+  Co. with four CTAs (Inbox / Chat / KB / Admin), and a new bullet
+  in the "Other software demos" list.
+- `_headers` - cache rules for `/sanad/css/*` and `/sanad/js/*`.
+- `_redirects` - friendly aliases `/sanad-app`, `/copilot`,
+  `/helpdesk`. (`/sanad` redirect omitted - it conflicts with the
+  static index at `/sanad/`.)
+- `sitemap.xml` - 5 new entries.
+- `README.md` - new row in the demos table with live-mode caveat.
+
+### Changed
+- Bumped to **2.1.0** (minor) - new vertical, no breaking changes to
+  the existing six demos.
+
 ## [2.0.0] - 2026-05-15 - Qahwa POS: café & quick-service POS demo (sixth demo)
 
 ### Added

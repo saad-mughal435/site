@@ -36,6 +36,10 @@
   Cache-Control: public, max-age=300, must-revalidate
 /pos/js/*
   Cache-Control: public, max-age=300, must-revalidate
+/sanad/css/*
+  Cache-Control: public, max-age=300, must-revalidate
+/sanad/js/*
+  Cache-Control: public, max-age=300, must-revalidate
 
 # HTML — short cache so updates surface quickly
 /*.html
