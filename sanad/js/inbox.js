@@ -104,17 +104,28 @@
     state.isInternal = false;
     state.ai = { reply: null, summary: null, sentiment: null, category: null };
     state.translated = null; state.showTranslated = false;
+    state.conv = null;
     // Refresh the list to show the active highlight
     var actives = document.querySelectorAll('.snd-conv.is-active');
     actives.forEach(function (a) { a.classList.remove('is-active'); });
     var el = document.querySelector('[data-id="' + id + '"]');
     if (el) el.classList.add('is-active');
 
+    // Show an immediate loading state so the centre column never goes blank
+    // while the API call is in flight.
+    $('thread').innerHTML = '<div class="snd-thread-empty"><div style="font-size:42px;opacity:.4;margin-bottom:10px;">⏳</div>Loading conversation…</div>';
+    $('ai-cards').innerHTML = '<div class="snd-empty"><div class="snd-empty-mark">✦</div>Loading AI insights…</div>';
+
     SanadApp.api('/conversations/' + id).then(function (r) {
-      if (!r.body.ok) { renderEmpty('Conversation not found'); return; }
+      if (!r.body || !r.body.ok) { renderEmpty('Conversation not found. It may have been deleted or never existed.'); return; }
+      if (!r.body.conversation) { renderEmpty('Conversation data missing — try reloading the page.'); return; }
       state.conv = r.body;
+      // Defensive: ensure messages is always an array, even if API returned nothing.
+      if (!Array.isArray(state.conv.messages)) state.conv.messages = [];
       renderThread();
       runAI();
+    }).catch(function (e) {
+      renderEmpty('Could not load conversation: ' + (e && e.message || 'unknown error'));
     });
   }
   function renderEmpty(msg) {
@@ -122,8 +133,9 @@
     $('ai-cards').innerHTML = '<div class="snd-empty"><div class="snd-empty-mark">✦</div>AI suggestions will appear here once you open a conversation.</div>';
   }
   function renderThread() {
+    if (!state.conv || !state.conv.conversation) { renderEmpty('Select a conversation from the list to begin.'); return; }
     var c = state.conv.conversation;
-    var msgs = state.conv.messages.slice();
+    var msgs = (state.conv.messages || []).slice();
     var custMap = {}; window.SANAD_DATA.CUSTOMERS.forEach(function (x) { custMap[x.id] = x; });
     var agMap = {}; window.SANAD_DATA.AGENTS.forEach(function (x) { agMap[x.id] = x; });
     var cu = custMap[c.customer_id] || { name: '?' };
@@ -155,6 +167,9 @@
       +   '</div>'
       + '</div>'
       + '<div class="snd-thread-body" id="t-body">'
+      +   (dayKeys.length === 0
+          ? '<div class="snd-empty" style="margin-top:40px;"><div class="snd-empty-mark">💬</div>No messages in this conversation yet. Send the first reply below.</div>'
+          : '')
       +   dayKeys.map(function (day) {
             return '<div class="snd-day-sep">' + SanadApp.fmtDate(byDay[day][0].created_at) + '</div>'
               + byDay[day].map(function (m, mIdx) {
