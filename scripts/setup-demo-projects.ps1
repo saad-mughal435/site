@@ -210,8 +210,9 @@ foreach ($p in $projects) {
     # Set description
     $null = gh project edit --owner $owner --number $projNumber --description $p.description 2>&1
 
-    # Discover the Status field + its option IDs
-    $fields = gh project field-list --owner $owner --number $projNumber --format json | ConvertFrom-Json
+    # Discover the Status field + its option IDs.
+    # NOTE: newer gh CLI takes the project number as a positional arg, not --number.
+    $fields = gh project field-list $projNumber --owner $owner --format json | ConvertFrom-Json
     $statusField = $fields.fields | Where-Object { $_.name -eq "Status" } | Select-Object -First 1
     if (-not $statusField) {
         Write-Host "  [warn] no Status field on this project — items will be created without status" -ForegroundColor Yellow
