@@ -26,9 +26,26 @@
   var LOCAL_PREF_KEY = 'sanad.chat.useLocal';
   if (SanadApp.jget(LOCAL_PREF_KEY, false)) state.local.enabled = true;
 
+  // History-format version. Bump this whenever the assistant-reply format
+  // changes (e.g. new mock dictionary) so cached old replies don't make the
+  // bot look broken on visitor reload.
+  var HIST_VERSION = 'v3';
+  var HIST_VERSION_KEY = 'sanad.chat.histVersion';
+
   // Persist history across reloads for realism
   var HIST_KEY = 'sanad.chat.history';
-  function loadHist() { state.history = SanadApp.jget(HIST_KEY, []); }
+  function loadHist() {
+    var stored = SanadApp.jget(HIST_VERSION_KEY, null);
+    if (stored !== HIST_VERSION) {
+      // Stale history (older reply format). Wipe so visitors don't see
+      // the old "couldn't find an article" canned line on reload.
+      try { localStorage.removeItem(HIST_KEY); } catch (e) {}
+      SanadApp.jset(HIST_VERSION_KEY, HIST_VERSION);
+      state.history = [];
+      return;
+    }
+    state.history = SanadApp.jget(HIST_KEY, []);
+  }
   function saveHist() { SanadApp.jset(HIST_KEY, state.history); }
 
   // ---------- Mode badge ----------
