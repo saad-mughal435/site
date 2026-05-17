@@ -18,7 +18,9 @@
     composer: '',
     isInternal: false,
     ai: { reply: null, summary: null, sentiment: null, category: null },
-    translated: null,          // last AI translation of customer's latest msg
+    aiRated: {},               // feature -> 'up'|'down'  (per-conversation in-memory only)
+    tone: 'friendly',          // friendly | formal | concise | apologetic
+    translated: null,
     showTranslated: false
   };
 
@@ -103,6 +105,8 @@
     state.composer = '';
     state.isInternal = false;
     state.ai = { reply: null, summary: null, sentiment: null, category: null };
+    state.aiRated = {};
+    state.tone = 'friendly';
     state.translated = null; state.showTranslated = false;
     state.conv = null;
     // Refresh the list to show the active highlight
@@ -273,10 +277,17 @@
   }
 
   // ---------- AI sidebar ----------
-  function runAI() {
+  function runAI(opts) {
+    opts = opts || {};
     var conv = state.conv;
     renderAI();
-    SanadAI.replySuggestion(conv).then(function (r) { state.ai.reply = r; renderAI(); });
+    SanadAI.replySuggestion(conv, { tone: state.tone }).then(function (r) {
+      state.ai.reply = r;
+      // Reset feedback when reply is freshly generated
+      if (opts.replyOnly || !opts.skipReplyRate) state.aiRated.reply = null;
+      renderAI();
+    });
+    if (opts.replyOnly) return;
     SanadAI.summarize(conv).then(function (r) { state.ai.summary = r; renderAI(); });
     var lastCu = lastCustomerMsg(conv.messages);
     if (lastCu) {
@@ -296,6 +307,12 @@
     var html = '';
 
     // Reply
+    var TONES = [
+      { id: 'friendly', label: '🙂 Friendly' },
+      { id: 'formal', label: '👔 Formal' },
+      { id: 'concise', label: '⚡ Concise' },
+      { id: 'apologetic', label: '🙏 Apologetic' }
+    ];
     html += '<div class="snd-ai-card">'
       + '<div class="snd-ai-card-head"><span class="snd-icon">✦</span>Suggested reply'
       +   (ai.reply ? '' : '<span class="snd-ai-loading"></span>')
@@ -304,11 +321,30 @@
     if (ai.reply) {
       html += '<div class="snd-ai-reply">' + esc(ai.reply.text) + '</div>';
       if (ai.reply.citations && ai.reply.citations.length) {
-        html += '<div class="snd-ai-actions">' + ai.reply.citations.map(function (c) { return '<a class="snd-ai-cite" href="kb.html#/article/' + (c.id || '') + '" target="_blank">📎 ' + esc(c.title) + '</a>'; }).join('') + '</div>';
+        html += '<div class="snd-ai-actions" style="margin-top:6px;">' + ai.reply.citations.map(function (c) { return '<a class="snd-ai-cite" href="kb.html#/article/' + (c.id || '') + '" target="_blank">📎 ' + esc(c.title) + '</a>'; }).join('') + '</div>';
       }
-      html += '<div class="snd-ai-actions">'
+      // Tone selector row
+      html += '<div style="margin-top:8px;display:flex;gap:4px;flex-wrap:wrap;">'
+        + TONES.map(function (t) {
+            var on = state.tone === t.id;
+            return '<button class="snd-btn snd-btn--sm" data-tone="' + t.id + '" style="font-size:11px;padding:3px 8px;min-height:24px;'
+              + (on ? 'background:rgba(139,92,246,.18);border-color:var(--snd-primary);color:var(--snd-ink);' : '')
+              + '">' + t.label + '</button>';
+          }).join('')
+        + '</div>';
+      // Insert / Regenerate / 👍 / 👎
+      var rated = state.aiRated.reply;
+      html += '<div class="snd-ai-actions" style="margin-top:8px;">'
         + '<button class="snd-btn snd-btn--sm snd-btn--primary" id="ai-insert">Insert</button>'
         + '<button class="snd-btn snd-btn--sm" id="ai-regen">Regenerate</button>'
+        + '<span style="margin-inline-start:auto;display:inline-flex;gap:4px;">'
+        +   '<button class="snd-btn snd-btn--sm" data-rate="up" title="Helpful" style="padding:3px 8px;min-height:24px;font-size:13px;' + (rated === 'up' ? 'background:rgba(52,211,153,.20);color:var(--snd-mint);border-color:var(--snd-mint-2);' : '') + '">👍</button>'
+        +   '<button class="snd-btn snd-btn--sm" data-rate="down" title="Not helpful" style="padding:3px 8px;min-height:24px;font-size:13px;' + (rated === 'down' ? 'background:rgba(244,63,94,.20);color:var(--snd-rose);border-color:var(--snd-rose);' : '') + '">👎</button>'
+        + '</span>'
+        + '</div>';
+      // Tiny footer with model + latency for transparency
+      html += '<div style="margin-top:6px;font-size:10.5px;color:var(--snd-muted);font-family:var(--font-mono);">'
+        + (ai.reply.model || '?') + ' · ' + (ai.reply.latency_ms || 0) + 'ms · tone: ' + state.tone
         + '</div>';
     }
     html += '</div>';
@@ -370,29 +406,48 @@
       var ins = $('ai-insert');
       var reg = $('ai-regen');
       if (ins) ins.addEventListener('click', function () {
-        // Read directly from state.ai (not the closure `ai`) in case
-        // renderAI fired again between listener-attach and click.
         var current = (state.ai && state.ai.reply && state.ai.reply.text) || ai.reply.text || '';
         state.composer = current;
         renderThread();
-        // Visible feedback — the composer lives in the centre column,
-        // user's eyes are on the right column. Without this they think
-        // nothing happened.
         setTimeout(function () {
           var inp = $('cb-input');
           if (inp) {
             inp.scrollIntoView({ behavior: 'smooth', block: 'center' });
             inp.focus();
-            // Place caret at end so they can keep typing
             inp.setSelectionRange(inp.value.length, inp.value.length);
           }
         }, 0);
         window.toast('Inserted into composer · ⌘+Enter to send', 'success');
       });
       if (reg) reg.addEventListener('click', function () {
-        state.ai.reply = null; renderAI();
-        window.toast('Regenerating…', 'success', 1500);
-        SanadAI.replySuggestion(state.conv).then(function (r) { state.ai.reply = r; renderAI(); });
+        state.ai.reply = null;
+        state.aiRated.reply = null;
+        renderAI();
+        window.toast('Regenerating with ' + state.tone + ' tone…', 'success', 1500);
+        SanadAI.replySuggestion(state.conv, { tone: state.tone }).then(function (r) { state.ai.reply = r; renderAI(); });
+      });
+      // Tone selector
+      document.querySelectorAll('[data-tone]').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var newTone = b.getAttribute('data-tone');
+          if (newTone === state.tone) return;
+          state.tone = newTone;
+          state.ai.reply = null;
+          state.aiRated.reply = null;
+          renderAI();
+          window.toast('Regenerating in ' + newTone + ' tone…', 'success', 1500);
+          SanadAI.replySuggestion(state.conv, { tone: state.tone }).then(function (r) { state.ai.reply = r; renderAI(); });
+        });
+      });
+      // 👍 / 👎 feedback
+      document.querySelectorAll('[data-rate]').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var rating = b.getAttribute('data-rate');
+          state.aiRated.reply = rating;
+          SanadAI.rateMessage(rating, { feature: 'reply', model: ai.reply.model, fallback: ai.reply.fallback });
+          window.toast(rating === 'up' ? 'Thanks — logged as helpful' : 'Thanks — logged as not helpful', rating === 'up' ? 'success' : 'warn');
+          renderAI();
+        });
       });
     }
     var tr = $('ai-translate');
