@@ -9,16 +9,18 @@
 
   var state = {
     open: false,
-    mode: 'embedded',   // 'embedded' | 'full'
-    history: [],
+    mode: 'embedded',
+    history: [],            // each msg may have .id, .rating ('up'|'down'|null), .model, .fallback
     typing: false,
     rated: false,
+    generating: false,      // local AI currently streaming
+    abort: false,           // user clicked Stop during streaming
     local: {
-      enabled: false,        // toggled on after the user opts in
-      ready: false,          // model loaded + warm
-      loading: false,        // download in progress
-      progress: 0,            // 0..1 aggregate
-      device: null            // 'webgpu' | 'wasm' once loaded
+      enabled: false,
+      ready: false,
+      loading: false,
+      progress: 0,
+      device: null
     }
   };
 
@@ -68,13 +70,23 @@
   }
   function renderChat(hostId) {
     ensureGreet();
-    var msgsHtml = state.history.map(function (m) {
+    var msgsHtml = state.history.map(function (m, mIdx) {
       var isUser = m.role === 'user';
+      var isAssistant = m.role === 'assistant' && !m.greeting;
+      var rated = m.rating;
+      var feedback = isAssistant ? (
+        '<div style="margin-top:4px;display:inline-flex;gap:4px;align-items:center;">'
+        + '<button class="snd-btn snd-btn--sm" data-mrate="up" data-midx="' + mIdx + '" title="Helpful" style="padding:2px 6px;min-height:22px;font-size:11px;background:transparent;border-color:transparent;' + (rated === 'up' ? 'background:rgba(52,211,153,.18);color:var(--snd-mint);border-color:var(--snd-mint-2);' : 'color:var(--snd-muted);') + '">👍</button>'
+        + '<button class="snd-btn snd-btn--sm" data-mrate="down" data-midx="' + mIdx + '" title="Not helpful" style="padding:2px 6px;min-height:22px;font-size:11px;background:transparent;border-color:transparent;' + (rated === 'down' ? 'background:rgba(244,63,94,.18);color:var(--snd-rose);border-color:var(--snd-rose);' : 'color:var(--snd-muted);') + '">👎</button>'
+        + (m.model ? '<span style="font-size:9.5px;color:var(--snd-muted);font-family:var(--font-mono);margin-inline-start:4px;">' + (m.model.indexOf('Qwen') !== -1 ? 'local' : m.fallback ? 'mock' : 'live') + '</span>' : '')
+        + '</div>'
+      ) : '';
       return '<div class="snd-chat-msg' + (isUser ? ' out' : '') + '">'
         + (isUser ? '' : '<div class="snd-msg-avatar" style="background:linear-gradient(135deg,var(--snd-primary),var(--snd-mint-2));display:grid;place-items:center;color:white;font-weight:800;font-size:11px;">S</div>')
         + '<div>'
         +   '<div class="snd-chat-msg-bubble">' + esc(m.content).replace(/\n/g, '<br/>') + '</div>'
         +   (m.citations && m.citations.length ? '<div style="margin-top:4px;">' + m.citations.map(function (c) { return '<a class="snd-ai-cite" data-cite="' + (c.id || '') + '">📎 ' + esc(c.title) + '</a>'; }).join(' ') + '</div>' : '')
+        +   feedback
         + '</div>'
         + (isUser ? '<div class="snd-msg-avatar" style="background:var(--snd-surface-2);display:grid;place-items:center;color:var(--snd-ink);font-weight:700;font-size:11px;">You</div>' : '')
         + '</div>';
@@ -122,8 +134,11 @@
       + ratePromptHtml + ratedHtml
       + '<div class="snd-chat-handoff">Want a human? <a href="#" id="chat-handoff">Open a ticket</a> · <a href="#" id="chat-reset">Start over</a></div>'
       + '<div class="snd-chat-foot">'
+      +   (state.generating
+            ? '<div style="text-align:center;margin-bottom:8px;"><button class="snd-btn snd-btn--sm snd-btn--danger" id="chat-stop">⏹ Stop generating</button></div>'
+            : '')
       +   '<div class="snd-chat-input-row">'
-      +     '<textarea class="snd-chat-input" id="chat-input" placeholder="Type a message…" rows="1"></textarea>'
+      +     '<textarea class="snd-chat-input" id="chat-input" placeholder="' + (state.generating ? 'Waiting for response…' : 'Type a message…') + '" rows="1"' + (state.generating ? ' disabled' : '') + '></textarea>'
       +     '<button class="snd-chat-send" id="chat-send" disabled>➤</button>'
       +   '</div>'
       + '</div>';
@@ -160,6 +175,30 @@
     });
     var lt = $('local-toggle');
     if (lt) lt.addEventListener('click', toggleLocal);
+    var stop = $('chat-stop');
+    if (stop) stop.addEventListener('click', function () {
+      state.abort = true;
+      state.generating = false;
+      window.toast('Stopped', 'warn');
+      rerender();
+    });
+    // 👍/👎 feedback on assistant messages
+    document.querySelectorAll('[data-mrate]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var idx = +b.getAttribute('data-midx');
+        var rating = b.getAttribute('data-mrate');
+        if (!state.history[idx]) return;
+        state.history[idx].rating = rating;
+        saveHist();
+        SanadAI.rateMessage(rating, {
+          feature: 'kb_answer',
+          model: state.history[idx].model || 'unknown',
+          fallback: !!state.history[idx].fallback
+        });
+        window.toast(rating === 'up' ? 'Thanks — logged as helpful' : 'Logged as not helpful', rating === 'up' ? 'success' : 'warn');
+        rerender();
+      });
+    });
   }
 
   // ---------- Local AI toggle ----------
@@ -241,7 +280,9 @@
     if (useLocal) {
       // Stream tokens straight into the bubble as the local model generates.
       state.typing = false;
-      state.history.push({ role: 'assistant', content: '', citations: [] });
+      state.generating = true;
+      state.abort = false;
+      state.history.push({ role: 'assistant', content: '', citations: [], model: 'Qwen2.5-0.5B', fallback: false, rating: null });
       saveHist();
       rerender();
       var idx = state.history.length - 1;
@@ -249,13 +290,16 @@
         question: v,
         history: state.history.slice(-6, -2),
         onToken: function (tok) {
+          if (state.abort) return;
           state.history[idx].content += tok;
           rerender();
         }
       }).then(function (r) {
-        // Final pass to attach citations + replace if onToken wasn't used (mock fallback)
         if (!state.history[idx].content) state.history[idx].content = r.text || '';
         state.history[idx].citations = r.citations || [];
+        state.history[idx].fallback = !!r.fallback;
+        state.generating = false;
+        state.abort = false;
         saveHist(); rerender();
       });
       return;
@@ -265,13 +309,13 @@
     SanadAI.kbAnswer({ question: v, history: state.history.slice(-6, -1) }).then(function (r) {
       var fullText = r.text || '';
       state.typing = false;
-      state.history.push({ role: 'assistant', content: '', citations: r.citations || [] });
+      state.history.push({ role: 'assistant', content: '', citations: r.citations || [], model: r.model || 'mock', fallback: !!r.fallback, rating: null });
       saveHist();
       rerender();
       typewriter(fullText, function (curr) {
         state.history[state.history.length - 1].content = curr;
         rerender();
-      }, function () { saveHist(); });
+      }, function () { saveHist(); rerender(); });
     });
   }
   function typewriter(text, onTick, onDone) {

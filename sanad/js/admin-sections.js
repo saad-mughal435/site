@@ -443,20 +443,33 @@
         var dk = new Date(c.created_at).toISOString().slice(0, 10);
         byDay[dk] = (byDay[dk] || 0) + 1;
       });
-      logs.forEach(function (l) { byFeature[l.feature] = (byFeature[l.feature] || 0) + 1; });
+      // Split log entries: regular AI calls vs user-feedback ratings
+      var callLogs = logs.filter(function (l) { return l.kind !== 'rating'; });
+      var ratings = logs.filter(function (l) { return l.kind === 'rating'; });
+      callLogs.forEach(function (l) { byFeature[l.feature] = (byFeature[l.feature] || 0) + 1; });
       var catMap = {}; window.SANAD_DATA.CATEGORIES.forEach(function (c) { catMap[c.id] = c; });
       var dayKeys = Object.keys(byDay).sort().slice(-14);
       var maxDay = Math.max.apply(null, dayKeys.map(function (k) { return byDay[k]; }).concat([1]));
       var totalCat = Object.values(byCat).reduce(function (s, v) { return s + v; }, 0) || 1;
-      var fallbackCount = logs.filter(function (l) { return l.fallback; }).length;
-      var fallbackPct = ((fallbackCount / (logs.length || 1)) * 100).toFixed(1);
-      var avgLatency = logs.length ? Math.round(logs.reduce(function (s, l) { return s + (l.latency_ms || 0); }, 0) / logs.length) : 0;
-      var totalCost = logs.reduce(function (s, l) { return s + (l.cost_usd || 0); }, 0);
+      var fallbackCount = callLogs.filter(function (l) { return l.fallback; }).length;
+      var fallbackPct = ((fallbackCount / (callLogs.length || 1)) * 100).toFixed(1);
+      var avgLatency = callLogs.length ? Math.round(callLogs.reduce(function (s, l) { return s + (l.latency_ms || 0); }, 0) / callLogs.length) : 0;
+      var totalCost = callLogs.reduce(function (s, l) { return s + (l.cost_usd || 0); }, 0);
+      // Satisfaction: % thumbs-up among ratings, per-feature
+      var ups = ratings.filter(function (r) { return r.rating === 'up'; }).length;
+      var downs = ratings.filter(function (r) { return r.rating === 'down'; }).length;
+      var satPct = ratings.length ? Math.round((ups / ratings.length) * 100) : null;
+      var byFeatureSat = {};
+      ratings.forEach(function (r) {
+        if (!byFeatureSat[r.feature]) byFeatureSat[r.feature] = { up: 0, down: 0 };
+        byFeatureSat[r.feature][r.rating] = (byFeatureSat[r.feature][r.rating] || 0) + 1;
+      });
 
       host.innerHTML =
         '<div class="snd-kpi-grid" style="margin-bottom:18px;">'
         +   '<div class="snd-kpi"><div class="snd-kpi-label">Conversations (all time)</div><div class="snd-kpi-value">' + convs.length + '</div></div>'
-        +   '<div class="snd-kpi"><div class="snd-kpi-label">AI calls</div><div class="snd-kpi-value">' + logs.length + '</div></div>'
+        +   '<div class="snd-kpi"><div class="snd-kpi-label">AI calls</div><div class="snd-kpi-value">' + callLogs.length + '</div></div>'
+        +   '<div class="snd-kpi"><div class="snd-kpi-label">Satisfaction (👍/👎)</div><div class="snd-kpi-value" style="color:' + (satPct == null ? 'var(--snd-muted-light)' : satPct > 70 ? 'var(--snd-mint-2)' : satPct > 40 ? 'var(--snd-amber)' : 'var(--snd-rose)') + ';">' + (satPct == null ? '—' : satPct + '%') + '</div><div class="snd-kpi-sub">' + ups + ' up · ' + downs + ' down</div></div>'
         +   '<div class="snd-kpi"><div class="snd-kpi-label">Fallback rate</div><div class="snd-kpi-value" style="color:' + (fallbackPct > 30 ? 'var(--snd-amber)' : 'var(--snd-mint-2)') + ';">' + fallbackPct + '%</div><div class="snd-kpi-sub">mock vs live</div></div>'
         +   '<div class="snd-kpi"><div class="snd-kpi-label">Avg latency</div><div class="snd-kpi-value">' + avgLatency + ' ms</div></div>'
         +   '<div class="snd-kpi"><div class="snd-kpi-label">Total cost (mock $)</div><div class="snd-kpi-value">$' + totalCost.toFixed(3) + '</div></div>'
@@ -479,8 +492,10 @@
         +   '</div>'
         +   '<div class="snd-card">'
         +     '<h3 style="margin-bottom:10px;">AI calls by feature</h3>'
-        +     '<table class="snd-table"><tbody>' + Object.keys(byFeature).map(function (f) {
-                return '<tr><td style="font-weight:600;">' + esc(f) + '</td><td style="text-align:right;font-family:var(--font-mono);">' + byFeature[f] + '</td></tr>';
+        +     '<table class="snd-table"><thead><tr><th>Feature</th><th style="text-align:right;">Calls</th><th style="text-align:right;">Sat.</th></tr></thead><tbody>' + Object.keys(byFeature).map(function (f) {
+                var s = byFeatureSat[f];
+                var sat = s ? Math.round(s.up / (s.up + s.down) * 100) + '%' : '—';
+                return '<tr><td style="font-weight:600;">' + esc(f) + '</td><td style="text-align:right;font-family:var(--font-mono);">' + byFeature[f] + '</td><td style="text-align:right;font-family:var(--font-mono);color:' + (s ? (s.up >= s.down ? 'var(--snd-mint-2)' : 'var(--snd-rose)') : 'var(--snd-muted-light)') + ';">' + sat + '</td></tr>';
               }).join('') + '</tbody></table>'
         +   '</div>'
         + '</div>'

@@ -338,6 +338,23 @@
       jset(LS.ai_log_extra, ex.slice(0, 100));
       return { ok: true };
     }
+    if (path === '/admin/ai-logs/rate' && method === 'POST') {
+      // 👍/👎 feedback on an AI suggestion. Logged as its own entry so the
+      // analytics tab can compute a satisfaction rate per feature/model.
+      var rx = jget(LS.ai_log_extra, []);
+      rx.unshift({
+        id: 'air-' + Date.now(),
+        at: body.at || new Date().toISOString(),
+        feature: body.feature || 'reply',
+        model: body.model || 'unknown',
+        rating: body.rating,
+        fallback: !!body.fallback,
+        kind: 'rating'
+      });
+      jset(LS.ai_log_extra, rx.slice(0, 200));
+      audit('ai.rate', body.feature || 'reply', body.rating);
+      return { ok: true };
+    }
     if (path === '/integrations' && method === 'GET') return { ok: true, items: window.SANAD_DATA.INTEGRATIONS };
 
     if (path === '/admin/reset-demo' && method === 'POST') {

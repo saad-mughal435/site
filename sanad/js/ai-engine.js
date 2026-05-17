@@ -80,7 +80,7 @@
     }
     var text = '';
     switch (feat) {
-      case 'reply':       text = mockReplyText(userMsg); break;
+      case 'reply':       text = mockReplyText(userMsg, { tone: opts.tone }); break;
       case 'summary':     text = mockSummary(opts); break;
       case 'category':    text = mockCategory(userMsg); break;
       case 'sentiment':   text = mockSentiment(userMsg); break;
@@ -93,26 +93,133 @@
     return { text: text, model: model, latency_ms: latency_ms, fallback: true };
   }
 
-  function mockReplyText(q) {
+  // Multi-variant reply dictionary. Each intent has 3-4 alternates so
+  // repeat clicks of "Regenerate" surface different wording instead of
+  // the same canned string. Variant is picked by a rotating index that
+  // increments each call — first click gets [0], next gets [1], etc.
+  var replyVariantIdx = 0;
+  var REPLY_VARIANTS = {
+    password: [
+      "Sorry for the trouble. Try the password reset link from the login screen — it sometimes lands in spam. If it doesn't arrive within 60 seconds, I can manually trigger one via our backup provider. What email address is on your account?\n\n[cite:Resetting your password]",
+      "That's frustrating, I get it. The reset email goes out instantly from our end — if you don't see it, the first place to check is spam, and the second is whether your IT team blocks `mail.sanad.app`. Share the email on your account and I'll fire one through our backup sender.\n\n[cite:Resetting your password]",
+      "Apologies — let me sort this out. Two quick checks: (1) is the email on the account correct? (2) does your inbox quarantine our domain? If both are fine, reply with the email and I'll manually trigger a reset.\n\n[cite:Resetting your password]"
+    ],
+    refund: [
+      "Happy to look into that. Could you share the transaction date and the last 4 digits of the card? Per our refund policy, anything within 14 days is eligible no-questions-asked.\n\n[cite:Refund policy]",
+      "I can process that right away. Just reply with the receipt email or transaction ID and I'll refund the duplicate today. It'll land back on your card in 3-5 business days.\n\n[cite:Refund policy]",
+      "Got it, this is on us. Refunds inside 14 days are automatic — just confirm the transaction date and I'll trigger it now. Anything older needs a quick approval but I can usually push it through same-day.\n\n[cite:Refund policy]"
+    ],
+    webhook: [
+      "That sounds like the classic 'parsed JSON instead of raw body' issue. Make sure you're computing the HMAC over the raw request body and using constant-time comparison. Express in particular needs `express.raw()` instead of `express.json()` on the webhook route.\n\n[cite:Webhook signature verification]",
+      "Nine times out of ten this is a body-parsing problem. Most frameworks auto-deserialize the JSON before your handler runs, which changes the bytes the signature was computed over. Verify against the raw request body and you should be good.\n\n[cite:Webhook signature verification]",
+      "Quick check: are you signing the raw body bytes or the re-serialized JSON? If your middleware (Express, Hono, etc.) parses the body first, the signature won't match. Switch to a raw-body handler on the webhook route.\n\n[cite:Webhook signature verification]"
+    ],
+    rate_limit: [
+      "Pro is capped at 500 req/min. If you're doing a bulk backfill I can temporarily raise it to 2,000 req/min for 48 hours. Just confirm the workspace ID and a window when the spike will happen.\n\n[cite:API quickstart]",
+      "429s during backfills are common — Pro defaults to 500/min. Want me to bump you to 2,000/min for the next 24-48h? Share the workspace ID and rough start time.\n\n[cite:API quickstart]"
+    ],
+    sso: [
+      "SSO is available on Business. Setup takes ~10 minutes via Settings → Security → SSO. I can hop on a 15-min call to walk through the SAML claims and group provisioning if it'd help.\n\n[cite:Setting up SSO with SAML]",
+      "Happy to get you set up. The flow is: upgrade to Business → Settings → Security → SSO → paste your IdP metadata → map the email/groups claims. Group-based provisioning is automatic.\n\n[cite:Setting up SSO with SAML]"
+    ],
+    slack: [
+      "Slack's legacy tokens were deprecated this quarter. Reconnect via Settings → Integrations → Slack — it'll re-auth with the new OAuth scopes and start posting again within a minute.",
+      "Known one — Slack rotated their token format and we silently dropped writes. A reconnect from Settings → Integrations → Slack fixes it in under a minute."
+    ],
+    mobile_crash: [
+      "Apologies for that crash. A fix is shipping in the next build (~30 min). As a workaround, swipe down from the home screen or use the web app. I'll DM you when the update is live.",
+      "Confirmed bug — already patched, going out as 14.7.2 within the hour. In the meantime the web app is a clean workaround. Sorry about that."
+    ],
+    csv_import: [
+      "Bulk CSV import is in Admin → Import → CSV, up to 50k rows. The matcher needs an email column. Want our template? I can pre-fill it with your column headers if you send me a sample.",
+      "Yep — Admin → Import → CSV handles up to 50,000 rows per file. Email column is required for the matcher. I can send our template plus a column-mapping spreadsheet if you share a sample row."
+    ],
+    data_residency: [
+      "We host in eu-fra, us-east, and ap-bom. For UAE PDPL compliance ap-bom is the right region. A region migration takes ~30 minutes and is one-time. Want me to schedule it?\n\n[cite:Data residency]",
+      "For UAE compliance you want ap-bom (Mumbai) — it's the closest region with the right data-residency posture. Migrating an existing workspace takes about 30 minutes; I can do it during your off-hours.\n\n[cite:Data residency]"
+    ],
+    dark_mode: [
+      "Dark mode for the admin panel is on the Q3 roadmap. I'll +1 your vote, which bumps the priority. In the meantime, the customer widget already follows the system theme.",
+      "Hear you — admin dark mode is queued for Q3. I added your vote internally. The customer widget already respects the system theme as a partial workaround."
+    ],
+    arabic_help: [
+      "أهلاً بك. يمكنني مساعدتك في ذلك. هل يمكنك إعطائي المزيد من التفاصيل أو رقم حسابك؟",
+      "مرحباً! يسعدني مساعدتك. شاركني المزيد من التفاصيل وسأتولى الأمر."
+    ],
+    generic: [
+      "Thanks for reaching out. I want to make sure I give you the right answer — could you share a bit more detail about what you're trying to do? In the meantime I'll loop in a human agent if it's urgent.",
+      "Happy to help. Could you give me a bit more context so I can point you at the right answer? If it's time-sensitive I'll bring in a human teammate right away.",
+      "Thanks for the message! I want to nail the answer rather than guess — share what you've tried so far and I'll take it from there."
+    ],
+    greeting: [
+      "Hi! Thanks for reaching out. Happy to help with whatever you need. Could you share a bit more detail about what brought you to us today?",
+      "Hey there — thanks for getting in touch. What can I help you with?",
+      "Hi! I'm here to help. Tell me what's going on and I'll do my best."
+    ],
+    short: [
+      "Thanks for the message! Could you give me a bit more detail so I can give you a useful answer?",
+      "Got it — to give you a useful answer I'll need a bit more detail. What's the situation?"
+    ]
+  };
+  function pickReply(intent) {
+    var arr = REPLY_VARIANTS[intent] || REPLY_VARIANTS.generic;
+    var picked = arr[replyVariantIdx % arr.length];
+    replyVariantIdx++;
+    return picked;
+  }
+  function classifyReply(q) {
     var raw = (q || '').trim();
     q = raw.toLowerCase();
-    // Short or greeting-only customer messages → an opener, not a canned policy reply.
-    if (/^(hi+|hello+|hey+|hola|salam|salaam|good\s+(morning|afternoon|evening))[\s!.?]*$/i.test(raw))
-      return "Hi! Thanks for reaching out. Happy to help with whatever you need. Could you share a bit more detail about what brought you to us today?";
-    if (raw.length > 0 && raw.length < 8 && !/refund|crash|bug|down/.test(q))
-      return "Thanks for the message! Could you give me a bit more detail so I can give you a useful answer?";
-    if (/password|reset|login/.test(q)) return "Sorry for the trouble. Try the password reset link from the login screen — it sometimes lands in spam. If it doesn't arrive within 60 seconds, I can manually trigger one via our backup provider. What email address is on your account?\n\n[cite:Resetting your password]";
-    if (/refund|cancel|charge|billing|invoice|payment/.test(q)) return "I can look into that right away. Could you share the transaction date and the last 4 digits of the card? Per our refund policy, anything within 14 days is eligible no-questions-asked.\n\n[cite:Refund policy]";
-    if (/webhook|signature|hmac|api/.test(q)) return "That sounds like the classic 'parsed JSON instead of raw body' issue. Make sure you're computing the HMAC over the raw request body and using constant-time comparison. Express in particular needs `express.raw()` instead of `express.json()` on the webhook route.\n\n[cite:Webhook signature verification]";
-    if (/rate.?limit|429/.test(q)) return "Pro is capped at 500 req/min. If you're doing a bulk backfill I can temporarily raise it to 2,000 req/min for 48 hours. Just confirm the workspace ID and a window when the spike will happen.\n\n[cite:API quickstart]";
-    if (/sso|saml|okta|azure/.test(q)) return "SSO is available on Business. Setup takes ~10 minutes via Settings → Security → SSO. I can hop on a 15-min call to walk through the SAML claims and group provisioning if it'd help.\n\n[cite:Setting up SSO with SAML]";
-    if (/slack|integration/.test(q)) return "Slack's legacy tokens were deprecated this quarter. Reconnect via Settings → Integrations → Slack — it'll re-auth with the new OAuth scopes and start posting again within a minute.";
-    if (/dark mode|theme/.test(q)) return "Dark mode for the admin panel is on the Q3 roadmap. I'll +1 your vote, which bumps the priority. In the meantime, the customer widget already follows the system theme.";
-    if (/mobile|crash|ios|android/.test(q)) return "Apologies for that crash. A fix is shipping in the next build (~30 min). As a workaround, swipe down from the home screen or use the web app. I'll DM you when the update is live.";
-    if (/import|csv|migrate/.test(q)) return "Bulk CSV import is in Admin → Import → CSV, up to 50k rows. The matcher needs an email column. Want our template? I can pre-fill it with your column headers if you send me a sample.";
-    if (/data residency|gdpr|pdpl|compliance/.test(q)) return "We host in eu-fra, us-east, and ap-bom. For UAE PDPL compliance ap-bom is the right region. A region migration takes ~30 minutes and is one-time. Want me to schedule it?\n\n[cite:Data residency]";
-    if (/مرحبا|شكرا|كلمة المرور/.test(q)) return "أهلاً بك. يمكنني مساعدتك في ذلك. هل يمكنك إعطائي المزيد من التفاصيل أو رقم حسابك؟";
-    return "Thanks for reaching out. I want to make sure I give you the right answer — could you share a bit more detail about what you're trying to do? In the meantime I'll loop in a human agent if it's urgent.";
+    if (/^(hi+|hello+|hey+|hola|salam|salaam|good\s+(morning|afternoon|evening))[\s!.?]*$/i.test(raw)) return 'greeting';
+    if (raw.length > 0 && raw.length < 8 && !/refund|crash|bug|down/.test(q)) return 'short';
+    if (/password|reset|login|forgot/.test(q)) return 'password';
+    if (/refund|cancel|charge|billing|invoice|payment|money\s*back/.test(q)) return 'refund';
+    if (/webhook|signature|hmac/.test(q)) return 'webhook';
+    if (/rate.?limit|429/.test(q)) return 'rate_limit';
+    if (/sso|saml|okta|azure/.test(q)) return 'sso';
+    if (/slack|integration/.test(q)) return 'slack';
+    if (/mobile|crash|ios|android|app\s+down/.test(q)) return 'mobile_crash';
+    if (/import|csv|migrate/.test(q)) return 'csv_import';
+    if (/data\s*residency|gdpr|pdpl|compliance|where.*data/.test(q)) return 'data_residency';
+    if (/dark\s*mode|theme/.test(q)) return 'dark_mode';
+    if (/مرحبا|شكرا|كلمة\s*المرور/.test(q)) return 'arabic_help';
+    return 'generic';
+  }
+
+  // Apply a "tone overlay" to a generated reply. In live mode the same
+  // tone instruction is sent to Claude via the system prompt; in mock
+  // mode we apply lightweight text transformations so the user sees a
+  // visible difference when they pick a different tone.
+  function applyTone(text, tone) {
+    if (!tone || tone === 'friendly') return text;       // dictionary defaults to friendly
+    var cite = '';
+    var m = text.match(/(\n\n\[cite:[^\]]+\])\s*$/);
+    if (m) { cite = m[1]; text = text.slice(0, -m[1].length).trimEnd(); }
+    if (tone === 'formal') {
+      text = text
+        .replace(/^(Hi|Hey|Hi there|Hey there)[!,.]?\s*/i, 'Hello, ')
+        .replace(/\bI'm\b/g, 'I am').replace(/\bdon't\b/gi, 'do not').replace(/\bcan't\b/gi, 'cannot').replace(/\bwon't\b/gi, 'will not').replace(/\bit's\b/gi, 'it is').replace(/\byou're\b/gi, 'you are')
+        .replace(/\bget\b/g, 'receive').replace(/\bgrab\b/g, 'obtain')
+        .replace(/^Happy to /i, 'I would be pleased to ')
+        .replace(/^Thanks /i, 'Thank you ');
+      if (!/^Hello,/.test(text)) text = 'Hello, ' + text.charAt(0).toLowerCase() + text.slice(1);
+    } else if (tone === 'concise') {
+      // First sentence only + the citation if any. Trim filler.
+      var first = text.split(/(?<=[.!?])\s/)[0];
+      first = first.replace(/^(Hi|Hey|Hello)[!,.]?\s*/i, '').replace(/^Sorry for the trouble[.!,]?\s*/i, '').replace(/^Thanks for reaching out[.!,]?\s*/i, '');
+      text = first.charAt(0).toUpperCase() + first.slice(1);
+    } else if (tone === 'apologetic') {
+      if (!/sorry|apolog/i.test(text)) text = "I'm really sorry for the friction here — " + text.charAt(0).toLowerCase() + text.slice(1);
+      text = text.replace(/^Happy to /, 'Sorry about that. Happy to ');
+    }
+    return text + cite;
+  }
+
+  function mockReplyText(q, opts) {
+    opts = opts || {};
+    var intent = classifyReply(q);
+    var text = pickReply(intent);
+    return applyTone(text, opts.tone);
   }
   function mockSummary(opts) {
     var thread = (opts.context && opts.context.thread) || '';
@@ -311,17 +418,43 @@
     local: Local,
     preferLocal: false,        // set by chat.js when user enables local mode
 
-    replySuggestion: function (conv) {
+    replySuggestion: function (conv, opts) {
+      opts = opts || {};
+      var tone = opts.tone || 'friendly';
       var thread = buildThread(conv);
       var p = "Conversation so far:\n\n" + thread + "\n\nDraft the next reply from the support agent.";
+      var TONE_INSTR = {
+        friendly:   "Use a warm, friendly tone. Contractions OK. Empathise where appropriate.",
+        formal:     "Use a formal, professional tone. Avoid contractions. Address the customer with appropriate courtesy.",
+        concise:    "Use the most concise tone possible. One or two short sentences. No filler.",
+        apologetic: "Lead with a genuine apology, acknowledge the friction, then offer the solution. Warm and remorseful."
+      };
+      var systemPrompt = SYS.reply + '\n\nTone guidance: ' + (TONE_INSTR[tone] || TONE_INSTR.friendly)
+        + '\n\n[KB titles available]\n' + KB.slice(0, 30).map(function (a) { return '- ' + a.title; }).join('\n');
       return call({
         feature: 'reply',
-        system: SYS.reply + '\n\n[KB titles available]\n' + KB.slice(0, 30).map(function (a) { return '- ' + a.title; }).join('\n'),
+        tone: tone,                    // passed through to mockReply for tone-aware mocks
+        system: systemPrompt,
         messages: [{ role: 'user', content: p }],
         max_tokens: 400
       }).then(function (r) {
-        return { text: stripCites(r.text), citations: kbCitations(r.text), model: r.model, latency_ms: r.latency_ms, fallback: r.fallback };
+        return { text: stripCites(r.text), citations: kbCitations(r.text), model: r.model, latency_ms: r.latency_ms, fallback: r.fallback, tone: tone };
       });
+    },
+
+    // 👍/👎 feedback. Logs the rating against the most recent AI call so the
+    // admin analytics tab can surface a "kept vs edited / good vs bad" score.
+    rateMessage: function (rating, context) {
+      return SanadApp.api('/admin/ai-logs/rate', {
+        method: 'POST',
+        body: {
+          rating: rating,      // 'up' | 'down'
+          feature: (context && context.feature) || 'reply',
+          model: (context && context.model) || 'unknown',
+          fallback: !!(context && context.fallback),
+          at: new Date().toISOString()
+        }
+      }).catch(function () {});
     },
 
     summarize: function (conv) {
