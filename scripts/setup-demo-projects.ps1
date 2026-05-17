@@ -1,4 +1,4 @@
-# Create 4 GitHub Projects (v2) boards — one per demo — pre-populated
+# Create 7 GitHub Projects (v2) boards — one per demo — pre-populated
 # with realistic Done / In Progress / Todo items so the Projects tab
 # on the profile reads like real engineering work, not an empty
 # template.
@@ -8,6 +8,9 @@
 #   - Pebble & Co. - storefront backlog
 #   - Anvil Supply Co. - wholesale portal
 #   - Manzil Properties - marketplace roadmap
+#   - Vacation Homes - booking marketplace
+#   - Qahwa POS - café POS roadmap
+#   - Sanad - AI support copilot roadmap
 #
 # Prereqs:
 #   1) gh CLI installed:  winget install GitHub.cli
@@ -124,6 +127,59 @@ $projects = @(
             @{ s="Todo"; t="Lender comparison page"; b="Side-by-side mortgage rates from UAE banks (Emirates NBD, ADCB, FAB, Mashreq, etc.)." },
             @{ s="Todo"; t="DLD / property tax calculator"; b="Itemised upfront costs (4% DLD, 2% commission, 0.25% fees, NOC, valuation)." },
             @{ s="Todo"; t="Mobile app (PWA)"; b="Add-to-homescreen, offline cache of saved listings, push notifications for alerts." }
+        )
+    },
+    @{
+        title = "Vacation Homes - booking marketplace"
+        description = "UAE short-stay booking marketplace demo. 56 stays across 10 destinations, hand-rolled date-range picker, 6-step host onboarding wizard with document upload, admin verification queue, 12-section admin SPA. Live at saadm.dev/vacation/."
+        items = @(
+            @{ s="Done"; t="56 stays across 10 destinations"; b="Dubai Marina, Palm Jumeirah, Hatta Mountains, RAK Beach, Fujairah, Liwa Desert, Al Ain, Sharjah, Abu Dhabi, Ras Al Khaimah." },
+            @{ s="Done"; t="Hand-rolled date-range picker"; b="No library. Availability calendar with blocked / booked / available states, multi-month view, keyboard nav." },
+            @{ s="Done"; t="Conflict-checked booking flow"; b="POST /bookings returns 409 if dates were taken since the picker loaded; UI bounces back with a toast and refreshes availability." },
+            @{ s="Done"; t="Per-night pricing breakdown"; b="Nightly subtotal × nights + weekend surcharge + cleaning + 10% service fee + 5% VAT, itemised at checkout." },
+            @{ s="Done"; t="6-step host onboarding wizard"; b="Save-and-resume drafts in localStorage, map-pin selector (Leaflet lazy-loaded), document upload (Emirates ID + Title Deed + DTCM permit + IBAN, base64 thumbnails)." },
+            @{ s="Done"; t="Admin verification queue"; b="New section: pending hosts table, drawer with document previews, approve / request-changes / reject buttons. Listings stay off-market until host is live." },
+            @{ s="Done"; t="12-section admin SPA"; b="Dashboard, listings (CRUD+bulk+CSV), bookings, hosts (Superhost verify), guests, reviews, payments/payouts, promotions, destinations, settings, audit, verifications." },
+            @{ s="Done"; t="EN / AR locale + 4 currencies"; b="Full RTL flip; AED/USD/GBP/EUR switcher persists across pages; prices reformat at the boundary." },
+            @{ s="In Progress"; t="iCal sync with Airbnb / Booking.com"; b="Two-way calendar import + export so hosts can cross-list without double-booking." },
+            @{ s="Todo"; t="Channel manager (push to OTAs)"; b="Outbound push to Airbnb / Booking.com / Expedia from the host dashboard." },
+            @{ s="Todo"; t="Smart-lock integration"; b="Auto-generate guest-specific PIN codes for confirmed bookings, valid only during stay window." },
+            @{ s="Todo"; t="Cleaner / handyman dispatch"; b="Assign cleanings between bookings, push to assigned cleaner with check-in time." }
+        )
+    },
+    @{
+        title = "Qahwa POS - café POS roadmap"
+        description = "Café & quick-service point-of-sale demo. Touch cashier terminal with PIN auth, kitchen display system, modifier-driven menus, shift cash reconciliation, 14-section admin SPA. Live at saadm.dev/pos/."
+        items = @(
+            @{ s="Done"; t="Touch cashier terminal with PIN lock"; b="4-staff demo set (1234 manager / 5678 supervisor / 1111+2222 cashiers). 60px buttons, ≥16px text — built for tablets." },
+            @{ s="Done"; t="Category grid + modifier modal"; b="49 products in 8 categories. Modal asks Size / Milk / Syrup / Extras with per-option price deltas + live line-total preview." },
+            @{ s="Done"; t="Payment flows (cash / card / split)"; b="Cash with numpad + change calculator, card with simulated approval, split cash + card with live total-covered indicator." },
+            @{ s="Done"; t="Kitchen Display System"; b="5-second polling, elapsed-time warnings (amber >5min, red >8min), per-line ready checkboxes, Web Audio chime on new ticket, mark-all-served." },
+            @{ s="Done"; t="14-section admin SPA"; b="Dashboard with hourly heatmap + weekly bars + top products + payment breakdown, live orders, products CRUD+bulk, categories, modifiers, discounts, tables, staff RBAC, shifts, reports, inventory, receipt template, settings, audit." },
+            @{ s="Done"; t="Shift cash reconciliation + Z-report"; b="Open/close shift with cash-denomination count form, variance = counted − expected, printable Z-report." },
+            @{ s="Done"; t="Inventory deduction via recipes"; b="Each product links to ingredients (espresso → 8g beans + cup + lid); decrements stock on payment; low-stock alerts on dashboard." },
+            @{ s="Done"; t="Order state machine"; b="open → kitchen → ready → served → completed, plus refunded / held / voided. Status pill in cart header." },
+            @{ s="In Progress"; t="Receipt printer integration"; b="ESC/POS over Bluetooth for Star TSP143 — currently uses window.print() as fallback." },
+            @{ s="Todo"; t="Customer-facing ordering tablet"; b="Self-order kiosk variant that runs the same modifier modal end-to-end." },
+            @{ s="Todo"; t="Loyalty stamps + redemption"; b="10 stamps = 1 free drink. Customer-side phone-number lookup at checkout." },
+            @{ s="Todo"; t="WPS-compliant payroll export"; b="Tip pool + hourly wage export to bank-ready SIF file for UAE payroll." }
+        )
+    },
+    @{
+        title = "Sanad - AI support copilot roadmap"
+        description = "AI customer-support copilot. SaaS-style helpdesk with Claude woven into every screen. Agent inbox with AI sidebar (reply / summary / sentiment / category / EN↔AR translate), RAG chat, 11-section admin with model selector + editable system prompt. Live at saadm.dev/sanad/."
+        items = @(
+            @{ s="Done"; t="Agent inbox with AI Copilot sidebar"; b="Six AI cards per conversation: suggested reply with KB citations + Insert button, summary with topic tags, sentiment with confidence bar, auto-category with confidence, EN↔AR translate toggle, quick actions." },
+            @{ s="Done"; t="Customer chat widget with RAG"; b="Streaming-typewriter replies grounded in knowledge base, clickable citation chips that open a side drawer, 'Talk to a human' creates a real ticket in the agent inbox." },
+            @{ s="Done"; t="Knowledge base with admin AI actions"; b="77 articles in 6 categories, tiny custom markdown renderer. Per-article: Generate FAQ, Suggest improvements, Translate to Arabic. 'Find gaps' clusters recent tickets and proposes new articles." },
+            @{ s="Done"; t="11-section admin SPA"; b="Dashboard, conversations, KB CRUD, categories, agents (permission matrix), customers, AI Console (model selector + editable system prompt + test-with-sample), analytics with fallback rate + latency + cost + CSV export, integrations, settings, audit log." },
+            @{ s="Done"; t="Live + mock modes"; b="Auto-detects via /api/sanad/ai/health. Worker proxy keeps the Anthropic key server-side. Falls back to a deterministic pattern-matched dictionary when no key is set so the demo never breaks for visitors." },
+            @{ s="Done"; t="Cost + fallback tracking"; b="Every AI call logged with feature, model, tokens, latency, cost, fallback bool. Analytics tab surfaces it; AI cost ticker on the dashboard." },
+            @{ s="In Progress"; t="Cloudflare Worker proxy"; b="The _worker.js entry was rejected twice by CF Workers Builds (auto-detect fails with assets.directory: '.'). README has the copy-pasteable worker + dashboard steps for manual enable." },
+            @{ s="Todo"; t="Prompt-version history with diff"; b="Track edits to system prompt over time, compare versions side-by-side, one-click revert." },
+            @{ s="Todo"; t="Embeddings + true RAG"; b="Replace the pass-the-whole-KB approach with sentence-bge embeddings + a top-k retriever for larger KBs." },
+            @{ s="Todo"; t="Multi-workspace + multi-tenant"; b="Each workspace gets isolated data, prompt, branding, and Anthropic-key scoping." },
+            @{ s="Todo"; t="Webhook + Linear + Slack triggers"; b="On status-change, post to a connected channel; on 'urgent' label, create a Linear issue."}
         )
     }
 )

@@ -14,10 +14,11 @@ Unsplash photographers - for the real-estate marketplace imagery in /property/.
 The CSS / web platform working groups - for shipping the platform.
 
 /* SITE */
-Last update: 2026-05-14
-Language: English
+Last update: 2026-05-17
+Language: English (with Arabic surfaces in /property/, /vacation/, /sanad/)
 Doctype: HTML5
 Frameworks: React 18 via CDN (homepage only); vanilla everywhere else.
+LLM: Claude (Haiku 4.5 / Sonnet 4.6 / Opus 4.7) — wired through a Cloudflare Worker proxy in /sanad/.
 Standards: WCAG 2.1 AA targets, prefers-reduced-motion respected.
 Build: none - push to main, Cloudflare Pages deploys.
 Components: hand-written, no UI library.

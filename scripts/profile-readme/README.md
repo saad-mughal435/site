@@ -32,7 +32,7 @@ My engineering background helps me run and support Krones beverage production li
 
 ## 🚀 Featured live demos
 
-> All four open in the browser - fabricated data, real workflows.
+> Seven open in the browser - fabricated data, real workflows.
 
 | Demo | What it is | Stack |
 |------|-----------|-------|
@@ -40,6 +40,8 @@ My engineering background helps me run and support Krones beverage production li
 | 🏢 **[Anvil Supply Co.](https://saadm.dev/b2b/)** | B2B wholesale portal with tier pricing, MOQ, quote + approval workflows, multi-user roles. | Role-based UI · Approval queue · Mock API |
 | 🏠 **[Manzil Properties](https://saadm.dev/property/)** | Dubai real-estate marketplace. Map + list search, agent profiles, mortgage / valuation / yield calculators, 13-section admin SPA. | Leaflet · localStorage · Mock API |
 | 🏖️ **[Vacation Homes](https://saadm.dev/vacation/)** | UAE short-stay booking platform. Custom date-range picker, 6-step host onboarding with document upload, admin verification queue. | Vanilla JS · Custom calendar · Mock API |
+| ☕ **[Qahwa POS](https://saadm.dev/pos/)** | Café & quick-service POS. Touch cashier terminal, kitchen display system, modifier-driven menus, shift cash reconciliation with Z-reports, 14-section admin. | PIN auth · KDS polling · Web Audio · Mock API |
+| ✦ **[Sanad](https://saadm.dev/sanad/)** | AI customer-support copilot. Helpdesk inbox with Claude-powered AI sidebar (suggested reply, summary, sentiment, EN↔AR translate), RAG chat widget, 11-section admin with model selector + editable system prompt. | Claude API · CF Worker proxy · RAG · Streaming · Mock fallback |
 | 🛒 **[Pebble & Co.](https://saadm.dev/b2c/)** | DTC storefront with admin panel — products, cart, checkout, customer accounts. | HTML5 · Vanilla JS · Mock API |
 
 ---
@@ -77,6 +79,7 @@ My engineering background helps me run and support Krones beverage production li
 ![PLC](https://img.shields.io/badge/PLC_Concepts-c4b5fd?style=flat&logoColor=white)
 
 **Working with** &nbsp;
+![Claude](https://img.shields.io/badge/Claude_API-D97757?style=flat&logoColor=white)
 ![Pandas](https://img.shields.io/badge/pandas-150458?style=flat&logo=pandas&logoColor=white)
 ![OpenAI](https://img.shields.io/badge/OpenAI-412991?style=flat&logo=openai&logoColor=white)
 ![REST APIs](https://img.shields.io/badge/REST_APIs-008080?style=flat&logoColor=white)

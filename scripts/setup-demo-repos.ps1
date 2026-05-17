@@ -1,10 +1,13 @@
 # Mirror each demo folder into its own standalone GitHub repo.
 #
-# Creates (or refreshes) four public repos:
+# Creates (or refreshes) seven public repos:
 #   - kingsley-mes-demo       <-  site/app/
 #   - pebble-storefront       <-  site/b2c/
 #   - anvil-wholesale         <-  site/b2b/
 #   - manzil-marketplace      <-  site/property/
+#   - vacation-homes-demo     <-  site/vacation/
+#   - qahwa-pos-demo          <-  site/pos/
+#   - sanad-copilot           <-  site/sanad/
 #
 # Each one uses `git subtree split` so only commits that touched that
 # subfolder land in the new repo (preserves history, no portfolio bloat).
@@ -54,6 +57,27 @@ $demos = @(
         description = "Manzil Properties — Dubai real-estate marketplace demo. 65 listings across 15 communities, map+list search (Leaflet), mortgage/valuation/yield calculators, 13-section admin SPA."
         homepage    = "https://saadm.dev/property/"
         topics      = @("real-estate","marketplace","leaflet","dubai","mortgage-calculator","admin-spa","portfolio")
+    },
+    @{
+        prefix      = "vacation"
+        repo        = "vacation-homes-demo"
+        description = "Vacation Homes — UAE short-stay booking marketplace demo. 56 stays across 10 destinations, hand-rolled date-range picker, conflict-checked bookings, 6-step host onboarding wizard with document upload, admin verification queue, 12-section admin SPA."
+        homepage    = "https://saadm.dev/vacation/"
+        topics      = @("short-stay","booking","marketplace","date-picker","leaflet","host-onboarding","verification-queue","admin-spa","portfolio")
+    },
+    @{
+        prefix      = "pos"
+        repo        = "qahwa-pos-demo"
+        description = "Qahwa POS — café & quick-service point-of-sale demo. Touch cashier terminal with PIN auth, kitchen display system with audio chime, modifier-driven menus, shift cash reconciliation with Z-reports, 14-section admin SPA."
+        homepage    = "https://saadm.dev/pos/"
+        topics      = @("pos","point-of-sale","cafe","kitchen-display","kds","touch-ui","shift-reconciliation","z-report","admin-spa","portfolio")
+    },
+    @{
+        prefix      = "sanad"
+        repo        = "sanad-copilot"
+        description = "Sanad — AI customer-support copilot demo. SaaS-style helpdesk with Claude integrated at every touchpoint: agent inbox with AI sidebar (suggested reply with KB citations, summary, sentiment, EN↔AR translate), RAG chat widget with streaming, 11-section admin with model selector + editable system prompt. Live + mock-fallback modes."
+        homepage    = "https://saadm.dev/sanad/"
+        topics      = @("ai","claude","anthropic","customer-support","copilot","rag","streaming","cloudflare-workers","helpdesk","admin-spa","portfolio")
     }
 )
 
