@@ -1018,6 +1018,27 @@ const PROJECTS = [
   },
   {
     domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
+    title: 'Qahwa POS - cafe & quick-service POS',
+    desc: <Fragment>A cafe and quick-service point-of-sale demo covering the in-person retail / F&amp;B vertical. Touch
+      cashier terminal with PIN auth, kitchen display system with audio chime on new tickets, and a 14-section
+      admin SPA for the back office. ~5,000 LOC, vanilla JS, all writes in localStorage - reset to seed any
+      time from Settings.</Fragment>,
+    bullets: [
+      <Fragment><strong>Touch cashier terminal</strong>: PIN lock, category grid + product search, modifier modal (size / milk / syrup / extras with per-option price deltas), cart with qty steppers, cash / card / split payment with change calculator</Fragment>,
+      <Fragment><strong>Kitchen Display System</strong>: 5-second polling, big card layout with elapsed-time warnings (amber &gt; 5 min, red &gt; 8 min), per-line ready checkboxes, Web Audio chime when a new ticket arrives</Fragment>,
+      <Fragment><strong>14-section admin SPA</strong>: dashboard with hourly heatmap + weekly bars + top products + payment breakdown, live orders pipeline with refund flow, products CRUD + bulk + modifier-group multi-link, categories, modifiers, discounts, tables floor plan, staff RBAC, shifts with cash-denomination count + variance + printable Z-report, reports with CSV export, inventory with recipe-based deduction, receipt template with live preview, settings, audit log</Fragment>,
+      <Fragment>Full order state machine (open → kitchen → ready → served → completed, plus refunded / held / voided) over a fetch interceptor serving <code>/pos/api/*</code></Fragment>,
+    ],
+    tags: ['HTML5', 'CSS Grid', 'Vanilla JS (ES6+)', 'PIN auth', 'Touch UI', 'KDS polling', 'Web Audio API', 'Mock API (fetch shim)', 'localStorage', 'Hash-routed SPA', 'Cash-drawer Z-report'],
+    ctas: [
+      { label: 'Open POS ↗', href: 'pos/index.html', target: '_blank', primary: true },
+      { label: 'Cashier terminal ↗', href: 'pos/terminal.html', target: '_blank' },
+      { label: 'Kitchen display ↗', href: 'pos/kitchen.html', target: '_blank' },
+      { label: 'Open admin ↗', href: 'pos/admin.html', target: '_blank' },
+    ],
+  },
+  {
+    domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
     title: 'Pebble & Co. - DTC storefront',
     desc: <Fragment>A full direct-to-consumer storefront built end-to-end as a portfolio piece - storefront, catalog,
       product detail, cart, multi-step checkout, customer account, and a Shopify-style admin panel with
