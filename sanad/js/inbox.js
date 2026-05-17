@@ -354,9 +354,29 @@
     if (ai.reply) {
       var ins = $('ai-insert');
       var reg = $('ai-regen');
-      if (ins) ins.addEventListener('click', function () { state.composer = ai.reply.text; renderThread(); });
+      if (ins) ins.addEventListener('click', function () {
+        // Read directly from state.ai (not the closure `ai`) in case
+        // renderAI fired again between listener-attach and click.
+        var current = (state.ai && state.ai.reply && state.ai.reply.text) || ai.reply.text || '';
+        state.composer = current;
+        renderThread();
+        // Visible feedback — the composer lives in the centre column,
+        // user's eyes are on the right column. Without this they think
+        // nothing happened.
+        setTimeout(function () {
+          var inp = $('cb-input');
+          if (inp) {
+            inp.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            inp.focus();
+            // Place caret at end so they can keep typing
+            inp.setSelectionRange(inp.value.length, inp.value.length);
+          }
+        }, 0);
+        window.toast('Inserted into composer · ⌘+Enter to send', 'success');
+      });
       if (reg) reg.addEventListener('click', function () {
         state.ai.reply = null; renderAI();
+        window.toast('Regenerating…', 'success', 1500);
         SanadAI.replySuggestion(state.conv).then(function (r) { state.ai.reply = r; renderAI(); });
       });
     }
@@ -371,15 +391,20 @@
     });
     var esc1 = $('ai-escalate');
     if (esc1) esc1.addEventListener('click', function () {
+      if (!state.activeId) return window.toast('Open a conversation first', 'warn');
       SanadApp.api('/conversations/' + state.activeId, { method: 'PUT', body: { priority: 'urgent', status: 'escalated' } })
-        .then(function () { window.toast('Escalated', 'warn'); openConv(state.activeId); loadList(); });
+        .then(function () { window.toast('Escalated · priority raised to urgent', 'warn'); openConv(state.activeId); loadList(); });
     });
     var sn1 = $('ai-snooze-1h');
-    if (sn1) sn1.addEventListener('click', snooze);
+    if (sn1) sn1.addEventListener('click', function () {
+      if (!state.activeId) return window.toast('Open a conversation first', 'warn');
+      snooze();
+    });
     var rs = $('ai-close-resolved');
     if (rs) rs.addEventListener('click', function () {
+      if (!state.activeId) return window.toast('Open a conversation first', 'warn');
       SanadApp.api('/conversations/' + state.activeId + '/status', { method: 'POST', body: { status: 'closed' } })
-        .then(function () { window.toast('Marked resolved', 'success'); openConv(state.activeId); loadList(); });
+        .then(function () { window.toast('Marked resolved · status → closed', 'success'); openConv(state.activeId); loadList(); });
     });
   }
 
