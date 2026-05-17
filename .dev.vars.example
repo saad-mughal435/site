@@ -1,0 +1,13 @@
+# Cloudflare Worker local secrets template.
+# Copy to `.dev.vars` (gitignored) and fill in real values when running
+# `npx wrangler dev` locally. In production, set these via the Cloudflare
+# dashboard under Workers > site > Settings > Variables and Secrets.
+
+# Required for Sanad live AI mode. Without it the demo falls back to a
+# deterministic mock (the demo still works, just no real Claude calls).
+ANTHROPIC_API_KEY=sk-ant-...
+
+# Optional. Default model the Sanad proxy uses when the client doesn't
+# specify one. Allowed: claude-haiku-4-5-20251001, claude-sonnet-4-6,
+# claude-opus-4-7.
+SANAD_DEFAULT_MODEL=claude-haiku-4-5-20251001
