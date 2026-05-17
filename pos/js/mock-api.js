@@ -101,7 +101,8 @@
     var sub = (order.lines || []).reduce(function (s, l) { return s + lineTotal(l); }, 0);
     order.subtotal = sub;
     var afterDisc = Math.max(0, sub - (order.discount || 0));
-    order.vat = +(afterDisc * 0.05).toFixed(2);
+    var vatPct = (settings().vat_pct != null ? settings().vat_pct : 5) / 100;
+    order.vat = +(afterDisc * vatPct).toFixed(2);
     order.total = +(afterDisc + order.vat).toFixed(2);
     return order;
   }
@@ -182,7 +183,7 @@
       if (params.q) { var q = String(params.q).toLowerCase(); rows = rows.filter(function (p) { return (p.name + ' ' + p.name_ar).toLowerCase().indexOf(q) !== -1; }); }
       return { ok: true, items: rows };
     }
-    if (m = path.match(/^\/products\/([^\/]+)$/) && method === 'GET') {
+    if ((m = path.match(/^\/products\/([^\/]+)$/)) && method === 'GET') {
       var p = products().find(function (x) { return x.id === m[1]; });
       if (!p) return { ok: false, error: 'not_found' };
       // Attach modifier groups
@@ -208,12 +209,12 @@
       audit('order.create', newO.id, newO.type);
       return { ok: true, order: newO };
     }
-    if (m = path.match(/^\/orders\/([^\/]+)$/) && method === 'GET') {
+    if ((m = path.match(/^\/orders\/([^\/]+)$/)) && method === 'GET') {
       var o = orders().find(function (x) { return x.id === m[1] || x.order_no === m[1]; });
       if (!o) return { ok: false, error: 'not_found' };
       return { ok: true, order: o };
     }
-    if (m = path.match(/^\/orders\/([^\/]+)$/) && method === 'PUT') {
+    if ((m = path.match(/^\/orders\/([^\/]+)$/)) && method === 'PUT') {
       var oid = m[1];
       var o2 = orders().find(function (x) { return x.id === oid; });
       if (!o2) return { ok: false, error: 'not_found' };
@@ -230,7 +231,7 @@
       edits[oid] = cur; jset(LS.orders_edits, edits);
       return { ok: true, order: cur };
     }
-    if (m = path.match(/^\/orders\/([^\/]+)\/kot$/) && method === 'POST') {
+    if ((m = path.match(/^\/orders\/([^\/]+)\/kot$/)) && method === 'POST') {
       var ke = jget(LS.orders_edits, {});
       var ot = orders().find(function (x) { return x.id === m[1]; });
       if (!ot) return { ok: false, error: 'not_found' };
@@ -240,7 +241,7 @@
       notify({ title: 'New order in kitchen', body: ot.order_no, kind: 'kitchen' });
       return { ok: true };
     }
-    if (m = path.match(/^\/orders\/([^\/]+)\/pay$/) && method === 'POST') {
+    if ((m = path.match(/^\/orders\/([^\/]+)\/pay$/)) && method === 'POST') {
       var pe = jget(LS.orders_edits, {});
       var op = orders().find(function (x) { return x.id === m[1] || x.order_no === m[1]; });
       if (!op) return { ok: false, error: 'not_found' };
@@ -256,14 +257,14 @@
       audit('order.pay', op.id, body.method + ' AED ' + (body.amount || cur2.total));
       return { ok: true, order: cur2, change: Math.max(0, (body.amount || 0) - cur2.total) };
     }
-    if (m = path.match(/^\/orders\/([^\/]+)\/refund$/) && method === 'POST') {
+    if ((m = path.match(/^\/orders\/([^\/]+)\/refund$/)) && method === 'POST') {
       var re = jget(LS.orders_edits, {});
       re[m[1]] = Object.assign({}, re[m[1]] || {}, { status: 'refunded', refunded_at: new Date().toISOString(), refund_reason: body.reason || '' });
       jset(LS.orders_edits, re);
       audit('order.refund', m[1], body.reason || '');
       return { ok: true };
     }
-    if (m = path.match(/^\/orders\/([^\/]+)\/(hold|resume|void|served)$/) && method === 'POST') {
+    if ((m = path.match(/^\/orders\/([^\/]+)\/(hold|resume|void|served)$/)) && method === 'POST') {
       var statusMap = { hold: 'held', resume: 'open', void: 'voided', served: 'served' };
       var he = jget(LS.orders_edits, {});
       he[m[1]] = Object.assign({}, he[m[1]] || {}, { status: statusMap[m[2]] });
@@ -274,11 +275,13 @@
 
     // ----- Kitchen -----
     if (path === '/orders/kitchen' && method === 'GET') {
-      var inKitchen = orders().filter(function (o) { return o.status === 'kitchen'; })
+      // 'ready' orders are food-prepped-but-not-handed-over yet; keep them on
+      // the KDS so staff can mark them served when the customer collects.
+      var inKitchen = orders().filter(function (o) { return o.status === 'kitchen' || o.status === 'ready'; })
         .sort(function (a, b) { return new Date(a.created_at) - new Date(b.created_at); });
       return { ok: true, items: inKitchen };
     }
-    if (m = path.match(/^\/orders\/([^\/]+)\/item\/([^\/]+)\/ready$/) && method === 'POST') {
+    if ((m = path.match(/^\/orders\/([^\/]+)\/item\/([^\/]+)\/ready$/)) && method === 'POST') {
       var ie2 = jget(LS.orders_edits, {});
       var oo = orders().find(function (x) { return x.id === m[1]; });
       if (!oo) return { ok: false, error: 'not_found' };
@@ -287,7 +290,7 @@
       ie2[m[1]] = cur3; jset(LS.orders_edits, ie2);
       return { ok: true };
     }
-    if (m = path.match(/^\/orders\/([^\/]+)\/ready$/) && method === 'POST') {
+    if ((m = path.match(/^\/orders\/([^\/]+)\/ready$/)) && method === 'POST') {
       var rr = jget(LS.orders_edits, {});
       var oR = orders().find(function (x) { return x.id === m[1]; });
       if (!oR) return { ok: false, error: 'not_found' };
@@ -301,10 +304,19 @@
 
     // ----- Tables / shifts / inventory -----
     if (path === '/tables' && method === 'GET') return { ok: true, items: tables() };
-    if (m = path.match(/^\/tables\/([^\/]+)\/(seat|free)$/) && method === 'PUT') {
+    if ((m = path.match(/^\/tables\/([^\/]+)\/(seat|free)$/)) && method === 'PUT') {
       var to = jget(LS.tables_overrides, {});
       to[m[1]] = Object.assign({}, to[m[1]] || {}, { status: m[2] === 'seat' ? 'seated' : 'free' });
       jset(LS.tables_overrides, to);
+      return { ok: true };
+    }
+    if ((m = path.match(/^\/tables\/([^\/]+)\/status$/)) && method === 'PUT') {
+      var allowed = ['free','seated','occupied','dirty'];
+      if (allowed.indexOf(body.status) === -1) return { ok: false, error: 'invalid_status' };
+      var to2 = jget(LS.tables_overrides, {});
+      to2[m[1]] = Object.assign({}, to2[m[1]] || {}, { status: body.status });
+      jset(LS.tables_overrides, to2);
+      audit('table.status', m[1], body.status);
       return { ok: true };
     }
     if (path === '/shifts/current' && method === 'GET') {
@@ -325,22 +337,25 @@
       var todaysOrders = orders().filter(function (o) { return o.status === 'completed' && new Date(o.completed_at || o.created_at) >= new Date(open2.opened_at); });
       var sales = todaysOrders.reduce(function (s, o) { return s + o.total; }, 0);
       var cashSales = todaysOrders.reduce(function (s, o) { return s + (o.payments || []).filter(function (p) { return p.method === 'cash'; }).reduce(function (a, p) { return a + (p.amount || 0); }, 0); }, 0);
-      var expected = open2.opening_count_aed + cashSales;
+      var expected = +(open2.opening_count_aed + cashSales).toFixed(2);
+      // Use explicit null check so a counted AED 0 (empty drawer) shows the true negative variance.
+      var counted = (body.closing_count_aed != null && body.closing_count_aed !== '') ? +body.closing_count_aed : expected;
+      var variance = +(counted - expected).toFixed(2);
       se[open2.id] = Object.assign({}, se[open2.id] || {}, {
         closed_at: new Date().toISOString(),
-        closing_count_aed: body.closing_count_aed || expected,
+        closing_count_aed: counted,
         expected_aed: expected,
-        variance: (body.closing_count_aed || expected) - expected,
-        payments_total: sales,
+        variance: variance,
+        payments_total: +sales.toFixed(2),
         orders_count: todaysOrders.length,
         closed_by: body.closed_by || 'st-manager'
       });
       jset(LS.shifts_edits, se);
-      audit('shift.close', open2.id, 'variance ' + ((body.closing_count_aed || expected) - expected).toFixed(2));
+      audit('shift.close', open2.id, 'variance ' + variance.toFixed(2));
       return { ok: true, shift: Object.assign({}, open2, se[open2.id]) };
     }
     if (path === '/inventory' && method === 'GET') return { ok: true, items: inventory() };
-    if (m = path.match(/^\/inventory\/([^\/]+)\/adjust$/) && method === 'POST') {
+    if ((m = path.match(/^\/inventory\/([^\/]+)\/adjust$/)) && method === 'POST') {
       var ie3 = jget(LS.inventory_edits, {});
       ie3[m[1]] = Object.assign({}, ie3[m[1]] || {}, { on_hand: body.on_hand });
       jset(LS.inventory_edits, ie3);
@@ -396,7 +411,7 @@
       audit('product.create', nid, body.name);
       return { ok: true, product: nP };
     }
-    if (m = path.match(/^\/admin\/products\/([^\/]+)$/)) {
+    if ((m = path.match(/^\/admin\/products\/([^\/]+)$/))) {
       if (method === 'PUT') {
         var pe2 = jget(LS.products_edits, {});
         pe2[m[1]] = Object.assign({}, pe2[m[1]] || {}, body);
@@ -435,7 +450,7 @@
       audit('staff.create', sid, body.name);
       return { ok: true, staff: nS };
     }
-    if (m = path.match(/^\/admin\/staff\/([^\/]+)$/)) {
+    if ((m = path.match(/^\/admin\/staff\/([^\/]+)$/))) {
       if (method === 'PUT') {
         var se2 = jget(LS.staff_edits, {});
         se2[m[1]] = Object.assign({}, se2[m[1]] || {}, body);
@@ -514,7 +529,7 @@
     }
 
     // ----- Live-orders admin override -----
-    if (m = path.match(/^\/admin\/orders\/([^\/]+)\/status$/) && method === 'POST') {
+    if ((m = path.match(/^\/admin\/orders\/([^\/]+)\/status$/)) && method === 'POST') {
       var aoe = jget(LS.orders_edits, {});
       aoe[m[1]] = Object.assign({}, aoe[m[1]] || {}, { status: body.status });
       if (body.status === 'completed') aoe[m[1]].completed_at = new Date().toISOString();

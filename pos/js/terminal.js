@@ -167,10 +167,17 @@
   }
 
   // ---------- Order state ----------
+  // Don't create an order on every page load — that pollutes localStorage and
+  // admin views with empty `open` orders. Create lazily on the first product tap.
   function startOrder() {
-    PosApp.api('/orders', { method: 'POST', body: { type: 'takeaway' } }).then(function (r) {
+    state.order = null;
+    renderCats(); renderProducts(); renderCart();
+  }
+  function ensureOrder() {
+    if (state.order) return Promise.resolve(state.order);
+    return PosApp.api('/orders', { method: 'POST', body: { type: 'takeaway' } }).then(function (r) {
       state.order = r.body.order;
-      renderCats(); renderProducts(); renderCart();
+      return state.order;
     });
   }
   function modLabels(modIds) {
@@ -194,9 +201,11 @@
     return product.price_aed + d;
   }
   function addLine(product, modIds, qty) {
-    var unit = lineUnit(product, modIds);
-    var line = { id: 'ln-' + Math.random().toString(36).slice(2, 8), product_id: product.id, qty: qty, modifiers: modIds, unit_price: unit, line_total: unit * qty, ready: false };
-    PosApp.api('/orders/' + state.order.id, { method: 'PUT', body: { add_line: line } }).then(function (r) {
+    ensureOrder().then(function () {
+      var unit = lineUnit(product, modIds);
+      var line = { id: 'ln-' + Math.random().toString(36).slice(2, 8), product_id: product.id, qty: qty, modifiers: modIds, unit_price: unit, line_total: unit * qty, ready: false };
+      return PosApp.api('/orders/' + state.order.id, { method: 'PUT', body: { add_line: line } });
+    }).then(function (r) {
       state.order = r.body.order; renderCart();
     });
   }
@@ -209,7 +218,18 @@
   }
   function renderCart() {
     var o = state.order;
-    if (!o) return;
+    if (!o) {
+      $('t-order-no').textContent = '—';
+      $('t-order-type').textContent = 'Takeaway';
+      $('t-order-meta').textContent = '';
+      $('t-cart-lines').innerHTML = '<div class="pos-cart-empty"><div class="pos-cart-empty-mark">☕</div>Tap a product to start the order.</div>';
+      $('t-subtotal').textContent = fmt(0);
+      $('t-vat').textContent = fmt(0);
+      $('t-total').textContent = fmt(0);
+      $('t-disc-row').style.display = 'none';
+      ['t-cash','t-card','t-split','t-discount-btn','t-hold','t-kot','t-void'].forEach(function (id) { $(id).disabled = true; });
+      return;
+    }
     $('t-order-no').textContent = o.order_no;
     $('t-order-type').textContent = o.type === 'dine-in' ? 'Dine-in · ' + (o.table_id || '') : 'Takeaway';
     $('t-order-meta').textContent = PosApp.fmtTime(o.created_at);
@@ -242,8 +262,16 @@
     if (o.discount > 0) { $('t-disc-row').style.display = ''; $('t-discount').textContent = '-' + fmt(o.discount); }
     else { $('t-disc-row').style.display = 'none'; }
     var hasLines = o.lines && o.lines.length > 0;
-    ['t-cash','t-card','t-split','t-discount-btn','t-hold','t-kot'].forEach(function (id) { $(id).disabled = !hasLines; });
+    // Once KOT has been sent the order is in the kitchen pipeline; don't allow
+    // double-send. Discount can still be applied to a kitchen-status order.
+    var alreadyKot = o.status !== 'open';
+    ['t-cash','t-card','t-split','t-discount-btn','t-hold'].forEach(function (id) { $(id).disabled = !hasLines; });
+    $('t-kot').disabled = !hasLines || alreadyKot;
     $('t-void').disabled = !hasLines;
+    // Surface order status in the type pill so the cashier sees "In kitchen" etc.
+    var typeLabel = o.type === 'dine-in' ? 'Dine-in · ' + (o.table_id || '') : 'Takeaway';
+    var statusLabel = { kitchen: ' · In kitchen', ready: ' · Ready', served: ' · Served', held: ' · Held' }[o.status] || '';
+    $('t-order-type').textContent = typeLabel + statusLabel;
   }
 
   // ---------- Payment flows ----------
@@ -292,6 +320,7 @@
             close();
             window.toast('Sale complete · change ' + fmt(r.body.change || 0), 'success', 3000);
             showReceipt(r.body.order, amt);
+            startOrder();
           });
         });
       }
@@ -299,6 +328,8 @@
   }
   function payCard() {
     var o = state.order; if (!o) return;
+    var timers = [];
+    var cancelled = false;
     var m = PosApp.showModal({
       title: 'Card payment · ' + fmt(o.total),
       body: '<div style="text-align:center;padding:30px 10px;">'
@@ -306,19 +337,27 @@
         + '<div id="cd-state" style="font-size:16px;color:var(--pos-ink);">Insert / tap card on reader…</div>'
         + '<div style="margin-top:18px;background:var(--pos-bg-2);height:6px;border-radius:999px;overflow:hidden;"><div id="cd-bar" style="height:100%;background:var(--pos-accent);width:0;transition:width 2.6s linear;"></div></div>'
         + '</div>',
-      foot: '<button class="pos-btn" data-modal-close>Cancel</button>',
+      foot: '<button class="pos-btn" data-modal-close id="cd-cancel">Cancel</button>',
       onMount: function (h, close) {
-        setTimeout(function () { h.querySelector('#cd-bar').style.width = '100%'; }, 50);
-        setTimeout(function () {
+        timers.push(setTimeout(function () { if (!cancelled) h.querySelector('#cd-bar').style.width = '100%'; }, 50));
+        timers.push(setTimeout(function () {
+          if (cancelled) return;
           h.querySelector('#cd-state').innerHTML = '<span style="color:var(--pos-success);">✓ Approved</span>';
-          setTimeout(function () {
+          timers.push(setTimeout(function () {
+            if (cancelled) return;
             PosApp.api('/orders/' + o.id + '/pay', { method: 'POST', body: { method: 'card', amount: o.total } }).then(function (r) {
+              if (cancelled) return;
               close();
               window.toast('Card payment approved', 'success');
               showReceipt(r.body.order, o.total);
+              startOrder();
             });
-          }, 700);
-        }, 2700);
+          }, 700));
+        }, 2700));
+        h.querySelector('#cd-cancel').addEventListener('click', function () {
+          cancelled = true;
+          timers.forEach(function (t) { clearTimeout(t); });
+        });
       }
     });
   }
@@ -351,6 +390,7 @@
           PosApp.api('/orders/' + o.id + '/pay', { method: 'POST', body: { payments: payments } }).then(function (r) {
             close(); window.toast('Split payment complete', 'success');
             showReceipt(r.body.order, c + d);
+            startOrder();
           });
         });
       }
@@ -383,16 +423,21 @@
           var fixed = parseFloat(h.querySelector('#dc-amt').value || 0);
           var code = (h.querySelector('#dc-code').value || '').toUpperCase().trim();
           if (code) {
-            var discs = D.DISCOUNTS;
-            var match = discs.find(function (d) { return d.code === code && d.active; });
-            if (match) {
-              if (match.type === 'pct') amt = +(o.subtotal * (match.value / 100)).toFixed(2);
-              else if (match.type === 'fixed') amt = match.value;
+            // Pull from API so admin-side edits to discount codes propagate.
+            PosApp.api('/discounts').then(function (rr) {
+              var discs = (rr.body && rr.body.items) || [];
+              var match = discs.find(function (d) { return d.code === code && d.active; });
+              if (!match) { window.toast('Invalid or expired code', 'warn'); return; }
+              if (match.min_total && o.subtotal < match.min_total) { window.toast('Code requires min spend ' + fmt(match.min_total), 'warn'); return; }
+              if (match.type === 'pct' || match.type === 'percent') amt = +(o.subtotal * (match.value / 100)).toFixed(2);
+              else if (match.type === 'fixed' || match.type === 'aed') amt = match.value;
+              else { window.toast('Code type not supported here', 'warn'); return; }
               window.toast('Code ' + code + ' applied', 'success');
-            } else { window.toast('Invalid or expired code', 'warn'); return; }
-          } else if (fixed > 0) {
-            amt = fixed;
+              apply();
+            });
+            return;
           }
+          if (fixed > 0) amt = fixed;
           apply();
         });
       }
@@ -403,7 +448,11 @@
     var o = state.order; if (!o || !o.lines.length) return;
     PosApp.api('/orders/' + o.id + '/kot', { method: 'POST' }).then(function () {
       window.toast('🔔 Sent to kitchen', 'success');
-      startOrder();
+      // Keep the cart visible so the cashier can still take payment after KOT
+      // (matches the planned end-to-end flow: KOT → KDS preps → terminal pays).
+      return PosApp.api('/orders/' + o.id);
+    }).then(function (r) {
+      if (r && r.body && r.body.order) { state.order = r.body.order; renderCart(); }
     });
   }
   function holdOrder() {
