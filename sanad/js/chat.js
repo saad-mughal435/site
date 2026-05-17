@@ -52,6 +52,14 @@
         + '</div>';
     }).join('');
     var typingHtml = state.typing ? '<div class="snd-chat-msg"><div class="snd-msg-avatar" style="background:linear-gradient(135deg,var(--snd-primary),var(--snd-mint-2));"></div><div class="snd-chat-typing"><span></span><span></span><span></span></div></div>' : '';
+    // Starter chips: when only the greeting is in the thread, suggest 4 common questions so visitors have something to click.
+    var starterHtml = (state.history.length === 1 && state.history[0].greeting) ? (
+      '<div style="margin-top:14px;display:flex;flex-direction:column;gap:6px;">'
+      + ['How do I reset my password?', 'How do refunds work?', 'How do I set up SSO?', 'Where is my data stored?'].map(function (q) {
+          return '<button class="snd-btn snd-btn--sm" data-starter="' + esc(q) + '" style="justify-content:flex-start;text-align:start;background:rgba(139,92,246,.08);border-color:rgba(139,92,246,.30);color:var(--snd-ink-2);">' + esc(q) + '</button>';
+        }).join('')
+      + '</div>'
+    ) : '';
     var ratedHtml = state.rated ? '<div style="text-align:center;padding:10px;font-size:12px;color:var(--snd-mint);">Thanks for the feedback!</div>' : '';
     var ratePromptHtml = (state.history.length >= 4 && !state.rated) ? '<div style="text-align:center;padding:8px;font-size:11.5px;color:var(--snd-muted);">Was this helpful? <button class="snd-btn snd-btn--sm" data-rate="up">👍</button> <button class="snd-btn snd-btn--sm" data-rate="down">👎</button></div>' : '';
 
@@ -66,7 +74,7 @@
       +   '</div>'
       +   (state.mode === 'embedded' ? '<button class="snd-modal-close" id="chat-close" style="color:var(--snd-muted);">×</button>' : '')
       + '</div>'
-      + '<div class="snd-chat-body" id="chat-body">' + msgsHtml + typingHtml + '</div>'
+      + '<div class="snd-chat-body" id="chat-body">' + msgsHtml + starterHtml + typingHtml + '</div>'
       + ratePromptHtml + ratedHtml
       + '<div class="snd-chat-handoff">Want a human? <a href="#" id="chat-handoff">Open a ticket</a> · <a href="#" id="chat-reset">Start over</a></div>'
       + '<div class="snd-chat-foot">'
@@ -99,6 +107,12 @@
     });
     document.querySelectorAll('[data-cite]').forEach(function (cit) {
       cit.addEventListener('click', function (e) { e.preventDefault(); openDrawer(cit.getAttribute('data-cite')); });
+    });
+    document.querySelectorAll('[data-starter]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var inp = document.getElementById('chat-input');
+        if (inp) { inp.value = b.getAttribute('data-starter'); inp.dispatchEvent(new Event('input')); doSend(); }
+      });
     });
   }
 
