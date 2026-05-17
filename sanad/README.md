@@ -4,51 +4,73 @@ A SaaS-style helpdesk with **Claude** integrated at every touchpoint:
 suggested replies, summaries, sentiment analysis, auto-categorization, RAG
 chat with knowledge-base citations, and translation (EN ↔ AR).
 
-The demo works in two modes:
+## Modes
 
 | Mode | When | Behaviour |
 | --- | --- | --- |
-| **Live** | `ANTHROPIC_API_KEY` is set on the Cloudflare Worker | Calls real Claude (Haiku 4.5 by default). Topbar shows **Live · Haiku 4.5**. |
-| **Demo** | No key configured, Worker unreachable, or rate-limited | Falls back to a deterministic pattern-matched response dictionary. Topbar shows **Demo mode**. Every feature still works. |
+| **Demo** | Default | Falls back to a deterministic pattern-matched response dictionary. Every feature works realistically. Topbar shows **Demo mode**. |
+| **Live** | A Cloudflare Worker proxy at `/api/sanad/ai/*` is deployed AND `ANTHROPIC_API_KEY` is set | Real Claude responses (Haiku 4.5 default). Topbar shows **Live · Haiku 4.5**. |
 
-The site visitor never sees the demo break either way.
+The site visitor never sees the demo break either way. Out of the box,
+this repo ships in **Demo mode** only.
 
-## Enable live mode
+## Enabling live mode (one-time setup)
 
-1. Cloudflare dashboard → **Workers & Pages → site → Settings → Variables and Secrets**
-2. Add an Encrypted Secret:
-   - `ANTHROPIC_API_KEY = sk-ant-...`
-3. *(Optional)* Add a Plain text variable:
-   - `SANAD_DEFAULT_MODEL = claude-haiku-4-5-20251001`
-4. Push or trigger a redeploy. Within ~60 seconds the topbar badge will flip
-   from **Demo mode** to **Live · Haiku 4.5** automatically.
+The Worker proxy is **not bundled with this repo**. The Cloudflare
+"Workers with Static Assets" config we deploy under requires a manual
+dashboard switch to accept a `_worker.js` entry point alongside
+`assets.directory: "."`, which Saad hasn't toggled yet.
 
-## Cost guardrails
+Once Saad enables that, the steps are:
 
-- Default model is **Claude Haiku 4.5** (~$0.80 per 1M input tokens,
-  ~$4.00 per 1M output). A typical suggested reply is ~500 input +
-  150 output tokens ≈ **$0.001 per call**.
-- The Worker rate-limits to **20 calls per minute per IP**. A 429 response
-  pushes the client into mock mode for that call.
-- Prompt caching can be enabled by sending the system prompt as a content
-  array with `cache_control: { type: 'ephemeral' }` — saves ~90% on repeat
-  invocations.
-- Admins can switch the live model to **Sonnet 4.6** or **Opus 4.7** from
-  the in-app **AI Console**.
+1. Drop the proxy in. A minimal reference implementation:
+   ```js
+   // _worker.js
+   export default {
+     async fetch(request, env) {
+       const url = new URL(request.url);
+       if (url.pathname === '/api/sanad/ai/health') {
+         return Response.json({ ok: true, live: !!env.ANTHROPIC_API_KEY,
+           model: env.SANAD_DEFAULT_MODEL || 'claude-haiku-4-5-20251001' });
+       }
+       if (url.pathname.startsWith('/api/sanad/ai/')) {
+         if (!env.ANTHROPIC_API_KEY)
+           return Response.json({ ok: false, error: 'no_key', fallback: true }, { status: 503 });
+         const body = await request.json();
+         const r = await fetch('https://api.anthropic.com/v1/messages', {
+           method: 'POST',
+           headers: {
+             'x-api-key': env.ANTHROPIC_API_KEY,
+             'anthropic-version': '2023-06-01',
+             'content-type': 'application/json'
+           },
+           body: JSON.stringify({
+             model: body.model || env.SANAD_DEFAULT_MODEL || 'claude-haiku-4-5-20251001',
+             max_tokens: body.max_tokens || 800,
+             system: body.system,
+             messages: body.messages,
+             stream: !!body.stream
+           })
+         });
+         return new Response(r.body, { status: r.status, headers: r.headers });
+       }
+       return env.ASSETS.fetch(request);
+     }
+   };
+   ```
+2. Cloudflare dashboard → **Workers & Pages → site → Settings → Variables and Secrets**
+   - Add Encrypted Secret: `ANTHROPIC_API_KEY = sk-ant-...`
+   - *(Optional)* Plain text: `SANAD_DEFAULT_MODEL = claude-haiku-4-5-20251001`
+3. Push or trigger a redeploy. The topbar badge flips to **Live · Haiku 4.5**.
 
-## Local development
+## Cost guardrails (when live)
 
-```bash
-# Mock mode only (no Worker, no key required):
-python -m http.server 8000
-# then open http://127.0.0.1:8000/sanad/
-
-# Live mode (requires wrangler):
-npx wrangler dev   # reads .dev.vars
-```
-
-Copy `.dev.vars.example` to `.dev.vars` and fill in your local key. Never
-commit `.dev.vars` — it's already in `.gitignore`.
+- **Claude Haiku 4.5** at ~$0.80 input / $4.00 output per 1M tokens. A
+  suggested reply ≈ 500 in + 150 out tokens ≈ **$0.001 per call**.
+- Add a rate limit (e.g. 20 req/min per IP) in the Worker to cap abuse.
+- Switch to **Sonnet 4.6** or **Opus 4.7** from the in-app **AI Console**.
+- Prompt caching: send the system prompt as a content array with
+  `cache_control: { type: 'ephemeral' }` to save ~90% on repeats.
 
 ## Files
 
@@ -63,7 +85,7 @@ sanad/
 ├── css/sanad.css              Design system (slate + violet + mint)
 └── js/
     ├── data.js                Seed: 24 customers, 8 agents, 80 conversations,
-    │                          ~600 messages, 77 KB articles
+    │                          227 messages, 77 KB articles
     ├── mock-api.js            Fetch interceptor for /sanad/api/*
     ├── ai-engine.js           AI client (live + mock fallback)
     ├── app.js                 Shared helpers (window.SanadApp)
@@ -74,7 +96,3 @@ sanad/
     ├── admin.js               Admin SPA shell
     └── admin-sections.js      Admin sections
 ```
-
-The Worker entry point lives at `site/_worker.js` (one directory up) and
-handles only `/api/sanad/ai/*` — everything else is passed through to the
-existing static-asset deployment.
