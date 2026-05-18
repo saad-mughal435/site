@@ -285,7 +285,10 @@ body.watad.landing .wtd-input {
 .wtd-equip.is-fcu     { background: linear-gradient(135deg, #14532d, #166534); border-color: var(--wtd-green-2); color: #c4f5cf; }
 .wtd-equip.is-light   { background: linear-gradient(135deg, #78350f, #92400e); border-color: var(--wtd-amber); color: #fde0a3; font-size: 14px; }
 .wtd-equip.is-meter   { background: linear-gradient(135deg, #581c87, #6b21a8); border-color: var(--wtd-violet); color: #e9d5ff; font-size: 14px; }
-.wtd-equip.is-sensor  { background: linear-gradient(135deg, #1e293b, #334155); border-color: var(--wtd-ink-2); color: var(--wtd-ink-2); font-size: 11px; }
+.wtd-equip.is-sensor,
+.wtd-equip.is-sensor-occ,
+.wtd-equip.is-sensor-co2 { background: linear-gradient(135deg, #1e293b, #334155); border-color: var(--wtd-ink-2); color: var(--wtd-ink-2); font-size: 11px; }
+.wtd-equip.is-cooling-tower { background: linear-gradient(135deg, #0e7490, #155e75); border-color: var(--wtd-cyan); color: #cffafe; }
 .wtd-equip.alarming { border-color: var(--wtd-red); animation: wtd-alarm-pulse 1.4s ease infinite; }
 .wtd-equip-label {
   position: absolute; top: 100%; left: 50%; transform: translate(-50%, 4px);

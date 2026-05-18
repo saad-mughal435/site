@@ -217,9 +217,10 @@
       if (/\.chws$/.test(pid))      return 44 + Math.sin(ts / 600000) * 1.2 + noise(0.4);
       if (/\.chwr$/.test(pid))      return 54 + Math.sin(ts / 600000) * 1.5 + dayFactor * 1.5 + noise(0.6);
       if (/\.cond_temp$/.test(pid)) {
-        // Outdoor-temp-driven; chiller-1 occasionally pushes high to fire the seeded alarm
+        // Outdoor-temp-driven; chiller-1 is intentionally hot 24/7 so the
+        // seeded alarm always fires regardless of when the page is opened.
         var base = 80 + (outdoor - 80) * 0.5 + dayFactor * 6;
-        if (asset.id === 'as-chiller-1') base += 5;     // intentionally hotter — alarm-prone
+        if (asset.id === 'as-chiller-1') base += 12;
         return base + noise(1.2);
       }
       if (/\.load$/.test(pid))      return clamp(30 + dayFactor * 55 + (outdoor - 88) * 1.2 + noise(3), 0, 100);
@@ -229,7 +230,7 @@
       if (/\.fan_speed$/.test(pid))  return clamp(40 + dayFactor * 50 + noise(6), 0, 100);
       if (/\.basin_temp$/.test(pid)) {
         var base = 78 + (outdoor - 88) * 0.3 + dayFactor * 3;
-        if (asset.id === 'as-ct-1') base += 7;          // seeded critical
+        if (asset.id === 'as-ct-1') base += 11;         // seeded critical, fires 24/7
         return base + noise(0.8);
       }
       if (/\.makeup_flow$/.test(pid)) return 8 + dayFactor * 8 + noise(1);
@@ -281,7 +282,7 @@
     if (asset.type === 'sensor-co2') {
       if (/\.co2$/.test(pid)) {
         var co = 500 + (occupied ? 350 : 50) + dayFactor * 100 + noise(40);
-        if (asset.id === 'as-co2-l2-board') co += 200;   // seeded urgent
+        if (asset.id === 'as-co2-l2-board') co += 450;  // seeded urgent, fires 24/7
         return co;
       }
     }
