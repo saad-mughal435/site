@@ -64,9 +64,20 @@ body.sanad {
   font-size: 14.5px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  min-height: 100vh;
+  /* Flex column so the portfolio-banner.js banner injected at the top
+     takes its natural height and the inbox takes the REMAINING viewport.
+     Previously body was overflow:hidden + .snd-inbox at height:100vh,
+     which clipped the bottom 40px of the inbox (= the composer area)
+     because the banner pushed the inbox down without shrinking it. */
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  margin: 0;
   overflow: hidden;
 }
+/* Portfolio banner gets natural height. Inbox/chat/etc. fill what's left. */
+body.sanad > .snd-inbox,
+body.sanad > .pos-terminal { flex: 1 1 0; min-height: 0; height: auto !important; }
 body.sanad.admin, body.sanad.landing, body.sanad.kb {
   background: var(--snd-bg-light);
   color: var(--snd-card-ink);
@@ -200,8 +211,10 @@ body.sanad.admin .snd-field > span, body.sanad.landing .snd-field > span, body.s
 .snd-inbox {
   display: grid;
   grid-template-columns: 320px 1fr 340px;
-  grid-template-rows: 52px 1fr;
-  height: 100vh;
+  grid-template-rows: 52px minmax(0, 1fr);
+  /* Height comes from the body flex layout (1fr after the portfolio banner).
+     No explicit 100vh — that was the clipping bug. */
+  min-height: 0;
 }
 .snd-inbox > .snd-topbar { grid-column: 1 / -1; }
 @media (max-width: 1400px) { .snd-inbox { grid-template-columns: 280px 1fr 300px; } }
@@ -234,7 +247,7 @@ body.sanad.admin .snd-field > span, body.sanad.landing .snd-field > span, body.s
   z-index: 70; box-shadow: -16px 0 48px rgba(2, 6, 23, 0.6);
 }
 
-html, body.sanad { overflow: hidden; height: 100%; }
+html { height: 100%; overflow: hidden; }
 
 /* ============================================================ Inbox list (left) */
 .snd-inbox-list {
