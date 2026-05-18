@@ -409,10 +409,12 @@
         var current = (state.ai && state.ai.reply && state.ai.reply.text) || ai.reply.text || '';
         state.composer = current;
         renderThread();
+        // Just focus + caret-to-end. The composer is already pinned at the
+        // bottom of its column via flex-shrink:0; scrollIntoView fights with
+        // overflow:hidden and leaves the viewport stuck.
         setTimeout(function () {
           var inp = $('cb-input');
           if (inp) {
-            inp.scrollIntoView({ behavior: 'smooth', block: 'center' });
             inp.focus();
             inp.setSelectionRange(inp.value.length, inp.value.length);
           }
