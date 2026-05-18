@@ -207,18 +207,33 @@ body.sanad.admin .snd-field > span, body.sanad.landing .snd-field > span, body.s
 @media (max-width: 1400px) { .snd-inbox { grid-template-columns: 280px 1fr 300px; } }
 @media (max-width: 1180px) { .snd-inbox { grid-template-columns: 240px 1fr 260px; } }
 @media (max-width: 960px)  { .snd-inbox { grid-template-columns: 220px 1fr 240px; } }
-/* Real mobile only: collapse to single column with toggles. AI sidebar is
-   kept visible at most desktop/laptop widths so the Insert button stays
-   reachable — the previous 980px breakpoint was hiding it on common laptop
-   viewports, which is why "Insert isn't visible" looked like a JS bug. */
 @media (max-width: 760px) {
   .snd-inbox { grid-template-columns: 1fr; grid-template-rows: 52px auto 1fr; }
   .snd-inbox-list, .snd-inbox-side { display: none; }
   .snd-inbox.show-list .snd-inbox-list, .snd-inbox.show-side .snd-inbox-side { display: flex; }
 }
-/* Defensive: belt-and-suspenders for the "page can scroll" bug. The grid
-   layout already pins itself to 100vh, but if anything ever overflows we'd
-   rather clip than push the composer off-screen. */
+
+/* Floating "Show AI" button — appears whenever the sidebar isn't visible
+   (mobile, or any browser/zoom combo where the user can't see it). One click
+   pops the AI Copilot up as a slide-over drawer so Insert/Regenerate/etc.
+   are always reachable. */
+.snd-ai-toggle {
+  position: fixed; bottom: 18px; right: 18px; z-index: 80;
+  background: linear-gradient(135deg, var(--snd-primary), var(--snd-primary-2));
+  color: white; border: 0; border-radius: 999px;
+  padding: 10px 16px; font-size: 13px; font-weight: 700;
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
+  cursor: pointer; display: none;
+}
+.snd-ai-toggle:hover { transform: translateY(-2px); }
+@media (max-width: 1180px) { .snd-ai-toggle { display: inline-block; } }
+/* When user clicks the toggle, the AI sidebar becomes a slide-over drawer. */
+.snd-inbox.ai-drawer-open .snd-inbox-side {
+  display: flex !important;
+  position: fixed; top: 52px; right: 0; bottom: 0; width: min(380px, 92vw);
+  z-index: 70; box-shadow: -16px 0 48px rgba(2, 6, 23, 0.6);
+}
+
 html, body.sanad { overflow: hidden; height: 100%; }
 
 /* ============================================================ Inbox list (left) */
@@ -279,18 +294,26 @@ html, body.sanad { overflow: hidden; height: 100%; }
 .snd-conv-sent-dot.neg { background: var(--snd-neg); }
 .snd-conv-sent-dot.neu { background: var(--snd-neu); }
 
-/* ============================================================ Thread (centre) */
+/* ============================================================ Thread (centre)
+   Uses CSS Grid (auto / 1fr / auto) instead of flex column. Grid is more
+   deterministic across browser/viewport combos — head and composer always
+   render at content height, body always fills the remainder, no chance of
+   any row collapsing unexpectedly. */
 .snd-thread {
-  display: flex; flex-direction: column; min-width: 0; min-height: 0;
+  display: grid; grid-template-rows: auto minmax(0, 1fr) auto;
+  min-width: 0; min-height: 0;
   background: var(--snd-bg); overflow: hidden;
 }
 .snd-thread-empty {
-  flex: 1 1 0; display: grid; place-items: center;
-  color: var(--snd-muted); text-align: center; padding: 60px 40px;
+  grid-row: 1 / -1;
+  display: grid; place-items: center;
+  color: var(--snd-ink-2); text-align: center; padding: 60px 40px;
+  background: var(--snd-bg);
 }
 .snd-thread-head {
   padding: 12px 18px; border-bottom: 1px solid var(--snd-line);
-  display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+  display: flex; align-items: center; gap: 12px;
+  background: var(--snd-bg-2);          /* slightly lighter — head always visible */
 }
 .snd-thread-customer { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
 .snd-thread-customer-meta { min-width: 0; }
@@ -298,7 +321,7 @@ html, body.sanad { overflow: hidden; height: 100%; }
 .snd-thread-customer-sub { font-size: 11.5px; color: var(--snd-muted); }
 .snd-thread-actions { display: flex; gap: 6px; flex-shrink: 0; }
 
-.snd-thread-body { flex: 1 1 0; min-height: 0; overflow-y: auto; padding: 18px; scrollbar-width: thin; }
+.snd-thread-body { min-height: 0; overflow-y: auto; padding: 18px; scrollbar-width: thin; }
 .snd-thread-body::-webkit-scrollbar { width: 6px; }
 .snd-thread-body::-webkit-scrollbar-thumb { background: var(--snd-line-2); border-radius: 999px; }
 .snd-day-sep {
@@ -338,8 +361,8 @@ html, body.sanad { overflow: hidden; height: 100%; }
   color: var(--snd-muted); font-style: italic;
 }
 
-/* Composer — never shrink. Pinned at viewport bottom so Send is always visible. */
-.snd-composer { border-top: 1px solid var(--snd-line); padding: 12px 18px; background: var(--snd-bg-2); flex-shrink: 0; }
+/* Composer — its own grid row, always at content height, always visible. */
+.snd-composer { border-top: 1px solid var(--snd-line); padding: 12px 18px; background: var(--snd-bg-2); }
 .snd-composer-bar { display: flex; align-items: center; gap: 4px; margin-bottom: 8px; flex-wrap: wrap; }
 .snd-composer-bar button {
   background: transparent; border: 1px solid transparent; color: var(--snd-muted);

@@ -480,6 +480,22 @@
     });
   }
 
+  // ---------- AI sidebar toggle (for narrow viewports) ----------
+  var toggleBtn = $('ai-toggle');
+  var drawerClose = $('ai-drawer-close');
+  function setDrawer(open) {
+    var inbox = document.querySelector('.snd-inbox');
+    if (!inbox) return;
+    inbox.classList.toggle('ai-drawer-open', open);
+    if (drawerClose) drawerClose.style.display = open ? 'inline-block' : 'none';
+    if (toggleBtn) toggleBtn.textContent = open ? '✕ Close' : '✦ AI';
+  }
+  if (toggleBtn) toggleBtn.addEventListener('click', function () {
+    var inbox = document.querySelector('.snd-inbox');
+    setDrawer(!inbox.classList.contains('ai-drawer-open'));
+  });
+  if (drawerClose) drawerClose.addEventListener('click', function () { setDrawer(false); });
+
   // ---------- Init ----------
   $('cv-search').addEventListener('input', function (e) {
     state.q = e.target.value;
