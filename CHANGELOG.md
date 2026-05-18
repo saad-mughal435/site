@@ -7,6 +7,105 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-05-18 - Watad: smart-building / BMS operations console (eighth demo)
+
+### Added
+- **Watad** at `/watad/` - eighth interactive demo and the first one
+  with a **real-time data shape** (the prior seven were request/response
+  CRUD with optional polling). A live operator console for a commercial
+  smart building — the kind of software Imdaad / EFS / Schneider /
+  Honeywell ship to facilities teams. Designed to fill a specific gap
+  in the portfolio: none of the existing seven demos proved Saad's
+  electrical-engineering + industrial operations background, which is
+  exactly what UAE facilities management, building automation, energy
+  utilities (DEWA / Masdar), and data-centre operators (Khazna)
+  pattern-match for. ~4,400 LOC across 7 HTML pages + 1 CSS file +
+  13 JS modules.
+- **Operations console** (`watad/console.html`) - the centrepiece.
+  Four-region layout: top KPI strip (alarms by severity, kW demand,
+  avg zone temp, occupancy %, kgCO₂, BACnet status pill), live SVG
+  floor plan with 48 equipment icons placed at absolute coordinates +
+  pulse-on-alarm + zone heat tint + click-to-drill, severity-sorted
+  alarm queue side panel with Web Audio cues + Acknowledge /
+  Create-WO / ✦ AI-explain actions, bottom trend strip (3 mini SVG
+  line charts — kW, avg zone temp, alarm count). Subscribes to
+  `WatadSim` and diff-renders every 5s with no flicker.
+- **Telemetry simulator** (`watad/js/telemetry-sim.js`) - the technical
+  differentiator. ~310 LOC. Ticks every 5 seconds, mutates every
+  point's value plausibly based on asset type + time of day +
+  occupancy schedule + synthesised outdoor temperature curve.
+  Raises and clears alarms based on per-point hi/lo thresholds.
+  Keeps a 288-sample (~24h) history buffer per point regenerated
+  from a deterministic seeded RNG so charts always look populated
+  on first paint. Exposes `window.WatadSim.subscribe()` for any
+  page to receive `tick` / `alarm-new` / `alarm-cleared` events.
+- **Asset detail** (`watad/asset.html`) - URL: `?id=as-xxx`. 24h
+  multi-point overlaid trend chart (custom SVG, no library), active
+  + recent alarms, related work orders, manual override panel
+  (setpoint slider, override status), asset metadata grid, AI panel
+  with "Suggest maintenance".
+- **Work orders module** (`watad/workorders.html`) - filter chips
+  (open / in-progress / on-hold / completed / cancelled), table with
+  WO# / asset / priority / assignee / due / status, create-WO modal
+  (also triggered from console alarm → pre-fills title + priority +
+  asset), drill-in modal with comments timeline + status pipeline +
+  HTML5-canvas signature capture.
+- **Energy dashboard** (`watad/energy.html`) - KPI tiles (today kWh,
+  cost AED, kgCO₂, peak kW, 30-day total MWh), 30-day daily bar
+  chart with **ASHRAE 90.1 reference-band overlay**, sub-meter table
+  (% of total + vs-yesterday trend arrows), DEWA DSM
+  demand-response opt-in panel, AI "Optimise setpoints" panel
+  returning 2-3 suggestions with estimated AED savings.
+- **10-section admin SPA** (`watad/admin.html`) - hash-routed:
+  Dashboard (KPI tiles + 7-day energy bars + alarms-by-hour
+  heatmap + top alarming assets + recent alarms), Assets (CRUD,
+  filterable by type/floor), Points (all 198 points with live
+  current value column), Alarms (full audit + filters), Schedules,
+  Work orders (admin lens), Staff (with permission matrix for
+  operator / tech / admin), Integrations (BACnet IP / Modbus TCP /
+  DALI / MQTT / Maximo CMMS / ServiceNow), AI Console (model
+  selector for Haiku 4.5 / Sonnet 4.6 / Opus 4.7 + editable system
+  prompt + test-with-sample), Settings (energy tariff, CO₂ factor,
+  ASHRAE band, units, reset-demo), Audit log with CSV export.
+- **WatadAI** (`watad/js/ai-engine.js`) - lifted from `sanad/js/ai-engine.js`,
+  same Live/Mock pattern, 3 BMS-specialised features:
+  `explainAlarm({alarm, asset})` returns Action + Likely cause in
+  2 paragraphs grounded in point values; `suggestMaintenance({asset,
+  alarm_history})` returns 2-3 preventive tasks ranked by priority
+  with AED estimates; `optimizeSetpoints({occupancy_pct,
+  outdoor_temp_f, current_setpoints})` returns setpoint/schedule
+  changes with estimated kWh + AED savings. Re-uses same
+  `ANTHROPIC_API_KEY` secret as Sanad — set once, both demos benefit.
+- **Seed data** (`watad/js/data.js`) - Boulevard Tower B fictional
+  building, 4 floors (Ground / L1 / L2 / Roof), 24 zones, 48 assets
+  (2 chillers + 2 cooling towers + 4 AHUs + 20 FCUs + 7 lights + 7
+  sub-meters + 5 occupancy + 1 CO₂), 182 telemetry points, 30
+  alarms across all states (9 open + 4 acknowledged + 17 cleared),
+  15 work orders (5 open + 5 in-progress + 5 completed), 6 staff,
+  4 schedules, 6 integrations, 210 daily-energy-history records.
+- **Design system** (`watad/css/watad.css`) - dark navy + electric
+  cyan + amber/red alarm + safety green. Mirrors real SCADA/BMS UIs
+  (Honeywell EBI, Schneider EcoStruxure, Siemens Desigo). Distinct
+  from every other demo palette.
+- **Landing + 404** - hero with three CTAs, six-feature explainer
+  grid, two-minute walkthrough. Branded not-found page.
+- **`watad/README.md`** - operator quick-start + live-mode setup
+  steps (reference Worker handler for `/api/watad/ai/*`).
+
+### Portfolio integration
+- `demo.html` - eighth demo card + intro copy bumped "Seven" → "Eight".
+- `index.html` - new PROJECTS data entry between Sanad and Pebble (4
+  CTAs: console / energy / work orders / admin), plus new bullet in
+  "Other software demos" list.
+- `_headers` - cache rules for `/watad/css/*` and `/watad/js/*`.
+- `_redirects` - friendly aliases `/bms`, `/building`, `/facilities`.
+- `sitemap.xml` - 5 new entries.
+- `README.md` - new row in the demos table.
+
+### Changed
+- Bumped to **2.2.0** (minor) - new vertical, no breaking changes to
+  the existing seven demos.
+
 ## [2.1.0] - 2026-05-17 - Sanad: AI customer-support copilot demo (seventh demo)
 
 ### Added

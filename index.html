@@ -163,6 +163,7 @@
       <li><strong>Vacation Homes</strong> - UAE short-stay booking demo. Hand-rolled date-range picker, conflict-checked bookings, 6-step host onboarding wizard with document upload, admin verification queue. <a href="vacation/index.html" style="color:#6e8eff;">Open →</a></li>
       <li><strong>Qahwa POS</strong> - café / quick-service POS demo. Touch cashier terminal, kitchen display, modifier-driven menus, shift cash reconciliation with Z-reports, 14-section admin. <a href="pos/index.html" style="color:#6e8eff;">Open →</a></li>
       <li><strong>Sanad</strong> - AI customer-support copilot demo. Agent inbox with Claude-powered AI sidebar (reply / summary / sentiment / category / EN↔AR translate), RAG chat widget, knowledge base, 11-section admin with model selector + editable system prompt. <a href="sanad/index.html" style="color:#6e8eff;">Open →</a></li>
+      <li><strong>Watad</strong> - smart-building BMS operations console demo. Live SVG floor plan with simulated BACnet/Modbus telemetry, alarm queue with audio cues, predictive-maintenance work orders, ASHRAE-overlaid energy curves, 3 BMS-tuned AI features (explain alarm / suggest maintenance / optimise setpoints). Real-time telemetry simulator is the technical differentiator. <a href="watad/index.html" style="color:#6e8eff;">Open →</a></li>
       <li><strong>Pebble &amp; Co.</strong> - direct-to-consumer storefront demo with admin panel. <a href="b2c/index.html" style="color:#6e8eff;">Open →</a></li>
     </ul>
 
@@ -1055,6 +1056,26 @@ const PROJECTS = [
       { label: 'Try chat widget ↗', href: 'sanad/chat.html', target: '_blank' },
       { label: 'Help centre ↗', href: 'sanad/kb.html', target: '_blank' },
       { label: 'Open admin ↗', href: 'sanad/admin.html', target: '_blank' },
+    ],
+  },
+  {
+    domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
+    title: 'Watad - smart-building / BMS operations console',
+    desc: <Fragment>A live operator console for a commercial smart building — the kind of software Imdaad / EFS / Schneider / Honeywell ship to facilities teams. Live SVG floor plan with HVAC, lighting, metering and sensor equipment plotted as icons, a simulated BACnet/Modbus telemetry stream (5-second tick mutating ~200 points plausibly per asset class + outdoor temp + occupancy), severity-sorted alarm queue with audio cues, predictive-maintenance work orders, ASHRAE-overlaid energy curves, and an industrial-AI copilot. The <strong>first portfolio demo with a real-time data shape</strong> — proves I can think beyond REST.</Fragment>,
+    bullets: [
+      <Fragment><strong>Live SVG floor plan</strong> · 4 floors, 48 assets at absolute pixel coordinates. Equipment icons pulse red when their associated point is in alarm. Click any chiller / AHU / FCU / light / meter to drill into a 24h overlaid trend chart.</Fragment>,
+      <Fragment><strong>Real-time telemetry simulator</strong> · ~200 points across the building, 5-second tick, plausible values per asset class (chiller load tracks outdoor temp, FCU zone temp drifts when occupied, sub-meters accumulate kWh), 288-sample history buffer per point regenerated from a seeded RNG so charts always look populated.</Fragment>,
+      <Fragment><strong>Alarm management</strong> · severity ranks (info / warning / urgent / critical), audio cue on new urgent/critical, Acknowledge / Create-WO / ✦ AI-explain actions per alarm card. Rule editor in admin.</Fragment>,
+      <Fragment><strong>Energy + sustainability</strong> · 30-day daily kWh bar chart with ASHRAE 90.1 reference band overlay, sub-meter breakdown with % of total + trend, DEWA DSM demand-response opt-in panel, kgCO₂ tile using UAE grid factor.</Fragment>,
+      <Fragment><strong>10-section admin SPA</strong> · Dashboard (KPIs + 7-day energy bars + alarms-by-hour heatmap + top alarming assets), Assets, Points (with live current value column), Alarms (full audit + filters), Schedules, Work orders, Staff (RBAC), Integrations (BACnet / Modbus / DALI / MQTT / Maximo / ServiceNow), AI Console (model selector + system prompt + test-with-sample), Settings + Audit.</Fragment>,
+      <Fragment><strong>3 BMS-tuned AI features</strong> · <em>Explain alarm</em> returns Action + Likely cause grounded in point values; <em>Suggest maintenance</em> proposes preventive tasks ranked by priority with AED estimates; <em>Optimise setpoints</em> reads occupancy + outdoor temp + current setpoints and proposes setpoint/schedule changes with estimated AED savings. Live Claude when a Worker proxy is configured; deterministic mock fallback otherwise.</Fragment>,
+    ],
+    tags: ['Vanilla JS (ES6+)', 'CSS Grid', 'SVG floor plan', 'Real-time telemetry sim', 'BACnet/Modbus (simulated)', 'Web Audio API', 'Claude API', 'CF Worker proxy', 'ASHRAE 90.1 band', 'localStorage', 'Mock fallback'],
+    ctas: [
+      { label: 'Open console ↗', href: 'watad/console.html', target: '_blank', primary: true },
+      { label: 'Energy dashboard ↗', href: 'watad/energy.html', target: '_blank' },
+      { label: 'Work orders ↗', href: 'watad/workorders.html', target: '_blank' },
+      { label: 'Open admin ↗', href: 'watad/admin.html', target: '_blank' },
     ],
   },
   {

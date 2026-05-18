@@ -39,3 +39,8 @@
 /sanad-app /sanad/index.html   302
 /copilot   /sanad/inbox.html   302
 /helpdesk  /sanad/index.html   302
+
+# Watad friendly aliases
+/bms        /watad/console.html  302
+/building   /watad/index.html    302
+/facilities /watad/console.html  302

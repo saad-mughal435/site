@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Watad — Smart-building operations console for facilities teams</title>
+<meta name="description" content="A live SVG floor-plan BMS console with simulated BACnet/Modbus telemetry, alarm management, predictive-maintenance work orders, energy KPIs, and AI alarm explanations. Built to demo electrical-engineering + operations software." />
+<meta name="theme-color" content="#0a1426" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2064%2064'%3E%3Crect%20width%3D'64'%20height%3D'64'%20rx%3D'14'%20fill%3D'%230a1426'/%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20font-family%3D'serif'%20font-weight%3D'700'%20font-size%3D'30'%20fill%3D'%2322d3ee'%20text-anchor%3D'middle'%3EW%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/watad.css?v=20260518a" />
+</head>
+<body class="watad landing">
+
+<div class="wtd-landing">
+  <header class="wtd-flex" style="margin-bottom:48px;">
+    <a href="index.html" class="wtd-topbar-brand" style="color:var(--wtd-card-ink);"><span class="wtd-topbar-mark">W</span> Watad</a>
+    <div style="margin-inline-start:auto;display:flex;align-items:center;gap:14px;">
+      <span class="wtd-mode-badge" id="mode-badge">…</span>
+      <a href="/" style="font-size:13.5px;color:var(--wtd-muted-light);">← saadm.dev</a>
+    </div>
+  </header>
+
+  <section class="wtd-landing-hero">
+    <div>
+      <span style="display:inline-block;padding:4px 12px;background:linear-gradient(135deg,rgba(34,211,238,.18),rgba(74,222,128,.18));color:var(--wtd-cyan-3);border-radius:999px;font-size:12px;font-weight:600;letter-spacing:.04em;margin-bottom:14px;">Demo · Smart-building BMS console</span>
+      <h1>Building operations, <span class="grad">live on a floor plan.</span></h1>
+      <p>A counter-mounted operator console for a commercial smart building. Live SVG floor plan with HVAC, lighting and metering equipment plotted as icons, real-time telemetry simulated over a synthesised BACnet/Modbus stream, alarm queue with audio cues, predictive-maintenance work orders, ASHRAE-overlaid energy curves, and an AI copilot that explains alarms and suggests setpoint optimisations.</p>
+      <div class="wtd-landing-ctas">
+        <a class="wtd-btn wtd-btn--primary wtd-btn--lg" href="console.html">Open operations console →</a>
+        <a class="wtd-btn wtd-btn--lg" href="energy.html">Energy dashboard</a>
+        <a class="wtd-btn wtd-btn--lg" href="admin.html">Open admin</a>
+      </div>
+      <div class="wtd-text-muted" style="margin-top:14px;font-size:12.5px;">Boulevard Tower B · 4 floors · 48 assets · 198 points · 24h trend history regenerated from a deterministic seed.</div>
+    </div>
+    <div class="wtd-landing-mock">
+      <div style="text-align:center;width:100%;padding:14px;">
+        <div style="font-size:54px;margin-bottom:8px;background:linear-gradient(135deg,var(--wtd-cyan),var(--wtd-green));-webkit-background-clip:text;background-clip:text;color:transparent;">❄</div>
+        <div style="font-family:var(--font-display);font-size:18px;font-weight:700;margin-bottom:10px;color:var(--wtd-ink);">CH-1 · 250 TR</div>
+        <div style="text-align:start;background:var(--wtd-bg-2);padding:14px;border-radius:10px;font-size:12.5px;color:var(--wtd-ink-2);line-height:1.55;max-width:340px;margin:0 auto;border:1px solid var(--wtd-line-2);">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>CHWS</span><strong style="font-family:var(--font-mono);color:var(--wtd-cyan);">44.2 °F</strong></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Condenser</span><strong style="font-family:var(--font-mono);color:var(--wtd-red);">94.2 °F ⚠</strong></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Load</span><strong style="font-family:var(--font-mono);color:var(--wtd-ink);">78 %</strong></div>
+          <div style="display:flex;justify-content:space-between;"><span>Power</span><strong style="font-family:var(--font-mono);color:var(--wtd-ink);">142 kW</strong></div>
+          <div style="margin-top:8px;padding-top:8px;border-top:1px dashed rgba(120,200,255,0.18);font-size:11px;color:var(--wtd-cyan);"><strong>✦ AI:</strong> Dispatch tech within the hour. Likely refrigerant charge or condenser-coil fouling.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 style="text-align:center;margin-bottom:8px;">What's inside</h2>
+    <p class="wtd-text-muted" style="text-align:center;margin-bottom:24px;font-size:15px;">Not a static dashboard — a working operator console with a real-time simulator behind it.</p>
+    <div class="wtd-landing-grid">
+      <div class="wtd-landing-card"><span class="wtd-emoji">🏢</span><h3>Live SVG floor plan</h3><p>4 floors, equipment icons placed at absolute coordinates. Click any chiller, AHU, FCU, light, meter or sensor to drill into 24h trends + alarms + work orders.</p></div>
+      <div class="wtd-landing-card"><span class="wtd-emoji">📡</span><h3>Simulated BACnet / Modbus stream</h3><p>198 telemetry points across 48 assets. A 5-second tick mutates every point plausibly based on time of day + occupancy schedule + outdoor temperature.</p></div>
+      <div class="wtd-landing-card"><span class="wtd-emoji">🔔</span><h3>Alarm management</h3><p>Severity-sorted queue with Ack / Create-WO / ✦ AI-explain actions, audio cue on new urgent/critical alarm, rule editor in admin.</p></div>
+      <div class="wtd-landing-card"><span class="wtd-emoji">🛠</span><h3>Predictive-maintenance WOs</h3><p>Status pipeline (open → in-progress → completed), priority + assignee, comments timeline, signature capture canvas. Spawn directly from an alarm.</p></div>
+      <div class="wtd-landing-card"><span class="wtd-emoji">⚡</span><h3>Energy dashboard</h3><p>30-day kWh bar chart with ASHRAE 90.1 reference band, sub-meter breakdown, demand-response opt-in, cost + kgCO₂ tiles, AED tariff.</p></div>
+      <div class="wtd-landing-card"><span class="wtd-emoji">✦</span><h3>Industrial AI copilot</h3><p>Three BMS-tuned features: explain alarm (with action + likely cause), suggest preventive maintenance, optimise setpoints with estimated kWh savings. Live Claude when configured, deterministic mock otherwise.</p></div>
+    </div>
+  </section>
+
+  <section class="wtd-card wtd-mt-4">
+    <h3 style="margin-bottom:10px;">Two-minute walkthrough</h3>
+    <ol style="margin:0;padding-inline-start:22px;line-height:1.85;font-size:14.5px;color:var(--wtd-card-ink-2);">
+      <li>Open the <a href="console.html">operations console</a>. Top strip shows live KPIs, floor plan loads with equipment placed.</li>
+      <li>Within 30 seconds something visibly changes — a kW tick, a zone temp drift, a new alarm.</li>
+      <li>Click any pulsing red icon → <a href="asset.html?id=as-chiller-1">asset detail</a> with 24h overlaid trend chart. Click "✦ Suggest maintenance".</li>
+      <li>Back to console → alarm queue → click ✦ "Explain" on any alarm → AI returns Action + Likely cause in 2 short paragraphs.</li>
+      <li>Click "Create WO" on the same alarm → modal pre-fills title + priority + asset → save → ticket appears in <a href="workorders.html">work orders</a>.</li>
+      <li>Open the <a href="energy.html">energy dashboard</a> → 30-day bar chart with ASHRAE band → click "Suggest optimisations" → AI returns 2-3 setpoint changes with AED savings.</li>
+      <li>Browse <a href="admin.html#points">admin → Points</a> to see all 198 telemetry points with live current values.</li>
+    </ol>
+  </section>
+
+  <footer class="wtd-landing-foot">
+    Demo built by Muhammad Saad · part of <a href="/" style="color:var(--wtd-cyan-3);">saadm.dev</a> portfolio · works offline (Demo mode) or with a Cloudflare Worker + Anthropic key (Live mode)
+  </footer>
+</div>
+
+<script src="js/data.js?v=20260518a"></script>
+<script src="js/mock-api.js?v=20260518a"></script>
+<script src="js/ai-engine.js?v=20260518a"></script>
+<script src="js/app.js?v=20260518a"></script>
+<script>
+  WatadAI.health().then(function (h) {
+    var el = document.getElementById('mode-badge');
+    var nm = h.model.indexOf('haiku') !== -1 ? 'Haiku 4.5' : h.model.indexOf('sonnet') !== -1 ? 'Sonnet 4.6' : 'Opus 4.7';
+    el.className = h.live ? 'wtd-mode-badge live' : 'wtd-mode-badge';
+    el.textContent = h.live ? 'Live · ' + nm : 'Demo mode';
+  });
+</script>
+</body>
+</html>
