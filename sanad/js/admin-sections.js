@@ -120,7 +120,7 @@
                     + '<td>' + chip(c.status) + '</td>'
                     + '<td style="font-size:12.5px;">' + (ag ? esc(ag.name) : '<span class="snd-text-muted">unassigned</span>') + '</td>'
                     + '<td>' + fmtDt(c.last_message_at) + '</td>'
-                    + '<td><a class="snd-btn snd-btn--sm" href="inbox.html#" target="_blank" onclick="event.preventDefault();window.open(\'inbox.html\',\'_blank\');">Open</a></td>'
+                    + '<td><a class="snd-btn snd-btn--sm" href="inbox.html#' + esc(c.id) + '" target="_blank" rel="noopener">Open</a></td>'
                     + '</tr>';
                 }).join('') : '<tr><td colspan="7" class="snd-table-empty">No conversations match.</td></tr>')
           +   '</tbody></table>'

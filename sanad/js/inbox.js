@@ -503,7 +503,22 @@
     window.__sndSearch = setTimeout(loadList, 200);
   });
   renderFilters();
-  loadList();
-  renderEmpty();
+
+  // Deep-link support: /sanad/inbox.html#cv-0042 auto-opens that conversation.
+  // Used by the admin "Open" buttons + sharable links to specific tickets.
+  function deepLinkOpen() {
+    var h = (location.hash || '').replace(/^#/, '').trim();
+    if (h && /^cv-/.test(h)) {
+      openConv(h);
+    } else {
+      renderEmpty();
+    }
+  }
+  // Load list first so the highlighted active row is visible after deep-link.
+  SanadApp.api('/conversations').then(function (r) {
+    renderList(r.body.items);
+    deepLinkOpen();
+  });
+  window.addEventListener('hashchange', deepLinkOpen);
   renderModeBadge();
 })();
