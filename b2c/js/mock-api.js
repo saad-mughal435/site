@@ -308,7 +308,10 @@
         customer_email: ship.email || D.current_user.email,
         placed_at: placed_at.toISOString(),
         eta,
-        status: 'paid',
+        // COD orders aren't paid until the courier collects cash at delivery.
+        // Card / PayPal go straight to 'paid' because the gateway has already
+        // captured the funds.
+        status: body.payment?.kind === 'cod' ? 'pending' : 'paid',
         lines: totals.lines.map(l => ({
           product_id: l.product_id,
           product: { id: l.product.id, name: l.product.name, slug: l.product.slug, palette: l.product.palette },

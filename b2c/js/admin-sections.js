@@ -250,7 +250,7 @@
         <div class="admin-filterbar">
           <input type="text" placeholder="Search by order # or customer..." id="orders-search">
           <div class="admin-pills" id="orders-status">
-            ${['all','paid','fulfilled','shipped','delivered','cancelled','refunded'].map(s =>
+            ${['all','pending','paid','fulfilled','shipped','delivered','cancelled','refunded'].map(s =>
               `<button class="pill ${s === filter ? 'active' : ''}" data-s="${s}">${s}</button>`
             ).join('')}
           </div>
@@ -424,7 +424,8 @@
           <p data-status-line><span class="badge ${statusBadge(o.status)}">${o.status}</span></p>
 
           <div style="margin-top:18px; display:flex; flex-direction:column; gap:8px;">
-            <button class="btn btn-primary btn-sm" data-action="ship" ${o.status === 'shipped' || o.status === 'delivered' || o.status === 'refunded' ? 'disabled' : ''}>${o.status === 'shipped' ? '✓ Already shipped' : 'Mark as shipped'}</button>
+            ${o.status === 'pending' ? `<button class="btn btn-primary btn-sm" data-action="markpaid">Mark as paid (cash received)</button>` : ''}
+            <button class="btn ${o.status === 'pending' ? 'btn-ghost' : 'btn-primary'} btn-sm" data-action="ship" ${o.status === 'shipped' || o.status === 'delivered' || o.status === 'refunded' ? 'disabled' : ''}>${o.status === 'shipped' ? '✓ Already shipped' : 'Mark as shipped'}</button>
             <button class="btn btn-ghost btn-sm" data-action="slip">Print packing slip</button>
             <button class="btn btn-ghost btn-sm" style="color:var(--red); border-color:#f4c4b8;" data-action="refund" ${o.status === 'refunded' ? 'disabled' : ''}>${o.status === 'refunded' ? '✓ Refunded' : 'Refund (demo)'}</button>
           </div>
@@ -455,10 +456,26 @@
     const modal = document.querySelector('.modal-backdrop');
     if (!modal) return;
 
+    const markPaidBtn = modal.querySelector('[data-action="markpaid"]');
     const shipBtn = modal.querySelector('[data-action="ship"]');
     const slipBtn = modal.querySelector('[data-action="slip"]');
     const refundBtn = modal.querySelector('[data-action="refund"]');
     const statusLine = modal.querySelector('[data-status-line]');
+
+    if (markPaidBtn) markPaidBtn.addEventListener('click', async () => {
+      markPaidBtn.disabled = true;
+      markPaidBtn.textContent = 'Marking…';
+      const res = await setOrderStatus(order.number || order.id, 'paid');
+      if (!res || !res.success) {
+        markPaidBtn.disabled = false;
+        markPaidBtn.textContent = 'Mark as paid (cash received)';
+        window.toast('Could not update status', 'error');
+        return;
+      }
+      paintStatus('paid');
+      markPaidBtn.remove();  // pending is gone — drop the button
+      window.toast(`Order ${order.number || order.id} marked as paid`, 'success');
+    });
 
     function paintStatus(newStatus) {
       if (statusLine) statusLine.innerHTML = `<span class="badge ${statusBadge(newStatus)}">${newStatus}</span>`;

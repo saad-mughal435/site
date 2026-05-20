@@ -411,7 +411,7 @@
     { id: 'c-12', name: 'Quinn Sample',   email: 'quinn@demo.local',    joined: daysAgo(540), orders_count: 14, lifetime_value: 2980,  points: 1430, segment: 'vip' },
   ];
 
-  /* ---- Orders (30, mix of statuses, last 90 days) ---- */
+  /* ---- Orders (30, mix of statuses + payment methods, last 90 days) ---- */
   const ORDER_STATUSES = ['paid', 'fulfilled', 'shipped', 'delivered', 'cancelled', 'refunded'];
   const ORDERS = [];
   for (let i = 0; i < 30; i++) {
@@ -428,7 +428,15 @@
     const shipping = subtotal >= 75 ? 0 : 8;
     const tax = +(subtotal * 0.05).toFixed(2);
     const total = +(subtotal + shipping + tax).toFixed(2);
-    const status = ORDER_STATUSES[Math.floor(Math.random() * ORDER_STATUSES.length)];
+    let status = ORDER_STATUSES[Math.floor(Math.random() * ORDER_STATUSES.length)];
+    // ~25% of orders are Cash on delivery (typical UAE / GCC e-commerce mix).
+    // For COD, cash is only collected at the door — so any order that hasn't
+    // shipped yet is 'pending', not 'paid'.
+    const isCod = Math.random() < 0.25;
+    if (isCod && status === 'paid') status = 'pending';
+    const payment_method = isCod
+      ? 'Cash on delivery'
+      : 'Card ****' + (1000 + Math.floor(Math.random() * 9000));
     ORDERS.push({
       id: 'o-' + String(1000 + i),
       number: 'PBL-' + String(10000 + i),
@@ -443,7 +451,8 @@
       tax,
       total,
       shipping_address: { line1: '12 Demo Lane', city: 'Sample City', country: 'Demo', zip: '00000' },
-      payment_method: 'Card ****' + (1000 + Math.floor(Math.random() * 9000)),
+      payment_method,
+      payment: { kind: isCod ? 'cod' : 'card', last4: isCod ? null : payment_method.slice(-4) },
     });
   }
   ORDERS.sort((a, b) => new Date(b.placed_at) - new Date(a.placed_at));
