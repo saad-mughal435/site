@@ -28,10 +28,11 @@
     let selectedVariant = product.variants[0];
     let qty = 1;
     let activeImg = 0;
+    let variantStock = 0;  // hoisted into init() so wireInteractions() can read it
 
     function render() {
       const save = product.compare_at ? Math.round((1 - product.price / product.compare_at) * 100) : 0;
-      const variantStock = (selectedVariant && selectedVariant.stock != null) ? selectedVariant.stock : product.stock;
+      variantStock = (selectedVariant && selectedVariant.stock != null) ? selectedVariant.stock : product.stock;
       const stockState = variantStock <= 0 ? 'out' : (variantStock < 10 ? 'low' : 'in');
       const stockLabel = stockState === 'out' ? 'Out of stock'
                         : stockState === 'low' ? `Only ${variantStock} left`
