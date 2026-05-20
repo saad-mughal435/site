@@ -14,12 +14,13 @@ Unsplash photographers - for the real-estate marketplace imagery in /property/.
 The CSS / web platform working groups - for shipping the platform.
 
 /* SITE */
-Last update: 2026-05-18
+Last update: 2026-05-20
 Language: English (with Arabic surfaces in /property/, /vacation/, /sanad/)
 Doctype: HTML5
 Frameworks: React 18 via CDN (homepage only); vanilla everywhere else.
-LLM: Claude (Haiku 4.5 / Sonnet 4.6 / Opus 4.7) — wired through a Cloudflare Worker proxy in /sanad/ and /watad/.
+LLM: Claude (Haiku 4.5 / Sonnet 4.6 / Opus 4.7) — wired through a Cloudflare Worker proxy in /sanad/, /watad/, and the homepage chat widget at /ask/.
 Real-time: /watad/ ships a pure-JS telemetry simulator (5s tick, ~200 points, subscriber pattern) — the only real-time data shape in the portfolio.
+Ask Saad: the homepage chat bubble is a RAG-grounded chatbot trained on this site's content (~40 doc corpus). Same Worker + Anthropic key as Sanad and Watad — three AI features, one engineering foundation.
 Standards: WCAG 2.1 AA targets, prefers-reduced-motion respected.
 Build: none - push to main, Cloudflare Pages deploys.
 Components: hand-written, no UI library.

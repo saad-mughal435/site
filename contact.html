@@ -31,6 +31,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="styles.css?v=20260515i" />
+<link rel="stylesheet" href="ask/css/ask.css?v=20260520a" />
 </head>
 <body>
 
@@ -187,6 +188,11 @@
                title="Open your email client with this message pre-filled">
               Or open in email app
             </a>
+            <button type="button" class="ask-cta-pill" id="ask-from-form"
+                    title="Open the Ask Saad chatbot — your message is forwarded as the first question"
+                    style="margin-inline-start:auto;">
+              <span aria-hidden="true">✦</span> Or ask the AI
+            </button>
           </div>
 
           <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
@@ -251,6 +257,30 @@
     btn.blur();
   });
   update();
+})();
+</script>
+
+<!-- ================= ASK SAAD CHATBOT ================= -->
+<script src="ask/js/app.js?v=20260520a"></script>
+<script src="ask/js/corpus.js?v=20260520a"></script>
+<script src="ask/js/engine.js?v=20260520a"></script>
+<script src="ask/js/chat.js?v=20260520a"></script>
+<script>
+(function () {
+  // Wire the "Or ask the AI" button next to the Send button.
+  // If the visitor has already typed their message, forward it to the chat
+  // as the first question. Otherwise just open the chat.
+  var btn = document.getElementById('ask-from-form');
+  if (!btn) return;
+  btn.addEventListener('click', function () {
+    var msg = document.getElementById('f-message');
+    var pref = msg && msg.value && msg.value.trim();
+    var opener = function () {
+      if (window.AskChat) window.AskChat.open(pref || '');
+    };
+    if (window.AskChat) opener();
+    else setTimeout(opener, 200);  // chat.js may still be loading
+  });
 })();
 </script>
 </body>

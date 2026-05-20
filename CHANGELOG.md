@@ -7,6 +7,100 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.0] - 2026-05-20 - Ask Saad: recruiter AI chatbot on the homepage
+
+### Added
+- **Ask Saad** — a floating ✦ cyan chat bubble on the homepage and the
+  contact page. Recruiters ask plain-English questions ("Does he know
+  Python?" / "What did he build at Kingsley?" / "Can he relocate?") and
+  get 2-4 sentence answers grounded in a pre-chunked corpus extracted
+  from the existing site content. Each reply renders one-click citation
+  chips that drill into the relevant demo / role / FAQ.
+
+  **Why:** the site now hosts eight interactive demos plus a long
+  experience timeline + skills + FAQ. Recruiters in Dubai screen 50+
+  candidates a week — most won't browse all eight. Ask Saad is the
+  30-second answer that drills them straight to the right demo.
+
+  This is **a feature on the homepage, not a 9th demo**. The site still
+  lists "Eight" interactive demos; Ask Saad adds a chat bubble.
+
+- **`ask/js/corpus.js`** — RAG knowledge base. ~40 documents extracted
+  from existing homepage content blocks (`HERO_COPY` × 3, `FAQ_ITEMS`
+  × 7, `EXPERIENCE` × 5, demo descriptions × 8, `STACK_GROUPS` × 9,
+  `WhatThisProves` × 4, About prose, education, contact, quantified
+  impact stats). Each doc has a stable `id`, plain-text body, a `link`
+  or `scrollTo` anchor for citation drill-downs, and a hand-curated
+  `tags[]` array. ~5 KB total.
+
+- **`ask/js/engine.js`** — `AskAI` namespace. Live/Mock pattern matching
+  Sanad/Watad: `health()`, `retrieve(q, k)`, `answer({question,
+  history})`, `rateMessage()`. Retrieval is keyword + tag overlap
+  (no embeddings, no vector DB — the corpus is small enough that
+  `tagOverlap × 2 + titleMatch × 1.5 + bodyTokenOverlap × 1` works
+  great). Top-3 retrieved docs are passed to Claude in a `CONTEXT:`
+  system-prompt block, each tagged `[doc-id]`. Claude cites by
+  `[doc-id]` at sentence endings; the client parses those into
+  citation chips. Mock fallback returns a templated answer built from
+  the top doc's body with the same citation chips so Demo mode is
+  realistic.
+
+- **`ask/js/chat.js`** — chat widget lifted from `sanad/js/chat.js`
+  and trimmed for this use case (no full-screen view, no local Qwen
+  model, no "talk to a human" handoff, no KB-article side drawer).
+  Keeps the typewriter animation, mode badge, 👍/👎 feedback per
+  message, starter chips ("Does he know Python?" / "What did he
+  build at Kingsley?" / "Can he relocate?" / "Tell me about Watad"),
+  history persistence with `HIST_VERSION` schema-migration key.
+  Mounts itself once into the page as a sibling of the React tree —
+  no conflict with the homepage SPA.
+
+- **`ask/css/ask.css`** — scoped `--ask-*` styles for the bubble +
+  chat window. Cyan + violet gradient to echo the existing site
+  accent. Responsive: bubble + window reflow on mobile (`<480px`).
+
+- **`ask/js/app.js`** — tiny `AskApp` helper shim (escapeHtml,
+  jget/jset, showModal, toast). Lifted from `sanad/js/app.js` so
+  chat.js doesn't have to import `SanadApp` across demos.
+
+- **`ask/README.md`** — operator quick-start + live-mode setup
+  (reference Cloudflare Worker handler for `/api/ask/ai/*`).
+
+### Changed
+- **`site/index.html`**: loads `ask/css/ask.css` in `<head>`, loads
+  the 4 `ask/js/*` scripts after the React mount (line 1411+).
+  Adds a `✦ Ask the AI` cyan pill button in the hero CTA row next
+  to "Contact me" and the existing demo CTA.
+- **`site/contact.html`**: loads the same Ask Saad assets. Adds a
+  `✦ Or ask the AI` button in the form-actions row. When clicked
+  the chat opens pre-filled with whatever the visitor has already
+  typed in the message textarea — no lost context.
+- **`site/_headers`**: cache rules for `/ask/css/*` and `/ask/js/*`
+  matching the other demos' pattern (`max-age=300, must-revalidate`).
+- **`site/README.md`**: new row in the features table — "Ask Saad —
+  AI chatbot on the homepage".
+- **`site/package.json`**: 2.2.0 → 2.3.0. Minor bump for an additive
+  feature, no breaking changes.
+- **`site/humans.txt`**: bumped to 2026-05-20 + added the Ask Saad
+  line to the LLM section.
+
+### Mistake-prevention (from prior demos)
+- Widget injected **after** `createRoot(...).render(<App />)` so the
+  React tree owns `#root` exclusively. The widget DOM (`#ask-bubble`,
+  `#ask-window`) lives as a body sibling.
+- Every CSS class + variable scoped with `ask-` / `--ask-` — no bleed
+  into the homepage or any demo.
+- `HIST_VERSION` key prevents stale canned-reply formats from showing
+  up after a corpus update (same lesson as Sanad).
+- Composer textarea has `max-height: 120px; overflow-y: auto` so a
+  long question doesn't push the chat window off-screen.
+- `?v=20260520a` cache-bust querystring on all `ask/*` script + link
+  tags in both `index.html` and `contact.html`.
+- Mock mode is the default; the chat answers realistically with
+  citations even when no Worker is configured.
+- Out-of-scope guard: when retrieval finds no decent match, the mock
+  politely declines and points to saad@saadm.dev.
+
 ## [2.2.0] - 2026-05-18 - Watad: smart-building / BMS operations console (eighth demo)
 
 ### Added

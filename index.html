@@ -128,6 +128,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="home.css?v=20260515j" />
+<link rel="stylesheet" href="ask/css/ask.css?v=20260520a" />
 </head>
 <body>
 
@@ -638,6 +639,14 @@ function Hero({ view, setView }) {
              href={copy.cta.href}
              {...(copy.cta.target ? { target: copy.cta.target, rel: 'noopener' } : {})}
           >{copy.cta.label}</a>
+          <button
+            type="button"
+            className="ask-cta-pill"
+            title="Open the Ask Saad chatbot — AI grounded in his portfolio"
+            onClick={() => { if (window.AskChat) window.AskChat.open(); }}
+          >
+            <span aria-hidden="true">✦</span> Ask the AI
+          </button>
         </div>
         <div className="hero-meta">
           <div><span className="meta-k">Currently</span><span className="meta-v">Kingsley Beverage FZCO · Dubai</span></div>
@@ -1409,6 +1418,16 @@ function App() {
 
 createRoot(document.getElementById('root')).render(<App />);
 </script>
+
+<!-- ================= ASK SAAD CHATBOT =================
+     Floating bubble + chat window. Mounts itself into the DOM via
+     chat.js — sits as a sibling of #root so it never collides with the
+     React tree. Demo mode by default; flips to Live · Haiku 4.5 if a
+     Cloudflare Worker at /api/ask/ai/* is configured (see ask/README.md). -->
+<script src="ask/js/app.js?v=20260520a"></script>
+<script src="ask/js/corpus.js?v=20260520a"></script>
+<script src="ask/js/engine.js?v=20260520a"></script>
+<script src="ask/js/chat.js?v=20260520a"></script>
 
 <!-- ================= BACK TO TOP ================= -->
 <button class="back-to-top" id="back-to-top" type="button" aria-label="Scroll back to top" title="Back to top">
