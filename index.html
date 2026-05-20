@@ -165,6 +165,7 @@
       <li><strong>Qahwa POS</strong> - café / quick-service POS demo. Touch cashier terminal, kitchen display, modifier-driven menus, shift cash reconciliation with Z-reports, 14-section admin. <a href="pos/index.html" style="color:#6e8eff;">Open →</a></li>
       <li><strong>Sanad</strong> - AI customer-support copilot demo. Agent inbox with Claude-powered AI sidebar (reply / summary / sentiment / category / EN↔AR translate), RAG chat widget, knowledge base, 11-section admin with model selector + editable system prompt. <a href="sanad/index.html" style="color:#6e8eff;">Open →</a></li>
       <li><strong>Watad</strong> - smart-building BMS operations console demo. Live SVG floor plan with simulated BACnet/Modbus telemetry, alarm queue with audio cues, predictive-maintenance work orders, ASHRAE-overlaid energy curves, 3 BMS-tuned AI features (explain alarm / suggest maintenance / optimise setpoints). Real-time telemetry simulator is the technical differentiator. <a href="watad/index.html" style="color:#6e8eff;">Open →</a></li>
+      <li><strong>Lahza</strong> - mobile-first AI journaling Progressive Web App. Installable on iOS / Android / desktop via Add to Home Screen. 4 Claude-powered AI features: time-of-day prompt suggestion, mood detection from entry text, weekly RAG insights, AI Coach chat with citation chips. Desktop shows an iPhone frame; mobile is fullscreen; installed = standalone window. <a href="lahza/" style="color:#6e8eff;">Open →</a></li>
       <li><strong>Pebble &amp; Co.</strong> - direct-to-consumer storefront demo with admin panel. <a href="b2c/index.html" style="color:#6e8eff;">Open →</a></li>
     </ul>
 
@@ -1085,6 +1086,31 @@ const PROJECTS = [
       { label: 'Energy dashboard ↗', href: 'watad/energy.html', target: '_blank' },
       { label: 'Work orders ↗', href: 'watad/workorders.html', target: '_blank' },
       { label: 'Open admin ↗', href: 'watad/admin.html', target: '_blank' },
+    ],
+  },
+  {
+    domain: 'code', kind: 'Mobile · PWA · Portfolio piece', year: '2026',
+    title: 'Lahza - AI journaling + mood tracking (mobile-first PWA)',
+    desc: <Fragment>A mobile-shaped <strong>Progressive Web App</strong> built to demonstrate
+      mobile-product thinking and a new AI integration domain (consumer wellness).
+      On desktop it renders inside a stylised iPhone frame; on mobile it's
+      fullscreen and edge-to-edge; installed to a home screen it opens as a
+      standalone window with no browser chrome. One AI-suggested prompt a day,
+      a few sentences, and Claude surfaces the mood + themes + patterns across
+      the week — same Cloudflare Worker pattern as the other AI demos.</Fragment>,
+    bullets: [
+      <Fragment><strong>PWA installable</strong> on iOS, Android, and desktop via "Add to Home Screen". No App Store, no native compilation. Custom service worker scoped to <code>/lahza/</code> only.</Fragment>,
+      <Fragment><strong>4 AI features</strong> · <em>Suggest prompt</em> (time-of-day + mood aware), <em>Detect mood</em> (returns structured JSON of mood + emotions from the entry text), <em>Weekly insights</em> (RAG over the last 7 entries, themes + wins + concerns), <em>AI Coach chat</em> (RAG over the last 14 entries, citation chips that open the cited entry in a bottom sheet).</Fragment>,
+      <Fragment><strong>7 mobile views</strong> · Onboarding (3-card swipe), Today (AI prompt + streak ring + recent strip), Compose (full-screen modal with mood emoji picker), Journal (chronological feed with mood filter chips), Insights (7-day mood SVG chart + theme tags + AI summary), AI Coach chat, Profile (locale EN/AR, theme, export-JSON, reset).</Fragment>,
+      <Fragment><strong>Privacy by default</strong> · entries live in <code>localStorage</code> only. In Live AI mode, only the active question is sent to Claude via the Worker proxy.</Fragment>,
+      <Fragment><strong>14-day fabricated seed</strong> from a deterministic RNG so first-time visitors see a populated mood chart, recent feed, and themes without waiting two weeks.</Fragment>,
+      <Fragment><strong>Fourth AI demo</strong> in the portfolio after Sanad (helpdesk), Watad (operations) and Ask Saad (recruiter Q&A) — same Worker, same encrypted-secret pattern, four products.</Fragment>,
+    ],
+    tags: ['Vanilla JS (ES6+)', 'PWA', 'Service Worker', 'Web App Manifest', 'Mobile-first', 'CSS Grid', 'SVG chart', 'Claude API', 'CF Worker proxy', 'RAG', 'localStorage', 'Mock fallback', 'i18n EN/AR'],
+    ctas: [
+      { label: 'Open app ↗', href: 'lahza/', target: '_blank', primary: true },
+      { label: 'AI Coach ↗', href: 'lahza/#coach', target: '_blank' },
+      { label: 'Insights ↗', href: 'lahza/#insights', target: '_blank' },
     ],
   },
   {

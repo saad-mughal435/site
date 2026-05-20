@@ -191,6 +191,13 @@
       link: '/b2c/',
       tags: ['demo', 'pebble', 'b2c', 'dtc', 'storefront', 'ecommerce', 'shopify', 'cart', 'checkout', 'admin', 'mock-api']
     },
+    {
+      id: 'demo-lahza',
+      title: 'Lahza — AI journaling + mood-tracking mobile PWA',
+      body: "Saad's first mobile-shaped demo and his fourth AI integration. A Progressive Web App for personal journaling: one AI-suggested prompt a day, a few sentences, and Claude detects mood + surfaces weekly patterns. Installable on iOS, Android, and desktop via 'Add to Home Screen' — no App Store, no native compilation. On desktop it renders inside a stylised iPhone frame; on mobile it's fullscreen; installed PWA opens as a standalone window with no browser chrome. 4 AI features: suggest prompt (time-of-day + recent-mood aware), detect mood (returns structured JSON), weekly insights (RAG over last 7 entries), AI Coach chat (RAG over last 14 entries with citation chips that open the cited entry in a bottom sheet). 7 views: onboarding, today, compose, journal feed, insights chart, AI Coach, profile. EN + AR locale. Entries stay in localStorage — privacy-by-default. Same Cloudflare Worker pattern as the other AI demos.",
+      link: '/lahza/',
+      tags: ['demo', 'lahza', 'mobile', 'pwa', 'app', 'journaling', 'wellness', 'mood', 'tracker', 'ai-coach', 'consumer', 'ios', 'android', 'standalone', 'serviceworker', 'manifest', 'rag', 'claude']
+    },
 
     /* ===================== Stack groups (9 clusters) ===================== */
     {

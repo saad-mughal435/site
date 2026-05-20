@@ -44,3 +44,8 @@
 /bms        /watad/console.html  302
 /building   /watad/index.html    302
 /facilities /watad/console.html  302
+
+# Lahza friendly aliases
+/journal    /lahza/        302
+/mood       /lahza/#insights  302
+/coach      /lahza/#coach  302
