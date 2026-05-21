@@ -198,6 +198,20 @@
       link: '/lahza/',
       tags: ['demo', 'lahza', 'mobile', 'pwa', 'app', 'journaling', 'wellness', 'mood', 'tracker', 'ai-coach', 'consumer', 'ios', 'android', 'standalone', 'serviceworker', 'manifest', 'rag', 'claude']
     },
+    {
+      id: 'demo-marsad',
+      title: 'Marsad — fleet / logistics dispatcher console',
+      body: "A live real-time dispatcher console for a Dubai last-mile courier — the kind of software Aramex, Noon Express, and Talabat run internally. 16 drivers across 3 shifts, 12 vans + 4 motorbikes, 96 in-flight orders across 6 service zones (Marina, JLT, Downtown, Business Bay, Deira, Sharjah Al Nahda). Live Leaflet map with vehicle pins that move every 4 seconds toward their assigned drop-off. Order queue with SLA-breach detection + Web Audio chime. 4 AI dispatcher features: explainDelay (cites real cause), suggestReroute (re-sequences by SLA), batchOptimize (assigns pending across idle drivers), dispatcherChat (conversational copilot grounded in live state). Driver-side simplified view. 9-section admin SPA. Saad's fifth AI integration and his second real-time-data-shape demo. ~4,500 LOC.",
+      link: '/marsad/',
+      tags: ['demo', 'marsad', 'fleet', 'logistics', 'dispatcher', 'maps', 'leaflet', 'last-mile', 'courier', 'real-time', 'sla', 'aramex', 'noon', 'talabat', 'driver', 'ai-dispatcher', 'claude', 'dubai']
+    },
+    {
+      id: 'demo-nabta',
+      title: 'Nabta — UAE HR + payroll SaaS',
+      body: "A modern UAE-shaped HRIS. 32 employees across 5 departments with full UAE fields (Emirates ID, passport, visa expiry, IBAN, base + allowances). Leave management with line-manager + HR approval workflow (7 leave types per UAE Labour Law). WPS-compliant payroll runs via Emirates NBD — per-employee breakdown + Generate WPS SIF + Finalize flow, pay-day 28th. Recruitment kanban: 4 open roles, 22 candidates, lead/applied/interview/offer/hired pipeline. Q2-2026 performance review cycle. Claude HR policy assistant grounded in 6 HR policies (leave, WPS, visa, gratuity, probation, remote) + UAE Labour Law (Federal Decree-Law No. 33 of 2021). Every AI reply cites by [pol-xxx] with click-to-open citations. Saad's sixth AI integration. Single hash-routed SPA, 9 sections.",
+      link: '/nabta/',
+      tags: ['demo', 'nabta', 'hr', 'hris', 'payroll', 'wps', 'wage-protection-system', 'uae', 'employees', 'leave', 'recruitment', 'kanban', 'performance', 'reviews', 'policy', 'labour-law', 'b2b', 'saas', 'ai', 'claude', 'rag']
+    },
 
     /* ===================== Stack groups (9 clusters) ===================== */
     {

@@ -60,6 +60,16 @@
 /lahza/sw.js
   Service-Worker-Allowed: /lahza/
   Cache-Control: public, max-age=0, must-revalidate
+/marsad/css/*
+  Cache-Control: public, max-age=300, must-revalidate
+/marsad/js/*
+  Cache-Control: public, max-age=300, must-revalidate
+/nabta/css/*
+  Cache-Control: public, max-age=300, must-revalidate
+/nabta/js/*
+  Cache-Control: public, max-age=300, must-revalidate
+/tokens.css
+  Cache-Control: public, max-age=300, must-revalidate
 
 # HTML — short cache so updates surface quickly
 /*.html

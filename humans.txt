@@ -14,14 +14,15 @@ Unsplash photographers - for the real-estate marketplace imagery in /property/.
 The CSS / web platform working groups - for shipping the platform.
 
 /* SITE */
-Last update: 2026-05-20
-Language: English (with Arabic surfaces in /property/, /vacation/, /sanad/, /lahza/)
+Last update: 2026-05-21
+Language: English (with Arabic surfaces in /property/, /vacation/, /sanad/, /lahza/, /nabta/)
 Doctype: HTML5
 Frameworks: React 18 via CDN (homepage only); vanilla everywhere else.
-LLM: Claude (Haiku 4.5 / Sonnet 4.6 / Opus 4.7) — wired through a Cloudflare Worker proxy in /sanad/, /watad/, the homepage chat widget at /ask/, and the Lahza journaling PWA at /lahza/.
-Real-time: /watad/ ships a pure-JS telemetry simulator (5s tick, ~200 points, subscriber pattern) — the only real-time data shape in the portfolio.
+LLM: Claude (Haiku 4.5 / Sonnet 4.6 / Opus 4.7) — wired through a single Cloudflare Worker proxy used by six features: /sanad/ (helpdesk), /watad/ (BMS), homepage /ask/ (recruiter chatbot), /lahza/ (journaling PWA), /marsad/ (fleet dispatcher), /nabta/ (HR policy assistant).
+Real-time: /watad/ (BMS telemetry, 5s tick, ~200 points) + /marsad/ (fleet dispatch, 4s vehicle ticks across a Leaflet map).
 Mobile: /lahza/ is the first mobile-shaped demo — installable PWA with service worker, custom manifest, and a stylised iPhone frame on desktop.
-Ask Saad: the homepage chat bubble is a RAG-grounded chatbot trained on this site's content. Four AI features, one Worker, one foundation.
+Maps: /property/ and /marsad/ both render real Dubai geography via Leaflet + OpenStreetMap (Manzil = property pins, Marsad = live fleet vehicles).
+Design tokens: /tokens.css holds brand + foundation tokens shared across the homepage and newer demos.
 Standards: WCAG 2.1 AA targets, prefers-reduced-motion respected.
 Build: none - push to main, Cloudflare Pages deploys.
 Components: hand-written, no UI library.

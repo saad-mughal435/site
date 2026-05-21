@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nabta — HR + payroll SaaS for UAE companies</title>
+<meta name="description" content="A modern UAE-shaped HR + payroll SaaS: employees, leave with approval workflow, WPS-compliant payroll runs, recruitment kanban, performance reviews, and a Claude-powered HR policy assistant." />
+<meta name="theme-color" content="#16a34a" />
+<meta name="robots" content="noindex" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2064%2064'%3E%3Crect%20width%3D'64'%20height%3D'64'%20rx%3D'14'%20fill%3D'%2316a34a'/%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20font-family%3D'serif'%20font-weight%3D'700'%20font-size%3D'32'%20fill%3D'%23ffffff'%20text-anchor%3D'middle'%3EN%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/tokens.css?v=20260521a" />
+<link rel="stylesheet" href="css/nabta.css?v=20260521a" />
+</head>
+<body class="nabta">
+
+<div class="nbt-landing">
+  <header style="display:flex;align-items:center;gap:14px;margin-bottom:40px;">
+    <a href="index.html" class="nbt-brand" style="padding:0;"><span class="nbt-brand-mark">N</span> Nabta</a>
+    <span style="margin-inline-start:auto;display:flex;align-items:center;gap:14px;">
+      <span class="nbt-mode-badge" id="mode-badge">…</span>
+      <a href="/" style="font-size:13.5px;color:var(--nbt-muted);">← saadm.dev</a>
+    </span>
+  </header>
+
+  <section class="nbt-landing-hero">
+    <div>
+      <span style="display:inline-block;padding:4px 12px;background:var(--nbt-emerald-bg);color:var(--nbt-emerald-dark);border-radius:999px;font-size:12px;font-weight:600;letter-spacing:.04em;margin-bottom:14px;">Demo · UAE HR + payroll SaaS</span>
+      <h1>Run your UAE company's <span class="grad">people operations.</span></h1>
+      <p>Nabta is the HRIS most UAE mid-size companies need but build with three spreadsheets and a Trello board. 32 employees across 5 departments, leave with line-manager + HR approval, WPS-compliant payroll runs through Emirates NBD, recruitment kanban, performance reviews, and an AI policy assistant grounded in your handbook + UAE Labour Law.</p>
+      <div class="nbt-landing-ctas">
+        <a class="nbt-btn nbt-btn--primary" href="app.html">Open the app →</a>
+        <a class="nbt-btn" href="app.html#payroll">Run payroll</a>
+        <a class="nbt-btn" href="app.html#ai_chat">Talk to the AI policy assistant</a>
+      </div>
+      <div style="margin-top:14px;font-size:12.5px;color:var(--nbt-muted);">Sila Trading FZ-LLC · DED 1234567 · 5 departments · UAE Labour Law 2021 compliant</div>
+    </div>
+    <div class="nbt-landing-mock">
+      <div style="text-align:center;width:100%;padding:14px;">
+        <div style="font-size:54px;margin-bottom:8px;">🌱</div>
+        <div style="font-family:var(--nbt-display);font-size:18px;font-weight:700;margin-bottom:10px;color:var(--nbt-emerald-dark);">5 pending leave · 4 visas expiring</div>
+        <div style="text-align:start;background:var(--nbt-bg-light);padding:14px;border-radius:10px;font-size:12.5px;color:var(--nbt-card-ink-2);line-height:1.6;max-width:340px;margin:0 auto;border:1px solid var(--nbt-line-light);">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Employees</span><strong style="font-family:var(--nbt-mono);">32</strong></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Open roles</span><strong style="font-family:var(--nbt-mono);color:var(--nbt-emerald);">4</strong></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Pending leave</span><strong style="font-family:var(--nbt-mono);color:var(--nbt-amber);">5</strong></div>
+          <div style="display:flex;justify-content:space-between;"><span>Next payroll</span><strong style="font-family:var(--nbt-mono);">AED 612k net</strong></div>
+          <div style="margin-top:8px;padding-top:8px;border-top:1px dashed rgba(31,40,24,0.12);font-size:11px;color:var(--nbt-emerald-dark);"><strong>✦ Policy AI:</strong> Annual leave at Sila is 30 days/year, carryable up to 15. Submit via Leave module — line manager + HR approval. <em>[pol-leave]</em></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 style="text-align:center;margin-bottom:8px;">What's inside</h2>
+    <p style="text-align:center;margin-bottom:24px;color:var(--nbt-muted);">A complete UAE HRIS — single SPA, 9 modules, AI policy assistant.</p>
+    <div class="nbt-landing-grid">
+      <div class="nbt-landing-card"><span class="emoji">👥</span><h3>Employees</h3><p>32 employees · 5 departments · full UAE-specific fields (Emirates ID, passport, visa expiry, IBAN). Filter / search / drill into the profile.</p></div>
+      <div class="nbt-landing-card"><span class="emoji">🏖</span><h3>Leave management</h3><p>7 leave types · 18 in-flight requests · pending / approved / rejected workflow · line-manager + HR sign-off · per-employee balance tracking (30 annual + 15 sick per UAE Labour Law).</p></div>
+      <div class="nbt-landing-card"><span class="emoji">💰</span><h3>WPS payroll runs</h3><p>6 months history + current draft · per-employee breakdown (base + allowances − deductions = net) · "Generate WPS SIF + Finalize" button. Real Emirates NBD pay-day mechanics.</p></div>
+      <div class="nbt-landing-card"><span class="emoji">🎯</span><h3>Recruitment kanban</h3><p>4 open roles · 22 candidates · lead → applied → interview → offer → hired pipeline. Source tracking · rating · expected salary.</p></div>
+      <div class="nbt-landing-card"><span class="emoji">⭐</span><h3>Performance reviews</h3><p>Q2-2026 cycle in flight · 12 reviews across status (not started / in progress / submitted) · rating + goals-met %.</p></div>
+      <div class="nbt-landing-card"><span class="emoji">✦</span><h3>AI policy assistant</h3><p>Claude grounded in 6 HR policies + UAE Labour Law (Federal Decree-Law No. 33 of 2021). Every answer cites the specific policy. Click a citation chip → opens the source.</p></div>
+    </div>
+  </section>
+
+  <footer style="margin-top:50px;padding:24px;text-align:center;font-size:12.5px;color:var(--nbt-muted);border-top:1px solid var(--nbt-line-light);">
+    Demo built by Muhammad Saad · part of <a href="/" style="color:var(--nbt-emerald);">saadm.dev</a> · all employees + data fabricated · UAE compliance illustrative, not legal advice
+  </footer>
+</div>
+
+<script src="js/data.js?v=20260521a"></script>
+<script src="js/mock-api.js?v=20260521a"></script>
+<script src="js/ai-engine.js?v=20260521a"></script>
+<script src="js/app.js?v=20260521a"></script>
+<script>
+  NabtaAI.health().then(function (h) {
+    var el = document.getElementById('mode-badge'); if (!el) return;
+    var nm = h.model.indexOf('haiku') !== -1 ? 'Haiku 4.5' : h.model.indexOf('sonnet') !== -1 ? 'Sonnet 4.6' : 'Opus 4.7';
+    el.className = h.live ? 'nbt-mode-badge live' : 'nbt-mode-badge';
+    el.textContent = h.live ? 'Live · ' + nm : 'Demo mode';
+  });
+</script>
+</body>
+</html>

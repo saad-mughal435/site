@@ -1,0 +1,199 @@
+/* =========================================================================
+   saadm.dev — shared design tokens
+   ---------------------------------------------------------------------------
+   Brand-level + foundation tokens that anything across the site can
+   reference. Per-demo design systems (--lz-*, --wtd-*, --snd-*, --ask-*,
+   --pos-*, etc.) keep their scoped colour palettes — this file gives them
+   a consistent spacing scale, radius scale, shadow ramp, ease curves,
+   typography stack, and z-index layer roles so the whole portfolio feels
+   like one product family.
+
+   Loaded by every NEW demo (Marsad, Nabta, and anything that comes next)
+   plus the homepage. Older demos still work without it; they can opt in
+   piecemeal.
+   ========================================================================= */
+:root {
+  /* ===================== Brand palette =====================
+     The saadm.dev signature accents — used in the homepage hero, mode
+     badges, link colours, and the citation chips on Ask Saad. */
+  --brand-blue:      #6e8eff;     /* primary action / brand */
+  --brand-blue-2:    #4f73f0;
+  --brand-teal:      #5eead4;     /* secondary / "ship" highlights */
+  --brand-teal-2:    #34d399;
+  --brand-violet:    #c4b5fd;     /* AI / intelligence */
+  --brand-violet-2:  #a78bfa;
+  --brand-coral:     #ff7373;     /* warm action / call-to-action */
+  --brand-coral-2:   #ff9b9b;
+  --brand-amber:     #f5c451;     /* warn / attention */
+  --brand-gold:      #d4a056;     /* premium / status */
+  --brand-pink:      #ff9bd1;     /* delight / playful */
+
+  /* ===================== Neutral scale =====================
+     Use these for surfaces, borders, text, and dim hairlines instead of
+     hand-rolled rgb() per file. Optimised for a dark-first palette but
+     each demo can flip to light surfaces using its own scoped tokens. */
+  --neutral-0:    #07080d;        /* darkest — full-bleed bg */
+  --neutral-50:   #0d1019;
+  --neutral-100:  #121622;
+  --neutral-200:  #181f30;
+  --neutral-300:  #1f2840;
+  --neutral-400:  #232b3d;
+  --neutral-500:  #2b3550;
+  --neutral-600:  #5a6378;
+  --neutral-700:  #7b8597;
+  --neutral-800:  #b5bdcc;
+  --neutral-900:  #edf1f8;
+  --neutral-1000: #ffffff;        /* lightest — pure white */
+
+  /* ===================== Semantic colours =====================
+     Status meanings reused across alarm queues, status chips, toasts.
+     Per-demo palettes can override but the meaning is constant. */
+  --status-ok:        #34d399;
+  --status-info:      #6e8eff;
+  --status-warning:   #f5c451;
+  --status-urgent:    #f97316;
+  --status-critical:  #ef4444;
+  --status-neutral:   #94a3b8;
+
+  /* ===================== Typography =====================
+     Three families: UI sans, display serif, monospace. All loaded via the
+     Google Fonts request in each page <head>. Falls back through the OS
+     stack if the network call fails. */
+  --font-ui:       'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --font-display:  'Fraunces', 'Inter', Georgia, serif;
+  --font-mono:     'JetBrains Mono', 'Fira Code', Consolas, ui-monospace, monospace;
+  --font-arabic:   'Tajawal', var(--font-ui);
+
+  /* Modular type scale — minor third (1.2) on a 14px base */
+  --text-2xs:  10.5px;
+  --text-xs:   12px;
+  --text-sm:   13.5px;
+  --text-md:   14px;        /* body default */
+  --text-lg:   16px;
+  --text-xl:   19px;
+  --text-2xl:  23px;
+  --text-3xl:  28px;
+  --text-4xl:  34px;
+  --text-5xl:  clamp(34px, 5vw, 54px);
+  --text-6xl:  clamp(40px, 6vw, 68px);
+
+  --leading-tight:   1.2;
+  --leading-snug:    1.35;
+  --leading-normal:  1.5;
+  --leading-relaxed: 1.65;
+
+  /* ===================== Spacing scale =====================
+     8px grid. Use these instead of pixel values in new code so the visual
+     rhythm stays consistent across the site. */
+  --space-0:   0;
+  --space-1:   4px;
+  --space-2:   8px;
+  --space-3:   12px;
+  --space-4:   16px;
+  --space-5:   20px;
+  --space-6:   24px;
+  --space-7:   28px;
+  --space-8:   32px;
+  --space-10:  40px;
+  --space-12:  48px;
+  --space-16:  64px;
+  --space-20:  80px;
+  --space-24:  96px;
+
+  /* ===================== Radii =====================
+     Small for chips + inputs, default for cards + buttons, large for
+     hero cards + modals. */
+  --radius-xs:     4px;
+  --radius-sm:     6px;
+  --radius:        10px;
+  --radius-md:     14px;
+  --radius-lg:     22px;
+  --radius-xl:     32px;
+  --radius-2xl:    48px;
+  --radius-full:   999px;
+
+  /* ===================== Shadows =====================
+     Three-step elevation ramp. Tinted blue at the base so shadows feel
+     atmospheric on the dark palette, not muddy. */
+  --shadow-sm:  0 1px 2px rgba(7, 12, 32, 0.30);
+  --shadow:     0 4px 14px rgba(7, 12, 32, 0.35);
+  --shadow-md:  0 10px 30px rgba(7, 12, 32, 0.45);
+  --shadow-lg:  0 24px 60px rgba(7, 12, 32, 0.55);
+  --shadow-xl:  0 40px 90px rgba(7, 12, 32, 0.65);
+  --shadow-glow:0 0 0 3px rgba(110, 142, 255, 0.25);     /* focus ring */
+
+  /* ===================== Easing + duration =====================
+     Use these everywhere instead of ad-hoc cubic-beziers per file. */
+  --ease:       cubic-bezier(0.16, 1, 0.3, 1);    /* smooth out — UI default */
+  --ease-in:    cubic-bezier(0.4, 0, 1, 1);
+  --ease-out:   cubic-bezier(0, 0, 0.2, 1);
+  --ease-bounce:cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --duration-instant: 0.08s;
+  --duration-fast:    0.15s;
+  --duration:         0.25s;
+  --duration-slow:    0.4s;
+  --duration-slower:  0.7s;
+
+  /* ===================== Z-index layers =====================
+     A clear hierarchy so popovers, modals, sheets, and toasts stack
+     predictably regardless of which demo is open. */
+  --z-base:       1;
+  --z-sticky:     10;
+  --z-overlay:    20;
+  --z-dropdown:   30;
+  --z-modal:      40;
+  --z-sheet:      50;
+  --z-toast:      60;
+  --z-tooltip:    70;
+  --z-banner:     80;
+  --z-max:        100;
+
+  /* ===================== Layout =====================
+     Page-level max-widths for prose vs dashboards vs hero rails. */
+  --maxw-prose:    66ch;
+  --maxw-content:  860px;
+  --maxw-page:     1180px;
+  --maxw-wide:     1400px;
+  --gutter:        var(--space-7);
+  --gutter-tight:  var(--space-4);
+}
+
+/* =========================================================================
+   Light-mode overrides (opt-in via data-theme="light" on a root container)
+   New demos can set this on their own scope to flip cards/surfaces light
+   without touching the rest of the site.
+   ========================================================================= */
+[data-theme="light"] {
+  --neutral-0:    #f5f7fb;
+  --neutral-50:   #ffffff;
+  --neutral-100:  #ffffff;
+  --neutral-200:  #f1f4fa;
+  --neutral-300:  #e6ebf4;
+  --neutral-400:  #d6dce7;
+  --neutral-500:  #b9c1d0;
+  --neutral-600:  #8a93a6;
+  --neutral-700:  #5b6478;
+  --neutral-800:  #2a3142;
+  --neutral-900:  #0f1320;
+  --shadow-sm:    0 1px 2px rgba(15, 19, 32, 0.06);
+  --shadow:       0 4px 14px rgba(15, 19, 32, 0.08);
+  --shadow-md:    0 10px 30px rgba(15, 19, 32, 0.10);
+  --shadow-lg:    0 24px 60px rgba(15, 19, 32, 0.12);
+}
+
+/* =========================================================================
+   Helper utility classes built on tokens. Keep small — demos use their
+   own scoped classes for everything else.
+   ========================================================================= */
+.t-focus-ring:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-glow);
+}
+.t-reduced-motion-safe {
+  transition-duration: var(--duration);
+  transition-timing-function: var(--ease);
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

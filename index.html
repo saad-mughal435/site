@@ -166,6 +166,8 @@
       <li><strong>Sanad</strong> - AI customer-support copilot demo. Agent inbox with Claude-powered AI sidebar (reply / summary / sentiment / category / EN↔AR translate), RAG chat widget, knowledge base, 11-section admin with model selector + editable system prompt. <a href="sanad/index.html" style="color:#6e8eff;">Open →</a></li>
       <li><strong>Watad</strong> - smart-building BMS operations console demo. Live SVG floor plan with simulated BACnet/Modbus telemetry, alarm queue with audio cues, predictive-maintenance work orders, ASHRAE-overlaid energy curves, 3 BMS-tuned AI features (explain alarm / suggest maintenance / optimise setpoints). Real-time telemetry simulator is the technical differentiator. <a href="watad/index.html" style="color:#6e8eff;">Open →</a></li>
       <li><strong>Lahza</strong> - mobile-first AI journaling Progressive Web App. Installable on iOS / Android / desktop via Add to Home Screen. 4 Claude-powered AI features: time-of-day prompt suggestion, mood detection from entry text, weekly RAG insights, AI Coach chat with citation chips. Desktop shows an iPhone frame; mobile is fullscreen; installed = standalone window. <a href="lahza/" style="color:#6e8eff;">Open →</a></li>
+      <li><strong>Marsad</strong> - fleet / logistics dispatcher console for a Dubai last-mile courier. Live Leaflet map · 16 drivers · 96 in-flight orders · 4s vehicle-position tick · SLA-breach audio cue · 4 AI dispatcher features (explain delay / reroute / batch-assign / chat) · driver-side view · 9-section admin SPA. <a href="marsad/console.html" style="color:#6e8eff;">Open →</a></li>
+      <li><strong>Nabta</strong> - UAE HR + payroll SaaS. 32 employees · WPS-compliant payroll runs via Emirates NBD · leave with line-manager + HR approval · recruitment kanban · performance reviews · Claude policy assistant grounded in 6 HR policies + UAE Labour Law (2021) with [pol-xxx] citation chips. <a href="nabta/app.html" style="color:#6e8eff;">Open →</a></li>
       <li><strong>Pebble &amp; Co.</strong> - direct-to-consumer storefront demo with admin panel. <a href="b2c/index.html" style="color:#6e8eff;">Open →</a></li>
     </ul>
 
@@ -1111,6 +1113,44 @@ const PROJECTS = [
       { label: 'Open app ↗', href: 'lahza/', target: '_blank', primary: true },
       { label: 'AI Coach ↗', href: 'lahza/#coach', target: '_blank' },
       { label: 'Insights ↗', href: 'lahza/#insights', target: '_blank' },
+    ],
+  },
+  {
+    domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
+    title: 'Marsad - fleet / logistics dispatcher console',
+    desc: <Fragment>A live <strong>dispatcher console for a Dubai last-mile courier</strong>. 16 drivers, 12 vans + 4 motorbikes, 96 in-flight orders across 6 service zones (Marina, JLT, Downtown, Business Bay, Deira, Sharjah Al Nahda). Real Leaflet map with vehicle pins that tick toward their next drop every 4 seconds. The fleet simulator + AI dispatcher copilot are the technical differentiators — recognisably the same shape Aramex / Noon Express / Talabat run internally.</Fragment>,
+    bullets: [
+      <Fragment><strong>Live map with real coordinates</strong> · Leaflet + Carto dark tiles, real Dubai lat/lng. Vehicle pins move toward their assigned drop-off · order pins flip green on delivery · audio chime on SLA breach.</Fragment>,
+      <Fragment><strong>Real-time fleet simulator</strong> · 4-second tick · 96 orders + 16 vehicles · plausible movement (vehicles head toward their next drop, deliver within 120m, then pick the next assignment). Pure JS, no map provider beyond tiles.</Fragment>,
+      <Fragment><strong>4 AI dispatcher features</strong> · <em>Explain delay</em> for any order (cites real cause + recommends action), <em>Suggest reroute</em> to re-sequence a driver's stops by SLA deadline, <em>Batch-assign</em> pending orders across idle drivers, <em>Dispatcher chat</em> conversational copilot grounded in live fleet state.</Fragment>,
+      <Fragment><strong>Driver-side view</strong> · simplified mobile-shaped UI for the driver — current job · route · COD pill · complete / handover buttons · today's earnings · streak. Switch drivers via top-right picker.</Fragment>,
+      <Fragment><strong>9-section admin SPA</strong> · Dashboard (KPIs + top zones + driver leaderboard), Orders (filter + search), Drivers, Vehicles (with fuel + last-ping), Zones, Integrations (Shopify · Twilio · Google Maps · QuickBooks), AI Console, Settings, Audit log.</Fragment>,
+      <Fragment><strong>UAE-shaped business logic</strong> · per-zone SLAs (Marina 90 min · Sharjah 150 min) · COD up to AED 500 · WPS-style driver compensation · Sheikh Mohammed Bin Zayed Road traffic context in the AI replies.</Fragment>,
+    ],
+    tags: ['Vanilla JS (ES6+)', 'Leaflet + OpenStreetMap', 'Real-time sim', 'CSS Grid', 'Web Audio API', 'Claude API', 'CF Worker proxy', 'Mock fallback', 'RAG', 'localStorage'],
+    ctas: [
+      { label: 'Open dispatcher ↗', href: 'marsad/console.html', target: '_blank', primary: true },
+      { label: 'Driver view ↗', href: 'marsad/driver.html', target: '_blank' },
+      { label: 'Open admin ↗', href: 'marsad/admin.html', target: '_blank' },
+    ],
+  },
+  {
+    domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
+    title: 'Nabta - UAE HR + payroll SaaS',
+    desc: <Fragment>A modern <strong>UAE-shaped HRIS</strong>: 32 employees across 5 departments, leave management with line-manager + HR approval, <strong>WPS-compliant payroll runs</strong> through Emirates NBD, recruitment kanban, performance review cycle, and a Claude-powered HR policy assistant grounded in the company handbook + UAE Labour Law (Federal Decree-Law No. 33 of 2021). The kind of software every Dubai / Abu Dhabi mid-size company actually runs but typically buys (Bayzat / GulfTalent / Zimyo) rather than builds.</Fragment>,
+    bullets: [
+      <Fragment><strong>Employees module</strong> · 32 employees with full UAE-specific fields (Emirates ID, passport, visa expiry, IBAN, base + allowances) · filter by department / status · per-employee profile sheet with leave balance.</Fragment>,
+      <Fragment><strong>Leave management</strong> · 7 leave types (Annual, Sick, Maternity, Paternity, Unpaid, Compassionate, Hajj/Umrah) · pending → approved / rejected workflow · line-manager + HR sign-off · per-employee balance tracking (30 annual + 15 sick per UAE Labour Law).</Fragment>,
+      <Fragment><strong>WPS payroll runs</strong> · 6 months of historical runs + current draft · per-employee breakdown (base + allowances − deductions = net) · "Generate WPS SIF + Finalize" flow · pay-day 28th via Emirates NBD.</Fragment>,
+      <Fragment><strong>Recruitment kanban</strong> · 4 open roles · 22 candidates · lead / applied / interview / offer / hired stages · source tracking · rating · expected salary range.</Fragment>,
+      <Fragment><strong>Performance reviews</strong> · Q2-2026 cycle in flight · 12 reviews across status (not started / in progress / submitted) · rating + goals-met %.</Fragment>,
+      <Fragment><strong>AI policy assistant</strong> · Claude grounded in 6 HR policies (leave, WPS, visa, gratuity, probation, remote) + UAE Labour Law. Every reply cites the specific policy by <code>[pol-xxx]</code>. Click a citation chip → opens the source policy.</Fragment>,
+    ],
+    tags: ['Vanilla JS (ES6+)', 'CSS Grid', 'Hash-routed SPA', 'localStorage', 'Mock API (fetch shim)', 'Claude API', 'CF Worker proxy', 'RAG (policy KB)', 'Mock fallback', 'UAE WPS', 'UAE Labour Law 2021'],
+    ctas: [
+      { label: 'Open app ↗', href: 'nabta/app.html', target: '_blank', primary: true },
+      { label: 'Run payroll ↗', href: 'nabta/app.html#payroll', target: '_blank' },
+      { label: 'AI policy assistant ↗', href: 'nabta/app.html#ai_chat', target: '_blank' },
     ],
   },
   {

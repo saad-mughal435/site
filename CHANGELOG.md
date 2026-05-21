@@ -7,6 +7,135 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.5.0] - 2026-05-21 - Marsad (10th) + Nabta (11th) + shared design tokens
+
+### Added — shared design tokens at `/tokens.css`
+
+Brand + foundation tokens loaded by the homepage and the two new demos
+(Marsad, Nabta). Includes:
+
+- **Brand palette** — saadm.dev signature blue/teal/violet/coral/amber/gold/pink
+- **Neutral scale** — 12 steps from `--neutral-0` (#07080d) to `--neutral-1000` (white)
+- **Semantic colours** — status-ok / info / warning / urgent / critical / neutral
+- **Typography** — UI sans (Inter), display serif (Fraunces), monospace (JetBrains Mono),
+  Arabic (Tajawal). Modular type scale `--text-2xs` through `--text-6xl`.
+- **8px spacing scale** — `--space-1` (4px) through `--space-24` (96px)
+- **Radius scale** — `--radius-xs` (4px) through `--radius-2xl` (48px) + `--radius-full`
+- **Shadow ramp** — three elevation steps + atmospheric blue tint
+- **Easing** — `--ease` (smooth-out UI default), `--ease-in`, `--ease-out`, `--ease-bounce`
+- **Duration tokens** — `--duration-instant` through `--duration-slower`
+- **Z-index layer roles** — sticky / overlay / dropdown / modal / sheet / toast / tooltip / banner
+- **Layout** — page max-widths for prose / content / page / wide
+- **`prefers-reduced-motion`** auto-respected via `t-reduced-motion-safe`
+- **Light-mode opt-in** via `data-theme="light"` for new demos
+
+Existing demos (`/sanad/`, `/watad/`, `/b2c/`, `/b2b/`, `/property/`, etc)
+keep their own scoped `--xxx-*` design systems untouched — zero-risk change
+to anything shipped. New demos reference `/tokens.css` for spacing / radii
+/ shadows so the visual rhythm stays consistent across the family.
+
+### Added — Marsad (10th demo) · real-time fleet dispatcher console
+
+A live dispatcher console for a Dubai last-mile courier. ~4,500 LOC across
+6 HTML pages + 1 CSS + 11 JS modules.
+
+- **Live Leaflet map** with real Dubai coordinates · Carto dark tiles
+  · 16 vehicle pins (12 vans + 4 motorbikes) ticking toward 96 in-flight
+  orders across 6 service zones (Marina, JLT, Downtown, Business Bay,
+  Deira, Sharjah Al Nahda).
+- **Fleet simulator** (`fleet-sim.js`) · 4-second tick · vehicles move
+  toward their assigned drop-off, deliver within 120m, pick the next
+  assignment from their driver's queue. Pure JS, no map provider
+  beyond tile imagery. Same subscriber pattern as WatadSim.
+- **4 AI dispatcher features** (`MarsadAI`): `explainDelay` (cites
+  cause + recommends action), `suggestReroute` (re-sequences by SLA),
+  `batchOptimize` (assigns pending across idle drivers), `dispatcherChat`
+  (conversational copilot grounded in live state).
+- **Driver-side view** (`driver.html`) · simplified mobile-shaped UI
+  for the driver: current job, route, COD pill, complete / handover,
+  today's earnings + streak. Driver picker top-right.
+- **9-section admin SPA** · Dashboard (KPIs + top zones +
+  leaderboard), Orders, Drivers, Vehicles (fuel + last-ping),
+  Zones, Integrations (Shopify · Twilio · Google Maps · QuickBooks),
+  AI Console, Settings, Audit log.
+- **UAE-specific business logic** · per-zone SLAs (Marina 90 min ·
+  Sharjah Al Nahda 150 min) · COD up to AED 500 · driver compensation
+  rate per delivery + incentive · real Dubai geography in AI replies.
+- **`/marsad/` aliases** — `/dispatcher` `/fleet` `/marsad-driver`.
+
+### Added — Nabta (11th demo) · UAE HR + payroll SaaS
+
+A modern UAE-shaped HRIS. ~3,800 LOC across 3 HTML pages + 1 CSS + 5 JS
+modules. Single-SPA hash-routed because that's how real HRIS products
+ship.
+
+- **Dashboard** · KPIs (employees, pending leave, open roles, visa
+  renewals, next payroll), recent leave activity, headcount by department.
+- **Employees** · 32 employees with full UAE-specific fields (Emirates
+  ID, passport, visa expiry, IBAN, base + allowances). Filter by
+  department / status, drill into profile sheet with leave balance.
+- **Leave management** · 7 leave types (Annual, Sick, Maternity,
+  Paternity, Unpaid, Compassionate, Hajj/Umrah) · 18 in-flight
+  requests · pending → approved/rejected workflow · line-manager + HR
+  sign-off · per-employee balance tracking (30 annual + 15 sick per
+  UAE Labour Law).
+- **WPS payroll runs** · 6 months historical + current draft.
+  Per-employee breakdown (base + allowances − deductions = net).
+  "Generate WPS SIF + Finalize" flow. Pay-day 28th via Emirates NBD.
+- **Recruitment kanban** · 4 open roles · 22 candidates · stages
+  (lead / applied / interview / offer / hired) · source + rating +
+  expected salary range.
+- **Performance reviews** · Q2-2026 cycle · 12 reviews across status
+  (not started / in progress / submitted) · rating + goals-met %.
+- **AI policy assistant** (`NabtaAI`) · Claude grounded in 6 HR
+  policies (leave, WPS, visa, gratuity, probation, remote) + UAE
+  Labour Law (Federal Decree-Law No. 33 of 2021). Every reply cites
+  by `[pol-xxx]`. Click a citation chip → opens the source policy in
+  a modal. Live + mock fallback.
+- **Settings + audit** · company settings (pay day, WPS code, leave
+  caps, probation), audit log with actor + action + target + details.
+- **`/nabta/` aliases** — `/hr` `/payroll` `/wps`.
+
+### Portfolio integration
+- `demo.html` — 2 new demo cards (Marsad + Nabta). Intro "Nine" → "Eleven".
+- `index.html` PROJECTS — two new entries between Lahza and Pebble.
+  Each card has 3 CTAs. Plus 2 new bullets in the "Other software
+  demos" list.
+- `_headers` — cache rules for `/marsad/*` + `/nabta/*` + `/tokens.css`.
+- `_redirects` — 6 new friendly aliases.
+- `sitemap.xml` — 5 new entries.
+- `README.md` — 2 new rows in the demos table; intro "nine" → "eleven";
+  AI-integration count "four" → "six"; new mention of `/tokens.css`.
+- `humans.txt` — Marsad + Nabta added; AI feature count + map list updated.
+- `package.json` — 2.4.0 → 2.5.0.
+
+### AI integration count
+Six features now share the single Cloudflare Worker + encrypted
+`ANTHROPIC_API_KEY` secret:
+
+1. **Sanad** — customer support copilot
+2. **Watad** — facilities operations (3 features inside)
+3. **Ask Saad** — recruiter Q&A on the homepage
+4. **Lahza** — personal wellness (4 features inside)
+5. **Marsad** — fleet dispatch (4 features inside)
+6. **Nabta** — HR policy assistant
+
+Same Worker, same key, six products. **No API key value anywhere in
+the repo** — only env-var references in the Worker handler. Each demo's
+README documents the additive `/api/<demo>/ai/*` branch as a paste-able
+snippet.
+
+### Mistake-prevention (from prior demos + this session)
+- All regex routes in mock-api.js wrap match in parens (POS lesson).
+- All CSS scoped with demo-specific prefix (`mrs-*`, `nbt-*`) — no bleed.
+- `?v=20260521a` cache-bust on every script + link tag.
+- Marsad's fleet-sim is in-memory only (vehicle positions don't persist
+  to localStorage — they'd be wrong on reload anyway).
+- Nabta's payroll breakdown excludes the one employee on `status: 'notice'`
+  to match UAE practice (final settlement is a separate process).
+- No `_worker.js` at site root; live mode is opt-in per demo.
+- No Claude co-author trailer on commits.
+
 ## [2.4.0] - 2026-05-20 - Lahza: AI journaling + mood-tracking mobile-first PWA (ninth demo)
 
 ### Added

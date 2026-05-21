@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Marsad — fleet dispatcher console for Dubai last-mile couriers</title>
+<meta name="description" content="A real-time fleet dispatcher console for a Dubai last-mile courier. Live map with vehicles + orders, AI dispatcher copilot, route optimisation, driver-side view, full admin SPA." />
+<meta name="theme-color" content="#0d1726" />
+<meta name="robots" content="noindex" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2064%2064'%3E%3Crect%20width%3D'64'%20height%3D'64'%20rx%3D'14'%20fill%3D'%230d1726'/%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20font-family%3D'serif'%20font-weight%3D'700'%20font-size%3D'30'%20fill%3D'%23fb923c'%20text-anchor%3D'middle'%3EM%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/tokens.css?v=20260521a" />
+<link rel="stylesheet" href="css/marsad.css?v=20260521a" />
+</head>
+<body class="marsad landing">
+
+<div class="mrs-landing">
+  <header style="display:flex;align-items:center;gap:14px;margin-bottom:48px;">
+    <a href="index.html" class="mrs-brand"><span class="mrs-brand-mark">M</span> Marsad</a>
+    <span style="margin-inline-start:auto;display:flex;align-items:center;gap:14px;">
+      <span class="mrs-mode-badge" id="mode-badge">…</span>
+      <a href="/" style="font-size:13.5px;color:var(--mrs-ink-2);">← saadm.dev</a>
+    </span>
+  </header>
+
+  <section class="mrs-landing-hero">
+    <div>
+      <span style="display:inline-block;padding:4px 12px;background:linear-gradient(135deg,rgba(251,146,60,0.18),rgba(167,139,250,0.18));color:var(--mrs-coral);border-radius:999px;font-size:12px;font-weight:600;letter-spacing:.04em;margin-bottom:14px;">Demo · Last-mile fleet ops</span>
+      <h1>Dispatch the city, <span class="grad">on one screen.</span></h1>
+      <p>A live dispatcher console for a Dubai last-mile courier — 16 drivers, 12 vans + 4 bikes, 96 in-flight orders across 6 zones. Vehicle pins tick on a live map, the alarm queue surfaces SLA breaches before they happen, and the AI copilot explains delays, reroutes drivers, and batch-assigns the pending queue.</p>
+      <div class="mrs-landing-ctas">
+        <a class="mrs-btn mrs-btn--primary mrs-btn--lg" href="console.html">Open dispatcher console →</a>
+        <a class="mrs-btn mrs-btn--lg" href="driver.html">Driver view</a>
+        <a class="mrs-btn mrs-btn--lg" href="admin.html">Open admin</a>
+      </div>
+      <div style="margin-top:14px;font-size:12.5px;color:var(--mrs-muted);">Al Quoz Industrial 4 hub · Marina, JLT, Downtown, Business Bay, Deira, Sharjah Al Nahda · live tick every 4s</div>
+    </div>
+    <div class="mrs-landing-mock">
+      <div style="text-align:center;width:100%;padding:14px;">
+        <div style="font-size:54px;margin-bottom:8px;">🛰</div>
+        <div style="font-family:var(--mrs-display);font-size:18px;font-weight:700;margin-bottom:10px;color:var(--mrs-coral);">96 orders · 14 drivers on route</div>
+        <div style="text-align:start;background:var(--mrs-bg);padding:14px;border-radius:10px;font-size:12.5px;color:var(--mrs-ink-2);line-height:1.6;max-width:340px;margin:0 auto;border:1px solid var(--mrs-line);">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Pending</span><strong style="font-family:var(--mrs-mono);color:var(--mrs-amber);">12</strong></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>In flight</span><strong style="font-family:var(--mrs-mono);color:var(--mrs-coral);">52</strong></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Delivered today</span><strong style="font-family:var(--mrs-mono);color:var(--mrs-mint);">28</strong></div>
+          <div style="display:flex;justify-content:space-between;"><span>SLA breaches</span><strong style="font-family:var(--mrs-mono);color:var(--mrs-red);">2 ⚠</strong></div>
+          <div style="margin-top:8px;padding-top:8px;border-top:1px dashed rgba(255,255,255,0.12);font-size:11px;color:var(--mrs-coral);"><strong>✦ AI:</strong> Both breaches in Sharjah Al Nahda · same driver · fuel at 18%. Reassign one to Karim Khan (idle at hub).</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 style="text-align:center;margin-bottom:8px;">What's inside</h2>
+    <p style="text-align:center;margin-bottom:24px;color:var(--mrs-muted);">Not a static dashboard — a working dispatcher with a real-time simulator behind it.</p>
+    <div class="mrs-landing-grid">
+      <div class="mrs-landing-card"><span class="emoji">🗺</span><h3>Live Leaflet map</h3><p>Real Dubai coordinates · vehicles tick every 4 seconds · hub + zones + delivery pins coloured by status. Click any vehicle/order/driver to focus the map.</p></div>
+      <div class="mrs-landing-card"><span class="emoji">📦</span><h3>Order queue + SLA tracking</h3><p>Pending / assigned / in-transit / breach. Per-zone SLAs (Marina 90 min · Sharjah 150 min). Audio chime on breach.</p></div>
+      <div class="mrs-landing-card"><span class="emoji">🚐</span><h3>Driver + vehicle live state</h3><p>16 drivers across 3 shifts · 12 vans + 4 bikes · live speed, fuel, last-ping. Click → focus on the map.</p></div>
+      <div class="mrs-landing-card"><span class="emoji">✦</span><h3>AI dispatcher copilot</h3><p><em>Explain delay</em> · <em>Suggest reroute</em> · <em>Batch-assign pending</em> · <em>Dispatcher chat</em>. Live Claude when a Worker is configured; deterministic mock otherwise.</p></div>
+      <div class="mrs-landing-card"><span class="emoji">📱</span><h3>Driver-side view</h3><p>Simplified mobile-shaped UI for the driver: current job, route, COD pill, complete / handover buttons, today's earnings.</p></div>
+      <div class="mrs-landing-card"><span class="emoji">⚙</span><h3>9-section admin SPA</h3><p>Dashboard · Orders · Drivers · Vehicles · Zones · Integrations · AI Console · Settings · Audit log.</p></div>
+    </div>
+  </section>
+
+  <section class="mrs-card" style="margin-top:24px;">
+    <h3 style="margin-bottom:10px;">Two-minute walkthrough</h3>
+    <ol style="margin:0;padding-inline-start:22px;line-height:1.85;font-size:14.5px;color:var(--mrs-ink-2);">
+      <li>Open the <a href="console.html">dispatcher console</a>. Map loads with vehicles + orders + hub.</li>
+      <li>Within ~10 seconds you'll see vehicle pins move. Within ~60 seconds a delivery completes (pin flips green) — chime plays.</li>
+      <li>Click ⚠ on the filter chip row to filter to SLA breaches. Click the ✦ button on any order → AI explains the delay and proposes a next action.</li>
+      <li>Click <strong>✦ AI batch-assign</strong> top right → AI proposes assignments for the pending queue.</li>
+      <li>Click the chat icon → conversational dispatcher copilot grounded in the live state. Try <em>"any breaches?"</em>, <em>"who has spare capacity?"</em>, <em>"fuel below 25%?"</em></li>
+      <li>Open <a href="driver.html">driver.html</a> to see the same world from a driver's POV — switch drivers via the top-right picker.</li>
+      <li>Open <a href="admin.html">admin.html</a> to browse the SPA — dashboard, orders, drivers, vehicles, zones, integrations, AI console, settings, audit.</li>
+    </ol>
+  </section>
+
+  <footer style="margin-top:60px;padding:24px;text-align:center;font-size:12.5px;color:var(--mrs-muted);border-top:1px solid var(--mrs-line);">
+    Demo built by Muhammad Saad · part of <a href="/" style="color:var(--mrs-coral);">saadm.dev</a> · works offline (Demo mode) or with a Cloudflare Worker (Live mode).
+  </footer>
+</div>
+
+<script src="js/data.js?v=20260521a"></script>
+<script src="js/mock-api.js?v=20260521a"></script>
+<script src="js/ai-engine.js?v=20260521a"></script>
+<script src="js/app.js?v=20260521a"></script>
+<script>
+  MarsadAI.health().then(function (h) {
+    var el = document.getElementById('mode-badge'); if (!el) return;
+    var nm = h.model.indexOf('haiku') !== -1 ? 'Haiku 4.5' : h.model.indexOf('sonnet') !== -1 ? 'Sonnet 4.6' : 'Opus 4.7';
+    el.className = h.live ? 'mrs-mode-badge live' : 'mrs-mode-badge';
+    el.textContent = h.live ? 'Live · ' + nm : 'Demo mode';
+  });
+</script>
+</body>
+</html>

@@ -49,3 +49,13 @@
 /journal    /lahza/        302
 /mood       /lahza/#insights  302
 /coach      /lahza/#coach  302
+
+# Marsad friendly aliases
+/dispatcher /marsad/console.html  302
+/fleet      /marsad/console.html  302
+/marsad-driver /marsad/driver.html 302
+
+# Nabta friendly aliases
+/hr         /nabta/app.html        302
+/payroll    /nabta/app.html#payroll 302
+/wps        /nabta/app.html#payroll 302

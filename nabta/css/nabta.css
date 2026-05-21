@@ -1,0 +1,294 @@
+/* =========================================================================
+   Nabta — HR + payroll SaaS · design system
+   Light-themed (HR products are typically airy + light). Emerald/sage primary
+   to play off the "sprout" name. Inter for body, Fraunces for display.
+   All classes prefixed `nbt-*`. References /tokens.css.
+   ========================================================================= */
+:root {
+  --nbt-bg-light:    #f5f7f5;
+  --nbt-bg-light-2:  #ebefea;
+  --nbt-card:        #ffffff;
+  --nbt-card-ink:    #1f2818;
+  --nbt-card-ink-2:  #41513a;
+  --nbt-muted:       #6b8062;
+  --nbt-muted-light: #7d8e75;
+  --nbt-line-light:  rgba(31, 40, 24, 0.10);
+  --nbt-line-light-2:rgba(31, 40, 24, 0.18);
+
+  --nbt-emerald:     #16a34a;        /* primary */
+  --nbt-emerald-2:   #22c55e;
+  --nbt-emerald-dark:#15803d;
+  --nbt-emerald-bg:  #e8f5ec;
+  --nbt-emerald-line:rgba(34, 197, 94, 0.30);
+  --nbt-amber:       #d97706;
+  --nbt-rose:        #e11d48;
+  --nbt-blue:        #2563eb;
+  --nbt-violet:      #7c3aed;
+
+  --nbt-display: 'Fraunces', 'Inter', Georgia, serif;
+  --nbt-ui:      'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  --nbt-mono:    'JetBrains Mono', ui-monospace, monospace;
+
+  --nbt-side-w: 240px;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+html { height: 100%; }
+body.nabta {
+  background: var(--nbt-bg-light);
+  color: var(--nbt-card-ink);
+  font-family: var(--nbt-ui);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+body.nabta.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+body.nabta.app > .nbt-shell { flex: 1 1 0; min-height: 0; }
+h1, h2, h3, h4 { margin: 0 0 .4em; color: var(--nbt-card-ink); }
+h1 { font-family: var(--nbt-display); font-size: clamp(28px, 4vw, 42px); letter-spacing: -0.02em; }
+h2 { font-size: 22px; }
+h3 { font-size: 16px; }
+a { color: var(--nbt-emerald); text-decoration: none; }
+
+/* ====== Brand ====== */
+.nbt-brand { display: inline-flex; align-items: center; gap: 10px; font-family: var(--nbt-display); font-weight: 700; font-size: 17px; color: var(--nbt-card-ink); text-decoration: none; padding: 0 8px 14px; }
+.nbt-brand-mark {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: linear-gradient(135deg, var(--nbt-emerald), var(--nbt-emerald-2));
+  color: white; display: grid; place-items: center;
+  font-weight: 800; font-size: 16px;
+  box-shadow: 0 4px 14px rgba(22, 163, 74, 0.32);
+}
+.nbt-co-pill { padding: 8px 12px; background: var(--nbt-emerald-bg); border: 1px solid var(--nbt-emerald-line); border-radius: 8px; margin: 0 4px 14px; font-size: 13px; color: var(--nbt-card-ink); }
+
+/* ====== App shell ====== */
+.nbt-shell {
+  display: grid;
+  grid-template-columns: var(--nbt-side-w) 1fr;
+  height: 100vh;
+}
+@media (max-width: 880px) { .nbt-shell { grid-template-columns: 1fr; } }
+.nbt-side {
+  background: var(--nbt-card);
+  border-inline-end: 1px solid var(--nbt-line-light);
+  padding: 18px 8px;
+  display: flex; flex-direction: column; gap: 2px;
+  overflow-y: auto;
+}
+.nbt-side-group { font-size: 11px; color: var(--nbt-muted); text-transform: uppercase; letter-spacing: .08em; padding: 14px 12px 6px; font-family: var(--nbt-mono); font-weight: 700; }
+.nbt-side-link {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 12px; border-radius: 8px;
+  color: var(--nbt-card-ink-2); font-size: 13.5px; font-weight: 500;
+  text-decoration: none;
+}
+.nbt-side-link:hover { background: var(--nbt-bg-light-2); color: var(--nbt-card-ink); }
+.nbt-side-link.active { background: linear-gradient(135deg, var(--nbt-emerald), var(--nbt-emerald-2)); color: white; font-weight: 700; box-shadow: 0 2px 8px rgba(22, 163, 74, 0.30); }
+.nbt-side-link.active .nbt-side-icon { filter: brightness(1.6); }
+.nbt-side-icon { width: 20px; text-align: center; font-size: 15px; }
+
+.nbt-main { display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+.nbt-top {
+  padding: 14px 22px;
+  background: var(--nbt-card);
+  border-bottom: 1px solid var(--nbt-line-light);
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+}
+.nbt-content {
+  padding: 22px;
+  flex: 1; overflow-y: auto;
+  max-width: 1280px; width: 100%;
+}
+
+/* ====== Mode badge ====== */
+.nbt-mode-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 10px; border-radius: 999px;
+  font-size: 11px; font-weight: 600; font-family: var(--nbt-mono);
+  background: var(--nbt-bg-light-2); color: var(--nbt-muted);
+}
+.nbt-mode-badge::before { content: ''; width: 6px; height: 6px; border-radius: 999px; background: var(--nbt-muted); }
+.nbt-mode-badge.live { background: var(--nbt-emerald-bg); color: var(--nbt-emerald); }
+.nbt-mode-badge.live::before { background: var(--nbt-emerald); box-shadow: 0 0 8px var(--nbt-emerald); animation: nbt-blink 1.6s ease infinite; }
+@keyframes nbt-blink { 0%,100%{opacity:1;} 50%{opacity:.35;} }
+
+/* ====== Cards / panels ====== */
+.nbt-card { background: var(--nbt-card); border: 1px solid var(--nbt-line-light); border-radius: 12px; padding: 16px; }
+.nbt-panel { background: var(--nbt-card); border: 1px solid var(--nbt-line-light); border-radius: 12px; overflow: hidden; }
+
+/* ====== KPI grid ====== */
+.nbt-kpi-grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+.nbt-kpi { background: var(--nbt-card); border: 1px solid var(--nbt-line-light); border-radius: 12px; padding: 16px; }
+.nbt-kpi-label { font-size: 11px; color: var(--nbt-muted); text-transform: uppercase; letter-spacing: .06em; font-weight: 700; margin-bottom: 6px; }
+.nbt-kpi-value { font-size: 26px; font-weight: 800; color: var(--nbt-card-ink); font-family: var(--nbt-display); letter-spacing: -.01em; line-height: 1.1; }
+.nbt-kpi-sub { font-size: 12px; color: var(--nbt-muted); margin-top: 4px; }
+.nbt-kpi.is-warn  { border-color: rgba(217, 119, 6, 0.4); background: rgba(217, 119, 6, 0.04); }
+.nbt-kpi.is-warn .nbt-kpi-value { color: var(--nbt-amber); }
+
+/* ====== Buttons + inputs ====== */
+.nbt-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 8px;
+  padding: 9px 16px;
+  background: var(--nbt-card); color: var(--nbt-card-ink);
+  border: 1px solid var(--nbt-line-light-2); border-radius: 8px;
+  font-family: inherit; font-size: 13.5px; font-weight: 600;
+  cursor: pointer; transition: all .12s ease;
+}
+.nbt-btn:hover { background: var(--nbt-bg-light-2); border-color: var(--nbt-emerald); }
+.nbt-btn--primary { background: var(--nbt-emerald); border-color: var(--nbt-emerald); color: white; }
+.nbt-btn--primary:hover { background: var(--nbt-emerald-2); border-color: var(--nbt-emerald-2); color: white; }
+.nbt-btn--sm { padding: 5px 11px; font-size: 12px; }
+
+.nbt-input, .nbt-textarea {
+  width: 100%;
+  background: var(--nbt-card);
+  color: var(--nbt-card-ink);
+  border: 1px solid var(--nbt-line-light-2);
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-family: inherit; font-size: 13.5px;
+}
+.nbt-input--sm { padding: 6px 10px; font-size: 12.5px; }
+.nbt-input:focus, .nbt-textarea:focus { outline: none; border-color: var(--nbt-emerald); box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.20); }
+.nbt-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+.nbt-field > span { font-size: 11px; color: var(--nbt-muted); text-transform: uppercase; letter-spacing: .06em; font-weight: 700; }
+
+/* ====== Tables ====== */
+.nbt-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.nbt-table th, .nbt-table td { padding: 9px 14px; text-align: left; border-bottom: 1px solid var(--nbt-line-light); color: var(--nbt-card-ink-2); }
+.nbt-table th { font-size: 10.5px; color: var(--nbt-muted); text-transform: uppercase; letter-spacing: .06em; font-weight: 700; background: var(--nbt-bg-light); }
+.nbt-table tr:hover td { background: rgba(22, 163, 74, 0.02); }
+
+/* ====== Chips ====== */
+.nbt-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 10px; border-radius: 999px;
+  font-size: 11.5px; font-weight: 600;
+  background: var(--nbt-bg-light-2); color: var(--nbt-muted);
+  border: 1px solid transparent; cursor: pointer;
+  text-transform: capitalize;
+}
+.nbt-chip.active     { background: var(--nbt-emerald); color: white; }
+.nbt-chip.pending    { background: rgba(217, 119, 6, 0.15);   color: var(--nbt-amber); }
+.nbt-chip.approved   { background: rgba(22, 163, 74, 0.15);   color: var(--nbt-emerald); }
+.nbt-chip.taken      { background: rgba(22, 163, 74, 0.10);   color: var(--nbt-emerald-dark); }
+.nbt-chip.rejected   { background: rgba(225, 29, 72, 0.15);   color: var(--nbt-rose); }
+.nbt-chip.draft      { background: rgba(124, 58, 237, 0.15);  color: var(--nbt-violet); }
+.nbt-chip.paid       { background: rgba(22, 163, 74, 0.15);   color: var(--nbt-emerald); }
+.nbt-chip.probation  { background: rgba(217, 119, 6, 0.15);   color: var(--nbt-amber); }
+.nbt-chip.notice     { background: rgba(225, 29, 72, 0.10);   color: var(--nbt-rose); }
+.nbt-chip.submitted   { background: rgba(22, 163, 74, 0.15); color: var(--nbt-emerald); }
+.nbt-chip.in_progress { background: rgba(37, 99, 235, 0.15);  color: var(--nbt-blue); }
+.nbt-chip.not_started { background: var(--nbt-bg-light-2);    color: var(--nbt-muted); }
+
+/* ====== Avatars ====== */
+.nbt-avatar {
+  display: inline-grid; place-items: center;
+  width: 32px; height: 32px; border-radius: 999px;
+  background: linear-gradient(135deg, var(--nbt-emerald), var(--nbt-emerald-2));
+  color: white;
+  font-weight: 700; font-size: 11px;
+}
+
+/* ====== Meta grid (employee modal) ====== */
+.nbt-meta-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; font-size: 13px; }
+.nbt-meta-grid > div { display: flex; flex-direction: column; gap: 2px; padding: 8px 12px; background: var(--nbt-bg-light); border-radius: 8px; }
+.nbt-meta-grid > div span { font-size: 10.5px; color: var(--nbt-muted); text-transform: uppercase; letter-spacing: .06em; font-weight: 700; }
+.nbt-meta-grid > div strong { color: var(--nbt-card-ink); font-weight: 600; }
+
+/* ====== Dept rows on dashboard ====== */
+.nbt-dept-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--nbt-line-light); font-size: 14px; }
+.nbt-dept-row:last-child { border-bottom: none; }
+
+/* ====== Kanban (recruitment) ====== */
+.nbt-kanban { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+@media (max-width: 1100px) { .nbt-kanban { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); } }
+.nbt-kanban-col { background: var(--nbt-bg-light-2); border: 1px solid var(--nbt-line-light); border-radius: 12px; padding: 12px; min-height: 200px; }
+.nbt-kanban-col h4 { font-size: 12px; color: var(--nbt-muted); text-transform: capitalize; letter-spacing: .04em; font-weight: 700; }
+.nbt-kanban-card { background: var(--nbt-card); border: 1px solid var(--nbt-line-light); border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; cursor: grab; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: all .12s ease; }
+.nbt-kanban-card:hover { transform: translateY(-1px); border-color: var(--nbt-emerald); box-shadow: 0 4px 10px rgba(22,163,74,0.15); }
+
+/* ====== Roles (recruitment) ====== */
+.nbt-role { display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--nbt-line-light); font-size: 13px; gap: 14px; }
+.nbt-role:last-child { border-bottom: none; }
+.nbt-role > div:first-child { flex: 1; }
+
+/* ====== AI chat ====== */
+.nbt-msg { display: flex; gap: 8px; margin-bottom: 12px; }
+.nbt-msg.out { justify-content: flex-end; }
+.nbt-bubble { max-width: 80%; padding: 10px 14px; background: var(--nbt-card); border: 1px solid var(--nbt-line-light); border-radius: 14px; border-top-left-radius: 4px; font-size: 14px; line-height: 1.6; color: var(--nbt-card-ink); }
+.nbt-msg.out .nbt-bubble { background: linear-gradient(135deg, var(--nbt-emerald-bg), rgba(34, 197, 94, 0.10)); border-color: var(--nbt-emerald-line); border-top-left-radius: 14px; border-top-right-radius: 4px; }
+.nbt-msg-avatar { width: 28px; height: 28px; border-radius: 999px; background: linear-gradient(135deg, var(--nbt-emerald), var(--nbt-emerald-2)); color: white; display: grid; place-items: center; font-size: 12px; font-weight: 800; flex-shrink: 0; }
+
+.nbt-cites { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 5px; }
+.nbt-cite {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 10px;
+  background: var(--nbt-emerald-bg);
+  border: 1px solid var(--nbt-emerald-line);
+  color: var(--nbt-emerald-dark);
+  border-radius: 999px;
+  font-size: 11.5px; font-weight: 600;
+  cursor: pointer; text-decoration: none;
+}
+.nbt-cite:hover { background: var(--nbt-emerald); color: white; }
+
+/* ====== Modal ====== */
+.nbt-modal-backdrop {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(31, 40, 24, 0.6); backdrop-filter: blur(4px);
+  display: grid; place-items: center; padding: 20px;
+  opacity: 0; pointer-events: none; transition: opacity .15s ease;
+}
+.nbt-modal-backdrop.show { opacity: 1; pointer-events: auto; }
+.nbt-modal { background: var(--nbt-card); color: var(--nbt-card-ink); border: 1px solid var(--nbt-line-light-2); border-radius: 16px; max-width: 560px; width: 100%; max-height: 88vh; overflow: auto; box-shadow: 0 30px 80px rgba(0,0,0,0.25); }
+.nbt-modal-head { padding: 14px 18px; border-bottom: 1px solid var(--nbt-line-light); display: flex; align-items: center; gap: 10px; }
+.nbt-modal-head h3 { margin: 0; font-size: 16px; flex: 1; }
+.nbt-modal-close { background: transparent; border: 0; color: var(--nbt-muted); font-size: 22px; cursor: pointer; line-height: 1; }
+.nbt-modal-body { padding: 18px; }
+.nbt-modal-foot { padding: 12px 18px; border-top: 1px solid var(--nbt-line-light); display: flex; gap: 8px; justify-content: flex-end; }
+
+/* ====== Toasts ====== */
+.nbt-toasts { position: fixed; bottom: 20px; right: 20px; z-index: 300; display: flex; flex-direction: column; gap: 8px; }
+.nbt-toast { background: var(--nbt-card); color: var(--nbt-card-ink); border: 1px solid var(--nbt-line-light-2); padding: 11px 14px; border-radius: 10px; font-size: 13.5px; box-shadow: 0 4px 16px rgba(0,0,0,0.10); }
+.nbt-toast.success { border-color: var(--nbt-emerald); }
+.nbt-toast.warn { border-color: var(--nbt-amber); }
+.nbt-toast.error { border-color: var(--nbt-rose); }
+
+/* ====== Loading ====== */
+.nbt-loading { display: flex; gap: 6px; padding: 60px 20px; justify-content: center; }
+.nbt-loading span { width: 8px; height: 8px; border-radius: 999px; background: var(--nbt-emerald); opacity: 0.5; animation: nbt-bounce 1s ease infinite; }
+.nbt-loading span:nth-child(2) { animation-delay: .15s; }
+.nbt-loading span:nth-child(3) { animation-delay: .30s; }
+@keyframes nbt-bounce { 0%,80%,100%{opacity:0.3;transform:translateY(0);} 40%{opacity:1;transform:translateY(-6px);} }
+
+/* ====== Landing ====== */
+.nbt-landing { max-width: 1080px; margin: 0 auto; padding: 50px 24px; }
+.nbt-landing-hero { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; margin-bottom: 50px; }
+@media (max-width: 760px) { .nbt-landing-hero { grid-template-columns: 1fr; } }
+.nbt-landing-hero h1 .grad {
+  background: linear-gradient(135deg, var(--nbt-emerald-dark), var(--nbt-emerald-2));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.nbt-landing-hero p { color: var(--nbt-card-ink-2); font-size: 16px; line-height: 1.7; margin-bottom: 22px; }
+.nbt-landing-ctas { display: flex; flex-wrap: wrap; gap: 10px; }
+.nbt-landing-mock {
+  background: var(--nbt-card);
+  border: 1px solid var(--nbt-line-light);
+  border-radius: 16px;
+  padding: 22px;
+  min-height: 320px;
+  display: grid; place-items: center;
+  box-shadow: 0 20px 60px rgba(31, 40, 24, 0.08);
+}
+.nbt-landing-grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); margin-bottom: 40px; }
+.nbt-landing-card { background: var(--nbt-card); border: 1px solid var(--nbt-line-light); border-radius: 14px; padding: 22px; }
+.nbt-landing-card .emoji { font-size: 32px; margin-bottom: 8px; display: block; }
+.nbt-landing-card p { color: var(--nbt-card-ink-2); font-size: 14px; margin: 0; line-height: 1.6; }
