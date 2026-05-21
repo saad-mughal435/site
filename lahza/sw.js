@@ -1,20 +1,21 @@
 /* Lahza service worker — scoped to /lahza/ ONLY. Never controls other parts
  * of saadm.dev. Cache-first for static assets, network-first for the app
  * shell and AI calls (so visitors always get the latest UI when online). */
-const CACHE = 'lahza-v20260520a';
+const CACHE_PREFIX = 'lahza-v';
+const CACHE = 'lahza-v20260521a';
 const STATIC_ASSETS = [
   '/lahza/',
   '/lahza/index.html',
-  '/lahza/css/lahza.css?v=20260520a',
-  '/lahza/js/data.js?v=20260520a',
-  '/lahza/js/mock-api.js?v=20260520a',
-  '/lahza/js/app.js?v=20260520a',
-  '/lahza/js/ai-engine.js?v=20260520a',
-  '/lahza/js/router.js?v=20260520a',
-  '/lahza/manifest.webmanifest?v=20260520a',
-  '/lahza/icons/icon.svg?v=20260520a',
-  '/lahza/icons/icon-192.png?v=20260520a',
-  '/lahza/icons/icon-512.png?v=20260520a'
+  '/lahza/css/lahza.css?v=20260521a',
+  '/lahza/js/data.js?v=20260521a',
+  '/lahza/js/mock-api.js?v=20260521a',
+  '/lahza/js/app.js?v=20260521a',
+  '/lahza/js/ai-engine.js?v=20260521a',
+  '/lahza/js/router.js?v=20260521a',
+  '/lahza/manifest.webmanifest?v=20260521a',
+  '/lahza/icons/icon.svg?v=20260521a',
+  '/lahza/icons/icon-192.png?v=20260521a',
+  '/lahza/icons/icon-512.png?v=20260521a'
 ];
 
 self.addEventListener('install', (e) => {
@@ -23,9 +24,14 @@ self.addEventListener('install', (e) => {
 });
 
 self.addEventListener('activate', (e) => {
+  // Delete any older lahza-v* cache so stale assets don't linger after deploy.
   e.waitUntil(
     caches.keys().then((keys) =>
-      Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))
+      Promise.all(
+        keys
+          .filter((k) => k.startsWith(CACHE_PREFIX) && k !== CACHE)
+          .map((k) => caches.delete(k))
+      )
     )
   );
   self.clients.claim();

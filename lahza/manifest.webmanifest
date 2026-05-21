@@ -14,10 +14,10 @@
   "dir": "ltr",
   "categories": ["lifestyle", "health", "productivity"],
   "icons": [
-    { "src": "icons/icon.svg", "type": "image/svg+xml", "sizes": "any", "purpose": "any" },
-    { "src": "icons/icon-192.png", "type": "image/png", "sizes": "192x192", "purpose": "any" },
-    { "src": "icons/icon-512.png", "type": "image/png", "sizes": "512x512", "purpose": "any" },
-    { "src": "icons/icon-maskable-512.png", "type": "image/png", "sizes": "512x512", "purpose": "maskable" }
+    { "src": "/lahza/icons/icon.svg", "type": "image/svg+xml", "sizes": "any", "purpose": "any" },
+    { "src": "/lahza/icons/icon-192.png", "type": "image/png", "sizes": "192x192", "purpose": "any" },
+    { "src": "/lahza/icons/icon-512.png", "type": "image/png", "sizes": "512x512", "purpose": "any" },
+    { "src": "/lahza/icons/icon-maskable-512.png", "type": "image/png", "sizes": "512x512", "purpose": "maskable" }
   ],
   "shortcuts": [
     {
@@ -25,14 +25,14 @@
       "short_name": "Compose",
       "description": "Write today's moment",
       "url": "/lahza/#compose",
-      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+      "icons": [{ "src": "/lahza/icons/icon-192.png", "sizes": "192x192" }]
     },
     {
       "name": "AI Coach",
       "short_name": "Coach",
       "description": "Chat with the AI Coach grounded in your journal",
       "url": "/lahza/#coach",
-      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+      "icons": [{ "src": "/lahza/icons/icon-192.png", "sizes": "192x192" }]
     }
   ]
 }

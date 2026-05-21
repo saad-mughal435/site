@@ -107,10 +107,11 @@
     });
     document.getElementById('pf-reset').addEventListener('click', function () {
       if (!confirm('Wipe all entries, settings, and AI Coach history? Seed data will reload on next visit.')) return;
-      // Also wipe coach history
+      // Wipe extra localStorage keys the mock-api /reset doesn't know about
       try {
         localStorage.removeItem('lahza.coach.history');
         localStorage.removeItem('lahza.coach.histVersion');
+        localStorage.removeItem('lahza.entries.deletedSeed');
       } catch (e) {}
       LahzaApp.api('/reset', { method: 'POST' }).then(function () {
         window.toast('Demo reset', 'warn');

@@ -133,8 +133,12 @@
         var t = pick(TAG_POOL);
         if (tags.indexOf(t) === -1) tags.push(t);
       }
+      // Stable seed ID — does NOT include the timestamp so the ID doesn't
+      // shift each day, which would orphan Coach citation chips after a
+      // reload. User-created entries (in mock-api.js) use a Date.now() ID
+      // and are kept separate.
       entries.push({
-        id: 'e-' + ts.getTime(),
+        id: 'e-seed-' + day.toISOString().slice(0, 10),
         ts: ts.toISOString(),
         date: day.toISOString().slice(0, 10),
         body: body,

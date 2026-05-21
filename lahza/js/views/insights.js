@@ -61,11 +61,22 @@
       return { x: x, y: y, d: d };
     });
     var validPts = pts.filter(function (p) { return p.y != null; });
-    var path = validPts.map(function (p, i) {
-      return (i === 0 ? 'M' : 'L') + p.x.toFixed(1) + ',' + p.y.toFixed(1);
-    }).join(' ');
-    var fillPath = path
-      + (validPts.length ? ' L' + validPts[validPts.length - 1].x.toFixed(1) + ',' + (h - pad) + ' L' + validPts[0].x.toFixed(1) + ',' + (h - pad) + ' Z' : '');
+    if (validPts.length === 0) {
+      // Empty state — no entries this week
+      return '<div class="lz-chart" style="display:grid;place-items:center;color:var(--lz-muted);font-size:12.5px;">'
+        + 'Write a few entries this week to see the chart fill in.'
+        + '</div>';
+    }
+    // Single-point chart: just render the dot + axis labels, no line.
+    var path = '', fillPath = '';
+    if (validPts.length >= 2) {
+      path = validPts.map(function (p, i) {
+        return (i === 0 ? 'M' : 'L') + p.x.toFixed(1) + ',' + p.y.toFixed(1);
+      }).join(' ');
+      fillPath = path
+        + ' L' + validPts[validPts.length - 1].x.toFixed(1) + ',' + (h - pad)
+        + ' L' + validPts[0].x.toFixed(1) + ',' + (h - pad) + ' Z';
+    }
     var grid = '';
     for (var i = 1; i < 4; i++) {
       var y = pad + i * (h - pad * 2) / 4;

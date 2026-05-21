@@ -37,11 +37,25 @@
     });
   }
 
+  // Per-route chrome rules. The FAB (compose shortcut) is hidden on the coach
+  // view (overlaps the send button) and on the compose view (its own UI).
+  // The tab bar is hidden on the compose view (full-screen modal).
+  var ROUTES_HIDE_FAB    = { compose: true, coach: true };
+  var ROUTES_HIDE_TABBAR = { compose: true };
+
+  function setChrome(route) {
+    var fab = document.getElementById('fab');
+    var bar = document.getElementById('tabbar');
+    if (fab) fab.style.display = ROUTES_HIDE_FAB[route]    ? 'none' : '';
+    if (bar) bar.style.display = ROUTES_HIDE_TABBAR[route] ? 'none' : '';
+  }
+
   function render() {
     var route = currentRoute();
     var app = document.getElementById('app');
     if (!app) return;
     renderTabbar();
+    setChrome(route);
     var V = window.LahzaViews || {};
     if (route === 'compose' && typeof V.compose === 'function') return V.compose(app);
     if (typeof V[route] === 'function') return V[route](app);

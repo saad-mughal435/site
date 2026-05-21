@@ -116,8 +116,20 @@
     return streak;
   }
 
-  // Cross-site portfolio-demo banner (consistent with the other demos)
-  (function () { var s = document.createElement('script'); s.src = '/assets/portfolio-banner.js?v=20260514'; s.async = true; document.head.appendChild(s); })();
+  // Cross-site portfolio-demo banner — load ONLY when Lahza is being viewed
+  // as a portfolio demo in a normal browser tab. Skip when installed as a
+  // standalone PWA (the banner shouldn't appear in someone's installed app)
+  // and skip on mobile (the iPhone-frame chrome isn't shown there anyway).
+  (function () {
+    var isStandalone = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches;
+    var isIosStandalone = (typeof navigator !== 'undefined') && navigator.standalone === true;
+    var isMobile = window.matchMedia && window.matchMedia('(max-width: 719px)').matches;
+    if (isStandalone || isIosStandalone || isMobile) return;
+    var s = document.createElement('script');
+    s.src = '/assets/portfolio-banner.js?v=20260514';
+    s.async = true;
+    document.head.appendChild(s);
+  })();
 
   window.LahzaApp = {
     jget: jget, jset: jset,
