@@ -17,13 +17,13 @@ The CSS / web platform working groups - for shipping the platform.
 Last update: 2026-06-01
 Language: English (with Arabic surfaces in /property/, /vacation/, /sanad/, /lahza/, /nabta/)
 Doctype: HTML5
-Frameworks: React 18 via CDN (homepage only); vanilla everywhere else.
+Frameworks: React 18 via CDN (homepage only), JSX precompiled to home.app.js (no runtime Babel); vanilla everywhere else.
 LLM: Claude (Haiku 4.5 / Sonnet 4.6 / Opus 4.8) — wired through a single Cloudflare Worker proxy used by six features: /sanad/ (helpdesk), /watad/ (BMS), homepage /ask/ (recruiter chatbot), /lahza/ (journaling PWA), /marsad/ (fleet dispatcher), /nabta/ (HR policy assistant).
 Real-time: /watad/ (BMS telemetry, 5s tick, ~180 points) + /marsad/ (fleet dispatch, 4s vehicle ticks across a Leaflet map).
 Mobile: /lahza/ is the first mobile-shaped demo — installable PWA with service worker, custom manifest, and a stylised iPhone frame on desktop.
 Maps: /property/ and /marsad/ both render real Dubai geography via Leaflet + OpenStreetMap (Manzil = property pins, Marsad = live fleet vehicles).
 Design tokens: /tokens.css holds brand + foundation tokens shared across the homepage and newer demos.
 Standards: WCAG 2.1 AA targets, prefers-reduced-motion respected.
-Build: none - push to main, Cloudflare Pages deploys.
+Build: one local transpile for the homepage (npm run build:home: home.app.jsx -> home.app.js); everything else is hand-written. Push to main, Cloudflare Pages serves the static files.
 Components: hand-written, no UI library.
 Software: VS Code, Git, Cloudflare Pages, GitHub Actions, Prettier.

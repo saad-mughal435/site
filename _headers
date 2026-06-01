@@ -81,6 +81,8 @@
 # Site CSS / JS at root — short cache
 /home.css
   Cache-Control: public, max-age=86400
+/home.app.js
+  Cache-Control: public, max-age=86400
 /styles.css
   Cache-Control: public, max-age=86400
 /script.js

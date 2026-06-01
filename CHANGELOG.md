@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.6.1] - 2026-06-01 - Drop in-browser Babel (precompiled homepage)
+
+### Changed - performance
+
+- The homepage React app is now **precompiled**. The JSX lives in
+  `home.app.jsx` (source of truth) and is transpiled once via
+  `npm run build:home` into the committed `home.app.js`; `index.html` loads
+  that plain script with `defer`, and the React / ReactDOM CDN tags are
+  deferred too.
+- **Removed `@babel/standalone`** (~900 KB gzipped) and the per-visit,
+  main-thread JSX transpile that previously blocked first paint. `index.html`
+  shrank from ~101 KB to ~20 KB; the homepage now paints without downloading
+  or running a compiler in the browser.
+- Verified by rendering the compiled bundle against the real React 18 UMD in
+  jsdom (`#root` mounts all sections, no React errors).
+- Added `@babel/cli` + `@babel/preset-react` devDependencies and a `build:home`
+  script. Deploy stays static (Cloudflare Pages serves committed files); the
+  only build is this single local transpile when the homepage changes.
+
 ## [2.6.0] - 2026-06-01 - Site-wide hardening + polish pass
 
 A multi-agent static audit of the homepage and all 12 demos (across
