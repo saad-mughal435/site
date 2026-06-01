@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.6.4] - 2026-06-01 - Fix: deploys were failing (invalid _redirects)
+
+### Fixed
+
+- **Removed the `/app/*  /app/index.html  200` rule from `_redirects`.**
+  Cloudflare's `wrangler deploy` rejects it as an infinite-loop redirect
+  (`.html` / `/index` stripping re-matches `/app/*`), which **failed the entire
+  deploy** — so every push from v2.6.0 onward never went live and the site
+  stayed frozen on the v2.5.0 build. Dropping the rule lets the deploy succeed
+  and ships v2.6.0–v2.6.4 at once. The MES app keeps its `/app/`-namespaced
+  client URLs; a deep-link hard-refresh falls through to the 404 (same as
+  before) — a real `/app/` single-page-app asset handler is a separate
+  follow-up.
+
 ## [2.6.3] - 2026-06-01 - Professional hero copy + cache fix
 
 ### Changed
@@ -125,7 +139,7 @@ surfaces made faster, more correct, and more accessible.
 - Added a **Report-Only Content-Security-Policy** (scoped to the unpkg / Google
   Fonts / Leaflet tiles / in-browser-LLM origins the demos actually use),
   `rel="noopener"` on internal new-tab links, cache rules for previously
-  uncovered root assets, an `/app/*` SPA fallback, and promoted the permanent
+  uncovered root assets, and promoted the permanent
   vanity redirects to 301.
 - Namespaced the MES app's client-side URLs under `/app/`, added an
   "Exit demo -> Portfolio" link, and marked the app shell `noindex`

@@ -7,10 +7,12 @@
 /login         /app/index.html  302
 /logout        /app/index.html  302
 
-# SPA fallback for the MES app: deep links like /app/inventory are client-routed,
-# so any /app/* path that isn't a real file rewrites (200) to the app shell. Real
-# assets (/app/js/*, /app/views/*, /app/index.html) are served first by CF Pages.
-/app/*         /app/index.html  200
+# NOTE: do NOT add an `/app/*  /app/index.html  200` SPA-fallback rule here.
+# Cloudflare rejects it at deploy time as an infinite loop (it strips .html /
+# /index from /app/index.html, which re-matches /app/* → loop) and FAILS THE
+# WHOLE DEPLOY. Deep /app/ links are client-routed; a hard refresh on one
+# falls through to the 404 page. A proper fix would be a Workers single-page
+# -app asset handler, not a redirect rule.
 
 # Friendly URLs — permanent vanity shortcuts, so 301 (consolidates link equity
 # from anything that links /cv, /resume, etc. onto the real page).
