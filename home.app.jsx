@@ -302,13 +302,13 @@ const HERO_COPY = {
     cta: { href: 'demo.html', label: 'Take demo ↗', target: '_blank' },
   },
   eng: {
-    title: ['Hands on the line.', 'Eyes on the OEE.'],
+    title: ['Operations on the floor.', 'Engineering behind it.'],
     sub: <Fragment>I&rsquo;m <strong>Saad</strong> - <strong>Automation Engineer</strong> with a software-first approach. I run and support Krones beverage production lines, coordinate operators during shifts, troubleshoot production issues, and build ERP / OEE / reporting tools around the production workflow. My strength is connecting factory operations with practical software systems: dashboards, batch records, downtime tracking, QC workflows, inventory visibility, and management reports.</Fragment>,
     stack: 'Krones line support · RCA · OEE tracking · GPON / PSTN',
     cta: { href: '#projects', label: 'See work →' },
   },
   code: {
-    title: ['I write code', 'that ends manual work.'],
+    title: ['Software for operations.', 'Automation behind it.'],
     sub: <Fragment>I&rsquo;m <strong>Saad</strong> - an <strong>Automation &amp; Software Developer</strong> focused on
       ERP systems, dashboards, backend tools, and web applications. I build software that replaces manual work
       - spreadsheets, paper logs, copy-paste reports, inventory tracking, admin panels, and business
@@ -1233,7 +1233,7 @@ function Footer() {
   return (
     <footer className="footer">
       <div className="container footer-inner">
-        <div className="footer-copy">© {new Date().getFullYear()} Saad. Built with React, vanilla CSS, and a healthy disrespect for manual work.</div>
+        <div className="footer-copy">© {new Date().getFullYear()} Muhammad Saad — Automation &amp; Software Developer. Built with React and vanilla CSS.</div>
         <div className="footer-links">
           <a href="mailto:saad@saadm.dev">Email</a>
           <a href="https://www.linkedin.com/in/muhammadsaad435/" target="_blank" rel="noopener">LinkedIn</a>

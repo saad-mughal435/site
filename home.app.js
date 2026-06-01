@@ -402,7 +402,7 @@ const HERO_COPY = {
     }
   },
   eng: {
-    title: ['Hands on the line.', 'Eyes on the OEE.'],
+    title: ['Operations on the floor.', 'Engineering behind it.'],
     sub: /*#__PURE__*/React.createElement(Fragment, null, "I\u2019m ", /*#__PURE__*/React.createElement("strong", null, "Saad"), " - ", /*#__PURE__*/React.createElement("strong", null, "Automation Engineer"), " with a software-first approach. I run and support Krones beverage production lines, coordinate operators during shifts, troubleshoot production issues, and build ERP / OEE / reporting tools around the production workflow. My strength is connecting factory operations with practical software systems: dashboards, batch records, downtime tracking, QC workflows, inventory visibility, and management reports."),
     stack: 'Krones line support · RCA · OEE tracking · GPON / PSTN',
     cta: {
@@ -411,7 +411,7 @@ const HERO_COPY = {
     }
   },
   code: {
-    title: ['I write code', 'that ends manual work.'],
+    title: ['Software for operations.', 'Automation behind it.'],
     sub: /*#__PURE__*/React.createElement(Fragment, null, "I\u2019m ", /*#__PURE__*/React.createElement("strong", null, "Saad"), " - an ", /*#__PURE__*/React.createElement("strong", null, "Automation & Software Developer"), " focused on ERP systems, dashboards, backend tools, and web applications. I build software that replaces manual work - spreadsheets, paper logs, copy-paste reports, inventory tracking, admin panels, and business workflows - with automation that runs itself."),
     stack: 'Python · FastAPI · MongoDB · Docker · Linux · React',
     cta: {
@@ -1788,7 +1788,7 @@ function Footer() {
     className: "container footer-inner"
   }, /*#__PURE__*/React.createElement("div", {
     className: "footer-copy"
-  }, "\xA9 ", new Date().getFullYear(), " Saad. Built with React, vanilla CSS, and a healthy disrespect for manual work."), /*#__PURE__*/React.createElement("div", {
+  }, "\xA9 ", new Date().getFullYear(), " Muhammad Saad \u2014 Automation & Software Developer. Built with React and vanilla CSS."), /*#__PURE__*/React.createElement("div", {
     className: "footer-links"
   }, /*#__PURE__*/React.createElement("a", {
     href: "mailto:saad@saadm.dev"

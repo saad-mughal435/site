@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.6.3] - 2026-06-01 - Professional hero copy + cache fix
+
+### Changed
+
+- Reworked the hero headlines for a consistent, professional tone across both
+  views: **Coding** reads "Software for operations. / Automation behind it."
+  and **Engineering** reads "Operations on the floor. / Engineering behind
+  it." Replaced the casual footer line ("a healthy disrespect for manual
+  work") with a clean credit naming the role.
+
+### Fixed
+
+- Bumped the `home.app.js` cache-buster and set the file to revalidate
+  (`max-age=300, must-revalidate`) so homepage rebuilds reach browsers and the
+  CDN immediately instead of serving a day-old cached bundle. (This is why the
+  v2.6.2 toggle change wasn't showing up.)
+
 ## [2.6.2] - 2026-06-01 - Homepage view toggle simplified
 
 ### Changed
