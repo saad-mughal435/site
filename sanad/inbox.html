@@ -41,13 +41,14 @@
     <div class="snd-inbox-side-head">
       <span class="snd-sparkle">✦</span>
       <h4>AI Copilot</h4>
-      <button class="snd-modal-close" id="ai-drawer-close" style="display:none;color:var(--snd-muted);margin-inline-start:auto;">×</button>
+      <button class="snd-modal-close" id="ai-drawer-close" aria-label="Close AI panel" style="display:none;color:var(--snd-muted);margin-inline-start:auto;">×</button>
     </div>
     <div id="ai-cards"></div>
   </aside>
 </div>
 
-<button class="snd-ai-toggle" id="ai-toggle" title="Show / hide AI Copilot">✦ AI</button>
+<button class="snd-list-toggle" id="list-toggle" aria-label="Show or hide conversations" title="Show / hide conversations">☰ Conversations</button>
+<button class="snd-ai-toggle" id="ai-toggle" aria-label="Show or hide AI Copilot" title="Show / hide AI Copilot">✦ AI</button>
 
 <script src="js/data.js?v=20260518d"></script>
 <script src="js/mock-api.js?v=20260518d"></script>

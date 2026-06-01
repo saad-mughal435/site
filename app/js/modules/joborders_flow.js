@@ -8,7 +8,7 @@
  * fully sent to a JO drop off the list (server filters to status=allocation_pending).
  */
 
-import { showToast } from '../utils.js?v=20260125h';
+import { showToast } from '../utils.js?v=20260129a';
 import { authenticatedFetch } from '../auth.js?v=20260428b';
 
 let pendingAllocations = [];

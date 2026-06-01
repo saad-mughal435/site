@@ -66,8 +66,8 @@
       + '</div>'
       + '<div style="position:absolute;bottom:var(--lz-tabbar-h);left:0;right:0;padding:10px 14px;background:var(--lz-bg-2);border-top:1px solid var(--lz-line);z-index:35;">'
       +   '<div style="display:flex;gap:8px;align-items:flex-end;">'
-      +     '<textarea class="lz-textarea" id="coach-input" rows="1" placeholder="Ask the Coach…" style="min-height:36px;max-height:100px;padding:8px 12px;"></textarea>'
-      +     '<button class="lz-btn lz-btn--primary" id="coach-send" style="padding:8px 14px;min-width:48px;">↑</button>'
+      +     '<textarea class="lz-textarea" id="coach-input" rows="1" aria-label="Ask the Coach a question" placeholder="Ask the Coach…" style="min-height:36px;max-height:100px;padding:8px 12px;"></textarea>'
+      +     '<button class="lz-btn lz-btn--primary" id="coach-send" aria-label="Send" style="padding:8px 14px;min-width:48px;">↑</button>'
       +   '</div>'
       + '</div>';
 

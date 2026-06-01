@@ -233,7 +233,7 @@
         { metric: 'Orders today',           value: k.orders_today },
         { metric: 'Open quotes',            value: k.open_quotes },
         { metric: 'Pending approvals',      value: k.pending_approvals },
-        { metric: 'Overdue invoices (AED)', value: k.overdue_invoices },
+        { metric: 'Overdue invoices (USD)', value: k.overdue_invoices },
         { metric: 'Avg order value',        value: k.avg_order },
       ];
       exportCSV(`anvil-dashboard-snapshot-${new Date().toISOString().slice(0,10)}.csv`, rows, [

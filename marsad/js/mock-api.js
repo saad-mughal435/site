@@ -241,5 +241,4 @@
     return Promise.resolve({ ok: !!res.ok, status: res.status || (res.ok ? 200 : 400), json: function () { return Promise.resolve(res); } });
   };
 
-  console.log('Marsad mock-api ready');
 })();

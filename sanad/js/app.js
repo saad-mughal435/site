@@ -71,7 +71,7 @@
     bg.className = 'snd-modal-backdrop';
     bg.innerHTML = ''
       + '<div class="snd-modal" style="max-width:' + (opts.size === 'lg' ? '760px' : opts.size === 'sm' ? '420px' : '560px') + ';">'
-      +   '<div class="snd-modal-head"><h3>' + escapeHtml(opts.title || '') + '</h3><button class="snd-modal-close" data-modal-close>×</button></div>'
+      +   '<div class="snd-modal-head"><h3>' + escapeHtml(opts.title || '') + '</h3><button class="snd-modal-close" data-modal-close aria-label="Close dialog">×</button></div>'
       +   '<div class="snd-modal-body">' + (opts.body || '') + '</div>'
       +   (opts.foot ? '<div class="snd-modal-foot">' + opts.foot + '</div>' : '')
       + '</div>';

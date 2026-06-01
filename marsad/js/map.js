@@ -63,19 +63,23 @@
 
   function placeOrder(o) {
     if (!M) return;
-    if (orderLayers[o.id]) M.removeLayer(orderLayers[o.id]);
-    var marker = L.marker([o.dropoff_lat, o.dropoff_lng], {
-      icon: L.divIcon({ html: orderIconHtml(o.status), iconSize: [16, 16], iconAnchor: [8, 8], className: '' })
-    });
     var sla = o.sla_breached ? '<span style="color:#ef4444;font-weight:600;">SLA BREACHED</span> · ' : '';
-    marker.bindPopup(
-      '<div style="min-width:200px;">'
+    var popup = '<div style="min-width:200px;">'
       + '<strong>' + escape(o.number) + '</strong> · ' + escape(o.status) + '<br/>'
       + sla
       + '<small>' + escape(o.zone_name) + ' · ' + escape(o.kind) + '</small><br/>'
       + '<small>' + escape(o.customer_name) + '</small>'
-      + '</div>'
-    );
+      + '</div>';
+    var existing = orderLayers[o.id];
+    if (existing) {                                  // idempotent update — no remove/re-add, popup stays open
+      existing.setIcon(L.divIcon({ html: orderIconHtml(o.status), iconSize: [16, 16], iconAnchor: [8, 8], className: '' }));
+      existing.setPopupContent(popup);
+      return existing;
+    }
+    var marker = L.marker([o.dropoff_lat, o.dropoff_lng], {
+      icon: L.divIcon({ html: orderIconHtml(o.status), iconSize: [16, 16], iconAnchor: [8, 8], className: '' })
+    });
+    marker.bindPopup(popup);
     marker.addTo(M);
     orderLayers[o.id] = marker;
     return marker;

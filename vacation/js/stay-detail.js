@@ -165,7 +165,7 @@
 
       + '<div class="v-stat-row">'
       +   '<div class="v-stat"><div class="v-stat-k">Guests</div><div class="v-stat-v">' + listing.max_guests + '</div></div>'
-      +   '<div class="v-stat"><div class="v-stat-k">Bedrooms</div><div class="v-stat-v">' + listing.bedrooms + '</div></div>'
+      +   '<div class="v-stat"><div class="v-stat-k">Bedrooms</div><div class="v-stat-v">' + (listing.bedrooms === 0 ? 'Studio' : listing.bedrooms) + '</div></div>'
       +   '<div class="v-stat"><div class="v-stat-k">Beds</div><div class="v-stat-v">' + listing.beds + '</div></div>'
       +   '<div class="v-stat"><div class="v-stat-k">Baths</div><div class="v-stat-v">' + listing.baths + '</div></div>'
       + '</div>'

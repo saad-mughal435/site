@@ -1016,5 +1016,4 @@
     ]);
   }
 
-  console.log('Manzil mock-api ready - fetch intercepted for /property/api/*');
 })();

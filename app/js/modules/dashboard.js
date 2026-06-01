@@ -4,7 +4,7 @@
  */
 
 import { authenticatedFetch, getCurrentUser } from '../auth.js?v=20260428b';
-import { formatNumber } from '../utils.js?v=20260125h';
+import { formatNumber } from '../utils.js?v=20260129a';
 
 const UAE_TZ = 'Asia/Dubai';
 
@@ -103,16 +103,14 @@ export async function loadDashboardStats() {
             inventoryValueEl.textContent = 'AED ' + formatNumber(stats.total_inventory_value || 0);
         }
         if (totalItemsEl) {
-            totalItemsEl.textContent = formatNumber(stats.total_items || 0);
+            totalItemsEl.textContent = formatNumber(stats.total_items || 0, 0);
         }
         if (lowStockEl) {
-            lowStockEl.textContent = formatNumber(stats.low_stock_count || 0);
+            lowStockEl.textContent = formatNumber(stats.low_stock_count || 0, 0);
         }
         if (activeRecipesEl) {
-            activeRecipesEl.textContent = formatNumber(stats.active_recipes || 0);
+            activeRecipesEl.textContent = formatNumber(stats.active_recipes || 0, 0);
         }
-
-        console.log('✅ Dashboard stats loaded:', stats);
     } catch (error) {
         console.error('Error loading dashboard stats:', error);
         ['kpi-inventory-value', 'kpi-total-items', 'kpi-low-stock', 'kpi-active-recipes'].forEach(id => {

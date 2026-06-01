@@ -933,6 +933,10 @@
         oee_pct: 78, units_this_shift: 200,
         qc_pending: QC_BATCHES.filter(b => b.status === 'pending').length,
         open_pos_value: 1, downtime_min: 12,
+        total_inventory_value: INVENTORY.reduce((s, i) => s + (i.stock_value || 0), 0),
+        total_items: INVENTORY.length,
+        low_stock_count: INVENTORY.filter(i => i.short).length,
+        active_recipes: RECIPES.filter(r => r.status === 'released').length,
         production_trend: [40,55,42,70,48,62,80],
         recent_activity: [
           { time: todayISO,   tag: 'PROD', message: 'Batch DEMO-0001 closed on Line A' },

@@ -21,8 +21,8 @@
     var pad = $('l-keypad');
     var keys = ['1','2','3','4','5','6','7','8','9','del','0','enter'];
     pad.innerHTML = keys.map(function (k) {
-      if (k === 'del') return '<button class="pos-key del" data-k="del">⌫</button>';
-      if (k === 'enter') return '<button class="pos-key" data-k="enter" style="background:var(--pos-accent);color:var(--pos-bg);">↵</button>';
+      if (k === 'del') return '<button class="pos-key del" data-k="del" aria-label="Delete last digit">⌫</button>';
+      if (k === 'enter') return '<button class="pos-key" data-k="enter" aria-label="Enter PIN" style="background:var(--pos-accent);color:var(--pos-bg);">↵</button>';
       if (k === '0') return '<button class="pos-key zero" data-k="0">0</button>';
       return '<button class="pos-key" data-k="' + k + '">' + k + '</button>';
     }).join('');
@@ -471,10 +471,16 @@
 
   // ---------- Receipt preview ----------
   function showReceipt(order, tendered) {
+    PosApp.api('/admin/settings').then(function (sr) {
+      var s = (sr.body && sr.body.settings) || (D.SETTINGS || {});
+      renderReceipt(order, tendered, s);
+    });
+  }
+  function renderReceipt(order, tendered, s) {
     var html = '<div class="pos-receipt-paper" style="background:white;color:#2a1f17;max-width:300px;margin:0 auto;padding:20px;font-family:var(--font-mono);font-size:12.5px;">'
       + '<div style="text-align:center;border-bottom:1px dashed rgba(42,31,23,.18);padding-bottom:10px;margin-bottom:10px;">'
-      +   '<div style="font-family:var(--font-display);font-weight:700;font-size:17px;">Qahwa Café</div>'
-      +   '<div style="font-size:11px;color:var(--pos-muted-light);">Downtown Dubai · TRN 100000000003</div>'
+      +   '<div style="font-family:var(--font-display);font-weight:700;font-size:17px;">' + esc(s.business_name || 'Qahwa Café') + '</div>'
+      +   '<div style="font-size:11px;color:var(--pos-muted-light);">' + esc(s.address || 'Downtown Dubai') + (s.trn ? ' · TRN ' + esc(s.trn) : '') + '</div>'
       + '</div>'
       + '<div style="font-size:11px;color:var(--pos-muted-light);">' + order.order_no + ' · ' + PosApp.fmtDateTime(order.completed_at || order.created_at) + ' · ' + esc(order.type) + '</div>'
       + '<div style="margin-top:8px;">'
@@ -492,7 +498,7 @@
       + '</div>'
       + (tendered ? '<div style="display:flex;justify-content:space-between;padding:6px 0 0;font-size:11px;color:var(--pos-muted-light);"><span>Tendered</span><span>' + fmt(tendered) + '</span></div>'
         + '<div style="display:flex;justify-content:space-between;padding:2px 0;font-size:11px;color:var(--pos-muted-light);"><span>Change</span><span>' + fmt(Math.max(0, tendered - order.total)) + '</span></div>' : '')
-      + '<div style="text-align:center;margin-top:14px;font-size:11px;color:var(--pos-muted-light);">Thank you. Come back soon. ☕</div>'
+      + '<div style="text-align:center;margin-top:14px;font-size:11px;color:var(--pos-muted-light);">' + esc(s.receipt_footer || 'Thank you. Come back soon. ☕') + '</div>'
       + '</div>';
     PosApp.showModal({
       title: 'Receipt',

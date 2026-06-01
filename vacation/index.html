@@ -4,14 +4,21 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Vacation Homes - Book by the night across the UAE</title>
-<meta name="description" content="UAE short-stay marketplace demo. 55 vacation homes across Dubai Marina, Palm Jumeirah, Hatta, RAK, Fujairah and Liwa. Book by the night with full pricing breakdown and instant confirmation." />
+<meta name="description" content="UAE short-stay marketplace demo. 54 vacation homes across Dubai Marina, Palm Jumeirah, Hatta, RAK, Fujairah and Liwa. Book by the night with full pricing breakdown and instant confirmation." />
 <meta name="theme-color" content="#c66b3d" />
 <link rel="canonical" href="https://saadm.dev/vacation/" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2064%2064'%3E%3Crect%20width%3D'64'%20height%3D'64'%20rx%3D'14'%20fill%3D'%23c66b3d'/%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20font-family%3D'sans-serif'%20font-weight%3D'700'%20font-size%3D'30'%20fill%3D'%23fff'%20text-anchor%3D'middle'%3EV%3C/text%3E%3C/svg%3E" />
 <meta property="og:title" content="Vacation Homes - UAE short-stay booking demo" />
-<meta property="og:description" content="55 vacation homes across the UAE. Book by the night with full pricing and instant confirmation. Demo by Saad Mughal." />
+<meta property="og:description" content="54 vacation homes across the UAE. Book by the night with full pricing and instant confirmation. Demo by Saad Mughal." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://saadm.dev/vacation/" />
+<meta property="og:image" content="https://saadm.dev/og.png?v=20260520" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Vacation Homes - UAE short-stay booking demo" />
+<meta name="twitter:description" content="54 vacation homes across the UAE. Book by the night with full pricing and instant confirmation. Demo by Saad Mughal." />
+<meta name="twitter:image" content="https://saadm.dev/og.png?v=20260520" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -25,7 +32,7 @@
   <div class="v-hero-inner">
     <span class="v-eyebrow">UAE short-stay marketplace</span>
     <h1>Stay a night, stay a season.</h1>
-    <p class="v-tagline">55 vacation homes across 10 UAE destinations - Marina to Liwa Desert. Book by the night with instant confirmation.</p>
+    <p class="v-tagline">54 vacation homes across 10 UAE destinations - Marina to Liwa Desert. Book by the night with instant confirmation.</p>
 
     <form class="v-search" id="hero-search" onsubmit="event.preventDefault();goSearch()">
       <div class="v-search-fields">
@@ -154,7 +161,7 @@ document.getElementById('h-co').value = VacationApp.ymd(co);
 
 document.querySelectorAll('.v-search-chip').forEach(function (ch) {
   ch.addEventListener('click', function () {
-    location.href = 'search.html?destination=' + ch.getAttribute('data-dest') + '&check_in=' + document.getElementById('h-ci').value + '&check_out=' + document.getElementById('h-co').value + '&guests=' + document.getElementById('h-g').value;
+    location.href = 'search.html?destination=' + ch.getAttribute('data-dest') + '&check_in=' + document.getElementById('h-ci').value + '&check_out=' + document.getElementById('h-co').value + '&max_guests=' + document.getElementById('h-g').value;
   });
 });
 
@@ -177,7 +184,7 @@ VacationApp.api('/listings/featured').then(function (r) {
 // Destinations
 var destGrid = document.getElementById('dest-grid');
 destGrid.innerHTML = d.DESTINATIONS.slice(0, 8).map(function (de) {
-  var count = d.LISTINGS.filter(function (l) { return l.destination_id === de.id; }).length;
+  var count = d.LISTINGS.filter(function (l) { return l.destination_id === de.id && (!l.status || l.status === 'live'); }).length;
   return ''
     + '<a href="search.html?destination=' + de.id + '" class="v-dest-card">'
     +   '<img src="' + de.hero + '" alt="' + de.name + '" loading="lazy" />'
@@ -188,7 +195,7 @@ destGrid.innerHTML = d.DESTINATIONS.slice(0, 8).map(function (de) {
 // Top hosts
 var hostGrid = document.getElementById('host-grid');
 hostGrid.innerHTML = d.HOSTS.slice(0, 8).map(function (h) {
-  var lc = d.LISTINGS.filter(function (l) { return l.host_id === h.id; }).length;
+  var lc = d.LISTINGS.filter(function (l) { return l.host_id === h.id && (!l.status || l.status === 'live'); }).length;
   return ''
     + '<div class="v-card" style="padding:16px;display:flex;gap:12px;align-items:center;">'
     +   '<img src="' + h.photo + '" alt="' + h.name + '" style="width:48px;height:48px;border-radius:999px;object-fit:cover;" />'

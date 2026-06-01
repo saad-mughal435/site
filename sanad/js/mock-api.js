@@ -387,6 +387,4 @@
       json: function () { return Promise.resolve(res); }
     });
   };
-
-  console.log('Sanad mock-api ready - /sanad/api/* intercepted');
 })();

@@ -5,8 +5,9 @@
  * toggle, no "talk to a human" handoff). Adds [doc-id] parsing for
  * citation chips that drill into the relevant demo / section / source.
  *
- * Mounts itself into #ask-root once. Persists history under ask.chat.*
- * with a HIST_VERSION key for safe schema migration.
+ * Appends #ask-bubble and #ask-window to document.body once (sits as a
+ * sibling of #root so it never collides with the React tree). Persists
+ * history under ask.chat.* with a HIST_VERSION key for safe schema migration.
  */
 (function () {
   'use strict';
@@ -96,7 +97,7 @@
     }
     if (pickFrom.length) {
       citeRow = '<div class="ask-cites">'
-        + pickFrom.map(function (c) { return '<a class="ask-cite" data-cite="' + esc(c.id) + '">📎 ' + esc(c.title) + '</a>'; }).join('')
+        + pickFrom.map(function (c) { return '<button type="button" class="ask-cite" data-cite="' + esc(c.id) + '">📎 ' + esc(c.title) + '</button>'; }).join('')
         + '</div>';
     }
     var rated = m.rating;
@@ -249,13 +250,18 @@
       return;
     }
     if (doc.scrollTo) {
-      // Internal anchor on the homepage — close the chat, then scroll
-      closeWin();
-      setTimeout(function () {
-        var el = document.querySelector(doc.scrollTo);
-        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 220);
-      return;
+      // Internal anchor on the homepage — resolve the target BEFORE closing the
+      // chat so a missing anchor degrades to the modal fallback below instead of
+      // silently closing the window with nothing to scroll to.
+      var el = document.querySelector(doc.scrollTo);
+      if (el) {
+        closeWin();
+        setTimeout(function () {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 220);
+        return;
+      }
+      // else fall through to the modal fallback below
     }
     // Fallback: show the doc body in a modal
     AskApp.showModal({
@@ -302,14 +308,21 @@
         state.generating = false;
         saveHist();
         render();
+        // Announce the completed answer once into the stable live region.
+        var live = document.getElementById('ask-live');
+        if (live) live.textContent = String(fullText).replace(/\[([a-z0-9-]+)\]/g, '').replace(/\s+([.,!?])/g, '$1').trim();
       });
     }).catch(function (err) {
       console.error('AskAI.answer failed', err);
       state.typing = false;
       state.generating = false;
-      state.history.push({ role: 'assistant', content: "Sorry, something went wrong — please try again or email saad@saadm.dev directly.", citations: [], model: 'error', fallback: true });
+      var errMsg = "Sorry, something went wrong — please try again or email saad@saadm.dev directly.";
+      state.history.push({ role: 'assistant', content: errMsg, citations: [], model: 'error', fallback: true });
       saveHist();
       render();
+      // Announce the failure so screen-reader users aren't left waiting silently.
+      var live = document.getElementById('ask-live');
+      if (live) live.textContent = errMsg;
     });
   }
 
@@ -332,6 +345,9 @@
     if (!win || !bub) return;
     ensureGreet();
     win.classList.add('open');
+    // Flag the open chat on <body> so the host page can hide other
+    // bottom-right fixed controls (e.g. .back-to-top) while the window is up.
+    document.body.classList.add('ask-open');
     bub.setAttribute('aria-expanded', 'true');
     render();
     setTimeout(function () {
@@ -345,6 +361,7 @@
     var win = document.getElementById('ask-window');
     var bub = document.getElementById('ask-bubble');
     if (win) win.classList.remove('open');
+    document.body.classList.remove('ask-open');
     if (bub) bub.setAttribute('aria-expanded', 'false');
   }
 
@@ -366,6 +383,18 @@
     win.setAttribute('role', 'dialog');
     win.setAttribute('aria-label', 'Ask Saad chat');
     document.body.appendChild(win);
+
+    // Stable, persistent, off-screen live region. render() rewrites the whole
+    // #ask-window every tick, so a live region inside it would never announce
+    // (and would re-announce on every typewriter tick). This node is created
+    // once and we write the final answer text into it exactly once on done.
+    var live = document.createElement('div');
+    live.id = 'ask-live';
+    live.setAttribute('role', 'status');
+    live.setAttribute('aria-live', 'polite');
+    live.setAttribute('aria-atomic', 'true');
+    live.style.cssText = 'position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);border:0;white-space:nowrap;';
+    document.body.appendChild(live);
 
     bubble.addEventListener('click', function () { state.open ? closeWin() : openWin(); });
 

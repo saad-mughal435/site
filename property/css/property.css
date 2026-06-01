@@ -882,5 +882,5 @@ body.manzil.rtl .m-admin-side { border-radius: 0; }
 .m-amenity-tile-icon { font-size: 18px; }
 
 /* Map pin selector (step 3) */
-.m-map-pin { height: 320px; border-radius: 10px; overflow: hidden; border: 1px solid var(--manzil-line); }
+.m-map-picker { height: 320px; border-radius: 10px; overflow: hidden; border: 1px solid var(--manzil-line); }
 .m-map-pin-hint { font-size: 12px; color: var(--manzil-muted); margin-top: 6px; text-align: center; }

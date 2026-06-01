@@ -89,7 +89,7 @@
             <div class="freight-bar-text">
               ${data.free_freight_eligible
                 ? '✓ Free freight unlocked'
-                : `Add <strong>${window.formatMoney(500 - data.after)}</strong> for free freight`}
+                : `Add <strong>${window.formatMoney(data.free_freight_threshold - data.after)}</strong> for free freight`}
             </div>
             <div class="freight-progress"><div class="freight-fill" style="width:${data.free_freight_progress}%;"></div></div>
           </div>

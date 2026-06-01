@@ -105,7 +105,7 @@
         <div class="quote-line" data-idx="${i}">
           <input type="text" placeholder="e.g. BR-6204 or 'industrial mop'" value="${l.sku}" data-sku>
           <input type="number" placeholder="e.g. 100" value="${l.qty}" data-qty>
-          <button data-remove ${lines.length === 1 ? 'disabled style="opacity:0.3;"' : ''}>×</button>
+          <button data-remove aria-label="Remove line" ${lines.length === 1 ? 'disabled style="opacity:0.3;"' : ''}>×</button>
         </div>
       `).join('')}
     `;

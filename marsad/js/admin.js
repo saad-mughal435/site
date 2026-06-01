@@ -1,4 +1,4 @@
-/* admin.js — Marsad admin SPA shell. Hash-routed, 6 sections. */
+/* admin.js — Marsad admin SPA shell. Hash-routed, 9 sections. */
 (function () {
   'use strict';
   var NAV = [
@@ -51,7 +51,7 @@
       + '</div>';
     MarsadAI.health().then(function (h) {
       var el = document.getElementById('a-mode');
-      var nm = h.model.indexOf('haiku') !== -1 ? 'Haiku 4.5' : h.model.indexOf('sonnet') !== -1 ? 'Sonnet 4.6' : 'Opus 4.7';
+      var nm = h.model.indexOf('haiku') !== -1 ? 'Haiku 4.5' : h.model.indexOf('sonnet') !== -1 ? 'Sonnet 4.6' : 'Opus 4.8';
       el.className = h.live ? 'mrs-mode-badge live' : 'mrs-mode-badge';
       el.textContent = h.live ? 'Live · ' + nm : 'Demo mode';
     });

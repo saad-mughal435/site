@@ -220,7 +220,7 @@
       var models = [
         ['claude-haiku-4-5-20251001', 'Haiku 4.5', 'Fastest · cheapest'],
         ['claude-sonnet-4-6',         'Sonnet 4.6', 'Balanced'],
-        ['claude-opus-4-7',           'Opus 4.7',   'Highest quality']
+        ['claude-opus-4-8',           'Opus 4.8',   'Highest quality']
       ];
       host.innerHTML =
           '<div class="mrs-card" style="margin-bottom:14px;"><h3 style="margin-bottom:14px;">Model</h3>'

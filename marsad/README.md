@@ -9,7 +9,7 @@ Part of the [saadm.dev](https://saadm.dev/) portfolio. Live at <https://saadm.de
 - **Dispatcher console** (`console.html`) — live Leaflet map + KPI strip + order queue + driver list + AI batch-assign + dispatcher chat
 - **Driver view** (`driver.html`) — simplified UI for a single driver: current job, route, COD pill, complete / handover, today's earnings
 - **Admin SPA** (`admin.html`) — 9 sections: Dashboard, Orders, Drivers, Vehicles, Zones, Integrations, AI Console, Settings, Audit log
-- **4 AI features**: `explainDelay`, `suggestReroute`, `batchOptimize`, `dispatcherChat`. Live Claude when a Cloudflare Worker is configured; deterministic mock otherwise.
+- **AI features**: 3 wired into the UI — `explainDelay`, `batchOptimize`, `dispatcherChat` — plus a `suggestReroute` helper (mock + system prompt ready, not yet surfaced in the UI). Live Claude when a Cloudflare Worker is configured; deterministic mock otherwise.
 
 ## How it behaves on the site
 

@@ -119,7 +119,7 @@
             </div>
           </div>
           <div class="footer-bottom">
-            <span>© <span id="year"></span> Pebble &amp; Co. (demo). Made in a portfolio.</span>
+            <span>© <span id="year"></span> Pebble &amp; Co. (demo). Built by Muhammad Saad — <a href="https://saadm.dev/" style="color:var(--coral-deep); font-weight:600;">saadm.dev</a></span>
             <span>${new Date().toLocaleString()}</span>
           </div>
         </div>
@@ -208,12 +208,18 @@
     if (y) y.textContent = new Date().getFullYear();
   };
 
-  /* ---------- Mobile menu toggle ---------- */
+  /* ---------- Mobile menu toggle + search ---------- */
   document.addEventListener('click', (e) => {
     const burger = e.target.closest('[data-action="menu"]');
     if (burger) {
       const links = document.querySelector('.nav-links');
       if (links) links.classList.toggle('open');
+      return;
+    }
+    const searchBtn = e.target.closest('[data-action="search"]');
+    if (searchBtn) {
+      const term = (window.prompt('Search products') || '').trim();
+      if (term) window.location.href = 'products.html?q=' + encodeURIComponent(term);
     }
   });
 })();

@@ -4,7 +4,7 @@
  * Products are sourced from Recipe Formation (recipes list)
  */
 
-import { showToast, state, formatNumber, formatDate, truncateText } from '../utils.js?v=20260125h';
+import { showToast, state, formatNumber, formatDate, truncateText } from '../utils.js?v=20260129a';
 import { authenticatedFetch } from '../auth.js?v=20260428b';
 
 // ============================================================================

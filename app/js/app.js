@@ -194,6 +194,7 @@ function switchTab(tab, updateHistory = true) {
         // Update page title
         const titleEl = getElement('page-title');
         if (titleEl) titleEl.textContent = pageTitles[tab] || 'Home';
+        document.title = (pageTitles[tab] || 'Home') + ' · Demo Plant MES';
 
         // Toggle back-to-home button visibility
         const backBtn = document.getElementById('back-to-home-btn');
@@ -201,7 +202,7 @@ function switchTab(tab, updateHistory = true) {
         
         // Update browser history
         if (updateHistory) {
-            const url = tab === 'home' ? '/' : `/${tab}`;
+            const url = tab === 'home' ? '/app/' : `/app/${tab}`;
             history.pushState({ tab: tab }, '', url);
         }
         
@@ -327,13 +328,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     let initialTab = 'home';
     
     const pathMap = {
-        '/recipes': 'recipes', '/inventory': 'inventory', '/forecast': 'forecast',
-        '/rmorder': 'rmorder', '/calculator': 'calculator', '/po': 'po', '/poprocessing': 'poprocessing',
-        '/production-reports': 'production-reports', '/yield': 'yield', '/grn': 'grn',
-        '/dispatch': 'dispatch',
-        '/joborders': 'joborders', '/analytics': 'analytics', '/qc': 'qc', '/mixing-section': 'mixing-section', '/tanks-mixing': 'mixing-section', '/mixing-utilities': 'mixing-utilities', '/sugar-dissolver': 'sugar-dissolver',
-        '/quotations': 'quotations', '/sage-entries': 'sage-entries', '/reporting': 'reporting',
-        '/accounting': 'accounting', '/customs': 'customs', '/admin': 'admin', '/login': 'login'
+        '/app/recipes': 'recipes', '/app/inventory': 'inventory', '/app/forecast': 'forecast',
+        '/app/rmorder': 'rmorder', '/app/calculator': 'calculator', '/app/poprocessing': 'poprocessing',
+        '/app/production-reports': 'production-reports', '/app/yield': 'yield', '/app/grn': 'grn',
+        '/app/dispatch': 'dispatch',
+        '/app/joborders': 'joborders', '/app/analytics': 'analytics', '/app/qc': 'qc', '/app/mixing-section': 'mixing-section', '/app/tanks-mixing': 'mixing-section', '/app/mixing-utilities': 'mixing-utilities', '/app/sugar-dissolver': 'sugar-dissolver',
+        '/app/quotations': 'quotations', '/app/sage-entries': 'sage-entries', '/app/reporting': 'reporting',
+        '/app/accounting': 'accounting', '/app/customs': 'customs', '/app/admin': 'admin', '/login': 'login'
     };
     
     initialTab = pathMap[path] || 'home';

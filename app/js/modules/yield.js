@@ -3,7 +3,7 @@
  * Handles production batch tracking and yield calculations
  */
 
-import { showToast, state } from '../utils.js?v=20260127c';
+import { showToast, state } from '../utils.js?v=20260129a';
 import { authenticatedFetch, hasAnyRole, getCurrentUser } from '../auth.js?v=20260428b';
 import { consumePendingJoChildIds, checkCalcTankCipPreflight } from './calculator.js?v=20260429a';
 
@@ -728,18 +728,14 @@ export async function confirmAndSendToSage() {
  */
 function getSageActionHtml(batch, sageStatus, canSendToSage) {
     const hasActualQty = batch.actual_qty && batch.actual_qty > 0;
-    
-    console.log(`[Sage] Batch ${batch.batch_no}: actual_qty=${batch.actual_qty}, hasActualQty=${hasActualQty}, sageStatus=`, sageStatus, 'canSendToSage=', canSendToSage);
-    
+
     // If no actual qty, no Sage options
     if (!hasActualQty) {
-        console.log(`[Sage] Batch ${batch.batch_no}: No actual qty - hiding Sage button`);
         return '';
     }
-    
+
     // Check draft status
     if (!sageStatus || !sageStatus.has_draft) {
-        console.log(`[Sage] Batch ${batch.batch_no}: No draft exists - showing Send to Sage button`);
         // No draft exists - show "Send to Sage" button
         if (canSendToSage) {
             return `
@@ -1077,8 +1073,7 @@ export async function pushToProduction(batchNo, recipeName, itemCode, descriptio
         
         if (pushResponse.ok) {
             const batchResult = await pushResponse.json();
-            console.log('Production batch created:', batchResult);
-            
+
             // Step 2: Create pending Process Control Report
             const today = new Date().toISOString().split('T')[0];
             const productName = description || recipeName || 'Unknown Product';
@@ -1101,9 +1096,7 @@ export async function pushToProduction(batchNo, recipeName, itemCode, descriptio
                 planned_qty: plannedQty,
                 raw_material_cost: totalCost
             };
-            
-            console.log('Creating Process Control Report with data:', reportData);
-            
+
             const reportResponse = await authenticatedFetch('/api/production-control-reports', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -1122,7 +1115,6 @@ export async function pushToProduction(batchNo, recipeName, itemCode, descriptio
                     if (completeResp.ok) {
                         const completeResult = await completeResp.json();
                         joCompletedCount = completeResult.completed_count || 0;
-                        console.log('Job orders auto-completed:', completeResult);
                     }
                 } catch (joErr) {
                     console.error('Failed to auto-complete job orders:', joErr);
@@ -1130,8 +1122,6 @@ export async function pushToProduction(batchNo, recipeName, itemCode, descriptio
             }
             
             if (reportResponse.ok) {
-                const reportResult = await reportResponse.json();
-                console.log('Process Control Report created:', reportResult);
                 const joMsg = joCompletedCount > 0 ? ` ${joCompletedCount} job order(s) marked completed.` : '';
                 showToast('Batch pushed to production!' + joMsg + ' Fill out the Production Report.', 'success');
                 if (typeof switchTab === 'function') switchTab('production-reports');

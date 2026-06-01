@@ -110,6 +110,7 @@
       lines, subtotal, discount, after, freight, tax, total,
       contract_discount_pct: contractDiscount * 100,
       company,
+      free_freight_threshold: D.brand.free_freight_threshold,
       free_freight_eligible: after >= D.brand.free_freight_threshold,
       free_freight_progress: Math.min(100, Math.round((after / D.brand.free_freight_threshold) * 100)),
     };

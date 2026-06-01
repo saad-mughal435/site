@@ -284,6 +284,10 @@
       for (var i = 0; i < TREND_LEN; i++) trends.alarms.push({ t: i, v: Object.keys(sim.alarmsByPoint || {}).length });
     }
 
+    // BACnet status pill — single-sourced from the live data so it never drifts
+    var bacnetPill = $('bacnet-pill');
+    if (bacnetPill) bacnetPill.textContent = '3 trunks · ' + D.POINTS.length + ' points · gateway online';
+
     renderFloorTabs();
     updateFloorMeta();
     WatadFloorPlan.render($('floor-canvas'), currentFloorId);

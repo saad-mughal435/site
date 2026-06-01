@@ -3,7 +3,7 @@
  * Served from /reporting-menu/frontend/reporting.js
  */
 
-import { debounce, formatNumber, showToast } from '/app/js/utils.js?v=20260129a';
+import { debounce, formatNumber, showToast } from '../utils.js?v=20260129a';
 import { authenticatedFetch } from '/app/js/auth.js?v=20260428b';
 
 const TEMPLATE_URL = '/app/reporting_template.html?v=20260330a';

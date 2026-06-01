@@ -50,7 +50,7 @@
 
   async function refreshCart() {
     const promo = localStorage.getItem('pebble.promo') || '';
-    state.cart = await fetch('/b2c/api/cart?promo=' + encodeURIComponent(promo)).then(r => r.json());
+    state.cart = await fetch('/b2c/api/cart?promo=' + encodeURIComponent(promo) + '&method=' + encodeURIComponent(state.shipping.method || 'standard')).then(r => r.json());
   }
 
   function render() {
@@ -165,14 +165,14 @@
           <label class="ship-method ${s.method==='standard'?'active':''}">
             <input type="radio" name="method" value="standard" ${s.method==='standard'?'checked':''}>
             <div>
-              <div class="ship-method-title">Standard <span class="ship-method-price">${state.cart.subtotal >= 75 ? 'Free' : '$5.99'}</span></div>
+              <div class="ship-method-title">Standard <span class="ship-method-price">${state.cart.subtotal >= 75 ? 'Free' : '$8.00'}</span></div>
               <div class="ship-method-sub">3-5 business days</div>
             </div>
           </label>
           <label class="ship-method ${s.method==='express'?'active':''}">
             <input type="radio" name="method" value="express" ${s.method==='express'?'checked':''}>
             <div>
-              <div class="ship-method-title">Express <span class="ship-method-price">$14.99</span></div>
+              <div class="ship-method-title">Express <span class="ship-method-price">$15.00</span></div>
               <div class="ship-method-sub">1-2 business days</div>
             </div>
           </label>
@@ -243,14 +243,14 @@
         </div>
 
         <div data-pay-pane="paypal" style="${p.kind==='paypal'?'':'display:none;'}">
-          <div style="padding:32px; border:2px dashed var(--line); border-radius:var(--radius); text-align:center; color:var(--ink-soft);">
+          <div style="padding:32px; border:2px dashed var(--line); border-radius:var(--r); text-align:center; color:var(--ink-soft);">
             <p style="margin-bottom:8px;">In a real store this is where the PayPal redirect would live.</p>
             <p style="font-size:13px;">Click "Continue to review" - we'll pretend you signed in.</p>
           </div>
         </div>
 
         <div data-pay-pane="cod" style="${p.kind==='cod'?'':'display:none;'}">
-          <div style="padding:24px; background:var(--surface-2); border-radius:var(--radius);">
+          <div style="padding:24px; background:var(--surface-2); border-radius:var(--r);">
             <h4 style="font-family:var(--display); font-size:18px; margin-bottom:8px;">Pay when it arrives</h4>
             <p style="color:var(--ink-soft); font-size:14px;">
               Available in UAE and Saudi Arabia only. The courier collects cash on delivery.
@@ -319,7 +319,7 @@
       </div>
 
       <h3 class="step-subheading">Order notes <span style="color:var(--ink-mute); font-weight:400; font-size:13px;">(optional)</span></h3>
-      <textarea id="order-notes" placeholder="Anything we should know? Gift wrap, delivery instructions..." style="width:100%; min-height:80px; padding:12px 14px; border:1.5px solid var(--line); border-radius:var(--radius); font-family:inherit; font-size:14px; resize:vertical;"></textarea>
+      <textarea id="order-notes" placeholder="Anything we should know? Gift wrap, delivery instructions..." style="width:100%; min-height:80px; padding:12px 14px; border:1.5px solid var(--line); border-radius:var(--r); font-family:inherit; font-size:14px; resize:vertical;"></textarea>
 
       <div style="margin-top:18px;">
         <label style="display:flex; align-items:flex-start; gap:10px; font-size:13.5px; color:var(--ink-soft);">
@@ -345,6 +345,8 @@
         r.addEventListener('change', () => {
           form.querySelectorAll('.ship-method').forEach(el => el.classList.remove('active'));
           r.closest('.ship-method').classList.add('active');
+          state.shipping.method = r.value;
+          refreshCart().then(renderSummary);
         });
       });
       form.addEventListener('submit', (e) => {

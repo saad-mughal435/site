@@ -3,59 +3,66 @@
 
 # If the live app's early auth gate ever fires before the bootstrap seeds
 # the token, it tries to navigate to /login. Send it back to the app.
+# These are genuinely temporary (auth state), so they stay 302.
 /login         /app/index.html  302
 /logout        /app/index.html  302
 
-# Friendly URLs
-/cv            /contact.html    302
-/resume        /contact.html    302
-/take-demo     /demo.html       302
+# SPA fallback for the MES app: deep links like /app/inventory are client-routed,
+# so any /app/* path that isn't a real file rewrites (200) to the app shell. Real
+# assets (/app/js/*, /app/views/*, /app/index.html) are served first by CF Pages.
+/app/*         /app/index.html  200
+
+# Friendly URLs — permanent vanity shortcuts, so 301 (consolidates link equity
+# from anything that links /cv, /resume, etc. onto the real page).
+/cv            /contact.html    301
+/resume        /contact.html    301
+/take-demo     /demo.html       301
 
 # Manzil Properties demo aliases
 # Note: do NOT add /property/admin → /property/admin.html — Cloudflare Pages
 # already serves admin.html when /property/admin is requested, and adding a
 # redirect causes a loop (CF strips .html → 307 to /admin, our rule sent it
 # back to /admin.html → loop).
-/manzil          /property/index.html             302
-/properties      /property/index.html             302
-/list-property   /property/owner-onboard.html     302
-/owner-dashboard /property/owner-dashboard.html   302
+/manzil          /property/index.html             301
+/properties      /property/index.html             301
+/list-property   /property/owner-onboard.html     301
+/owner-dashboard /property/owner-dashboard.html   301
 
 # Vacation Homes friendly aliases
 # (Note: /list-property is owned by Manzil above. Vacation uses /list-stay
 # to avoid the duplicate source path that CF rejects at deploy time.)
-/vacation-homes  /vacation/index.html          302
-/stays           /vacation/index.html          302
-/list-stay       /vacation/host-onboard.html   302
-/become-a-host   /vacation/host.html           302
-/host-dashboard  /vacation/host-dashboard.html 302
+/vacation-homes  /vacation/index.html          301
+/stays           /vacation/index.html          301
+/list-stay       /vacation/host-onboard.html   301
+/become-a-host   /vacation/host.html           301
+/host-dashboard  /vacation/host-dashboard.html 301
 
 # Qahwa POS friendly aliases
-/qahwa     /pos/index.html     302
-/cashier   /pos/terminal.html  302
-/kds       /pos/kitchen.html   302
+/qahwa     /pos/index.html     301
+/cashier   /pos/terminal.html  301
+/kds       /pos/kitchen.html   301
 
 # Sanad friendly aliases
-/sanad-app /sanad/index.html   302
-/copilot   /sanad/inbox.html   302
-/helpdesk  /sanad/index.html   302
+/sanad-app /sanad/index.html   301
+/copilot   /sanad/inbox.html   301
+/helpdesk  /sanad/index.html   301
 
 # Watad friendly aliases
-/bms        /watad/console.html  302
-/building   /watad/index.html    302
-/facilities /watad/console.html  302
+/bms        /watad/console.html  301
+/building   /watad/index.html    301
+/facilities /watad/console.html  301
 
 # Lahza friendly aliases
-/journal    /lahza/        302
-/mood       /lahza/#insights  302
-/coach      /lahza/#coach  302
+/journal    /lahza/        301
+/mood       /lahza/#insights  301
+/coach      /lahza/#coach  301
 
 # Marsad friendly aliases
-/dispatcher /marsad/console.html  302
-/fleet      /marsad/console.html  302
-/marsad-driver /marsad/driver.html 302
+/dispatcher /marsad/console.html  301
+/fleet      /marsad/console.html  301
+/marsad-driver /marsad/driver.html 301
 
 # Nabta friendly aliases
-/hr         /nabta/app.html        302
-/payroll    /nabta/app.html#payroll 302
-/wps        /nabta/app.html#payroll 302
+/hr         /nabta/app.html        301
+/payroll    /nabta/app.html#payroll 301
+/wps        /nabta/app.html#payroll 301

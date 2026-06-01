@@ -108,7 +108,7 @@
     }).filter(Boolean);
   }
 
-  function cartTotals(promoCode) {
+  function cartTotals(promoCode, method) {
     const lines = cartLines();
     const subtotal = +lines.reduce((s, l) => s + l.line_total, 0).toFixed(2);
     let discount = 0;
@@ -122,7 +122,11 @@
       if (promo.min_subtotal && subtotal < promo.min_subtotal) discount = 0;
     }
     const after_discount = +(subtotal - discount).toFixed(2);
-    const shipping = (free_shipping_override || after_discount >= D.brand.free_shipping_threshold || after_discount === 0) ? 0 : 8;
+    let shipping;
+    if (free_shipping_override || after_discount === 0) shipping = 0;
+    else if (method === 'express') shipping = 15;
+    else if (method === 'pickup') shipping = 0;
+    else shipping = after_discount >= D.brand.free_shipping_threshold ? 0 : 8; // standard (default)
     const tax = +(after_discount * D.brand.tax_rate).toFixed(2);
     const total = +(after_discount + shipping + tax).toFixed(2);
     return {
@@ -214,7 +218,7 @@
 
     // ---- cart ----
     if (path === '/cart') {
-      if (method === 'GET') return jsonResponse(cartTotals(q.promo));
+      if (method === 'GET') return jsonResponse(cartTotals(q.promo, q.method));
       // POST: add or set
       const body = payload || {};
       const cart = readLS(LS.cart, []);
@@ -293,7 +297,7 @@
     // ---- checkout ----
     if (path === '/checkout' && method === 'POST') {
       const body = payload || {};
-      const totals = cartTotals(body.promo);
+      const totals = cartTotals(body.promo, (body.shipping || {}).method);
       const orderNum = 'PBL-' + Math.floor(11000 + Math.random() * 8999);
       const placed_at = new Date();
       const ship = body.shipping || {};

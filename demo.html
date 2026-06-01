@@ -8,6 +8,7 @@
 <meta name="keywords" content="MES demo, ERP demo, manufacturing software demo, Saad portfolio, Python MES, FastAPI ERP, beverage manufacturing software" />
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
 <meta name="theme-color" content="#07080d" />
+<meta name="color-scheme" content="dark light" />
 <link rel="canonical" href="https://saadm.dev/demo.html" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2064%2064'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0%25'%20stop-color%3D'%237c9cff'/%3E%3Cstop%20offset%3D'100%25'%20stop-color%3D'%235eead4'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D'64'%20height%3D'64'%20rx%3D'14'%20fill%3D'url(%23g)'/%3E%3Ctext%20x%3D'50%25'%20y%3D'56%25'%20font-family%3D'monospace'%20font-weight%3D'700'%20font-size%3D'22'%20fill%3D'%2307080d'%20text-anchor%3D'middle'%3ES%3C/text%3E%3C/svg%3E" />
 <link rel="apple-touch-icon" href="saad.png" />
@@ -17,7 +18,15 @@
 <meta property="og:title" content="MES/ERP Demo - Saad's Manufacturing Software Walkthrough" />
 <meta property="og:description" content="Interactive walkthrough of an enterprise MES/ERP system built by Saad - production planning, inventory, QC, accounts, OEE monitoring. All data fabricated." />
 <meta property="og:url" content="https://saadm.dev/demo.html" />
-<meta property="og:image" content="https://saadm.dev/saad.png" />
+<meta property="og:image" content="https://saadm.dev/og.png?v=20260520" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:alt" content="MES/ERP demo by Muhammad Saad - production planning, inventory, QC, accounts, OEE monitoring. All data fabricated." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="MES/ERP Demo - Saad's Manufacturing Software Walkthrough" />
+<meta name="twitter:description" content="Interactive walkthrough of an enterprise MES/ERP system built by Saad - production planning, inventory, QC, accounts, OEE monitoring. All data fabricated." />
+<meta name="twitter:image" content="https://saadm.dev/og.png?v=20260520" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -30,7 +39,7 @@
 <header class="nav no-print">
   <div class="container nav-inner">
     <a href="index.html#top" class="logo">
-      <img class="logo-photo" src="saad.png" alt="Saad" />
+      <img class="logo-photo" width="36" height="36" decoding="async" src="saad.png" alt="Saad" />
       <span class="logo-text">Saad</span>
     </a>
     <nav class="nav-links">
@@ -286,7 +295,7 @@
         <div class="nav-group">
           <div class="app-nav-section">Sales &amp; Dispatch</div>
           <a class="app-nav-link" data-view="quotations"><span class="ico">▤</span>Quotations</a>
-          <a class="app-nav-link" data-view="pi"><span class="ico">▤</span>Performa Invoice</a>
+          <a class="app-nav-link" data-view="pi"><span class="ico">▤</span>Proforma Invoice</a>
           <a class="app-nav-link" data-view="dispatch"><span class="ico">▻</span>Dispatch</a>
         </div>
 
@@ -873,7 +882,7 @@
 
         <div class="info-panel" id="info-quotations" hidden>
           <h4>About Quotations</h4>
-          <p>Customer pricing quotes generated against current cost + margin policy. Accepted quotes convert directly into Performa Invoices and Job Orders.</p>
+          <p>Customer pricing quotes generated against current cost + margin policy. Accepted quotes convert directly into Proforma Invoices and Job Orders.</p>
         </div>
 
         <div class="card">
@@ -888,10 +897,10 @@
         </div>
       </section>
 
-      <!-- ====== PERFORMA INVOICE ====== -->
+      <!-- ====== PROFORMA INVOICE ====== -->
       <section class="view" id="view-pi">
         <div class="view-head">
-          <div><div class="crumb">Sales / Performa Invoice</div><h2>Performa invoices</h2></div>
+          <div><div class="crumb">Sales / Proforma Invoice</div><h2>Proforma invoices</h2></div>
           <div class="view-actions">
             <button class="btn-mini" data-info="pi">ⓘ How it works</button>
             <button class="btn-mini primary">+ New PI</button>
@@ -899,7 +908,7 @@
         </div>
 
         <div class="info-panel" id="info-pi" hidden>
-          <h4>About Performa Invoice</h4>
+          <h4>About Proforma Invoice</h4>
           <p>A pro-forma invoice issued before goods ship - confirms what will be billed once the order is fulfilled. Used by the customer for advance payment, by us for AR forecasting.</p>
         </div>
 
@@ -1170,7 +1179,7 @@
             </button>
             <button class="doc-tile" data-pdf="invoice" data-pi="PI-0001">
               <div class="doc-ico">📄</div>
-              <div class="doc-name">Performa Invoice</div>
+              <div class="doc-name">Proforma Invoice</div>
               <div class="doc-sub">PI-0001</div>
             </button>
             <button class="doc-tile" data-pdf="dispatch" data-da="DA-0001">
@@ -1510,7 +1519,7 @@
         </div>
       </div>
       <div class="doc-title-block">
-        <div class="doc-title">PERFORMA INVOICE</div>
+        <div class="doc-title">PROFORMA INVOICE</div>
         <div class="doc-num">__PI__</div>
       </div>
     </header>
@@ -1543,7 +1552,7 @@
       <p>Net 30 from invoice date. Bank: Bank Demo · A/C ****0001 · SWIFT DEMOEDUM.</p>
     </section>
 
-    <div class="doc-foot">Demo Plant LLC · Performa Invoice · DEMO MODE · placeholder values</div>
+    <div class="doc-foot">Demo Plant LLC · Proforma Invoice · DEMO MODE · placeholder values</div>
   </div>
 </template>
 

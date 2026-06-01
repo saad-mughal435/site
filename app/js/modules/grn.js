@@ -50,9 +50,7 @@ export async function loadGRNData() {
         if (!Array.isArray(allGRNData)) {
             throw new Error('Data is not an array');
         }
-        
-        console.log(`✅ Loaded ${allGRNData.length} transactions`);
-        
+
         if (allGRNData.length < (metadata.total_records_matching || 0)) {
             showToast(`Loaded ${allGRNData.length.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})} recent records (${metadata.total_records_matching.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})} total)`, 'success');
             const loadAllBtn = document.getElementById('load-all-data-btn');

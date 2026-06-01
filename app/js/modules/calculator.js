@@ -3,7 +3,7 @@
  * Handles material calculation for production planning
  */
 
-import { showToast, state } from '../utils.js?v=20260125h';
+import { showToast, state } from '../utils.js?v=20260129a';
 import { authenticatedFetch } from '../auth.js?v=20260428b';
 import { getRtdRatio, getBottleSizeInfo } from './recipes.js?v=20260216b';
 
@@ -471,8 +471,7 @@ function _updateUnitDescription() {
  */
 export function setUnit(unit) {
     state.selectedUnit = unit;
-    console.log('Unit changed to:', unit);
-    
+
     const casesBtn = document.getElementById('unit-cases-btn');
     const cansBtn = document.getElementById('unit-cans-btn');
     const unitLabel = document.getElementById('unit-label');
@@ -525,8 +524,6 @@ export async function calculateMaterials() {
     if (!name) return alert("Please select a recipe");
     if (!targetQty || targetQty <= 0) return alert("Please enter a valid target quantity");
 
-    console.log('Calculating with:', { recipe: name, qty: targetQty, unit: calcUnit, source: _calcSource });
-
     if (loader) loader.style.display = 'block';
 
     try {
@@ -535,8 +532,7 @@ export async function calculateMaterials() {
             target_qty: targetQty,
             unit: calcUnit
         };
-        console.log('Sending request:', requestBody);
-        
+
         const response = await authenticatedFetch('/api/calculate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -549,8 +545,7 @@ export async function calculateMaterials() {
         }
 
         const result = await response.json();
-        console.log('Received result:', result);
-        
+
         // Render results
         if (tbody) {
             tbody.innerHTML = '';

@@ -370,8 +370,9 @@
       var all = orders();
       var today = new Date(); today.setHours(0,0,0,0);
       var todayOrders = all.filter(function (o) { return new Date(o.created_at) >= today && (o.status === 'completed' || o.status === 'kitchen' || o.status === 'ready' || o.status === 'served'); });
-      var revenue = todayOrders.filter(function (o) { return o.status === 'completed'; }).reduce(function (s, o) { return s + o.total; }, 0);
-      var avgTicket = todayOrders.length ? revenue / todayOrders.length : 0;
+      var completedToday = todayOrders.filter(function (o) { return o.status === 'completed'; });
+      var revenue = completedToday.reduce(function (s, o) { return s + o.total; }, 0);
+      var avgTicket = completedToday.length ? revenue / completedToday.length : 0;
       var byProduct = {};
       todayOrders.forEach(function (o) { (o.lines || []).forEach(function (l) { byProduct[l.product_id] = (byProduct[l.product_id] || 0) + l.qty; }); });
       var topProducts = Object.keys(byProduct).map(function (id) { var p = products().find(function (x) { return x.id === id; }); return { product: p ? p.name : id, qty: byProduct[id] }; }).sort(function (a, b) { return b.qty - a.qty; }).slice(0, 5);
@@ -389,7 +390,7 @@
       }
       return {
         ok: true,
-        kpis: { revenue_today: revenue, orders_today: todayOrders.length, avg_ticket: avgTicket, kitchen_active: all.filter(function (o) { return o.status === 'kitchen'; }).length },
+        kpis: { revenue_today: revenue, orders_today: completedToday.length, avg_ticket: avgTicket, kitchen_active: all.filter(function (o) { return o.status === 'kitchen'; }).length },
         top_products: topProducts,
         by_hour: byHour,
         by_payment: byPayment,
@@ -575,5 +576,5 @@
     });
   };
 
-  console.log('Qahwa POS mock-api ready - /pos/api/* intercepted');
+  if (window.POS_DEBUG) console.log('Qahwa POS mock-api ready - /pos/api/* intercepted');
 })();

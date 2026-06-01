@@ -51,6 +51,7 @@
     var t = $('top');
     t.innerHTML = '<div style="font-weight:700;font-size:15px;">' + esc(labelOf(currentRoute())) + '</div>'
       + '<div style="margin-inline-start:auto;display:flex;align-items:center;gap:10px;">'
+      +   '<a href="/" style="font-size:13px;color:var(--nbt-muted);">← saadm.dev</a>'
       +   '<span class="nbt-mode-badge" id="mode-badge">…</span>'
       +   '<span style="display:flex;align-items:center;gap:6px;padding:4px 10px;background:var(--nbt-bg-light-2);border-radius:999px;font-size:12px;color:var(--nbt-card-ink);">'
       +     '<span style="width:24px;height:24px;border-radius:999px;background:linear-gradient(135deg,var(--nbt-emerald),var(--nbt-emerald-2));color:white;display:grid;place-items:center;font-weight:700;font-size:10px;">LH</span>'
@@ -136,14 +137,14 @@
         }).join('');
         host.innerHTML =
             '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;align-items:center;">'
-          +   '<select class="nbt-input nbt-input--sm" id="emp-dept" style="max-width:180px;">'
+          +   '<select class="nbt-input nbt-input--sm" id="emp-dept" aria-label="Filter by department" style="max-width:180px;">'
           +     '<option value="all">All departments</option>'
           +     D.DEPTS.map(function (x) { return '<option value="' + x.id + '"' + (state.dept === x.id ? ' selected' : '') + '>' + esc(x.name) + '</option>'; }).join('')
           +   '</select>'
-          +   '<select class="nbt-input nbt-input--sm" id="emp-status" style="max-width:140px;">'
+          +   '<select class="nbt-input nbt-input--sm" id="emp-status" aria-label="Filter by status" style="max-width:140px;">'
           +     ['all','active','probation','notice'].map(function (s) { return '<option value="' + s + '"' + (state.status === s ? ' selected' : '') + '>' + esc(s) + '</option>'; }).join('')
           +   '</select>'
-          +   '<input class="nbt-input nbt-input--sm" id="emp-q" placeholder="Search…" style="max-width:240px;" value="' + esc(state.q) + '"/>'
+          +   '<input class="nbt-input nbt-input--sm" id="emp-q" aria-label="Search employees" placeholder="Search…" style="max-width:240px;" value="' + esc(state.q) + '"/>'
           +   '<span style="margin-inline-start:auto;color:var(--nbt-muted);font-size:13px;">' + rows.length + ' employees</span>'
           + '</div>'
           + '<div class="nbt-panel"><table class="nbt-table">'
@@ -440,8 +441,8 @@
           '<div style="display:flex;flex-direction:column;height:calc(100vh - 130px);max-height:720px;">'
         +   '<div id="thread" style="flex:1;overflow-y:auto;padding-bottom:14px;">' + greetingHtml + msgsHtml + '</div>'
         +   '<div style="display:flex;gap:8px;padding-top:10px;border-top:1px solid var(--nbt-line-light);">'
-        +     '<input class="nbt-input" id="ai-input" placeholder="Ask about leave, payroll, visa, gratuity, probation, remote work…"/>'
-        +     '<button class="nbt-btn nbt-btn--primary" id="ai-send">↑</button>'
+        +     '<input class="nbt-input" id="ai-input" aria-label="Ask the policy assistant" placeholder="Ask about leave, payroll, visa, gratuity, probation, remote work…"/>'
+        +     '<button class="nbt-btn nbt-btn--primary" id="ai-send" aria-label="Send message">↑</button>'
         +   '</div>'
         + '</div>';
       var thread = $('thread'); if (thread) thread.scrollTop = thread.scrollHeight;

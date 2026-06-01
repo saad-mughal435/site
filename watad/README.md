@@ -30,12 +30,12 @@ watad/
 ├── asset.html                 Asset detail drill-in
 ├── workorders.html            Work-orders module
 ├── energy.html                Energy dashboard
-├── admin.html                 Admin SPA (10 sections)
+├── admin.html                 Admin SPA (11 sections)
 ├── 404.html                   Branded not-found
 ├── css/watad.css              Design system — dark navy + electric cyan
 └── js/
     ├── data.js                Seed: building + 4 floors + 24 zones + 48
-    │                          assets + 198 points + 30 alarms + 15 WOs
+    │                          assets + 182 points + 30 alarms + 15 WOs
     ├── telemetry-sim.js       The real-time data engine — 5s tick,
     │                          plausible value mutation per asset class,
     │                          alarm raise/clear, 288-sample history buffer
@@ -53,7 +53,7 @@ watad/
     ├── workorders.js          Work-orders module
     ├── energy.js              Energy dashboard
     ├── admin.js               Admin SPA shell
-    └── admin-sections.js      10 admin section renderers
+    └── admin-sections.js      11 admin section renderers
 ```
 
 ## Live-mode setup (one-time)

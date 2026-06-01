@@ -54,21 +54,12 @@ async function fetchAnalyticsSummary() {
             : '';
         
         const url = `/api/analytics/summary?days=${days}${categoryParam}`;
-        console.log(`📊 Fetching analytics summary: ${url}`);
-        
+
         const response = await authenticatedFetch(url);
         if (!response.ok) throw new Error('Failed to fetch analytics summary');
-        
+
         analyticsData = await response.json();
-        
-        console.log('✅ Analytics summary loaded:', {
-            kpis: analyticsData.kpis,
-            categories: Object.keys(analyticsData.categories || {}).length,
-            timeSeries: (analyticsData.time_series || []).length,
-            topItems: (analyticsData.top_items || []).length,
-            productionVsSales: (analyticsData.production_vs_sales || []).length
-        });
-        
+
         // Populate category filter dropdown with available categories
         populateCategoryFilter(analyticsData.categories);
         
@@ -90,7 +81,6 @@ function attachEventListeners() {
     if (categoryFilter) {
         categoryFilter.removeEventListener('change', handleCategoryChange);
         categoryFilter.addEventListener('change', handleCategoryChange);
-        console.log('✅ Category filter event listener attached');
     }
     
     // Date range filter
@@ -98,7 +88,6 @@ function attachEventListeners() {
     if (dateRangeFilter) {
         dateRangeFilter.removeEventListener('change', handleDateRangeChange);
         dateRangeFilter.addEventListener('change', handleDateRangeChange);
-        console.log('✅ Date range filter event listener attached');
     }
 }
 
@@ -163,9 +152,7 @@ export function updateAnalyticsDateRange() {
     } else {
         currentDateRange = parseInt(value);
     }
-    
-    console.log(`📅 Date range changed to: ${currentDateRange || 'all time'}`);
-    
+
     // Re-fetch data from server with new date range
     showLoadingOverlay(true);
     fetchAnalyticsSummary()
@@ -180,8 +167,6 @@ export function updateAnalyticsDateRange() {
  * Filter analytics by category (re-fetches from server)
  */
 export function filterAnalyticsByCategory(category) {
-    console.log('🔍 Category filter changed to:', category);
-    
     currentCategoryFilter = category;
     updateCategoryFilterUI(category);
     
@@ -245,9 +230,7 @@ export function renderAnalytics() {
         console.warn('⚠️ No analytics data to render');
         return;
     }
-    
-    console.log('🎨 Rendering analytics dashboard');
-    
+
     // Update KPIs
     renderKPIs(analyticsData.kpis);
     
@@ -257,8 +240,6 @@ export function renderAnalytics() {
     renderProductionVsSalesChart(analyticsData.production_vs_sales);
     renderTopItemsChart(analyticsData.top_items);
     renderTransactionVolumeChart(analyticsData.time_series);
-    
-    console.log('✅ All charts rendered');
 }
 
 /**
@@ -434,8 +415,7 @@ function renderProductionVsSalesChart(productionVsSales) {
     }
     
     const data = productionVsSales || [];
-    console.log('📊 Rendering Production vs Sales chart with', data.length, 'data points');
-    
+
     // Calculate max ticks based on data size for readability
     const maxTicks = getMaxTicksForDataSize(data.length);
     

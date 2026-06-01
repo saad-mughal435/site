@@ -3,7 +3,7 @@
  * Handles recipe management, validation, and export
  */
 
-import { debounce, showToast, state } from '../utils.js?v=20260125h';
+import { debounce, showToast, state } from '../utils.js?v=20260129a';
 import { authenticatedFetch, hasAnyRole } from '../auth.js?v=20260428b';
 
 // ============================================================================
@@ -200,7 +200,6 @@ async function loadRawMaterialItems() {
             }));
         
         rawMaterialsLoaded = true;
-        console.log(`✓ Recipe module: Loaded ${allRawMaterialItems.length} items for dropdown`);
     } catch (error) {
         console.error('Error loading raw materials for recipe dropdown:', error);
         // Fallback to /api/inventory
@@ -217,7 +216,6 @@ async function loadRawMaterialItems() {
                     }))
                     .sort((a, b) => a.code.localeCompare(b.code));
                 rawMaterialsLoaded = true;
-                console.log(`✓ Recipe module: Loaded ${allRawMaterialItems.length} items (fallback)`);
             }
         } catch (fallbackError) {
             console.error('Fallback also failed:', fallbackError);

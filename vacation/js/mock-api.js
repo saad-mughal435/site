@@ -1011,6 +1011,4 @@
       text: function () { return Promise.resolve(JSON.stringify(res)); }
     });
   };
-
-  console.log('Vacation mock-api ready - fetch intercepted for /vacation/api/*');
 })();

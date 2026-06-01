@@ -15,8 +15,8 @@
 
   function currentRoute() {
     var h = (window.location.hash || '#today').replace('#', '').split('/')[0];
-    // 'compose' and 'install' are overlay states — render the previously active tab too
-    if (h === 'compose' || h === 'install') return h;
+    // 'compose' is an overlay state — render the previously active tab too
+    if (h === 'compose') return h;
     return TABS.find(function (t) { return t.id === h; }) ? h : 'today';
   }
 

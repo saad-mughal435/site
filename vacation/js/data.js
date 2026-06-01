@@ -342,13 +342,13 @@
   // Past completed - daysOut negative, status completed (15)
   for (var i = 0; i < 15; i++) BOOKINGS.push(buildBooking(BOOKINGS.length + 1, i * 3, i * 2, -(60 - i * 3), 3 + i % 5, 'completed'));
   // In-progress - currently staying (3)
-  for (var j = 0; j < 3; j++) BOOKINGS.push(buildBooking(BOOKINGS.length + 1, j * 5 + 2, j + 4, -2 - j, 5 + j, 'in-progress'));
+  for (var j = 0; j < 3; j++) BOOKINGS.push(buildBooking(BOOKINGS.length + 1, j * 5 + 2, j === 0 ? 0 : j + 4, -2 - j, 5 + j, 'in-progress'));
   // Upcoming confirmed (12)
-  for (var k = 0; k < 12; k++) BOOKINGS.push(buildBooking(BOOKINGS.length + 1, k * 4 + 1, k + 2, 7 + k * 6, 2 + k % 5, 'confirmed'));
+  for (var k = 0; k < 12; k++) BOOKINGS.push(buildBooking(BOOKINGS.length + 1, k * 4 + 1, k === 0 ? 0 : k + 2, 7 + k * 6, 2 + k % 5, 'confirmed'));
   // Pending payment (3)
   for (var l = 0; l < 3; l++) BOOKINGS.push(buildBooking(BOOKINGS.length + 1, l * 7, l + 7, 30 + l * 14, 4 + l, 'pending'));
   // Cancelled (4)
-  for (var m = 0; m < 4; m++) BOOKINGS.push(buildBooking(BOOKINGS.length + 1, m * 6 + 3, m + 9, 15 + m * 10, 3 + m, 'cancelled'));
+  for (var m = 0; m < 4; m++) BOOKINGS.push(buildBooking(BOOKINGS.length + 1, m * 6 + 3, m === 0 ? 0 : m + 9, 15 + m * 10, 3 + m, 'cancelled'));
   // Disputed (1)
   BOOKINGS.push(buildBooking(BOOKINGS.length + 1, 10, 13, -45, 4, 'disputed'));
   // Refunded (4)

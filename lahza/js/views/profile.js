@@ -77,7 +77,7 @@
       +   '<button class="lz-btn lz-btn--block" id="pf-reset" style="margin-top:8px;color:var(--lz-coral);border-color:rgba(255,107,107,0.45);">🗑 Reset demo (wipes everything)</button>'
 
       +   '<div style="margin-top:24px;text-align:center;font-size:11px;color:var(--lz-muted);font-family:var(--lz-font-mono);">'
-      +     'Lahza · part of <a href="/" style="color:var(--lz-coral);" target="_blank">saadm.dev</a> · v2.4.0'
+      +     'Lahza · part of <a href="/" style="color:var(--lz-coral);" target="_blank" rel="noopener">saadm.dev</a> · v2.4.0'
       +   '</div>'
       + '</div>';
 

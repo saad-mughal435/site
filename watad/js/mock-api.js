@@ -114,7 +114,7 @@
       avg_zone_f: +avgZone.toFixed(1),
       occupancy_pct: occPct,
       today_kgco2: +kgCO2.toFixed(0),
-      bacnet_status: { trunks: 3, points: 198, gateway_ok: true }
+      bacnet_status: { trunks: 3, points: points().length, gateway_ok: true }
     };
   }
 
@@ -409,6 +409,4 @@
       json: function () { return Promise.resolve(res); }
     });
   };
-
-  console.log('Watad mock-api ready - /watad/api/* intercepted');
 })();

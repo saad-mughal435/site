@@ -102,6 +102,10 @@
   // ---------- Thread ----------
   function openConv(id) {
     state.activeId = id;
+    // On mobile the list is a slide-over overlay; close it so the tapped
+    // thread becomes visible.
+    var inboxEl = document.querySelector('.snd-inbox');
+    if (inboxEl) inboxEl.classList.remove('show-list');
     state.composer = '';
     state.isInternal = false;
     state.ai = { reply: null, summary: null, sentiment: null, category: null };
@@ -321,7 +325,7 @@
     if (ai.reply) {
       html += '<div class="snd-ai-reply">' + esc(ai.reply.text) + '</div>';
       if (ai.reply.citations && ai.reply.citations.length) {
-        html += '<div class="snd-ai-actions" style="margin-top:6px;">' + ai.reply.citations.map(function (c) { return '<a class="snd-ai-cite" href="kb.html#/article/' + (c.id || '') + '" target="_blank">📎 ' + esc(c.title) + '</a>'; }).join('') + '</div>';
+        html += '<div class="snd-ai-actions" style="margin-top:6px;">' + ai.reply.citations.map(function (c) { return '<a class="snd-ai-cite" href="kb.html#/article/' + (c.id || '') + '" target="_blank" rel="noopener">📎 ' + esc(c.title) + '</a>'; }).join('') + '</div>';
       }
       // Tone selector row
       html += '<div style="margin-top:8px;display:flex;gap:4px;flex-wrap:wrap;">'
@@ -496,6 +500,13 @@
   });
   if (drawerClose) drawerClose.addEventListener('click', function () { setDrawer(false); });
 
+  // ---------- Conversation list toggle (mobile) ----------
+  var listToggle = $('list-toggle');
+  if (listToggle) listToggle.addEventListener('click', function () {
+    var inbox = document.querySelector('.snd-inbox');
+    if (inbox) inbox.classList.toggle('show-list');
+  });
+
   // ---------- Init ----------
   $('cv-search').addEventListener('input', function (e) {
     state.q = e.target.value;
@@ -511,6 +522,10 @@
     if (h && /^cv-/.test(h)) {
       openConv(h);
     } else {
+      // No conversation targeted — on mobile, reveal the list so the recruiter
+      // lands on something selectable instead of the empty thread state.
+      var ib = document.querySelector('.snd-inbox');
+      if (ib) ib.classList.add('show-list');
       renderEmpty();
     }
   }

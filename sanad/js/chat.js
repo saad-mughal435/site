@@ -101,7 +101,7 @@
       + '</div>'
     ) : '';
     var ratedHtml = state.rated ? '<div style="text-align:center;padding:10px;font-size:12px;color:var(--snd-mint);">Thanks for the feedback!</div>' : '';
-    var ratePromptHtml = (state.history.length >= 4 && !state.rated) ? '<div style="text-align:center;padding:8px;font-size:11.5px;color:var(--snd-muted);">Was this helpful? <button class="snd-btn snd-btn--sm" data-rate="up">👍</button> <button class="snd-btn snd-btn--sm" data-rate="down">👎</button></div>' : '';
+    var ratePromptHtml = (state.history.length >= 4 && !state.rated) ? '<div style="text-align:center;padding:8px;font-size:11.5px;color:var(--snd-muted);">Was this helpful? <button class="snd-btn snd-btn--sm" data-rate="up" aria-label="Helpful">👍</button> <button class="snd-btn snd-btn--sm" data-rate="down" aria-label="Not helpful">👎</button></div>' : '';
 
     var host = $(hostId);
     if (!host) return;
@@ -128,7 +128,7 @@
       +     '<div class="sub">' + subline + '</div>'
       +   '</div>'
       +   localPill
-      +   (state.mode === 'embedded' ? '<button class="snd-modal-close" id="chat-close" style="color:var(--snd-muted);margin-inline-start:6px;">×</button>' : '')
+      +   (state.mode === 'embedded' ? '<button class="snd-modal-close" id="chat-close" aria-label="Close chat" style="color:var(--snd-muted);margin-inline-start:6px;">×</button>' : '')
       + '</div>'
       + '<div class="snd-chat-body" id="chat-body">' + msgsHtml + starterHtml + typingHtml + '</div>'
       + ratePromptHtml + ratedHtml
@@ -139,7 +139,7 @@
             : '')
       +   '<div class="snd-chat-input-row">'
       +     '<textarea class="snd-chat-input" id="chat-input" placeholder="' + (state.generating ? 'Waiting for response…' : 'Type a message…') + '" rows="1"' + (state.generating ? ' disabled' : '') + '></textarea>'
-      +     '<button class="snd-chat-send" id="chat-send" disabled>➤</button>'
+      +     '<button class="snd-chat-send" id="chat-send" aria-label="Send message" disabled>➤</button>'
       +   '</div>'
       + '</div>';
 
@@ -388,7 +388,10 @@
     $('view-embed').classList.remove('snd-btn--primary');
     renderChat('chat-win-full');
   });
-  $('bubble').addEventListener('click', function () { state.open ? closeWin() : openWin(); state.open = !state.open ? false : true; });
+  $('bubble').addEventListener('click', function () {
+    if (state.open) { state.open = false; closeWin(); }
+    else { openWin(); }
+  });
 
   // ---------- Init ----------
   loadHist();

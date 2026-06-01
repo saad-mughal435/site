@@ -992,7 +992,7 @@
           +     r.items.map(function (x) {
                   var l = d.LISTINGS.find(function (y) { return y.id === x.listing_id; }) || {};
                   return '<tr>'
-                    + '<td><a href="listing.html?id=' + x.listing_id + '" target="_blank">' + esc(l.title || x.listing_id) + '</a></td>'
+                    + '<td><a href="listing.html?id=' + x.listing_id + '" target="_blank" rel="noopener">' + esc(l.title || x.listing_id) + '</a></td>'
                     + '<td>' + esc(x.reason) + '</td>'
                     + '<td><span class="m-chip ' + (x.severity === 'medium' ? 'pending' : 'draft') + '">' + x.severity + '</span></td>'
                     + '<td>' + ManzilApp.relDate(x.reported_at) + '</td>'
@@ -1105,10 +1105,10 @@
       var qs = statusFilter ? '?status=' + statusFilter : '';
       ManzilApp.api('/admin/verifications' + qs).then(function (r) {
         var countEl = document.getElementById('vf-count');
-        if (countEl) countEl.textContent = r.body.items.length + ' applications';
+        if (countEl) countEl.textContent = (r.items || []).length + ' applications';
         var tbody = document.getElementById('vf-tbody');
         if (!tbody) return;
-        tbody.innerHTML = r.body.items.length ? r.body.items.map(function (a) {
+        tbody.innerHTML = (r.items || []).length ? r.items.map(function (a) {
           return '<tr>'
             + '<td>' + (a.owner_photo ? '<img src="' + a.owner_photo + '" style="width:36px;height:36px;border-radius:999px;object-fit:cover;">' : '👤') + '</td>'
             + '<td><strong>' + esc(a.owner_name) + '</strong><div class="m-text-muted" style="font-size:11px;">' + esc(a.owner_id) + '</div></td>'
@@ -1147,7 +1147,7 @@
     var statusFilter = 'pending_review';
     function refresh() {
       ManzilApp.api('/admin/listings' + (statusFilter ? '?status=' + statusFilter : '')).then(function (r) {
-        var items = (r.body.items || []).filter(function (l) {
+        var items = (r.items || []).filter(function (l) {
           if (statusFilter) return true;
           return (l.status || 'active') !== 'awaiting_owner_verification';
         });
@@ -1195,7 +1195,7 @@
   window.ManzilAdminActions = window.ManzilAdminActions || {};
   window.ManzilAdminActions.openVerification = function (owner_id) {
     ManzilApp.api('/admin/verifications/' + owner_id).then(function (r) {
-      var a = r.body.application; var o = r.body.owner; var listings = r.body.listings || [];
+      var a = r.application; var o = r.owner; var listings = r.listings || [];
       if (!a) return;
       var drawer = document.createElement('div');
       drawer.className = 'm-drawer-backdrop';
@@ -1203,7 +1203,7 @@
         + '<div class="m-drawer">'
         +   '<div class="m-drawer-head"><div style="display:flex;gap:12px;align-items:center;">' + (o && o.photo ? '<img src="' + o.photo + '" style="width:44px;height:44px;border-radius:999px;object-fit:cover;">' : '👤')
         +     '<div><h3 style="margin:0;">' + esc(o ? o.name : '(unknown)') + '</h3><div class="m-text-muted" style="font-size:12px;">' + esc(a.owner_id) + ' · submitted ' + (a.submitted_at || '—') + ' · <span class="m-status-chip ' + esc(a.status) + '">' + esc(a.status.replace('_',' ')) + '</span></div></div></div>'
-        +     '<button class="m-btn m-btn--ghost m-btn--sm" data-drawer-close>×</button></div>'
+        +     '<button class="m-btn m-btn--ghost m-btn--sm" data-drawer-close aria-label="Close">×</button></div>'
         +   '<div class="m-drawer-body">'
         +     (a.notes_from_admin ? '<div class="m-doc-reject-reason" style="margin-bottom:14px;"><strong>Admin notes:</strong> ' + esc(a.notes_from_admin) + '</div>' : '')
         +     '<p class="m-text-muted" style="font-size:13px;">' + (a.resident ? 'UAE resident' : 'Non-resident owner') + '</p>'
@@ -1256,12 +1256,12 @@
 
   window.ManzilAdminActions.openListingReview = function (lid) {
     ManzilApp.api('/listings/' + lid).then(function (r) {
-      var l = r.body.listing; if (!l) return;
+      var l = r.listing; if (!l) return;
       var drawer = document.createElement('div');
       drawer.className = 'm-drawer-backdrop';
       drawer.innerHTML = ''
         + '<div class="m-drawer">'
-        +   '<div class="m-drawer-head"><h3 style="margin:0;">Review listing - ' + esc(l.title) + '</h3><button class="m-btn m-btn--ghost m-btn--sm" data-drawer-close>×</button></div>'
+        +   '<div class="m-drawer-head"><h3 style="margin:0;">Review listing - ' + esc(l.title) + '</h3><button class="m-btn m-btn--ghost m-btn--sm" data-drawer-close aria-label="Close">×</button></div>'
         +   '<div class="m-drawer-body">'
         +     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px;">' + (l.photos || []).slice(0, 6).map(function (u) { return '<img src="' + esc(u) + '" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:6px;">'; }).join('') + '</div>'
         +     '<p>' + esc(l.description) + '</p>'

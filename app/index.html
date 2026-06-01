@@ -27,7 +27,9 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Demo Plant LLC - Inventory</title>
+    <title>Demo Plant MES — disconnected demo</title>
+    <meta name="robots" content="noindex, follow" />
+    <meta name="description" content="Interactive demo of an enterprise MES/ERP/OEE platform built by Muhammad Saad. Disconnected, all data fabricated for demonstration." />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -480,12 +482,12 @@
             <!-- Top Header Bar -->
             <header id="top-header" class="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between">
                 <!-- Mobile hamburger button - hidden on desktop -->
-                <button id="mobile-menu-btn" class="hidden mr-3 p-2 rounded-lg hover:bg-slate-100" onclick="toggleMobileSidebar()">
+                <button id="mobile-menu-btn" aria-label="Open navigation menu" class="hidden mr-3 p-2 rounded-lg hover:bg-slate-100" onclick="toggleMobileSidebar()">
                     <svg class="w-6 h-6 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                     </svg>
                 </button>
-                <button id="back-to-home-btn" onclick="switchTab('home')" class="hidden mr-2 p-1.5 rounded-lg hover:bg-slate-100 transition" title="Back to Home">
+                <button id="back-to-home-btn" onclick="switchTab('home')" aria-label="Back to Home" class="hidden mr-2 p-1.5 rounded-lg hover:bg-slate-100 transition" title="Back to Home">
                     <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                 </button>
                 <h1 id="page-title" class="text-xl font-semibold text-slate-800">Home</h1>
@@ -524,8 +526,13 @@
                             Admin Panel
                         </a>
                         <div class="border-t border-slate-100 my-1 admin-divider hidden"></div>
-                        <button 
-                            onclick="logout()" 
+                        <a href="/" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                            Exit demo → Portfolio
+                        </a>
+                        <div class="border-t border-slate-100 my-1"></div>
+                        <button
+                            onclick="logout()"
                             class="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition"
                         >
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

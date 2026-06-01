@@ -3,7 +3,7 @@
  */
 
 import { authenticatedFetch, getCurrentUser } from '../auth.js?v=20260428b';
-import { showToast, formatDate } from '../utils.js?v=20260125h';
+import { showToast, formatDate } from '../utils.js?v=20260129a';
 import { MENU_SECTIONS, ALL_MENU_KEYS, USE_ROLE_DEFAULTS_SENTINEL, getRoleDefaultMenus } from './menuConfig.js?v=20260504sdcip03';
 
 let currentUsers = [];

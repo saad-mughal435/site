@@ -1,8 +1,9 @@
 User-agent: *
 Allow: /
 
-# Disconnected MES/ERP live demo - okay to index but it's interactive
-# (fake admin auto-login + mock data), pages render via JS.
+# Disconnected MES/ERP live demo - interactive app shell (mock data,
+# fake admin auto-login). Not indexed as a landing page (demo.html is the
+# indexable MES walkthrough); crawling of /app/ assets stays allowed.
 Allow: /app/
 
 Sitemap: https://saadm.dev/sitemap.xml

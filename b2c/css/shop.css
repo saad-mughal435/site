@@ -101,6 +101,7 @@ p { margin: 0; }
 .nav-inner {
   display: flex; align-items: center; justify-content: space-between;
   height: 72px; gap: 24px;
+  position: relative;
 }
 .brand-mark {
   font-family: var(--display);
@@ -867,6 +868,21 @@ p { margin: 0; }
 }
 @media (max-width: 720px) {
   .nav-links { display: none; }
+  .nav-links.open {
+    display: flex;
+    position: absolute;
+    top: 100%;
+    left: 0; right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    padding: 8px 16px;
+    box-shadow: var(--shadow);
+    z-index: 60;
+  }
+  .nav-links.open a { padding: 12px 4px; }
   .nav-burger { display: inline-flex; }
   .nav-inner { height: 60px; }
   .hero { padding: 40px 0 56px; }

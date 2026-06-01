@@ -159,7 +159,7 @@
                     + '<td style="text-align:right;font-family:var(--font-mono);">' + a.views + '</td>'
                     + '<td style="text-align:right;font-family:var(--font-mono);color:' + (score > 0 ? 'var(--snd-mint-2)' : 'var(--snd-muted-light)') + ';">' + (score > 0 ? '+' : '') + score + '</td>'
                     + '<td>' + fmtDate(a.published_at) + '</td>'
-                    + '<td><a class="snd-btn snd-btn--sm" href="kb.html#/article/' + esc(a.slug) + '" target="_blank">Open</a></td>'
+                    + '<td><a class="snd-btn snd-btn--sm" href="kb.html#/article/' + esc(a.slug) + '" target="_blank" rel="noopener">Open</a></td>'
                     + '</tr>';
                 }).join('')
           +   '</tbody></table>'

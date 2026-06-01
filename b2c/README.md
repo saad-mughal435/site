@@ -27,7 +27,7 @@ A complete direct-to-consumer commerce demo - storefront, catalog, product detai
 ### Customer side
 - Browse a 24-product catalog with category filters, search, and featured carousels.
 - View product detail with reviews (~80 fabricated), variants (colour / size), specs, related products.
-- Add to cart, apply promo codes (`SUMMER15`, `FREESHIP`, etc.), proceed to multi-step checkout.
+- Add to cart, apply promo codes (`DEMO10`, `PEBBLE25`, `FREESHIP`, `WELCOME15`), proceed to multi-step checkout.
 - Pay via fabricated card / Apple Pay / Google Pay - order confirmation page, order email log entry.
 - Manage account: order history, addresses, loyalty points, wishlist, password / email update.
 

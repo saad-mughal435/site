@@ -89,9 +89,7 @@ export async function loadTransactionCodes() {
                 `;
             }
         }
-        
-        console.log(`✓ Loaded ${transactionCodes.length} transaction codes`);
-        
+
     } catch (error) {
         console.error('Error loading transaction codes:', error);
         // Set fallback transaction codes
@@ -175,9 +173,7 @@ async function loadSageItems() {
                 stockLink: item.stock_link,
                 unitCost: item.unit_cost || 0
             }));
-        
-        console.log(`✓ Loaded ${allSageItems.length} items from Sage for dropdown`);
-        
+
         // Update any open dropdowns
         const codeDropdown = document.getElementById('item-code-dropdown');
         const descDropdown = document.getElementById('item-desc-dropdown');
@@ -193,7 +189,6 @@ async function loadSageItems() {
         
         // Try fallback to inventory APIs
         try {
-            console.log('Attempting fallback to inventory APIs...');
             const [rmResponse, fgResponse] = await Promise.all([
                 authenticatedFetch('/api/inventory'),
                 authenticatedFetch('/api/finished-goods-inventory')
@@ -226,9 +221,7 @@ async function loadSageItems() {
                 .filter(item => item.code)
                 .sort((a, b) => a.code.localeCompare(b.code))
                 .filter((item, idx, arr) => idx === 0 || item.code !== arr[idx - 1].code);
-            
-            console.log(`✓ Loaded ${allSageItems.length} items from fallback APIs`);
-            
+
         } catch (fallbackError) {
             console.error('Fallback also failed:', fallbackError);
             showToast('Failed to load items for dropdown', 'error');

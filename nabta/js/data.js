@@ -81,7 +81,7 @@
       nationality: pick(NATIONALITIES),
       passport: 'P' + (1000000 + Math.floor(rand() * 8999999)),
       emirates_id: '784-' + (1980 + Math.floor(rand() * 30)) + '-' + Math.floor(rand() * 9999999).toString().padStart(7, '0') + '-' + Math.floor(rand() * 9),
-      visa_expires: isoAgo(-Math.floor(60 + rand() * 600)).slice(0, 10),
+      visa_expires: isoAgo(-(i < 4 ? Math.floor(15 + rand() * 35) : Math.floor(60 + rand() * 600))).slice(0, 10),
       base_salary_aed: baseSalary,
       allowances_aed: allowances,
       total_salary_aed: baseSalary + allowances,
@@ -108,9 +108,10 @@
     else if (lr < 13) status = 'approved';
     else if (lr < 15) status = 'taken';
     else status = 'rejected';
+    var n = leaveSerial++;
     LEAVE.push({
-      id: 'lv-' + (leaveSerial++),
-      number: 'LV-' + String(leaveSerial),
+      id: 'lv-' + n,
+      number: 'LV-' + n,
       employee_id: emp.id,
       employee_name: emp.name,
       type: pick(LEAVE_TYPES),

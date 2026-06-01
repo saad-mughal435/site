@@ -75,6 +75,7 @@
   max-width: calc(100vw - 32px);
   height: 580px;
   max-height: calc(100vh - 120px);
+  max-height: calc(100dvh - 120px);   /* tracks the actually-visible viewport so the footer isn't clipped */
   background: var(--ask-bg);
   border: 1px solid var(--ask-line-2);
   border-radius: var(--ask-radius);
@@ -92,7 +93,11 @@
 }
 .ask-window.open { display: flex; opacity: 1; transform: translateY(0) scale(1); }
 @media (max-width: 480px) {
-  .ask-window { width: calc(100vw - 24px); right: 12px; bottom: 86px; height: calc(100vh - 110px); }
+  .ask-window {
+    width: calc(100vw - 24px); right: 12px; bottom: 86px;
+    height: calc(100vh - 110px);
+    height: calc(100dvh - 110px);   /* shrink with iOS Safari's collapsing chrome so the input row stays reachable */
+  }
   .ask-bubble  { right: 16px; bottom: 16px; }
 }
 
@@ -193,8 +198,10 @@
   text-decoration: none;
   font-family: var(--ask-font-ui);
   transition: all .12s ease;
+  appearance: none; line-height: 1.4; text-transform: none; margin: 0;
 }
 .ask-cite:hover { background: rgba(34, 211, 238, 0.20); border-color: var(--ask-cyan); color: white; }
+.ask-cite:focus-visible { outline: 2px solid var(--ask-cyan); outline-offset: 2px; }
 
 /* Feedback buttons under assistant messages */
 .ask-feedback { margin-top: 4px; display: inline-flex; gap: 4px; }

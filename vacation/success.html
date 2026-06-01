@@ -33,6 +33,10 @@ if (!last) {
   host.innerHTML = '<div class="v-empty"><h3>No confirmation found</h3><p>Try opening this from your trips page.</p><a class="v-btn v-btn--primary" href="trips.html">My trips</a></div>';
 } else {
   VacationApp.api('/listings/' + last.listing_id).then(function (r) {
+    if (!r.body.ok || !r.body.listing) {
+      host.innerHTML = '<div class="v-empty"><h3>Booking confirmed</h3><p>Reference: ' + ref + '</p><a class="v-btn v-btn--primary" href="trips.html">View in My trips</a></div>';
+      return;
+    }
     var l = r.body.listing, h = r.body.host || {};
     var dest = VACATION_DATA.DESTINATIONS.find(function (x) { return x.id === l.destination_id; }) || {};
     host.innerHTML = ''

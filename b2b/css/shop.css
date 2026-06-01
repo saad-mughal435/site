@@ -677,7 +677,12 @@ code { font-family: var(--mono); font-size: 0.92em; }
 }
 @media (max-width: 720px) {
   .nav-search { display: none; }
-  .nav-links { display: none; }
+  .nav-links { display: none; position: absolute; top: 100%; right: 0; left: 0;
+    flex-direction: column; align-items: flex-start; gap: 0;
+    background: #fff; border-bottom: 1px solid var(--line);
+    box-shadow: var(--shadow-lg); padding: 8px 22px 12px; z-index: 60; }
+  .nav-links.open { display: flex; }
+  .nav-links a { padding: 10px 0; width: 100%; }
   .nav-burger { display: inline-flex; align-items: center; justify-content: center; }
   .checkout-form-grid { grid-template-columns: 1fr; }
   .cart-row { grid-template-columns: 60px 1fr; }

@@ -57,7 +57,7 @@ tab and the demo open in another.
 
 **You'll see, within ~200 ms:**
 
-- **Topbar:** Watad brand · Console / Work orders / Energy / Admin nav · BACnet status pill ("3 trunks · 198 points · gateway online") · Demo / Live mode badge.
+- **Topbar:** Watad brand · Console / Work orders / Energy / Admin nav · BACnet status pill ("3 trunks · 182 points · gateway online") · Demo / Live mode badge.
 - **KPI strip (second row):**
   - 🔴 **Active alarms** — at least **5 active** (the three time-of-day-insensitive seeded alarms always fire: CH-1 condenser high, CT-1 basin critical, L2 boardroom CO₂ over 1000 ppm — plus AHU-L2 filter ΔP warning and main-meter low PF warning).
   - ⚡ **Real power** — live kW reading from the main meter, e.g. *242.3 kW*.
@@ -69,7 +69,7 @@ tab and the demo open in another.
 - **Trend strip (bottom 160 px):** three mini SVG line charts — **Real power**, **Avg zone temp** (with a green ASHRAE comfort band overlay 68-76 °F), **Active alarms**. Each card pre-populated with ~60 historical samples from the seeded RNG buffer so the lines aren't empty.
 
 **Under the hood:** `console.js` calls `WatadSim.start()` which executes
-`_seedHistory()` first — 288 samples × 198 points generated from a
+`_seedHistory()` first — 288 samples × 182 points generated from a
 deterministic-feeling generator before paint. Then it calls
 `WatadFloorPlan.render()` (custom SVG with `<button class="wtd-equip">`
 absolute-positioned for each asset) and subscribes to sim ticks. Diff-rendering
@@ -339,7 +339,7 @@ array. Server-side aggregation in `mock-api.js → dashboardKpis()`.
 
 **You'll see:**
 
-- Asset filter dropdown · search box · counter (e.g. "198 / 198 points").
+- Asset filter dropdown · search box · counter (e.g. "182 / 182 points").
 - Table: Point · Asset · Kind chip · Setpoint · Hi-alarm · Lo-alarm · **Current** (live).
 - The **Current** column shows live values from `WatadSim` — values refresh on every tick because the simulator is running in the background.
 - Filter to `as-chiller-1` to see all 6 of its points (Run status, CHWS, CHWR, Condenser temp, Load, Power) — Condenser temp will read ~99-103 °F (above its 95 °F hi-alarm, in amber).
@@ -404,7 +404,7 @@ AI invocation anywhere in the app.
 **You'll see:**
 
 - A grid of 6 cards: **BACnet IP Gateway · Modbus TCP · DALI Lighting · MQTT Broker · IBM Maximo CMMS · ServiceNow**.
-- Each card shows icon · name · last-connect timestamp · connected/disconnected chip · details (e.g. "3 trunks · 87 devices · 198 points").
+- Each card shows icon · name · last-connect timestamp · connected/disconnected chip · details (e.g. "3 trunks · 87 devices · 182 points").
 - **Connect / Disconnect** button toggles state and persists to
   `watad.integ.overrides`.
 

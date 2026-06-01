@@ -58,7 +58,7 @@
             <svg class="nav-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
             <input type="text" placeholder="Search SKU or product..." id="nav-search-input">
           </div>
-          <nav class="nav-links" aria-label="Primary">
+          <nav class="nav-links" id="nav-links-host" aria-label="Primary">
             ${links.map(l => `<a href="${l.href}" class="${active === l.id ? 'active' : ''}">${l.label}</a>`).join('')}
             <a href="admin.html" style="color:var(--orange);">Admin</a>
           </nav>
@@ -70,7 +70,7 @@
               </svg>
               ${cartCount > 0 ? `<span class="cart-count">${cartCount}</span>` : ''}
             </a>
-            <button class="nav-icon-btn nav-burger" aria-label="Menu">
+            <button class="nav-icon-btn nav-burger" id="nav-burger" aria-label="Menu" aria-expanded="false" aria-controls="nav-links-host">
               <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
             </button>
           </div>
@@ -211,6 +211,15 @@
         if (e.key === 'Enter' && searchInput.value.trim()) {
           window.location.href = 'catalog.html?search=' + encodeURIComponent(searchInput.value.trim());
         }
+      });
+    }
+
+    const burger = document.getElementById('nav-burger');
+    const navLinks = document.getElementById('nav-links-host');
+    if (burger && navLinks) {
+      burger.addEventListener('click', () => {
+        const open = navLinks.classList.toggle('open');
+        burger.setAttribute('aria-expanded', open ? 'true' : 'false');
       });
     }
   };

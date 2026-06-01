@@ -90,7 +90,7 @@
 <script>
   MarsadAI.health().then(function (h) {
     var el = document.getElementById('mode-badge'); if (!el) return;
-    var nm = h.model.indexOf('haiku') !== -1 ? 'Haiku 4.5' : h.model.indexOf('sonnet') !== -1 ? 'Sonnet 4.6' : 'Opus 4.7';
+    var nm = h.model.indexOf('haiku') !== -1 ? 'Haiku 4.5' : h.model.indexOf('sonnet') !== -1 ? 'Sonnet 4.6' : 'Opus 4.8';
     el.className = h.live ? 'mrs-mode-badge live' : 'mrs-mode-badge';
     el.textContent = h.live ? 'Live · ' + nm : 'Demo mode';
   });

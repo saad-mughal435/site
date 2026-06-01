@@ -235,9 +235,9 @@
 
   // ===================== INTEGRATIONS =====================
   var INTEGRATIONS = [
-    { id: 'int-bacnet',   name: 'BACnet IP Gateway',   status: 'connected',    connected_at: isoAgo(60 * 24 * 200), icon: '🔌', details: '3 trunks · 87 devices · 198 points' },
-    { id: 'int-modbus',   name: 'Modbus TCP',          status: 'connected',    connected_at: isoAgo(60 * 24 * 200), icon: '⚡', details: '1 gateway · 12 devices · 48 points (meters)' },
-    { id: 'int-dali',     name: 'DALI Lighting',       status: 'connected',    connected_at: isoAgo(60 * 24 * 200), icon: '💡', details: '1 router · 6 zones · 48 fixtures' },
+    { id: 'int-bacnet',   name: 'BACnet IP Gateway',   status: 'connected',    connected_at: isoAgo(60 * 24 * 200), icon: '🔌', details: '3 trunks · 87 devices · 182 points' },
+    { id: 'int-modbus',   name: 'Modbus TCP',          status: 'connected',    connected_at: isoAgo(60 * 24 * 200), icon: '⚡', details: '1 gateway · 7 meters · 28 points (meters)' },
+    { id: 'int-dali',     name: 'DALI Lighting',       status: 'connected',    connected_at: isoAgo(60 * 24 * 200), icon: '💡', details: '1 router · 7 zones · 7 fixtures' },
     { id: 'int-mqtt',     name: 'MQTT Broker',         status: 'disconnected', connected_at: null, icon: '📡', details: 'Edge IoT broker for occupancy + air-quality sensors' },
     { id: 'int-maximo',   name: 'IBM Maximo CMMS',     status: 'connected',    connected_at: isoAgo(60 * 24 * 90),  icon: '🛠', details: 'Work orders sync, asset register' },
     { id: 'int-servicenow', name: 'ServiceNow',        status: 'disconnected', connected_at: null, icon: '🎫', details: 'Optional: tenant ticket integration' }

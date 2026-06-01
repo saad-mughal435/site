@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Lahza — a moment a day</title>
 <meta name="description" content="Lahza — AI-augmented personal journaling and mood tracking. A daily prompt, a few sentences, and Claude surfaces the patterns. Installable as a PWA on iOS and Android." />
 <meta name="theme-color" content="#1c1936" />
@@ -24,16 +24,16 @@
 <body class="lahza">
 
 <!-- Desktop chrome (only visible on >=720px viewports) -->
-<div class="lz-desktop-chrome" aria-hidden="true">
+<div class="lz-desktop-chrome">
   <header class="lz-chrome-head">
     <div class="lz-chrome-brand">
-      <span class="lz-chrome-logo">L</span>
+      <span class="lz-chrome-logo" aria-hidden="true">L</span>
       <div>
         <div class="lz-chrome-title">Lahza</div>
         <div class="lz-chrome-sub">a moment a day · AI-augmented journaling</div>
       </div>
     </div>
-    <a href="#install" class="lz-chrome-cta">Install on your phone ↗</a>
+    <a href="#" class="lz-chrome-cta" onclick="window.toast('Open this page on your phone, then use the install hint below.', '', 3200); return false;">Install on your phone ↗</a>
   </header>
   <div class="lz-chrome-foot">
     <div class="lz-chrome-hint">

@@ -105,6 +105,21 @@
 
   function renderMap() {
     if (state.view !== 'map') return;
+    // populate the right-hand list pane that sits beside the map
+    var ml = document.getElementById('mapList');
+    if (ml) {
+      if (!state.items.length) {
+        ml.innerHTML = '<div class="m-empty" style="grid-column:1/-1;"><div class="m-empty-icon">🔍</div><h3>No matches</h3><p>Try widening your filters.</p></div>';
+      } else {
+        ml.innerHTML = state.items.map(function (l) { return ManzilApp.listingCard(l, { hideAgent: true }); }).join('');
+        ManzilApp.updateAllPrices();
+        ml.querySelectorAll('[data-listing-id]').forEach(function (card) {
+          var id = card.getAttribute('data-listing-id');
+          card.addEventListener('mouseenter', function () { highlightMarker(id, true); });
+          card.addEventListener('mouseleave', function () { highlightMarker(id, false); });
+        });
+      }
+    }
     if (!window.L) { return; }
     if (!state.map) {
       state.map = L.map('mapEl', { zoomControl: true, attributionControl: true }).setView([25.15, 55.25], 11);

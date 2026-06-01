@@ -49,6 +49,7 @@
         +   '<div style="display:flex;align-items:center;gap:10px;">'
         +     '<a href="index.html" class="mrs-brand"><span class="mrs-brand-mark">M</span> Marsad</a>'
         +     '<span style="font-size:11.5px;color:var(--mrs-muted);font-family:var(--mrs-mono);">Driver view</span>'
+        +     '<a href="/" style="font-size:11.5px;color:var(--mrs-ink-2);">← saadm.dev</a>'
         +   '</div>'
         +   driverSelect
         + '</div>'

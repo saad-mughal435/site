@@ -4,7 +4,7 @@
  *   Critical Materials → Requisition → LPO → Receive → Sage GRN
  */
 
-import { showToast, formatNumber } from '../utils.js?v=20260125h';
+import { showToast, formatNumber } from '../utils.js?v=20260129a';
 import { authenticatedFetch, hasAnyRole, getCurrentUser } from '../auth.js?v=20260428b';
 
 // ============================================================================

@@ -7,6 +7,86 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.6.0] - 2026-06-01 - Site-wide hardening + polish pass
+
+A multi-agent static audit of the homepage and all 12 demos (across
+accessibility, performance, SEO, responsive layout, security and correctness)
+surfaced 60 verified issues; this release fixes them. No new demos — existing
+surfaces made faster, more correct, and more accessible.
+
+### Fixed - functional bugs (recruiter-visible)
+
+- **Manzil owner dashboard + admin were fully broken** - the code read a
+  `.body` envelope the mock API never returns, throwing on every owner-dashboard
+  section and on the admin owner-approvals / verification / listing drawers.
+  Corrected the read paths in `owner-dashboard.js`, `admin-sections.js` and
+  `owner-onboard.js` (the "Edit listing" wizard prefills again).
+- **MES home dashboard rendered all-zero KPIs** - `/dashboard/stats` now
+  returns `total_inventory_value` / `total_items` / `low_stock_count` /
+  `active_recipes`, so the first screen shows real figures.
+- **Dead mobile navigation** - wired the hamburger menus on the b2c and b2b
+  storefronts and added a slide-over conversation list to the Sanad inbox
+  (the inbox was unreachable at <=760px).
+- **Manzil maps** - the search "Map" view left its right-hand list pane blank;
+  a `.m-map-pin` class collision blew every compact price-pin up to 320px
+  (renamed the wizard container to `.m-map-picker`); the "Talk to sales" CTA
+  404'd (`contact.html` -> `../contact.html`).
+- **Marsad** rebuilt all 112 map markers every 4s (flicker, popups slammed
+  shut) - `placeOrder` is now idempotent.
+- **Sanad** embedded chat could not reopen after closing; a dead KB intra-link
+  was repaired.
+- **Lahza** desktop "Install" CTA blanked the app; re-enabled pinch-zoom
+  (removed `user-scalable=no`); removed an `aria-hidden` wrapper that hid
+  focusable links.
+- **Qahwa POS** admin floor plan collapsed all tables into one corner; receipts
+  and TRN now read from settings.
+- **b2c checkout** - the chosen shipping method now actually affects the total.
+- Corrected contradictory / wrong figures visible to recruiters: Manzil admin
+  (13 -> 15 sections), Vacation admin (11/12 -> 13) and stays (55 -> 54), Watad
+  telemetry points (198 -> 182), Nabta visa-expiry KPI and a leave-id off-by-one,
+  and a "performa" -> "proforma invoice" typo on the headline MES card + demo.
+
+### Fixed - accessibility
+
+- Added a "Skip to content" link; fixed the Skills heading-level skip
+  (h2->h4 became h2->h3); gave the hero view-toggle a correct `role="group"` /
+  `aria-pressed` pattern; exposed the Ask-Saad citation chips as keyboard /
+  screen-reader-operable buttons with an `aria-live` region for AI replies;
+  raised touch targets to 44px; added aria-labels to icon-only controls across
+  Marsad / Sanad / Nabta / Lahza / POS; lifted the code-comment colour to WCAG AA.
+
+### Fixed - SEO & social cards
+
+- Pruned `sitemap.xml` to the 19 genuinely-indexable URLs (it was listing ~23
+  `noindex` pages - a Search Console "Submitted URL marked noindex" error) and
+  added `<lastmod>`.
+- Added Open Graph + Twitter cards to every shareable demo landing page and
+  fixed `demo.html` (it used the portrait headshot as its share image); added
+  self-referential canonicals to indexable property / vacation / sanad pages.
+- Synced the JSON-LD role list to the visible FAQ, de-keyword-stuffed the
+  WebSite schema `name`, and corrected misleading schema comments.
+
+### Changed - performance
+
+- **`saad.png` 1.84 MB -> 83 KB** (a 1122x1402 image rendered at <=168px is now
+  400x500 and compressed) - it sits on the critical path of every page.
+- Reduced orb blur (80 -> 60px) and dropped the third orb on mobile; trimmed an
+  unused mono font weight; added intrinsic `width`/`height` to nav and portrait
+  images; normalised the MES app's 25 `utils.js` imports to a single module
+  instance.
+
+### Changed - security & infra
+
+- Added a **Report-Only Content-Security-Policy** (scoped to the unpkg / Google
+  Fonts / Leaflet tiles / in-browser-LLM origins the demos actually use),
+  `rel="noopener"` on internal new-tab links, cache rules for previously
+  uncovered root assets, an `/app/*` SPA fallback, and promoted the permanent
+  vanity redirects to 301.
+- Namespaced the MES app's client-side URLs under `/app/`, added an
+  "Exit demo -> Portfolio" link, and marked the app shell `noindex`
+  (`demo.html` is the indexable MES entry point). Stripped leftover
+  `console.log` debug output across the demos.
+
 ## [2.5.0] - 2026-05-21 - Marsad (10th) + Nabta (11th) + shared design tokens
 
 ### Added — shared design tokens at `/tokens.css`

@@ -28,7 +28,7 @@
     bg.className = 'nbt-modal-backdrop';
     bg.innerHTML = ''
       + '<div class="nbt-modal" style="max-width:' + (opts.size === 'lg' ? '780px' : '520px') + ';">'
-      +   '<div class="nbt-modal-head"><h3>' + escapeHtml(opts.title || '') + '</h3><button class="nbt-modal-close" data-modal-close>×</button></div>'
+      +   '<div class="nbt-modal-head"><h3>' + escapeHtml(opts.title || '') + '</h3><button class="nbt-modal-close" data-modal-close aria-label="Close">×</button></div>'
       +   '<div class="nbt-modal-body">' + (opts.body || '') + '</div>'
       +   (opts.foot ? '<div class="nbt-modal-foot">' + opts.foot + '</div>' : '')
       + '</div>';

@@ -6,6 +6,7 @@
   X-Frame-Options: SAMEORIGIN
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), microphone=(), camera=()
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.tailwindcss.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://images.unsplash.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://unpkg.com; connect-src 'self' https://huggingface.co https://*.hf.co https://cdn.jsdelivr.net; worker-src 'self' blob:; child-src 'self' blob:; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://formsubmit.co; object-src 'none'
 
 # Short cache + revalidate for project JS/CSS — these files don't have fingerprints in
 # their names so they need to revalidate often. (Was: max-age=31536000 immutable —
@@ -70,6 +71,8 @@
   Cache-Control: public, max-age=300, must-revalidate
 /tokens.css
   Cache-Control: public, max-age=300, must-revalidate
+/assets/*
+  Cache-Control: public, max-age=300, must-revalidate
 
 # HTML — short cache so updates surface quickly
 /*.html
@@ -81,6 +84,12 @@
 /styles.css
   Cache-Control: public, max-age=86400
 /script.js
+  Cache-Control: public, max-age=86400
+/demo.css
+  Cache-Control: public, max-age=86400
+/demo.js
+  Cache-Control: public, max-age=86400
+/contact.js
   Cache-Control: public, max-age=86400
 
 # Headshot — cache aggressively

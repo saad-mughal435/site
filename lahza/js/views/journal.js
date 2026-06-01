@@ -22,7 +22,7 @@
     app.innerHTML =
         '<div class="lz-topbar"><div class="lz-topbar-title">Journal</div></div>'
       + '<div class="lz-view">'
-      +   '<input class="lz-input" id="jr-search" placeholder="Search entries…" style="margin-bottom:10px;" value="' + esc(state.q) + '">'
+      +   '<input class="lz-input" id="jr-search" aria-label="Search entries" placeholder="Search entries…" style="margin-bottom:10px;" value="' + esc(state.q) + '">'
       +   '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;overflow-x:auto;">' + chipsHtml + '</div>'
       +   '<div id="jr-list"><div class="lz-loading"><span></span><span></span><span></span></div></div>'
       + '</div>';

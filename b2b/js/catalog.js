@@ -124,7 +124,7 @@
     lastItems = items;
 
     document.getElementById('catalog-count').textContent =
-      `${items.length} SKU${items.length === 1 ? '' : 's'} ${state.industry !== 'all' ? '&middot; ' + state.industry : ''}`;
+      `${items.length} SKU${items.length === 1 ? '' : 's'} ${state.industry !== 'all' ? '· ' + state.industry : ''}`;
     document.getElementById('catalog-sub').textContent =
       state.industry === 'all'
         ? 'Browse, filter, paste a SKU list, or jump in.'

@@ -24,7 +24,7 @@
   // ============ Mode badge ============
   MarsadAI.health().then(function (h) {
     var el = $('mode-badge'); if (!el) return;
-    var nm = h.model.indexOf('haiku') !== -1 ? 'Haiku 4.5' : h.model.indexOf('sonnet') !== -1 ? 'Sonnet 4.6' : 'Opus 4.7';
+    var nm = h.model.indexOf('haiku') !== -1 ? 'Haiku 4.5' : h.model.indexOf('sonnet') !== -1 ? 'Sonnet 4.6' : 'Opus 4.8';
     el.className = h.live ? 'mrs-mode-badge live' : 'mrs-mode-badge';
     el.textContent = h.live ? 'Live · ' + nm : 'Demo mode';
   });
@@ -139,9 +139,14 @@
 
     var queueHtml = rows.slice(0, 30).map(function (o) {
       var driver = assetMap[o.driver_id];
-      var sla = o.sla_breached
-        ? '<span class="mrs-sla breach">SLA BREACH</span>'
-        : '<span class="mrs-sla">SLA in ' + Math.max(0, Math.round((new Date(o.sla_deadline) - new Date()) / 60000)) + ' min</span>';
+      var terminal = o.status === 'delivered' || o.status === 'failed';
+      var sla = terminal
+        ? ''
+        : o.sla_breached
+          ? '<span class="mrs-sla breach">SLA BREACH</span>'
+          : o.sla_warn
+            ? '<span class="mrs-sla warn">SLA &lt;10 min</span>'
+            : '<span class="mrs-sla">SLA in ' + Math.max(0, Math.round((new Date(o.sla_deadline) - new Date()) / 60000)) + ' min</span>';
       var isNew = !seenOrders.has(o.id);
       seenOrders.add(o.id);
       return '<div class="mrs-order' + (isNew ? ' is-new' : '') + (o.sla_breached ? ' is-breach' : '') + '" data-order-id="' + esc(o.id) + '">'
@@ -149,11 +154,11 @@
         + '<div class="mrs-order-body">'
         +   '<div class="mrs-order-no">' + esc(o.number) + ' · ' + esc(o.zone_name) + '</div>'
         +   '<div class="mrs-order-cust">' + esc(o.customer_name) + (o.cod_aed ? ' · <strong>COD ' + MarsadApp.fmtMoney(o.cod_aed) + '</strong>' : '') + '</div>'
-        +   '<div class="mrs-order-meta">' + (driver ? esc(driver.name) : '<em>unassigned</em>') + ' · ' + sla + '</div>'
+        +   '<div class="mrs-order-meta">' + (driver ? esc(driver.name) : '<em>unassigned</em>') + (sla ? ' · ' + sla : '') + '</div>'
         + '</div>'
         + '<div class="mrs-order-actions">'
-        +   '<button class="mrs-btn mrs-btn--sm" data-act="explain" data-id="' + esc(o.id) + '" title="✦ Explain delay">✦</button>'
-        +   '<button class="mrs-btn mrs-btn--sm" data-act="locate" data-id="' + esc(o.id) + '" title="Locate on map">📍</button>'
+        +   '<button class="mrs-btn mrs-btn--sm" data-act="explain" data-id="' + esc(o.id) + '" aria-label="Explain delay" title="✦ Explain delay">✦</button>'
+        +   '<button class="mrs-btn mrs-btn--sm" data-act="locate" data-id="' + esc(o.id) + '" aria-label="Locate on map" title="Locate on map">📍</button>'
         + '</div>'
         + '</div>';
     }).join('');
@@ -212,14 +217,16 @@
   }
 
   function ensureMapOrders(ords) {
-    // Place any order not yet on the map; update statuses for ones already there.
+    // Place any order not yet on the map; update in place for ones already there.
     ords.forEach(function (o) {
       if (!o.dropoff_lat) return;
-      // (placeOrder also updates if already exists)
+      // placeOrder is idempotent — updates icon + popup if already on the map,
+      // so an open popup is not torn down on every tick.
       MarsadMap.placeOrder(o);
     });
-    // Place vehicles
-    Object.values(window.MarsadSim ? window.MarsadSim.vehicles : {}).forEach(MarsadMap.placeVehicle);
+    // Vehicles are placed/updated idempotently by onTick via
+    // MarsadMap.updateVehiclePosition (which self-places on first sight),
+    // so we do NOT re-place all vehicles here every refresh.
   }
 
   function initials(name) {
@@ -284,7 +291,7 @@
       body: '<div id="chat-thread" style="max-height:50vh;overflow:auto;padding:8px 0;font-size:14px;line-height:1.6;color:var(--mrs-ink-2);"></div>'
         + '<div style="display:flex;gap:8px;margin-top:10px;">'
         + '  <input class="mrs-input" id="chat-input" placeholder="Ask Marsad — try \'fuel\', \'idle drivers\', \'sla\'…" style="flex:1;"/>'
-        + '  <button class="mrs-btn mrs-btn--primary" id="chat-send">↑</button>'
+        + '  <button class="mrs-btn mrs-btn--primary" id="chat-send" aria-label="Send" title="Send">↑</button>'
         + '</div>'
         + '<div style="margin-top:8px;font-size:11px;color:var(--mrs-muted);">Try: <em>"any breaches?"</em>, <em>"who has spare capacity?"</em>, <em>"fuel below 25%?"</em></div>',
       foot: '<button class="mrs-btn" data-modal-close>Close</button>',

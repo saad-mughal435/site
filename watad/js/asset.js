@@ -243,7 +243,6 @@
   setInterval(function () {
     var sim = window.WatadSim;
     if (!sim) return;
-    document.querySelectorAll('#asset-side table tr').forEach(function () {});  // keep alive
     // Re-render the live points block in place
     WatadApp.api('/assets/' + assetId).then(function (r) {
       if (!r.body || !r.body.ok) return;

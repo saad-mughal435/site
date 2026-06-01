@@ -223,7 +223,14 @@ body.sanad.admin .snd-field > span, body.sanad.landing .snd-field > span, body.s
 @media (max-width: 760px) {
   .snd-inbox { grid-template-columns: 1fr; grid-template-rows: 52px auto 1fr; }
   .snd-inbox-list, .snd-inbox-side { display: none; }
-  .snd-inbox.show-list .snd-inbox-list, .snd-inbox.show-side .snd-inbox-side { display: flex; }
+  .snd-inbox.show-side .snd-inbox-side { display: flex; }
+  /* Conversation list opens as a slide-over overlay (mirrors ai-drawer-open),
+     so it always gets usable height and never collapses the thread row. */
+  .snd-inbox.show-list .snd-inbox-list {
+    display: flex;
+    position: fixed; top: 52px; left: 0; bottom: 0; width: min(360px, 92vw);
+    z-index: 70; box-shadow: 16px 0 48px rgba(2, 6, 23, 0.6);
+  }
 }
 
 /* Floating "Show AI" button — appears whenever the sidebar isn't visible
@@ -240,6 +247,19 @@ body.sanad.admin .snd-field > span, body.sanad.landing .snd-field > span, body.s
 }
 .snd-ai-toggle:hover { transform: translateY(-2px); }
 @media (max-width: 1180px) { .snd-ai-toggle { display: inline-block; } }
+
+/* Floating "Conversations" button — only at <=760px, the exact breakpoint
+   where the conversation list is hidden. Mirrors the AI toggle pattern so the
+   inbox list is always reachable on a phone. */
+.snd-list-toggle {
+  position: fixed; bottom: 18px; left: 18px; z-index: 80;
+  background: var(--snd-surface); color: var(--snd-ink);
+  border: 1px solid var(--snd-line-2); border-radius: 999px;
+  padding: 10px 16px; font-size: 13px; font-weight: 700;
+  box-shadow: 0 6px 20px rgba(2, 6, 23, 0.5);
+  cursor: pointer; display: none; font-family: inherit;
+}
+@media (max-width: 760px) { .snd-list-toggle { display: inline-block; } }
 /* When user clicks the toggle, the AI sidebar becomes a slide-over drawer. */
 .snd-inbox.ai-drawer-open .snd-inbox-side {
   display: flex !important;

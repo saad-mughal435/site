@@ -3,7 +3,7 @@
  * Handles quotations, proforma invoices, price list, and customer management
  */
 
-import { showToast, state, debounce } from '../utils.js?v=20260125h';
+import { showToast, state, debounce } from '../utils.js?v=20260129a';
 import { authenticatedFetch, hasAnyRole, getCurrentUser } from '../auth.js?v=20260428b';
 
 // ============================================================================

@@ -99,8 +99,8 @@
 
   sections.listings = function (host) {
     Promise.all([ManzilApp.api('/owner/dashboard'), ManzilApp.api('/owner/listings')]).then(function (rs) {
-      var k = rs[0].body.kpis || {};
-      var items = rs[1].body.items || [];
+      var k = rs[0].kpis || {};
+      var items = rs[1].items || [];
       host.innerHTML = ''
         + '<div style="display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;">'
         +   '<h2 style="margin:0;">My listings</h2>'
@@ -124,7 +124,7 @@
                 + '<td>' + aed(l.price_aed) + (l.transaction === 'rent' ? '/year' : '') + '</td>'
                 + '<td>' + (l.listed_at ? l.listed_at.slice(0,10) : '—') + '</td>'
                 + '<td class="m-table-actions">'
-                +   '<a class="m-btn m-btn--ghost m-btn--sm" href="listing.html?id=' + esc(l.id) + '" target="_blank">View</a>'
+                +   '<a class="m-btn m-btn--ghost m-btn--sm" href="listing.html?id=' + esc(l.id) + '" target="_blank" rel="noopener">View</a>'
                 +   '<a class="m-btn m-btn--ghost m-btn--sm" href="owner-onboard.html?mode=edit&id=' + esc(l.id) + '">Edit</a>'
                 +   (s === 'active' ? '<button class="m-btn m-btn--ghost m-btn--sm" data-pause="' + esc(l.id) + '">Pause</button>' : (s === 'paused' ? '<button class="m-btn m-btn--ghost m-btn--sm" data-unpause="' + esc(l.id) + '">Unpause</button>' : ''))
                 + '</td></tr>';
@@ -138,7 +138,7 @@
 
   sections.inquiries = function (host) {
     ManzilApp.api('/owner/inquiries').then(function (r) {
-      var items = r.body.items || [];
+      var items = r.items || [];
       host.innerHTML = ''
         + '<h2>Inquiries</h2>'
         + '<p class="m-text-muted">Messages and viewing requests from people interested in your listings.</p>'
@@ -155,7 +155,7 @@
 
   sections.availability = function (host) {
     ManzilApp.api('/owner/listings').then(function (r) {
-      var items = r.body.items || [];
+      var items = r.items || [];
       host.innerHTML = ''
         + '<h2>Availability</h2>'
         + '<p class="m-text-muted">Quick toggle for each listing.</p>'
@@ -174,7 +174,7 @@
 
   sections.earnings = function (host) {
     ManzilApp.api('/owner/listings').then(function (r) {
-      var items = r.body.items || [];
+      var items = r.items || [];
       var totalValue = items.filter(function (l) { return l.status === 'active'; }).reduce(function (s, l) { return s + (l.price_aed || 0); }, 0);
       host.innerHTML = ''
         + '<h2>Estimated earnings</h2>'
@@ -222,7 +222,7 @@
 
   sections.verification = function (host) {
     ManzilApp.api('/owner/applications/me').then(function (r) {
-      var a = r.body.application;
+      var a = r.application;
       if (!a) {
         host.innerHTML = '<h2>Verification</h2><div class="m-empty-illustration"><div class="m-empty-illustration-mark">🛡️</div><h3>No application yet</h3><p>You have not submitted documents yet. Start the listing wizard to begin.</p><a class="m-btn m-btn--primary" href="owner-onboard.html">Start listing</a></div>';
         return;

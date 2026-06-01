@@ -92,7 +92,7 @@
     {
       id: 'faq-code',
       title: "Can I see Saad's code?",
-      body: "Yes — the live MES/ERP walkthrough is at saadm.dev/demo.html and saadm.dev/app (interactive, every value fabricated for privacy, every workflow faithful to the real system). Source for some open work is on GitHub at github.com/saad-mughal435 — including standalone repos for each of the eight portfolio demos (kingsley-mes-demo, sanad-copilot, watad-bms, etc).",
+      body: "Yes — the live MES/ERP walkthrough is at saadm.dev/demo.html and saadm.dev/app (interactive, every value fabricated for privacy, every workflow faithful to the real system). Source for some open work is on GitHub at github.com/saad-mughal435 — including standalone repos for the portfolio demos (kingsley-mes-demo, sanad-copilot, watad-bms, and more).",
       link: '/demo.html',
       tags: ['code', 'github', 'demo', 'source', 'repo', 'open-source']
     },

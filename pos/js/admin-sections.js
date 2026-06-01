@@ -630,8 +630,10 @@
         +   '<div class="pos-panel-head"><h3>Floor plan</h3><span class="pos-text-muted" style="font-size:12px;">Click a table to change status</span></div>'
         +   '<div style="position:relative;background:repeating-linear-gradient(0deg,transparent,transparent 39px,var(--pos-line-light) 39px,var(--pos-line-light) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,var(--pos-line-light) 39px,var(--pos-line-light) 40px),var(--pos-bg-light);height:520px;margin:14px;border-radius:8px;">'
         +     tbls.map(function (t) {
-                var x = (t.position && t.position.x) || 50;
-                var y = (t.position && t.position.y) || 50;
+                var col = (t.position && t.position.x) || 1;
+                var row = (t.position && t.position.y) || 1;
+                var x = (col - 1) * 110 + 24;
+                var y = (row - 1) * 110 + 24;
                 return '<button data-t="' + t.id + '" class="pos-floor-table" style="position:absolute;left:' + x + 'px;top:' + y + 'px;width:80px;height:80px;border-radius:12px;background:white;border:3px solid ' + (STATUS_COLOR[t.status] || 'var(--pos-line)') + ';color:var(--pos-card-ink);font-weight:700;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:inherit;">'
                   + '<span style="font-size:15px;">' + esc(t.label) + '</span>'
                   + '<span style="font-size:10.5px;color:var(--pos-muted-light);">' + (t.capacity || 0) + ' seats</span>'
@@ -661,7 +663,7 @@
         var rows = r.body.items;
         var PERMS = {
           cashier: ['Take orders', 'Send to kitchen', 'Take payment', 'View shift'],
-          supervisor: ['All cashier permissions', 'Apply discounts > 20%', 'Refund orders', 'Reopen shift'],
+          supervisor: ['All cashier permissions', 'Approve large discounts', 'Refund orders', 'Reopen shift'],
           manager: ['All supervisor permissions', 'Edit products / prices', 'Open / close shifts', 'Admin SPA access', 'Edit settings']
         };
         host.innerHTML =

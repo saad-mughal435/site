@@ -276,7 +276,7 @@
       +   '<label class="m-field"><span>Address line</span><input class="m-input" id="pr-addr" value="' + esc(p.address) + '"/></label>'
       +   '<div>'
       +     '<label class="m-field"><span>Drop pin where the property is</span></label>'
-      +     '<div id="pr-map" class="m-map-pin"></div>'
+      +     '<div id="pr-map" class="m-map-picker"></div>'
       +     '<div class="m-map-pin-hint">Click anywhere on the map to set the location. Approximate is fine.</div>'
       +   '</div>'
       +   '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:14px;">'
@@ -584,7 +584,7 @@
       } });
     }
     step1().then(step2).then(step3).then(function (r) {
-      var ref = (r && r.body && r.body.listing && r.body.listing.id) || ('L' + Date.now());
+      var ref = (r && r.listing && r.listing.id) || ('L' + Date.now());
       var displayRef = 'MZ-' + new Date().getFullYear() + '-' + ref.replace(/[^A-Z0-9]/gi, '').slice(-5).toUpperCase();
       state.submitted_ref = displayRef;
       clearDraft();
@@ -627,8 +627,8 @@
       }
       if (mode === 'edit' && editId) {
         ManzilApp.api('/listings/' + editId).then(function (r) {
-          if (r.body && r.body.listing) {
-            var l = r.body.listing;
+          if (r && r.ok && r.listing) {
+            var l = r.listing;
             state.property = Object.assign({}, state.property, l);
             state.photos.list = l.photos || []; state.photos.description = l.description || '';
             state.amenities.selected = (l.amenities || []).slice();
