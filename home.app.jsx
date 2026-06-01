@@ -785,7 +785,7 @@ const PROJECTS = [
     ],
     tags: ['Java 21', 'Spring Boot 3', 'Spring Data JPA', 'Spring Security', 'PostgreSQL', 'Flyway', 'JWT', 'OpenAPI / Swagger', 'JUnit 5', 'Testcontainers', 'Docker', 'GitHub Actions'],
     ctas: [
-      { label: 'Open live API (Swagger) ↗', href: 'https://shopfloor-api-lvb0.onrender.com/swagger-ui.html', target: '_blank', primary: true, prominent: true },
+      { label: 'Open live demo ↗', href: 'https://shopfloor-api-lvb0.onrender.com/', target: '_blank', primary: true, prominent: true },
       { label: 'View source on GitHub ↗', href: 'https://github.com/saad-mughal435/shopfloor-api', target: '_blank' },
     ],
     ctaSubtitle: 'Live on a free instance - the first request after idle can take ~50s to wake. Log in with manager / password.',

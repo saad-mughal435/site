@@ -1141,8 +1141,8 @@ const PROJECTS = [{
   bullets: [/*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "OEE engine"), " - unit-tested Availability \xD7 Performance \xD7 Quality, computed end-to-end when a job order closes"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Spring Security (JWT)"), " with operator / QC / manager roles enforced by ", /*#__PURE__*/React.createElement("code", null, "@PreAuthorize"), " method security"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "JPA + PostgreSQL + Flyway"), " (H2 demo profile); Hibernate ", /*#__PURE__*/React.createElement("em", null, "validate"), " keeps schema and entities in lockstep"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Tested + CI"), " - JUnit 5, MockMvc, and a Testcontainers PostgreSQL integration test; GitHub Actions runs ", /*#__PURE__*/React.createElement("code", null, "mvn verify"))],
   tags: ['Java 21', 'Spring Boot 3', 'Spring Data JPA', 'Spring Security', 'PostgreSQL', 'Flyway', 'JWT', 'OpenAPI / Swagger', 'JUnit 5', 'Testcontainers', 'Docker', 'GitHub Actions'],
   ctas: [{
-    label: 'Open live API (Swagger) ↗',
-    href: 'https://shopfloor-api-lvb0.onrender.com/swagger-ui.html',
+    label: 'Open live demo ↗',
+    href: 'https://shopfloor-api-lvb0.onrender.com/',
     target: '_blank',
     primary: true,
     prominent: true

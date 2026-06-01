@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.7.3] - 2026-06-01 - ShopFloor live links point at the new landing page
+
+### Changed
+
+- ShopFloor API now has a **branded landing page** at its root (explains the
+  OEE model, a 3-step try-it, the domain, roles, stack, and a live example,
+  with a button into Swagger). The homepage project card and `/demo` chooser
+  card now link **"Open live demo"** to that landing page instead of dropping
+  straight into raw Swagger.
+
 ## [2.7.2] - 2026-06-01 - ShopFloor API live demo wired in
 
 ### Added
