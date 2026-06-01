@@ -172,7 +172,7 @@ function WordReveal({
     }
   }, w, i < words.length - 1 ? ' ' : '')));
 }
-const MARQUEE_ITEMS = ['Python', 'FastAPI', 'React', 'JavaScript', 'TypeScript', 'MongoDB', 'SQL Server', 'Docker', 'Linux', 'nginx', 'Cloudflare', 'Git', 'GitHub', 'Tailwind CSS', 'REST APIs', 'JWT', 'Pandas', 'NumPy', 'OpenAI API', 'LangChain', 'Sage Evolution', 'OEE', 'MES / ERP', 'Production Automation'];
+const MARQUEE_ITEMS = ['Python', 'Java', 'FastAPI', 'Spring Boot', 'React', 'JavaScript', 'MongoDB', 'PostgreSQL', 'SQL Server', 'Docker', 'Linux', 'nginx', 'Cloudflare', 'Git', 'GitHub', 'Tailwind CSS', 'REST APIs', 'JWT', 'Pandas', 'NumPy', 'OpenAI API', 'LangChain', 'Sage Evolution', 'OEE', 'MES / ERP', 'Production Automation'];
 function MarqueeStrip() {
   return /*#__PURE__*/React.createElement("div", {
     className: "marquee",
@@ -413,7 +413,7 @@ const HERO_COPY = {
   code: {
     title: ['Software for operations.', 'Automation behind it.'],
     sub: /*#__PURE__*/React.createElement(Fragment, null, "I\u2019m ", /*#__PURE__*/React.createElement("strong", null, "Saad"), " - an ", /*#__PURE__*/React.createElement("strong", null, "Automation & Software Developer"), " focused on ERP systems, dashboards, backend tools, and web applications. I build software that replaces manual work - spreadsheets, paper logs, copy-paste reports, inventory tracking, admin panels, and business workflows - with automation that runs itself."),
-    stack: 'Python · FastAPI · MongoDB · Docker · Linux · React',
+    stack: 'Python · FastAPI · Java · Spring Boot · PostgreSQL · Docker',
     cta: {
       href: 'app/index.html',
       label: 'Launch live app ↗',
@@ -877,16 +877,16 @@ function Stats({
    ========================================================= */
 const STACK_GROUPS = [{
   label: 'Languages',
-  tags: ['Python', 'JavaScript', 'HTML5', 'CSS3', 'SQL', 'Bash', 'C++']
+  tags: ['Python', 'Java', 'JavaScript', 'HTML5', 'CSS3', 'SQL', 'Bash', 'C++']
 }, {
   label: 'Web / Frameworks',
-  tags: ['FastAPI', 'Vanilla JS', 'ES Modules', 'React (learning)', 'JSX', 'Babel', 'Tailwind CSS', 'Responsive Design']
+  tags: ['FastAPI', 'Spring Boot', 'Vanilla JS', 'ES Modules', 'React (learning)', 'JSX', 'Babel', 'Tailwind CSS', 'Responsive Design']
 }, {
   label: 'Backend / APIs',
-  tags: ['REST APIs', 'JSON', 'JWT auth', 'Pydantic', 'Uvicorn', 'Motor', 'pymongo', 'pyodbc', 'asyncio', 'httpx']
+  tags: ['REST APIs', 'JSON', 'JWT auth', 'Spring Data JPA', 'Hibernate', 'OpenAPI / Swagger', 'Pydantic', 'Uvicorn', 'Motor', 'pymongo', 'pyodbc', 'asyncio', 'httpx']
 }, {
   label: 'Databases',
-  tags: ['MongoDB', 'SQL Server', 'SQLite', 'Mongo aggregation', 'indexes', 'transactions']
+  tags: ['MongoDB', 'PostgreSQL', 'SQL Server', 'SQLite', 'Flyway', 'Mongo aggregation', 'indexes', 'transactions']
 }, {
   label: 'Data / Automation',
   tags: ['Pandas', 'NumPy', 'OpenPyXL', 'Matplotlib', 'Excel automation', 'PDF generation', 'fpdf', 'pdfplumber', 'pypdf']
@@ -895,7 +895,7 @@ const STACK_GROUPS = [{
   tags: ['Docker', 'Docker Compose', 'Linux', 'Ubuntu', 'nginx', 'systemd', 'Cron', 'SSH', 'Cloudflare', 'Cloudflare Pages', 'Workers', 'Let\'s Encrypt']
 }, {
   label: 'Tooling',
-  tags: ['Git', 'GitHub', 'GitHub Actions', 'VS Code', 'curl', 'jq', 'Postman']
+  tags: ['Git', 'GitHub', 'GitHub Actions', 'Maven', 'JUnit 5', 'Testcontainers', 'VS Code', 'curl', 'jq', 'Postman']
 }, {
   label: 'AI / ML',
   tags: ['OpenAI API', 'LangChain', 'scikit-learn · model training (Omdena internship)']
@@ -958,7 +958,7 @@ const FAQ_ITEMS = [{
   a: /*#__PURE__*/React.createElement(Fragment, null, "Automation, ERP / MES, manufacturing systems, backend engineering, IT operations, NOC engineering, industrial maintenance, and Python-heavy technical roles. Currently UAE-based; open to relocate worldwide. Open to on-site, hybrid, or fully remote.")
 }, {
   q: 'What is Saad\'s tech stack?',
-  a: /*#__PURE__*/React.createElement(Fragment, null, "Python, FastAPI, MongoDB, React, JavaScript, Docker, Linux, nginx, Cloudflare, Git, REST APIs, JWT auth, Pandas, OpenPyXL, scikit-learn, Sage Evolution integration. Comfortable with the full lifecycle from data model design through deployment and ops.")
+  a: /*#__PURE__*/React.createElement(Fragment, null, "Python, FastAPI, Java, Spring Boot, MongoDB, PostgreSQL, React, JavaScript, Docker, Linux, nginx, Cloudflare, Git, REST APIs, JWT auth, Pandas, OpenPyXL, scikit-learn, Sage Evolution integration. Comfortable with the full lifecycle from data model design through deployment and ops.")
 }, {
   q: 'Where is Saad based?',
   a: /*#__PURE__*/React.createElement(Fragment, null, "Dubai, United Arab Emirates. Originally from Pakistan; graduated from COMSATS University Islamabad.")
@@ -1128,6 +1128,23 @@ const PROJECTS = [{
     label: 'Static walkthrough',
     href: 'demo.html',
     target: '_blank'
+  }]
+}, {
+  domain: 'all',
+  kind: 'Backend service · Open source · Java / Spring Boot',
+  year: '2026',
+  sectionEyebrow: 'Backend engineering',
+  sectionHeading: 'The same operations domain, in Java & Spring Boot',
+  sectionBlurb: 'A standalone REST backend that re-implements the manufacturing operations model - OEE, job orders, downtime, QC, FIFO inventory - in the enterprise Java stack. Open source, green CI, and runnable with one Docker command.',
+  title: 'ShopFloor API - MES / OEE backend',
+  desc: /*#__PURE__*/React.createElement(Fragment, null, "A production-floor operations REST API in ", /*#__PURE__*/React.createElement("strong", null, "Spring Boot 3 / Java 21"), ": job orders that ", /*#__PURE__*/React.createElement("strong", null, "compute OEE"), " (Availability \xD7 Performance \xD7 Quality) on close, downtime with root-cause logging, QC holds, and ", /*#__PURE__*/React.createElement("strong", null, "FIFO inventory"), " across stock lots. Layered service architecture, role-based JWT security, and a Flyway-managed PostgreSQL schema validated against the JPA entities - with green CI and interactive Swagger docs."),
+  bullets: [/*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "OEE engine"), " - unit-tested Availability \xD7 Performance \xD7 Quality, computed end-to-end when a job order closes"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Spring Security (JWT)"), " with operator / QC / manager roles enforced by ", /*#__PURE__*/React.createElement("code", null, "@PreAuthorize"), " method security"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "JPA + PostgreSQL + Flyway"), " (H2 demo profile); Hibernate ", /*#__PURE__*/React.createElement("em", null, "validate"), " keeps schema and entities in lockstep"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Tested + CI"), " - JUnit 5, MockMvc, and a Testcontainers PostgreSQL integration test; GitHub Actions runs ", /*#__PURE__*/React.createElement("code", null, "mvn verify"))],
+  tags: ['Java 21', 'Spring Boot 3', 'Spring Data JPA', 'Spring Security', 'PostgreSQL', 'Flyway', 'JWT', 'OpenAPI / Swagger', 'JUnit 5', 'Testcontainers', 'Docker', 'GitHub Actions'],
+  ctas: [{
+    label: 'View source on GitHub ↗',
+    href: 'https://github.com/saad-mughal435/shopfloor-api',
+    target: '_blank',
+    primary: true
   }]
 }, {
   domain: 'code',
@@ -1672,7 +1689,7 @@ function Projects({
 const SKILLS = [{
   domain: 'code',
   title: 'Backend & APIs',
-  items: ['Python', 'FastAPI', 'REST APIs', 'JWT Auth', 'Pydantic', 'Motor', 'pyodbc', 'async I/O']
+  items: ['Python', 'FastAPI', 'Java', 'Spring Boot', 'Spring Data JPA', 'REST APIs', 'JWT Auth', 'Pydantic', 'Motor', 'pyodbc', 'async I/O']
 }, {
   domain: 'all',
   title: 'Manufacturing Systems',
@@ -1684,7 +1701,7 @@ const SKILLS = [{
 }, {
   domain: 'code',
   title: 'Data & Reporting',
-  items: ['MongoDB', 'SQL Server', 'Pandas', 'OpenPyXL', 'Excel Automation', 'PDF Generation', 'Report Pipelines']
+  items: ['MongoDB', 'PostgreSQL', 'SQL Server', 'Pandas', 'OpenPyXL', 'Excel Automation', 'PDF Generation', 'Report Pipelines']
 }, {
   domain: 'code',
   title: 'Infrastructure',

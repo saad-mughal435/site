@@ -134,7 +134,7 @@ function WordReveal({ children, className = '', as: Tag = 'span' }) {
 }
 
 const MARQUEE_ITEMS = [
-  'Python', 'FastAPI', 'React', 'JavaScript', 'TypeScript', 'MongoDB', 'SQL Server',
+  'Python', 'Java', 'FastAPI', 'Spring Boot', 'React', 'JavaScript', 'MongoDB', 'PostgreSQL', 'SQL Server',
   'Docker', 'Linux', 'nginx', 'Cloudflare', 'Git', 'GitHub', 'Tailwind CSS',
   'REST APIs', 'JWT', 'Pandas', 'NumPy', 'OpenAI API', 'LangChain', 'Sage Evolution',
   'OEE', 'MES / ERP', 'Production Automation',
@@ -313,7 +313,7 @@ const HERO_COPY = {
       ERP systems, dashboards, backend tools, and web applications. I build software that replaces manual work
       - spreadsheets, paper logs, copy-paste reports, inventory tracking, admin panels, and business
       workflows - with automation that runs itself.</Fragment>,
-    stack: 'Python · FastAPI · MongoDB · Docker · Linux · React',
+    stack: 'Python · FastAPI · Java · Spring Boot · PostgreSQL · Docker',
     cta: { href: 'app/index.html', label: 'Launch live app ↗', target: '_blank' },
   },
 };
@@ -506,13 +506,13 @@ function Stats({ view }) {
    STACK CHIPS - visible tag cloud (helps SEO + signals breadth)
    ========================================================= */
 const STACK_GROUPS = [
-  { label: 'Languages', tags: ['Python', 'JavaScript', 'HTML5', 'CSS3', 'SQL', 'Bash', 'C++'] },
-  { label: 'Web / Frameworks', tags: ['FastAPI', 'Vanilla JS', 'ES Modules', 'React (learning)', 'JSX', 'Babel', 'Tailwind CSS', 'Responsive Design'] },
-  { label: 'Backend / APIs', tags: ['REST APIs', 'JSON', 'JWT auth', 'Pydantic', 'Uvicorn', 'Motor', 'pymongo', 'pyodbc', 'asyncio', 'httpx'] },
-  { label: 'Databases', tags: ['MongoDB', 'SQL Server', 'SQLite', 'Mongo aggregation', 'indexes', 'transactions'] },
+  { label: 'Languages', tags: ['Python', 'Java', 'JavaScript', 'HTML5', 'CSS3', 'SQL', 'Bash', 'C++'] },
+  { label: 'Web / Frameworks', tags: ['FastAPI', 'Spring Boot', 'Vanilla JS', 'ES Modules', 'React (learning)', 'JSX', 'Babel', 'Tailwind CSS', 'Responsive Design'] },
+  { label: 'Backend / APIs', tags: ['REST APIs', 'JSON', 'JWT auth', 'Spring Data JPA', 'Hibernate', 'OpenAPI / Swagger', 'Pydantic', 'Uvicorn', 'Motor', 'pymongo', 'pyodbc', 'asyncio', 'httpx'] },
+  { label: 'Databases', tags: ['MongoDB', 'PostgreSQL', 'SQL Server', 'SQLite', 'Flyway', 'Mongo aggregation', 'indexes', 'transactions'] },
   { label: 'Data / Automation', tags: ['Pandas', 'NumPy', 'OpenPyXL', 'Matplotlib', 'Excel automation', 'PDF generation', 'fpdf', 'pdfplumber', 'pypdf'] },
   { label: 'DevOps / Infra', tags: ['Docker', 'Docker Compose', 'Linux', 'Ubuntu', 'nginx', 'systemd', 'Cron', 'SSH', 'Cloudflare', 'Cloudflare Pages', 'Workers', 'Let\'s Encrypt'] },
-  { label: 'Tooling', tags: ['Git', 'GitHub', 'GitHub Actions', 'VS Code', 'curl', 'jq', 'Postman'] },
+  { label: 'Tooling', tags: ['Git', 'GitHub', 'GitHub Actions', 'Maven', 'JUnit 5', 'Testcontainers', 'VS Code', 'curl', 'jq', 'Postman'] },
   { label: 'AI / ML', tags: ['OpenAI API', 'LangChain', 'scikit-learn · model training (Omdena internship)'] },
   { label: 'Industrial', tags: ['MES', 'ERP', 'Sage Evolution', 'OEE', 'Production Planning', 'PLC concepts', 'Krones', 'GPON', 'PSTN'] },
 ];
@@ -560,7 +560,7 @@ const FAQ_ITEMS = [
   },
   {
     q: 'What is Saad\'s tech stack?',
-    a: <Fragment>Python, FastAPI, MongoDB, React, JavaScript, Docker, Linux, nginx, Cloudflare, Git, REST APIs, JWT auth, Pandas, OpenPyXL, scikit-learn, Sage Evolution integration. Comfortable with the full lifecycle from data model design through deployment and ops.</Fragment>,
+    a: <Fragment>Python, FastAPI, Java, Spring Boot, MongoDB, PostgreSQL, React, JavaScript, Docker, Linux, nginx, Cloudflare, Git, REST APIs, JWT auth, Pandas, OpenPyXL, scikit-learn, Sage Evolution integration. Comfortable with the full lifecycle from data model design through deployment and ops.</Fragment>,
   },
   {
     q: 'Where is Saad based?',
@@ -764,6 +764,28 @@ const PROJECTS = [
     ctas: [
       { label: 'Launch live interactive demo ↗', href: 'app/index.html', target: '_blank', primary: true, prominent: true },
       { label: 'Static walkthrough', href: 'demo.html', target: '_blank' },
+    ],
+  },
+  {
+    domain: 'all', kind: 'Backend service · Open source · Java / Spring Boot', year: '2026',
+    sectionEyebrow: 'Backend engineering',
+    sectionHeading: 'The same operations domain, in Java & Spring Boot',
+    sectionBlurb: 'A standalone REST backend that re-implements the manufacturing operations model - OEE, job orders, downtime, QC, FIFO inventory - in the enterprise Java stack. Open source, green CI, and runnable with one Docker command.',
+    title: 'ShopFloor API - MES / OEE backend',
+    desc: <Fragment>A production-floor operations REST API in <strong>Spring Boot 3 / Java 21</strong>: job orders
+      that <strong>compute OEE</strong> (Availability × Performance × Quality) on close, downtime with
+      root-cause logging, QC holds, and <strong>FIFO inventory</strong> across stock lots. Layered service
+      architecture, role-based JWT security, and a Flyway-managed PostgreSQL schema validated against the JPA
+      entities - with green CI and interactive Swagger docs.</Fragment>,
+    bullets: [
+      <Fragment><strong>OEE engine</strong> - unit-tested Availability × Performance × Quality, computed end-to-end when a job order closes</Fragment>,
+      <Fragment><strong>Spring Security (JWT)</strong> with operator / QC / manager roles enforced by <code>@PreAuthorize</code> method security</Fragment>,
+      <Fragment><strong>JPA + PostgreSQL + Flyway</strong> (H2 demo profile); Hibernate <em>validate</em> keeps schema and entities in lockstep</Fragment>,
+      <Fragment><strong>Tested + CI</strong> - JUnit 5, MockMvc, and a Testcontainers PostgreSQL integration test; GitHub Actions runs <code>mvn verify</code></Fragment>,
+    ],
+    tags: ['Java 21', 'Spring Boot 3', 'Spring Data JPA', 'Spring Security', 'PostgreSQL', 'Flyway', 'JWT', 'OpenAPI / Swagger', 'JUnit 5', 'Testcontainers', 'Docker', 'GitHub Actions'],
+    ctas: [
+      { label: 'View source on GitHub ↗', href: 'https://github.com/saad-mughal435/shopfloor-api', target: '_blank', primary: true },
     ],
   },
   {
@@ -1154,13 +1176,13 @@ function Projects({ view }) {
 // areas the section title implies. Lets the viewer scan instead of judge.
 const SKILLS = [
   { domain: 'code', title: 'Backend & APIs', items:
-    ['Python', 'FastAPI', 'REST APIs', 'JWT Auth', 'Pydantic', 'Motor', 'pyodbc', 'async I/O'] },
+    ['Python', 'FastAPI', 'Java', 'Spring Boot', 'Spring Data JPA', 'REST APIs', 'JWT Auth', 'Pydantic', 'Motor', 'pyodbc', 'async I/O'] },
   { domain: 'all', title: 'Manufacturing Systems', items:
     ['MES', 'ERP', 'OEE', 'PPC', 'QC Workflows', 'Batch Tracking', 'Inventory / FIFO', 'Sage Evolution'] },
   { domain: 'code', title: 'Frontend & UI', items:
     ['JavaScript ES6+', 'HTML5 / CSS3', 'Admin Dashboards', 'Multi-step Forms', 'Role-based UI', 'Responsive Design', 'SPA hash routing', 'Mock-driven prototyping'] },
   { domain: 'code', title: 'Data & Reporting', items:
-    ['MongoDB', 'SQL Server', 'Pandas', 'OpenPyXL', 'Excel Automation', 'PDF Generation', 'Report Pipelines'] },
+    ['MongoDB', 'PostgreSQL', 'SQL Server', 'Pandas', 'OpenPyXL', 'Excel Automation', 'PDF Generation', 'Report Pipelines'] },
   { domain: 'code', title: 'Infrastructure', items:
     ['Docker', 'Docker Compose', 'Linux', 'nginx', 'Cloudflare', 'SSH / Cron', 'Git / GitHub', "Let's Encrypt"] },
   { domain: 'eng', title: 'Industrial Operations', items:

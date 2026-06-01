@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.7.0] - 2026-06-01 - ShopFloor API: a Java / Spring Boot backend, wired across the portfolio
+
+### Added
+
+- **New project — [ShopFloor API](https://github.com/saad-mughal435/shopfloor-api)**: a
+  manufacturing-operations (MES/OEE) REST backend in **Spring Boot 3 / Java 21**.
+  Job orders that compute OEE on close, downtime + root-cause logging, QC holds,
+  and FIFO inventory; layered services, role-based JWT security, JPA +
+  PostgreSQL + Flyway (H2 demo profile), OpenAPI/Swagger, Docker, and a green
+  GitHub Actions CI (JUnit 5, MockMvc, Testcontainers PostgreSQL). Open source.
+- Featured it on the homepage as its own "Backend engineering" project card
+  (links to the repo), and threaded **Java / Spring Boot / Spring Data JPA /
+  PostgreSQL / Flyway / Maven / JUnit / Testcontainers / OpenAPI** through the
+  hero stack, tech-stack chips, skills, marquee, FAQ, the JSON-LD `knowsAbout`,
+  the no-JS fallback, and `package.json` keywords — so the portfolio now reads
+  as a Java + Spring shop alongside the Python/JS work.
+
+### Changed
+
+- Homepage React bundle rebuilt (`home.app.js`) and its cache-buster bumped.
+
 ## [2.6.4] - 2026-06-01 - Fix: deploys were failing (invalid _redirects)
 
 ### Fixed

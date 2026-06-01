@@ -33,10 +33,11 @@ contact form, shared design tokens at `/tokens.css`.
 
 | Page | What it does |
 |------|--------------|
-| [`/`](https://saadm.dev/) | Home. React 18 SPA (no build step) with animated hero, view-toggle (All / Coding / Engineering), tech-stack chips, timeline, projects, skills, FAQ. |
+| [`/`](https://saadm.dev/) | Home. React 18 SPA (no build step) with animated hero, view-toggle (Coding / Engineering), tech-stack chips, timeline, projects, skills, FAQ. |
 | [`/contact.html`](https://saadm.dev/contact.html) | Contact form, posts to [Formsubmit.co](https://formsubmit.co) → email inbox. |
 | [`/demo.html`](https://saadm.dev/demo.html) | Static screenshot-style walkthrough of the MES/ERP project (fabricated data). |
 | [`/app/`](https://saadm.dev/app/) | Disconnected live demo: the real frontend running entirely in the browser with a fetch interceptor. Auto-logs in as admin. |
+| [`shopfloor-api`](https://github.com/saad-mughal435/shopfloor-api) · GitHub | **ShopFloor API** - manufacturing operations (MES/OEE) REST backend in **Spring Boot 3 / Java 21**. Job orders that compute OEE on close, downtime + root-cause logging, QC holds, FIFO inventory; layered services, role-based JWT security, JPA + PostgreSQL + Flyway (H2 demo profile), OpenAPI/Swagger, Docker, and green GitHub Actions CI (JUnit 5, MockMvc, Testcontainers PostgreSQL). Open source. |
 | [`/b2c/`](https://saadm.dev/b2c/) | **Pebble & Co.** - full DTC storefront demo. Storefront, catalog, product detail, cart, multi-step checkout, customer account, Shopify-style admin panel. Mock API runs in-browser. |
 | [`/b2b/`](https://saadm.dev/b2b/) | **Anvil Supply Co.** - full B2B wholesale portal demo. Tier pricing, MOQ, contract discounts, quote workflow, approval workflow for orders over $1,000, admin with order/quote/approval queues. |
 | [`/property/`](https://saadm.dev/property/) | **Manzil Properties** - Dubai real-estate marketplace demo. 65+ listings across 15 communities, map + list search (Leaflet/OpenStreetMap), agent and agency profiles, area guides, mortgage calculator with amortisation, 15-section admin SPA (listings, inquiries pipeline, viewings calendar, agents, agencies, customers, analytics, promotions, content CMS, moderation, owner approvals, listing approvals, settings, audit). EN/AR locale and AED/USD/GBP/EUR currency switcher. |

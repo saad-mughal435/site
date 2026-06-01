@@ -70,12 +70,13 @@
   },
   "knowsAbout": [
     "Software Development", "Full-Stack Development", "Backend Development", "Frontend Development",
-    "Python", "JavaScript", "React", "HTML5", "CSS3", "Tailwind CSS",
-    "FastAPI", "REST APIs", "JSON", "JWT Authentication",
-    "MongoDB", "SQL Server", "SQLite", "Motor", "pymongo", "pyodbc",
+    "Python", "Java", "JavaScript", "React", "HTML5", "CSS3", "Tailwind CSS",
+    "Spring Boot", "Spring Data JPA", "Hibernate", "Spring Security",
+    "FastAPI", "REST APIs", "JSON", "JWT Authentication", "OpenAPI", "Swagger",
+    "MongoDB", "PostgreSQL", "SQL Server", "SQLite", "Flyway", "Motor", "pymongo", "pyodbc",
     "Pandas", "NumPy", "scikit-learn", "Matplotlib", "OpenPyXL",
     "Docker", "Docker Compose", "Linux", "nginx", "Cloudflare", "Let's Encrypt",
-    "Git", "GitHub", "Bash", "SSH", "Cron",
+    "Git", "GitHub", "Maven", "JUnit", "Testcontainers", "Bash", "SSH", "Cron",
     "PDF Generation", "fpdf", "pdfplumber", "pypdf",
     "OpenAI API", "LangChain", "Machine Learning",
     "ERP Systems", "MES Systems", "Manufacturing Execution Systems",
@@ -107,7 +108,7 @@
     { "@type": "Question", "name": "Is Saad available for hire?",
       "acceptedAnswer": { "@type": "Answer", "text": "Yes - open to backend, full-stack, automation, NOC engineering, IT infrastructure, and MES/ERP roles. On-site in the UAE, hybrid, or fully remote. Available immediately. Reach out via saad@saadm.dev." } },
     { "@type": "Question", "name": "What is Saad's tech stack?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Python, FastAPI, MongoDB, React, JavaScript, Docker, Linux, nginx, Cloudflare, Git, REST APIs, JWT auth, Pandas, OpenPyXL, scikit-learn, Sage Evolution integration." } },
+      "acceptedAnswer": { "@type": "Answer", "text": "Python, FastAPI, Java, Spring Boot, MongoDB, PostgreSQL, React, JavaScript, Docker, Linux, nginx, Cloudflare, Git, REST APIs, JWT auth, Pandas, OpenPyXL, scikit-learn, Sage Evolution integration." } },
     { "@type": "Question", "name": "Where is Saad based?",
       "acceptedAnswer": { "@type": "Answer", "text": "Dubai, United Arab Emirates. Originally from Pakistan; graduated from COMSATS University Islamabad." } }
   ]
@@ -160,6 +161,7 @@
 
     <h3 style="color:#edf1f8; margin:18px 0 8px; font-size:16px;">Other software demos</h3>
     <ul style="padding-left:18px; margin:0 0 18px;">
+      <li><strong>ShopFloor API</strong> - MES/OEE backend in Java / Spring Boot 3 (open source, CI-tested). Job orders that compute OEE on close, downtime + root-cause logging, QC holds, FIFO inventory; JWT role-based auth, PostgreSQL + Flyway, OpenAPI/Swagger, Docker. <a href="https://github.com/saad-mughal435/shopfloor-api" style="color:#6e8eff;">GitHub →</a></li>
       <li><strong>Anvil Supply Co.</strong> - B2B wholesale portal demo. Tier pricing, MOQ, contract discounts, quote workflow, approval workflow for orders over $1,000, admin with order/quote/approval queues. <a href="b2b/index.html" style="color:#6e8eff;">Open →</a></li>
       <li><strong>Manzil Properties</strong> - Dubai real-estate marketplace demo. Map + list search, agent profiles, mortgage / valuation / yield calculators, 15-section admin SPA. <a href="property/index.html" style="color:#6e8eff;">Open →</a></li>
       <li><strong>Vacation Homes</strong> - UAE short-stay booking demo. Hand-rolled date-range picker, conflict-checked bookings, 6-step host onboarding wizard with document upload, admin verification queue. <a href="vacation/index.html" style="color:#6e8eff;">Open →</a></li>
@@ -173,7 +175,7 @@
     </ul>
 
     <h3 style="color:#edf1f8; margin:18px 0 8px; font-size:16px;">Stack</h3>
-    <p style="color:#b5bdcc; margin:0 0 6px;"><strong>Backend</strong> · Python · FastAPI · MongoDB · SQL Server · pyodbc · REST APIs · JWT</p>
+    <p style="color:#b5bdcc; margin:0 0 6px;"><strong>Backend</strong> · Python · FastAPI · Java · Spring Boot · MongoDB · PostgreSQL · SQL Server · REST APIs · JWT</p>
     <p style="color:#b5bdcc; margin:0 0 6px;"><strong>Frontend</strong> · React · JavaScript (ES6+) · HTML5 · CSS3 · CSS Grid · Design systems</p>
     <p style="color:#b5bdcc; margin:0 0 6px;"><strong>Manufacturing / ERP</strong> · Sage Evolution · OEE · QC seam-check · Batch tracking · Inventory / FIFO · Production planning</p>
     <p style="color:#b5bdcc; margin:0 0 6px;"><strong>Reporting</strong> · pandas · openpyxl · fpdf · pdfplumber · Excel automation · Print-ready PDFs</p>
@@ -204,7 +206,7 @@
 <script defer crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
 <script defer crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
 
-<script src="home.app.js?v=20260601b" defer></script>
+<script src="home.app.js?v=20260601c" defer></script>
 
 <!-- ================= ASK SAAD CHATBOT =================
      Floating bubble + chat window. Mounts itself into the DOM via
