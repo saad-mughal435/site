@@ -1131,21 +1131,27 @@ const PROJECTS = [{
   }]
 }, {
   domain: 'all',
-  kind: 'Backend service · Open source · Java / Spring Boot',
+  kind: 'Backend service · Live API · Open source · Java / Spring Boot',
   year: '2026',
   sectionEyebrow: 'Backend engineering',
   sectionHeading: 'The same operations domain, in Java & Spring Boot',
-  sectionBlurb: 'A standalone REST backend that re-implements the manufacturing operations model - OEE, job orders, downtime, QC, FIFO inventory - in the enterprise Java stack. Open source, green CI, and runnable with one Docker command.',
+  sectionBlurb: 'A standalone REST backend that re-implements the manufacturing operations model - OEE, job orders, downtime, QC, FIFO inventory - in the enterprise Java stack. Open source, green CI, and deployed live with interactive Swagger docs you can click through.',
   title: 'ShopFloor API - MES / OEE backend',
   desc: /*#__PURE__*/React.createElement(Fragment, null, "A production-floor operations REST API in ", /*#__PURE__*/React.createElement("strong", null, "Spring Boot 3 / Java 21"), ": job orders that ", /*#__PURE__*/React.createElement("strong", null, "compute OEE"), " (Availability \xD7 Performance \xD7 Quality) on close, downtime with root-cause logging, QC holds, and ", /*#__PURE__*/React.createElement("strong", null, "FIFO inventory"), " across stock lots. Layered service architecture, role-based JWT security, and a Flyway-managed PostgreSQL schema validated against the JPA entities - with green CI and interactive Swagger docs."),
   bullets: [/*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "OEE engine"), " - unit-tested Availability \xD7 Performance \xD7 Quality, computed end-to-end when a job order closes"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Spring Security (JWT)"), " with operator / QC / manager roles enforced by ", /*#__PURE__*/React.createElement("code", null, "@PreAuthorize"), " method security"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "JPA + PostgreSQL + Flyway"), " (H2 demo profile); Hibernate ", /*#__PURE__*/React.createElement("em", null, "validate"), " keeps schema and entities in lockstep"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Tested + CI"), " - JUnit 5, MockMvc, and a Testcontainers PostgreSQL integration test; GitHub Actions runs ", /*#__PURE__*/React.createElement("code", null, "mvn verify"))],
   tags: ['Java 21', 'Spring Boot 3', 'Spring Data JPA', 'Spring Security', 'PostgreSQL', 'Flyway', 'JWT', 'OpenAPI / Swagger', 'JUnit 5', 'Testcontainers', 'Docker', 'GitHub Actions'],
   ctas: [{
+    label: 'Open live API (Swagger) ↗',
+    href: 'https://shopfloor-api-lvb0.onrender.com/swagger-ui.html',
+    target: '_blank',
+    primary: true,
+    prominent: true
+  }, {
     label: 'View source on GitHub ↗',
     href: 'https://github.com/saad-mughal435/shopfloor-api',
-    target: '_blank',
-    primary: true
-  }]
+    target: '_blank'
+  }],
+  ctaSubtitle: 'Live on a free instance - the first request after idle can take ~50s to wake. Log in with manager / password.'
 }, {
   domain: 'code',
   kind: 'Disconnected demo · Portfolio piece',

@@ -767,10 +767,10 @@ const PROJECTS = [
     ],
   },
   {
-    domain: 'all', kind: 'Backend service · Open source · Java / Spring Boot', year: '2026',
+    domain: 'all', kind: 'Backend service · Live API · Open source · Java / Spring Boot', year: '2026',
     sectionEyebrow: 'Backend engineering',
     sectionHeading: 'The same operations domain, in Java & Spring Boot',
-    sectionBlurb: 'A standalone REST backend that re-implements the manufacturing operations model - OEE, job orders, downtime, QC, FIFO inventory - in the enterprise Java stack. Open source, green CI, and runnable with one Docker command.',
+    sectionBlurb: 'A standalone REST backend that re-implements the manufacturing operations model - OEE, job orders, downtime, QC, FIFO inventory - in the enterprise Java stack. Open source, green CI, and deployed live with interactive Swagger docs you can click through.',
     title: 'ShopFloor API - MES / OEE backend',
     desc: <Fragment>A production-floor operations REST API in <strong>Spring Boot 3 / Java 21</strong>: job orders
       that <strong>compute OEE</strong> (Availability × Performance × Quality) on close, downtime with
@@ -785,8 +785,10 @@ const PROJECTS = [
     ],
     tags: ['Java 21', 'Spring Boot 3', 'Spring Data JPA', 'Spring Security', 'PostgreSQL', 'Flyway', 'JWT', 'OpenAPI / Swagger', 'JUnit 5', 'Testcontainers', 'Docker', 'GitHub Actions'],
     ctas: [
-      { label: 'View source on GitHub ↗', href: 'https://github.com/saad-mughal435/shopfloor-api', target: '_blank', primary: true },
+      { label: 'Open live API (Swagger) ↗', href: 'https://shopfloor-api-lvb0.onrender.com/swagger-ui.html', target: '_blank', primary: true, prominent: true },
+      { label: 'View source on GitHub ↗', href: 'https://github.com/saad-mughal435/shopfloor-api', target: '_blank' },
     ],
+    ctaSubtitle: 'Live on a free instance - the first request after idle can take ~50s to wake. Log in with manager / password.',
   },
   {
     domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',

@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.7.2] - 2026-06-01 - ShopFloor API live demo wired in
+
+### Added
+
+- ShopFloor API is now **deployed live** (Render, free tier) at a public
+  Swagger UI. Both the homepage project card and the `/demo` chooser card now
+  link **"Open live API (Swagger) ↗"** (with the GitHub source as a secondary
+  link on the homepage card), so recruiters can log in (`manager` / `password`)
+  and exercise the real endpoints, not just read the code.
+
 ## [2.7.1] - 2026-06-01 - ShopFloor in the /demo chooser
 
 ### Added
