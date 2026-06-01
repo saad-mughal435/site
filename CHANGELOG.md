@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.7.1] - 2026-06-01 - ShopFloor in the /demo chooser
+
+### Added
+
+- Added a **ShopFloor API (Java / Spring Boot)** card to the demo chooser on
+  `demo.html`, placed right after the ERP system so the two MES/OEE pieces -
+  the production Python system and the open-source Java rebuild - sit together.
+
 ## [2.7.0] - 2026-06-01 - ShopFloor API: a Java / Spring Boot backend, wired across the portfolio
 
 ### Added
