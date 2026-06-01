@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.6.2] - 2026-06-01 - Homepage view toggle simplified
+
+### Changed
+
+- The hero "Tailored for" toggle now offers two views - **Coding** (default)
+  and **Engineering** - instead of All / Coding / Engineering, so the homepage
+  opens on the software-focused view. A previously-stored "All" preference
+  falls back to Coding.
+
 ## [2.6.1] - 2026-06-01 - Drop in-browser Babel (precompiled homepage)
 
 ### Changed - performance

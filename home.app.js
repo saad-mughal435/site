@@ -337,9 +337,6 @@ function Nav() {
    VIEW TOGGLE
    ========================================================= */
 const VIEWS = [{
-  key: 'all',
-  label: 'All'
-}, {
   key: 'code',
   label: 'Coding'
 }, {
@@ -1815,10 +1812,11 @@ function App() {
   const [view, setView] = useState(() => {
     try {
       const q = new URLSearchParams(window.location.search).get('view');
-      if (q === 'eng' || q === 'code' || q === 'all') return q;
-      return localStorage.getItem('portfolio_view') || 'all';
+      if (q === 'eng' || q === 'code') return q;
+      const stored = localStorage.getItem('portfolio_view');
+      return stored === 'eng' || stored === 'code' ? stored : 'code';
     } catch (_) {
-      return 'all';
+      return 'code';
     }
   });
   useEffect(() => {

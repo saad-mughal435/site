@@ -254,7 +254,6 @@ function Nav() {
    VIEW TOGGLE
    ========================================================= */
 const VIEWS = [
-  { key: 'all',  label: 'All' },
   { key: 'code', label: 'Coding' },
   { key: 'eng',  label: 'Engineering' },
 ];
@@ -1253,9 +1252,10 @@ function App() {
   const [view, setView] = useState(() => {
     try {
       const q = new URLSearchParams(window.location.search).get('view');
-      if (q === 'eng' || q === 'code' || q === 'all') return q;
-      return localStorage.getItem('portfolio_view') || 'all';
-    } catch (_) { return 'all'; }
+      if (q === 'eng' || q === 'code') return q;
+      const stored = localStorage.getItem('portfolio_view');
+      return stored === 'eng' || stored === 'code' ? stored : 'code';
+    } catch (_) { return 'code'; }
   });
   useEffect(() => {
     try { localStorage.setItem('portfolio_view', view); } catch (_) {}
