@@ -12,6 +12,12 @@ const { useState, useEffect, useRef, useMemo, useCallback, Fragment } = React;
 const { createRoot } = ReactDOM;
 
 /* =========================================================
+   SINGLE-SOURCE FACTS  -  defined once, referenced everywhere
+   ========================================================= */
+const KINGSLEY = { departments: 5, reportingSpeedup: 60 };
+const AVAILABILITY = 'UAE-based, open to relocate worldwide, and happy with on-site, hybrid, or remote work';
+
+/* =========================================================
    HOOKS
    ========================================================= */
 function useInView(ref, opts = {}) {
@@ -26,24 +32,6 @@ function useInView(ref, opts = {}) {
     return () => io.disconnect();
   }, []);
   return inView;
-}
-
-function useCountUp(target, inView, duration = 1400) {
-  const [val, setVal] = useState(0);
-  useEffect(() => {
-    if (!inView) return;
-    let frame;
-    const start = performance.now();
-    const tick = (now) => {
-      const t = Math.min(1, (now - start) / duration);
-      const eased = 1 - Math.pow(1 - t, 3);
-      setVal(target * eased);
-      if (t < 1) frame = requestAnimationFrame(tick);
-    };
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, [inView, target, duration]);
-  return val;
 }
 
 function useScrollPos() {
@@ -94,28 +82,6 @@ function ScrollProgress() {
   return <div className="scroll-progress" style={{ transform: `scaleX(${p / 100})` }} />;
 }
 
-function CursorSpotlight() {
-  const ref = useRef(null);
-  useEffect(() => {
-    if (matchMedia('(hover: none)').matches) return;
-    let frame;
-    const onMove = (e) => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => {
-        if (ref.current) {
-          ref.current.style.transform = `translate(${e.clientX - 200}px, ${e.clientY - 200}px)`;
-          ref.current.style.opacity = 1;
-        }
-      });
-    };
-    const onLeave = () => { if (ref.current) ref.current.style.opacity = 0; };
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('mouseout', onLeave);
-    return () => { window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseout', onLeave); cancelAnimationFrame(frame); };
-  }, []);
-  return <div ref={ref} className="cursor-spotlight" aria-hidden="true" />;
-}
-
 function WordReveal({ children, className = '', as: Tag = 'span' }) {
   const ref = useRef(null);
   const inView = useInView(ref, { threshold: 0.2 });
@@ -133,70 +99,15 @@ function WordReveal({ children, className = '', as: Tag = 'span' }) {
   );
 }
 
-const MARQUEE_ITEMS = [
-  'Python', 'Java', 'FastAPI', 'Spring Boot', 'React', 'JavaScript', 'MongoDB', 'PostgreSQL', 'SQL Server',
-  'Docker', 'Linux', 'nginx', 'Cloudflare', 'Git', 'GitHub', 'Tailwind CSS',
-  'REST APIs', 'JWT', 'Pandas', 'NumPy', 'OpenAI API', 'LangChain', 'Sage Evolution',
-  'OEE', 'MES / ERP', 'Production Automation',
-];
-
-function MarqueeStrip() {
-  return (
-    <div className="marquee" aria-hidden="true">
-      <div className="marquee-track">
-        {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map((item, i) => (
-          <span className="marquee-item" key={i}>
-            <span className="marquee-dot" />{item}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function TiltCard({ children, intensity = 6, className = '', tag: Tag = 'div', ...rest }) {
-  const ref = useRef(null);
-  const onMove = (e) => {
-    if (!ref.current) return;
-    if (matchMedia('(hover: none)').matches) return;
-    const r = ref.current.getBoundingClientRect();
-    const x = ((e.clientX - r.left) / r.width - 0.5) * intensity;
-    const y = ((e.clientY - r.top) / r.height - 0.5) * intensity;
-    ref.current.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
-    ref.current.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
-    ref.current.style.transform = `perspective(1200px) rotateY(${-x.toFixed(2)}deg) rotateX(${y.toFixed(2)}deg) translateY(-3px)`;
-  };
-  const reset = () => { if (ref.current) ref.current.style.transform = ''; };
-  return (
-    <Tag ref={ref} onMouseMove={onMove} onMouseLeave={reset} className={className} {...rest}>
-      {children}
-    </Tag>
-  );
+// Static card + button wrappers. Kept as thin components so call sites stay
+// unchanged; the 3D-tilt and magnetic-follow effects were removed for a calmer,
+// more professional feel. `intensity` is accepted and ignored.
+function TiltCard({ children, intensity, className = '', tag: Tag = 'div', ...rest }) {
+  return <Tag className={className} {...rest}>{children}</Tag>;
 }
 
 function MagneticBtn({ as: Tag = 'a', children, className = 'btn btn-primary', ...rest }) {
-  const ref = useRef(null);
-  const [t, setT] = useState({ x: 0, y: 0 });
-  const onMove = (e) => {
-    if (!ref.current) return;
-    const r = ref.current.getBoundingClientRect();
-    const x = (e.clientX - r.left - r.width / 2) * 0.25;
-    const y = (e.clientY - r.top - r.height / 2) * 0.25;
-    setT({ x, y });
-  };
-  const reset = () => setT({ x: 0, y: 0 });
-  return (
-    <Tag
-      ref={ref}
-      onMouseMove={onMove}
-      onMouseLeave={reset}
-      className={className}
-      style={{ transform: `translate(${t.x}px, ${t.y}px)` }}
-      {...rest}
-    >
-      {children}
-    </Tag>
-  );
+  return <Tag className={className} {...rest}>{children}</Tag>;
 }
 
 /* =========================================================
@@ -393,22 +304,9 @@ const CODE_SNIPPETS = {
 };
 
 function CodeWindow({ view }) {
-  const ref = useRef(null);
-  const onMove = (e) => {
-    if (!ref.current) return;
-    const r = ref.current.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width - 0.5;
-    const y = (e.clientY - r.top) / r.height - 0.5;
-    ref.current.style.transform = `perspective(1400px) rotateY(${(-x * 8).toFixed(2)}deg) rotateX(${(y * 6).toFixed(2)}deg)`;
-  };
-  const reset = () => {
-    if (ref.current) ref.current.style.transform = 'perspective(1400px) rotateY(-3deg) rotateX(2deg)';
-  };
-  useEffect(() => { reset(); }, [view]);
   const snippet = CODE_SNIPPETS[view] || CODE_SNIPPETS.all;
   return (
-    <div className="code-window view-fade" key={view} ref={ref}
-         onMouseMove={onMove} onMouseLeave={reset}
+    <div className="code-window view-fade" key={view}
          style={{ transform: 'perspective(1400px) rotateY(-3deg) rotateX(2deg)' }}>
       <div className="code-window-bar">
         <span className="dot red"></span><span className="dot yellow"></span><span className="dot green"></span>
@@ -443,14 +341,6 @@ function Hero({ view, setView }) {
              href={copy.cta.href}
              {...(copy.cta.target ? { target: copy.cta.target, rel: 'noopener' } : {})}
           >{copy.cta.label}</a>
-          <button
-            type="button"
-            className="ask-cta-pill"
-            title="Open the Ask Saad chatbot — AI grounded in his portfolio"
-            onClick={() => { if (window.AskChat) window.AskChat.open(); }}
-          >
-            <span aria-hidden="true">✦</span> Ask the AI
-          </button>
         </div>
         <div className="hero-meta">
           <div><span className="meta-k">Currently</span><span className="meta-v">Kingsley Beverage FZCO · Dubai</span></div>
@@ -471,22 +361,19 @@ function Hero({ view, setView }) {
    STATS
    ========================================================= */
 const STATS_ALL = [
-  { num: 60,   suffix: '%',    label: 'reduction in production reporting time', domain: 'code' },
-  { num: 5,    suffix: '',     label: 'departments digitised through MES/ERP workflows', domain: 'code' },
+  { num: KINGSLEY.reportingSpeedup, suffix: '%',    label: 'reduction in production reporting time', domain: 'code' },
+  { num: KINGSLEY.departments,      suffix: '',     label: 'departments digitised through MES/ERP workflows', domain: 'code' },
   { num: 2,    suffix: ' yrs', label: 'industrial & telecom-ops experience', domain: 'all' },
   { num: 7,    suffix: '',     label: 'Krones subsystems supported in production', domain: 'eng' },
   { num: 2,    suffix: ' yrs', label: 'GPON / PSTN / broadband NOC operations', domain: 'eng' },
   { num: 6,    suffix: '+ yrs',label: 'writing Python since university - projects, internships, production', domain: 'code' },
 ];
 
-function Stat({ s, view }) {
-  const ref = useRef(null);
-  const inView = useInView(ref);
-  const v = useCountUp(s.num, inView);
+function Stat({ s }) {
   return (
-    <div ref={ref} className="stat">
+    <div className="stat">
       <div className="stat-num">
-        {s.suffix.includes('%') ? '~' : ''}{Math.round(v).toLocaleString()}{s.suffix}
+        {s.suffix.includes('%') ? '~' : ''}{s.num.toLocaleString()}{s.suffix}
       </div>
       <div className="stat-lbl">{s.label}</div>
     </div>
@@ -497,43 +384,7 @@ function Stats({ view }) {
   const list = STATS_ALL.filter((s) => view === 'all' || s.domain === view || s.domain === 'all');
   return (
     <section className="stats container" id="stats">
-      {list.map((s, i) => <Stat key={s.label} s={s} view={view} />)}
-    </section>
-  );
-}
-
-/* =========================================================
-   STACK CHIPS - visible tag cloud (helps SEO + signals breadth)
-   ========================================================= */
-const STACK_GROUPS = [
-  { label: 'Languages', tags: ['Python', 'Java', 'JavaScript', 'HTML5', 'CSS3', 'SQL', 'Bash', 'C++'] },
-  { label: 'Web / Frameworks', tags: ['FastAPI', 'Spring Boot', 'Vanilla JS', 'ES Modules', 'React (learning)', 'JSX', 'Babel', 'Tailwind CSS', 'Responsive Design'] },
-  { label: 'Backend / APIs', tags: ['REST APIs', 'JSON', 'JWT auth', 'Spring Data JPA', 'Hibernate', 'OpenAPI / Swagger', 'Pydantic', 'Uvicorn', 'Motor', 'pymongo', 'pyodbc', 'asyncio', 'httpx'] },
-  { label: 'Databases', tags: ['MongoDB', 'PostgreSQL', 'SQL Server', 'SQLite', 'Flyway', 'Mongo aggregation', 'indexes', 'transactions'] },
-  { label: 'Data / Automation', tags: ['Pandas', 'NumPy', 'OpenPyXL', 'Matplotlib', 'Excel automation', 'PDF generation', 'fpdf', 'pdfplumber', 'pypdf'] },
-  { label: 'DevOps / Infra', tags: ['Docker', 'Docker Compose', 'Linux', 'Ubuntu', 'nginx', 'systemd', 'Cron', 'SSH', 'Cloudflare', 'Cloudflare Pages', 'Workers', 'Let\'s Encrypt'] },
-  { label: 'Tooling', tags: ['Git', 'GitHub', 'GitHub Actions', 'Maven', 'JUnit 5', 'Testcontainers', 'VS Code', 'curl', 'jq', 'Postman'] },
-  { label: 'AI / ML', tags: ['OpenAI API', 'LangChain', 'scikit-learn · model training (Omdena internship)'] },
-  { label: 'Industrial', tags: ['MES', 'ERP', 'Sage Evolution', 'OEE', 'Production Planning', 'PLC concepts', 'Krones', 'GPON', 'PSTN'] },
-];
-
-function StackChips() {
-  return (
-    <section className="container stack-chips-section" id="stack">
-      <Reveal className="section-head" style={{ marginBottom: 24 }}>
-        <span className="section-tag">Tech stack</span>
-        <h2 style={{ fontSize: 'clamp(22px, 3vw, 30px)' }}>Tools I use to build, ship, and run things.</h2>
-      </Reveal>
-      <Reveal className="stack-chips-grid">
-        {STACK_GROUPS.map((g) => (
-          <div className="stack-group" key={g.label}>
-            <div className="stack-group-label">{g.label}</div>
-            <div className="stack-chip-row">
-              {g.tags.map((t) => <span key={t} className="stack-chip">{t}</span>)}
-            </div>
-          </div>
-        ))}
-      </Reveal>
+      {list.map((s) => <Stat key={s.label} s={s} />)}
     </section>
   );
 }
@@ -543,32 +394,20 @@ function StackChips() {
    ========================================================= */
 const FAQ_ITEMS = [
   {
-    q: 'Who is Muhammad Saad?',
-    a: <Fragment>Muhammad Saad (Saad for short) is an <strong>Automation &amp; Software Developer</strong> currently based in the UAE and open to relocate worldwide. He builds ERP systems, dashboards, backend tools, admin panels, and web applications in Python, FastAPI, MongoDB, and JavaScript. Engineering background: B.Sc. Electrical Engineering with a Computer Engineering specialization from COMSATS Islamabad. Currently works as Automation Engineer and ERP Developer at Kingsley Beverage FZCO.</Fragment>,
-  },
-  {
-    q: 'What does Saad work on?',
-    a: <Fragment>The pattern is the same regardless of the project: take something a team is still doing by hand - spreadsheets, paper logs, ticket prep, copy-paste reports, manual reconciliations - and rebuild it as automation that runs itself. Most recently that meant designing and shipping a full-stack MES/ERP from scratch covering production planning, inventory, QC, accounts, and live reporting across 5 departments, plus running the Linux VM, MongoDB, Sage integration, and Cloudflare-fronted nginx behind it.</Fragment>,
-  },
-  {
     q: 'Is Saad available for hire?',
-    a: <Fragment>Yes - open to backend, full-stack, automation, NOC engineering, IT infrastructure, and MES/ERP roles. On-site in the UAE, hybrid, or fully remote. Available immediately. Reach out via the <a href="contact.html">contact form</a>, email <a href="mailto:saad@saadm.dev">saad@saadm.dev</a>, or WhatsApp <a href="https://wa.me/971502578065" target="_blank" rel="noopener">+971 50 257 8065</a>.</Fragment>,
+    a: <Fragment>Yes - open to automation, backend, full-stack, ERP / MES, IT-operations, and NOC roles. {AVAILABILITY}, and available immediately. Reach out via the <a href="contact.html">contact form</a>, email <a href="mailto:saad@saadm.dev">saad@saadm.dev</a>, or WhatsApp <a href="https://wa.me/971502578065" target="_blank" rel="noopener">+971 50 257 8065</a>.</Fragment>,
   },
   {
-    q: 'What type of roles is Saad open to?',
-    a: <Fragment>Automation, ERP / MES, manufacturing systems, backend engineering, IT operations, NOC engineering, industrial maintenance, and Python-heavy technical roles. Currently UAE-based; open to relocate worldwide. Open to on-site, hybrid, or fully remote.</Fragment>,
+    q: 'What does the Kingsley MES / ERP platform do?',
+    a: <Fragment>It replaces spreadsheets and paper across {KINGSLEY.departments} departments - production planning, QC, batch &amp; expiry tracking, inventory with FIFO, dispatch, accounts, and Sage Evolution integration - with OEE monitoring and print-ready PDF reports generated server-side from live data. Saad designed, built, and runs it end-to-end (Python / FastAPI, MongoDB + SQL Server, Docker, nginx), cutting production reporting time by roughly {KINGSLEY.reportingSpeedup}%.</Fragment>,
   },
   {
     q: 'What is Saad\'s tech stack?',
-    a: <Fragment>Python, FastAPI, Java, Spring Boot, MongoDB, PostgreSQL, React, JavaScript, Docker, Linux, nginx, Cloudflare, Git, REST APIs, JWT auth, Pandas, OpenPyXL, scikit-learn, Sage Evolution integration. Comfortable with the full lifecycle from data model design through deployment and ops.</Fragment>,
-  },
-  {
-    q: 'Where is Saad based?',
-    a: <Fragment>Dubai, United Arab Emirates. Originally from Pakistan; graduated from COMSATS University Islamabad.</Fragment>,
+    a: <Fragment>Python, FastAPI, Java, Spring Boot, MongoDB, PostgreSQL, JavaScript, React, Docker, Linux, nginx, Cloudflare, Git, REST APIs, JWT auth, Pandas, and Sage Evolution integration - comfortable across the full lifecycle from data-model design through deployment and ops.</Fragment>,
   },
   {
     q: 'Can I see Saad\'s code?',
-    a: <Fragment>Yes - check the <a href="demo.html" target="_blank" rel="noopener">live MES/ERP demo</a> (interactive, all data fabricated for privacy). Source for some open work is on GitHub at <a href="https://github.com/saad-mughal435" target="_blank" rel="noopener">github.com/saad-mughal435</a>.</Fragment>,
+    a: <Fragment>Yes - try the <a href="demo.html" target="_blank" rel="noopener">interactive MES/ERP demo</a> (all data fabricated for privacy) and the live <a href="https://shopfloor-api-lvb0.onrender.com/" target="_blank" rel="noopener">ShopFloor API</a> in Java / Spring Boot. Open source is on GitHub at <a href="https://github.com/saad-mughal435" target="_blank" rel="noopener">github.com/saad-mughal435</a>.</Fragment>,
   },
 ];
 
@@ -603,29 +442,17 @@ function About() {
       </Reveal>
       <div className="about-grid">
         <Reveal className="about-copy">
-          <p>I&rsquo;m an <strong>Automation &amp; Software Developer</strong> focused on ERP systems, dashboards, admin panels,
-            and web applications. At Kingsley Beverage FZCO in Dubai I work as <strong>Automation Engineer</strong>,
-            <strong>ERP Developer</strong>, and <strong>IT Administrator</strong>, and I&rsquo;m the sole developer of the
-            enterprise software running across the plant.</p>
-          <p>My engineering background (B.Sc. Electrical Engineering / Computer Engineering specialization, COMSATS
-            Islamabad) helps me run and support the Krones beverage production lines, coordinate operators during
-            shifts, and troubleshoot production issues across blow molding, filling, Checkmate inspection, Variopac FS
-            packaging, palletizing, and PET preform handling.</p>
-          <p>The Krones machine automation is OEM-locked; my software work sits around the production workflow through
-            ERP / MES, OEE reporting, QC records, inventory, and management dashboards.</p>
-          <p>Before that I spent two years as a <strong>NOC Engineer at PTCL</strong> running GPON / PSTN /
-            broadband infrastructure, where I shipped a Python tool that auto-generated configuration scripts
-            from tickets, eliminating hours of manual ticket prep every day.</p>
-          <p>The pattern: I look at slow, manual operational work and rebuild it in code. That&rsquo;s what I want to do next
-            - build automation, backend, ERP/MES, or technical operations systems for teams where reliability
-            and real workflows matter.</p>
-          <div className="about-tags">
-            {['Python', 'FastAPI', 'React', 'JavaScript (ES6+)', 'HTML / CSS', 'CSS Grid', 'MongoDB',
-              'Docker', 'Linux', 'nginx', 'Cloudflare', 'Git', 'REST APIs', 'JWT', 'Pandas',
-              'Design Systems', 'MES / ERP', 'Sage', 'PLC concepts', 'Krones', 'RCA', 'GPON / PSTN'].map((t) =>
-              <span className="tag" key={t}>{t}</span>
-            )}
-          </div>
+          <p>I&rsquo;m an <strong>Automation &amp; Software Developer</strong> at Kingsley Beverage FZCO in Dubai, where I&rsquo;m
+            the sole developer of the MES/ERP platform running across the plant - and also work hands-on as
+            <strong> Automation Engineer</strong> and <strong>IT Administrator</strong>. My engineering background
+            (B.Sc. Electrical / Computer Engineering, COMSATS Islamabad) lets me run and support the Krones beverage
+            lines and troubleshoot production issues, then build the software <em>around</em> that workflow - the
+            machine automation is OEM-locked, so my work is the OEE reporting, QC records, inventory, and management
+            dashboards that sit on top of it.</p>
+          <p>Before Kingsley I spent two years as a <strong>NOC Engineer at PTCL</strong> on GPON / PSTN / broadband
+            infrastructure, where I shipped a Python tool that auto-generated configuration scripts from tickets and
+            removed hours of manual prep a day. The throughline: I look at slow, manual operational work and rebuild
+            it in code - which is exactly the automation, backend, and ERP/MES work I want to keep doing.</p>
         </Reveal>
         <Reveal className="aside-card">
           <div className="aside-card-head">// quick facts</div>
@@ -814,11 +641,9 @@ const PROJECTS = [
   {
     domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
     title: 'Manzil Properties - Dubai marketplace',
-    desc: <Fragment>A Dubai real-estate marketplace demo with 65+ listings across Marina, Downtown,
-      Palm Jumeirah, JBR, Business Bay, DIFC, Arabian Ranches and more. Map-and-list search using
-      Leaflet/OpenStreetMap, agent and agency profiles with verified RERA-style permits, mortgage
-      calculator with full amortisation schedule, and a comprehensive 15-section admin panel covering
-      listings CRUD, leads pipeline, viewings calendar, analytics, moderation and audit log.</Fragment>,
+    desc: <Fragment>A Dubai real-estate marketplace demo: 65+ listings, map-and-list search on
+      Leaflet/OpenStreetMap, agent and agency profiles, a mortgage calculator with full amortisation,
+      and a 15-section admin panel - plus a 6-step owner listing wizard feeding a verification queue.</Fragment>,
     bullets: [
       <Fragment>10 customer pages: home, search (list/map), listing detail, agents, agencies, areas, mortgage, compare, account</Fragment>,
       <Fragment>Map view with price-labelled pins, hover sync with list, single-pin detail map</Fragment>,
@@ -836,11 +661,9 @@ const PROJECTS = [
   {
     domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
     title: 'Vacation Homes - UAE short-stay booking',
-    desc: <Fragment>A UAE short-stay booking marketplace demo with 55 vacation homes across 10 destinations
-      (Dubai Marina, Palm Jumeirah, Hatta Mountains, RAK Beach, Fujairah, Liwa Desert and more). Hand-rolled
-      date-range picker, availability calendar with conflict-check, per-night pricing with weekend surcharge
-      and 5% VAT breakdown, and a 13-section admin SPA covering listings, bookings, hosts, guests, reviews,
-      payments, promotions, destinations CMS, host/listing approvals, settings and audit.</Fragment>,
+    desc: <Fragment>A UAE short-stay booking marketplace demo: 55 homes across 10 destinations, a hand-rolled
+      date-range picker and availability calendar with conflict-check, per-night pricing with weekend surcharge
+      and 5% VAT, and a 13-section admin SPA - plus a host listing wizard with a manual approval queue.</Fragment>,
     bullets: [
       <Fragment>Hand-rolled <strong>date-range picker</strong> + availability calendar (no library) with blocked / booked / available states</Fragment>,
       <Fragment><strong>Conflict-check booking flow</strong>: POST /bookings returns 409 if dates were just taken; UI bounces back with a toast</Fragment>,
@@ -1049,33 +872,6 @@ function ProjectCard({ p }) {
   );
 }
 
-/* What this proves - credibility strip between About and Projects. */
-function WhatThisProves() {
-  const items = [
-    { icon: '⚙', title: 'I understand production-line operations', body: 'Machinery, utilities, shift workflows, downtime causes - not only the code that sits above them.' },
-    { icon: '👷', title: 'I design workflows for every role on the plant', body: 'Operators, QC, stores, finance and management each have different friction points and screens.' },
-    { icon: '🔗', title: 'I connect the whole stack', body: 'Frontend screens, backend APIs, MongoDB + SQL Server, Sage/ERP data and print-ready PDF reports - end-to-end in one head.' },
-    { icon: '📊', title: 'I turn paper + Excel into software', body: 'My job is converting messy spreadsheets and paper logs into structured, audit-able, fast operational tools.' },
-  ];
-  return (
-    <section id="proves" className="section container">
-      <Reveal className="section-head">
-        <span className="section-tag">What this proves</span>
-        <h2><WordReveal>I build operations software because I&rsquo;ve worked operations.</WordReveal></h2>
-      </Reveal>
-      <Reveal stagger className="proves-grid">
-        {items.map((it, i) => (
-          <Reveal as="div" key={i} className="proves-card">
-            <div className="proves-icon" aria-hidden="true">{it.icon}</div>
-            <h3>{it.title}</h3>
-            <p>{it.body}</p>
-          </Reveal>
-        ))}
-      </Reveal>
-    </section>
-  );
-}
-
 /* MES thumbnail mockup cards - rendered above the featured MES project card.
    Pure CSS/JSX, no images required. Swap with real Kingsley screenshots
    later by dropping a PNG into site/screenshots/ and replacing one card
@@ -1178,19 +974,19 @@ function Projects({ view }) {
 // areas the section title implies. Lets the viewer scan instead of judge.
 const SKILLS = [
   { domain: 'code', title: 'Backend & APIs', items:
-    ['Python', 'FastAPI', 'Java', 'Spring Boot', 'Spring Data JPA', 'REST APIs', 'JWT Auth', 'Pydantic', 'Motor', 'pyodbc', 'async I/O'] },
+    ['Python', 'FastAPI', 'Java', 'Spring Boot', 'Spring Data JPA', 'REST APIs', 'JWT Auth', 'OpenAPI / Swagger', 'Pydantic', 'async I/O'] },
   { domain: 'all', title: 'Manufacturing Systems', items:
     ['MES', 'ERP', 'OEE', 'PPC', 'QC Workflows', 'Batch Tracking', 'Inventory / FIFO', 'Sage Evolution'] },
   { domain: 'code', title: 'Frontend & UI', items:
-    ['JavaScript ES6+', 'HTML5 / CSS3', 'Admin Dashboards', 'Multi-step Forms', 'Role-based UI', 'Responsive Design', 'SPA hash routing', 'Mock-driven prototyping'] },
+    ['JavaScript ES6+', 'HTML5 / CSS3', 'Admin Dashboards', 'Multi-step Forms', 'Role-based UI', 'Responsive Design', 'SPA hash routing'] },
   { domain: 'code', title: 'Data & Reporting', items:
-    ['MongoDB', 'PostgreSQL', 'SQL Server', 'Pandas', 'OpenPyXL', 'Excel Automation', 'PDF Generation', 'Report Pipelines'] },
-  { domain: 'code', title: 'Infrastructure', items:
-    ['Docker', 'Docker Compose', 'Linux', 'nginx', 'Cloudflare', 'SSH / Cron', 'Git / GitHub', "Let's Encrypt"] },
+    ['MongoDB', 'PostgreSQL', 'SQL Server', 'Flyway', 'Pandas', 'OpenPyXL', 'Excel Automation', 'PDF Generation'] },
+  { domain: 'code', title: 'Infrastructure & CI', items:
+    ['Docker', 'Docker Compose', 'Linux', 'nginx', 'Cloudflare', 'Git / GitHub', 'GitHub Actions', "Let's Encrypt"] },
   { domain: 'eng', title: 'Industrial Operations', items:
     ['Krones Line Operations', 'Operator Coordination', 'Line Troubleshooting', 'RCA', 'SOPs', 'Commissioning Support', 'GPON / PSTN', 'Oracle CRM'] },
   { domain: 'all', title: 'Learning / Expanding', items:
-    ['React', 'Tailwind CSS', 'PLC / Siemens basics', 'scikit-learn', 'GitHub Actions'] },
+    ['React', 'Tailwind CSS', 'PLC / Siemens basics', 'scikit-learn'] },
 ];
 
 function SkillCard({ s }) {
@@ -1243,7 +1039,7 @@ function Contact() {
           <li><span className="contact-k">Email</span><a className="contact-v" href="mailto:saad@saadm.dev">saad@saadm.dev</a></li>
           <li><span className="contact-k">Phone</span><a className="contact-v" href="tel:+971502578065">+971 50 257 8065</a></li>
           <li><span className="contact-k">LinkedIn</span><a className="contact-v" href="https://www.linkedin.com/in/muhammadsaad435/" target="_blank" rel="noopener">/in/muhammadsaad435</a></li>
-          <li><span className="contact-k">Based in</span><span className="contact-v">UAE · Open to relocate worldwide · on-site / hybrid / remote</span></li>
+          <li><span className="contact-k">Based in</span><span className="contact-v">{AVAILABILITY}</span></li>
         </ul>
       </Reveal>
     </section>
@@ -1289,15 +1085,11 @@ function App() {
     <Fragment>
       <a href="#top" className="skip-link">Skip to content</a>
       <ScrollProgress />
-      <CursorSpotlight />
       <Nav />
       <main>
         <Hero view={view} setView={setView} />
         <Stats view={view} />
-        <MarqueeStrip />
-        <StackChips />
         <About />
-        <WhatThisProves />
         <Experience view={view} />
         <Projects view={view} />
         <Skills view={view} />

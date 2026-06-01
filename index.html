@@ -101,16 +101,14 @@
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
-    { "@type": "Question", "name": "Who is Saad M?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Muhammad Saad is an Automation & Software Developer currently based in the UAE and open to relocate worldwide. Engineering background (B.Sc. Electrical Engineering with a Computer Engineering specialization from COMSATS Islamabad). He builds ERP systems, dashboards, backend tools, admin panels, and web applications in Python, FastAPI, MongoDB, and JavaScript, and currently works as Automation Engineer and ERP Developer at Kingsley Beverage FZCO." } },
-    { "@type": "Question", "name": "What does Saad work on?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Saad designed and shipped an enterprise MES/ERP from scratch covering production planning, inventory, QC, accounts, and live production reporting across 5 departments. He also runs the Linux VM, MongoDB instance, Sage integration, and Cloudflare-fronted nginx that serves it." } },
     { "@type": "Question", "name": "Is Saad available for hire?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Yes - open to backend, full-stack, automation, NOC engineering, IT infrastructure, and MES/ERP roles. On-site in the UAE, hybrid, or fully remote. Available immediately. Reach out via saad@saadm.dev." } },
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes - open to automation, backend, full-stack, ERP / MES, IT-operations, and NOC roles. UAE-based, open to relocate worldwide, and happy with on-site, hybrid, or remote work; available immediately. Reach out via saad@saadm.dev or WhatsApp +971 50 257 8065." } },
+    { "@type": "Question", "name": "What does the Kingsley MES / ERP platform do?",
+      "acceptedAnswer": { "@type": "Answer", "text": "It replaces spreadsheets and paper across 5 departments - production planning, QC, batch and expiry tracking, inventory with FIFO, dispatch, accounts, and Sage Evolution integration - with OEE monitoring and print-ready PDF reports generated server-side. Saad designed, built, and runs it end-to-end in Python/FastAPI, MongoDB + SQL Server, Docker and nginx, cutting production reporting time by roughly 60%." } },
     { "@type": "Question", "name": "What is Saad's tech stack?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Python, FastAPI, Java, Spring Boot, MongoDB, PostgreSQL, React, JavaScript, Docker, Linux, nginx, Cloudflare, Git, REST APIs, JWT auth, Pandas, OpenPyXL, scikit-learn, Sage Evolution integration." } },
-    { "@type": "Question", "name": "Where is Saad based?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Dubai, United Arab Emirates. Originally from Pakistan; graduated from COMSATS University Islamabad." } }
+      "acceptedAnswer": { "@type": "Answer", "text": "Python, FastAPI, Java, Spring Boot, MongoDB, PostgreSQL, JavaScript, React, Docker, Linux, nginx, Cloudflare, Git, REST APIs, JWT auth, Pandas, and Sage Evolution integration - comfortable across the full lifecycle from data-model design through deployment and ops." } },
+    { "@type": "Question", "name": "Can I see Saad's code?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes - try the interactive MES/ERP demo at saadm.dev/demo.html (all data fabricated for privacy) and the live ShopFloor API in Java / Spring Boot. Open source is on GitHub at github.com/saad-mughal435." } }
   ]
 }
 </script>
@@ -129,16 +127,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="home.css?v=20260515j" />
-<link rel="stylesheet" href="ask/css/ask.css?v=20260520a" />
+<link rel="stylesheet" href="home.css?v=20260601a" />
 </head>
 <body>
-
-<div class="orbs">
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
-</div>
 
 <div id="root"></div>
 
@@ -206,17 +197,7 @@
 <script defer crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
 <script defer crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
 
-<script src="home.app.js?v=20260601e" defer></script>
-
-<!-- ================= ASK SAAD CHATBOT =================
-     Floating bubble + chat window. Mounts itself into the DOM via
-     chat.js — sits as a sibling of #root so it never collides with the
-     React tree. Demo mode by default; flips to Live · Haiku 4.5 if a
-     Cloudflare Worker at /api/ask/ai/* is configured (see ask/README.md). -->
-<script src="ask/js/app.js?v=20260520a"></script>
-<script src="ask/js/corpus.js?v=20260520a"></script>
-<script src="ask/js/engine.js?v=20260520a"></script>
-<script src="ask/js/chat.js?v=20260520a"></script>
+<script src="home.app.js?v=20260601f" defer></script>
 
 <!-- ================= BACK TO TOP ================= -->
 <button class="back-to-top" id="back-to-top" type="button" aria-label="Scroll back to top" title="Back to top">

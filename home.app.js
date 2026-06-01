@@ -22,6 +22,15 @@ const {
 } = ReactDOM;
 
 /* =========================================================
+   SINGLE-SOURCE FACTS  -  defined once, referenced everywhere
+   ========================================================= */
+const KINGSLEY = {
+  departments: 5,
+  reportingSpeedup: 60
+};
+const AVAILABILITY = 'UAE-based, open to relocate worldwide, and happy with on-site, hybrid, or remote work';
+
+/* =========================================================
    HOOKS
    ========================================================= */
 function useInView(ref, opts = {}) {
@@ -42,23 +51,6 @@ function useInView(ref, opts = {}) {
     return () => io.disconnect();
   }, []);
   return inView;
-}
-function useCountUp(target, inView, duration = 1400) {
-  const [val, setVal] = useState(0);
-  useEffect(() => {
-    if (!inView) return;
-    let frame;
-    const start = performance.now();
-    const tick = now => {
-      const t = Math.min(1, (now - start) / duration);
-      const eased = 1 - Math.pow(1 - t, 3);
-      setVal(target * eased);
-      if (t < 1) frame = requestAnimationFrame(tick);
-    };
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, [inView, target, duration]);
-  return val;
 }
 function useScrollPos() {
   const [scrolled, setScrolled] = useState(false);
@@ -115,37 +107,6 @@ function ScrollProgress() {
     }
   });
 }
-function CursorSpotlight() {
-  const ref = useRef(null);
-  useEffect(() => {
-    if (matchMedia('(hover: none)').matches) return;
-    let frame;
-    const onMove = e => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => {
-        if (ref.current) {
-          ref.current.style.transform = `translate(${e.clientX - 200}px, ${e.clientY - 200}px)`;
-          ref.current.style.opacity = 1;
-        }
-      });
-    };
-    const onLeave = () => {
-      if (ref.current) ref.current.style.opacity = 0;
-    };
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('mouseout', onLeave);
-    return () => {
-      window.removeEventListener('mousemove', onMove);
-      window.removeEventListener('mouseout', onLeave);
-      cancelAnimationFrame(frame);
-    };
-  }, []);
-  return /*#__PURE__*/React.createElement("div", {
-    ref: ref,
-    className: "cursor-spotlight",
-    "aria-hidden": "true"
-  });
-}
 function WordReveal({
   children,
   className = '',
@@ -172,45 +133,18 @@ function WordReveal({
     }
   }, w, i < words.length - 1 ? ' ' : '')));
 }
-const MARQUEE_ITEMS = ['Python', 'Java', 'FastAPI', 'Spring Boot', 'React', 'JavaScript', 'MongoDB', 'PostgreSQL', 'SQL Server', 'Docker', 'Linux', 'nginx', 'Cloudflare', 'Git', 'GitHub', 'Tailwind CSS', 'REST APIs', 'JWT', 'Pandas', 'NumPy', 'OpenAI API', 'LangChain', 'Sage Evolution', 'OEE', 'MES / ERP', 'Production Automation'];
-function MarqueeStrip() {
-  return /*#__PURE__*/React.createElement("div", {
-    className: "marquee",
-    "aria-hidden": "true"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "marquee-track"
-  }, [...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map((item, i) => /*#__PURE__*/React.createElement("span", {
-    className: "marquee-item",
-    key: i
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "marquee-dot"
-  }), item))));
-}
+
+// Static card + button wrappers. Kept as thin components so call sites stay
+// unchanged; the 3D-tilt and magnetic-follow effects were removed for a calmer,
+// more professional feel. `intensity` is accepted and ignored.
 function TiltCard({
   children,
-  intensity = 6,
+  intensity,
   className = '',
   tag: Tag = 'div',
   ...rest
 }) {
-  const ref = useRef(null);
-  const onMove = e => {
-    if (!ref.current) return;
-    if (matchMedia('(hover: none)').matches) return;
-    const r = ref.current.getBoundingClientRect();
-    const x = ((e.clientX - r.left) / r.width - 0.5) * intensity;
-    const y = ((e.clientY - r.top) / r.height - 0.5) * intensity;
-    ref.current.style.setProperty('--mx', (e.clientX - r.left) / r.width * 100 + '%');
-    ref.current.style.setProperty('--my', (e.clientY - r.top) / r.height * 100 + '%');
-    ref.current.style.transform = `perspective(1200px) rotateY(${-x.toFixed(2)}deg) rotateX(${y.toFixed(2)}deg) translateY(-3px)`;
-  };
-  const reset = () => {
-    if (ref.current) ref.current.style.transform = '';
-  };
   return /*#__PURE__*/React.createElement(Tag, _extends({
-    ref: ref,
-    onMouseMove: onMove,
-    onMouseLeave: reset,
     className: className
   }, rest), children);
 }
@@ -220,33 +154,8 @@ function MagneticBtn({
   className = 'btn btn-primary',
   ...rest
 }) {
-  const ref = useRef(null);
-  const [t, setT] = useState({
-    x: 0,
-    y: 0
-  });
-  const onMove = e => {
-    if (!ref.current) return;
-    const r = ref.current.getBoundingClientRect();
-    const x = (e.clientX - r.left - r.width / 2) * 0.25;
-    const y = (e.clientY - r.top - r.height / 2) * 0.25;
-    setT({
-      x,
-      y
-    });
-  };
-  const reset = () => setT({
-    x: 0,
-    y: 0
-  });
   return /*#__PURE__*/React.createElement(Tag, _extends({
-    ref: ref,
-    onMouseMove: onMove,
-    onMouseLeave: reset,
-    className: className,
-    style: {
-      transform: `translate(${t.x}px, ${t.y}px)`
-    }
+    className: className
   }, rest), children);
 }
 
@@ -690,27 +599,10 @@ const CODE_SNIPPETS = {
 function CodeWindow({
   view
 }) {
-  const ref = useRef(null);
-  const onMove = e => {
-    if (!ref.current) return;
-    const r = ref.current.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width - 0.5;
-    const y = (e.clientY - r.top) / r.height - 0.5;
-    ref.current.style.transform = `perspective(1400px) rotateY(${(-x * 8).toFixed(2)}deg) rotateX(${(y * 6).toFixed(2)}deg)`;
-  };
-  const reset = () => {
-    if (ref.current) ref.current.style.transform = 'perspective(1400px) rotateY(-3deg) rotateX(2deg)';
-  };
-  useEffect(() => {
-    reset();
-  }, [view]);
   const snippet = CODE_SNIPPETS[view] || CODE_SNIPPETS.all;
   return /*#__PURE__*/React.createElement("div", {
     className: "code-window view-fade",
     key: view,
-    ref: ref,
-    onMouseMove: onMove,
-    onMouseLeave: reset,
     style: {
       transform: 'perspective(1400px) rotateY(-3deg) rotateX(2deg)'
     }
@@ -775,16 +667,7 @@ function Hero({
   }, copy.cta.target ? {
     target: copy.cta.target,
     rel: 'noopener'
-  } : {}), copy.cta.label), /*#__PURE__*/React.createElement("button", {
-    type: "button",
-    className: "ask-cta-pill",
-    title: "Open the Ask Saad chatbot \u2014 AI grounded in his portfolio",
-    onClick: () => {
-      if (window.AskChat) window.AskChat.open();
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    "aria-hidden": "true"
-  }, "\u2726"), " Ask the AI")), /*#__PURE__*/React.createElement("div", {
+  } : {}), copy.cta.label)), /*#__PURE__*/React.createElement("div", {
     className: "hero-meta"
   }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", {
     className: "meta-k"
@@ -812,12 +695,12 @@ function Hero({
    STATS
    ========================================================= */
 const STATS_ALL = [{
-  num: 60,
+  num: KINGSLEY.reportingSpeedup,
   suffix: '%',
   label: 'reduction in production reporting time',
   domain: 'code'
 }, {
-  num: 5,
+  num: KINGSLEY.departments,
   suffix: '',
   label: 'departments digitised through MES/ERP workflows',
   domain: 'code'
@@ -843,18 +726,13 @@ const STATS_ALL = [{
   domain: 'code'
 }];
 function Stat({
-  s,
-  view
+  s
 }) {
-  const ref = useRef(null);
-  const inView = useInView(ref);
-  const v = useCountUp(s.num, inView);
   return /*#__PURE__*/React.createElement("div", {
-    ref: ref,
     className: "stat"
   }, /*#__PURE__*/React.createElement("div", {
     className: "stat-num"
-  }, s.suffix.includes('%') ? '~' : '', Math.round(v).toLocaleString(), s.suffix), /*#__PURE__*/React.createElement("div", {
+  }, s.suffix.includes('%') ? '~' : '', s.num.toLocaleString(), s.suffix), /*#__PURE__*/React.createElement("div", {
     className: "stat-lbl"
   }, s.label));
 }
@@ -865,86 +743,18 @@ function Stats({
   return /*#__PURE__*/React.createElement("section", {
     className: "stats container",
     id: "stats"
-  }, list.map((s, i) => /*#__PURE__*/React.createElement(Stat, {
+  }, list.map(s => /*#__PURE__*/React.createElement(Stat, {
     key: s.label,
-    s: s,
-    view: view
+    s: s
   })));
-}
-
-/* =========================================================
-   STACK CHIPS - visible tag cloud (helps SEO + signals breadth)
-   ========================================================= */
-const STACK_GROUPS = [{
-  label: 'Languages',
-  tags: ['Python', 'Java', 'JavaScript', 'HTML5', 'CSS3', 'SQL', 'Bash', 'C++']
-}, {
-  label: 'Web / Frameworks',
-  tags: ['FastAPI', 'Spring Boot', 'Vanilla JS', 'ES Modules', 'React (learning)', 'JSX', 'Babel', 'Tailwind CSS', 'Responsive Design']
-}, {
-  label: 'Backend / APIs',
-  tags: ['REST APIs', 'JSON', 'JWT auth', 'Spring Data JPA', 'Hibernate', 'OpenAPI / Swagger', 'Pydantic', 'Uvicorn', 'Motor', 'pymongo', 'pyodbc', 'asyncio', 'httpx']
-}, {
-  label: 'Databases',
-  tags: ['MongoDB', 'PostgreSQL', 'SQL Server', 'SQLite', 'Flyway', 'Mongo aggregation', 'indexes', 'transactions']
-}, {
-  label: 'Data / Automation',
-  tags: ['Pandas', 'NumPy', 'OpenPyXL', 'Matplotlib', 'Excel automation', 'PDF generation', 'fpdf', 'pdfplumber', 'pypdf']
-}, {
-  label: 'DevOps / Infra',
-  tags: ['Docker', 'Docker Compose', 'Linux', 'Ubuntu', 'nginx', 'systemd', 'Cron', 'SSH', 'Cloudflare', 'Cloudflare Pages', 'Workers', 'Let\'s Encrypt']
-}, {
-  label: 'Tooling',
-  tags: ['Git', 'GitHub', 'GitHub Actions', 'Maven', 'JUnit 5', 'Testcontainers', 'VS Code', 'curl', 'jq', 'Postman']
-}, {
-  label: 'AI / ML',
-  tags: ['OpenAI API', 'LangChain', 'scikit-learn · model training (Omdena internship)']
-}, {
-  label: 'Industrial',
-  tags: ['MES', 'ERP', 'Sage Evolution', 'OEE', 'Production Planning', 'PLC concepts', 'Krones', 'GPON', 'PSTN']
-}];
-function StackChips() {
-  return /*#__PURE__*/React.createElement("section", {
-    className: "container stack-chips-section",
-    id: "stack"
-  }, /*#__PURE__*/React.createElement(Reveal, {
-    className: "section-head",
-    style: {
-      marginBottom: 24
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "section-tag"
-  }, "Tech stack"), /*#__PURE__*/React.createElement("h2", {
-    style: {
-      fontSize: 'clamp(22px, 3vw, 30px)'
-    }
-  }, "Tools I use to build, ship, and run things.")), /*#__PURE__*/React.createElement(Reveal, {
-    className: "stack-chips-grid"
-  }, STACK_GROUPS.map(g => /*#__PURE__*/React.createElement("div", {
-    className: "stack-group",
-    key: g.label
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "stack-group-label"
-  }, g.label), /*#__PURE__*/React.createElement("div", {
-    className: "stack-chip-row"
-  }, g.tags.map(t => /*#__PURE__*/React.createElement("span", {
-    key: t,
-    className: "stack-chip"
-  }, t)))))));
 }
 
 /* =========================================================
    FAQ - long-tail keyword capture + FAQPage rich result
    ========================================================= */
 const FAQ_ITEMS = [{
-  q: 'Who is Muhammad Saad?',
-  a: /*#__PURE__*/React.createElement(Fragment, null, "Muhammad Saad (Saad for short) is an ", /*#__PURE__*/React.createElement("strong", null, "Automation & Software Developer"), " currently based in the UAE and open to relocate worldwide. He builds ERP systems, dashboards, backend tools, admin panels, and web applications in Python, FastAPI, MongoDB, and JavaScript. Engineering background: B.Sc. Electrical Engineering with a Computer Engineering specialization from COMSATS Islamabad. Currently works as Automation Engineer and ERP Developer at Kingsley Beverage FZCO.")
-}, {
-  q: 'What does Saad work on?',
-  a: /*#__PURE__*/React.createElement(Fragment, null, "The pattern is the same regardless of the project: take something a team is still doing by hand - spreadsheets, paper logs, ticket prep, copy-paste reports, manual reconciliations - and rebuild it as automation that runs itself. Most recently that meant designing and shipping a full-stack MES/ERP from scratch covering production planning, inventory, QC, accounts, and live reporting across 5 departments, plus running the Linux VM, MongoDB, Sage integration, and Cloudflare-fronted nginx behind it.")
-}, {
   q: 'Is Saad available for hire?',
-  a: /*#__PURE__*/React.createElement(Fragment, null, "Yes - open to backend, full-stack, automation, NOC engineering, IT infrastructure, and MES/ERP roles. On-site in the UAE, hybrid, or fully remote. Available immediately. Reach out via the ", /*#__PURE__*/React.createElement("a", {
+  a: /*#__PURE__*/React.createElement(Fragment, null, "Yes - open to automation, backend, full-stack, ERP / MES, IT-operations, and NOC roles. ", AVAILABILITY, ", and available immediately. Reach out via the ", /*#__PURE__*/React.createElement("a", {
     href: "contact.html"
   }, "contact form"), ", email ", /*#__PURE__*/React.createElement("a", {
     href: "mailto:saad@saadm.dev"
@@ -954,21 +764,22 @@ const FAQ_ITEMS = [{
     rel: "noopener"
   }, "+971 50 257 8065"), ".")
 }, {
-  q: 'What type of roles is Saad open to?',
-  a: /*#__PURE__*/React.createElement(Fragment, null, "Automation, ERP / MES, manufacturing systems, backend engineering, IT operations, NOC engineering, industrial maintenance, and Python-heavy technical roles. Currently UAE-based; open to relocate worldwide. Open to on-site, hybrid, or fully remote.")
+  q: 'What does the Kingsley MES / ERP platform do?',
+  a: /*#__PURE__*/React.createElement(Fragment, null, "It replaces spreadsheets and paper across ", KINGSLEY.departments, " departments - production planning, QC, batch & expiry tracking, inventory with FIFO, dispatch, accounts, and Sage Evolution integration - with OEE monitoring and print-ready PDF reports generated server-side from live data. Saad designed, built, and runs it end-to-end (Python / FastAPI, MongoDB + SQL Server, Docker, nginx), cutting production reporting time by roughly ", KINGSLEY.reportingSpeedup, "%.")
 }, {
   q: 'What is Saad\'s tech stack?',
-  a: /*#__PURE__*/React.createElement(Fragment, null, "Python, FastAPI, Java, Spring Boot, MongoDB, PostgreSQL, React, JavaScript, Docker, Linux, nginx, Cloudflare, Git, REST APIs, JWT auth, Pandas, OpenPyXL, scikit-learn, Sage Evolution integration. Comfortable with the full lifecycle from data model design through deployment and ops.")
-}, {
-  q: 'Where is Saad based?',
-  a: /*#__PURE__*/React.createElement(Fragment, null, "Dubai, United Arab Emirates. Originally from Pakistan; graduated from COMSATS University Islamabad.")
+  a: /*#__PURE__*/React.createElement(Fragment, null, "Python, FastAPI, Java, Spring Boot, MongoDB, PostgreSQL, JavaScript, React, Docker, Linux, nginx, Cloudflare, Git, REST APIs, JWT auth, Pandas, and Sage Evolution integration - comfortable across the full lifecycle from data-model design through deployment and ops.")
 }, {
   q: 'Can I see Saad\'s code?',
-  a: /*#__PURE__*/React.createElement(Fragment, null, "Yes - check the ", /*#__PURE__*/React.createElement("a", {
+  a: /*#__PURE__*/React.createElement(Fragment, null, "Yes - try the ", /*#__PURE__*/React.createElement("a", {
     href: "demo.html",
     target: "_blank",
     rel: "noopener"
-  }, "live MES/ERP demo"), " (interactive, all data fabricated for privacy). Source for some open work is on GitHub at ", /*#__PURE__*/React.createElement("a", {
+  }, "interactive MES/ERP demo"), " (all data fabricated for privacy) and the live ", /*#__PURE__*/React.createElement("a", {
+    href: "https://shopfloor-api-lvb0.onrender.com/",
+    target: "_blank",
+    rel: "noopener"
+  }, "ShopFloor API"), " in Java / Spring Boot. Open source is on GitHub at ", /*#__PURE__*/React.createElement("a", {
     href: "https://github.com/saad-mughal435",
     target: "_blank",
     rel: "noopener"
@@ -1009,12 +820,7 @@ function About() {
     className: "about-grid"
   }, /*#__PURE__*/React.createElement(Reveal, {
     className: "about-copy"
-  }, /*#__PURE__*/React.createElement("p", null, "I\u2019m an ", /*#__PURE__*/React.createElement("strong", null, "Automation & Software Developer"), " focused on ERP systems, dashboards, admin panels, and web applications. At Kingsley Beverage FZCO in Dubai I work as ", /*#__PURE__*/React.createElement("strong", null, "Automation Engineer"), ",", /*#__PURE__*/React.createElement("strong", null, "ERP Developer"), ", and ", /*#__PURE__*/React.createElement("strong", null, "IT Administrator"), ", and I\u2019m the sole developer of the enterprise software running across the plant."), /*#__PURE__*/React.createElement("p", null, "My engineering background (B.Sc. Electrical Engineering / Computer Engineering specialization, COMSATS Islamabad) helps me run and support the Krones beverage production lines, coordinate operators during shifts, and troubleshoot production issues across blow molding, filling, Checkmate inspection, Variopac FS packaging, palletizing, and PET preform handling."), /*#__PURE__*/React.createElement("p", null, "The Krones machine automation is OEM-locked; my software work sits around the production workflow through ERP / MES, OEE reporting, QC records, inventory, and management dashboards."), /*#__PURE__*/React.createElement("p", null, "Before that I spent two years as a ", /*#__PURE__*/React.createElement("strong", null, "NOC Engineer at PTCL"), " running GPON / PSTN / broadband infrastructure, where I shipped a Python tool that auto-generated configuration scripts from tickets, eliminating hours of manual ticket prep every day."), /*#__PURE__*/React.createElement("p", null, "The pattern: I look at slow, manual operational work and rebuild it in code. That\u2019s what I want to do next - build automation, backend, ERP/MES, or technical operations systems for teams where reliability and real workflows matter."), /*#__PURE__*/React.createElement("div", {
-    className: "about-tags"
-  }, ['Python', 'FastAPI', 'React', 'JavaScript (ES6+)', 'HTML / CSS', 'CSS Grid', 'MongoDB', 'Docker', 'Linux', 'nginx', 'Cloudflare', 'Git', 'REST APIs', 'JWT', 'Pandas', 'Design Systems', 'MES / ERP', 'Sage', 'PLC concepts', 'Krones', 'RCA', 'GPON / PSTN'].map(t => /*#__PURE__*/React.createElement("span", {
-    className: "tag",
-    key: t
-  }, t)))), /*#__PURE__*/React.createElement(Reveal, {
+  }, /*#__PURE__*/React.createElement("p", null, "I\u2019m an ", /*#__PURE__*/React.createElement("strong", null, "Automation & Software Developer"), " at Kingsley Beverage FZCO in Dubai, where I\u2019m the sole developer of the MES/ERP platform running across the plant - and also work hands-on as", /*#__PURE__*/React.createElement("strong", null, " Automation Engineer"), " and ", /*#__PURE__*/React.createElement("strong", null, "IT Administrator"), ". My engineering background (B.Sc. Electrical / Computer Engineering, COMSATS Islamabad) lets me run and support the Krones beverage lines and troubleshoot production issues, then build the software ", /*#__PURE__*/React.createElement("em", null, "around"), " that workflow - the machine automation is OEM-locked, so my work is the OEE reporting, QC records, inventory, and management dashboards that sit on top of it."), /*#__PURE__*/React.createElement("p", null, "Before Kingsley I spent two years as a ", /*#__PURE__*/React.createElement("strong", null, "NOC Engineer at PTCL"), " on GPON / PSTN / broadband infrastructure, where I shipped a Python tool that auto-generated configuration scripts from tickets and removed hours of manual prep a day. The throughline: I look at slow, manual operational work and rebuild it in code - which is exactly the automation, backend, and ERP/MES work I want to keep doing.")), /*#__PURE__*/React.createElement(Reveal, {
     className: "aside-card"
   }, /*#__PURE__*/React.createElement("div", {
     className: "aside-card-head"
@@ -1178,7 +984,7 @@ const PROJECTS = [{
   kind: 'Disconnected demo · Portfolio piece',
   year: '2026',
   title: 'Manzil Properties - Dubai marketplace',
-  desc: /*#__PURE__*/React.createElement(Fragment, null, "A Dubai real-estate marketplace demo with 65+ listings across Marina, Downtown, Palm Jumeirah, JBR, Business Bay, DIFC, Arabian Ranches and more. Map-and-list search using Leaflet/OpenStreetMap, agent and agency profiles with verified RERA-style permits, mortgage calculator with full amortisation schedule, and a comprehensive 15-section admin panel covering listings CRUD, leads pipeline, viewings calendar, analytics, moderation and audit log."),
+  desc: /*#__PURE__*/React.createElement(Fragment, null, "A Dubai real-estate marketplace demo: 65+ listings, map-and-list search on Leaflet/OpenStreetMap, agent and agency profiles, a mortgage calculator with full amortisation, and a 15-section admin panel - plus a 6-step owner listing wizard feeding a verification queue."),
   bullets: [/*#__PURE__*/React.createElement(Fragment, null, "10 customer pages: home, search (list/map), listing detail, agents, agencies, areas, mortgage, compare, account"), /*#__PURE__*/React.createElement(Fragment, null, "Map view with price-labelled pins, hover sync with list, single-pin detail map"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Owner-side: 6-step listing wizard"), " (save-and-resume drafts, map-pin selector, transaction-type branching for buy/rent/off-plan, document upload - Emirates ID + Title Deed + DLD permit + NOC + IBAN) feeding an ", /*#__PURE__*/React.createElement("strong", null, "admin verification queue"), " with approve / request-changes / reject"), /*#__PURE__*/React.createElement(Fragment, null, "15-section admin SPA: dashboard, listings, inquiries pipeline, viewings calendar, agents, agencies, customers, analytics, promotions, content CMS, moderation, settings, audit, ", /*#__PURE__*/React.createElement("strong", null, "owner approvals, listing approvals")), /*#__PURE__*/React.createElement(Fragment, null, "AED/USD/GBP/EUR currency switcher, EN/AR locale toggle with RTL layout")],
   tags: ['HTML5', 'CSS Grid', 'Vanilla JS (ES6+)', 'Owner onboarding wizard', 'Document upload', 'Verification queue', 'Leaflet · OpenStreetMap', 'localStorage', 'Mock API', 'Hash-routed SPA', 'i18n EN/AR', 'Multi-currency'],
   ctas: [{
@@ -1200,7 +1006,7 @@ const PROJECTS = [{
   kind: 'Disconnected demo · Portfolio piece',
   year: '2026',
   title: 'Vacation Homes - UAE short-stay booking',
-  desc: /*#__PURE__*/React.createElement(Fragment, null, "A UAE short-stay booking marketplace demo with 55 vacation homes across 10 destinations (Dubai Marina, Palm Jumeirah, Hatta Mountains, RAK Beach, Fujairah, Liwa Desert and more). Hand-rolled date-range picker, availability calendar with conflict-check, per-night pricing with weekend surcharge and 5% VAT breakdown, and a 13-section admin SPA covering listings, bookings, hosts, guests, reviews, payments, promotions, destinations CMS, host/listing approvals, settings and audit."),
+  desc: /*#__PURE__*/React.createElement(Fragment, null, "A UAE short-stay booking marketplace demo: 55 homes across 10 destinations, a hand-rolled date-range picker and availability calendar with conflict-check, per-night pricing with weekend surcharge and 5% VAT, and a 13-section admin SPA - plus a host listing wizard with a manual approval queue."),
   bullets: [/*#__PURE__*/React.createElement(Fragment, null, "Hand-rolled ", /*#__PURE__*/React.createElement("strong", null, "date-range picker"), " + availability calendar (no library) with blocked / booked / available states"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Conflict-check booking flow"), ": POST /bookings returns 409 if dates were just taken; UI bounces back with a toast"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Host-side: 6-step listing wizard"), " (save-and-resume drafts, map-pin selector, document upload - Emirates ID + ownership + DTCM permit + IBAN) feeding an ", /*#__PURE__*/React.createElement("strong", null, "admin verification queue"), " for manual approval; listings stay off-market until live"), /*#__PURE__*/React.createElement(Fragment, null, "9 guest pages + 13-section admin SPA + host dashboard: dashboard, listings (CRUD + bulk + status pipeline + CSV), bookings, hosts (Superhost verify), guests, reviews, payments/payouts, promotions, destinations, ", /*#__PURE__*/React.createElement("strong", null, "host approvals + listing approvals (approve / request-changes / reject)"), ", settings, audit"), /*#__PURE__*/React.createElement(Fragment, null, "Full pricing breakdown: nightly subtotal \xD7 nights + weekend surcharge + cleaning + 10% service fee + 5% VAT")],
   tags: ['HTML5', 'CSS Grid', 'Vanilla JS (ES6+)', 'Multi-step wizard', 'Document upload', 'Verification queue', 'Custom date-range picker', 'Leaflet maps', 'localStorage', 'Mock API', 'Hash-routed SPA'],
   ctas: [{
@@ -1480,45 +1286,6 @@ function ProjectCard({
   }, p.ctaTip)));
 }
 
-/* What this proves - credibility strip between About and Projects. */
-function WhatThisProves() {
-  const items = [{
-    icon: '⚙',
-    title: 'I understand production-line operations',
-    body: 'Machinery, utilities, shift workflows, downtime causes - not only the code that sits above them.'
-  }, {
-    icon: '👷',
-    title: 'I design workflows for every role on the plant',
-    body: 'Operators, QC, stores, finance and management each have different friction points and screens.'
-  }, {
-    icon: '🔗',
-    title: 'I connect the whole stack',
-    body: 'Frontend screens, backend APIs, MongoDB + SQL Server, Sage/ERP data and print-ready PDF reports - end-to-end in one head.'
-  }, {
-    icon: '📊',
-    title: 'I turn paper + Excel into software',
-    body: 'My job is converting messy spreadsheets and paper logs into structured, audit-able, fast operational tools.'
-  }];
-  return /*#__PURE__*/React.createElement("section", {
-    id: "proves",
-    className: "section container"
-  }, /*#__PURE__*/React.createElement(Reveal, {
-    className: "section-head"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "section-tag"
-  }, "What this proves"), /*#__PURE__*/React.createElement("h2", null, /*#__PURE__*/React.createElement(WordReveal, null, "I build operations software because I\u2019ve worked operations."))), /*#__PURE__*/React.createElement(Reveal, {
-    stagger: true,
-    className: "proves-grid"
-  }, items.map((it, i) => /*#__PURE__*/React.createElement(Reveal, {
-    as: "div",
-    key: i,
-    className: "proves-card"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "proves-icon",
-    "aria-hidden": "true"
-  }, it.icon), /*#__PURE__*/React.createElement("h3", null, it.title), /*#__PURE__*/React.createElement("p", null, it.body)))));
-}
-
 /* MES thumbnail mockup cards - rendered above the featured MES project card.
    Pure CSS/JSX, no images required. Swap with real Kingsley screenshots
    later by dropping a PNG into site/screenshots/ and replacing one card
@@ -1695,7 +1462,7 @@ function Projects({
 const SKILLS = [{
   domain: 'code',
   title: 'Backend & APIs',
-  items: ['Python', 'FastAPI', 'Java', 'Spring Boot', 'Spring Data JPA', 'REST APIs', 'JWT Auth', 'Pydantic', 'Motor', 'pyodbc', 'async I/O']
+  items: ['Python', 'FastAPI', 'Java', 'Spring Boot', 'Spring Data JPA', 'REST APIs', 'JWT Auth', 'OpenAPI / Swagger', 'Pydantic', 'async I/O']
 }, {
   domain: 'all',
   title: 'Manufacturing Systems',
@@ -1703,15 +1470,15 @@ const SKILLS = [{
 }, {
   domain: 'code',
   title: 'Frontend & UI',
-  items: ['JavaScript ES6+', 'HTML5 / CSS3', 'Admin Dashboards', 'Multi-step Forms', 'Role-based UI', 'Responsive Design', 'SPA hash routing', 'Mock-driven prototyping']
+  items: ['JavaScript ES6+', 'HTML5 / CSS3', 'Admin Dashboards', 'Multi-step Forms', 'Role-based UI', 'Responsive Design', 'SPA hash routing']
 }, {
   domain: 'code',
   title: 'Data & Reporting',
-  items: ['MongoDB', 'PostgreSQL', 'SQL Server', 'Pandas', 'OpenPyXL', 'Excel Automation', 'PDF Generation', 'Report Pipelines']
+  items: ['MongoDB', 'PostgreSQL', 'SQL Server', 'Flyway', 'Pandas', 'OpenPyXL', 'Excel Automation', 'PDF Generation']
 }, {
   domain: 'code',
-  title: 'Infrastructure',
-  items: ['Docker', 'Docker Compose', 'Linux', 'nginx', 'Cloudflare', 'SSH / Cron', 'Git / GitHub', "Let's Encrypt"]
+  title: 'Infrastructure & CI',
+  items: ['Docker', 'Docker Compose', 'Linux', 'nginx', 'Cloudflare', 'Git / GitHub', 'GitHub Actions', "Let's Encrypt"]
 }, {
   domain: 'eng',
   title: 'Industrial Operations',
@@ -1719,7 +1486,7 @@ const SKILLS = [{
 }, {
   domain: 'all',
   title: 'Learning / Expanding',
-  items: ['React', 'Tailwind CSS', 'PLC / Siemens basics', 'scikit-learn', 'GitHub Actions']
+  items: ['React', 'Tailwind CSS', 'PLC / Siemens basics', 'scikit-learn']
 }];
 function SkillCard({
   s
@@ -1798,7 +1565,7 @@ function Contact() {
     className: "contact-k"
   }, "Based in"), /*#__PURE__*/React.createElement("span", {
     className: "contact-v"
-  }, "UAE \xB7 Open to relocate worldwide \xB7 on-site / hybrid / remote")))));
+  }, AVAILABILITY)))));
 }
 
 /* =========================================================
@@ -1850,12 +1617,12 @@ function App() {
   return /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("a", {
     href: "#top",
     className: "skip-link"
-  }, "Skip to content"), /*#__PURE__*/React.createElement(ScrollProgress, null), /*#__PURE__*/React.createElement(CursorSpotlight, null), /*#__PURE__*/React.createElement(Nav, null), /*#__PURE__*/React.createElement("main", null, /*#__PURE__*/React.createElement(Hero, {
+  }, "Skip to content"), /*#__PURE__*/React.createElement(ScrollProgress, null), /*#__PURE__*/React.createElement(Nav, null), /*#__PURE__*/React.createElement("main", null, /*#__PURE__*/React.createElement(Hero, {
     view: view,
     setView: setView
   }), /*#__PURE__*/React.createElement(Stats, {
     view: view
-  }), /*#__PURE__*/React.createElement(MarqueeStrip, null), /*#__PURE__*/React.createElement(StackChips, null), /*#__PURE__*/React.createElement(About, null), /*#__PURE__*/React.createElement(WhatThisProves, null), /*#__PURE__*/React.createElement(Experience, {
+  }), /*#__PURE__*/React.createElement(About, null), /*#__PURE__*/React.createElement(Experience, {
     view: view
   }), /*#__PURE__*/React.createElement(Projects, {
     view: view
