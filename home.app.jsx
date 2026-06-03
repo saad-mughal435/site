@@ -618,6 +618,29 @@ const PROJECTS = [
     ctaSubtitle: 'Live on a free instance - the first request after idle can take ~50s to wake. Log in with manager / password.',
   },
   {
+    domain: 'code', kind: 'Test automation · Open source · CI', year: '2026',
+    sectionEyebrow: 'Quality engineering',
+    sectionHeading: 'Tested like production software',
+    sectionBlurb: 'Automated quality gates for the work above: a Playwright suite drives this very site and the ShopFloor API across real browsers and devices, runs in GitHub Actions on every push and nightly, and doubles as a production uptime check.',
+    title: 'playwright-e2e - Cross-browser test automation',
+    desc: <Fragment>A <strong>Playwright + TypeScript</strong> end-to-end suite that tests <strong>this portfolio</strong>
+      and the live <strong>ShopFloor API</strong>. Browser specs cover load smoke, the React render, SEO / JSON-LD,
+      navigation, the contact form, every project demo, and the Lahza PWA; API specs cover JWT auth and read-only
+      domain endpoints - all green in CI across five browser and device targets.</Fragment>,
+    bullets: [
+      <Fragment><strong>Cross-browser + mobile</strong> - Chromium, Firefox, WebKit, plus Pixel 7 and iPhone 14 emulation</Fragment>,
+      <Fragment><strong>Browser + API testing</strong> - DOM, SEO and PWA checks alongside read-only ShopFloor API auth and endpoint tests</Fragment>,
+      <Fragment><strong>Accessibility</strong> - axe-core WCAG 2.0 / 2.1 A &amp; AA scan, gated on critical + serious issues</Fragment>,
+      <Fragment><strong>GitHub Actions CI</strong> - every push, a nightly cron, and manual dispatch; uploads the HTML report</Fragment>,
+    ],
+    tags: ['Playwright', 'TypeScript', 'E2E Testing', 'API Testing', 'axe-core / a11y', 'Cross-browser', 'GitHub Actions', 'CI'],
+    ctas: [
+      { label: 'View source on GitHub ↗', href: 'https://github.com/saad-mughal435/playwright-e2e', target: '_blank', primary: true, prominent: true },
+      { label: 'CI runs ↗', href: 'https://github.com/saad-mughal435/playwright-e2e/actions', target: '_blank' },
+    ],
+    ctaSubtitle: 'Cross-browser E2E + API + accessibility - green in CI, runs nightly against production.',
+  },
+  {
     domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
     sectionEyebrow: 'Other software demos',
     sectionHeading: 'Product demos built around real workflows',
