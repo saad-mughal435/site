@@ -322,7 +322,7 @@ const HERO_COPY = {
   code: {
     title: ['Software for operations.', 'Automation behind it.'],
     sub: /*#__PURE__*/React.createElement(Fragment, null, "I\u2019m ", /*#__PURE__*/React.createElement("strong", null, "Saad"), " - an ", /*#__PURE__*/React.createElement("strong", null, "Automation & Software Developer"), " focused on ERP systems, dashboards, backend tools, and web applications. I build software that replaces manual work - spreadsheets, paper logs, copy-paste reports, inventory tracking, admin panels, and business workflows - with automation that runs itself."),
-    stack: 'Python · FastAPI · Java · Spring Boot · PostgreSQL · Docker',
+    stack: 'Python · FastAPI · Java · Spring Boot · PostgreSQL · Docker · n8n · TypeScript',
     cta: {
       href: 'app/index.html',
       label: 'Launch live app ↗',
@@ -779,7 +779,11 @@ const FAQ_ITEMS = [{
     href: "https://shopfloor-api-lvb0.onrender.com/",
     target: "_blank",
     rel: "noopener"
-  }, "ShopFloor API"), " in Java / Spring Boot. Open source is on GitHub at ", /*#__PURE__*/React.createElement("a", {
+  }, "ShopFloor API"), " in Java / Spring Boot, plus the open-source ", /*#__PURE__*/React.createElement("a", {
+    href: "https://github.com/saad-mughal435/n8n-nodes-devtools",
+    target: "_blank",
+    rel: "noopener"
+  }, "n8n-nodes-devtools"), " automation node in TypeScript. Open source is on GitHub at ", /*#__PURE__*/React.createElement("a", {
     href: "https://github.com/saad-mughal435",
     target: "_blank",
     rel: "noopener"
@@ -981,6 +985,29 @@ const PROJECTS = [{
     target: '_blank'
   }],
   ctaSubtitle: 'Cross-browser E2E + API + accessibility - green in CI, runs nightly against production.'
+}, {
+  domain: 'all',
+  kind: 'Open-source n8n node · TypeScript · CI-tested',
+  year: '2026',
+  sectionEyebrow: 'Automation & open-source tooling',
+  sectionHeading: 'An open-source n8n node for workflow automation',
+  sectionBlurb: 'A published n8n community node that packages the developer and crypto primitives workflows keep reaching for - JWT, hashing, IDs, conversions, regex - behind a clean Resource / Operation UI. The logic is kept pure and unit-tested with green CI; the kind of TypeScript tooling that turns up in real automation and integration work.',
+  title: 'n8n-nodes-devtools - n8n community node',
+  desc: /*#__PURE__*/React.createElement(Fragment, null, "A standalone ", /*#__PURE__*/React.createElement("strong", null, "n8n community node"), " in ", /*#__PURE__*/React.createElement("strong", null, "TypeScript"), " that bundles the utilities every real workflow reaches for: ", /*#__PURE__*/React.createElement("strong", null, "JWT sign / verify"), " (HS256/RS256, with", /*#__PURE__*/React.createElement("code", null, "exp"), " / ", /*#__PURE__*/React.createElement("code", null, "nbf"), " checks), hashing and ", /*#__PURE__*/React.createElement("strong", null, "HMAC"), ", UUID / Nano ID, JSON \u2194 CSV and base64, and ", /*#__PURE__*/React.createElement("strong", null, "regex extraction"), " with named groups. A programmatic ", /*#__PURE__*/React.createElement("code", null, "INodeType"), "over a framework-free core, so the behaviour is ", /*#__PURE__*/React.createElement("strong", null, "fully unit-tested"), " with green CI."),
+  bullets: [/*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "JWT sign / verify"), " - HS256/384/512 + RS256; verification checks the signature and ", /*#__PURE__*/React.createElement("code", null, "exp"), " / ", /*#__PURE__*/React.createElement("code", null, "nbf"), " and lets you pin the accepted algorithms"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Hashing + IDs"), " - SHA-256/512 and keyed HMAC (hex or base64), UUID v4, and an unbiased Nano ID"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Convert + extract"), " - RFC 4180 JSON \u2194 CSV, base64, and regex with named capture groups"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Engineered as a sample"), " - pure logic split from the n8n glue, 20 Jest tests, ESLint (n8n rules), and a lint + build + test GitHub Actions CI")],
+  tags: ['n8n', 'TypeScript', 'Node.js', 'n8n community node', 'JWT', 'HMAC / SHA-256', 'Jest', 'ESLint', 'GitHub Actions', 'JSON ↔ CSV', 'Regex'],
+  ctas: [{
+    label: 'View source on GitHub ↗',
+    href: 'https://github.com/saad-mughal435/n8n-nodes-devtools',
+    target: '_blank',
+    primary: true,
+    prominent: true
+  }, {
+    label: 'CI runs ↗',
+    href: 'https://github.com/saad-mughal435/n8n-nodes-devtools/actions',
+    target: '_blank'
+  }],
+  ctaSubtitle: 'Open source · MIT · green CI. Install from the repo or via n8n Community Nodes - npm publish coming.'
 }, {
   domain: 'code',
   kind: 'Disconnected demo · Portfolio piece',
@@ -1485,7 +1512,7 @@ function Projects({
 const SKILLS = [{
   domain: 'code',
   title: 'Backend & APIs',
-  items: ['Python', 'FastAPI', 'Java', 'Spring Boot', 'Spring Data JPA', 'REST APIs', 'JWT Auth', 'OpenAPI / Swagger', 'Pydantic', 'async I/O']
+  items: ['Python', 'FastAPI', 'Java', 'Spring Boot', 'Spring Data JPA', 'TypeScript', 'Node.js', 'REST APIs', 'JWT Auth', 'OpenAPI / Swagger', 'Pydantic', 'async I/O']
 }, {
   domain: 'all',
   title: 'Manufacturing Systems',
@@ -1501,7 +1528,7 @@ const SKILLS = [{
 }, {
   domain: 'code',
   title: 'Infrastructure & CI',
-  items: ['Docker', 'Docker Compose', 'Linux', 'nginx', 'Cloudflare', 'Git / GitHub', 'GitHub Actions', "Let's Encrypt"]
+  items: ['Docker', 'Docker Compose', 'Linux', 'nginx', 'Cloudflare', 'Git / GitHub', 'GitHub Actions', 'n8n', 'Workflow Automation', "Let's Encrypt"]
 }, {
   domain: 'eng',
   title: 'Industrial Operations',

@@ -224,7 +224,7 @@ const HERO_COPY = {
       ERP systems, dashboards, backend tools, and web applications. I build software that replaces manual work
       - spreadsheets, paper logs, copy-paste reports, inventory tracking, admin panels, and business
       workflows - with automation that runs itself.</Fragment>,
-    stack: 'Python · FastAPI · Java · Spring Boot · PostgreSQL · Docker',
+    stack: 'Python · FastAPI · Java · Spring Boot · PostgreSQL · Docker · n8n · TypeScript',
     cta: { href: 'app/index.html', label: 'Launch live app ↗', target: '_blank' },
   },
 };
@@ -407,7 +407,7 @@ const FAQ_ITEMS = [
   },
   {
     q: 'Can I see Saad\'s code?',
-    a: <Fragment>Yes - try the <a href="demo.html" target="_blank" rel="noopener">interactive MES/ERP demo</a> (all data fabricated for privacy) and the live <a href="https://shopfloor-api-lvb0.onrender.com/" target="_blank" rel="noopener">ShopFloor API</a> in Java / Spring Boot. Open source is on GitHub at <a href="https://github.com/saad-mughal435" target="_blank" rel="noopener">github.com/saad-mughal435</a>.</Fragment>,
+    a: <Fragment>Yes - try the <a href="demo.html" target="_blank" rel="noopener">interactive MES/ERP demo</a> (all data fabricated for privacy) and the live <a href="https://shopfloor-api-lvb0.onrender.com/" target="_blank" rel="noopener">ShopFloor API</a> in Java / Spring Boot, plus the open-source <a href="https://github.com/saad-mughal435/n8n-nodes-devtools" target="_blank" rel="noopener">n8n-nodes-devtools</a> automation node in TypeScript. Open source is on GitHub at <a href="https://github.com/saad-mughal435" target="_blank" rel="noopener">github.com/saad-mughal435</a>.</Fragment>,
   },
 ];
 
@@ -639,6 +639,30 @@ const PROJECTS = [
       { label: 'CI runs ↗', href: 'https://github.com/saad-mughal435/playwright-e2e/actions', target: '_blank' },
     ],
     ctaSubtitle: 'Cross-browser E2E + API + accessibility - green in CI, runs nightly against production.',
+  },
+  {
+    domain: 'all', kind: 'Open-source n8n node · TypeScript · CI-tested', year: '2026',
+    sectionEyebrow: 'Automation & open-source tooling',
+    sectionHeading: 'An open-source n8n node for workflow automation',
+    sectionBlurb: 'A published n8n community node that packages the developer and crypto primitives workflows keep reaching for - JWT, hashing, IDs, conversions, regex - behind a clean Resource / Operation UI. The logic is kept pure and unit-tested with green CI; the kind of TypeScript tooling that turns up in real automation and integration work.',
+    title: 'n8n-nodes-devtools - n8n community node',
+    desc: <Fragment>A standalone <strong>n8n community node</strong> in <strong>TypeScript</strong> that bundles the
+      utilities every real workflow reaches for: <strong>JWT sign / verify</strong> (HS256/RS256, with
+      <code>exp</code> / <code>nbf</code> checks), hashing and <strong>HMAC</strong>, UUID / Nano ID, JSON ↔ CSV
+      and base64, and <strong>regex extraction</strong> with named groups. A programmatic <code>INodeType</code>
+      over a framework-free core, so the behaviour is <strong>fully unit-tested</strong> with green CI.</Fragment>,
+    bullets: [
+      <Fragment><strong>JWT sign / verify</strong> - HS256/384/512 + RS256; verification checks the signature and <code>exp</code> / <code>nbf</code> and lets you pin the accepted algorithms</Fragment>,
+      <Fragment><strong>Hashing + IDs</strong> - SHA-256/512 and keyed HMAC (hex or base64), UUID v4, and an unbiased Nano ID</Fragment>,
+      <Fragment><strong>Convert + extract</strong> - RFC 4180 JSON ↔ CSV, base64, and regex with named capture groups</Fragment>,
+      <Fragment><strong>Engineered as a sample</strong> - pure logic split from the n8n glue, 20 Jest tests, ESLint (n8n rules), and a lint + build + test GitHub Actions CI</Fragment>,
+    ],
+    tags: ['n8n', 'TypeScript', 'Node.js', 'n8n community node', 'JWT', 'HMAC / SHA-256', 'Jest', 'ESLint', 'GitHub Actions', 'JSON ↔ CSV', 'Regex'],
+    ctas: [
+      { label: 'View source on GitHub ↗', href: 'https://github.com/saad-mughal435/n8n-nodes-devtools', target: '_blank', primary: true, prominent: true },
+      { label: 'CI runs ↗', href: 'https://github.com/saad-mughal435/n8n-nodes-devtools/actions', target: '_blank' },
+    ],
+    ctaSubtitle: 'Open source · MIT · green CI. Install from the repo or via n8n Community Nodes - npm publish coming.',
   },
   {
     domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
@@ -997,7 +1021,7 @@ function Projects({ view }) {
 // areas the section title implies. Lets the viewer scan instead of judge.
 const SKILLS = [
   { domain: 'code', title: 'Backend & APIs', items:
-    ['Python', 'FastAPI', 'Java', 'Spring Boot', 'Spring Data JPA', 'REST APIs', 'JWT Auth', 'OpenAPI / Swagger', 'Pydantic', 'async I/O'] },
+    ['Python', 'FastAPI', 'Java', 'Spring Boot', 'Spring Data JPA', 'TypeScript', 'Node.js', 'REST APIs', 'JWT Auth', 'OpenAPI / Swagger', 'Pydantic', 'async I/O'] },
   { domain: 'all', title: 'Manufacturing Systems', items:
     ['MES', 'ERP', 'OEE', 'PPC', 'QC Workflows', 'Batch Tracking', 'Inventory / FIFO', 'Sage Evolution'] },
   { domain: 'code', title: 'Frontend & UI', items:
@@ -1005,7 +1029,7 @@ const SKILLS = [
   { domain: 'code', title: 'Data & Reporting', items:
     ['MongoDB', 'PostgreSQL', 'SQL Server', 'Flyway', 'Pandas', 'OpenPyXL', 'Excel Automation', 'PDF Generation'] },
   { domain: 'code', title: 'Infrastructure & CI', items:
-    ['Docker', 'Docker Compose', 'Linux', 'nginx', 'Cloudflare', 'Git / GitHub', 'GitHub Actions', "Let's Encrypt"] },
+    ['Docker', 'Docker Compose', 'Linux', 'nginx', 'Cloudflare', 'Git / GitHub', 'GitHub Actions', 'n8n', 'Workflow Automation', "Let's Encrypt"] },
   { domain: 'eng', title: 'Industrial Operations', items:
     ['Krones Line Operations', 'Operator Coordination', 'Line Troubleshooting', 'RCA', 'SOPs', 'Commissioning Support', 'GPON / PSTN', 'Oracle CRM'] },
   { domain: 'all', title: 'Learning / Expanding', items:

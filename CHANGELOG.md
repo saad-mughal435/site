@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.8.0] - 2026-06-03 - n8n-nodes-devtools: an open-source n8n node, wired across the portfolio
+
+### Added
+
+- **New project — [n8n-nodes-devtools](https://github.com/saad-mughal435/n8n-nodes-devtools)**:
+  a standalone **n8n community node in TypeScript** bundling developer & crypto
+  utilities — JWT sign/verify (HS256/RS256 with `exp`/`nbf` checks), hashing +
+  HMAC (SHA-256/512), UUID / Nano ID, JSON↔CSV, base64, and regex extraction.
+  Programmatic `INodeType` over a framework-free core, 20 Jest unit tests, ESLint
+  (n8n rules), and a green lint + build + test GitHub Actions CI. Open source, MIT.
+- Featured it on the homepage as its own **"Automation & open-source tooling"**
+  project card (GitHub + CI links), and threaded **n8n / TypeScript / Node.js /
+  Workflow Automation / JWT** through the hero stack, skills, the "Can I see
+  Saad's code?" FAQ, the JSON-LD `knowsAbout`, the no-JS fallback, and
+  `package.json` keywords — so the portfolio now reads as an automation-tooling
+  shop alongside the Python/Java/JS work.
+
+### Changed
+
+- Homepage React bundle rebuilt (`home.app.js`) and its cache-buster bumped.
+
 ## [2.7.3] - 2026-06-01 - ShopFloor live links point at the new landing page
 
 ### Changed
