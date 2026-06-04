@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.11.2] - 2026-06-04 - Cinematic bloom + refined composition
+
+### Added
+
+- **Cinematic bloom** post-processing (three.js `UnrealBloomPass` via
+  `EffectComposer`) on the WebGL scene for a premium, glowing look. Feature-detected
+  and try/catch-guarded; falls back to plain rendering if the modules don't load.
+  Postprocessing modules added across all 81 pages.
+
+### Changed
+
+- Refined composition: the 3D icosahedron is now an **off-centre accent** (upper
+  right) instead of dead-centre behind the hero text, and the motion is calmer and
+  smoother. Bumped the `home.fx.js` cache-buster (`?v=…d`).
+
 ## [2.11.1] - 2026-06-04 - More 3D: glowing icosahedron centerpiece
 
 ### Added

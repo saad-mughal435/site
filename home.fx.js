@@ -103,7 +103,7 @@
         'uniform float uTime;',
         'void main(){',
         '  vec3 p = position;',
-        '  p += normal * sin(uTime*0.8 + position.y*0.6 + position.x*0.4) * 0.22;',
+        '  p += normal * sin(uTime*0.7 + position.y*0.6 + position.x*0.4) * 0.14;',
         '  vec4 mv = modelViewMatrix * vec4(p, 1.0);',
         '  vN = normalize(normalMatrix * normal);',
         '  vView = normalize(-mv.xyz);',
@@ -127,9 +127,26 @@
     scene.add(mesh);
     var wire = new THREE.LineSegments(
       new THREE.WireframeGeometry(ICO),
-      new THREE.LineBasicMaterial({ color: new THREE.Color('#7c9cff'), transparent: true, opacity: 0.14 })
+      new THREE.LineBasicMaterial({ color: new THREE.Color('#7c9cff'), transparent: true, opacity: 0.16 })
     );
     scene.add(wire);
+    // Composition: place the object as an off-centre accent (upper right) so the
+    // hero copy stays clear, instead of a blob dead-centre behind the text.
+    mesh.position.set(7.5, 2.5, -3);
+    wire.position.copy(mesh.position);
+
+    // ---- Cinematic bloom (post-processing) for a premium, glowing look ----
+    var composer = null, useBloom = false;
+    try {
+      if (THREE.EffectComposer && THREE.RenderPass && THREE.UnrealBloomPass) {
+        renderer.setClearColor(0x06070c, 1); // opaque dark base so bloom reads richly
+        composer = new THREE.EffectComposer(renderer);
+        composer.addPass(new THREE.RenderPass(scene, camera));
+        composer.addPass(new THREE.UnrealBloomPass(
+          new THREE.Vector2(window.innerWidth, window.innerHeight), 0.9, 0.55, 0.0));
+        useBloom = true;
+      }
+    } catch (e) { useBloom = false; }
 
     var mx = 0, my = 0, tx = 0, ty = 0, scrollN = 0;
     window.addEventListener('mousemove', function (e) {
@@ -151,18 +168,18 @@
       points.rotation.y = t * 0.035 + tx * 0.6 + scrollN * 1.4;
       points.rotation.x = ty * 0.4 + scrollN * 0.5;
       meshU.uTime.value = t;
-      mesh.rotation.y = t * 0.12 + tx * 0.9;
-      mesh.rotation.x = t * 0.08 + ty * 0.7;
-      mesh.rotation.z = scrollN * 0.8;
-      var ms = 1 + scrollN * 0.55 + Math.sin(t * 0.6) * 0.05;
+      mesh.rotation.y = t * 0.07 + tx * 0.7;
+      mesh.rotation.x = t * 0.05 + ty * 0.5;
+      mesh.rotation.z = scrollN * 0.6;
+      var ms = 1 + scrollN * 0.5 + Math.sin(t * 0.5) * 0.035;
       mesh.scale.setScalar(ms);
       wire.rotation.copy(mesh.rotation);
       wire.scale.copy(mesh.scale);
-      camera.position.x = tx * 5;
-      camera.position.y = -ty * 4;
-      camera.position.z = 20 - scrollN * 9;
+      camera.position.x = tx * 4.5;
+      camera.position.y = -ty * 3.5;
+      camera.position.z = 20 - scrollN * 8.5;
       camera.lookAt(scene.position);
-      renderer.render(scene, camera);
+      if (useBloom) composer.render(); else renderer.render(scene, camera);
       rafId = requestAnimationFrame(tick);
     }
     rafId = requestAnimationFrame(tick);
@@ -171,6 +188,7 @@
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
+      if (composer) composer.setSize(window.innerWidth, window.innerHeight);
     });
     document.addEventListener('visibilitychange', function () {
       if (document.hidden) { cancelAnimationFrame(rafId); }
