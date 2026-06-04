@@ -409,7 +409,18 @@ function Hero({
     className: "meta-k"
   }, "Open to"), /*#__PURE__*/React.createElement("span", {
     className: "meta-v"
-  }, "On-site \xB7 Hybrid \xB7 Remote")))));
+  }, "On-site \xB7 Hybrid \xB7 Remote")))), /*#__PURE__*/React.createElement("div", {
+    className: "hero-right"
+  }, /*#__PURE__*/React.createElement("figure", {
+    className: "hero-photo"
+  }, /*#__PURE__*/React.createElement("img", {
+    src: "saad.png",
+    width: "400",
+    height: "500",
+    loading: "eager",
+    decoding: "async",
+    alt: "Muhammad Saad - Automation & Software Developer, Dubai"
+  }))));
 }
 
 /* =========================================================
@@ -1166,7 +1177,10 @@ function Footer() {
     className: "container footer-inner"
   }, /*#__PURE__*/React.createElement("div", {
     className: "footer-copy"
-  }, "\xA9 ", new Date().getFullYear(), " Muhammad Saad \u2014 Automation & Software Developer. Built with React and vanilla CSS."), /*#__PURE__*/React.createElement("div", {
+  }, "\xA9 ", new Date().getFullYear(), " Muhammad Saad \u2014 Automation & Software Developer. Hand-built with vanilla CSS.", /*#__PURE__*/React.createElement("span", {
+    className: "react-badge",
+    title: "This homepage is a React 18 single-page app (precompiled JSX, no build-time framework)"
+  }, "\u269B Built with React 18")), /*#__PURE__*/React.createElement("div", {
     className: "footer-links"
   }, /*#__PURE__*/React.createElement("a", {
     href: "mailto:saad@saadm.dev"
@@ -1190,16 +1204,26 @@ function App() {
   const [view, setView] = useState(() => {
     try {
       const q = new URLSearchParams(window.location.search).get('view');
-      if (q === 'eng' || q === 'code') return q;
+      if (q === 'eng' || q === 'code' || q === 'all') return q;
       const stored = localStorage.getItem('portfolio_view');
-      return stored === 'eng' || stored === 'code' ? stored : 'code';
+      return stored === 'eng' || stored === 'code' || stored === 'all' ? stored : 'code';
     } catch (_) {
       return 'code';
     }
   });
+  // Persist the active view and reflect it in the URL (?view=) so the page is
+  // deep-linkable / shareable in a given mode. replaceState keeps it out of the
+  // back-button history.
   useEffect(() => {
     try {
       localStorage.setItem('portfolio_view', view);
+    } catch (_) {}
+    try {
+      const url = new URL(window.location.href);
+      if (url.searchParams.get('view') !== view) {
+        url.searchParams.set('view', view);
+        window.history.replaceState(null, '', url);
+      }
     } catch (_) {}
   }, [view]);
   return /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("a", {

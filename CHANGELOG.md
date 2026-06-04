@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.9.0] - 2026-06-04 - Headshot in the hero + a richer React homepage
+
+### Added
+
+- **Headshot in the hero**: the professional photo (`saad.png`) now sits beside
+  the intro in a clean two-column hero — a real photo where the removed fake-code
+  panel used to be.
+- **Deep-linkable view**: the Coding / Engineering toggle now reflects in the URL
+  (`?view=…` via `history.replaceState`) and is read back on load, so a chosen
+  view is shareable. Added a visible **"⚛ Built with React 18"** badge in the
+  footer to signal the homepage is a React 18 single-page app.
+
+### Changed
+
+- Homepage React bundle rebuilt; `home.css` / `home.app.js` cache-busters bumped.
+
 ## [2.8.4] - 2026-06-04 - Cleaner, more professional homepage (remove fake-UI mockups)
 
 ### Changed

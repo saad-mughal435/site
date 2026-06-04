@@ -217,11 +217,31 @@ img, svg { display: block; max-width: 100%; }
    ========================================================= */
 .hero {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 56px;
+  align-items: center;
   padding: 92px 28px 72px;
   position: relative;
 }
-.hero-left { min-width: 0; max-width: 760px; }
+.hero-left { min-width: 0; }
+.hero-right { min-width: 0; display: flex; justify-content: center; }
+.hero-photo { margin: 0; width: 100%; max-width: 360px; }
+.hero-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+}
+.react-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-left: 10px; vertical-align: middle;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.5px;
+  padding: 3px 10px; border-radius: 999px;
+  color: #61dafb; border: 1px solid rgba(97,218,251,0.35);
+  background: rgba(97,218,251,0.08);
+}
 
 .eyebrow {
   display: inline-flex; align-items: center; gap: 8px;

@@ -271,6 +271,12 @@ function Hero({ view, setView }) {
           <div><span className="meta-k">Open to</span><span className="meta-v">On-site · Hybrid · Remote</span></div>
         </div>
       </div>
+      <div className="hero-right">
+        <figure className="hero-photo">
+          <img src="saad.png" width="400" height="500" loading="eager" decoding="async"
+               alt="Muhammad Saad - Automation & Software Developer, Dubai" />
+        </figure>
+      </div>
     </section>
   );
 }
@@ -938,7 +944,9 @@ function Footer() {
   return (
     <footer className="footer">
       <div className="container footer-inner">
-        <div className="footer-copy">© {new Date().getFullYear()} Muhammad Saad — Automation &amp; Software Developer. Built with React and vanilla CSS.</div>
+        <div className="footer-copy">© {new Date().getFullYear()} Muhammad Saad — Automation &amp; Software Developer. Hand-built with vanilla CSS.
+          <span className="react-badge" title="This homepage is a React 18 single-page app (precompiled JSX, no build-time framework)">⚛ Built with React 18</span>
+        </div>
         <div className="footer-links">
           <a href="mailto:saad@saadm.dev">Email</a>
           <a href="https://www.linkedin.com/in/muhammadsaad435/" target="_blank" rel="noopener">LinkedIn</a>
@@ -957,13 +965,23 @@ function App() {
   const [view, setView] = useState(() => {
     try {
       const q = new URLSearchParams(window.location.search).get('view');
-      if (q === 'eng' || q === 'code') return q;
+      if (q === 'eng' || q === 'code' || q === 'all') return q;
       const stored = localStorage.getItem('portfolio_view');
-      return stored === 'eng' || stored === 'code' ? stored : 'code';
+      return stored === 'eng' || stored === 'code' || stored === 'all' ? stored : 'code';
     } catch (_) { return 'code'; }
   });
+  // Persist the active view and reflect it in the URL (?view=) so the page is
+  // deep-linkable / shareable in a given mode. replaceState keeps it out of the
+  // back-button history.
   useEffect(() => {
     try { localStorage.setItem('portfolio_view', view); } catch (_) {}
+    try {
+      const url = new URL(window.location.href);
+      if (url.searchParams.get('view') !== view) {
+        url.searchParams.set('view', view);
+        window.history.replaceState(null, '', url);
+      }
+    } catch (_) {}
   }, [view]);
 
   return (
