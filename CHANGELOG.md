@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.10.1] - 2026-06-04 - Brighter particles + 3D tilt cards
+
+### Changed
+
+- Made the WebGL particles **more visible** (count 6.5k→9.5k desktop, larger point
+  size, higher alpha). Added **3D tilt** on project + skill cards (cursor-driven
+  perspective rotate with a lift shadow) and a gentle float on the hero headshot.
+
 ## [2.10.0] - 2026-06-04 - Overkill animation layer (WebGL + GSAP + smooth scroll)
 
 ### Added

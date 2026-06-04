@@ -33,7 +33,7 @@
     var camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 120);
     camera.position.z = 20;
 
-    var COUNT = window.innerWidth < 760 ? 2600 : 6500;
+    var COUNT = window.innerWidth < 760 ? 4200 : 9500;
     var positions = new Float32Array(COUNT * 3);
     var scales = new Float32Array(COUNT);
     for (var i = 0; i < COUNT; i++) {
@@ -52,7 +52,7 @@
       blending: THREE.AdditiveBlending,
       uniforms: {
         uTime: { value: 0 },
-        uSize: { value: (renderer.getPixelRatio ? renderer.getPixelRatio() : 1) * 26 },
+        uSize: { value: (renderer.getPixelRatio ? renderer.getPixelRatio() : 1) * 34 },
         uColorA: { value: new THREE.Color('#5e8eff') },
         uColorB: { value: new THREE.Color('#5eead4') },
       },
@@ -80,7 +80,7 @@
         '  if (d > 0.5) discard;',
         '  float a = smoothstep(0.5, 0.0, d);',
         '  vec3 col = mix(uColorA, uColorB, vA);',
-        '  gl_FragColor = vec4(col, a * (0.18 + vA*0.45));',
+        '  gl_FragColor = vec4(col, a * (0.40 + vA*0.55));',
         '}',
       ].join('\n'),
     });
@@ -235,6 +235,29 @@
     }, { passive: true });
   }
 
+  /* ======================================================= 3D tilt cards */
+  function initTilt() {
+    var SEL = '.project, .skill-card';
+    var current = null;
+    function reset(el) { el.style.transform = ''; el.classList.remove('fx-tilting'); }
+    document.addEventListener('mousemove', function (e) {
+      var card = e.target.closest && e.target.closest(SEL);
+      if (card) {
+        if (current && current !== card) reset(current);
+        current = card;
+        var r = card.getBoundingClientRect();
+        var px = (e.clientX - r.left) / r.width - 0.5;
+        var py = (e.clientY - r.top) / r.height - 0.5;
+        card.classList.add('fx-tilting');
+        card.style.transform = 'perspective(900px) rotateX(' + (-py * 7).toFixed(2) +
+          'deg) rotateY(' + (px * 9).toFixed(2) + 'deg) translateY(-4px)';
+      } else if (current) {
+        reset(current);
+        current = null;
+      }
+    }, { passive: true });
+  }
+
   /* ================================================================ boot */
   // React 18 may flush its first render a tick after home.app.js runs, so wait
   // for the hero to exist before wiring GSAP triggers to real DOM nodes.
@@ -251,6 +274,7 @@
     try { if (!REDUCE && window.THREE) initWebGL(); } catch (e) {}
     try { if (!REDUCE && FINE) initCursor(); } catch (e) {}
     try { if (FINE) initMagnetic(); } catch (e) {}
+    try { if (!REDUCE && FINE) initTilt(); } catch (e) {}
     whenContent(function () { try { initMotion(); } catch (e) {} });
     document.documentElement.classList.add('fx-ready');
   }

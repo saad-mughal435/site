@@ -67,6 +67,26 @@
               color .2s ease, border-color .2s ease, box-shadow .2s ease;
 }
 
+/* ---- 3D tilt cards (driven by home.fx.js on fine pointers) ---- */
+.project, .skill-card {
+  transition: transform .35s cubic-bezier(.2, .8, .2, 1), box-shadow .35s ease;
+  transform-style: preserve-3d;
+}
+.project.fx-tilting, .skill-card.fx-tilting {
+  transition: transform .08s linear, box-shadow .2s ease;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(124, 156, 255, 0.25);
+  z-index: 2;
+}
+
+/* ---- Gentle float on the hero headshot ---- */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-photo img { animation: fx-float 6s ease-in-out infinite; }
+}
+@keyframes fx-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
 /* ---- Lenis smooth scroll ---- */
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
