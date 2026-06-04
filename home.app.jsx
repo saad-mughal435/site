@@ -659,10 +659,11 @@ const PROJECTS = [
     ],
     tags: ['n8n', 'TypeScript', 'Node.js', 'n8n community node', 'JWT', 'HMAC / SHA-256', 'Jest', 'ESLint', 'GitHub Actions', 'JSON ↔ CSV', 'Regex'],
     ctas: [
-      { label: 'View source on GitHub ↗', href: 'https://github.com/saad-mughal435/n8n-nodes-devtools', target: '_blank', primary: true, prominent: true },
+      { label: 'View on npm ↗', href: 'https://www.npmjs.com/package/@saadmughal435/n8n-nodes-devtools', target: '_blank', primary: true, prominent: true },
+      { label: 'View source on GitHub ↗', href: 'https://github.com/saad-mughal435/n8n-nodes-devtools', target: '_blank' },
       { label: 'CI runs ↗', href: 'https://github.com/saad-mughal435/n8n-nodes-devtools/actions', target: '_blank' },
     ],
-    ctaSubtitle: 'Open source · MIT · green CI. Install from the repo or via n8n Community Nodes - npm publish coming.',
+    ctaSubtitle: 'Published on npm · MIT · green CI — npm install @saadmughal435/n8n-nodes-devtools',
   },
   {
     domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',

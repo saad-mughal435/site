@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.8.1] - 2026-06-04 - n8n-nodes-devtools published to npm
+
+### Added
+
+- **n8n-nodes-devtools is now published on npm** as
+  [`@saadmughal435/n8n-nodes-devtools`](https://www.npmjs.com/package/@saadmughal435/n8n-nodes-devtools)
+  (v1.0.0 — scoped under the personal namespace because the bare name collided
+  with an existing package). The homepage project card now leads with a
+  **"View on npm ↗"** CTA and shows an `npm install @saadmughal435/n8n-nodes-devtools`
+  line; the README projects table and the no-JS fallback link npm too.
+
+### Changed
+
+- Homepage React bundle rebuilt (`home.app.js`) and its cache-buster bumped.
+
 ## [2.8.0] - 2026-06-03 - n8n-nodes-devtools: an open-source n8n node, wired across the portfolio
 
 ### Added

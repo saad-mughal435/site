@@ -997,17 +997,21 @@ const PROJECTS = [{
   bullets: [/*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "JWT sign / verify"), " - HS256/384/512 + RS256; verification checks the signature and ", /*#__PURE__*/React.createElement("code", null, "exp"), " / ", /*#__PURE__*/React.createElement("code", null, "nbf"), " and lets you pin the accepted algorithms"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Hashing + IDs"), " - SHA-256/512 and keyed HMAC (hex or base64), UUID v4, and an unbiased Nano ID"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Convert + extract"), " - RFC 4180 JSON \u2194 CSV, base64, and regex with named capture groups"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Engineered as a sample"), " - pure logic split from the n8n glue, 20 Jest tests, ESLint (n8n rules), and a lint + build + test GitHub Actions CI")],
   tags: ['n8n', 'TypeScript', 'Node.js', 'n8n community node', 'JWT', 'HMAC / SHA-256', 'Jest', 'ESLint', 'GitHub Actions', 'JSON ↔ CSV', 'Regex'],
   ctas: [{
-    label: 'View source on GitHub ↗',
-    href: 'https://github.com/saad-mughal435/n8n-nodes-devtools',
+    label: 'View on npm ↗',
+    href: 'https://www.npmjs.com/package/@saadmughal435/n8n-nodes-devtools',
     target: '_blank',
     primary: true,
     prominent: true
+  }, {
+    label: 'View source on GitHub ↗',
+    href: 'https://github.com/saad-mughal435/n8n-nodes-devtools',
+    target: '_blank'
   }, {
     label: 'CI runs ↗',
     href: 'https://github.com/saad-mughal435/n8n-nodes-devtools/actions',
     target: '_blank'
   }],
-  ctaSubtitle: 'Open source · MIT · green CI. Install from the repo or via n8n Community Nodes - npm publish coming.'
+  ctaSubtitle: 'Published on npm · MIT · green CI — npm install @saadmughal435/n8n-nodes-devtools'
 }, {
   domain: 'code',
   kind: 'Disconnected demo · Portfolio piece',
