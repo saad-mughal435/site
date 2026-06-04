@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.10.0] - 2026-06-04 - Overkill animation layer (WebGL + GSAP + smooth scroll)
+
+### Added
+
+- A full "Awwwards-style" animation layer on the homepage (`home.fx.js` +
+  `home.fx.css`), decoupled from the React app and feature-detected so it can
+  never break the page:
+  - **WebGL background** (three.js r137): a ~6.5k-particle field with a custom
+    GLSL shader, reacting to mouse + scroll, behind the content (the hero shows
+    it through).
+  - **Smooth scroll** (Lenis) integrated with **GSAP ScrollTrigger** parallax on
+    the hero and section eyebrows.
+  - **Custom cursor** (dot + trailing ring that grows over interactive elements)
+    and **magnetic buttons**.
+  - Fully gated on `prefers-reduced-motion` and coarse/touch pointers (mobile and
+    motion-sensitive users get the calm static site). Libraries via CDN (three,
+    gsap, lenis); no bundler. The React app is untouched.
+
 ## [2.9.0] - 2026-06-04 - Headshot in the hero + a richer React homepage
 
 ### Added
