@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.11.0] - 2026-06-04 - Animation layer rolled out site-wide
+
+### Added
+
+- The animation layer (WebGL particle background + GSAP/ScrollTrigger + Lenis
+  smooth scroll + custom cursor + magnetic buttons) now loads on **every page** —
+  80 demo / sub-pages injected, plus the homepage. Per the brief: full overkill
+  everywhere. Assets referenced absolutely (`/home.fx.js`, `/home.fx.css`) so they
+  work at any path depth.
+
+### Changed
+
+- FX canvas moved to `z-index:-1` so it sits behind content on pages without the
+  homepage's `#root` wrapper; form fields, `.leaflet-container`, and `<canvas>`
+  keep a native cursor.
+
+### Notes
+
+- On demos with an opaque full-page background the WebGL is hidden behind it (the
+  custom cursor / smooth-scroll / magnetic still apply); the whole layer degrades
+  gracefully if a CDN lib is blocked. Heavy interactive demos (maps, scrollable
+  admin, real-time canvases) carry the full layer too — watch for scroll/cursor
+  friction there.
+
 ## [2.10.1] - 2026-06-04 - Brighter particles + 3D tilt cards
 
 ### Changed

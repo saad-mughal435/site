@@ -8,7 +8,7 @@
   inset: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 0;
+  z-index: -1;
   pointer-events: none;
   opacity: 0;
   transition: opacity 1.2s ease;
@@ -24,9 +24,14 @@
 .fx-cursor-on a,
 .fx-cursor-on button,
 .fx-cursor-on .btn,
-.fx-cursor-on summary,
+.fx-cursor-on summary { cursor: none; }
+/* Keep a real cursor on anything you type into or drag (forms, maps, editors). */
 .fx-cursor-on input,
-.fx-cursor-on textarea { cursor: none; }
+.fx-cursor-on textarea,
+.fx-cursor-on select,
+.fx-cursor-on [contenteditable],
+.fx-cursor-on .leaflet-container,
+.fx-cursor-on canvas { cursor: auto; }
 
 #fx-cursor-dot,
 #fx-cursor-ring {
