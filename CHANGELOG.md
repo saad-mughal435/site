@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.8.4] - 2026-06-04 - Cleaner, more professional homepage (remove fake-UI mockups)
+
+### Changed
+
+- Removed the decorative fake-UI "gimmicks" for a more professional, content-first
+  feel: the **3D-tilted hero code window** (`engineer.py` / `close_shift.py` /
+  `shift_report.yaml`), the fabricated **"Production dashboard / QC batch record /
+  Inventory"** demo cards with DEMO badges, and the **mini code snippet** on the
+  Kingsley project card. The hero is now a clean **single column**. Deleted the
+  now-dead JS components (`CodeWindow`, `CODE_SNIPPETS`, `MesThumbnails`) and their
+  CSS. The view toggle, stats, and real project cards are unchanged.
+
 ## [2.8.3] - 2026-06-04 - Fix: blank projects grid on narrow viewports
 
 ### Fixed

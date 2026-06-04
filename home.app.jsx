@@ -238,94 +238,6 @@ const HERO_COPY = {
   },
 };
 
-const CODE_SNIPPETS = {
-  all: { title: 'engineer.py', body: (
-    <Fragment>
-      <span className="k">class</span> <span className="cls">Engineer</span>:{'\n'}
-      {'    '}<span className="v">name</span>      = <span className="s">"Saad"</span>{'\n'}
-      {'    '}<span className="v">based_in</span>  = <span className="s">"Dubai, UAE"</span>{'\n'}
-      {'    '}<span className="v">open_to</span>   = <span className="s">"relocate worldwide"</span>{'\n'}
-      {'    '}<span className="v">role</span>      = <span className="s">"Automation Engineer / ERP-OEE Developer / Operations Software Builder"</span>{'\n'}
-      {'    '}<span className="v">does</span> = [{'\n'}
-      {'        '}<span className="s">"Build MES/ERP from scratch"</span>,{'\n'}
-      {'        '}<span className="s">"Replace manual workflows with automation"</span>,{'\n'}
-      {'        '}<span className="s">"Ship full-stack apps in Python, FastAPI, and vanilla JavaScript"</span>,{'\n'}
-      {'        '}<span className="s">"Own infrastructure end-to-end: db to deployment"</span>,{'\n'}
-      {'        '}<span className="s">"Troubleshoot what others escalate"</span>,{'\n'}
-      {'    '}]{'\n\n'}
-      {'    '}<span className="k">def</span> <span className="fn">value</span>(<span className="v">self</span>) -&gt; <span className="c">str</span>:{'\n'}
-      {'        '}<span className="k">return</span> <span className="s">"hardware + software, same engineer"</span>{'\n\n\n'}
-      <span className="v">me</span> = <span className="cls">Engineer</span>(){'\n'}
-      <span className="b">print</span>(<span className="v">me</span>.<span className="fn">value</span>())  <span className="comment"># → hardware + software, same engineer</span>
-    </Fragment>
-  )},
-  code: { title: 'close_shift.py', body: (
-    <Fragment>
-      <span className="k">from</span> <span className="m">dataclasses</span> <span className="k">import</span> <span className="c">dataclass</span>{'\n'}
-      <span className="k">from</span> <span className="m">decimal</span> <span className="k">import</span> <span className="c">Decimal</span>{'\n\n\n'}
-      <span className="d">@dataclass</span>{'\n'}
-      <span className="k">class</span> <span className="cls">Batch</span>:{'\n'}
-      {'    '}<span className="v">line</span>: <span className="c">str</span>{'\n'}
-      {'    '}<span className="v">recipe</span>: <span className="c">str</span>{'\n'}
-      {'    '}<span className="v">good</span>: <span className="c">int</span>{'\n'}
-      {'    '}<span className="v">reject</span>: <span className="c">int</span>{'\n'}
-      {'    '}<span className="v">planned</span>: <span className="c">int</span>{'\n\n'}
-      {'    '}<span className="d">@property</span>{'\n'}
-      {'    '}<span className="k">def</span> <span className="fn">oee</span>(<span className="v">self</span>) -&gt; <span className="c">Decimal</span>:{'\n'}
-      {'        '}<span className="v">avail</span>   = <span className="cls">Decimal</span>(<span className="v">self</span>.good + <span className="v">self</span>.reject) / <span className="v">self</span>.planned{'\n'}
-      {'        '}<span className="v">quality</span> = <span className="cls">Decimal</span>(<span className="v">self</span>.good) / (<span className="v">self</span>.good + <span className="v">self</span>.reject){'\n'}
-      {'        '}<span className="k">return</span> <span className="v">avail</span> * <span className="v">quality</span>  <span className="comment"># × performance</span>{'\n\n\n'}
-      <span className="k">def</span> <span className="fn">close_shift</span>(<span className="v">batches</span>: <span className="c">list</span>[<span className="cls">Batch</span>]):{'\n'}
-      {'    '}<span className="k">for</span> <span className="v">b</span> <span className="k">in</span> <span className="v">batches</span>:{'\n'}
-      {'        '}<span className="fn">publish_to_mes</span>(<span className="v">b</span>, <span className="v">b</span>.<span className="fn">oee</span>)
-    </Fragment>
-  )},
-  eng: { title: 'shift_report.yaml', body: (
-    <Fragment>
-      <span className="comment"># shift A · line A · 2026-05-13</span>{'\n'}
-      <span className="k">line_support</span>:   <span className="s">saad</span>{'\n'}
-      <span className="k">line</span>:           <span className="s">Line A - Krones</span>{'\n'}
-      <span className="k">role</span>:{'\n'}
-      {'  '}- <span className="s">line support</span>{'\n'}
-      {'  '}- <span className="s">operator coordination</span>{'\n'}
-      {'  '}- <span className="s">OEE reporting</span>{'\n'}
-      <span className="k">subsystems</span>:{'\n'}
-      {'  '}- <span className="s">blow_molder</span>:        <span className="v">✓ running</span>{'\n'}
-      {'  '}- <span className="s">filler</span>:             <span className="v">✓ running</span>{'\n'}
-      {'  '}- <span className="s">checkmate_inspection</span>: <span className="v">sensor flag · waiting check</span>{'\n'}
-      {'  '}- <span className="s">variopac_fs</span>:        <span className="v">✓ running</span>{'\n'}
-      {'  '}- <span className="s">palletizer</span>:         <span className="v">✓ running</span>{'\n\n'}
-      <span className="k">recipe</span>:         <span className="s">Demo Beverage 500 mL</span>{'\n'}
-      <span className="k">planned_qty</span>:    <span className="n">1000</span> cases{'\n'}
-      <span className="k">good</span>:           <span className="n">962</span>{'\n'}
-      <span className="k">reject</span>:         <span className="n">18</span>{'\n'}
-      <span className="k">downtime_min</span>:   <span className="n">12</span>{'\n'}
-      <span className="k">downtime_cause</span>: <span className="s">Variopac jam · cleared in 12 min</span>{'\n'}
-      <span className="k">oee_percent</span>:    <span className="n">78</span>{'\n\n'}
-      <span className="k">root_cause</span>:{'\n'}
-      {'  '}<span className="k">where</span>:   <span className="s">Variopac infeed</span>{'\n'}
-      {'  '}<span className="k">why</span>:     <span className="s">torn shrink film</span>{'\n'}
-      {'  '}<span className="k">fix</span>:     <span className="s">replaced film roll · tension reset</span>{'\n'}
-      {'  '}<span className="k">prevent</span>: <span className="s">spec change to film supplier</span>{'\n\n'}
-      <span className="k">handover_to</span>:    <span className="s">shift B</span>
-    </Fragment>
-  )},
-};
-
-function CodeWindow({ view }) {
-  const snippet = CODE_SNIPPETS[view] || CODE_SNIPPETS.all;
-  return (
-    <div className="code-window view-fade" key={view}
-         style={{ transform: 'perspective(1400px) rotateY(-3deg) rotateX(2deg)' }}>
-      <div className="code-window-bar">
-        <span className="dot red"></span><span className="dot yellow"></span><span className="dot green"></span>
-        <span className="code-window-title">{snippet.title}</span>
-      </div>
-      <pre className="code-window-body"><code>{snippet.body}</code></pre>
-    </div>
-  );
-}
-
 function Hero({ view, setView }) {
   const copy = HERO_COPY[view] || HERO_COPY.all;
   return (
@@ -358,9 +270,6 @@ function Hero({ view, setView }) {
           </div>
           <div><span className="meta-k">Open to</span><span className="meta-v">On-site · Hybrid · Remote</span></div>
         </div>
-      </div>
-      <div className="hero-right">
-        <CodeWindow view={view} />
       </div>
     </section>
   );
@@ -594,7 +503,6 @@ const PROJECTS = [
       <Fragment><strong>~60%</strong> faster production reporting · <strong>5 departments</strong> on one system · operators, QC, stores, finance and management each have their own workflow</Fragment>,
     ],
     tags: ['Python', 'FastAPI', 'MongoDB', 'SQL Server', 'Docker', 'Nginx', 'TLS', 'JWT', 'RBAC', 'Sage Evolution', 'pandas', 'openpyxl', 'fpdf', 'OEE', 'Manufacturing'],
-    showCode: true,
     ctaSubtitle: 'Live interactive demo - every value fabricated for privacy, every workflow faithful to the real system',
     ctaTip: <Fragment><strong>Best first view:</strong> open the <em>static walkthrough</em> for the 3-minute tour, then jump into the <em>live interactive demo</em>.</Fragment>,
     ctas: [
@@ -903,17 +811,6 @@ function ProjectCard({ p }) {
       <p className="project-desc">{p.desc}</p>
       <ul className="project-bullets">{p.bullets.map((b, i) => <li key={i}>{b}</li>)}</ul>
       <div className="project-tags">{p.tags.map((t) => <span key={t} className="tag">{t}</span>)}</div>
-      {p.showCode && (
-        <div className="project-impl">
-          <pre className="mini-code"><code>
-            <span className="comment"># core loop - simplified</span>{'\n'}
-            <span className="k">def</span> <span className="fn">close_shift</span>(<span className="v">line</span>: <span className="c">str</span>, <span className="v">shift</span>: <span className="c">int</span>):{'\n'}
-            {'    '}<span className="v">batches</span> = <span className="fn">collect_batches</span>(<span className="v">line</span>, <span className="v">shift</span>){'\n'}
-            {'    '}<span className="v">oee</span> = <span className="fn">compute_oee</span>(<span className="v">batches</span>){'\n'}
-            {'    '}<span className="fn">publish</span>(<span className="v">line</span>, <span className="v">shift</span>, <span className="v">oee</span>, <span className="v">batches</span>)
-          </code></pre>
-        </div>
-      )}
       {p.ctas && (
         <div className="project-cta">
           {p.ctas.map((c) => (
@@ -926,74 +823,6 @@ function ProjectCard({ p }) {
         </div>
       )}
     </TiltCard>
-  );
-}
-
-/* MES thumbnail mockup cards - rendered above the featured MES project card.
-   Pure CSS/JSX, no images required. Swap with real Kingsley screenshots
-   later by dropping a PNG into site/screenshots/ and replacing one card
-   with <img src="…">. */
-function MesThumbnails() {
-  return (
-    <div className="mes-thumbs">
-      <div className="mes-thumb">
-        <div className="mes-thumb-head">
-          <span className="mes-thumb-dot"></span><span className="mes-thumb-dot y"></span><span className="mes-thumb-dot g"></span>
-          <span className="mes-thumb-title">Production dashboard</span>
-          <span className="mes-thumb-badge">DEMO</span>
-        </div>
-        <div className="mes-thumb-meta">Line A · Shift A · 14:32</div>
-        <div className="mes-thumb-kpis">
-          <div><span className="mes-kpi-k">OEE</span><span className="mes-kpi-v">78%</span></div>
-          <div><span className="mes-kpi-k">Speed</span><span className="mes-kpi-v">9,600 bph</span></div>
-          <div><span className="mes-kpi-k">Output</span><span className="mes-kpi-v">3,847 cs</span></div>
-          <div><span className="mes-kpi-k">Rejects</span><span className="mes-kpi-v">42</span></div>
-        </div>
-        <div className="mes-thumb-bars">
-          <div style={{height:'62%'}}></div>
-          <div style={{height:'74%'}}></div>
-          <div style={{height:'48%'}}></div>
-          <div style={{height:'85%'}}></div>
-          <div style={{height:'70%'}}></div>
-          <div style={{height:'92%'}}></div>
-          <div style={{height:'78%'}}></div>
-          <div style={{height:'66%'}}></div>
-        </div>
-      </div>
-
-      <div className="mes-thumb">
-        <div className="mes-thumb-head">
-          <span className="mes-thumb-dot"></span><span className="mes-thumb-dot y"></span><span className="mes-thumb-dot g"></span>
-          <span className="mes-thumb-title">QC batch record</span>
-          <span className="mes-thumb-badge">DEMO</span>
-        </div>
-        <div className="mes-thumb-meta">Batch BR-2026-0418 · 500 ml PET</div>
-        <ul className="mes-thumb-checks">
-          <li><span>Seam thickness</span><span className="mes-thumb-pass">✓ PASS</span></li>
-          <li><span>Drop test</span><span className="mes-thumb-pass">✓ PASS</span></li>
-          <li><span>Brix &amp; carbonation</span><span className="mes-thumb-pass">✓ PASS</span></li>
-          <li><span>Fill weight</span><span className="mes-thumb-pass">✓ PASS</span></li>
-          <li><span>Microbiology</span><span className="mes-thumb-pass">✓ PASS</span></li>
-        </ul>
-        <div className="mes-thumb-footer">Verdict <strong>PASS</strong> · 36 samples · approved by demo.qc</div>
-      </div>
-
-      <div className="mes-thumb">
-        <div className="mes-thumb-head">
-          <span className="mes-thumb-dot"></span><span className="mes-thumb-dot y"></span><span className="mes-thumb-dot g"></span>
-          <span className="mes-thumb-title">Inventory + Sage</span>
-          <span className="mes-thumb-badge">DEMO</span>
-        </div>
-        <div className="mes-thumb-meta">Stock vs Sage reconciliation</div>
-        <ul className="mes-thumb-rows">
-          <li><span>Sugar</span><span className="mes-thumb-qty">12,500 kg</span><span className="mes-thumb-ok">sync ok</span></li>
-          <li><span>Preforms 500 ml</span><span className="mes-thumb-qty">480,000 pcs</span><span className="mes-thumb-ok">sync ok</span></li>
-          <li><span>Caps</span><span className="mes-thumb-qty">510,000 pcs</span><span className="mes-thumb-warn">312 short</span></li>
-          <li><span>Labels 500 ml</span><span className="mes-thumb-qty">470,000 pcs</span><span className="mes-thumb-ok">sync ok</span></li>
-        </ul>
-        <div className="mes-thumb-footer">Last Sage sync · 11 minutes ago · 0 errors</div>
-      </div>
-    </div>
   );
 }
 
@@ -1015,7 +844,6 @@ function Projects({ view }) {
                 {p.sectionBlurb && <p>{p.sectionBlurb}</p>}
               </div>
             )}
-            {p.featured && <MesThumbnails />}
             <ProjectCard p={p} />
           </Fragment>
         ))}

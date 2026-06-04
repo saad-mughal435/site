@@ -217,18 +217,11 @@ img, svg { display: block; max-width: 100%; }
    ========================================================= */
 .hero {
   display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
-  gap: 56px;
-  align-items: center;
+  grid-template-columns: 1fr;
   padding: 92px 28px 72px;
   position: relative;
 }
-/* CRITICAL: grid items default to min-width:auto which is content-size.
-   For columns containing the code window (with long pre lines), that
-   forces the column wider than the viewport on mobile. Override so
-   they can shrink and the pre scrolls internally. */
-.hero-left, .hero-right { min-width: 0; }
-.hero-right { width: 100%; }
+.hero-left { min-width: 0; max-width: 760px; }
 
 .eyebrow {
   display: inline-flex; align-items: center; gap: 8px;
@@ -378,58 +371,6 @@ img, svg { display: block; max-width: 100%; }
 .meta-k { color: var(--fg-mute); text-transform: uppercase; letter-spacing: 0.6px; font-size: 11px; }
 .meta-v { color: var(--fg); }
 
-/* Hero illustration card (code window) */
-.code-window {
-  background: linear-gradient(180deg, #0e1320 0%, #07080d 100%);
-  border: 1px solid var(--border);
-  border-radius: var(--r-lg);
-  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(255,255,255,0.02) inset;
-  overflow: hidden;
-  max-width: 100%;
-  min-width: 0;
-  transform-style: preserve-3d;
-  transition: transform 0.5s var(--easing);
-  will-change: transform;
-}
-.code-window-bar {
-  display: flex; align-items: center; gap: 8px;
-  padding: 12px 16px;
-  background: rgba(255,255,255,0.02);
-  border-bottom: 1px solid var(--border);
-}
-.code-window-bar .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
-.code-window-bar .dot.red    { background: #ff5f56; }
-.code-window-bar .dot.yellow { background: #ffbd2e; }
-.code-window-bar .dot.green  { background: #27c93f; }
-.code-window-title { margin-left: 12px; font-family: var(--mono); font-size: 12px; color: var(--fg-mute); }
-.code-window-body {
-  font-family: var(--mono);
-  font-size: 12px;
-  line-height: 1.6;
-  padding: 18px 20px;
-  color: var(--fg);
-  overflow-x: auto;
-  /* pre-wrap so long lines fold inside the window instead of overflowing. */
-  white-space: pre-wrap;
-  word-break: break-word;
-  max-width: 100%;
-}
-.code-window-body code { font-family: inherit; color: inherit; word-break: break-word; }
-/* Scale up slightly on very wide screens where there's room. */
-@media (min-width: 1280px) {
-  .code-window-body { font-size: 13px; }
-}
-.k    { color: #ff7b9c; }
-.s    { color: #a6d8ff; }
-.n    { color: #ffb86c; }
-.c    { color: #ffd580; }
-.cls  { color: #ffd580; }
-.fn   { color: #c4a8ff; }
-.v    { color: #edf1f8; }
-.comment { color: #828fa6; font-style: italic; }
-.b    { color: #7dd3fc; }
-.d    { color: #f5c451; }
-.m    { color: #ffa657; }
 
 /* View cross-fade for hero content */
 .view-fade {
@@ -622,8 +563,6 @@ img, svg { display: block; max-width: 100%; }
 }
 /* Full-width umbrella heading + blurb so it never sits beside a card */
 .projects-grid > .project-section-heading { grid-column: 1 / -1; }
-/* The MES dashboard mock-up is a full-width strip above the featured card */
-.projects-grid > .mes-thumbs { grid-column: 1 / -1; }
 .project {
   position: relative;
   background: var(--surface);
@@ -662,12 +601,6 @@ img, svg { display: block; max-width: 100%; }
 .project-bullets li::before { content: "▸"; color: var(--teal); position: absolute; left: 2px; top: 0; }
 .project-bullets strong { color: var(--fg); }
 .project-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.project-impl {
-  margin-top: 16px;
-  border-top: 1px dashed var(--border);
-  padding-top: 14px;
-}
-.mini-code { margin: 0; font-family: var(--mono); font-size: 12.5px; line-height: 1.6; color: var(--fg); white-space: pre; overflow-x: auto; }
 .project-cta { margin-top: auto; padding-top: 14px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 .project-cta .cta-subtitle { flex-basis: 100%; font-size: 12.5px; color: var(--fg-mute); margin-top: 4px; }
 .project-cta .cta-tip { flex-basis: 100%; font-size: 12.5px; color: var(--accent); margin-top: 2px; padding: 8px 12px; background: rgba(94,234,212,.06); border: 1px solid rgba(94,234,212,.18); border-radius: 8px; }
@@ -928,10 +861,6 @@ a.contact-v:hover { color: var(--blue); }
   .view-toggle { font-size: 12px; }
   .vt-pill { padding: 6px 12px; }
 
-  /* Code window - shrink font to fit narrow screens */
-  .code-window { transform: none !important; }
-  .code-window-body { font-size: 10.5px; padding: 14px 14px; line-height: 1.55; }
-
   /* Stats - single column for the smallest screens */
   .stats { grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 18px 20px 56px; }
   .stat { padding: 18px 16px; }
@@ -957,7 +886,6 @@ a.contact-v:hover { color: var(--blue); }
   .project { padding: 22px 20px; }
   .project-title { font-size: 19px; }
   .project-desc { font-size: 14px; }
-  .mini-code { font-size: 11.5px; white-space: pre-wrap; word-break: break-word; }
 
   /* Skills */
   .skills-grid { grid-template-columns: 1fr; gap: 12px; }
@@ -1090,97 +1018,3 @@ a:focus-visible, button:focus-visible, .btn:focus-visible {
   .back-to-top:hover { transform: none; }
 }
 
-/* ============================================================
-   MES screenshot thumbnails - rendered above the featured MES
-   project card. Pure CSS/JSX mockups, no images needed.
-   Replace with real Kingsley screenshots later by swapping a
-   card's contents for an <img>.
-   ============================================================ */
-.mes-thumbs {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 14px;
-  margin: 0 0 22px;
-}
-@media (min-width: 780px) { .mes-thumbs { grid-template-columns: 1fr 1fr 1fr; } }
-.mes-thumb {
-  background: linear-gradient(180deg, #0c1018, #0f1320);
-  border: 1px solid rgba(124,156,255,0.22);
-  border-radius: 12px;
-  padding: 14px 16px 16px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11.5px;
-  color: #d3dae7;
-  box-shadow: 0 10px 28px rgba(0,0,0,0.35);
-  position: relative;
-  min-height: 200px;
-}
-.mes-thumb-head {
-  display: flex; align-items: center; gap: 6px;
-  padding-bottom: 10px; margin-bottom: 10px;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-.mes-thumb-dot {
-  width: 8px; height: 8px; border-radius: 999px;
-  background: #f87171; flex: 0 0 8px;
-}
-.mes-thumb-dot.y { background: #f5c451; }
-.mes-thumb-dot.g { background: #34d399; }
-.mes-thumb-title {
-  flex: 1; text-align: center; font-size: 11px;
-  color: #cfd6e3; letter-spacing: 0.4px;
-  text-transform: uppercase; font-weight: 600;
-}
-.mes-thumb-badge {
-  font-size: 9px; letter-spacing: 1.2px;
-  padding: 2px 6px; border-radius: 4px;
-  background: rgba(94,234,212,0.15); color: #5eead4;
-  border: 1px solid rgba(94,234,212,0.3);
-}
-.mes-thumb-meta {
-  font-size: 10.5px; color: #7f8a9d;
-  margin-bottom: 12px; letter-spacing: 0.3px;
-}
-.mes-thumb-kpis {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
-  margin-bottom: 14px;
-}
-.mes-thumb-kpis > div {
-  display: flex; flex-direction: column;
-  padding: 8px 10px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 8px;
-}
-.mes-kpi-k { font-size: 10px; color: #7f8a9d; letter-spacing: 0.5px; text-transform: uppercase; }
-.mes-kpi-v { font-size: 15px; color: #edf1f8; font-weight: 700; margin-top: 2px; font-family: 'Inter', sans-serif; }
-.mes-thumb-bars {
-  display: flex; align-items: flex-end; gap: 6px;
-  height: 60px; padding: 0 2px;
-}
-.mes-thumb-bars > div {
-  flex: 1; border-radius: 3px 3px 0 0;
-  background: linear-gradient(180deg, #5eead4, #7c9cff);
-  min-height: 4px;
-}
-.mes-thumb-checks, .mes-thumb-rows {
-  list-style: none; padding: 0; margin: 0 0 12px;
-  display: flex; flex-direction: column; gap: 6px;
-}
-.mes-thumb-checks li {
-  display: flex; justify-content: space-between; align-items: center;
-  font-size: 12px;
-}
-.mes-thumb-rows li {
-  display: grid; grid-template-columns: 1.1fr 1fr auto; gap: 8px; align-items: center;
-  font-size: 11.5px;
-}
-.mes-thumb-qty { color: #cfd6e3; font-weight: 600; }
-.mes-thumb-pass { color: #34d399; font-weight: 700; letter-spacing: 0.4px; font-size: 11px; }
-.mes-thumb-ok { color: #5eead4; font-size: 10.5px; }
-.mes-thumb-warn { color: #f5c451; font-size: 10.5px; font-weight: 600; }
-.mes-thumb-footer {
-  font-size: 10.5px; color: #7f8a9d;
-  padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.06);
-  margin-top: auto;
-}
