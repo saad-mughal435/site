@@ -122,12 +122,13 @@
         '}',
       ].join('\n'),
     });
-    var ICO = new THREE.IcosahedronGeometry(5.5, 1);
-    var mesh = new THREE.Mesh(ICO, meshMat);
+    // High subdivision -> a smooth round sphere (not a faceted/blocky die).
+    var mesh = new THREE.Mesh(new THREE.IcosahedronGeometry(5.5, 5), meshMat);
     scene.add(mesh);
+    // Coarser geodesic wireframe over the smooth orb for a clean line accent.
     var wire = new THREE.LineSegments(
-      new THREE.WireframeGeometry(ICO),
-      new THREE.LineBasicMaterial({ color: new THREE.Color('#7c9cff'), transparent: true, opacity: 0.16 })
+      new THREE.WireframeGeometry(new THREE.IcosahedronGeometry(5.5, 2)),
+      new THREE.LineBasicMaterial({ color: new THREE.Color('#7c9cff'), transparent: true, opacity: 0.13 })
     );
     scene.add(wire);
     // Composition: place the object as an off-centre accent (upper right) so the

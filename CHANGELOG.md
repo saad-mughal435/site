@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.11.3] - 2026-06-04 - Smooth round 3D sphere
+
+### Changed
+
+- The 3D object is now a **smooth round sphere** (icosahedron subdivision 1 → 5)
+  instead of a faceted/blocky low-poly die, with a cleaner geodesic wireframe over
+  it. Bumped the `home.fx.js` cache-buster across all pages.
+
 ## [2.11.2] - 2026-06-04 - Cinematic bloom + refined composition
 
 ### Added
