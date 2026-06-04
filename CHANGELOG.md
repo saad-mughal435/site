@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.8.3] - 2026-06-04 - Fix: blank projects grid on narrow viewports
+
+### Fixed
+
+- The homepage **"Selected Work"** project cards rendered blank on mobile /
+  narrow widths: the scroll-reveal kept them at `opacity:0` until an
+  IntersectionObserver reported the grid ≥12% visible, but the single-column
+  grid had grown taller than ~8× the viewport (ShopFloor + playwright + n8n
+  cards), so 12% was never on screen at once and the observer never fired.
+  Hardened `useInView` to trigger on **any** intersection (`threshold: 0`), to
+  reveal immediately when `IntersectionObserver` is unavailable, and added a
+  1.8s failsafe so content can never stay hidden. Rebuilt `home.app.js`, bumped
+  the cache-buster.
+
 ## [2.8.2] - 2026-06-04 - Ask Saad chatbot learns the open-source repos
 
 ### Added

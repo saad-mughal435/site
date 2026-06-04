@@ -36,19 +36,34 @@ const AVAILABILITY = 'UAE-based, open to relocate worldwide, and happy with on-s
 function useInView(ref, opts = {}) {
   const [inView, setInView] = useState(false);
   useEffect(() => {
-    if (!ref.current) return;
+    const el = ref.current;
+    if (!el) return;
+    // No IntersectionObserver (very old browser) -> just show the content.
+    if (typeof IntersectionObserver === 'undefined') {
+      setInView(true);
+      return;
+    }
+    // threshold 0 fires as soon as the element enters the viewport, so it works
+    // for any height. (A 0.12 threshold can never be met by a container taller
+    // than ~8x the viewport - e.g. the single-column projects grid on mobile -
+    // which would leave its cards stuck at opacity:0.)
     const io = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         setInView(true);
         io.disconnect();
       }
     }, {
-      threshold: 0.12,
+      threshold: 0,
       rootMargin: '0px 0px -60px 0px',
       ...opts
     });
-    io.observe(ref.current);
-    return () => io.disconnect();
+    io.observe(el);
+    // Failsafe: never leave content permanently hidden if the observer never fires.
+    const t = setTimeout(() => setInView(true), 1800);
+    return () => {
+      io.disconnect();
+      clearTimeout(t);
+    };
   }, []);
   return inView;
 }
