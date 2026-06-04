@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.8.2] - 2026-06-04 - Ask Saad chatbot learns the open-source repos
+
+### Added
+
+- The **Ask Saad** recruiter chatbot's knowledge base (`ask/js/corpus.js`) now
+  includes the three open-source repos — **n8n-nodes-devtools**, **ShopFloor
+  API**, and **playwright-e2e** — so it can answer questions about Saad's
+  automation, Java / Spring Boot, npm-published, and test-automation work, with
+  citation chips that open npm / GitHub. Bumped the corpus cache-buster.
+
 ## [2.8.1] - 2026-06-04 - n8n-nodes-devtools published to npm
 
 ### Added

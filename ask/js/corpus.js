@@ -213,6 +213,29 @@
       tags: ['demo', 'nabta', 'hr', 'hris', 'payroll', 'wps', 'wage-protection-system', 'uae', 'employees', 'leave', 'recruitment', 'kanban', 'performance', 'reviews', 'policy', 'labour-law', 'b2b', 'saas', 'ai', 'claude', 'rag']
     },
 
+    /* ===================== Open-source repos (3) ===================== */
+    {
+      id: 'oss-n8n-devtools',
+      title: 'n8n-nodes-devtools — open-source n8n automation node (published on npm)',
+      body: "An open-source n8n community node Saad built in TypeScript and published to npm as @saadmughal435/n8n-nodes-devtools. It bundles the developer and crypto utilities automation workflows keep reaching for, behind a clean Resource/Operation UI: JWT sign and verify (HS256/384/512 and RS256, checks exp and nbf, with pinnable algorithms), hashing and HMAC (SHA-256/512), UUID and Nano ID generation, JSON to and from CSV, base64, and regex extraction with named groups. Engineered as a real software sample: a programmatic INodeType over a framework-free, fully unit-tested core (20 Jest tests), ESLint with the n8n community rules, and a green lint + build + test GitHub Actions CI. It demonstrates TypeScript, Node.js, SDK / node-API design, clean architecture, testing discipline, CI/CD, and publishing to a package registry — and shows Saad's automation, integration, and security-adjacent (JWT / crypto) skills. Anyone can install it with: npm install @saadmughal435/n8n-nodes-devtools. Yes, Saad has built and published open-source automation tooling.",
+      link: 'https://www.npmjs.com/package/@saadmughal435/n8n-nodes-devtools',
+      tags: ['project', 'opensource', 'open-source', 'npm', 'package', 'n8n', 'automation', 'workflow', 'node', 'typescript', 'nodejs', 'javascript', 'jwt', 'crypto', 'hmac', 'sha256', 'hashing', 'csv', 'base64', 'regex', 'jest', 'unit-test', 'testing', 'ci', 'github-actions', 'integration', 'sdk']
+    },
+    {
+      id: 'oss-shopfloor-api',
+      title: 'ShopFloor API — MES / OEE backend in Java / Spring Boot (open source, live demo)',
+      body: "An open-source manufacturing-operations REST backend Saad built in the enterprise Java stack — Spring Boot 3 and Java 21 — taking the same operations domain as his Kingsley MES and rebuilding it the way a Java shop would. Job orders that compute OEE (Availability × Performance × Quality) on close, downtime with root-cause logging, QC holds, and FIFO inventory across stock lots. Layered service architecture, role-based JWT security with operator / QC / manager roles enforced by @PreAuthorize method security, Spring Data JPA over a Flyway-managed PostgreSQL schema (with a self-contained H2 demo profile), OpenAPI / Swagger docs, Docker, and a green GitHub Actions CI (JUnit 5, MockMvc, and a Testcontainers PostgreSQL integration test). Deployed live on Render with an interactive Swagger UI you can log into (manager / password). This is Saad's Java and Spring Boot credential alongside his Python and JavaScript work — yes, Saad knows Java and Spring Boot, and has shipped enterprise-style backend code.",
+      link: 'https://github.com/saad-mughal435/shopfloor-api',
+      tags: ['project', 'opensource', 'open-source', 'shopfloor', 'java', 'spring', 'spring-boot', 'backend', 'rest', 'api', 'oee', 'mes', 'manufacturing', 'jpa', 'hibernate', 'postgresql', 'flyway', 'jwt', 'security', 'swagger', 'openapi', 'docker', 'junit', 'testcontainers', 'ci', 'enterprise', 'render', 'live']
+    },
+    {
+      id: 'oss-playwright-e2e',
+      title: 'playwright-e2e — cross-browser test-automation suite (open source)',
+      body: "An open-source Playwright + TypeScript end-to-end test suite Saad built that tests his own portfolio site and the live ShopFloor API. Browser specs cover load smoke, the React render, SEO / JSON-LD, navigation, the contact form, every project demo, and the Lahza PWA; API specs cover JWT auth and read-only domain endpoints. It runs across five browser and device targets — Chromium, Firefox, WebKit, plus Pixel 7 and iPhone 14 emulation — and includes an axe-core WCAG 2.0 / 2.1 A & AA accessibility scan gated on critical and serious issues. Green in GitHub Actions CI on every push, a nightly cron, and manual dispatch, uploading the HTML report, and it doubles as a production uptime check. It demonstrates Saad's QA / SDET capabilities: test automation, cross-browser testing, API testing, accessibility, and continuous integration. Source on GitHub.",
+      link: 'https://github.com/saad-mughal435/playwright-e2e',
+      tags: ['project', 'opensource', 'open-source', 'playwright', 'testing', 'test-automation', 'qa', 'sdet', 'e2e', 'end-to-end', 'typescript', 'cross-browser', 'api-testing', 'accessibility', 'axe-core', 'a11y', 'wcag', 'ci', 'github-actions', 'chromium', 'firefox', 'webkit', 'mobile', 'quality']
+    },
+
     /* ===================== Stack groups (9 clusters) ===================== */
     {
       id: 'stack-languages',
