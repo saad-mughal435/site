@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.11.1] - 2026-06-04 - More 3D: glowing icosahedron centerpiece
+
+### Added
+
+- A real 3D centerpiece in the WebGL scene (site-wide): a breathing **fresnel
+  icosahedron** with a wireframe overlay that rotates, wobbles, and reacts to mouse
+  + scroll, alongside the particle field. More dramatic scroll camera dolly. Bumped
+  the `home.fx.js` cache-buster across all 81 pages.
+
 ## [2.11.0] - 2026-06-04 - Animation layer rolled out site-wide
 
 ### Added

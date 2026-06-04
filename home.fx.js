@@ -88,6 +88,49 @@
     var points = new THREE.Points(geo, mat);
     scene.add(points);
 
+    // ---- central 3D object: a glowing, breathing fresnel icosahedron ----
+    var meshU = {
+      uTime: { value: 0 },
+      uA: { value: new THREE.Color('#5e8eff') },
+      uB: { value: new THREE.Color('#5eead4') },
+    };
+    var meshMat = new THREE.ShaderMaterial({
+      transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+      uniforms: meshU,
+      vertexShader: [
+        'varying vec3 vN;',
+        'varying vec3 vView;',
+        'uniform float uTime;',
+        'void main(){',
+        '  vec3 p = position;',
+        '  p += normal * sin(uTime*0.8 + position.y*0.6 + position.x*0.4) * 0.22;',
+        '  vec4 mv = modelViewMatrix * vec4(p, 1.0);',
+        '  vN = normalize(normalMatrix * normal);',
+        '  vView = normalize(-mv.xyz);',
+        '  gl_Position = projectionMatrix * mv;',
+        '}',
+      ].join('\n'),
+      fragmentShader: [
+        'uniform vec3 uA;',
+        'uniform vec3 uB;',
+        'varying vec3 vN;',
+        'varying vec3 vView;',
+        'void main(){',
+        '  float f = pow(1.0 - max(dot(normalize(vN), normalize(vView)), 0.0), 2.2);',
+        '  vec3 col = mix(uA, uB, f);',
+        '  gl_FragColor = vec4(col, f * 0.85 + 0.04);',
+        '}',
+      ].join('\n'),
+    });
+    var ICO = new THREE.IcosahedronGeometry(5.5, 1);
+    var mesh = new THREE.Mesh(ICO, meshMat);
+    scene.add(mesh);
+    var wire = new THREE.LineSegments(
+      new THREE.WireframeGeometry(ICO),
+      new THREE.LineBasicMaterial({ color: new THREE.Color('#7c9cff'), transparent: true, opacity: 0.14 })
+    );
+    scene.add(wire);
+
     var mx = 0, my = 0, tx = 0, ty = 0, scrollN = 0;
     window.addEventListener('mousemove', function (e) {
       mx = e.clientX / window.innerWidth - 0.5;
@@ -107,9 +150,17 @@
       ty += (my - ty) * 0.04;
       points.rotation.y = t * 0.035 + tx * 0.6 + scrollN * 1.4;
       points.rotation.x = ty * 0.4 + scrollN * 0.5;
+      meshU.uTime.value = t;
+      mesh.rotation.y = t * 0.12 + tx * 0.9;
+      mesh.rotation.x = t * 0.08 + ty * 0.7;
+      mesh.rotation.z = scrollN * 0.8;
+      var ms = 1 + scrollN * 0.55 + Math.sin(t * 0.6) * 0.05;
+      mesh.scale.setScalar(ms);
+      wire.rotation.copy(mesh.rotation);
+      wire.scale.copy(mesh.scale);
       camera.position.x = tx * 5;
       camera.position.y = -ty * 4;
-      camera.position.z = 20 - scrollN * 6;
+      camera.position.z = 20 - scrollN * 9;
       camera.lookAt(scene.position);
       renderer.render(scene, camera);
       rafId = requestAnimationFrame(tick);
