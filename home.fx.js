@@ -1,14 +1,14 @@
-/* home.fx.js — the "overkill" animation layer for saadm.dev.
+/* home.fx.js — the scroll/motion layer for saadm.dev.
  *
  * Deliberately decoupled from the React app (home.app.js): it only touches the
- * DOM after render and adds a WebGL background, smooth scroll, scroll-driven
- * parallax, a custom cursor and magnetic buttons. Everything is feature-detected
- * and wrapped in try/catch, and the whole layer is skipped under
- * prefers-reduced-motion — so if a CDN lib fails to load or anything throws, the
- * plain (already-working) site is unaffected.
+ * DOM after render and adds smooth scroll, scroll-driven parallax, a custom
+ * cursor, magnetic buttons and 3D card tilt. Everything is feature-detected and
+ * wrapped in try/catch, and the heavy bits are skipped under prefers-reduced-
+ * motion / touch — so if a CDN lib fails to load or anything throws, the plain
+ * (already-working) site is unaffected.
  *
- * Libraries (loaded via CDN in index.html): three (WebGL), gsap + ScrollTrigger,
- * @studio-freight/lenis (smooth scroll).
+ * Libraries (loaded via CDN in index.html): gsap + ScrollTrigger and
+ * @studio-freight/lenis (smooth scroll). No WebGL — the backdrop is static CSS.
  */
 (function () {
   'use strict';
@@ -17,193 +17,10 @@
   try { REDUCE = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
   var FINE = true;
   try { FINE = window.matchMedia('(pointer: fine)').matches; } catch (e) {}
-  // WebGL is reserved for capable desktops; the CSS glow background carries the
-  // rest (touch, small screens, reduced-motion, and the light theme).
+  // The custom cursor / 3D tilt are reserved for capable desktops; touch, small
+  // screens and reduced-motion get the plain (already-working) page.
   var BIG = true;
   try { BIG = window.matchMedia('(min-width: 1024px)').matches; } catch (e) {}
-  function fxTheme() {
-    try { return document.documentElement.getAttribute('data-theme') || 'dark'; }
-    catch (e) { return 'dark'; }
-  }
-
-  /* ============================================================ WebGL bg */
-  function initWebGL() {
-    var THREE = window.THREE;
-    var canvas = document.createElement('canvas');
-    canvas.id = 'fx-canvas';
-    document.body.insertBefore(canvas, document.body.firstChild);
-
-    var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    renderer.setSize(window.innerWidth, window.innerHeight);
-
-    var scene = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 120);
-    camera.position.z = 20;
-
-    var COUNT = window.innerWidth < 760 ? 4200 : 9500;
-    var positions = new Float32Array(COUNT * 3);
-    var scales = new Float32Array(COUNT);
-    for (var i = 0; i < COUNT; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 70;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 46;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 46;
-      scales[i] = Math.random();
-    }
-    var geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geo.setAttribute('aScale', new THREE.BufferAttribute(scales, 1));
-
-    var mat = new THREE.ShaderMaterial({
-      transparent: true,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending,
-      uniforms: {
-        uTime: { value: 0 },
-        uSize: { value: (renderer.getPixelRatio ? renderer.getPixelRatio() : 1) * 34 },
-        uColorA: { value: new THREE.Color('#5e8eff') },
-        uColorB: { value: new THREE.Color('#5eead4') },
-      },
-      vertexShader: [
-        'attribute float aScale;',
-        'uniform float uTime;',
-        'uniform float uSize;',
-        'varying float vA;',
-        'void main(){',
-        '  vec3 p = position;',
-        '  p.y += sin(uTime*0.45 + position.x*0.25) * 0.8;',
-        '  p.x += cos(uTime*0.30 + position.y*0.22) * 0.8;',
-        '  vec4 mv = modelViewMatrix * vec4(p,1.0);',
-        '  gl_Position = projectionMatrix * mv;',
-        '  gl_PointSize = uSize * (0.35 + aScale) * (1.0 / -mv.z);',
-        '  vA = aScale;',
-        '}',
-      ].join('\n'),
-      fragmentShader: [
-        'uniform vec3 uColorA;',
-        'uniform vec3 uColorB;',
-        'varying float vA;',
-        'void main(){',
-        '  float d = distance(gl_PointCoord, vec2(0.5));',
-        '  if (d > 0.5) discard;',
-        '  float a = smoothstep(0.5, 0.0, d);',
-        '  vec3 col = mix(uColorA, uColorB, vA);',
-        '  gl_FragColor = vec4(col, a * (0.40 + vA*0.55));',
-        '}',
-      ].join('\n'),
-    });
-
-    var points = new THREE.Points(geo, mat);
-    scene.add(points);
-
-    // ---- central 3D object: a glowing, breathing fresnel icosahedron ----
-    var meshU = {
-      uTime: { value: 0 },
-      uA: { value: new THREE.Color('#5e8eff') },
-      uB: { value: new THREE.Color('#5eead4') },
-    };
-    var meshMat = new THREE.ShaderMaterial({
-      transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
-      uniforms: meshU,
-      vertexShader: [
-        'varying vec3 vN;',
-        'varying vec3 vView;',
-        'uniform float uTime;',
-        'void main(){',
-        '  vec3 p = position;',
-        '  p += normal * sin(uTime*0.7 + position.y*0.6 + position.x*0.4) * 0.14;',
-        '  vec4 mv = modelViewMatrix * vec4(p, 1.0);',
-        '  vN = normalize(normalMatrix * normal);',
-        '  vView = normalize(-mv.xyz);',
-        '  gl_Position = projectionMatrix * mv;',
-        '}',
-      ].join('\n'),
-      fragmentShader: [
-        'uniform vec3 uA;',
-        'uniform vec3 uB;',
-        'varying vec3 vN;',
-        'varying vec3 vView;',
-        'void main(){',
-        '  float f = pow(1.0 - max(dot(normalize(vN), normalize(vView)), 0.0), 2.2);',
-        '  vec3 col = mix(uA, uB, f);',
-        '  gl_FragColor = vec4(col, f * 0.85 + 0.04);',
-        '}',
-      ].join('\n'),
-    });
-    // High subdivision -> a smooth round sphere (not a faceted/blocky die).
-    var mesh = new THREE.Mesh(new THREE.IcosahedronGeometry(5.5, 5), meshMat);
-    scene.add(mesh);
-    // Coarser geodesic wireframe over the smooth orb for a clean line accent.
-    var wire = new THREE.LineSegments(
-      new THREE.WireframeGeometry(new THREE.IcosahedronGeometry(5.5, 2)),
-      new THREE.LineBasicMaterial({ color: new THREE.Color('#7c9cff'), transparent: true, opacity: 0.13 })
-    );
-    scene.add(wire);
-    // Composition: place the object as an off-centre accent (upper right) so the
-    // hero copy stays clear, instead of a blob dead-centre behind the text.
-    mesh.position.set(7.5, 2.5, -3);
-    wire.position.copy(mesh.position);
-
-    // ---- Cinematic bloom (post-processing) for a premium, glowing look ----
-    var composer = null, useBloom = false;
-    try {
-      if (THREE.EffectComposer && THREE.RenderPass && THREE.UnrealBloomPass) {
-        renderer.setClearColor(0x06070c, 1); // opaque dark base so bloom reads richly
-        composer = new THREE.EffectComposer(renderer);
-        composer.addPass(new THREE.RenderPass(scene, camera));
-        composer.addPass(new THREE.UnrealBloomPass(
-          new THREE.Vector2(window.innerWidth, window.innerHeight), 0.9, 0.55, 0.0));
-        useBloom = true;
-      }
-    } catch (e) { useBloom = false; }
-
-    var mx = 0, my = 0, tx = 0, ty = 0, scrollN = 0;
-    window.addEventListener('mousemove', function (e) {
-      mx = e.clientX / window.innerWidth - 0.5;
-      my = e.clientY / window.innerHeight - 0.5;
-    }, { passive: true });
-    window.addEventListener('scroll', function () {
-      var h = document.documentElement.scrollHeight - window.innerHeight;
-      scrollN = h > 0 ? (window.scrollY || window.pageYOffset || 0) / h : 0;
-    }, { passive: true });
-
-    var clock = new THREE.Clock();
-    var rafId = 0;
-    function tick() {
-      var t = clock.getElapsedTime();
-      mat.uniforms.uTime.value = t;
-      tx += (mx - tx) * 0.04;
-      ty += (my - ty) * 0.04;
-      points.rotation.y = t * 0.035 + tx * 0.6 + scrollN * 1.4;
-      points.rotation.x = ty * 0.4 + scrollN * 0.5;
-      meshU.uTime.value = t;
-      mesh.rotation.y = t * 0.07 + tx * 0.7;
-      mesh.rotation.x = t * 0.05 + ty * 0.5;
-      mesh.rotation.z = scrollN * 0.6;
-      var ms = 1 + scrollN * 0.5 + Math.sin(t * 0.5) * 0.035;
-      mesh.scale.setScalar(ms);
-      wire.rotation.copy(mesh.rotation);
-      wire.scale.copy(mesh.scale);
-      camera.position.x = tx * 4.5;
-      camera.position.y = -ty * 3.5;
-      camera.position.z = 20 - scrollN * 8.5;
-      camera.lookAt(scene.position);
-      if (useBloom) composer.render(); else renderer.render(scene, camera);
-      rafId = requestAnimationFrame(tick);
-    }
-    rafId = requestAnimationFrame(tick);
-
-    window.addEventListener('resize', function () {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      if (composer) composer.setSize(window.innerWidth, window.innerHeight);
-    });
-    document.addEventListener('visibilitychange', function () {
-      if (document.hidden) { cancelAnimationFrame(rafId); }
-      else { rafId = requestAnimationFrame(tick); }
-    });
-  }
 
   /* =================================================== Smooth scroll + GSAP */
   function initMotion() {
@@ -349,23 +166,6 @@
   }
 
   function boot() {
-    // WebGL only on dark theme + capable desktops; built once, then shown/hidden
-    // as the visitor toggles theme (additive particles suit ink, not white).
-    var webglStarted = false;
-    function startWebGL() {
-      if (webglStarted || REDUCE || !FINE || !BIG || !window.THREE) return;
-      if (fxTheme() !== 'dark') return;
-      try { initWebGL(); webglStarted = true; } catch (e) {}
-    }
-    startWebGL();
-    try {
-      var fxThemeMO = new MutationObserver(function () {
-        var c = document.getElementById('fx-canvas');
-        if (fxTheme() === 'dark') { if (c) c.style.display = ''; else startWebGL(); }
-        else if (c) { c.style.display = 'none'; }
-      });
-      fxThemeMO.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-    } catch (e) {}
     try { if (!REDUCE && FINE) initCursor(); } catch (e) {}
     try { if (FINE) initMagnetic(); } catch (e) {}
     try { if (!REDUCE && FINE && BIG) initTilt(); } catch (e) {}

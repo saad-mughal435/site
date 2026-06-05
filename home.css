@@ -137,21 +137,15 @@ body::before {
           mask-image: radial-gradient(ellipse 92% 60% at 50% 0%, #000 32%, transparent 100%);
   pointer-events: none;
 }
-/* Soft accent glows that drift slowly — the "animated gradient" backdrop. */
+/* Soft, STATIC accent glows — a calm professional backdrop (no animation). */
 body::after {
   content: "";
-  position: fixed; inset: -10% -5% 0;
+  position: fixed; inset: 0;
   z-index: -2;
   background:
     radial-gradient(680px 520px at 86% -6%, var(--glow-blue), transparent 70%),
-    radial-gradient(560px 520px at 2% 8%, var(--glow-teal), transparent 72%),
-    radial-gradient(620px 600px at 60% 108%, var(--glow-blue), transparent 74%);
+    radial-gradient(560px 520px at 2% 8%, var(--glow-teal), transparent 72%);
   pointer-events: none;
-  animation: bgDrift 22s var(--ease) infinite alternate;
-}
-@keyframes bgDrift {
-  0%   { transform: translate3d(0, 0, 0) scale(1); }
-  100% { transform: translate3d(0, -2.2%, 0) scale(1.06); }
 }
 
 a { color: var(--link); text-decoration: none; transition: color var(--t-fast) ease; }

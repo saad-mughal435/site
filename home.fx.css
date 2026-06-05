@@ -2,20 +2,7 @@
    Loaded after home.css. Everything here is additive; under reduced-motion or
    on touch devices the heavy bits are switched off. */
 
-/* ---- WebGL background canvas (behind all content) ---- */
-#fx-canvas {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: -1;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 1.2s ease;
-}
-.fx-ready #fx-canvas { opacity: 1; }
-
-/* Content sits above the canvas; the hero lets the WebGL show through. */
+/* Content sits above the static CSS backdrop; the hero lets it show through. */
 #root { position: relative; z-index: 1; }
 .hero { background: transparent; }
 

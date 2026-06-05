@@ -192,8 +192,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
 <script>(function(){try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.setAttribute('data-theme',t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='light'?'#f5f7fc':'#07080d');}catch(e){}})();</script>
-<link rel="stylesheet" href="home.css?v=20260605e" />
-<link rel="stylesheet" href="home.fx.css?v=20260605b" />
+<link rel="stylesheet" href="home.css?v=20260605f" />
+<link rel="stylesheet" href="home.fx.css?v=20260605f" />
 </head>
 <body>
 
@@ -306,13 +306,12 @@
   update();
 })();
 </script>
-<!-- ============ Animation layer — desktop only, decoupled from React ============ -->
-<!-- Feature-detected + gated inside home.fx.js (pointer:fine, >=1024px, no reduced-motion). three r137 = last working UMD build; do not bump blindly. -->
-<script defer crossorigin src="https://cdn.jsdelivr.net/npm/three@0.137.5/build/three.min.js"></script>
+<!-- ============ Scroll/motion layer — desktop, decoupled from React ============ -->
+<!-- Feature-detected + gated inside home.fx.js (pointer:fine, >=1024px, no reduced-motion). -->
 <script defer crossorigin src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script defer crossorigin src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script defer crossorigin src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-<script src="home.fx.js?v=20260605b" defer></script>
+<script src="home.fx.js?v=20260605f" defer></script>
 
 <!-- ================= LEFT CONTACT RAIL ================= -->
 <aside class="social-rail" aria-label="Contact Saad">
