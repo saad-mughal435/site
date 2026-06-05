@@ -787,13 +787,13 @@ const PROJECTS = [{
     target: '_blank'
   }],
   ctaSubtitle: 'Published on npm · MIT · green CI — npm install @saadmughal435/n8n-nodes-devtools'
-}, {
+}];
+
+/* Product demos — shown after Skills as a horizontal slider (compact cards). */
+const DEMO_PROJECTS = [{
   domain: 'code',
   kind: 'Disconnected demo · Portfolio piece',
   year: '2026',
-  sectionEyebrow: 'Other software demos',
-  sectionHeading: 'Product demos built around real workflows',
-  sectionBlurb: 'These browser-based demos are not the headline of the portfolio. They show how the same operations-first approach can be applied to B2B portals, marketplaces, booking systems, storefronts, admin panels, approvals, dashboards, and workflow-heavy product software.',
   title: 'Anvil Supply Co. - B2B wholesale portal',
   desc: /*#__PURE__*/React.createElement(Fragment, null, "A wholesale/industrial portal with tier pricing, MOQs, contract discounts, quote requests, and an approval workflow for large orders. Multi-user accounts with purchaser / approver / viewer roles, recurring orders, statements view, and a data-dense admin panel with quote queue and approval queue."),
   bullets: [/*#__PURE__*/React.createElement(Fragment, null, "Tier pricing (1/10/50/100), MOQ enforcement, customer contract discounts"), /*#__PURE__*/React.createElement(Fragment, null, "Quote request workflow + approval workflow for orders over $1,000"), /*#__PURE__*/React.createElement(Fragment, null, "Multi-user accounts (purchaser / approver / viewer), bulk SKU paste add"), /*#__PURE__*/React.createElement(Fragment, null, "Admin: order queue, quote queue, approval queue, customers, analytics")],
@@ -1032,12 +1032,15 @@ const PROJECTS = [{
   tags: ['scikit-learn', 'NumPy', 'Pandas']
 }];
 function ProjectCard({
-  p
+  p,
+  compact
 }) {
+  // compact = slider card: summary + tags + links (the bullet detail lives on
+  // each demo's own page), so the row of demos stays scannable.
   return /*#__PURE__*/React.createElement(TiltCard, {
     tag: "article",
-    intensity: 5,
-    className: 'project' + (p.featured ? ' featured' : '')
+    intensity: compact ? 4 : 5,
+    className: 'project' + (p.featured ? ' featured' : '') + (compact ? ' demo-slide' : '')
   }, /*#__PURE__*/React.createElement("div", {
     className: "project-meta"
   }, /*#__PURE__*/React.createElement("span", {
@@ -1048,7 +1051,7 @@ function ProjectCard({
     className: "project-title"
   }, p.title), /*#__PURE__*/React.createElement("p", {
     className: "project-desc"
-  }, p.desc), /*#__PURE__*/React.createElement("ul", {
+  }, p.desc), !compact && /*#__PURE__*/React.createElement("ul", {
     className: "project-bullets"
   }, p.bullets.map((b, i) => /*#__PURE__*/React.createElement("li", {
     key: i
@@ -1066,9 +1069,9 @@ function ProjectCard({
   }, c.target ? {
     target: c.target,
     rel: 'noopener'
-  } : {}), c.label)), p.ctaSubtitle && /*#__PURE__*/React.createElement("div", {
+  } : {}), c.label)), !compact && p.ctaSubtitle && /*#__PURE__*/React.createElement("div", {
     className: "cta-subtitle"
-  }, p.ctaSubtitle), p.ctaTip && /*#__PURE__*/React.createElement("div", {
+  }, p.ctaSubtitle), !compact && p.ctaTip && /*#__PURE__*/React.createElement("div", {
     className: "cta-tip"
   }, p.ctaTip)));
 }
@@ -1083,7 +1086,7 @@ function Projects({
     className: "section-head"
   }, /*#__PURE__*/React.createElement("span", {
     className: "section-tag"
-  }, "Fig. 03 \u2014 Selected Work"), /*#__PURE__*/React.createElement("h2", null, /*#__PURE__*/React.createElement(WordReveal, null, "Software projects built around real workflows."))), /*#__PURE__*/React.createElement(Reveal, {
+  }, "Fig. 03 \u2014 Selected Work"), /*#__PURE__*/React.createElement("h2", null, /*#__PURE__*/React.createElement(WordReveal, null, "Production software, backends and open source."))), /*#__PURE__*/React.createElement(Reveal, {
     stagger: true,
     className: "projects-grid"
   }, items.map(p => /*#__PURE__*/React.createElement(Fragment, {
@@ -1095,6 +1098,60 @@ function Projects({
   }, p.sectionEyebrow), /*#__PURE__*/React.createElement("h3", null, p.sectionHeading), p.sectionBlurb && /*#__PURE__*/React.createElement("p", null, p.sectionBlurb)), /*#__PURE__*/React.createElement(ProjectCard, {
     p: p
   })))));
+}
+
+/* =========================================================
+   DEMOS — product demos as a horizontal slider (after Skills)
+   ========================================================= */
+function Demos({
+  view
+}) {
+  const items = DEMO_PROJECTS.filter(p => view === 'all' || p.domain === view || p.domain === 'all');
+  const trackRef = useRef(null);
+  if (!items.length) return null;
+  const slide = dir => {
+    const el = trackRef.current;
+    if (el) el.scrollBy({
+      left: dir * Math.round(el.clientWidth * 0.85),
+      behavior: 'smooth'
+    });
+  };
+  return /*#__PURE__*/React.createElement("section", {
+    id: "demos",
+    className: "section container"
+  }, /*#__PURE__*/React.createElement(Reveal, {
+    className: "section-head demos-head"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "demos-head-text"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "section-tag"
+  }, "Fig. 05 \u2014 Demos"), /*#__PURE__*/React.createElement("h2", null, /*#__PURE__*/React.createElement(WordReveal, null, "Product demos built around real workflows.")), /*#__PURE__*/React.createElement("p", {
+    className: "demos-sub"
+  }, "Browser-based demos - B2B portals, marketplaces, booking, POS, AI copilots and dashboards. Drag, swipe, or use the arrows; open any to explore the full build. ", /*#__PURE__*/React.createElement("a", {
+    href: "demo.html",
+    target: "_blank",
+    rel: "noopener"
+  }, "Full gallery \u2197"))), /*#__PURE__*/React.createElement("div", {
+    className: "slider-nav"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "slider-btn",
+    type: "button",
+    "aria-label": "Scroll to previous demos",
+    onClick: () => slide(-1)
+  }, "\u2039"), /*#__PURE__*/React.createElement("button", {
+    className: "slider-btn",
+    type: "button",
+    "aria-label": "Scroll to next demos",
+    onClick: () => slide(1)
+  }, "\u203A"))), /*#__PURE__*/React.createElement("div", {
+    className: "demos-slider",
+    ref: trackRef,
+    "data-lenis-prevent": true
+  }, items.map(p => /*#__PURE__*/React.createElement(ProjectCard, {
+    key: p.title,
+    p: p,
+    compact: true
+  }))));
 }
 
 /* =========================================================
@@ -1179,7 +1236,7 @@ function Contact() {
     className: "contact-left"
   }, /*#__PURE__*/React.createElement("span", {
     className: "section-tag"
-  }, "Fig. 05 \u2014 Contact"), /*#__PURE__*/React.createElement("h2", null, "Let\u2019s build something that ships."), /*#__PURE__*/React.createElement("p", null, "If you\u2019re hiring for automation, ERP/MES, manufacturing systems, backend engineering, IT operations, or Python-heavy technical roles in the UAE or remote, I\u2019d love to talk."), /*#__PURE__*/React.createElement(MagneticBtn, {
+  }, "Fig. 06 \u2014 Contact"), /*#__PURE__*/React.createElement("h2", null, "Let\u2019s build something that ships."), /*#__PURE__*/React.createElement("p", null, "If you\u2019re hiring for automation, ERP/MES, manufacturing systems, backend engineering, IT operations, or Python-heavy technical roles in the UAE or remote, I\u2019d love to talk."), /*#__PURE__*/React.createElement(MagneticBtn, {
     as: "a",
     href: "contact.html",
     className: "btn btn-primary"
@@ -1283,6 +1340,8 @@ function App() {
   }), /*#__PURE__*/React.createElement(Projects, {
     view: view
   }), /*#__PURE__*/React.createElement(Skills, {
+    view: view
+  }), /*#__PURE__*/React.createElement(Demos, {
     view: view
   }), /*#__PURE__*/React.createElement(FAQ, null), /*#__PURE__*/React.createElement(Contact, null)), /*#__PURE__*/React.createElement(Footer, null));
 }

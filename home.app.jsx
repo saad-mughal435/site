@@ -619,11 +619,12 @@ const PROJECTS = [
     ],
     ctaSubtitle: 'Published on npm · MIT · green CI — npm install @saadmughal435/n8n-nodes-devtools',
   },
+];
+
+/* Product demos — shown after Skills as a horizontal slider (compact cards). */
+const DEMO_PROJECTS = [
   {
     domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
-    sectionEyebrow: 'Other software demos',
-    sectionHeading: 'Product demos built around real workflows',
-    sectionBlurb: 'These browser-based demos are not the headline of the portfolio. They show how the same operations-first approach can be applied to B2B portals, marketplaces, booking systems, storefronts, admin panels, approvals, dashboards, and workflow-heavy product software.',
     title: 'Anvil Supply Co. - B2B wholesale portal',
     desc: <Fragment>A wholesale/industrial portal with tier pricing, MOQs, contract discounts, quote requests, and an
       approval workflow for large orders. Multi-user accounts with purchaser / approver / viewer roles, recurring
@@ -837,16 +838,19 @@ const PROJECTS = [
   },
 ];
 
-function ProjectCard({ p }) {
+function ProjectCard({ p, compact }) {
+  // compact = slider card: summary + tags + links (the bullet detail lives on
+  // each demo's own page), so the row of demos stays scannable.
   return (
-    <TiltCard tag="article" intensity={5} className={'project' + (p.featured ? ' featured' : '')}>
+    <TiltCard tag="article" intensity={compact ? 4 : 5}
+      className={'project' + (p.featured ? ' featured' : '') + (compact ? ' demo-slide' : '')}>
       <div className="project-meta">
         <span className="project-kind">{p.kind}</span>
         <span className="project-year">{p.year}</span>
       </div>
       <h3 className="project-title">{p.title}</h3>
       <p className="project-desc">{p.desc}</p>
-      <ul className="project-bullets">{p.bullets.map((b, i) => <li key={i}>{b}</li>)}</ul>
+      {!compact && <ul className="project-bullets">{p.bullets.map((b, i) => <li key={i}>{b}</li>)}</ul>}
       <div className="project-tags">{p.tags.map((t) => <span key={t} className="tag">{t}</span>)}</div>
       {p.ctas && (
         <div className="project-cta">
@@ -855,8 +859,8 @@ function ProjectCard({ p }) {
                className={'btn ' + (c.primary ? 'btn-primary' : 'btn-ghost') + (c.prominent ? ' btn-prominent' : '')}
                {...(c.target ? { target: c.target, rel: 'noopener' } : {})}>{c.label}</a>
           ))}
-          {p.ctaSubtitle && <div className="cta-subtitle">{p.ctaSubtitle}</div>}
-          {p.ctaTip && <div className="cta-tip">{p.ctaTip}</div>}
+          {!compact && p.ctaSubtitle && <div className="cta-subtitle">{p.ctaSubtitle}</div>}
+          {!compact && p.ctaTip && <div className="cta-tip">{p.ctaTip}</div>}
         </div>
       )}
     </TiltCard>
@@ -869,7 +873,7 @@ function Projects({ view }) {
     <section id="projects" className="section container">
       <Reveal className="section-head">
         <span className="section-tag">Fig. 03 — Selected Work</span>
-        <h2><WordReveal>Software projects built around real workflows.</WordReveal></h2>
+        <h2><WordReveal>Production software, backends and open source.</WordReveal></h2>
       </Reveal>
       <Reveal stagger className="projects-grid">
         {items.map((p) => (
@@ -885,6 +889,37 @@ function Projects({ view }) {
           </Fragment>
         ))}
       </Reveal>
+    </section>
+  );
+}
+
+/* =========================================================
+   DEMOS — product demos as a horizontal slider (after Skills)
+   ========================================================= */
+function Demos({ view }) {
+  const items = DEMO_PROJECTS.filter((p) => view === 'all' || p.domain === view || p.domain === 'all');
+  const trackRef = useRef(null);
+  if (!items.length) return null;
+  const slide = (dir) => {
+    const el = trackRef.current;
+    if (el) el.scrollBy({ left: dir * Math.round(el.clientWidth * 0.85), behavior: 'smooth' });
+  };
+  return (
+    <section id="demos" className="section container">
+      <Reveal className="section-head demos-head">
+        <div className="demos-head-text">
+          <span className="section-tag">Fig. 05 — Demos</span>
+          <h2><WordReveal>Product demos built around real workflows.</WordReveal></h2>
+          <p className="demos-sub">Browser-based demos - B2B portals, marketplaces, booking, POS, AI copilots and dashboards. Drag, swipe, or use the arrows; open any to explore the full build. <a href="demo.html" target="_blank" rel="noopener">Full gallery ↗</a></p>
+        </div>
+        <div className="slider-nav">
+          <button className="slider-btn" type="button" aria-label="Scroll to previous demos" onClick={() => slide(-1)}>‹</button>
+          <button className="slider-btn" type="button" aria-label="Scroll to next demos" onClick={() => slide(1)}>›</button>
+        </div>
+      </Reveal>
+      <div className="demos-slider" ref={trackRef} data-lenis-prevent>
+        {items.map((p) => <ProjectCard key={p.title} p={p} compact />)}
+      </div>
     </section>
   );
 }
@@ -949,7 +984,7 @@ function Contact() {
     <section id="contact" className="section container">
       <Reveal className="contact-box">
         <div className="contact-left">
-          <span className="section-tag">Fig. 05 — Contact</span>
+          <span className="section-tag">Fig. 06 — Contact</span>
           <h2>Let&rsquo;s build something that ships.</h2>
           <p>If you&rsquo;re hiring for automation, ERP/MES, manufacturing systems, backend engineering, IT operations, or
             Python-heavy technical roles in the UAE or remote, I&rsquo;d love to talk.</p>
@@ -1027,6 +1062,7 @@ function App() {
         <Experience view={view} />
         <Projects view={view} />
         <Skills view={view} />
+        <Demos view={view} />
         <FAQ />
         <Contact />
       </main>
