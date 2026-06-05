@@ -420,7 +420,9 @@ function Hero({
     loading: "eager",
     decoding: "async",
     alt: "Muhammad Saad - Automation & Software Developer, Dubai"
-  }))));
+  }), /*#__PURE__*/React.createElement("figcaption", null, /*#__PURE__*/React.createElement("span", {
+    className: "plate-no"
+  }, "Plate 01"), " M. Saad \xB7 Automation & Software \xB7 Dubai, UAE"))));
 }
 
 /* =========================================================
@@ -529,7 +531,7 @@ function FAQ() {
     className: "section-head"
   }, /*#__PURE__*/React.createElement("span", {
     className: "section-tag"
-  }, "FAQ"), /*#__PURE__*/React.createElement("h2", null, "About Muhammad Saad - engineering background, software delivery focus.")), /*#__PURE__*/React.createElement(Reveal, {
+  }, "Appendix \u2014 FAQ"), /*#__PURE__*/React.createElement("h2", null, "About Muhammad Saad - engineering background, software delivery focus.")), /*#__PURE__*/React.createElement(Reveal, {
     stagger: true,
     className: "faq-list"
   }, FAQ_ITEMS.map((f, i) => /*#__PURE__*/React.createElement("details", {
@@ -552,7 +554,7 @@ function About() {
     className: "section-head"
   }, /*#__PURE__*/React.createElement("span", {
     className: "section-tag"
-  }, "01 - About"), /*#__PURE__*/React.createElement("h2", null, /*#__PURE__*/React.createElement(WordReveal, null, "I sit between the factory floor and the keyboard."))), /*#__PURE__*/React.createElement("div", {
+  }, "Fig. 01 \u2014 About"), /*#__PURE__*/React.createElement("h2", null, /*#__PURE__*/React.createElement(WordReveal, null, "I sit between the factory floor and the keyboard."))), /*#__PURE__*/React.createElement("div", {
     className: "about-grid"
   }, /*#__PURE__*/React.createElement(Reveal, {
     className: "about-copy"
@@ -619,7 +621,7 @@ function Experience({
     className: "section-head"
   }, /*#__PURE__*/React.createElement("span", {
     className: "section-tag"
-  }, "02 - Experience"), /*#__PURE__*/React.createElement("h2", null, /*#__PURE__*/React.createElement(WordReveal, null, "A short career, but a wide one."))), /*#__PURE__*/React.createElement("ol", {
+  }, "Fig. 02 \u2014 Experience"), /*#__PURE__*/React.createElement("h2", null, /*#__PURE__*/React.createElement(WordReveal, null, "A short career, but a wide one."))), /*#__PURE__*/React.createElement("ol", {
     className: "timeline"
   }, items.map((e, i) => /*#__PURE__*/React.createElement(Reveal, {
     as: "li",
@@ -1039,7 +1041,7 @@ function Projects({
     className: "section-head"
   }, /*#__PURE__*/React.createElement("span", {
     className: "section-tag"
-  }, "03 - Selected Work"), /*#__PURE__*/React.createElement("h2", null, /*#__PURE__*/React.createElement(WordReveal, null, "Software projects built around real workflows."))), /*#__PURE__*/React.createElement(Reveal, {
+  }, "Fig. 03 \u2014 Selected Work"), /*#__PURE__*/React.createElement("h2", null, /*#__PURE__*/React.createElement(WordReveal, null, "Software projects built around real workflows."))), /*#__PURE__*/React.createElement(Reveal, {
     stagger: true,
     className: "projects-grid"
   }, items.map(p => /*#__PURE__*/React.createElement(Fragment, {
@@ -1113,7 +1115,7 @@ function Skills({
     className: "section-head"
   }, /*#__PURE__*/React.createElement("span", {
     className: "section-tag"
-  }, "04 - Skills"), /*#__PURE__*/React.createElement("h2", null, /*#__PURE__*/React.createElement(WordReveal, null, "Skills I use to build and run operations software."))), /*#__PURE__*/React.createElement(Reveal, {
+  }, "Fig. 04 \u2014 Skills"), /*#__PURE__*/React.createElement("h2", null, /*#__PURE__*/React.createElement(WordReveal, null, "Skills I use to build and run operations software."))), /*#__PURE__*/React.createElement(Reveal, {
     stagger: true,
     className: "skills-grid"
   }, items.map(s => /*#__PURE__*/React.createElement(SkillCard, {
@@ -1135,7 +1137,7 @@ function Contact() {
     className: "contact-left"
   }, /*#__PURE__*/React.createElement("span", {
     className: "section-tag"
-  }, "05 - Contact"), /*#__PURE__*/React.createElement("h2", null, "Let\u2019s build something that ships."), /*#__PURE__*/React.createElement("p", null, "If you\u2019re hiring for automation, ERP/MES, manufacturing systems, backend engineering, IT operations, or Python-heavy technical roles in the UAE or remote, I\u2019d love to talk."), /*#__PURE__*/React.createElement(MagneticBtn, {
+  }, "Fig. 05 \u2014 Contact"), /*#__PURE__*/React.createElement("h2", null, "Let\u2019s build something that ships."), /*#__PURE__*/React.createElement("p", null, "If you\u2019re hiring for automation, ERP/MES, manufacturing systems, backend engineering, IT operations, or Python-heavy technical roles in the UAE or remote, I\u2019d love to talk."), /*#__PURE__*/React.createElement(MagneticBtn, {
     as: "a",
     href: "contact.html",
     className: "btn btn-primary"

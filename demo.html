@@ -7,10 +7,10 @@
 <meta name="description" content="Interactive walkthrough of an enterprise MES/ERP system built by Saad. Production planning, inventory, quality control, accounts, OEE monitoring and Sage integration. Built with Python, FastAPI, MongoDB. All data fabricated for demonstration." />
 <meta name="keywords" content="MES demo, ERP demo, manufacturing software demo, Saad portfolio, Python MES, FastAPI ERP, beverage manufacturing software" />
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
-<meta name="theme-color" content="#07080d" />
-<meta name="color-scheme" content="dark light" />
+<meta name="theme-color" content="#ece4d2" />
+<meta name="color-scheme" content="light" />
 <link rel="canonical" href="https://saadm.dev/demo.html" />
-<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2064%2064'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0%25'%20stop-color%3D'%237c9cff'/%3E%3Cstop%20offset%3D'100%25'%20stop-color%3D'%235eead4'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D'64'%20height%3D'64'%20rx%3D'14'%20fill%3D'url(%23g)'/%3E%3Ctext%20x%3D'50%25'%20y%3D'56%25'%20font-family%3D'monospace'%20font-weight%3D'700'%20font-size%3D'22'%20fill%3D'%2307080d'%20text-anchor%3D'middle'%3ES%3C/text%3E%3C/svg%3E" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='9'%20fill='%231b1712'/%3E%3Ctext%20x='50%25'%20y='58%25'%20font-family='Georgia,%20Times,%20serif'%20font-style='italic'%20font-weight='600'%20font-size='36'%20fill='%23f4efe3'%20text-anchor='middle'%3ES%3C/text%3E%3Crect%20x='18'%20y='47'%20width='28'%20height='3'%20fill='%23c0341a'/%3E%3C/svg%3E" />
 <link rel="apple-touch-icon" href="saad.png" />
 
 <meta property="og:type" content="website" />
@@ -29,9 +29,9 @@
 <meta name="twitter:image" content="https://saadm.dev/og.png?v=20260520" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles.css?v=20260514m4" />
-<link rel="stylesheet" href="demo.css?v=20260514m4" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,460;0,9..144,500;0,9..144,600;1,9..144,440&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css?v=20260605a" />
+<link rel="stylesheet" href="demo.css?v=20260605a" />
 </head>
 <body>
 
@@ -168,7 +168,7 @@
 
 <!-- ================= INTRO ================= -->
 <section id="erp-demo" class="container demo-intro no-print" style="padding-top:24px;">
-  <div style="display:inline-flex; align-items:center; gap:8px; padding:4px 12px; border-radius:999px; background:rgba(94,234,212,0.10); border:1px solid rgba(94,234,212,0.30); margin-bottom:10px; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#5eead4;">
+  <div style="display:inline-flex; align-items:center; gap:8px; padding:4px 12px; border-radius:999px; background:var(--panel-hi); border:1px solid var(--rule-2); margin-bottom:10px; font-family:var(--mono); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--signal);">
     <span>●</span> Now showing: ERP system
   </div>
   <span class="section-tag">Project walkthrough</span>
@@ -213,36 +213,36 @@
   </p>
 
   <!-- ================= RECOMMENDED TOUR ================= -->
-  <div class="demo-tour" style="margin-top:36px; padding:24px 28px; background:linear-gradient(135deg, rgba(94,234,212,0.06), rgba(124,156,255,0.05)); border:1px solid rgba(94,234,212,0.22); border-radius:14px; position:relative;">
+  <div class="demo-tour" style="margin-top:36px; padding:24px 28px; background:var(--panel); border:1px solid var(--rule-2); border-radius:8px; position:relative;">
     <div style="display:flex; align-items:center; gap:8px; margin-bottom:14px;">
-      <span style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:1.2px; text-transform:uppercase; color:#5eead4; background:rgba(94,234,212,0.12); padding:4px 10px; border-radius:999px; border:1px solid rgba(94,234,212,0.3);">● Recommended 3-minute tour</span>
+      <span style="font-family:var(--mono); font-size:11px; letter-spacing:1.2px; text-transform:uppercase; color:var(--signal); background:var(--panel-hi); padding:4px 10px; border-radius:999px; border:1px solid var(--rule-2);">● Recommended 3-minute tour</span>
       <span style="font-family:var(--mono); font-size:11.5px; color:var(--fg-mute);">Best path through the live app</span>
     </div>
     <h3 style="margin:0 0 6px; font-size:18px; color:var(--fg);">If you only have 3 minutes - click these 5 modules in order.</h3>
     <p style="font-size:13.5px; color:var(--fg-soft); margin:0 0 18px; max-width:720px;">The live app has 20+ modules and it's easy to wander. This is the route that shows the whole MES/ERP/OEE story end-to-end without missing anything important. Each step opens the live app at that module.</p>
     <ol class="demo-tour-steps" style="list-style:none; padding:0; margin:0; display:grid; gap:10px; grid-template-columns:1fr;">
-      <li style="display:grid; grid-template-columns:32px 1fr auto; gap:14px; align-items:center; padding:12px 14px; background:rgba(0,0,0,0.18); border:1px solid rgba(124,156,255,0.18); border-radius:10px;">
-        <span style="display:grid; place-items:center; width:32px; height:32px; border-radius:999px; background:linear-gradient(135deg,#7c9cff,#5eead4); color:#07080d; font-weight:800; font-family:var(--mono); font-size:14px;">1</span>
+      <li style="display:grid; grid-template-columns:32px 1fr auto; gap:14px; align-items:center; padding:12px 14px; background:var(--panel-hi); border:1px solid var(--rule-2); border-radius:5px;">
+        <span style="display:grid; place-items:center; width:32px; height:32px; border-radius:999px; background:var(--ink); color:var(--panel-hi); font-weight:600; font-family:var(--mono); font-size:14px;">1</span>
         <div><strong style="color:var(--fg); display:block; font-size:14.5px;">Dashboard</strong><span style="font-size:12.5px; color:var(--fg-soft);">Plant overview - KPIs, alerts, today's batches at a glance.</span></div>
         <a class="btn btn-ghost btn-sm" href="/app/index.html#dashboard" target="_blank" rel="noopener">Open ↗</a>
       </li>
-      <li style="display:grid; grid-template-columns:32px 1fr auto; gap:14px; align-items:center; padding:12px 14px; background:rgba(0,0,0,0.18); border:1px solid rgba(124,156,255,0.18); border-radius:10px;">
-        <span style="display:grid; place-items:center; width:32px; height:32px; border-radius:999px; background:linear-gradient(135deg,#7c9cff,#5eead4); color:#07080d; font-weight:800; font-family:var(--mono); font-size:14px;">2</span>
+      <li style="display:grid; grid-template-columns:32px 1fr auto; gap:14px; align-items:center; padding:12px 14px; background:var(--panel-hi); border:1px solid var(--rule-2); border-radius:5px;">
+        <span style="display:grid; place-items:center; width:32px; height:32px; border-radius:999px; background:var(--ink); color:var(--panel-hi); font-weight:600; font-family:var(--mono); font-size:14px;">2</span>
         <div><strong style="color:var(--fg); display:block; font-size:14.5px;">Job order</strong><span style="font-size:12.5px; color:var(--fg-soft);">Production planning flow - customer PO → job order → batch.</span></div>
         <a class="btn btn-ghost btn-sm" href="/app/index.html#joborder" target="_blank" rel="noopener">Open ↗</a>
       </li>
-      <li style="display:grid; grid-template-columns:32px 1fr auto; gap:14px; align-items:center; padding:12px 14px; background:rgba(0,0,0,0.18); border:1px solid rgba(124,156,255,0.18); border-radius:10px;">
-        <span style="display:grid; place-items:center; width:32px; height:32px; border-radius:999px; background:linear-gradient(135deg,#7c9cff,#5eead4); color:#07080d; font-weight:800; font-family:var(--mono); font-size:14px;">3</span>
+      <li style="display:grid; grid-template-columns:32px 1fr auto; gap:14px; align-items:center; padding:12px 14px; background:var(--panel-hi); border:1px solid var(--rule-2); border-radius:5px;">
+        <span style="display:grid; place-items:center; width:32px; height:32px; border-radius:999px; background:var(--ink); color:var(--panel-hi); font-weight:600; font-family:var(--mono); font-size:14px;">3</span>
         <div><strong style="color:var(--fg); display:block; font-size:14.5px;">Quality control</strong><span style="font-size:12.5px; color:var(--fg-soft);">Batch record + seam check + microbiology - open any QC batch to see the workflow.</span></div>
         <a class="btn btn-ghost btn-sm" href="/app/index.html#qc" target="_blank" rel="noopener">Open ↗</a>
       </li>
-      <li style="display:grid; grid-template-columns:32px 1fr auto; gap:14px; align-items:center; padding:12px 14px; background:rgba(0,0,0,0.18); border:1px solid rgba(124,156,255,0.18); border-radius:10px;">
-        <span style="display:grid; place-items:center; width:32px; height:32px; border-radius:999px; background:linear-gradient(135deg,#7c9cff,#5eead4); color:#07080d; font-weight:800; font-family:var(--mono); font-size:14px;">4</span>
+      <li style="display:grid; grid-template-columns:32px 1fr auto; gap:14px; align-items:center; padding:12px 14px; background:var(--panel-hi); border:1px solid var(--rule-2); border-radius:5px;">
+        <span style="display:grid; place-items:center; width:32px; height:32px; border-radius:999px; background:var(--ink); color:var(--panel-hi); font-weight:600; font-family:var(--mono); font-size:14px;">4</span>
         <div><strong style="color:var(--fg); display:block; font-size:14.5px;">Inventory</strong><span style="font-size:12.5px; color:var(--fg-soft);">Sage-linked stock tracking - raw materials and finished goods with batch + expiry.</span></div>
         <a class="btn btn-ghost btn-sm" href="/app/index.html#inventory" target="_blank" rel="noopener">Open ↗</a>
       </li>
-      <li style="display:grid; grid-template-columns:32px 1fr auto; gap:14px; align-items:center; padding:12px 14px; background:rgba(0,0,0,0.18); border:1px solid rgba(124,156,255,0.18); border-radius:10px;">
-        <span style="display:grid; place-items:center; width:32px; height:32px; border-radius:999px; background:linear-gradient(135deg,#7c9cff,#5eead4); color:#07080d; font-weight:800; font-family:var(--mono); font-size:14px;">5</span>
+      <li style="display:grid; grid-template-columns:32px 1fr auto; gap:14px; align-items:center; padding:12px 14px; background:var(--panel-hi); border:1px solid var(--rule-2); border-radius:5px;">
+        <span style="display:grid; place-items:center; width:32px; height:32px; border-radius:999px; background:var(--ink); color:var(--panel-hi); font-weight:600; font-family:var(--mono); font-size:14px;">5</span>
         <div><strong style="color:var(--fg); display:block; font-size:14.5px;">Reporting / PDF</strong><span style="font-size:12.5px; color:var(--fg-soft);">Click <em>Generate PDF</em> on any record to see a print-ready document.</span></div>
         <a class="btn btn-ghost btn-sm" href="/app/index.html#reporting" target="_blank" rel="noopener">Open ↗</a>
       </li>
@@ -1308,8 +1308,8 @@
     </main>
   </div>
 
-  <div class="after-note" style="border-left:3px solid #5eead4; background:rgba(94,234,212,0.06); padding:14px 18px; font-family:'Inter',sans-serif; font-size:14px; line-height:1.6; color:#cbd5e1; margin-top:24px; border-radius:6px;">
-    <strong style="color:#5eead4;">Intentional design choice:</strong> every value above is fabricated for portfolio
+  <div class="after-note" style="border-left:3px solid var(--signal); background:var(--panel); padding:14px 18px; font-family:var(--sans); font-size:14px; line-height:1.6; color:var(--ink-soft); margin-top:24px; border-radius:5px; text-align:left;">
+    <strong style="color:var(--signal);">Intentional design choice:</strong> every value above is fabricated for portfolio
     privacy. The structure, workflow names, document templates and inter-module integrations mirror the real
     production system - they are industry-standard MES/ERP shapes I designed and shipped.
   </div>
@@ -1797,18 +1797,5 @@
   update();
 })();
 </script>
-<!-- saadm.dev animation layer (three.js + gsap + lenis) -->
-<link rel="stylesheet" href="/home.fx.css?v=20260604c" />
-<script defer src="https://cdn.jsdelivr.net/npm/three@0.137.5/build/three.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/three@0.137.5/examples/js/shaders/CopyShader.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/three@0.137.5/examples/js/shaders/LuminosityHighPassShader.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/three@0.137.5/examples/js/postprocessing/EffectComposer.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/three@0.137.5/examples/js/postprocessing/RenderPass.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/three@0.137.5/examples/js/postprocessing/ShaderPass.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/three@0.137.5/examples/js/postprocessing/UnrealBloomPass.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-<script defer src="/home.fx.js?v=20260604e"></script>
 </body>
 </html>

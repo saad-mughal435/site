@@ -275,6 +275,7 @@ function Hero({ view, setView }) {
         <figure className="hero-photo">
           <img src="saad.png" width="400" height="500" loading="eager" decoding="async"
                alt="Muhammad Saad - Automation & Software Developer, Dubai" />
+          <figcaption><span className="plate-no">Plate 01</span> M. Saad · Automation &amp; Software · Dubai, UAE</figcaption>
         </figure>
       </div>
     </section>
@@ -339,7 +340,7 @@ function FAQ() {
   return (
     <section id="faq" className="section container">
       <Reveal className="section-head">
-        <span className="section-tag">FAQ</span>
+        <span className="section-tag">Appendix — FAQ</span>
         <h2>About Muhammad Saad - engineering background, software delivery focus.</h2>
       </Reveal>
       <Reveal stagger className="faq-list">
@@ -361,7 +362,7 @@ function About() {
   return (
     <section id="about" className="section container">
       <Reveal className="section-head">
-        <span className="section-tag">01 - About</span>
+        <span className="section-tag">Fig. 01 — About</span>
         <h2><WordReveal>I sit between the factory floor and the keyboard.</WordReveal></h2>
       </Reveal>
       <div className="about-grid">
@@ -463,7 +464,7 @@ function Experience({ view }) {
   return (
     <section id="experience" className="section container">
       <Reveal className="section-head">
-        <span className="section-tag">02 - Experience</span>
+        <span className="section-tag">Fig. 02 — Experience</span>
         <h2><WordReveal>A short career, but a wide one.</WordReveal></h2>
       </Reveal>
       <ol className="timeline">
@@ -837,7 +838,7 @@ function Projects({ view }) {
   return (
     <section id="projects" className="section container">
       <Reveal className="section-head">
-        <span className="section-tag">03 - Selected Work</span>
+        <span className="section-tag">Fig. 03 — Selected Work</span>
         <h2><WordReveal>Software projects built around real workflows.</WordReveal></h2>
       </Reveal>
       <Reveal stagger className="projects-grid">
@@ -900,7 +901,7 @@ function Skills({ view }) {
   return (
     <section id="skills" className="section container">
       <Reveal className="section-head">
-        <span className="section-tag">04 - Skills</span>
+        <span className="section-tag">Fig. 04 — Skills</span>
         <h2><WordReveal>Skills I use to build and run operations software.</WordReveal></h2>
       </Reveal>
       <Reveal stagger className="skills-grid">
@@ -918,7 +919,7 @@ function Contact() {
     <section id="contact" className="section container">
       <Reveal className="contact-box">
         <div className="contact-left">
-          <span className="section-tag">05 - Contact</span>
+          <span className="section-tag">Fig. 05 — Contact</span>
           <h2>Let&rsquo;s build something that ships.</h2>
           <p>If you&rsquo;re hiring for automation, ERP/MES, manufacturing systems, backend engineering, IT operations, or
             Python-heavy technical roles in the UAE or remote, I&rsquo;d love to talk.</p>

@@ -7,6 +7,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.0] - 2026-06-05 - "Engineering Field Notes" — full portfolio-shell redesign
+
+A ground-up redesign of the portfolio shell into a warm, light, editorial-technical
+system that reads like a precision engineering logbook — a deliberate break from the
+generic dark dev-portfolio look.
+
+### Changed
+
+- **New art direction (light "Engineering Field Notes").** Warm drafting-paper
+  background, near-black ink, a single signal-red accent, a faint graph-paper grid,
+  hairline rules, figure-numbered section tags (`Fig. 01 — About`), and a framed
+  "Plate 01" headshot caption. Applied to the homepage, contact, 404, and the demo
+  walkthrough as one cohesive system.
+- **New type system.** Display set in **Fraunces** (characterful serif, italic for
+  emphasis), body in **IBM Plex Sans**, technical labels/data in **IBM Plex Mono** —
+  replacing Inter + JetBrains Mono.
+- **`home.css`** fully rewritten for the new system (homepage React app).
+- **`styles.css`** fully rewritten (shared by contact, 404, demo) to the same system,
+  preserving every class name; legacy tokens (`--bg`, `--fg`, `--accent`, `--grad`, …)
+  are aliased to the new palette so all existing rules resolve light.
+- **`demo.css`** re-themed to a crisp light admin UI with an ink "ledger-spine"
+  sidebar; the MES/ERP walkthrough structure and fabricated-data notice are unchanged.
+- **`home.app.jsx`** markup updated (figure-style section tags, Plate caption) and
+  recompiled to `home.app.js`. All content, copy, SEO/JSON-LD, the Coding/Engineering
+  view toggle, and the FAQ are preserved verbatim.
+- Light `theme-color` (`#ece4d2`), `color-scheme: light`, and a new ink/paper/signal
+  favicon across all four shell pages.
+
+### Removed
+
+- The WebGL (three.js) + GSAP/ScrollTrigger + Lenis "overkill" animation layer is no
+  longer loaded on the **shell pages** (homepage, contact, 404, demo); motion is now
+  calm, CSS-only (staggered load reveals, scroll-in fades, refined hover states). The
+  `home.fx.*` files remain in place — the demo sub-apps still reference them and are
+  unchanged in this pass.
+
 ## [2.11.3] - 2026-06-04 - Smooth round 3D sphere
 
 ### Changed
