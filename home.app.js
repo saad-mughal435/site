@@ -177,6 +177,48 @@ function MagneticBtn({
 /* =========================================================
    NAV
    ========================================================= */
+function ThemeToggle() {
+  const [theme, setTheme] = useState(() => {
+    try {
+      return document.documentElement.getAttribute('data-theme') || 'dark';
+    } catch (_) {
+      return 'dark';
+    }
+  });
+  const apply = t => {
+    try {
+      document.documentElement.setAttribute('data-theme', t);
+      localStorage.setItem('theme', t);
+      const m = document.querySelector('meta[name="theme-color"]');
+      if (m) m.setAttribute('content', t === 'light' ? '#f5f7fc' : '#07080d');
+    } catch (_) {}
+    setTheme(t);
+  };
+  return /*#__PURE__*/React.createElement("button", {
+    className: "theme-toggle",
+    type: "button",
+    "aria-label": "Toggle light or dark theme",
+    "aria-pressed": theme === 'light',
+    title: "Toggle light / dark",
+    onClick: () => apply(theme === 'light' ? 'dark' : 'light')
+  }, /*#__PURE__*/React.createElement("svg", {
+    className: "icon-moon",
+    viewBox: "0 0 24 24",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"
+  })), /*#__PURE__*/React.createElement("svg", {
+    className: "icon-sun",
+    viewBox: "0 0 24 24",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("circle", {
+    cx: "12",
+    cy: "12",
+    r: "4.2"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M12 2v2.4M12 19.6V22M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M2 12h2.4M19.6 12H22M4.9 19.1l1.7-1.7M17.4 6.6l1.7-1.7"
+  })));
+}
 function Nav() {
   const scrolled = useScrollPos();
   const [active, setActive] = useState('');
@@ -244,7 +286,7 @@ function Nav() {
   }, "Demo \u2197"), /*#__PURE__*/React.createElement("a", {
     href: "contact.html",
     onClick: close
-  }, "Contact")), /*#__PURE__*/React.createElement("a", {
+  }, "Contact")), /*#__PURE__*/React.createElement(ThemeToggle, null), /*#__PURE__*/React.createElement("a", {
     className: "nav-cta",
     href: "contact.html"
   }, "Get in touch ", /*#__PURE__*/React.createElement("span", {

@@ -17,6 +17,14 @@
   try { REDUCE = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
   var FINE = true;
   try { FINE = window.matchMedia('(pointer: fine)').matches; } catch (e) {}
+  // WebGL is reserved for capable desktops; the CSS glow background carries the
+  // rest (touch, small screens, reduced-motion, and the light theme).
+  var BIG = true;
+  try { BIG = window.matchMedia('(min-width: 1024px)').matches; } catch (e) {}
+  function fxTheme() {
+    try { return document.documentElement.getAttribute('data-theme') || 'dark'; }
+    catch (e) { return 'dark'; }
+  }
 
   /* ============================================================ WebGL bg */
   function initWebGL() {
@@ -341,10 +349,26 @@
   }
 
   function boot() {
-    try { if (!REDUCE && window.THREE) initWebGL(); } catch (e) {}
+    // WebGL only on dark theme + capable desktops; built once, then shown/hidden
+    // as the visitor toggles theme (additive particles suit ink, not white).
+    var webglStarted = false;
+    function startWebGL() {
+      if (webglStarted || REDUCE || !FINE || !BIG || !window.THREE) return;
+      if (fxTheme() !== 'dark') return;
+      try { initWebGL(); webglStarted = true; } catch (e) {}
+    }
+    startWebGL();
+    try {
+      var fxThemeMO = new MutationObserver(function () {
+        var c = document.getElementById('fx-canvas');
+        if (fxTheme() === 'dark') { if (c) c.style.display = ''; else startWebGL(); }
+        else if (c) { c.style.display = 'none'; }
+      });
+      fxThemeMO.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    } catch (e) {}
     try { if (!REDUCE && FINE) initCursor(); } catch (e) {}
     try { if (FINE) initMagnetic(); } catch (e) {}
-    try { if (!REDUCE && FINE) initTilt(); } catch (e) {}
+    try { if (!REDUCE && FINE && BIG) initTilt(); } catch (e) {}
     whenContent(function () { try { initMotion(); } catch (e) {} });
     document.documentElement.classList.add('fx-ready');
   }

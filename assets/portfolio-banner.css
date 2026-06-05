@@ -1,12 +1,35 @@
 /* portfolio-banner.css - top strip styling. Non-sticky so it doesn't fight
-   sub-site navs; recruiters see it above the fold on cold load then it scrolls. */
+   sub-site navs; recruiters see it above the fold on cold load then it scrolls.
+   Adapts to the visitor's saadm.dev theme preference: portfolio-banner.js sets
+   data-theme on the bar from localStorage['theme'] (fallback prefers-color-scheme).
+   Default = dark. */
 .portfolio-demo-banner {
-  background: linear-gradient(90deg, #1a1d2b 0%, #232742 100%);
-  color: rgba(255,255,255,.92);
+  --pdb-bg: linear-gradient(90deg, #0b0e16 0%, #131a2c 100%);
+  --pdb-text: rgba(237,241,248,0.82);
+  --pdb-strong: #edf1f8;
+  --pdb-border: rgba(255,255,255,0.08);
+  --pdb-back: #86b8ff;
+  --pdb-back-h: #a9c4ff;
+  --pdb-close: rgba(237,241,248,0.55);
+  --pdb-close-h: #edf1f8;
+  --pdb-close-bg: rgba(255,255,255,0.06);
+  background: var(--pdb-bg);
+  color: var(--pdb-text);
   font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   font-size: 13px;
   line-height: 1.35;
-  border-bottom: 1px solid rgba(255,255,255,.08);
+  border-bottom: 1px solid var(--pdb-border);
+}
+.portfolio-demo-banner[data-theme="light"] {
+  --pdb-bg: linear-gradient(90deg, #ffffff 0%, #eef2f8 100%);
+  --pdb-text: #3a4458;
+  --pdb-strong: #0d1220;
+  --pdb-border: rgba(13,18,32,0.10);
+  --pdb-back: #3b5bdb;
+  --pdb-back-h: #2f49c0;
+  --pdb-close: rgba(13,18,32,0.50);
+  --pdb-close-h: #0d1220;
+  --pdb-close-bg: rgba(13,18,32,0.06);
 }
 .portfolio-demo-banner .pdb-inner {
   max-width: 1280px;
@@ -18,8 +41,8 @@
   flex-wrap: wrap;
 }
 .portfolio-demo-banner .pdb-pill {
-  background: linear-gradient(135deg, #7c9cff, #5eead4);
-  color: #0a0d18;
+  background: linear-gradient(135deg, #6e8eff, #5eead4);
+  color: #07080d;
   font-weight: 700;
   font-size: 11px;
   letter-spacing: .04em;
@@ -28,28 +51,28 @@
   border-radius: 999px;
   white-space: nowrap;
 }
-.portfolio-demo-banner .pdb-text { color: rgba(255,255,255,.85); }
-.portfolio-demo-banner .pdb-text strong { color: #fff; font-weight: 600; }
+.portfolio-demo-banner .pdb-text { color: var(--pdb-text); }
+.portfolio-demo-banner .pdb-text strong { color: var(--pdb-strong); font-weight: 600; }
 .portfolio-demo-banner .pdb-back {
   margin-inline-start: auto;
-  color: #93b3ff;
+  color: var(--pdb-back);
   text-decoration: none;
   font-weight: 500;
   font-size: 12.5px;
   white-space: nowrap;
 }
-.portfolio-demo-banner .pdb-back:hover { color: #b8caff; text-decoration: underline; }
+.portfolio-demo-banner .pdb-back:hover { color: var(--pdb-back-h); text-decoration: underline; }
 .portfolio-demo-banner .pdb-close {
   background: transparent;
   border: 0;
-  color: rgba(255,255,255,.55);
+  color: var(--pdb-close);
   font-size: 20px;
   line-height: 1;
   padding: 0 4px;
   cursor: pointer;
   border-radius: 4px;
 }
-.portfolio-demo-banner .pdb-close:hover { color: #fff; background: rgba(255,255,255,.06); }
+.portfolio-demo-banner .pdb-close:hover { color: var(--pdb-close-h); background: var(--pdb-close-bg); }
 @media (max-width: 540px) {
   .portfolio-demo-banner .pdb-inner { padding: 6px 12px; gap: 8px; }
   .portfolio-demo-banner .pdb-text { font-size: 12px; }

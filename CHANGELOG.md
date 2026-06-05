@@ -7,6 +7,49 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.0.0] - 2026-06-05 - Dual-theme premium redesign (light + dark, glass/glow)
+
+A full visual rebuild of the portfolio shell into a premium "operations console" system with
+a **visible light/dark theme toggle**. Deep-ink glass + glow by default, plus a clean bright
+neutral light theme — re-unifying the marketing shell with the dark demo apps. All content,
+SEO/JSON-LD, the Coding/Engineering view toggle, and functionality are preserved verbatim.
+
+### Added
+
+- **Theme system.** A sun/moon toggle in the nav on every shell page (homepage React nav,
+  contact, demo gallery, 404). The choice persists in `localStorage['theme']` and is shared
+  across all pages; a tiny inline head script applies it before first paint (no flash) and
+  defaults to the visitor's OS `prefers-color-scheme`. The `theme-color` meta updates per theme.
+- **WebGL/GSAP/Lenis animation layer is back on the homepage** (`home.fx.js`), now gated to
+  capable desktops only (fine pointer, ≥1024px, not reduced-motion) and to the dark theme; the
+  canvas is hidden in light mode, where the CSS glow background carries the look.
+- **Theme-aware portfolio demo banner** — the injected strip follows the visitor's theme.
+
+### Changed
+
+- **New art direction (premium glass/glow).** Deep-ink surfaces, glass nav with scroll
+  frosting, an animated dot-grid + drifting accent glows, gradient hero headline, glowing
+  buttons, animated card borders, and soft glow hovers. The light theme is a clean bright
+  neutral counterpart. Both themes are driven entirely by `[data-theme]` CSS variables.
+- **New type system** — display **Space Grotesk**, body **Inter**, labels/data **JetBrains
+  Mono** (replacing Fraunces + IBM Plex).
+- **`home.css`** fully rewritten as a dual-theme token system (dark default + light); every
+  homepage class re-skinned, all selectors preserved so the React markup is unchanged except
+  for the added toggle.
+- **`styles.css`** (contact, demo, 404) reworked to the same dual-theme tokens; every class
+  name and legacy alias (`--bg`, `--fg`, `--accent`, `--grad`, …) preserved.
+- **`demo.css`** re-themed; the app-shell "ink spine" sidebar is pinned dark in both themes.
+- **`home.app.jsx`** gains a `ThemeToggle` component in the nav and was recompiled to
+  `home.app.js` (`npm run build:home`).
+- New dark "S" favicon, `theme-color: #07080d` default, and `color-scheme: dark light` across
+  the shell pages; asset cache-busting query bumped to `?v=20260605b`.
+
+### Notes
+
+- `index.v4.html` — the unshipped dark preview that informed this direction — is now redundant
+  and can be removed.
+- `og.png` social card still shows the previous design; regeneration is deferred.
+
 ## [3.0.0] - 2026-06-05 - "Engineering Field Notes" — full portfolio-shell redesign
 
 A ground-up redesign of the portfolio shell into a warm, light, editorial-technical

@@ -122,6 +122,35 @@ function MagneticBtn({ as: Tag = 'a', children, className = 'btn btn-primary', .
 /* =========================================================
    NAV
    ========================================================= */
+function ThemeToggle() {
+  const [theme, setTheme] = useState(() => {
+    try { return document.documentElement.getAttribute('data-theme') || 'dark'; }
+    catch (_) { return 'dark'; }
+  });
+  const apply = (t) => {
+    try {
+      document.documentElement.setAttribute('data-theme', t);
+      localStorage.setItem('theme', t);
+      const m = document.querySelector('meta[name="theme-color"]');
+      if (m) m.setAttribute('content', t === 'light' ? '#f5f7fc' : '#07080d');
+    } catch (_) {}
+    setTheme(t);
+  };
+  return (
+    <button
+      className="theme-toggle"
+      type="button"
+      aria-label="Toggle light or dark theme"
+      aria-pressed={theme === 'light'}
+      title="Toggle light / dark"
+      onClick={() => apply(theme === 'light' ? 'dark' : 'light')}
+    >
+      <svg className="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" /></svg>
+      <svg className="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" /><path d="M12 2v2.4M12 19.6V22M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M2 12h2.4M19.6 12H22M4.9 19.1l1.7-1.7M17.4 6.6l1.7-1.7" /></svg>
+    </button>
+  );
+}
+
 function Nav() {
   const scrolled = useScrollPos();
   const [active, setActive] = useState('');
@@ -156,6 +185,7 @@ function Nav() {
           <a href="demo.html" target="_blank" rel="noopener" onClick={close}>Demo ↗</a>
           <a href="contact.html" onClick={close}>Contact</a>
         </nav>
+        <ThemeToggle />
         <a className="nav-cta" href="contact.html">Get in touch <span className="arrow">→</span></a>
         <button
           className={'nav-burger' + (open ? ' open' : '')}

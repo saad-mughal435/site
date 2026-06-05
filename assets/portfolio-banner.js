@@ -15,7 +15,7 @@
     l.id = 'portfolio-demo-banner-css';
     l.rel = 'stylesheet';
     // Match the location of the loading script - same /assets/ folder.
-    l.href = '/assets/portfolio-banner.css?v=20260514';
+    l.href = '/assets/portfolio-banner.css?v=20260605b';
     document.head.appendChild(l);
   }
 
@@ -26,6 +26,14 @@
     var bar = document.createElement('div');
     bar.id = 'portfolio-demo-banner';
     bar.className = 'portfolio-demo-banner';
+    // Follow the visitor's saadm.dev theme preference so the strip feels connected.
+    var pref;
+    try { pref = localStorage.getItem('theme'); } catch (e) {}
+    if (pref !== 'light' && pref !== 'dark') {
+      try { pref = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'; }
+      catch (e2) { pref = 'dark'; }
+    }
+    bar.setAttribute('data-theme', pref);
     bar.innerHTML = ''
       + '<div class="pdb-inner">'
       +   '<span class="pdb-pill">Portfolio demo</span>'

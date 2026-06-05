@@ -109,3 +109,25 @@
     });
   });
 })();
+
+/* ---------- theme toggle (light / dark, persisted across pages) ---------- */
+(function themeToggle() {
+  function setTheme(t) {
+    if (t !== 'light' && t !== 'dark') t = 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+    try { localStorage.setItem('theme', t); } catch (_) {}
+    const m = document.querySelector('meta[name="theme-color"]');
+    if (m) m.setAttribute('content', t === 'light' ? '#f5f7fc' : '#07080d');
+    document.querySelectorAll('.theme-toggle').forEach((b) => {
+      b.setAttribute('aria-pressed', t === 'light' ? 'true' : 'false');
+    });
+  }
+  const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+  document.querySelectorAll('.theme-toggle').forEach((b) => {
+    b.setAttribute('aria-pressed', cur === 'light' ? 'true' : 'false');
+    b.addEventListener('click', () => {
+      const now = document.documentElement.getAttribute('data-theme') || 'dark';
+      setTheme(now === 'light' ? 'dark' : 'light');
+    });
+  });
+})();
