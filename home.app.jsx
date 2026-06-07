@@ -898,28 +898,17 @@ function Projects({ view }) {
    ========================================================= */
 function Demos({ view }) {
   const items = DEMO_PROJECTS.filter((p) => view === 'all' || p.domain === view || p.domain === 'all');
-  const trackRef = useRef(null);
   if (!items.length) return null;
-  const slide = (dir) => {
-    const el = trackRef.current;
-    if (el) el.scrollBy({ left: dir * Math.round(el.clientWidth * 0.85), behavior: 'smooth' });
-  };
   return (
     <section id="demos" className="section container">
-      <Reveal className="section-head demos-head">
-        <div className="demos-head-text">
-          <span className="section-tag">Fig. 05 — Demos</span>
-          <h2><WordReveal>Product demos built around real workflows.</WordReveal></h2>
-          <p className="demos-sub">Browser-based demos - B2B portals, marketplaces, booking, POS, AI copilots and dashboards. Drag, swipe, or use the arrows; open any to explore the full build. <a href="demo.html" target="_blank" rel="noopener">Full gallery ↗</a></p>
-        </div>
-        <div className="slider-nav">
-          <button className="slider-btn" type="button" aria-label="Scroll to previous demos" onClick={() => slide(-1)}>‹</button>
-          <button className="slider-btn" type="button" aria-label="Scroll to next demos" onClick={() => slide(1)}>›</button>
-        </div>
+      <Reveal className="section-head">
+        <span className="section-tag">Fig. 05 — Demos</span>
+        <h2><WordReveal>Product demos built around real workflows.</WordReveal></h2>
+        <p className="demos-sub">Browser-based demos - B2B portals, marketplaces, booking, POS, AI copilots and dashboards. Open any to explore the full build. <a href="demo.html" target="_blank" rel="noopener">Full gallery ↗</a></p>
       </Reveal>
-      <div className="demos-slider" ref={trackRef} data-lenis-prevent>
+      <Reveal stagger className="demos-grid">
         {items.map((p) => <ProjectCard key={p.title} p={p} compact />)}
-      </div>
+      </Reveal>
     </section>
   );
 }

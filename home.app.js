@@ -1107,46 +1107,23 @@ function Demos({
   view
 }) {
   const items = DEMO_PROJECTS.filter(p => view === 'all' || p.domain === view || p.domain === 'all');
-  const trackRef = useRef(null);
   if (!items.length) return null;
-  const slide = dir => {
-    const el = trackRef.current;
-    if (el) el.scrollBy({
-      left: dir * Math.round(el.clientWidth * 0.85),
-      behavior: 'smooth'
-    });
-  };
   return /*#__PURE__*/React.createElement("section", {
     id: "demos",
     className: "section container"
   }, /*#__PURE__*/React.createElement(Reveal, {
-    className: "section-head demos-head"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "demos-head-text"
+    className: "section-head"
   }, /*#__PURE__*/React.createElement("span", {
     className: "section-tag"
   }, "Fig. 05 \u2014 Demos"), /*#__PURE__*/React.createElement("h2", null, /*#__PURE__*/React.createElement(WordReveal, null, "Product demos built around real workflows.")), /*#__PURE__*/React.createElement("p", {
     className: "demos-sub"
-  }, "Browser-based demos - B2B portals, marketplaces, booking, POS, AI copilots and dashboards. Drag, swipe, or use the arrows; open any to explore the full build. ", /*#__PURE__*/React.createElement("a", {
+  }, "Browser-based demos - B2B portals, marketplaces, booking, POS, AI copilots and dashboards. Open any to explore the full build. ", /*#__PURE__*/React.createElement("a", {
     href: "demo.html",
     target: "_blank",
     rel: "noopener"
-  }, "Full gallery \u2197"))), /*#__PURE__*/React.createElement("div", {
-    className: "slider-nav"
-  }, /*#__PURE__*/React.createElement("button", {
-    className: "slider-btn",
-    type: "button",
-    "aria-label": "Scroll to previous demos",
-    onClick: () => slide(-1)
-  }, "\u2039"), /*#__PURE__*/React.createElement("button", {
-    className: "slider-btn",
-    type: "button",
-    "aria-label": "Scroll to next demos",
-    onClick: () => slide(1)
-  }, "\u203A"))), /*#__PURE__*/React.createElement("div", {
-    className: "demos-slider",
-    ref: trackRef,
-    "data-lenis-prevent": true
+  }, "Full gallery \u2197"))), /*#__PURE__*/React.createElement(Reveal, {
+    stagger: true,
+    className: "demos-grid"
   }, items.map(p => /*#__PURE__*/React.createElement(ProjectCard, {
     key: p.title,
     p: p,
