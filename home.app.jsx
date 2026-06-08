@@ -619,9 +619,60 @@ const PROJECTS = [
     ],
     ctaSubtitle: 'Published on npm · MIT · green CI — npm install @saadmughal435/n8n-nodes-devtools',
   },
+  {
+    domain: 'code', kind: 'C++17 library + CLI · Open source · CI', year: '2026',
+    sectionEyebrow: 'Systems & C++',
+    sectionHeading: 'Systems programming in C++',
+    sectionBlurb: 'Three small, dependency-light C++17 repositories - modern CMake, unit tests (Catch2 fetched by CMake), and green GitHub Actions CI - one each across the operations, systems, and networking domains the rest of this portfolio covers.',
+    title: 'oee-core - OEE & downtime analytics (C++17)',
+    desc: <Fragment>The same manufacturing-operations domain as my ShopFloor API, in modern C++. A library + CLI that computes <strong>OEE = Availability × Performance × Quality</strong> with divide-by-zero guards and factor clamping, grades the result, and builds a <strong>Pareto of downtime</strong> with MTTR / MTBF.</Fragment>,
+    bullets: [
+      <Fragment><strong>OEE engine</strong> - availability / performance / quality with over-speed clamping, unit-tested against the classic worked example (87.5% OEE)</Fragment>,
+      <Fragment><strong>Downtime analytics</strong> - reason-coded Pareto with MTTR and MTBF from a CSV of stop events</Fragment>,
+      <Fragment><strong>Modern C++17 + CMake</strong> - library, CLI and Catch2 tests; warnings-clean under <code>-Wall -Wextra -Wpedantic</code></Fragment>,
+      <Fragment><strong>Green CI</strong> - GitHub Actions builds and runs <code>ctest</code> on every push</Fragment>,
+    ],
+    tags: ['C++17', 'CMake', 'Catch2', 'GitHub Actions', 'OEE', 'Manufacturing', 'CLI'],
+    ctas: [
+      { label: 'View on GitHub ↗', href: 'https://github.com/saad-mughal435/oee-core', target: '_blank', primary: true, prominent: true },
+      { label: 'CI runs ↗', href: 'https://github.com/saad-mughal435/oee-core/actions', target: '_blank' },
+    ],
+  },
+  {
+    domain: 'code', kind: 'C++17 header-only library · Open source · CI', year: '2026',
+    title: 'threadpool - header-only C++17 thread pool',
+    desc: <Fragment>A single-header thread pool: <code>submit(fn, args…)</code> returns a <code>std::future</code>, exceptions propagate through <code>future.get()</code>, and the destructor <strong>drains the queue</strong> so every submitted task completes. Classic mutex + condition-variable design.</Fragment>,
+    bullets: [
+      <Fragment><strong>Futures + perfect forwarding</strong> - <code>submit</code> returns <code>std::future&lt;result&gt;</code> via <code>packaged_task</code></Fragment>,
+      <Fragment><strong>Exception-safe</strong> - a throwing task rethrows from <code>get()</code>; copy/assignment disabled</Fragment>,
+      <Fragment><strong>Graceful shutdown</strong> - drain-on-destruct guarantee, covered by a test</Fragment>,
+      <Fragment><strong>Tested</strong> - result delivery, 1000-task throughput, parallel range-sum and exception propagation</Fragment>,
+    ],
+    tags: ['C++17', 'Concurrency', 'std::future', 'Header-only', 'CMake', 'Catch2', 'GitHub Actions'],
+    ctas: [
+      { label: 'View on GitHub ↗', href: 'https://github.com/saad-mughal435/threadpool', target: '_blank', primary: true, prominent: true },
+      { label: 'CI runs ↗', href: 'https://github.com/saad-mughal435/threadpool/actions', target: '_blank' },
+    ],
+  },
+  {
+    domain: 'code', kind: 'C++17 CLI + library · Open source · CI', year: '2026',
+    title: 'netlat - TCP connect-latency probe',
+    desc: <Fragment>A NOC-style reachability / latency tool from my networking background. It times the TCP handshake to a <code>host:port</code> over N samples and reports <strong>min / avg / p50 / p95 / p99 / max</strong> plus jitter, using a <strong>non-blocking connect with a select() timeout</strong> so dead hosts fail fast.</Fragment>,
+    bullets: [
+      <Fragment><strong>Non-blocking connect + select() timeout</strong> over POSIX sockets - no hanging on unreachable hosts</Fragment>,
+      <Fragment><strong>Latency statistics</strong> - nearest-rank percentiles (p50 / p95 / p99), mean and jitter (std-dev)</Fragment>,
+      <Fragment><strong>Tested</strong> - the stats maths plus a real probe against a loopback listener and a refused port</Fragment>,
+      <Fragment><strong>C++17 + CMake + CI</strong> - library, CLI, Catch2 tests, GitHub Actions</Fragment>,
+    ],
+    tags: ['C++17', 'POSIX sockets', 'TCP', 'Networking', 'CMake', 'Catch2', 'GitHub Actions'],
+    ctas: [
+      { label: 'View on GitHub ↗', href: 'https://github.com/saad-mughal435/netlat', target: '_blank', primary: true, prominent: true },
+      { label: 'CI runs ↗', href: 'https://github.com/saad-mughal435/netlat/actions', target: '_blank' },
+    ],
+  },
 ];
 
-/* Product demos — shown after Skills as a horizontal slider (compact cards). */
+/* Product demos — shown after Skills as a 3-column grid (compact cards). */
 const DEMO_PROJECTS = [
   {
     domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
@@ -920,7 +971,7 @@ function Demos({ view }) {
 // areas the section title implies. Lets the viewer scan instead of judge.
 const SKILLS = [
   { domain: 'code', title: 'Backend & APIs', items:
-    ['Python', 'FastAPI', 'Java', 'Spring Boot', 'Spring Data JPA', 'TypeScript', 'Node.js', 'REST APIs', 'JWT Auth', 'OpenAPI / Swagger', 'Pydantic', 'async I/O'] },
+    ['Python', 'FastAPI', 'Java', 'Spring Boot', 'Spring Data JPA', 'C++17', 'TypeScript', 'Node.js', 'REST APIs', 'JWT Auth', 'OpenAPI / Swagger', 'Pydantic', 'async I/O'] },
   { domain: 'all', title: 'Manufacturing Systems', items:
     ['MES', 'ERP', 'OEE', 'PPC', 'QC Workflows', 'Batch Tracking', 'Inventory / FIFO', 'Sage Evolution'] },
   { domain: 'code', title: 'Frontend & UI', items:
@@ -928,7 +979,7 @@ const SKILLS = [
   { domain: 'code', title: 'Data & Reporting', items:
     ['MongoDB', 'PostgreSQL', 'SQL Server', 'Flyway', 'Pandas', 'OpenPyXL', 'Excel Automation', 'PDF Generation'] },
   { domain: 'code', title: 'Infrastructure & CI', items:
-    ['Docker', 'Docker Compose', 'Linux', 'nginx', 'Cloudflare', 'Git / GitHub', 'GitHub Actions', 'n8n', 'Workflow Automation', "Let's Encrypt"] },
+    ['Docker', 'Docker Compose', 'Linux', 'nginx', 'Cloudflare', 'Git / GitHub', 'GitHub Actions', 'CMake', 'n8n', 'Workflow Automation', "Let's Encrypt"] },
   { domain: 'eng', title: 'Industrial Operations', items:
     ['Krones Line Operations', 'Operator Coordination', 'Line Troubleshooting', 'RCA', 'SOPs', 'Commissioning Support', 'GPON / PSTN', 'Oracle CRM'] },
   { domain: 'all', title: 'Learning / Expanding', items:

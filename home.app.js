@@ -787,9 +787,69 @@ const PROJECTS = [{
     target: '_blank'
   }],
   ctaSubtitle: 'Published on npm · MIT · green CI — npm install @saadmughal435/n8n-nodes-devtools'
+}, {
+  domain: 'code',
+  kind: 'C++17 library + CLI · Open source · CI',
+  year: '2026',
+  sectionEyebrow: 'Systems & C++',
+  sectionHeading: 'Systems programming in C++',
+  sectionBlurb: 'Three small, dependency-light C++17 repositories - modern CMake, unit tests (Catch2 fetched by CMake), and green GitHub Actions CI - one each across the operations, systems, and networking domains the rest of this portfolio covers.',
+  title: 'oee-core - OEE & downtime analytics (C++17)',
+  desc: /*#__PURE__*/React.createElement(Fragment, null, "The same manufacturing-operations domain as my ShopFloor API, in modern C++. A library + CLI that computes ", /*#__PURE__*/React.createElement("strong", null, "OEE = Availability \xD7 Performance \xD7 Quality"), " with divide-by-zero guards and factor clamping, grades the result, and builds a ", /*#__PURE__*/React.createElement("strong", null, "Pareto of downtime"), " with MTTR / MTBF."),
+  bullets: [/*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "OEE engine"), " - availability / performance / quality with over-speed clamping, unit-tested against the classic worked example (87.5% OEE)"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Downtime analytics"), " - reason-coded Pareto with MTTR and MTBF from a CSV of stop events"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Modern C++17 + CMake"), " - library, CLI and Catch2 tests; warnings-clean under ", /*#__PURE__*/React.createElement("code", null, "-Wall -Wextra -Wpedantic")), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Green CI"), " - GitHub Actions builds and runs ", /*#__PURE__*/React.createElement("code", null, "ctest"), " on every push")],
+  tags: ['C++17', 'CMake', 'Catch2', 'GitHub Actions', 'OEE', 'Manufacturing', 'CLI'],
+  ctas: [{
+    label: 'View on GitHub ↗',
+    href: 'https://github.com/saad-mughal435/oee-core',
+    target: '_blank',
+    primary: true,
+    prominent: true
+  }, {
+    label: 'CI runs ↗',
+    href: 'https://github.com/saad-mughal435/oee-core/actions',
+    target: '_blank'
+  }]
+}, {
+  domain: 'code',
+  kind: 'C++17 header-only library · Open source · CI',
+  year: '2026',
+  title: 'threadpool - header-only C++17 thread pool',
+  desc: /*#__PURE__*/React.createElement(Fragment, null, "A single-header thread pool: ", /*#__PURE__*/React.createElement("code", null, "submit(fn, args\u2026)"), " returns a ", /*#__PURE__*/React.createElement("code", null, "std::future"), ", exceptions propagate through ", /*#__PURE__*/React.createElement("code", null, "future.get()"), ", and the destructor ", /*#__PURE__*/React.createElement("strong", null, "drains the queue"), " so every submitted task completes. Classic mutex + condition-variable design."),
+  bullets: [/*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Futures + perfect forwarding"), " - ", /*#__PURE__*/React.createElement("code", null, "submit"), " returns ", /*#__PURE__*/React.createElement("code", null, "std::future<result>"), " via ", /*#__PURE__*/React.createElement("code", null, "packaged_task")), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Exception-safe"), " - a throwing task rethrows from ", /*#__PURE__*/React.createElement("code", null, "get()"), "; copy/assignment disabled"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Graceful shutdown"), " - drain-on-destruct guarantee, covered by a test"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Tested"), " - result delivery, 1000-task throughput, parallel range-sum and exception propagation")],
+  tags: ['C++17', 'Concurrency', 'std::future', 'Header-only', 'CMake', 'Catch2', 'GitHub Actions'],
+  ctas: [{
+    label: 'View on GitHub ↗',
+    href: 'https://github.com/saad-mughal435/threadpool',
+    target: '_blank',
+    primary: true,
+    prominent: true
+  }, {
+    label: 'CI runs ↗',
+    href: 'https://github.com/saad-mughal435/threadpool/actions',
+    target: '_blank'
+  }]
+}, {
+  domain: 'code',
+  kind: 'C++17 CLI + library · Open source · CI',
+  year: '2026',
+  title: 'netlat - TCP connect-latency probe',
+  desc: /*#__PURE__*/React.createElement(Fragment, null, "A NOC-style reachability / latency tool from my networking background. It times the TCP handshake to a ", /*#__PURE__*/React.createElement("code", null, "host:port"), " over N samples and reports ", /*#__PURE__*/React.createElement("strong", null, "min / avg / p50 / p95 / p99 / max"), " plus jitter, using a ", /*#__PURE__*/React.createElement("strong", null, "non-blocking connect with a select() timeout"), " so dead hosts fail fast."),
+  bullets: [/*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Non-blocking connect + select() timeout"), " over POSIX sockets - no hanging on unreachable hosts"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Latency statistics"), " - nearest-rank percentiles (p50 / p95 / p99), mean and jitter (std-dev)"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Tested"), " - the stats maths plus a real probe against a loopback listener and a refused port"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "C++17 + CMake + CI"), " - library, CLI, Catch2 tests, GitHub Actions")],
+  tags: ['C++17', 'POSIX sockets', 'TCP', 'Networking', 'CMake', 'Catch2', 'GitHub Actions'],
+  ctas: [{
+    label: 'View on GitHub ↗',
+    href: 'https://github.com/saad-mughal435/netlat',
+    target: '_blank',
+    primary: true,
+    prominent: true
+  }, {
+    label: 'CI runs ↗',
+    href: 'https://github.com/saad-mughal435/netlat/actions',
+    target: '_blank'
+  }]
 }];
 
-/* Product demos — shown after Skills as a horizontal slider (compact cards). */
+/* Product demos — shown after Skills as a 3-column grid (compact cards). */
 const DEMO_PROJECTS = [{
   domain: 'code',
   kind: 'Disconnected demo · Portfolio piece',
@@ -1139,7 +1199,7 @@ function Demos({
 const SKILLS = [{
   domain: 'code',
   title: 'Backend & APIs',
-  items: ['Python', 'FastAPI', 'Java', 'Spring Boot', 'Spring Data JPA', 'TypeScript', 'Node.js', 'REST APIs', 'JWT Auth', 'OpenAPI / Swagger', 'Pydantic', 'async I/O']
+  items: ['Python', 'FastAPI', 'Java', 'Spring Boot', 'Spring Data JPA', 'C++17', 'TypeScript', 'Node.js', 'REST APIs', 'JWT Auth', 'OpenAPI / Swagger', 'Pydantic', 'async I/O']
 }, {
   domain: 'all',
   title: 'Manufacturing Systems',
@@ -1155,7 +1215,7 @@ const SKILLS = [{
 }, {
   domain: 'code',
   title: 'Infrastructure & CI',
-  items: ['Docker', 'Docker Compose', 'Linux', 'nginx', 'Cloudflare', 'Git / GitHub', 'GitHub Actions', 'n8n', 'Workflow Automation', "Let's Encrypt"]
+  items: ['Docker', 'Docker Compose', 'Linux', 'nginx', 'Cloudflare', 'Git / GitHub', 'GitHub Actions', 'CMake', 'n8n', 'Workflow Automation', "Let's Encrypt"]
 }, {
   domain: 'eng',
   title: 'Industrial Operations',
