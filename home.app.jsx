@@ -88,7 +88,7 @@ function Reveal({ children, className = '', stagger = false, as: Tag = 'div', ..
 
 function ScrollProgress() {
   const p = useScrollProgress();
-  return <div className="scroll-progress" style={{ transform: `scaleX(${p / 100})` }} />;
+  return <div className="scroll-progress" aria-hidden="true" style={{ transform: `scaleX(${p / 100})` }} />;
 }
 
 function WordReveal({ children, className = '', as: Tag = 'span' }) {
@@ -178,10 +178,10 @@ function Nav() {
           <span>Saad</span>
         </a>
         <nav className={'nav-links' + (open ? ' open' : '')}>
-          <a href="#about" className={active === 'about' ? 'active' : ''} onClick={close}>About</a>
-          <a href="#experience" className={active === 'experience' ? 'active' : ''} onClick={close}>Experience</a>
-          <a href="#projects" className={active === 'projects' ? 'active' : ''} onClick={close}>Projects</a>
-          <a href="#skills" className={active === 'skills' ? 'active' : ''} onClick={close}>Skills</a>
+          <a href="#about" className={active === 'about' ? 'active' : ''} aria-current={active === 'about' ? 'page' : undefined} onClick={close}>About</a>
+          <a href="#experience" className={active === 'experience' ? 'active' : ''} aria-current={active === 'experience' ? 'page' : undefined} onClick={close}>Experience</a>
+          <a href="#projects" className={active === 'projects' ? 'active' : ''} aria-current={active === 'projects' ? 'page' : undefined} onClick={close}>Projects</a>
+          <a href="#skills" className={active === 'skills' ? 'active' : ''} aria-current={active === 'skills' ? 'page' : undefined} onClick={close}>Skills</a>
           <a href="demo.html" target="_blank" rel="noopener" onClick={close}>Demo ↗</a>
           <a href="contact.html" onClick={close}>Contact</a>
         </nav>
@@ -273,7 +273,7 @@ function Hero({ view, setView }) {
   return (
     <section className="hero container" id="top">
       <div className="hero-left">
-        <div className="eyebrow"><span className="led"></span> Currently available in the UAE · Open to relocate worldwide</div>
+        <div className="eyebrow"><span className="led" aria-hidden="true"></span> Currently available in the UAE · Open to relocate worldwide</div>
         <div className="view-toggle-wrap">
           <span className="view-toggle-hint">Tailored for:</span>
           <ViewToggle view={view} setView={setView} />

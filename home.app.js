@@ -117,6 +117,7 @@ function ScrollProgress() {
   const p = useScrollProgress();
   return /*#__PURE__*/React.createElement("div", {
     className: "scroll-progress",
+    "aria-hidden": "true",
     style: {
       transform: `scaleX(${p / 100})`
     }
@@ -265,18 +266,22 @@ function Nav() {
   }, /*#__PURE__*/React.createElement("a", {
     href: "#about",
     className: active === 'about' ? 'active' : '',
+    "aria-current": active === 'about' ? 'page' : undefined,
     onClick: close
   }, "About"), /*#__PURE__*/React.createElement("a", {
     href: "#experience",
     className: active === 'experience' ? 'active' : '',
+    "aria-current": active === 'experience' ? 'page' : undefined,
     onClick: close
   }, "Experience"), /*#__PURE__*/React.createElement("a", {
     href: "#projects",
     className: active === 'projects' ? 'active' : '',
+    "aria-current": active === 'projects' ? 'page' : undefined,
     onClick: close
   }, "Projects"), /*#__PURE__*/React.createElement("a", {
     href: "#skills",
     className: active === 'skills' ? 'active' : '',
+    "aria-current": active === 'skills' ? 'page' : undefined,
     onClick: close
   }, "Skills"), /*#__PURE__*/React.createElement("a", {
     href: "demo.html",
@@ -400,7 +405,8 @@ function Hero({
   }, /*#__PURE__*/React.createElement("div", {
     className: "eyebrow"
   }, /*#__PURE__*/React.createElement("span", {
-    className: "led"
+    className: "led",
+    "aria-hidden": "true"
   }), " Currently available in the UAE \xB7 Open to relocate worldwide"), /*#__PURE__*/React.createElement("div", {
     className: "view-toggle-wrap"
   }, /*#__PURE__*/React.createElement("span", {

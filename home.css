@@ -22,7 +22,7 @@
   --text:        #edf1f8;   /* primary                                  */
   --text-soft:   #b5bdcc;   /* secondary copy                           */
   --text-mute:   #7b8597;   /* captions, meta                          */
-  --text-faint:  #5a6478;   /* hairline labels                         */
+  --text-faint:  #767f93;   /* hairline labels (>= 4.5:1 AA on dark)   */
   --on-accent:   #07080d;   /* text on a bright accent fill            */
 
   /* ---- Lines ------------------------------------------------------------- */
