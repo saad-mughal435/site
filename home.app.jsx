@@ -623,7 +623,7 @@ const PROJECTS = [
     domain: 'code', kind: 'C++17 library + CLI · Open source · CI', year: '2026',
     sectionEyebrow: 'Systems & C++',
     sectionHeading: 'Systems programming in C++',
-    sectionBlurb: 'Three small, dependency-light C++17 repositories - modern CMake, unit tests (Catch2 fetched by CMake), and green GitHub Actions CI - one each across the operations, systems, and networking domains the rest of this portfolio covers.',
+    sectionBlurb: 'Four small, dependency-light C++17 repositories - modern CMake, unit tests (Catch2 fetched by CMake), and green GitHub Actions CI - spanning the operations, systems, networking, and industrial-protocol domains the rest of this portfolio covers.',
     title: 'oee-core - OEE & downtime analytics (C++17)',
     desc: <Fragment>The same manufacturing-operations domain as my ShopFloor API, in modern C++. A library + CLI that computes <strong>OEE = Availability × Performance × Quality</strong> with divide-by-zero guards and factor clamping, grades the result, and builds a <strong>Pareto of downtime</strong> with MTTR / MTBF.</Fragment>,
     bullets: [
@@ -668,6 +668,22 @@ const PROJECTS = [
     ctas: [
       { label: 'View on GitHub ↗', href: 'https://github.com/saad-mughal435/netlat', target: '_blank', primary: true, prominent: true },
       { label: 'CI runs ↗', href: 'https://github.com/saad-mughal435/netlat/actions', target: '_blank' },
+    ],
+  },
+  {
+    domain: 'code', kind: 'C++17 library + CLI · Open source · CI', year: '2026',
+    title: 'modbus-codec - Modbus RTU/TCP frame codec',
+    desc: <Fragment>An industrial-protocol codec from my automation background. It encodes and decodes <strong>Modbus RTU</strong> (serial, CRC-16 checked) and <strong>Modbus TCP</strong> (MBAP header) frames, with helpers for the common function codes and exception responses - the fieldbus behind PLCs, drives and building-automation gear.</Fragment>,
+    bullets: [
+      <Fragment><strong>CRC-16/MODBUS</strong> - validated against the canonical <code>0x4B37</code> check value</Fragment>,
+      <Fragment><strong>RTU + TCP framing</strong> - encode / decode with CRC and MBAP-length validation</Fragment>,
+      <Fragment><strong>Function-code helpers</strong> - build / parse read requests (0x01-0x04), register responses, and exception detection</Fragment>,
+      <Fragment><strong>Pure logic, tested</strong> - no I/O; Catch2 round-trip and rejection tests, green CI</Fragment>,
+    ],
+    tags: ['C++17', 'Modbus RTU', 'Modbus TCP', 'CRC-16', 'Industrial', 'CMake', 'Catch2', 'GitHub Actions'],
+    ctas: [
+      { label: 'View on GitHub ↗', href: 'https://github.com/saad-mughal435/modbus-codec', target: '_blank', primary: true, prominent: true },
+      { label: 'CI runs ↗', href: 'https://github.com/saad-mughal435/modbus-codec/actions', target: '_blank' },
     ],
   },
 ];

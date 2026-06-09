@@ -793,7 +793,7 @@ const PROJECTS = [{
   year: '2026',
   sectionEyebrow: 'Systems & C++',
   sectionHeading: 'Systems programming in C++',
-  sectionBlurb: 'Three small, dependency-light C++17 repositories - modern CMake, unit tests (Catch2 fetched by CMake), and green GitHub Actions CI - one each across the operations, systems, and networking domains the rest of this portfolio covers.',
+  sectionBlurb: 'Four small, dependency-light C++17 repositories - modern CMake, unit tests (Catch2 fetched by CMake), and green GitHub Actions CI - spanning the operations, systems, networking, and industrial-protocol domains the rest of this portfolio covers.',
   title: 'oee-core - OEE & downtime analytics (C++17)',
   desc: /*#__PURE__*/React.createElement(Fragment, null, "The same manufacturing-operations domain as my ShopFloor API, in modern C++. A library + CLI that computes ", /*#__PURE__*/React.createElement("strong", null, "OEE = Availability \xD7 Performance \xD7 Quality"), " with divide-by-zero guards and factor clamping, grades the result, and builds a ", /*#__PURE__*/React.createElement("strong", null, "Pareto of downtime"), " with MTTR / MTBF."),
   bullets: [/*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "OEE engine"), " - availability / performance / quality with over-speed clamping, unit-tested against the classic worked example (87.5% OEE)"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Downtime analytics"), " - reason-coded Pareto with MTTR and MTBF from a CSV of stop events"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Modern C++17 + CMake"), " - library, CLI and Catch2 tests; warnings-clean under ", /*#__PURE__*/React.createElement("code", null, "-Wall -Wextra -Wpedantic")), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Green CI"), " - GitHub Actions builds and runs ", /*#__PURE__*/React.createElement("code", null, "ctest"), " on every push")],
@@ -845,6 +845,25 @@ const PROJECTS = [{
   }, {
     label: 'CI runs ↗',
     href: 'https://github.com/saad-mughal435/netlat/actions',
+    target: '_blank'
+  }]
+}, {
+  domain: 'code',
+  kind: 'C++17 library + CLI · Open source · CI',
+  year: '2026',
+  title: 'modbus-codec - Modbus RTU/TCP frame codec',
+  desc: /*#__PURE__*/React.createElement(Fragment, null, "An industrial-protocol codec from my automation background. It encodes and decodes ", /*#__PURE__*/React.createElement("strong", null, "Modbus RTU"), " (serial, CRC-16 checked) and ", /*#__PURE__*/React.createElement("strong", null, "Modbus TCP"), " (MBAP header) frames, with helpers for the common function codes and exception responses - the fieldbus behind PLCs, drives and building-automation gear."),
+  bullets: [/*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "CRC-16/MODBUS"), " - validated against the canonical ", /*#__PURE__*/React.createElement("code", null, "0x4B37"), " check value"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "RTU + TCP framing"), " - encode / decode with CRC and MBAP-length validation"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Function-code helpers"), " - build / parse read requests (0x01-0x04), register responses, and exception detection"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Pure logic, tested"), " - no I/O; Catch2 round-trip and rejection tests, green CI")],
+  tags: ['C++17', 'Modbus RTU', 'Modbus TCP', 'CRC-16', 'Industrial', 'CMake', 'Catch2', 'GitHub Actions'],
+  ctas: [{
+    label: 'View on GitHub ↗',
+    href: 'https://github.com/saad-mughal435/modbus-codec',
+    target: '_blank',
+    primary: true,
+    prominent: true
+  }, {
+    label: 'CI runs ↗',
+    href: 'https://github.com/saad-mughal435/modbus-codec/actions',
     target: '_blank'
   }]
 }];

@@ -131,7 +131,7 @@
   "@type": "ItemList",
   "name": "Software projects by Muhammad Saad",
   "itemListOrder": "https://schema.org/ItemListOrderAscending",
-  "numberOfItems": 11,
+  "numberOfItems": 12,
   "itemListElement": [
     { "@type": "ListItem", "position": 1, "item": {
       "@type": "SoftwareApplication", "name": "Kingsley MES / ERP / OEE Platform",
@@ -204,7 +204,14 @@
       "codeRepository": "https://github.com/saad-mughal435/netlat",
       "programmingLanguage": "C++",
       "author": { "@type": "Person", "name": "Muhammad Saad" },
-      "description": "C++17 CLI + library that times the TCP handshake to a host:port and reports p50/p95/p99 latency and jitter using a non-blocking connect with a select() timeout. CMake, Catch2 tests, CI." } }
+      "description": "C++17 CLI + library that times the TCP handshake to a host:port and reports p50/p95/p99 latency and jitter using a non-blocking connect with a select() timeout. CMake, Catch2 tests, CI." } },
+    { "@type": "ListItem", "position": 12, "item": {
+      "@type": "SoftwareSourceCode", "name": "modbus-codec - Modbus RTU/TCP frame codec (C++17)",
+      "url": "https://github.com/saad-mughal435/modbus-codec",
+      "codeRepository": "https://github.com/saad-mughal435/modbus-codec",
+      "programmingLanguage": "C++",
+      "author": { "@type": "Person", "name": "Muhammad Saad" },
+      "description": "C++17 Modbus RTU and TCP frame codec - CRC-16/MODBUS, MBAP header, common function codes and exception responses. CMake, Catch2 tests, GitHub Actions CI." } }
   ]
 }
 </script>
@@ -245,6 +252,7 @@
       <li><strong>oee-core</strong> - C++17 OEE (Availability × Performance × Quality) and downtime / MTTR / MTBF analytics library + CLI; CMake, Catch2 tests, green CI. <a href="https://github.com/saad-mughal435/oee-core" style="color:#2c4f8f;">GitHub →</a></li>
       <li><strong>threadpool</strong> - header-only C++17 thread pool: std::future results, exception propagation, drain-on-destruct; CMake, Catch2 tests, green CI. <a href="https://github.com/saad-mughal435/threadpool" style="color:#2c4f8f;">GitHub →</a></li>
       <li><strong>netlat</strong> - C++17 TCP connect-latency probe (p50 / p95 / p99 + jitter) over POSIX sockets; CMake, Catch2 tests, green CI. <a href="https://github.com/saad-mughal435/netlat" style="color:#2c4f8f;">GitHub →</a></li>
+      <li><strong>modbus-codec</strong> - C++17 Modbus RTU/TCP frame codec (CRC-16, MBAP, function codes + exceptions); CMake, Catch2 tests, green CI. <a href="https://github.com/saad-mughal435/modbus-codec" style="color:#2c4f8f;">GitHub →</a></li>
       <li><strong>Anvil Supply Co.</strong> - B2B wholesale portal demo. Tier pricing, MOQ, contract discounts, quote workflow, approval workflow for orders over $1,000, admin with order/quote/approval queues. <a href="b2b/index.html" style="color:#2c4f8f;">Open →</a></li>
       <li><strong>Manzil Properties</strong> - Dubai real-estate marketplace demo. Map + list search, agent profiles, mortgage / valuation / yield calculators, 15-section admin SPA. <a href="property/index.html" style="color:#2c4f8f;">Open →</a></li>
       <li><strong>Vacation Homes</strong> - UAE short-stay booking demo. Hand-rolled date-range picker, conflict-checked bookings, 6-step host onboarding wizard with document upload, admin verification queue. <a href="vacation/index.html" style="color:#2c4f8f;">Open →</a></li>
@@ -289,7 +297,7 @@
 <script defer crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
 <script defer crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
 
-<script src="home.app.js?v=20260607b" defer></script>
+<script src="home.app.js?v=20260609a" defer></script>
 
 <!-- ================= BACK TO TOP ================= -->
 <button class="back-to-top" id="back-to-top" type="button" aria-label="Scroll back to top" title="Back to top">
