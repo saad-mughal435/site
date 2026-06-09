@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.2.0] - 2026-06-09 - hft-orderbook: live L2 WebSocket book viewer + next-round refresh
+
+Adds an interactive demo and refreshes the flagship C++ card after a second deep improvement pass on
+the repo (analytics & signals, a windowed level store, sharded scaling, a WebSocket viewer).
+
+### Added
+
+- **Live L2 book viewer** at `/hft-book/viewer.html` — a self-contained, theme-aware page that
+  animates a **real recorded replay** (`book-replay.json`, 72 snapshots produced by the C++
+  `wsbook --dump` in CI — not a mock) of the engine reconstructing a NASDAQ ITCH 5.0 book: an L2
+  depth ladder (bids/asks with size bars), micro-price / spread / order-book-imbalance readout, and
+  play/pause. Pass `?ws=ws://host:port` to watch a local `wsbook` live. Respects
+  `prefers-reduced-motion` and the site's theme.
+- **"Live L2 viewer ↗"** CTA on the flagship card.
+
+### Changed
+
+- **Flagship card** bullets/tags refreshed: microstructure signals + VWAP/OHLCV tape; the price-tick
+  **windowed level store** (~24% faster in the 3-way A/B); **sharded** multi-threaded scaling; the
+  dependency-free **WebSocket** viewer. JSON-LD description + `<noscript>` line updated to match;
+  skills nudge `Market microstructure`. Recompiled `home.app.js`; cache-bust `?v=20260609e`.
+
 ## [5.1.1] - 2026-06-09 - hft-orderbook flagship card refresh (real data, hardening, perf A/B)
 
 Content refresh of the flagship C++ card after a major improvement pass on the repo. No layout or

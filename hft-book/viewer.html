@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>hft-orderbook — live L2 book viewer</title>
+<meta name="description" content="Watch the hft-orderbook C++ engine reconstruct a NASDAQ ITCH 5.0 limit-order book in real time: top-of-book depth, micro-price and order-book imbalance, streamed over WebSocket." />
+<link rel="canonical" href="https://saadm.dev/hft-book/viewer.html" />
+<script>
+  // Share the site's theme choice (set before first paint, no flash).
+  (function () {
+    try {
+      var t = localStorage.getItem('theme');
+      if (!t) t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+    } catch (e) { /* default dark */ }
+  })();
+</script>
+<style>
+  :root {
+    --bg: #0b0e17; --panel: #121726; --line: #1f2740; --ink: #e7ecf6; --mut: #828c9f;
+    --bid: #34d399; --bid-bar: rgba(52, 211, 153, 0.18);
+    --ask: #f87171; --ask-bar: rgba(248, 113, 113, 0.18);
+    --accent: #7aa2ff;
+  }
+  [data-theme="light"] {
+    --bg: #f6f8fc; --panel: #ffffff; --line: #e3e8f2; --ink: #0f172a; --mut: #54607a;
+    --bid: #0a8f5b; --bid-bar: rgba(10, 143, 91, 0.12);
+    --ask: #c23b3b; --ask-bar: rgba(194, 59, 59, 0.12);
+    --accent: #2c4f8f;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 15px/1.5 "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    padding: 24px;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; }
+  h1 { font-size: 1.25rem; margin: 0 0 4px; letter-spacing: -0.01em; }
+  .sub { color: var(--mut); margin: 0 0 18px; font-size: 0.92rem; }
+  .sub a { color: var(--accent); }
+  .grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 18px; }
+  @media (max-width: 680px) { .grid { grid-template-columns: 1fr; } }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  .panel h2 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--mut); margin: 0 0 12px; }
+  .ladder { font-variant-numeric: tabular-nums; font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.86rem; }
+  .row { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 2px 8px; border-radius: 5px; }
+  .row .bar { position: absolute; top: 1px; bottom: 1px; border-radius: 4px; transition: width 140ms ease; z-index: 0; }
+  .row .px, .row .qty { position: relative; z-index: 1; }
+  .row .qty { text-align: right; color: var(--mut); }
+  .ask .px { color: var(--ask); } .ask .bar { right: 0; background: var(--ask-bar); }
+  .bid .px { color: var(--bid); } .bid .bar { left: 0; background: var(--bid-bar); }
+  .mid { text-align: center; padding: 8px; margin: 8px 0; border-top: 1px dashed var(--line); border-bottom: 1px dashed var(--line); color: var(--ink); font-weight: 600; font-family: "JetBrains Mono", ui-monospace, monospace; }
+  .metric { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+  .metric:last-child { border-bottom: 0; }
+  .metric .k { color: var(--mut); }
+  .metric .v { font-family: "JetBrains Mono", ui-monospace, monospace; }
+  .imb { height: 10px; border-radius: 6px; background: var(--line); position: relative; margin-top: 10px; overflow: hidden; }
+  .imb > span { position: absolute; top: 0; bottom: 0; }
+  .imb .pos { left: 50%; background: var(--bid); } .imb .neg { right: 50%; background: var(--ask); }
+  .controls { display: flex; align-items: center; gap: 12px; margin-top: 16px; color: var(--mut); font-size: 0.88rem; }
+  button { font: inherit; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 7px 14px; cursor: pointer; }
+  button:hover { border-color: var(--accent); }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .tag { font-size: 0.78rem; color: var(--mut); }
+  code { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>hft-orderbook — live L2 book</h1>
+  <p class="sub" id="status">Recorded replay of the C++ engine reconstructing a NASDAQ&nbsp;ITCH&nbsp;5.0 book.
+    Pass <code>?ws=ws://host:port</code> to watch a local <code>wsbook</code> live. ·
+    <a href="https://github.com/saad-mughal435/hft-orderbook">source ↗</a></p>
+
+  <div class="grid">
+    <section class="panel" aria-label="Order book depth">
+      <h2>Depth (L2)</h2>
+      <div class="ladder">
+        <div id="asks" role="list" aria-label="Ask levels"></div>
+        <div class="mid" id="mid">—</div>
+        <div id="bids" role="list" aria-label="Bid levels"></div>
+      </div>
+    </section>
+
+    <section class="panel" aria-label="Microstructure signals">
+      <h2>Signals</h2>
+      <div class="metric"><span class="k">mid</span><span class="v" id="m-mid">—</span></div>
+      <div class="metric"><span class="k">micro-price</span><span class="v" id="m-micro">—</span></div>
+      <div class="metric"><span class="k">spread</span><span class="v" id="m-spread">—</span></div>
+      <div class="metric"><span class="k">imbalance</span><span class="v" id="m-imb">—</span></div>
+      <div class="imb" aria-hidden="true"><span class="neg" id="imb-neg"></span><span class="pos" id="imb-pos"></span></div>
+      <div class="controls">
+        <button id="play" aria-label="Pause or resume the replay">Pause</button>
+        <span class="tag" id="seq">frame 0</span>
+        <span class="tag" id="symtag"></span>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var asksEl = document.getElementById('asks'), bidsEl = document.getElementById('bids');
+  var midEl = document.getElementById('mid'), statusEl = document.getElementById('status');
+  var mMid = document.getElementById('m-mid'), mMicro = document.getElementById('m-micro');
+  var mSpread = document.getElementById('m-spread'), mImb = document.getElementById('m-imb');
+  var imbPos = document.getElementById('imb-pos'), imbNeg = document.getElementById('imb-neg');
+  var seqEl = document.getElementById('seq'), symEl = document.getElementById('symtag');
+  var playBtn = document.getElementById('play');
+
+  function fmt(x, d) { return (x == null ? '—' : Number(x).toFixed(d == null ? 4 : d)); }
+
+  function rowHtml(side, px, qty, pct) {
+    return '<div class="row ' + side + '" role="listitem">' +
+      '<span class="bar" style="width:' + pct + '%"></span>' +
+      '<span class="px">' + fmt(px, 4) + '</span>' +
+      '<span class="qty">' + qty + '</span></div>';
+  }
+
+  function render(s) {
+    if (!s) return;
+    var bids = s.bids || [], asks = s.asks || [];
+    var maxq = 1;
+    bids.forEach(function (l) { if (l[1] > maxq) maxq = l[1]; });
+    asks.forEach(function (l) { if (l[1] > maxq) maxq = l[1]; });
+    // asks: show worst (highest) at top down to best (lowest) just above mid
+    var aHtml = '';
+    for (var i = Math.min(asks.length, 10) - 1; i >= 0; i--)
+      aHtml += rowHtml('ask', asks[i][0], asks[i][1], (asks[i][1] / maxq) * 100);
+    asksEl.innerHTML = aHtml;
+    var bHtml = '';
+    for (var j = 0; j < Math.min(bids.length, 10); j++)
+      bHtml += rowHtml('bid', bids[j][0], bids[j][1], (bids[j][1] / maxq) * 100);
+    bidsEl.innerHTML = bHtml;
+
+    midEl.textContent = (s.mid != null ? fmt(s.mid, 4) : '—');
+    mMid.textContent = fmt(s.mid, 4);
+    mMicro.textContent = fmt(s.microprice, 4);
+    mSpread.textContent = (s.spread_bps != null ? fmt(s.spread_bps, 2) + ' bps' : '—');
+    var imb = s.imbalance || 0;
+    mImb.textContent = fmt(imb, 3);
+    imbPos.style.width = (imb > 0 ? imb * 50 : 0) + '%';
+    imbNeg.style.width = (imb < 0 ? -imb * 50 : 0) + '%';
+    seqEl.textContent = 'frame ' + (s.seq == null ? '?' : s.seq);
+    if (s.symbol) symEl.textContent = s.symbol;
+  }
+
+  // --- live WebSocket mode (?ws=ws://host:port) ---
+  var params = new URLSearchParams(location.search);
+  var wsUrl = params.get('ws');
+  if (wsUrl) {
+    statusEl.innerHTML = 'Live from <code>' + wsUrl + '</code> · ' +
+      '<a href="https://github.com/saad-mughal435/hft-orderbook">source ↗</a>';
+    try {
+      var sock = new WebSocket(wsUrl);
+      sock.onmessage = function (ev) { try { render(JSON.parse(ev.data)); } catch (e) {} };
+      sock.onerror = function () { statusEl.textContent = 'WebSocket error — is wsbook running at ' + wsUrl + '?'; };
+      playBtn.style.display = 'none';
+    } catch (e) { statusEl.textContent = 'Could not open ' + wsUrl; }
+    return;
+  }
+
+  // --- recorded replay mode (default) ---
+  var frames = [], idx = 0, timer = null, playing = true;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function step() {
+    if (!frames.length) return;
+    render(frames[idx]);
+    idx = (idx + 1) % frames.length;
+  }
+  function play() { if (timer) return; playing = true; playBtn.textContent = 'Pause'; timer = setInterval(step, 220); }
+  function pause() { playing = false; playBtn.textContent = 'Resume'; if (timer) { clearInterval(timer); timer = null; } }
+  playBtn.addEventListener('click', function () { playing ? pause() : play(); });
+
+  fetch('book-replay.json').then(function (r) { return r.json(); }).then(function (data) {
+    frames = Array.isArray(data) ? data : [];
+    if (!frames.length) { statusEl.textContent = 'No recorded data found.'; return; }
+    render(frames[0]); idx = 1;
+    if (reduce) { pause(); } else { play(); }
+  }).catch(function () { statusEl.textContent = 'Could not load the recorded replay.'; });
+})();
+</script>
+</body>
+</html>

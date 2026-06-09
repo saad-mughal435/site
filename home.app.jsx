@@ -625,17 +625,19 @@ const PROJECTS = [
     sectionHeading: 'Systems programming in C++',
     sectionBlurb: 'Five dependency-light C++17 repositories - modern CMake, unit tests (Catch2 fetched by CMake), and green GitHub Actions CI - led by a low-latency HFT market-data engine and spanning the operations, systems, networking and industrial-protocol domains the rest of this portfolio covers.',
     title: 'hft-orderbook - HFT market-data engine (NASDAQ ITCH 5.0 + MT5)',
-    desc: <Fragment>A low-latency <strong>C++17</strong> engine that reconstructs a live limit-order book from the real <strong>NASDAQ TotalView-ITCH 5.0</strong> feed. ITCH is order-based and already matched, so this is a <strong>reconstructor, not a matching engine</strong> - the hot path is an O(1) <code>order_ref → order</code> map. It deframes real BinaryFILE captures and reconstructs every symbol in the stream; a pluggable adapter runs the same engine against <strong>MetaTrader 5</strong> (live ticks in / orders out).</Fragment>,
+    desc: <Fragment>A low-latency <strong>C++17</strong> engine that reconstructs a live limit-order book from the real <strong>NASDAQ TotalView-ITCH 5.0</strong> feed. ITCH is order-based and already matched, so this is a <strong>reconstructor, not a matching engine</strong> - the hot path is an O(1) <code>order_ref → order</code> map. It deframes real BinaryFILE captures and reconstructs every symbol in the stream, derives microstructure signals, scales across worker threads, and can be <strong>watched reconstructing the book live in the browser</strong>. A pluggable adapter runs the same engine against <strong>MetaTrader 5</strong>.</Fragment>,
     bullets: [
       <Fragment><strong>ITCH 5.0 decoder + real data</strong> - manual big-endian field extraction (never a packed-struct cast over the wire); deframes real <strong>BinaryFILE</strong> captures and routes every message to a per-symbol book by <code>stock_locate</code></Fragment>,
-      <Fragment><strong>Lock-free pipeline</strong> - a wait-free SPSC ring (power-of-two mask, <code>alignas(64)</code> cache-line split) feeds a decode thread → book thread, parity-tested and <strong>validated race-free by ThreadSanitizer</strong> in CI</Fragment>,
-      <Fragment><strong>Pluggable book, measured</strong> - the reconstructor is templated over its price-level store (a <code>std::map</code> baseline vs a cache-friendly flat sorted vector) and benchmarked head-to-head with Google Benchmark; <code>obreplay</code> prints throughput + a p50 / p99 / p99.9 latency histogram</Fragment>,
-      <Fragment><strong>MetaTrader 5 bridge</strong> - versioned NDJSON over TCP, an <code>ITCHBridge.mq5</code> EA, and a depth publisher that streams the reconstructed book back; a mock-client integration test runs the full ticks → orders → acks round trip in CI without Windows</Fragment>,
+      <Fragment><strong>Lock-free, and it scales</strong> - a wait-free SPSC ring (power-of-two mask, <code>alignas(64)</code> cache-line split) feeds a decode → book pipeline; symbols shard across worker threads (one ring each) for throughput - all <strong>validated race-free by ThreadSanitizer</strong></Fragment>,
+      <Fragment><strong>Pluggable book, measured</strong> - templated over its price-level store: a <code>std::map</code> baseline, a flat sorted vector, and a <strong>price-tick-indexed windowed array</strong> (the canonical L2 structure, ~24% faster in the A/B) - all three parity-tested and benchmarked head-to-head with Google Benchmark</Fragment>,
+      <Fragment><strong>Microstructure signals + live viewer</strong> - micro-price, order-book imbalance and spread (bps) plus a trade tape with VWAP / OHLCV, streamed as JSON over a <strong>dependency-free WebSocket</strong> (hand-rolled SHA-1 + RFC-6455 frame codec) to a browser L2 book viewer</Fragment>,
+      <Fragment><strong>MetaTrader 5 bridge</strong> - versioned NDJSON over TCP, an <code>ITCHBridge.mq5</code> EA, and a depth/signal publisher that streams the reconstructed book back; a mock-client integration test runs the full ticks → orders → acks round trip in CI without Windows</Fragment>,
       <Fragment><strong>Hardened & verified</strong> - every push runs ThreadSanitizer, Address / UB sanitizers, a <strong>libFuzzer</strong> decode harness and a clang <code>-Werror</code> build alongside <code>ctest</code> and a benchmark smoke</Fragment>,
     ],
-    tags: ['C++17', 'HFT', 'NASDAQ ITCH 5.0', 'Lock-free', 'Low-latency', 'Market data', 'Multi-symbol', 'MetaTrader 5', 'Benchmarked', 'Sanitized + fuzzed', 'CMake', 'Catch2', 'GitHub Actions'],
+    tags: ['C++17', 'HFT', 'NASDAQ ITCH 5.0', 'Lock-free', 'Low-latency', 'Market data', 'Multi-symbol', 'Microstructure signals', 'Order-book imbalance', 'Sharded', 'WebSocket', 'MetaTrader 5', 'Benchmarked', 'Sanitized + fuzzed', 'CMake', 'GitHub Actions'],
     ctas: [
       { label: 'View on GitHub ↗', href: 'https://github.com/saad-mughal435/hft-orderbook', target: '_blank', primary: true, prominent: true },
+      { label: 'Live L2 viewer ↗', href: '/hft-book/viewer.html', target: '_blank', prominent: true },
       { label: 'CI runs ↗', href: 'https://github.com/saad-mughal435/hft-orderbook/actions', target: '_blank' },
     ],
   },
@@ -1004,7 +1006,7 @@ function Demos({ view }) {
 // areas the section title implies. Lets the viewer scan instead of judge.
 const SKILLS = [
   { domain: 'code', title: 'Backend & APIs', items:
-    ['Python', 'FastAPI', 'Java', 'Spring Boot', 'Spring Data JPA', 'C++17', 'Lock-free', 'Low-latency', 'Market data', 'TypeScript', 'Node.js', 'REST APIs', 'JWT Auth', 'OpenAPI / Swagger', 'Pydantic', 'async I/O'] },
+    ['Python', 'FastAPI', 'Java', 'Spring Boot', 'Spring Data JPA', 'C++17', 'Lock-free', 'Low-latency', 'Market data', 'Market microstructure', 'TypeScript', 'Node.js', 'REST APIs', 'JWT Auth', 'OpenAPI / Swagger', 'Pydantic', 'async I/O'] },
   { domain: 'all', title: 'Manufacturing Systems', items:
     ['MES', 'ERP', 'OEE', 'PPC', 'QC Workflows', 'Batch Tracking', 'Inventory / FIFO', 'Sage Evolution'] },
   { domain: 'code', title: 'Frontend & UI', items:
