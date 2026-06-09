@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.3.1] - 2026-06-10 - L2 viewer: clean (uncrossed) book + terminal polish
+
+### Fixed
+
+- **The viewer's book was crossed** (best bid above best ask, negative spread) because it replayed the
+  engine's *stress* synthetic feed, which lets resting orders pile up across the mid (the engine is a
+  reconstructor, not a matcher). The recorded `book-replay.json` is now produced from a new
+  never-crossed generator (`make_synthetic_book`, every add priced inside the current best bid/ask) —
+  a realistic L2 ladder with a tight ~1-bp spread, verified 0 crossed frames.
+
+### Changed
+
+- **Viewer polish** to read like a trading terminal: thousands-separated sizes, an inside/spread strip
+  (mid + spread in ticks and bps), best-bid/ask row highlight, colored spread/imbalance, a live/recorded
+  badge, and **last-trade / VWAP / volume** from the engine's trade tape (now in the snapshot stream).
+
 ## [5.3.0] - 2026-06-10 - hft-orderbook: HFT-role positioning (FIX, MoldUDP64, microsecond)
 
 Refreshes the flagship C++ card to position the engine for an HFT / low-latency C++ role after adding
