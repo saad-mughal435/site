@@ -795,11 +795,30 @@ const PROJECTS = [{
   ctaSubtitle: 'Published on npm · MIT · green CI — npm install @saadmughal435/n8n-nodes-devtools'
 }, {
   domain: 'code',
-  kind: 'C++17 library + CLI · Open source · CI',
+  kind: 'C++17 HFT engine · NASDAQ ITCH 5.0 + MT5 · Open source · CI',
   year: '2026',
   sectionEyebrow: 'Systems & C++',
   sectionHeading: 'Systems programming in C++',
-  sectionBlurb: 'Four small, dependency-light C++17 repositories - modern CMake, unit tests (Catch2 fetched by CMake), and green GitHub Actions CI - spanning the operations, systems, networking, and industrial-protocol domains the rest of this portfolio covers.',
+  sectionBlurb: 'Five dependency-light C++17 repositories - modern CMake, unit tests (Catch2 fetched by CMake), and green GitHub Actions CI - led by a low-latency HFT market-data engine and spanning the operations, systems, networking and industrial-protocol domains the rest of this portfolio covers.',
+  title: 'hft-orderbook - HFT market-data engine (NASDAQ ITCH 5.0 + MT5)',
+  desc: /*#__PURE__*/React.createElement(Fragment, null, "A low-latency ", /*#__PURE__*/React.createElement("strong", null, "C++17"), " engine that reconstructs a live limit-order book from the real ", /*#__PURE__*/React.createElement("strong", null, "NASDAQ TotalView-ITCH 5.0"), " feed. ITCH is order-based and already matched, so this is a ", /*#__PURE__*/React.createElement("strong", null, "reconstructor, not a matching engine"), " - the hot path is an O(1) ", /*#__PURE__*/React.createElement("code", null, "order_ref \u2192 order"), " map. A pluggable adapter runs the same engine against ", /*#__PURE__*/React.createElement("strong", null, "MetaTrader 5"), " (live ticks in / orders out)."),
+  bullets: [/*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "ITCH 5.0 decoder"), " - manual big-endian field extraction (never a packed-struct cast over the wire); add / execute / cancel / delete / replace"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Lock-free pipeline"), " - a wait-free SPSC ring (power-of-two mask, ", /*#__PURE__*/React.createElement("code", null, "alignas(64)"), " cache-line split) feeds a decode thread \u2192 book thread, parity-tested against the single-threaded path"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Benchmarks + replay"), " - Google Benchmark microbenches and an ", /*#__PURE__*/React.createElement("code", null, "obreplay"), " tool that streams a capture through the pipeline and prints throughput + a p50 / p99 / p99.9 latency histogram"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "MetaTrader 5 bridge"), " - versioned NDJSON over TCP, an ", /*#__PURE__*/React.createElement("code", null, "ITCHBridge.mq5"), " EA, and a mock-client integration test so the full ticks \u2192 orders \u2192 acks round trip runs in CI without Windows"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Green CI"), " - GitHub Actions builds, runs ", /*#__PURE__*/React.createElement("code", null, "ctest"), ", and smoke-tests the replay tool and the benchmarks on every push")],
+  tags: ['C++17', 'HFT', 'NASDAQ ITCH 5.0', 'Lock-free', 'Low-latency', 'Market data', 'MetaTrader 5', 'CMake', 'Catch2', 'GitHub Actions'],
+  ctas: [{
+    label: 'View on GitHub ↗',
+    href: 'https://github.com/saad-mughal435/hft-orderbook',
+    target: '_blank',
+    primary: true,
+    prominent: true
+  }, {
+    label: 'CI runs ↗',
+    href: 'https://github.com/saad-mughal435/hft-orderbook/actions',
+    target: '_blank'
+  }]
+}, {
+  domain: 'code',
+  kind: 'C++17 library + CLI · Open source · CI',
+  year: '2026',
   title: 'oee-core - OEE & downtime analytics (C++17)',
   desc: /*#__PURE__*/React.createElement(Fragment, null, "The same manufacturing-operations domain as my ShopFloor API, in modern C++. A library + CLI that computes ", /*#__PURE__*/React.createElement("strong", null, "OEE = Availability \xD7 Performance \xD7 Quality"), " with divide-by-zero guards and factor clamping, grades the result, and builds a ", /*#__PURE__*/React.createElement("strong", null, "Pareto of downtime"), " with MTTR / MTBF."),
   bullets: [/*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "OEE engine"), " - availability / performance / quality with over-speed clamping, unit-tested against the classic worked example (87.5% OEE)"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Downtime analytics"), " - reason-coded Pareto with MTTR and MTBF from a CSV of stop events"), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Modern C++17 + CMake"), " - library, CLI and Catch2 tests; warnings-clean under ", /*#__PURE__*/React.createElement("code", null, "-Wall -Wextra -Wpedantic")), /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("strong", null, "Green CI"), " - GitHub Actions builds and runs ", /*#__PURE__*/React.createElement("code", null, "ctest"), " on every push")],
@@ -1224,7 +1243,7 @@ function Demos({
 const SKILLS = [{
   domain: 'code',
   title: 'Backend & APIs',
-  items: ['Python', 'FastAPI', 'Java', 'Spring Boot', 'Spring Data JPA', 'C++17', 'TypeScript', 'Node.js', 'REST APIs', 'JWT Auth', 'OpenAPI / Swagger', 'Pydantic', 'async I/O']
+  items: ['Python', 'FastAPI', 'Java', 'Spring Boot', 'Spring Data JPA', 'C++17', 'Lock-free', 'Low-latency', 'Market data', 'TypeScript', 'Node.js', 'REST APIs', 'JWT Auth', 'OpenAPI / Swagger', 'Pydantic', 'async I/O']
 }, {
   domain: 'all',
   title: 'Manufacturing Systems',

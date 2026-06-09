@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.1.0] - 2026-06-09 - Flagship C++ project: hft-orderbook (HFT market-data engine)
+
+Adds a flagship systems-programming project at the head of the "Systems programming in C++"
+group. No restructuring; all existing content is preserved verbatim.
+
+### Added
+
+- **`hft-orderbook` flagship card** leading the C++ group — a low-latency **C++17** NASDAQ
+  TotalView-ITCH 5.0 **order-book reconstructor** with a lock-free **SPSC decode→book pipeline**,
+  Google Benchmark microbenches + an `obreplay` throughput/latency tool, and a **MetaTrader 5**
+  NDJSON-over-TCP bridge (MQL5 EA). GitHub + CI-runs links; green CI.
+- **`SoftwareSourceCode` JSON-LD entry** for hft-orderbook (ItemList position 9; the other C++
+  repos shift to 10–13) and a matching `<noscript>` fallback line.
+- **Skills nudge** — `Lock-free`, `Low-latency`, `Market data` added to *Backend & APIs*.
+
+### Changed
+
+- C++ section blurb now reads "Five … repositories … led by a low-latency HFT market-data engine".
+- Recompiled `home.app.jsx` → `home.app.js`; cache-bust bumped to `?v=20260609c`.
+
 ## [5.0.0] - 2026-06-05 - Dual-theme premium redesign (light + dark, glass/glow)
 
 A full visual rebuild of the portfolio shell into a premium "operations console" system with

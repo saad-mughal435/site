@@ -620,10 +620,27 @@ const PROJECTS = [
     ctaSubtitle: 'Published on npm · MIT · green CI — npm install @saadmughal435/n8n-nodes-devtools',
   },
   {
-    domain: 'code', kind: 'C++17 library + CLI · Open source · CI', year: '2026',
+    domain: 'code', kind: 'C++17 HFT engine · NASDAQ ITCH 5.0 + MT5 · Open source · CI', year: '2026',
     sectionEyebrow: 'Systems & C++',
     sectionHeading: 'Systems programming in C++',
-    sectionBlurb: 'Four small, dependency-light C++17 repositories - modern CMake, unit tests (Catch2 fetched by CMake), and green GitHub Actions CI - spanning the operations, systems, networking, and industrial-protocol domains the rest of this portfolio covers.',
+    sectionBlurb: 'Five dependency-light C++17 repositories - modern CMake, unit tests (Catch2 fetched by CMake), and green GitHub Actions CI - led by a low-latency HFT market-data engine and spanning the operations, systems, networking and industrial-protocol domains the rest of this portfolio covers.',
+    title: 'hft-orderbook - HFT market-data engine (NASDAQ ITCH 5.0 + MT5)',
+    desc: <Fragment>A low-latency <strong>C++17</strong> engine that reconstructs a live limit-order book from the real <strong>NASDAQ TotalView-ITCH 5.0</strong> feed. ITCH is order-based and already matched, so this is a <strong>reconstructor, not a matching engine</strong> - the hot path is an O(1) <code>order_ref → order</code> map. A pluggable adapter runs the same engine against <strong>MetaTrader 5</strong> (live ticks in / orders out).</Fragment>,
+    bullets: [
+      <Fragment><strong>ITCH 5.0 decoder</strong> - manual big-endian field extraction (never a packed-struct cast over the wire); add / execute / cancel / delete / replace</Fragment>,
+      <Fragment><strong>Lock-free pipeline</strong> - a wait-free SPSC ring (power-of-two mask, <code>alignas(64)</code> cache-line split) feeds a decode thread → book thread, parity-tested against the single-threaded path</Fragment>,
+      <Fragment><strong>Benchmarks + replay</strong> - Google Benchmark microbenches and an <code>obreplay</code> tool that streams a capture through the pipeline and prints throughput + a p50 / p99 / p99.9 latency histogram</Fragment>,
+      <Fragment><strong>MetaTrader 5 bridge</strong> - versioned NDJSON over TCP, an <code>ITCHBridge.mq5</code> EA, and a mock-client integration test so the full ticks → orders → acks round trip runs in CI without Windows</Fragment>,
+      <Fragment><strong>Green CI</strong> - GitHub Actions builds, runs <code>ctest</code>, and smoke-tests the replay tool and the benchmarks on every push</Fragment>,
+    ],
+    tags: ['C++17', 'HFT', 'NASDAQ ITCH 5.0', 'Lock-free', 'Low-latency', 'Market data', 'MetaTrader 5', 'CMake', 'Catch2', 'GitHub Actions'],
+    ctas: [
+      { label: 'View on GitHub ↗', href: 'https://github.com/saad-mughal435/hft-orderbook', target: '_blank', primary: true, prominent: true },
+      { label: 'CI runs ↗', href: 'https://github.com/saad-mughal435/hft-orderbook/actions', target: '_blank' },
+    ],
+  },
+  {
+    domain: 'code', kind: 'C++17 library + CLI · Open source · CI', year: '2026',
     title: 'oee-core - OEE & downtime analytics (C++17)',
     desc: <Fragment>The same manufacturing-operations domain as my ShopFloor API, in modern C++. A library + CLI that computes <strong>OEE = Availability × Performance × Quality</strong> with divide-by-zero guards and factor clamping, grades the result, and builds a <strong>Pareto of downtime</strong> with MTTR / MTBF.</Fragment>,
     bullets: [
@@ -987,7 +1004,7 @@ function Demos({ view }) {
 // areas the section title implies. Lets the viewer scan instead of judge.
 const SKILLS = [
   { domain: 'code', title: 'Backend & APIs', items:
-    ['Python', 'FastAPI', 'Java', 'Spring Boot', 'Spring Data JPA', 'C++17', 'TypeScript', 'Node.js', 'REST APIs', 'JWT Auth', 'OpenAPI / Swagger', 'Pydantic', 'async I/O'] },
+    ['Python', 'FastAPI', 'Java', 'Spring Boot', 'Spring Data JPA', 'C++17', 'Lock-free', 'Low-latency', 'Market data', 'TypeScript', 'Node.js', 'REST APIs', 'JWT Auth', 'OpenAPI / Swagger', 'Pydantic', 'async I/O'] },
   { domain: 'all', title: 'Manufacturing Systems', items:
     ['MES', 'ERP', 'OEE', 'PPC', 'QC Workflows', 'Batch Tracking', 'Inventory / FIFO', 'Sage Evolution'] },
   { domain: 'code', title: 'Frontend & UI', items:
