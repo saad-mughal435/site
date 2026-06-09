@@ -1,13 +1,13 @@
-/* fleet-sim.js — Marsad real-time vehicle simulator.
+/* fleet-sim.js - Marsad real-time vehicle simulator.
  *
  * Ticks every 4 seconds. Each on-route vehicle inches along a synthesised
  * heading + speed toward its next drop-off (the oldest open order for its
  * driver, if any), with small jitter. When a vehicle gets within ~120m of
- * its drop-off, it "delivers" — order flips to delivered, vehicle is sent
+ * its drop-off, it "delivers" - order flips to delivered, vehicle is sent
  * back toward the hub, then to its next assignment.
  *
  * Exposed as window.MarsadSim with the same subscriber pattern as WatadSim
- * — any page (console, driver, admin dashboard) can subscribe() and get
+ * - any page (console, driver, admin dashboard) can subscribe() and get
  * push notifications for 'tick' / 'delivered' / 'failed' / 'sla-warn'. */
 (function () {
   'use strict';
@@ -58,7 +58,7 @@
         };
       });
       D.ORDERS.forEach(function (o) { self.orders[o.id] = Object.assign({}, o); });
-      // Assign each on-route vehicle a target — the oldest still-open order for that driver.
+      // Assign each on-route vehicle a target - the oldest still-open order for that driver.
       Object.values(this.vehicles).forEach(function (veh) {
         var open = Object.values(self.orders).filter(function (o) {
           return o.driver_id === veh.driver_id && (o.status === 'assigned' || o.status === 'picked_up' || o.status === 'in_transit');
@@ -78,7 +78,7 @@
         if (!driver || driver.status !== 'on_route') { veh.speed_kmh = 0; return; }
         var target = veh.target_order_id ? self.orders[veh.target_order_id] : null;
         if (!target) {
-          // Idle near current position — small drift toward hub.
+          // Idle near current position - small drift toward hub.
           driftToward(veh, D.HUB.lat, D.HUB.lng, 0.0001 + Math.random() * 0.0002);
           veh.speed_kmh = Math.floor(15 + Math.random() * 10);
         } else {

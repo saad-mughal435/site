@@ -1,11 +1,11 @@
 /* =========================================================================
-   Watad — Smart-building / BMS operations console · design system
+   Watad - Smart-building / BMS operations console · design system
    Dark navy + electric cyan + amber/red alarm + safety green. Mirrors real
    SCADA/BMS UIs (Honeywell EBI, Schneider EcoStruxure, Siemens Desigo).
    All classes prefixed `wtd-*`.
    ========================================================================= */
 :root {
-  /* Dark base — operator works on a dim NOC display */
+  /* Dark base - operator works on a dim NOC display */
   --wtd-bg:        #0a1426;
   --wtd-bg-2:      #0e1a30;
   --wtd-surface:   #14223b;
@@ -72,7 +72,7 @@ body.watad {
   -webkit-font-smoothing: antialiased;
   /* Flex column so portfolio-banner.js banner takes natural height + the
      console grid takes the remaining viewport. NEVER use height:100vh on
-     the inner grid — that bug clipped the composer in Sanad. */
+     the inner grid - that bug clipped the composer in Sanad. */
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -364,7 +364,7 @@ body.watad.landing .wtd-input {
 .wtd-trend-value { font-size: 14px; font-weight: 800; color: var(--wtd-ink); font-family: var(--font-mono); margin-inline-start: auto; }
 .wtd-trend-svg { flex: 1; min-height: 0; width: 100%; height: 100%; }
 
-/* SVG chart bits — used in trends + asset + energy */
+/* SVG chart bits - used in trends + asset + energy */
 .wtd-svg-line { fill: none; stroke: var(--wtd-cyan); stroke-width: 1.5; }
 .wtd-svg-area { fill: rgba(34, 211, 238, 0.12); }
 .wtd-svg-axis { stroke: var(--wtd-line-2); stroke-width: 1; }

@@ -167,7 +167,7 @@
   }
 
   // ---------- Order state ----------
-  // Don't create an order on every page load — that pollutes localStorage and
+  // Don't create an order on every page load - that pollutes localStorage and
   // admin views with empty `open` orders. Create lazily on the first product tap.
   function startOrder() {
     state.order = null;
@@ -219,7 +219,7 @@
   function renderCart() {
     var o = state.order;
     if (!o) {
-      $('t-order-no').textContent = '—';
+      $('t-order-no').textContent = '-';
       $('t-order-type').textContent = 'Takeaway';
       $('t-order-meta').textContent = '';
       $('t-cart-lines').innerHTML = '<div class="pos-cart-empty"><div class="pos-cart-empty-mark">☕</div>Tap a product to start the order.</div>';

@@ -1,4 +1,4 @@
-/* coach.js — AI Coach chat. RAG over the user's last 14 entries. Citation
+/* coach.js - AI Coach chat. RAG over the user's last 14 entries. Citation
  * chips [entry-id] open the cited entry in a bottom sheet. */
 (function () {
   'use strict';
@@ -39,7 +39,7 @@
     var greetingHtml = !state.history.length
       ? '<div class="lz-ai-panel" style="margin-bottom:14px;">'
         + '<div class="lz-ai-panel-head">✦ Coach</div>'
-        + '<div class="lz-ai-panel-body" style="font-size:14px;">Hi. I read your last 14 entries before each reply. Ask me something specific — I\'ll cite the entries I lean on.</div>'
+        + '<div class="lz-ai-panel-body" style="font-size:14px;">Hi. I read your last 14 entries before each reply. Ask me something specific - I\'ll cite the entries I lean on.</div>'
         + '<div style="margin-top:10px;display:flex;flex-direction:column;gap:6px;">'
         + STARTERS.map(function (q) { return '<button class="lz-prompt-chip" data-starter="' + esc(q) + '" style="text-align:start;justify-content:flex-start;">' + esc(q) + '</button>'; }).join('')
         + '</div></div>'

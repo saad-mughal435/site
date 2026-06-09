@@ -1,10 +1,10 @@
-/* console.js — Marsad dispatcher console (centrepiece).
+/* console.js - Marsad dispatcher console (centrepiece).
  *
  * Four-region layout:
  *   - Top KPI strip (pending, in-flight, delivered today, SLA breaches, on-time %)
- *   - Map (left ~65%) — vehicles + order pins + hub
- *   - Order queue + driver list (right ~35%) — filter chips, AI batch button
- *   - Bottom AI dispatcher copilot strip — open chat, explain-delay shortcut
+ *   - Map (left ~65%) - vehicles + order pins + hub
+ *   - Order queue + driver list (right ~35%) - filter chips, AI batch button
+ *   - Bottom AI dispatcher copilot strip - open chat, explain-delay shortcut
  *
  * Subscribes to MarsadSim and diff-renders on tick. Same pattern as the
  * Watad console. */
@@ -220,7 +220,7 @@
     // Place any order not yet on the map; update in place for ones already there.
     ords.forEach(function (o) {
       if (!o.dropoff_lat) return;
-      // placeOrder is idempotent — updates icon + popup if already on the map,
+      // placeOrder is idempotent - updates icon + popup if already on the map,
       // so an open popup is not torn down on every tick.
       MarsadMap.placeOrder(o);
     });
@@ -290,7 +290,7 @@
       size: 'lg',
       body: '<div id="chat-thread" style="max-height:50vh;overflow:auto;padding:8px 0;font-size:14px;line-height:1.6;color:var(--mrs-ink-2);"></div>'
         + '<div style="display:flex;gap:8px;margin-top:10px;">'
-        + '  <input class="mrs-input" id="chat-input" placeholder="Ask Marsad — try \'fuel\', \'idle drivers\', \'sla\'…" style="flex:1;"/>'
+        + '  <input class="mrs-input" id="chat-input" placeholder="Ask Marsad - try \'fuel\', \'idle drivers\', \'sla\'…" style="flex:1;"/>'
         + '  <button class="mrs-btn mrs-btn--primary" id="chat-send" aria-label="Send" title="Send">↑</button>'
         + '</div>'
         + '<div style="margin-top:8px;font-size:11px;color:var(--mrs-muted);">Try: <em>"any breaches?"</em>, <em>"who has spare capacity?"</em>, <em>"fuel below 25%?"</em></div>',

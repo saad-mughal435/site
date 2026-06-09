@@ -1,4 +1,4 @@
-/* ai-engine.js — MarsadAI client.
+/* ai-engine.js - MarsadAI client.
  *
  * Four dispatcher-tuned features grounded in the live fleet state:
  *   - explainDelay({ order })         → why is this order late + what to do
@@ -77,11 +77,11 @@
     return lines.join('\n');
   }
   function plausibleDelayCause(o) {
-    if (o.cod_aed > 200) return 'High-value COD (AED ' + o.cod_aed + ') — driver may have stopped to verify cash on hand. Common pattern in Deira late-afternoon traffic.';
-    if (o.zone_id === 'zn-sharjah') return 'Sharjah Al Nahda traffic — Sheikh Mohammed Bin Zayed Road typically congested 17:00-19:30. SLA built for 150 min may not be realistic for this slot.';
-    if (o.zone_id === 'zn-deira') return 'Deira souk-area access — narrow streets + parking lookup. The address line mentions "Tower" so likely needs concierge handoff.';
-    if (o.kind && /furniture/i.test(o.kind)) return 'Large parcel — needs a van rather than a bike, and concierge clearance for delivery to a high-rise.';
-    return 'Driver currently has 3+ active stops and route hasn\'t been re-optimised since 14:00. SLA window is closing — recommend reroute or reassign to a nearer driver.';
+    if (o.cod_aed > 200) return 'High-value COD (AED ' + o.cod_aed + ') - driver may have stopped to verify cash on hand. Common pattern in Deira late-afternoon traffic.';
+    if (o.zone_id === 'zn-sharjah') return 'Sharjah Al Nahda traffic - Sheikh Mohammed Bin Zayed Road typically congested 17:00-19:30. SLA built for 150 min may not be realistic for this slot.';
+    if (o.zone_id === 'zn-deira') return 'Deira souk-area access - narrow streets + parking lookup. The address line mentions "Tower" so likely needs concierge handoff.';
+    if (o.kind && /furniture/i.test(o.kind)) return 'Large parcel - needs a van rather than a bike, and concierge clearance for delivery to a high-rise.';
+    return 'Driver currently has 3+ active stops and route hasn\'t been re-optimised since 14:00. SLA window is closing - recommend reroute or reassign to a nearer driver.';
   }
   function recommendAction(o, driver) {
     if (o.sla_breached) return 'Call the customer first (' + (o.customer_phone || '') + '), apologise and offer an updated ETA. Then if it\'s still feasible, push this order to the top of ' + (driver ? driver.name : 'the assigned driver') + '\'s queue.';
@@ -90,7 +90,7 @@
 
   function mockSuggestReroute(ctx) {
     var queue = (ctx && ctx.queue) || [];
-    if (!queue.length) return 'No active stops on this driver — nothing to reroute.';
+    if (!queue.length) return 'No active stops on this driver - nothing to reroute.';
     // "Optimised" order: sort by zone affinity + sla deadline
     var sorted = queue.slice().sort(function (a, b) {
       return new Date(a.sla_deadline) - new Date(b.sla_deadline);
@@ -100,7 +100,7 @@
     lines.push('**Recommended sequence** (by SLA deadline, then geographic clustering):');
     lines.push('');
     sorted.forEach(function (o, i) {
-      lines.push((i + 1) + '. **' + o.number + '** — ' + o.zone_name + ' · SLA in ' + Math.round((new Date(o.sla_deadline) - new Date()) / 60000) + ' min');
+      lines.push((i + 1) + '. **' + o.number + '** - ' + o.zone_name + ' · SLA in ' + Math.round((new Date(o.sla_deadline) - new Date()) / 60000) + ' min');
     });
     lines.push('');
     lines.push('**Estimated saving:** ~' + savings + ' minutes vs current order. Press "Apply" to push this to the driver\'s app.');
@@ -124,18 +124,18 @@
 
   function mockDispatcherChat(ctx) {
     var q = String((ctx && ctx.question) || '').toLowerCase();
-    if (/sla|breach|late/.test(q)) return 'Two breaches right now — both in Sharjah Al Nahda, both with the same driver (Yusuf Al-Mansouri). His van shows fuel at 18% — that might explain the slowdown. Suggest you reassign one of those orders to bike rider Karim Khan who is currently idle at the hub.';
+    if (/sla|breach|late/.test(q)) return 'Two breaches right now - both in Sharjah Al Nahda, both with the same driver (Yusuf Al-Mansouri). His van shows fuel at 18% - that might explain the slowdown. Suggest you reassign one of those orders to bike rider Karim Khan who is currently idle at the hub.';
     if (/idle|spare|capacity/.test(q)) return 'Three idle drivers right now: 2 at the hub, 1 in JLT just back from a drop. Total spare capacity ~28 parcels across the two vans + 4 on the bike.';
     if (/fuel/.test(q)) return 'Two vehicles below the 25% fuel threshold: V03 (van, Yusuf) at 18%, M02 (bike, Bilal) at 22%. Recommend Yusuf swing past the hub for a top-up after his current drop.';
     if (/peak|busy|rush/.test(q)) return 'Peak window today projects 16:30-19:00 based on last 14-day pattern. Downtown + Business Bay clusters dominate. Suggest pre-staging 2 vans in the BB micro-hub before 16:00.';
-    return 'I read the live fleet state for every reply. Try asking about SLAs, idle capacity, fuel, peak windows, or a specific driver/zone. (For full questions: live Claude needs a Cloudflare Worker — see README.)';
+    return 'I read the live fleet state for every reply. Try asking about SLAs, idle capacity, fuel, peak windows, or a specific driver/zone. (For full questions: live Claude needs a Cloudflare Worker - see README.)';
   }
 
   var SYS = {
     explain_delay:   "You are Marsad, an AI dispatcher copilot for a Dubai last-mile courier. Given a late order's details + the assigned driver's state, explain the likely cause in one sentence, then propose ONE specific next action. Lead with the action when possible. Reference real Dubai geography. Be direct, no fluff.",
     suggest_reroute: "You are Marsad, a route-optimisation copilot. Given a driver's pending stop list with addresses + SLA deadlines, propose a re-sequenced order that minimises late deliveries. Output a numbered list with order number, zone, and minutes-to-SLA, followed by an estimated time-saved line. Be concise.",
     batch_optimize:  "You are Marsad, a fleet-balancing copilot. Given a list of pending orders and a list of idle/available drivers, propose pairings that balance zone affinity and driver load. Output a bullet list of assignments with brief reasoning, then a one-line summary. Be specific and direct.",
-    dispatcher_chat: "You are Marsad, a conversational AI dispatcher copilot. Answer questions about fleet state — SLA breaches, idle drivers, fuel, peak windows, specific drivers/zones. Be brief, operational, and reference the live state in CONTEXT below."
+    dispatcher_chat: "You are Marsad, a conversational AI dispatcher copilot. Answer questions about fleet state - SLA breaches, idle drivers, fuel, peak windows, specific drivers/zones. Be brief, operational, and reference the live state in CONTEXT below."
   };
 
   var MarsadAI = {

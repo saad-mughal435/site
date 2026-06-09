@@ -1,4 +1,4 @@
-# Cloudflare Pages — HTTP headers
+# Cloudflare Pages - HTTP headers
 # https://developers.cloudflare.com/pages/configuration/headers/
 
 /*
@@ -8,8 +8,8 @@
   Permissions-Policy: geolocation=(), microphone=(), camera=()
   Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.tailwindcss.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://images.unsplash.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://unpkg.com; connect-src 'self' https://huggingface.co https://*.hf.co https://cdn.jsdelivr.net; worker-src 'self' blob:; child-src 'self' blob:; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://formsubmit.co; object-src 'none'
 
-# Short cache + revalidate for project JS/CSS — these files don't have fingerprints in
-# their names so they need to revalidate often. (Was: max-age=31536000 immutable —
+# Short cache + revalidate for project JS/CSS - these files don't have fingerprints in
+# their names so they need to revalidate often. (Was: max-age=31536000 immutable -
 # which locked stale code in browser caches for up to a year. Don't do that.)
 /app/css/*
   Cache-Control: public, max-age=300, must-revalidate
@@ -74,11 +74,11 @@
 /assets/*
   Cache-Control: public, max-age=300, must-revalidate
 
-# HTML — short cache so updates surface quickly
+# HTML - short cache so updates surface quickly
 /*.html
   Cache-Control: public, max-age=0, must-revalidate
 
-# Site CSS / JS at root — short cache
+# Site CSS / JS at root - short cache
 /home.css
   Cache-Control: public, max-age=86400
 /home.app.js
@@ -94,7 +94,7 @@
 /contact.js
   Cache-Control: public, max-age=86400
 
-# Headshot — cache aggressively
+# Headshot - cache aggressively
 /saad.png
   Cache-Control: public, max-age=31536000, immutable
 /og.png

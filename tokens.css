@@ -1,9 +1,9 @@
 /* =========================================================================
-   saadm.dev — shared design tokens
+   saadm.dev - shared design tokens
    ---------------------------------------------------------------------------
    Brand-level + foundation tokens that anything across the site can
    reference. Per-demo design systems (--lz-*, --wtd-*, --snd-*, --ask-*,
-   --pos-*, etc.) keep their scoped colour palettes — this file gives them
+   --pos-*, etc.) keep their scoped colour palettes - this file gives them
    a consistent spacing scale, radius scale, shadow ramp, ease curves,
    typography stack, and z-index layer roles so the whole portfolio feels
    like one product family.
@@ -14,7 +14,7 @@
    ========================================================================= */
 :root {
   /* ===================== Brand palette =====================
-     The saadm.dev signature accents — used in the homepage hero, mode
+     The saadm.dev signature accents - used in the homepage hero, mode
      badges, link colours, and the citation chips on Ask Saad. */
   --brand-blue:      #6e8eff;     /* primary action / brand */
   --brand-blue-2:    #4f73f0;
@@ -32,7 +32,7 @@
      Use these for surfaces, borders, text, and dim hairlines instead of
      hand-rolled rgb() per file. Optimised for a dark-first palette but
      each demo can flip to light surfaces using its own scoped tokens. */
-  --neutral-0:    #07080d;        /* darkest — full-bleed bg */
+  --neutral-0:    #07080d;        /* darkest - full-bleed bg */
   --neutral-50:   #0d1019;
   --neutral-100:  #121622;
   --neutral-200:  #181f30;
@@ -43,7 +43,7 @@
   --neutral-700:  #7b8597;
   --neutral-800:  #b5bdcc;
   --neutral-900:  #edf1f8;
-  --neutral-1000: #ffffff;        /* lightest — pure white */
+  --neutral-1000: #ffffff;        /* lightest - pure white */
 
   /* ===================== Semantic colours =====================
      Status meanings reused across alarm queues, status chips, toasts.
@@ -64,7 +64,7 @@
   --font-mono:     'JetBrains Mono', 'Fira Code', Consolas, ui-monospace, monospace;
   --font-arabic:   'Tajawal', var(--font-ui);
 
-  /* Modular type scale — minor third (1.2) on a 14px base */
+  /* Modular type scale - minor third (1.2) on a 14px base */
   --text-2xs:  10.5px;
   --text-xs:   12px;
   --text-sm:   13.5px;
@@ -124,7 +124,7 @@
 
   /* ===================== Easing + duration =====================
      Use these everywhere instead of ad-hoc cubic-beziers per file. */
-  --ease:       cubic-bezier(0.16, 1, 0.3, 1);    /* smooth out — UI default */
+  --ease:       cubic-bezier(0.16, 1, 0.3, 1);    /* smooth out - UI default */
   --ease-in:    cubic-bezier(0.4, 0, 1, 1);
   --ease-out:   cubic-bezier(0, 0, 0.2, 1);
   --ease-bounce:cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -183,7 +183,7 @@
 }
 
 /* =========================================================================
-   Helper utility classes built on tokens. Keep small — demos use their
+   Helper utility classes built on tokens. Keep small - demos use their
    own scoped classes for everything else.
    ========================================================================= */
 .t-focus-ring:focus-visible {

@@ -370,7 +370,7 @@ function FAQ() {
   return (
     <section id="faq" className="section container">
       <Reveal className="section-head">
-        <span className="section-tag">Appendix — FAQ</span>
+        <span className="section-tag">Appendix - FAQ</span>
         <h2>About Muhammad Saad - engineering background, software delivery focus.</h2>
       </Reveal>
       <Reveal stagger className="faq-list">
@@ -392,7 +392,7 @@ function About() {
   return (
     <section id="about" className="section container">
       <Reveal className="section-head">
-        <span className="section-tag">Fig. 01 — About</span>
+        <span className="section-tag">Fig. 01 - About</span>
         <h2><WordReveal>I sit between the factory floor and the keyboard.</WordReveal></h2>
       </Reveal>
       <div className="about-grid">
@@ -494,7 +494,7 @@ function Experience({ view }) {
   return (
     <section id="experience" className="section container">
       <Reveal className="section-head">
-        <span className="section-tag">Fig. 02 — Experience</span>
+        <span className="section-tag">Fig. 02 - Experience</span>
         <h2><WordReveal>A short career, but a wide one.</WordReveal></h2>
       </Reveal>
       <ol className="timeline">
@@ -617,7 +617,7 @@ const PROJECTS = [
       { label: 'View source on GitHub ↗', href: 'https://github.com/saad-mughal435/n8n-nodes-devtools', target: '_blank' },
       { label: 'CI runs ↗', href: 'https://github.com/saad-mughal435/n8n-nodes-devtools/actions', target: '_blank' },
     ],
-    ctaSubtitle: 'Published on npm · MIT · green CI — npm install @saadmughal435/n8n-nodes-devtools',
+    ctaSubtitle: 'Published on npm · MIT · green CI - npm install @saadmughal435/n8n-nodes-devtools',
   },
   {
     domain: 'code', kind: 'C++17 HFT engine · ITCH 5.0 · MoldUDP64 · FIX 4.4 · MT5 · CI', year: '2026',
@@ -708,7 +708,7 @@ const PROJECTS = [
   },
 ];
 
-/* Product demos — shown after Skills as a 3-column grid (compact cards). */
+/* Product demos - shown after Skills as a 3-column grid (compact cards). */
 const DEMO_PROJECTS = [
   {
     domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
@@ -792,13 +792,13 @@ const DEMO_PROJECTS = [
   {
     domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
     title: 'Sanad - AI customer-support copilot',
-    desc: <Fragment>A SaaS-style helpdesk with Claude integrated at every touchpoint. Built to demonstrate <strong>real LLM wiring</strong> end-to-end — system prompts, streaming, prompt caching, server-side key handling via a Cloudflare Worker proxy, graceful mock fallback when the key isn't set, and cost tracking — not just an OpenAI playground demo. Works offline in deterministic mock mode out of the box.</Fragment>,
+    desc: <Fragment>A SaaS-style helpdesk with Claude integrated at every touchpoint. Built to demonstrate <strong>real LLM wiring</strong> end-to-end - system prompts, streaming, prompt caching, server-side key handling via a Cloudflare Worker proxy, graceful mock fallback when the key isn't set, and cost tracking - not just an OpenAI playground demo. Works offline in deterministic mock mode out of the box.</Fragment>,
     bullets: [
       <Fragment><strong>Agent inbox with AI sidebar</strong>: suggested reply (with KB citations), conversation summary, sentiment, auto-category, EN↔AR translation, AI-drafted quick-action reasons. Click "Insert" to push the AI's draft into the composer.</Fragment>,
       <Fragment><strong>Customer chat widget</strong>: streaming AI replies grounded in the knowledge base with clickable citation chips. "Talk to a human" creates a real ticket in the agent inbox.</Fragment>,
       <Fragment><strong>Knowledge base</strong>: 77 articles in 6 categories, tiny custom markdown renderer, admin-only AI actions per article (<em>Generate FAQ</em>, <em>Suggest improvements</em>, <em>Translate to Arabic</em>), plus a "Find gaps" feature that clusters recent tickets and proposes new articles.</Fragment>,
       <Fragment><strong>11-section admin SPA</strong>: dashboard with sentiment split + hourly heatmap + AI-cost ticker, conversations, KB CRUD, categories, agents with permission matrix, customers, <strong>AI Console</strong> (model selector Haiku 4.5 / Sonnet 4.6 / Opus 4.7, editable system prompt with test-with-sample preview, temperature / max-tokens / cache toggles), analytics (daily volume, by-category, fallback rate, latency, cost, CSV export), integrations, settings, audit log.</Fragment>,
-      <Fragment><strong>Live + mock modes</strong>: detects whether a Cloudflare Worker proxy with ANTHROPIC_API_KEY is configured via <code>GET /api/sanad/ai/health</code> and shows a Live/Demo badge in the topbar. Every feature gracefully falls back to a deterministic pattern-matched mock when no key is set — the demo never breaks for visitors.</Fragment>,
+      <Fragment><strong>Live + mock modes</strong>: detects whether a Cloudflare Worker proxy with ANTHROPIC_API_KEY is configured via <code>GET /api/sanad/ai/health</code> and shows a Live/Demo badge in the topbar. Every feature gracefully falls back to a deterministic pattern-matched mock when no key is set - the demo never breaks for visitors.</Fragment>,
     ],
     tags: ['Vanilla JS (ES6+)', 'Claude API', 'CF Worker proxy', 'RAG (lite)', 'Streaming', 'Prompt caching', 'Server-side keys', 'Mock fallback', 'EN/AR i18n', 'localStorage'],
     ctas: [
@@ -811,7 +811,7 @@ const DEMO_PROJECTS = [
   {
     domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
     title: 'Watad - smart-building / BMS operations console',
-    desc: <Fragment>A live operator console for a commercial smart building — the kind of software Imdaad / EFS / Schneider / Honeywell ship to facilities teams. Live SVG floor plan with HVAC, lighting, metering and sensor equipment plotted as icons, a simulated BACnet/Modbus telemetry stream (5-second tick mutating ~200 points plausibly per asset class + outdoor temp + occupancy), severity-sorted alarm queue with audio cues, predictive-maintenance work orders, ASHRAE-overlaid energy curves, and an industrial-AI copilot. The <strong>first portfolio demo with a real-time data shape</strong> — proves I can think beyond REST.</Fragment>,
+    desc: <Fragment>A live operator console for a commercial smart building - the kind of software Imdaad / EFS / Schneider / Honeywell ship to facilities teams. Live SVG floor plan with HVAC, lighting, metering and sensor equipment plotted as icons, a simulated BACnet/Modbus telemetry stream (5-second tick mutating ~200 points plausibly per asset class + outdoor temp + occupancy), severity-sorted alarm queue with audio cues, predictive-maintenance work orders, ASHRAE-overlaid energy curves, and an industrial-AI copilot. The <strong>first portfolio demo with a real-time data shape</strong> - proves I can think beyond REST.</Fragment>,
     bullets: [
       <Fragment><strong>Live SVG floor plan</strong> · 4 floors, 48 assets at absolute pixel coordinates. Equipment icons pulse red when their associated point is in alarm. Click any chiller / AHU / FCU / light / meter to drill into a 24h overlaid trend chart.</Fragment>,
       <Fragment><strong>Real-time telemetry simulator</strong> · ~200 points across the building, 5-second tick, plausible values per asset class (chiller load tracks outdoor temp, FCU zone temp drifts when occupied, sub-meters accumulate kWh), 288-sample history buffer per point regenerated from a seeded RNG so charts always look populated.</Fragment>,
@@ -837,14 +837,14 @@ const DEMO_PROJECTS = [
       fullscreen and edge-to-edge; installed to a home screen it opens as a
       standalone window with no browser chrome. One AI-suggested prompt a day,
       a few sentences, and Claude surfaces the mood + themes + patterns across
-      the week — same Cloudflare Worker pattern as the other AI demos.</Fragment>,
+      the week - same Cloudflare Worker pattern as the other AI demos.</Fragment>,
     bullets: [
       <Fragment><strong>PWA installable</strong> on iOS, Android, and desktop via "Add to Home Screen". No App Store, no native compilation. Custom service worker scoped to <code>/lahza/</code> only.</Fragment>,
       <Fragment><strong>4 AI features</strong> · <em>Suggest prompt</em> (time-of-day + mood aware), <em>Detect mood</em> (returns structured JSON of mood + emotions from the entry text), <em>Weekly insights</em> (RAG over the last 7 entries, themes + wins + concerns), <em>AI Coach chat</em> (RAG over the last 14 entries, citation chips that open the cited entry in a bottom sheet).</Fragment>,
       <Fragment><strong>7 mobile views</strong> · Onboarding (3-card swipe), Today (AI prompt + streak ring + recent strip), Compose (full-screen modal with mood emoji picker), Journal (chronological feed with mood filter chips), Insights (7-day mood SVG chart + theme tags + AI summary), AI Coach chat, Profile (locale EN/AR, theme, export-JSON, reset).</Fragment>,
       <Fragment><strong>Privacy by default</strong> · entries live in <code>localStorage</code> only. In Live AI mode, only the active question is sent to Claude via the Worker proxy.</Fragment>,
       <Fragment><strong>14-day fabricated seed</strong> from a deterministic RNG so first-time visitors see a populated mood chart, recent feed, and themes without waiting two weeks.</Fragment>,
-      <Fragment><strong>Fourth AI demo</strong> in the portfolio after Sanad (helpdesk), Watad (operations) and Ask Saad (recruiter Q&A) — same Worker, same encrypted-secret pattern, four products.</Fragment>,
+      <Fragment><strong>Fourth AI demo</strong> in the portfolio after Sanad (helpdesk), Watad (operations) and Ask Saad (recruiter Q&A) - same Worker, same encrypted-secret pattern, four products.</Fragment>,
     ],
     tags: ['Vanilla JS (ES6+)', 'PWA', 'Service Worker', 'Web App Manifest', 'Mobile-first', 'CSS Grid', 'SVG chart', 'Claude API', 'CF Worker proxy', 'RAG', 'localStorage', 'Mock fallback', 'i18n EN/AR'],
     ctas: [
@@ -856,12 +856,12 @@ const DEMO_PROJECTS = [
   {
     domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
     title: 'Marsad - fleet / logistics dispatcher console',
-    desc: <Fragment>A live <strong>dispatcher console for a Dubai last-mile courier</strong>. 16 drivers, 12 vans + 4 motorbikes, 96 in-flight orders across 6 service zones (Marina, JLT, Downtown, Business Bay, Deira, Sharjah Al Nahda). Real Leaflet map with vehicle pins that tick toward their next drop every 4 seconds. The fleet simulator + AI dispatcher copilot are the technical differentiators — recognisably the same shape Aramex / Noon Express / Talabat run internally.</Fragment>,
+    desc: <Fragment>A live <strong>dispatcher console for a Dubai last-mile courier</strong>. 16 drivers, 12 vans + 4 motorbikes, 96 in-flight orders across 6 service zones (Marina, JLT, Downtown, Business Bay, Deira, Sharjah Al Nahda). Real Leaflet map with vehicle pins that tick toward their next drop every 4 seconds. The fleet simulator + AI dispatcher copilot are the technical differentiators - recognisably the same shape Aramex / Noon Express / Talabat run internally.</Fragment>,
     bullets: [
       <Fragment><strong>Live map with real coordinates</strong> · Leaflet + Carto dark tiles, real Dubai lat/lng. Vehicle pins move toward their assigned drop-off · order pins flip green on delivery · audio chime on SLA breach.</Fragment>,
       <Fragment><strong>Real-time fleet simulator</strong> · 4-second tick · 96 orders + 16 vehicles · plausible movement (vehicles head toward their next drop, deliver within 120m, then pick the next assignment). Pure JS, no map provider beyond tiles.</Fragment>,
       <Fragment><strong>4 AI dispatcher features</strong> · <em>Explain delay</em> for any order (cites real cause + recommends action), <em>Suggest reroute</em> to re-sequence a driver's stops by SLA deadline, <em>Batch-assign</em> pending orders across idle drivers, <em>Dispatcher chat</em> conversational copilot grounded in live fleet state.</Fragment>,
-      <Fragment><strong>Driver-side view</strong> · simplified mobile-shaped UI for the driver — current job · route · COD pill · complete / handover buttons · today's earnings · streak. Switch drivers via top-right picker.</Fragment>,
+      <Fragment><strong>Driver-side view</strong> · simplified mobile-shaped UI for the driver - current job · route · COD pill · complete / handover buttons · today's earnings · streak. Switch drivers via top-right picker.</Fragment>,
       <Fragment><strong>9-section admin SPA</strong> · Dashboard (KPIs + top zones + driver leaderboard), Orders (filter + search), Drivers, Vehicles (with fuel + last-ping), Zones, Integrations (Shopify · Twilio · Google Maps · QuickBooks), AI Console, Settings, Audit log.</Fragment>,
       <Fragment><strong>UAE-shaped business logic</strong> · per-zone SLAs (Marina 90 min · Sharjah 150 min) · COD up to AED 500 · WPS-style driver compensation · Sheikh Mohammed Bin Zayed Road traffic context in the AI replies.</Fragment>,
     ],
@@ -959,7 +959,7 @@ function Projects({ view }) {
   return (
     <section id="projects" className="section container">
       <Reveal className="section-head">
-        <span className="section-tag">Fig. 03 — Selected Work</span>
+        <span className="section-tag">Fig. 03 - Selected Work</span>
         <h2><WordReveal>Production software, backends and open source.</WordReveal></h2>
       </Reveal>
       <Reveal stagger className="projects-grid">
@@ -981,7 +981,7 @@ function Projects({ view }) {
 }
 
 /* =========================================================
-   DEMOS — product demos as a horizontal slider (after Skills)
+   DEMOS - product demos as a horizontal slider (after Skills)
    ========================================================= */
 function Demos({ view }) {
   const items = DEMO_PROJECTS.filter((p) => view === 'all' || p.domain === view || p.domain === 'all');
@@ -989,7 +989,7 @@ function Demos({ view }) {
   return (
     <section id="demos" className="section container">
       <Reveal className="section-head">
-        <span className="section-tag">Fig. 05 — Demos</span>
+        <span className="section-tag">Fig. 05 - Demos</span>
         <h2><WordReveal>Product demos built around real workflows.</WordReveal></h2>
         <p className="demos-sub">Browser-based demos - B2B portals, marketplaces, booking, POS, AI copilots and dashboards. Open any to explore the full build. <a href="demo.html" target="_blank" rel="noopener">Full gallery ↗</a></p>
       </Reveal>
@@ -1042,7 +1042,7 @@ function Skills({ view }) {
   return (
     <section id="skills" className="section container">
       <Reveal className="section-head">
-        <span className="section-tag">Fig. 04 — Skills</span>
+        <span className="section-tag">Fig. 04 - Skills</span>
         <h2><WordReveal>Skills I use to build and run operations software.</WordReveal></h2>
       </Reveal>
       <Reveal stagger className="skills-grid">
@@ -1060,7 +1060,7 @@ function Contact() {
     <section id="contact" className="section container">
       <Reveal className="contact-box">
         <div className="contact-left">
-          <span className="section-tag">Fig. 06 — Contact</span>
+          <span className="section-tag">Fig. 06 - Contact</span>
           <h2>Let&rsquo;s build something that ships.</h2>
           <p>If you&rsquo;re hiring for automation, ERP/MES, manufacturing systems, backend engineering, IT operations, or
             Python-heavy technical roles in the UAE or remote, I&rsquo;d love to talk.</p>
@@ -1086,7 +1086,7 @@ function Footer() {
   return (
     <footer className="footer">
       <div className="container footer-inner">
-        <div className="footer-copy">© {new Date().getFullYear()} Muhammad Saad — Automation &amp; Software Developer. Hand-built with vanilla CSS.
+        <div className="footer-copy">© {new Date().getFullYear()} Muhammad Saad - Automation &amp; Software Developer. Hand-built with vanilla CSS.
           <span className="react-badge" title="This homepage is a React 18 single-page app (precompiled JSX, no build-time framework)">⚛ Built with React 18</span>
         </div>
         <div className="footer-links">

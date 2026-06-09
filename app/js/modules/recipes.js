@@ -21,12 +21,12 @@ export function getRtdRatio(recipeName) {
     if (!recipeName) return { ingredient: 1, water: 5 };
     const n = recipeName.toLowerCase();
 
-    // 1:1 – Frutesca Mango / Guava / Pineapple (check BEFORE apple, since "pineapple" contains "apple")
+    // 1:1 - Frutesca Mango / Guava / Pineapple (check BEFORE apple, since "pineapple" contains "apple")
     if (n.includes('frutesca') && (n.includes('mango') || n.includes('guava') || n.includes('pineapple'))) {
         return { ingredient: 1, water: 1 };
     }
 
-    // 1:3 – Frutesca Apple or Spencer's Apple
+    // 1:3 - Frutesca Apple or Spencer's Apple
     if ((n.includes('frutesca') && n.includes('apple')) ||
         (n.includes('spencer') && n.includes('apple'))) {
         return { ingredient: 1, water: 3 };

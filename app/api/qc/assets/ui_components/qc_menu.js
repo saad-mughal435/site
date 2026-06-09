@@ -1394,7 +1394,7 @@ function normalizeQcReportRows(value, line, itemCode = '') {
 function qcReportRowHasEnteredBrix(row) {
   const raw = String((row && row.brix) || '').trim();
   if (!raw) return false;
-  if (raw === '-' || raw === '-' || raw === '–') return false;
+  if (raw === '-' || raw === '-' || raw === '-') return false;
   return true;
 }
 

@@ -50,7 +50,7 @@
   function greetingHtml() {
     return ''
       + '<div class="ask-greeting-strip">'
-      +   "👋 Hi! I'm <strong>Ask Saad</strong> — an AI grounded in Saad's portfolio, CV, and demos. "
+      +   "👋 Hi! I'm <strong>Ask Saad</strong> - an AI grounded in Saad's portfolio, CV, and demos. "
       +   "Ask me anything about his experience, skills, or projects. Each answer cites where it came from."
       + '</div>';
   }
@@ -174,7 +174,7 @@
       var nm = h.model.indexOf('haiku') !== -1 ? 'Haiku 4.5' : h.model.indexOf('sonnet') !== -1 ? 'Sonnet 4.6' : 'Opus 4.7';
       el.className = h.live ? 'ask-mode-badge live' : 'ask-mode-badge';
       el.textContent = h.live ? 'Live · ' + nm : 'Demo mode';
-      el.title = h.live ? 'Real Claude responses via Worker proxy' : 'Pattern-matched mock replies — see ask/README.md';
+      el.title = h.live ? 'Real Claude responses via Worker proxy' : 'Pattern-matched mock replies - see ask/README.md';
     });
   }
 
@@ -235,7 +235,7 @@
         else state.history[idx].rating = rating;
         saveHist();
         AskAI.rateMessage(rating, { feature: 'answer', model: state.history[idx].model || 'unknown', fallback: !!state.history[idx].fallback });
-        if (window.toast) window.toast(rating === 'up' ? 'Thanks — logged as helpful' : 'Logged as not helpful', rating === 'up' ? 'success' : 'warn', 1800);
+        if (window.toast) window.toast(rating === 'up' ? 'Thanks - logged as helpful' : 'Logged as not helpful', rating === 'up' ? 'success' : 'warn', 1800);
         render();
       });
     });
@@ -250,7 +250,7 @@
       return;
     }
     if (doc.scrollTo) {
-      // Internal anchor on the homepage — resolve the target BEFORE closing the
+      // Internal anchor on the homepage - resolve the target BEFORE closing the
       // chat so a missing anchor degrades to the modal fallback below instead of
       // silently closing the window with nothing to scroll to.
       var el = document.querySelector(doc.scrollTo);
@@ -316,7 +316,7 @@
       console.error('AskAI.answer failed', err);
       state.typing = false;
       state.generating = false;
-      var errMsg = "Sorry, something went wrong — please try again or email saad@saadm.dev directly.";
+      var errMsg = "Sorry, something went wrong - please try again or email saad@saadm.dev directly.";
       state.history.push({ role: 'assistant', content: errMsg, citations: [], model: 'error', fallback: true });
       saveHist();
       render();

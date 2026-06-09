@@ -1,5 +1,5 @@
 /* ============================================================================
-   demo.html — MES/ERP walkthrough
+   demo.html - MES/ERP walkthrough
    "Engineering Field Notes" light system. Reuses tokens from styles.css and
    restyles the app-shell as a crisp light admin UI with an ink sidebar.
    ============================================================================ */
@@ -75,7 +75,7 @@
   box-shadow: var(--shadow-lg);
 }
 
-/* ---------- Sidebar — deep ink spine (fixed dark in both themes) ---------- */
+/* ---------- Sidebar - deep ink spine (fixed dark in both themes) ---------- */
 .app-sidebar {
   background: #0b0e16;
   border-right: 1px solid rgba(255,255,255,0.08);

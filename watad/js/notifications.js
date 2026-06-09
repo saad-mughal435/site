@@ -19,7 +19,7 @@
     setTimeout(function () { t.remove(); }, (ms || 2800) + 300);
   };
 
-  // Web Audio chime for new alarms — lifted from pos/js/kitchen.js
+  // Web Audio chime for new alarms - lifted from pos/js/kitchen.js
   window.WatadAudio = {
     alarm: function (severity) {
       try {

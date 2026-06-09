@@ -119,7 +119,7 @@
             </div>
           </div>
           <div class="footer-bottom">
-            <span>© <span id="year"></span> Pebble &amp; Co. (demo). Built by Muhammad Saad — <a href="https://saadm.dev/" style="color:var(--coral-deep); font-weight:600;">saadm.dev</a></span>
+            <span>© <span id="year"></span> Pebble &amp; Co. (demo). Built by Muhammad Saad - <a href="https://saadm.dev/" style="color:var(--coral-deep); font-weight:600;">saadm.dev</a></span>
             <span>${new Date().toLocaleString()}</span>
           </div>
         </div>

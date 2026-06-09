@@ -58,15 +58,15 @@
       +   '<thead><tr><th>WO#</th><th>Title</th><th>Asset</th><th>Priority</th><th>Assignee</th><th>Created</th><th>Due</th><th>Status</th><th></th></tr></thead>'
       +   '<tbody>' + (rows.length ? rows.map(function (w) {
             var asset = assetMap[w.asset_id];
-            var st = staffMap[w.assignee_id] || { name: '—' };
+            var st = staffMap[w.assignee_id] || { name: '-' };
             return '<tr>'
               + '<td style="font-family:var(--font-mono);font-weight:700;">' + esc(w.wo_no) + '</td>'
               + '<td>' + esc(w.title) + '</td>'
-              + '<td style="font-size:12px;">' + (asset ? esc(asset.name) : '—') + '</td>'
+              + '<td style="font-size:12px;">' + (asset ? esc(asset.name) : '-') + '</td>'
               + '<td><span class="wtd-priority ' + w.priority + '">' + w.priority + '</span></td>'
               + '<td style="font-size:12px;">' + esc(st.name) + '</td>'
               + '<td style="font-family:var(--font-mono);font-size:11.5px;">' + WatadApp.fmtDate(w.created_at) + '</td>'
-              + '<td style="font-family:var(--font-mono);font-size:11.5px;">' + (w.due ? WatadApp.fmtDate(w.due) : '—') + '</td>'
+              + '<td style="font-family:var(--font-mono);font-size:11.5px;">' + (w.due ? WatadApp.fmtDate(w.due) : '-') + '</td>'
               + '<td><span class="wtd-chip ' + w.status + '">' + w.status + '</span></td>'
               + '<td><button class="wtd-btn wtd-btn--sm" data-open-id="' + esc(w.id) + '">Open</button></td>'
               + '</tr>';
@@ -87,7 +87,7 @@
       var body =
           '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px;font-size:13px;">'
         +   '<div><div style="font-size:11px;color:var(--wtd-muted-light);text-transform:uppercase;letter-spacing:.06em;font-weight:700;">WO#</div><div style="font-family:var(--font-mono);font-weight:700;font-size:14px;">' + esc(w.wo_no) + '</div></div>'
-        +   '<div><div style="font-size:11px;color:var(--wtd-muted-light);text-transform:uppercase;letter-spacing:.06em;font-weight:700;">Asset</div><div>' + (asset ? esc(asset.name) : '—') + '</div></div>'
+        +   '<div><div style="font-size:11px;color:var(--wtd-muted-light);text-transform:uppercase;letter-spacing:.06em;font-weight:700;">Asset</div><div>' + (asset ? esc(asset.name) : '-') + '</div></div>'
         +   '<div><div style="font-size:11px;color:var(--wtd-muted-light);text-transform:uppercase;letter-spacing:.06em;font-weight:700;">Priority</div><div><span class="wtd-priority ' + w.priority + '">' + w.priority + '</span></div></div>'
         + '</div>'
         + '<div style="margin-bottom:14px;"><strong>' + esc(w.title) + '</strong>'
@@ -179,7 +179,7 @@
           '<div class="wtd-field" style="margin-bottom:10px;"><span>Title</span><input class="wtd-input" id="nw-title" placeholder="What needs doing?"/></div>'
         + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">'
         +   '<div class="wtd-field"><span>Asset</span><select class="wtd-select" id="nw-asset">'
-        +     '<option value="">(none — site-wide)</option>'
+        +     '<option value="">(none - site-wide)</option>'
         +     D.ASSETS.map(function (a) { return '<option value="' + a.id + '"' + (a.id === prefillAssetId ? ' selected' : '') + '>' + esc(a.name) + '</option>'; }).join('')
         +   '</select></div>'
         +   '<div class="wtd-field"><span>Priority</span><select class="wtd-select" id="nw-prio"><option value="low">Low</option><option value="med" selected>Medium</option><option value="high">High</option><option value="urgent">Urgent</option></select></div>'

@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>hft-orderbook — live L2 book viewer</title>
-<meta name="description" content="Watch the hft-orderbook C++ engine reconstruct a NASDAQ ITCH 5.0 limit-order book in real time: L2 depth ladder, a cumulative depth-of-market chart, micro-price, order-book imbalance, spread and VWAP — streamed over a dependency-free WebSocket." />
+<title>hft-orderbook - live L2 book viewer</title>
+<meta name="description" content="Watch the hft-orderbook C++ engine reconstruct a NASDAQ ITCH 5.0 limit-order book in real time: L2 depth ladder, a cumulative depth-of-market chart, micro-price, order-book imbalance, spread and VWAP - streamed over a dependency-free WebSocket." />
 <link rel="canonical" href="https://saadm.dev/hft-book/viewer.html" />
 <script>
   (function () {
@@ -103,6 +103,18 @@
   button:hover { border-color: var(--accent); }
   button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .tag { font-size: 0.74rem; color: var(--mut); }
+
+  .about { margin-top: 16px; }
+  .about p { font-size: 0.9rem; opacity: 0.92; margin: 0 0 12px; }
+  .about p.muted { color: var(--mut); opacity: 1; }
+  .about a { color: var(--accent); }
+  .flow { background: var(--panel2); border: 1px solid var(--line); border-radius: 9px; padding: 10px 13px;
+    font-size: 0.76rem; color: var(--mut); margin: 0 0 14px; display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; }
+  .flow b { color: var(--ink); font-weight: 500; }
+  .flow .arr { color: var(--accent); }
+  .explain { margin: 0 0 14px; }
+  .explain dt { color: var(--accent); font-weight: 600; font-size: 0.84rem; margin-top: 11px; }
+  .explain dd { margin: 3px 0 0; opacity: 0.86; font-size: 0.88rem; }
 </style>
 </head>
 <body>
@@ -116,8 +128,8 @@
       </div>
     </div>
     <div class="t-right">
-      <div class="t-price mono" id="last">—</div>
-      <div class="t-meta mono" id="topmeta">spread — · mid —</div>
+      <div class="t-price mono" id="last">-</div>
+      <div class="t-meta mono" id="topmeta">spread - · mid -</div>
     </div>
   </div>
 
@@ -131,19 +143,19 @@
       <div class="ladder mono">
         <div class="colhdr"><span>price</span><span>size</span></div>
         <div id="asks" role="list" aria-label="Ask levels"></div>
-        <div class="inside"><span class="mid-px mono" id="mid">—</span><span class="spr mono" id="spr"></span></div>
+        <div class="inside"><span class="mid-px mono" id="mid">-</span><span class="spr mono" id="spr"></span></div>
         <div id="bids" role="list" aria-label="Bid levels"></div>
       </div>
     </section>
 
     <section class="panel" aria-label="Microstructure signals">
       <h2><span>Signals</span></h2>
-      <div class="metric"><span class="k">micro-price</span><span class="v mono" id="m-micro">—</span></div>
-      <div class="metric"><span class="k">spread</span><span class="v mono" id="m-spread">—</span></div>
-      <div class="metric"><span class="k">last trade</span><span class="v mono" id="m-last">—</span></div>
-      <div class="metric"><span class="k">VWAP</span><span class="v mono" id="m-vwap">—</span></div>
-      <div class="metric"><span class="k">volume</span><span class="v mono" id="m-vol">—</span></div>
-      <div class="metric"><span class="k">imbalance</span><span class="v mono" id="m-imb">—</span></div>
+      <div class="metric"><span class="k">micro-price</span><span class="v mono" id="m-micro">-</span></div>
+      <div class="metric"><span class="k">spread</span><span class="v mono" id="m-spread">-</span></div>
+      <div class="metric"><span class="k">last trade</span><span class="v mono" id="m-last">-</span></div>
+      <div class="metric"><span class="k">VWAP</span><span class="v mono" id="m-vwap">-</span></div>
+      <div class="metric"><span class="k">volume</span><span class="v mono" id="m-vol">-</span></div>
+      <div class="metric"><span class="k">imbalance</span><span class="v mono" id="m-imb">-</span></div>
       <div class="imb" aria-hidden="true"><span class="neg" id="imb-neg"></span><span class="pos" id="imb-pos"></span></div>
       <div class="imb-scale" aria-hidden="true"><span>asks</span><span>0</span><span>bids</span></div>
       <h2 style="margin-top:16px"><span>mid · session</span></h2>
@@ -162,11 +174,49 @@
       <path id="askArea" stroke-width="1.5" vector-effect="non-scaling-stroke" d="" />
       <line id="midLine" stroke-width="1" stroke-dasharray="3 4" vector-effect="non-scaling-stroke" x1="300" y1="12" x2="300" y2="158" />
     </svg>
-    <div class="axis mono"><span id="ax-lo">—</span><span id="ax-mid">—</span><span id="ax-hi">—</span></div>
+    <div class="axis mono"><span id="ax-lo">-</span><span id="ax-mid">-</span><span id="ax-hi">-</span></div>
     <div class="controls">
       <button id="play" aria-label="Pause or resume the replay">Pause</button>
       <span class="tag mono" id="seq">frame 0</span>
     </div>
+  </section>
+
+  <section class="panel about" aria-label="What this viewer is doing">
+    <h2><span>What you are looking at</span></h2>
+    <p>This page is a view of the <a href="https://github.com/saad-mughal435/hft-orderbook">hft-orderbook</a>
+      C++ engine reconstructing a NASDAQ TotalView-ITCH 5.0 limit-order book. ITCH is the exchange's
+      order-by-order market-data feed: every add, execute, cancel, delete and replace carries an 8-byte
+      order reference, and the exchange has already matched. So the engine is a
+      <b>reconstructor, not a matching engine</b>: it applies each message to an O(1) order-reference map
+      to rebuild the live resting book, then derives signals from it.</p>
+
+    <div class="flow mono">
+      <b>ITCH 5.0 feed</b><span class="arr">&#8594;</span>decode (manual big-endian)<span class="arr">&#8594;</span>O(1) order-ref book<span class="arr">&#8594;</span>metrics + trade tape<span class="arr">&#8594;</span>JSON snapshot<span class="arr">&#8594;</span><b>this view</b>
+    </div>
+
+    <dl class="explain">
+      <dt>Order book - L2</dt>
+      <dd>The resting limit orders: bids (green) below, asks (red) above, with the size at each price
+        level (bar length is size relative to the deepest visible level). The top row on each side is the
+        best bid / best ask, and the strip between them is the inside and its spread. A real book is
+        never crossed: the best bid sits strictly below the best ask.</dd>
+      <dt>Cumulative depth</dt>
+      <dd>The same book as a depth-of-market chart - cumulative resting size against price. Bids accumulate
+        to the left of the mid and asks to the right; the gap in the middle is the spread. Taller, steeper
+        walls mean more liquidity stacked near the touch.</dd>
+      <dt>Signals</dt>
+      <dd><b>Micro-price</b> is a size-weighted fair value that leans toward the heavier side (a classic
+        short-horizon predictor). <b>Spread</b> is best ask minus best bid, in basis points.
+        <b>Imbalance</b> is the relative resting size, (bid - ask) / (bid + ask), a short-term directional
+        read - the gauge fills green when bids dominate, red when asks do. <b>Last / VWAP / volume</b> come
+        from the trade tape (the executions), tracked separately from the resting book.</dd>
+    </dl>
+
+    <p class="muted">The decode, reconstruction, metrics and streaming all run in C++ (a lock-free
+      pipeline, sub-microsecond per message); the browser is only the view. The data here is real engine
+      output - a recorded capture produced by <code>wsbook --dump</code> and replayed in a loop. Append
+      <code>?ws=ws://host:port</code> to drive this same view live from a local <code>wsbook</code> over a
+      dependency-free WebSocket (hand-rolled SHA-1 + RFC-6455).</p>
   </section>
 </div>
 
@@ -185,7 +235,7 @@
   var W = 600, H = 180, padX = 6, padTop = 12, baseY = 158;
   var prevLast = null, midHist = [];
 
-  function px(x) { return x == null ? '—' : Number(x).toFixed(4); }
+  function px(x) { return x == null ? '-' : Number(x).toFixed(4); }
   function qty(x) { return Number(x).toLocaleString('en-US'); }
   function setCls(el, up) { el.className = 'v mono ' + (up > 0 ? 'up' : up < 0 ? 'down' : ''); }
 
@@ -258,16 +308,16 @@
       lastBig.className = 't-price mono ' + (prevLast == null ? '' : shown > prevLast ? 'up' : shown < prevLast ? 'down' : '');
       prevLast = shown;
     }
-    topMeta.textContent = (s.spread_bps != null ? 'spread ' + Number(s.spread_bps).toFixed(2) + ' bps' : 'spread —') +
+    topMeta.textContent = (s.spread_bps != null ? 'spread ' + Number(s.spread_bps).toFixed(2) + ' bps' : 'spread -') +
       '  ·  mid ' + px(s.mid);
     if (s.symbol) { symHdr.textContent = s.symbol; symName.textContent = s.symbol; }
 
     mMicro.textContent = px(s.microprice);
-    mSpread.textContent = (s.spread_bps != null ? Number(s.spread_bps).toFixed(2) + ' bps' : '—');
+    mSpread.textContent = (s.spread_bps != null ? Number(s.spread_bps).toFixed(2) + ' bps' : '-');
     setCls(mSpread, s.spread_bps);
-    mLast.textContent = (s.last != null ? px(s.last) : '—');
-    mVwap.textContent = (s.vwap != null ? px(s.vwap) : '—');
-    mVol.textContent = (s.volume != null ? qty(s.volume) : '—');
+    mLast.textContent = (s.last != null ? px(s.last) : '-');
+    mVwap.textContent = (s.vwap != null ? px(s.vwap) : '-');
+    mVol.textContent = (s.volume != null ? qty(s.volume) : '-');
     var imb = s.imbalance || 0;
     mImb.textContent = imb.toFixed(3); setCls(mImb, imb);
     imbPos.style.width = (imb > 0 ? imb * 50 : 0) + '%';
@@ -288,7 +338,7 @@
     try {
       var sock = new WebSocket(wsUrl);
       sock.onmessage = function (ev) { try { render(JSON.parse(ev.data)); } catch (e) {} };
-      sock.onerror = function () { statusEl.textContent = 'WebSocket error — is wsbook running at ' + wsUrl + '?'; };
+      sock.onerror = function () { statusEl.textContent = 'WebSocket error - is wsbook running at ' + wsUrl + '?'; };
       playBtn.style.display = 'none';
     } catch (e) { statusEl.textContent = 'Could not open ' + wsUrl; }
     return;

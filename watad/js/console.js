@@ -4,7 +4,7 @@
  *  - Top KPI strip (alarms count by severity, kW, avg zone temp, occupancy %, kgCO₂, BACnet status)
  *  - Floor plan (delegates to floorplan.js) with floor switcher
  *  - Alarm queue side panel (Ack / Create-WO / ✦ Explain with AI)
- *  - Bottom trend strip — 3 mini SVG line charts (kW, avg zone temp, alarm count)
+ *  - Bottom trend strip - 3 mini SVG line charts (kW, avg zone temp, alarm count)
  *
  * Sim ticks every 5s → diff-render each region (no flicker). Audio cue +
  * card flash on new alarm. Same proven pattern as pos/js/kitchen.js.
@@ -31,7 +31,7 @@
     var nm = h.model.indexOf('haiku') !== -1 ? 'Haiku 4.5' : h.model.indexOf('sonnet') !== -1 ? 'Sonnet 4.6' : 'Opus 4.7';
     el.className = h.live ? 'wtd-mode-badge live' : 'wtd-mode-badge';
     el.textContent = h.live ? 'Live · ' + nm : 'Demo mode';
-    el.title = h.live ? 'Connected to Claude via Worker proxy' : 'Running with deterministic mock replies — see watad/README.md for live setup';
+    el.title = h.live ? 'Connected to Claude via Worker proxy' : 'Running with deterministic mock replies - see watad/README.md for live setup';
   });
 
   // ---------- Floor tabs ----------
@@ -284,7 +284,7 @@
       for (var i = 0; i < TREND_LEN; i++) trends.alarms.push({ t: i, v: Object.keys(sim.alarmsByPoint || {}).length });
     }
 
-    // BACnet status pill — single-sourced from the live data so it never drifts
+    // BACnet status pill - single-sourced from the live data so it never drifts
     var bacnetPill = $('bacnet-pill');
     if (bacnetPill) bacnetPill.textContent = '3 trunks · ' + D.POINTS.length + ' points · gateway online';
 

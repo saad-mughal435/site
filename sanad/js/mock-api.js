@@ -2,7 +2,7 @@
    conversations / messages / articles / agents / customers / categories /
    settings / audit from SANAD_DATA + localStorage. All writes are local-only.
    AI calls go to /api/sanad/ai/* and are handled by ai-engine.js (Worker proxy
-   with mock fallback) — those bypass this shim. */
+   with mock fallback) - those bypass this shim. */
 (function () {
   'use strict';
   if (!window.SANAD_DATA) { console.error('mock-api: SANAD_DATA not loaded'); return; }

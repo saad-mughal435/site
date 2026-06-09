@@ -17,7 +17,7 @@ dist/
 *.env
 *.env.local
 
-# Defensive blocklist — never publish these even if accidentally placed under site/
+# Defensive blocklist - never publish these even if accidentally placed under site/
 **/certbot/
 **/private_key.json
 **/*.pem

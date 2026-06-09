@@ -28,9 +28,9 @@
       var assetMap = {}; D.ASSETS.forEach(function (a) { assetMap[a.id] = a; });
       host.innerHTML =
           '<div class="wtd-kpi-grid">'
-        +   '<div class="wtd-kpi"><div class="wtd-kpi-label">Alarms — critical</div><div class="wtd-kpi-value" style="color:var(--wtd-red);">' + (d.kpis.alarms.critical || 0) + '</div></div>'
-        +   '<div class="wtd-kpi"><div class="wtd-kpi-label">Alarms — urgent</div><div class="wtd-kpi-value" style="color:var(--wtd-sev-urgent);">' + (d.kpis.alarms.urgent || 0) + '</div></div>'
-        +   '<div class="wtd-kpi"><div class="wtd-kpi-label">Alarms — warning</div><div class="wtd-kpi-value" style="color:var(--wtd-amber);">' + (d.kpis.alarms.warning || 0) + '</div></div>'
+        +   '<div class="wtd-kpi"><div class="wtd-kpi-label">Alarms - critical</div><div class="wtd-kpi-value" style="color:var(--wtd-red);">' + (d.kpis.alarms.critical || 0) + '</div></div>'
+        +   '<div class="wtd-kpi"><div class="wtd-kpi-label">Alarms - urgent</div><div class="wtd-kpi-value" style="color:var(--wtd-sev-urgent);">' + (d.kpis.alarms.urgent || 0) + '</div></div>'
+        +   '<div class="wtd-kpi"><div class="wtd-kpi-label">Alarms - warning</div><div class="wtd-kpi-value" style="color:var(--wtd-amber);">' + (d.kpis.alarms.warning || 0) + '</div></div>'
         +   '<div class="wtd-kpi"><div class="wtd-kpi-label">Live power</div><div class="wtd-kpi-value">' + d.kpis.kw_now + ' kW</div><div class="wtd-kpi-sub">main meter</div></div>'
         +   '<div class="wtd-kpi"><div class="wtd-kpi-label">Avg zone temp</div><div class="wtd-kpi-value">' + d.kpis.avg_zone_f + '°F</div></div>'
         +   '<div class="wtd-kpi"><div class="wtd-kpi-label">Occupancy</div><div class="wtd-kpi-value">' + d.kpis.occupancy_pct + '%</div></div>'
@@ -103,15 +103,15 @@
           + '<div class="wtd-panel"><table class="wtd-table">'
           + '<thead><tr><th>Name</th><th>Type</th><th>Floor</th><th>Model</th><th>Firmware</th><th>Install</th><th>Controller</th><th></th></tr></thead>'
           + '<tbody>' + (rows.length ? rows.map(function (a) {
-              var f = floorMap[a.floor_id] || { name: '—' };
+              var f = floorMap[a.floor_id] || { name: '-' };
               return '<tr>'
                 + '<td style="font-weight:600;">' + esc(a.name) + '</td>'
                 + '<td><span class="wtd-chip">' + esc(a.type) + '</span></td>'
                 + '<td style="font-size:12px;">' + esc(f.name) + '</td>'
-                + '<td style="font-size:12px;font-family:var(--font-mono);">' + esc(a.model || '—') + '</td>'
-                + '<td style="font-size:11.5px;font-family:var(--font-mono);">' + esc(a.firmware || '—') + '</td>'
-                + '<td style="font-size:11.5px;font-family:var(--font-mono);">' + esc(a.install_date || '—') + '</td>'
-                + '<td style="font-size:11.5px;font-family:var(--font-mono);color:var(--wtd-muted-light);">' + esc(a.controller_id || '—') + '</td>'
+                + '<td style="font-size:12px;font-family:var(--font-mono);">' + esc(a.model || '-') + '</td>'
+                + '<td style="font-size:11.5px;font-family:var(--font-mono);">' + esc(a.firmware || '-') + '</td>'
+                + '<td style="font-size:11.5px;font-family:var(--font-mono);">' + esc(a.install_date || '-') + '</td>'
+                + '<td style="font-size:11.5px;font-family:var(--font-mono);color:var(--wtd-muted-light);">' + esc(a.controller_id || '-') + '</td>'
                 + '<td><a class="wtd-btn wtd-btn--sm" href="asset.html?id=' + esc(a.id) + '" target="_blank">Open</a></td>'
                 + '</tr>';
             }).join('') : '<tr><td colspan="8" class="wtd-table-empty">No assets match.</td></tr>')
@@ -154,10 +154,10 @@
                 + '<td><strong>' + esc(p.name) + '</strong> <span style="color:var(--wtd-muted-light);font-family:var(--font-mono);font-size:11px;">' + esc(p.id) + '</span></td>'
                 + '<td style="font-size:12px;">' + esc(asset.name) + '</td>'
                 + '<td><span class="wtd-chip">' + esc(p.kind) + '</span></td>'
-                + '<td style="text-align:right;font-family:var(--font-mono);">' + (p.setpoint != null ? p.setpoint + ' ' + (p.unit || '') : '—') + '</td>'
-                + '<td style="text-align:right;font-family:var(--font-mono);color:var(--wtd-amber);">' + (p.hi_alarm != null ? p.hi_alarm + ' ' + (p.unit || '') : '—') + '</td>'
-                + '<td style="text-align:right;font-family:var(--font-mono);color:var(--wtd-blue);">' + (p.lo_alarm != null ? p.lo_alarm + ' ' + (p.unit || '') : '—') + '</td>'
-                + '<td style="text-align:right;font-family:var(--font-mono);font-weight:700;color:var(--wtd-card-ink);">' + (snap ? WatadApp.fmtUnit(snap.value, p.unit) : '—') + '</td>'
+                + '<td style="text-align:right;font-family:var(--font-mono);">' + (p.setpoint != null ? p.setpoint + ' ' + (p.unit || '') : '-') + '</td>'
+                + '<td style="text-align:right;font-family:var(--font-mono);color:var(--wtd-amber);">' + (p.hi_alarm != null ? p.hi_alarm + ' ' + (p.unit || '') : '-') + '</td>'
+                + '<td style="text-align:right;font-family:var(--font-mono);color:var(--wtd-blue);">' + (p.lo_alarm != null ? p.lo_alarm + ' ' + (p.unit || '') : '-') + '</td>'
+                + '<td style="text-align:right;font-family:var(--font-mono);font-weight:700;color:var(--wtd-card-ink);">' + (snap ? WatadApp.fmtUnit(snap.value, p.unit) : '-') + '</td>'
                 + '</tr>';
             }).join('')
           + '</tbody></table></div>';
@@ -195,8 +195,8 @@
                 + '<td><strong>' + esc(a.title) + '</strong></td>'
                 + '<td style="font-size:12px;">' + esc(asset.name) + '</td>'
                 + '<td style="font-family:var(--font-mono);font-size:11.5px;">' + fmtDt(a.raised_at) + '</td>'
-                + '<td style="font-family:var(--font-mono);font-size:11.5px;color:var(--wtd-muted-light);">' + (a.acknowledged_at ? fmtDt(a.acknowledged_at) : '—') + '</td>'
-                + '<td style="font-family:var(--font-mono);font-size:11.5px;color:' + (a.cleared_at ? 'var(--wtd-green-2)' : 'var(--wtd-muted-light)') + ';">' + (a.cleared_at ? fmtDt(a.cleared_at) : '—') + '</td>'
+                + '<td style="font-family:var(--font-mono);font-size:11.5px;color:var(--wtd-muted-light);">' + (a.acknowledged_at ? fmtDt(a.acknowledged_at) : '-') + '</td>'
+                + '<td style="font-family:var(--font-mono);font-size:11.5px;color:' + (a.cleared_at ? 'var(--wtd-green-2)' : 'var(--wtd-muted-light)') + ';">' + (a.cleared_at ? fmtDt(a.cleared_at) : '-') + '</td>'
                 + '</tr>';
             }).join('')
           + '</tbody></table></div>';
@@ -219,8 +219,8 @@
               + '<td><strong>' + esc(s.name) + '</strong> <span style="color:var(--wtd-muted-light);font-family:var(--font-mono);font-size:11px;">' + esc(s.id) + '</span></td>'
               + ['sun','mon','tue','wed','thu','fri','sat'].map(function (d) {
                   var w = s[d] || [];
-                  if (!w.length) return '<td style="color:var(--wtd-muted-light);font-family:var(--font-mono);font-size:11px;">—</td>';
-                  return '<td style="font-family:var(--font-mono);font-size:11px;">' + w.map(function (x) { return esc(x[0] + '–' + x[1]); }).join(' / ') + '</td>';
+                  if (!w.length) return '<td style="color:var(--wtd-muted-light);font-family:var(--font-mono);font-size:11px;">-</td>';
+                  return '<td style="font-family:var(--font-mono);font-size:11px;">' + w.map(function (x) { return esc(x[0] + '-' + x[1]); }).join(' / ') + '</td>';
                 }).join('')
               + '</tr>';
           }).join('')

@@ -1,4 +1,4 @@
-/* notifications.js — Marsad toast stack + Web Audio cue on SLA breach. */
+/* notifications.js - Marsad toast stack + Web Audio cue on SLA breach. */
 (function () {
   'use strict';
   var stack;

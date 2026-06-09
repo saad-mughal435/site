@@ -213,7 +213,7 @@ body.sanad.admin .snd-field > span, body.sanad.landing .snd-field > span, body.s
   grid-template-columns: 320px 1fr 340px;
   grid-template-rows: 52px minmax(0, 1fr);
   /* Height comes from the body flex layout (1fr after the portfolio banner).
-     No explicit 100vh — that was the clipping bug. */
+     No explicit 100vh - that was the clipping bug. */
   min-height: 0;
 }
 .snd-inbox > .snd-topbar { grid-column: 1 / -1; }
@@ -233,7 +233,7 @@ body.sanad.admin .snd-field > span, body.sanad.landing .snd-field > span, body.s
   }
 }
 
-/* Floating "Show AI" button — appears whenever the sidebar isn't visible
+/* Floating "Show AI" button - appears whenever the sidebar isn't visible
    (mobile, or any browser/zoom combo where the user can't see it). One click
    pops the AI Copilot up as a slide-over drawer so Insert/Regenerate/etc.
    are always reachable. */
@@ -248,7 +248,7 @@ body.sanad.admin .snd-field > span, body.sanad.landing .snd-field > span, body.s
 .snd-ai-toggle:hover { transform: translateY(-2px); }
 @media (max-width: 1180px) { .snd-ai-toggle { display: inline-block; } }
 
-/* Floating "Conversations" button — only at <=760px, the exact breakpoint
+/* Floating "Conversations" button - only at <=760px, the exact breakpoint
    where the conversation list is hidden. Mirrors the AI toggle pattern so the
    inbox list is always reachable on a phone. */
 .snd-list-toggle {
@@ -329,7 +329,7 @@ html { height: 100%; overflow: hidden; }
 
 /* ============================================================ Thread (centre)
    Uses CSS Grid (auto / 1fr / auto) instead of flex column. Grid is more
-   deterministic across browser/viewport combos — head and composer always
+   deterministic across browser/viewport combos - head and composer always
    render at content height, body always fills the remainder, no chance of
    any row collapsing unexpectedly. */
 .snd-thread {
@@ -346,7 +346,7 @@ html { height: 100%; overflow: hidden; }
 .snd-thread-head {
   padding: 12px 18px; border-bottom: 1px solid var(--snd-line);
   display: flex; align-items: center; gap: 12px;
-  background: var(--snd-bg-2);          /* slightly lighter — head always visible */
+  background: var(--snd-bg-2);          /* slightly lighter - head always visible */
 }
 .snd-thread-customer { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
 .snd-thread-customer-meta { min-width: 0; }
@@ -394,7 +394,7 @@ html { height: 100%; overflow: hidden; }
   color: var(--snd-muted); font-style: italic;
 }
 
-/* Composer — its own grid row, always at content height, always visible. */
+/* Composer - its own grid row, always at content height, always visible. */
 .snd-composer { border-top: 1px solid var(--snd-line); padding: 12px 18px; background: var(--snd-bg-2); }
 .snd-composer-bar { display: flex; align-items: center; gap: 4px; margin-bottom: 8px; flex-wrap: wrap; }
 .snd-composer-bar button {

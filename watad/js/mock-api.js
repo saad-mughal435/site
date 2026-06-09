@@ -89,7 +89,7 @@
     var warning = act.filter(function (a) { return a.severity === 'warning'; }).length;
     var info = act.filter(function (a) { return a.severity === 'info'; }).length;
 
-    // Current kW + zone temp + occupancy snapshots — use sim if available,
+    // Current kW + zone temp + occupancy snapshots - use sim if available,
     // else fall back to plausible static numbers from seed.
     var s = settings();
     var kw, avgZone, occPct, kgCO2;
@@ -103,7 +103,7 @@
     } else {
       kw = 220; avgZone = 72.4; occPct = 62;
     }
-    // Today's kgCO2 — accumulator from sim or estimated from kw × hours since midnight
+    // Today's kgCO2 - accumulator from sim or estimated from kw × hours since midnight
     var hoursSinceMidnight = (Date.now() - new Date().setHours(0,0,0,0)) / 3600000;
     var todayKwh = kw * hoursSinceMidnight;
     kgCO2 = todayKwh * s.co2_factor;

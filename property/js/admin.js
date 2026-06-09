@@ -30,7 +30,7 @@
 
   function current() {
     var h = (location.hash || '#dashboard').slice(1);
-    // Backward-compat — old moderation routes still resolve.
+    // Backward-compat - old moderation routes still resolve.
     return h;
   }
 

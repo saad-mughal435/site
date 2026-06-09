@@ -1,4 +1,4 @@
-/* onboarding.js — 3-card swipe onboarding shown on first visit. Gated by
+/* onboarding.js - 3-card swipe onboarding shown on first visit. Gated by
  * lahza.settings.onboarded localStorage flag (router.js handles the gate). */
 (function () {
   'use strict';
@@ -13,7 +13,7 @@
     {
       icon: '✦',
       title: 'Claude reads the patterns.',
-      body: 'After a few entries, your AI Coach can answer questions like "Why was Tuesday hard?" — grounded in your own writing, with citations.'
+      body: 'After a few entries, your AI Coach can answer questions like "Why was Tuesday hard?" - grounded in your own writing, with citations.'
     },
     {
       icon: '🔒',

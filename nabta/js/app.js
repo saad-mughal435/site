@@ -1,4 +1,4 @@
-/* app.js — Nabta helpers + admin SPA shell + sections.
+/* app.js - Nabta helpers + admin SPA shell + sections.
  * Single-file approach since the demo is one SPA. */
 (function () {
   'use strict';
@@ -13,7 +13,7 @@
   }
   function fmtDate(iso) { if (!iso) return ''; return new Date(iso).toLocaleDateString('en', { day: 'numeric', month: 'short', year: 'numeric' }); }
   function fmtDateTime(iso) { if (!iso) return ''; return new Date(iso).toLocaleString('en', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }); }
-  function fmtMoney(n) { if (n == null) return '—'; return 'AED ' + Number(n).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 }); }
+  function fmtMoney(n) { if (n == null) return '-'; return 'AED ' + Number(n).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 }); }
   function api(path, opts) {
     opts = opts || {};
     var url = (opts.absolute ? '' : '/nabta/api') + path;

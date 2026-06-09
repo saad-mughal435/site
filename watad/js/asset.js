@@ -39,7 +39,7 @@
         +   '<div>'
         +     '<h2 style="margin:0;color:var(--wtd-ink);">' + esc(asset.name) + '</h2>'
         +     '<div style="font-size:12.5px;color:var(--wtd-muted);font-family:var(--font-mono);margin-top:4px;">'
-        +       esc(asset.type) + ' · ' + esc(floor ? floor.name : '?') + (zone ? ' / ' + esc(zone.name) : '') + ' · ' + esc(asset.model || '—') + ' · firmware ' + esc(asset.firmware || '—')
+        +       esc(asset.type) + ' · ' + esc(floor ? floor.name : '?') + (zone ? ' / ' + esc(zone.name) : '') + ' · ' + esc(asset.model || '-') + ' · firmware ' + esc(asset.firmware || '-')
         +     '</div>'
         +   '</div>'
         + '</div>'
@@ -99,12 +99,12 @@
         + '<div class="wtd-meta-grid">'
         +   '<div class="wtd-meta-row"><span>ID</span><span>' + esc(asset.id) + '</span></div>'
         +   '<div class="wtd-meta-row"><span>Type</span><span>' + esc(asset.type) + '</span></div>'
-        +   '<div class="wtd-meta-row"><span>Model</span><span>' + esc(asset.model || '—') + '</span></div>'
-        +   '<div class="wtd-meta-row"><span>Firmware</span><span>' + esc(asset.firmware || '—') + '</span></div>'
-        +   '<div class="wtd-meta-row"><span>Install date</span><span>' + esc(asset.install_date || '—') + '</span></div>'
-        +   '<div class="wtd-meta-row"><span>Floor</span><span>' + esc(floor ? floor.name : '—') + '</span></div>'
-        +   '<div class="wtd-meta-row"><span>Zone</span><span>' + esc(zone ? zone.name : '—') + '</span></div>'
-        +   '<div class="wtd-meta-row"><span>Controller</span><span>' + esc(asset.controller_id || '—') + '</span></div>'
+        +   '<div class="wtd-meta-row"><span>Model</span><span>' + esc(asset.model || '-') + '</span></div>'
+        +   '<div class="wtd-meta-row"><span>Firmware</span><span>' + esc(asset.firmware || '-') + '</span></div>'
+        +   '<div class="wtd-meta-row"><span>Install date</span><span>' + esc(asset.install_date || '-') + '</span></div>'
+        +   '<div class="wtd-meta-row"><span>Floor</span><span>' + esc(floor ? floor.name : '-') + '</span></div>'
+        +   '<div class="wtd-meta-row"><span>Zone</span><span>' + esc(zone ? zone.name : '-') + '</span></div>'
+        +   '<div class="wtd-meta-row"><span>Controller</span><span>' + esc(asset.controller_id || '-') + '</span></div>'
         +   (asset.rated_kw ? '<div class="wtd-meta-row"><span>Rated kW</span><span>' + asset.rated_kw + '</span></div>' : '')
         + '</div>'
         + '</div>';
@@ -204,7 +204,7 @@
     var legend = '<div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:8px;font-size:11px;color:var(--wtd-muted);font-family:var(--font-mono);">'
       + seriesData.map(function (s, i) {
           var snap = sim.getPoint(s.point.id);
-          return '<span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:10px;height:2px;background:' + colors[i % colors.length] + ';"></span>' + esc(s.point.name) + ' <strong style="color:var(--wtd-ink);">' + (snap ? snap.value.toFixed(1) : '—') + ' ' + esc(s.point.unit || '') + '</strong></span>';
+          return '<span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:10px;height:2px;background:' + colors[i % colors.length] + ';"></span>' + esc(s.point.name) + ' <strong style="color:var(--wtd-ink);">' + (snap ? snap.value.toFixed(1) : '-') + ' ' + esc(s.point.unit || '') + '</strong></span>';
         }).join('')
       + '</div>';
     return '<svg viewBox="0 0 ' + w + ' ' + h + '" style="display:block;width:100%;height:200px;">'
@@ -231,7 +231,7 @@
     return '<table class="wtd-table" style="font-size:11.5px;color:var(--wtd-ink-2);"><tbody>'
       + pts.map(function (p) {
           var snap = sim && sim.getPoint(p.id);
-          var v = snap ? WatadApp.fmtUnit(snap.value, p.unit) : '—';
+          var v = snap ? WatadApp.fmtUnit(snap.value, p.unit) : '-';
           var ts = snap ? WatadApp.fmtTime(snap.ts) : '';
           return '<tr style="border-color:var(--wtd-line);"><td style="border-color:var(--wtd-line);padding:6px 8px;">' + esc(p.name) + '</td><td style="border-color:var(--wtd-line);padding:6px 8px;font-family:var(--font-mono);color:var(--wtd-ink);text-align:right;">' + v + '</td><td style="border-color:var(--wtd-line);padding:6px 8px;color:var(--wtd-muted);font-family:var(--font-mono);text-align:right;">' + ts + '</td></tr>';
         }).join('')

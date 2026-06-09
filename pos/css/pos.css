@@ -116,7 +116,7 @@ body.pos.landing .pos-input {
 }
 
 /* ============================================================
-   TERMINAL — the centrepiece
+   TERMINAL - the centrepiece
    ============================================================ */
 .pos-terminal {
   display: grid; grid-template-columns: 1fr 420px;
@@ -395,7 +395,7 @@ body.pos.landing .pos-input {
 .pos-status-chip.voided::before { background: var(--pos-muted-light); }
 
 /* ============================================================
-   KDS — Kitchen Display System
+   KDS - Kitchen Display System
    ============================================================ */
 .pos-kds {
   height: 100vh; display: flex; flex-direction: column;

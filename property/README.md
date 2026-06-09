@@ -48,7 +48,7 @@ Built to show what a marketplace-shaped product looks like when you're responsib
 |---------|--------------|
 | Dashboard | KPIs, monthly views/leads bar chart, inquiry status mix, top listings, recent inquiries, expiring listings, alerts |
 | Listings | CRUD + bulk publish / feature / verify / delete · **CSV bulk import** · CSV export |
-| Inquiries | Inbox-style 2-pane with pipeline (new → won/lost), **lead scoring 1–5** with auto-score, **activity timeline** (every event chronologically), quick contact buttons |
+| Inquiries | Inbox-style 2-pane with pipeline (new → won/lost), **lead scoring 1-5** with auto-score, **activity timeline** (every event chronologically), quick contact buttons |
 | Viewings | Month calendar + table, confirm / reschedule / cancel |
 | Agents / Agencies / Customers | CRUD with performance metrics |
 | Analytics | SVG line chart (views), leads by source, conversion funnel, top areas |

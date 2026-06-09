@@ -1,6 +1,6 @@
 /* =============================================================================
-   saadm.dev — shared chrome (contact.html, 404.html, demo.html)
-   "Engineering Field Notes" — warm drafting paper, ink, Fraunces + IBM Plex,
+   saadm.dev - shared chrome (contact.html, 404.html, demo.html)
+   "Engineering Field Notes" - warm drafting paper, ink, Fraunces + IBM Plex,
    hairline rules, one signal-red accent. Matches home.css exactly.
 
    Legacy token NAMES (--bg, --fg, --accent, --grad, …) are kept and aliased
@@ -251,7 +251,7 @@ strong { font-weight: 600; color: var(--ink); }
 }
 .nav-cta:hover { background: var(--accent-h); color: var(--on-accent); transform: translateY(-1px); box-shadow: 0 12px 30px -12px var(--signal); }
 
-/* Theme toggle — sun/moon, shared across static shell pages */
+/* Theme toggle - sun/moon, shared across static shell pages */
 .theme-toggle {
   flex: none; width: 40px; height: 40px;
   display: inline-flex; align-items: center; justify-content: center;
@@ -407,7 +407,7 @@ strong { font-weight: 600; color: var(--ink); }
 .project-desc { margin: 0 0 12px; color: var(--ink-soft); font-size: 14.5px; }
 .project-bullets { list-style: none; margin: 0 0 14px; padding: 0; display: flex; flex-direction: column; gap: 5px; }
 .project-bullets li { font-family: var(--mono); font-size: 12.5px; color: var(--ink-soft); padding-left: 20px; position: relative; }
-.project-bullets li::before { content: "—"; color: var(--signal); position: absolute; left: 0; top: 0; }
+.project-bullets li::before { content: "-"; color: var(--signal); position: absolute; left: 0; top: 0; }
 .project-bullets strong { color: var(--ink); }
 .project-tags { display: flex; flex-wrap: wrap; gap: 6px; }
 .project-impl { margin-top: 16px; border-top: 1px solid var(--rule); padding-top: 14px; }
@@ -570,7 +570,7 @@ body.view-eng [data-domain="eng"], body.view-code [data-domain="code"], body.vie
 .back-to-top svg { width: 19px; height: 19px; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 @media print { .back-to-top { display: none !important; } }
 
-/* Social rail — fixed left contact links (glass, theme-matched) */
+/* Social rail - fixed left contact links (glass, theme-matched) */
 .social-rail { position: fixed; left: 18px; top: 50%; transform: translateY(-50%); z-index: 55; display: flex; flex-direction: column; align-items: center; gap: 10px; }
 .social-rail .social-link { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 11px; color: var(--ink-mute); background: var(--glass); border: 1px solid var(--rule); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: color var(--t) ease, border-color var(--t) ease, background var(--t) ease, transform var(--t-fast) var(--ease), box-shadow var(--t) ease; }
 .social-rail .social-link:hover { color: var(--ink); border-color: var(--border-acc); background: var(--panel-hi); transform: translateY(-3px); box-shadow: var(--glow); }

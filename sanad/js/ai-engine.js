@@ -96,18 +96,18 @@
   // Multi-variant reply dictionary. Each intent has 3-4 alternates so
   // repeat clicks of "Regenerate" surface different wording instead of
   // the same canned string. Variant is picked by a rotating index that
-  // increments each call — first click gets [0], next gets [1], etc.
+  // increments each call - first click gets [0], next gets [1], etc.
   var replyVariantIdx = 0;
   var REPLY_VARIANTS = {
     password: [
-      "Sorry for the trouble. Try the password reset link from the login screen — it sometimes lands in spam. If it doesn't arrive within 60 seconds, I can manually trigger one via our backup provider. What email address is on your account?\n\n[cite:Resetting your password]",
-      "That's frustrating, I get it. The reset email goes out instantly from our end — if you don't see it, the first place to check is spam, and the second is whether your IT team blocks `mail.sanad.app`. Share the email on your account and I'll fire one through our backup sender.\n\n[cite:Resetting your password]",
-      "Apologies — let me sort this out. Two quick checks: (1) is the email on the account correct? (2) does your inbox quarantine our domain? If both are fine, reply with the email and I'll manually trigger a reset.\n\n[cite:Resetting your password]"
+      "Sorry for the trouble. Try the password reset link from the login screen - it sometimes lands in spam. If it doesn't arrive within 60 seconds, I can manually trigger one via our backup provider. What email address is on your account?\n\n[cite:Resetting your password]",
+      "That's frustrating, I get it. The reset email goes out instantly from our end - if you don't see it, the first place to check is spam, and the second is whether your IT team blocks `mail.sanad.app`. Share the email on your account and I'll fire one through our backup sender.\n\n[cite:Resetting your password]",
+      "Apologies - let me sort this out. Two quick checks: (1) is the email on the account correct? (2) does your inbox quarantine our domain? If both are fine, reply with the email and I'll manually trigger a reset.\n\n[cite:Resetting your password]"
     ],
     refund: [
       "Happy to look into that. Could you share the transaction date and the last 4 digits of the card? Per our refund policy, anything within 14 days is eligible no-questions-asked.\n\n[cite:Refund policy]",
       "I can process that right away. Just reply with the receipt email or transaction ID and I'll refund the duplicate today. It'll land back on your card in 3-5 business days.\n\n[cite:Refund policy]",
-      "Got it, this is on us. Refunds inside 14 days are automatic — just confirm the transaction date and I'll trigger it now. Anything older needs a quick approval but I can usually push it through same-day.\n\n[cite:Refund policy]"
+      "Got it, this is on us. Refunds inside 14 days are automatic - just confirm the transaction date and I'll trigger it now. Anything older needs a quick approval but I can usually push it through same-day.\n\n[cite:Refund policy]"
     ],
     webhook: [
       "That sounds like the classic 'parsed JSON instead of raw body' issue. Make sure you're computing the HMAC over the raw request body and using constant-time comparison. Express in particular needs `express.raw()` instead of `express.json()` on the webhook route.\n\n[cite:Webhook signature verification]",
@@ -116,49 +116,49 @@
     ],
     rate_limit: [
       "Pro is capped at 500 req/min. If you're doing a bulk backfill I can temporarily raise it to 2,000 req/min for 48 hours. Just confirm the workspace ID and a window when the spike will happen.\n\n[cite:API quickstart]",
-      "429s during backfills are common — Pro defaults to 500/min. Want me to bump you to 2,000/min for the next 24-48h? Share the workspace ID and rough start time.\n\n[cite:API quickstart]"
+      "429s during backfills are common - Pro defaults to 500/min. Want me to bump you to 2,000/min for the next 24-48h? Share the workspace ID and rough start time.\n\n[cite:API quickstart]"
     ],
     sso: [
       "SSO is available on Business. Setup takes ~10 minutes via Settings → Security → SSO. I can hop on a 15-min call to walk through the SAML claims and group provisioning if it'd help.\n\n[cite:Setting up SSO with SAML]",
       "Happy to get you set up. The flow is: upgrade to Business → Settings → Security → SSO → paste your IdP metadata → map the email/groups claims. Group-based provisioning is automatic.\n\n[cite:Setting up SSO with SAML]"
     ],
     slack: [
-      "Slack's legacy tokens were deprecated this quarter. Reconnect via Settings → Integrations → Slack — it'll re-auth with the new OAuth scopes and start posting again within a minute.",
-      "Known one — Slack rotated their token format and we silently dropped writes. A reconnect from Settings → Integrations → Slack fixes it in under a minute."
+      "Slack's legacy tokens were deprecated this quarter. Reconnect via Settings → Integrations → Slack - it'll re-auth with the new OAuth scopes and start posting again within a minute.",
+      "Known one - Slack rotated their token format and we silently dropped writes. A reconnect from Settings → Integrations → Slack fixes it in under a minute."
     ],
     mobile_crash: [
       "Apologies for that crash. A fix is shipping in the next build (~30 min). As a workaround, swipe down from the home screen or use the web app. I'll DM you when the update is live.",
-      "Confirmed bug — already patched, going out as 14.7.2 within the hour. In the meantime the web app is a clean workaround. Sorry about that."
+      "Confirmed bug - already patched, going out as 14.7.2 within the hour. In the meantime the web app is a clean workaround. Sorry about that."
     ],
     csv_import: [
       "Bulk CSV import is in Admin → Import → CSV, up to 50k rows. The matcher needs an email column. Want our template? I can pre-fill it with your column headers if you send me a sample.",
-      "Yep — Admin → Import → CSV handles up to 50,000 rows per file. Email column is required for the matcher. I can send our template plus a column-mapping spreadsheet if you share a sample row."
+      "Yep - Admin → Import → CSV handles up to 50,000 rows per file. Email column is required for the matcher. I can send our template plus a column-mapping spreadsheet if you share a sample row."
     ],
     data_residency: [
       "We host in eu-fra, us-east, and ap-bom. For UAE PDPL compliance ap-bom is the right region. A region migration takes ~30 minutes and is one-time. Want me to schedule it?\n\n[cite:Data residency]",
-      "For UAE compliance you want ap-bom (Mumbai) — it's the closest region with the right data-residency posture. Migrating an existing workspace takes about 30 minutes; I can do it during your off-hours.\n\n[cite:Data residency]"
+      "For UAE compliance you want ap-bom (Mumbai) - it's the closest region with the right data-residency posture. Migrating an existing workspace takes about 30 minutes; I can do it during your off-hours.\n\n[cite:Data residency]"
     ],
     dark_mode: [
       "Dark mode for the admin panel is on the Q3 roadmap. I'll +1 your vote, which bumps the priority. In the meantime, the customer widget already follows the system theme.",
-      "Hear you — admin dark mode is queued for Q3. I added your vote internally. The customer widget already respects the system theme as a partial workaround."
+      "Hear you - admin dark mode is queued for Q3. I added your vote internally. The customer widget already respects the system theme as a partial workaround."
     ],
     arabic_help: [
       "أهلاً بك. يمكنني مساعدتك في ذلك. هل يمكنك إعطائي المزيد من التفاصيل أو رقم حسابك؟",
       "مرحباً! يسعدني مساعدتك. شاركني المزيد من التفاصيل وسأتولى الأمر."
     ],
     generic: [
-      "Thanks for reaching out. I want to make sure I give you the right answer — could you share a bit more detail about what you're trying to do? In the meantime I'll loop in a human agent if it's urgent.",
+      "Thanks for reaching out. I want to make sure I give you the right answer - could you share a bit more detail about what you're trying to do? In the meantime I'll loop in a human agent if it's urgent.",
       "Happy to help. Could you give me a bit more context so I can point you at the right answer? If it's time-sensitive I'll bring in a human teammate right away.",
-      "Thanks for the message! I want to nail the answer rather than guess — share what you've tried so far and I'll take it from there."
+      "Thanks for the message! I want to nail the answer rather than guess - share what you've tried so far and I'll take it from there."
     ],
     greeting: [
       "Hi! Thanks for reaching out. Happy to help with whatever you need. Could you share a bit more detail about what brought you to us today?",
-      "Hey there — thanks for getting in touch. What can I help you with?",
+      "Hey there - thanks for getting in touch. What can I help you with?",
       "Hi! I'm here to help. Tell me what's going on and I'll do my best."
     ],
     short: [
       "Thanks for the message! Could you give me a bit more detail so I can give you a useful answer?",
-      "Got it — to give you a useful answer I'll need a bit more detail. What's the situation?"
+      "Got it - to give you a useful answer I'll need a bit more detail. What's the situation?"
     ]
   };
   function pickReply(intent) {
@@ -209,7 +209,7 @@
       first = first.replace(/^(Hi|Hey|Hello)[!,.]?\s*/i, '').replace(/^Sorry for the trouble[.!,]?\s*/i, '').replace(/^Thanks for reaching out[.!,]?\s*/i, '');
       text = first.charAt(0).toUpperCase() + first.slice(1);
     } else if (tone === 'apologetic') {
-      if (!/sorry|apolog/i.test(text)) text = "I'm really sorry for the friction here — " + text.charAt(0).toLowerCase() + text.slice(1);
+      if (!/sorry|apolog/i.test(text)) text = "I'm really sorry for the friction here - " + text.charAt(0).toLowerCase() + text.slice(1);
       text = text.replace(/^Happy to /, 'Sorry about that. Happy to ');
     }
     return text + cite;
@@ -223,7 +223,7 @@
   }
   function mockSummary(opts) {
     var thread = (opts.context && opts.context.thread) || '';
-    if (/password|reset/.test(thread)) return "Customer can't reset their password — emails not arriving. AI offered backup-provider reset. Pending customer confirmation.\nTopics: password, account-recovery, deliverability";
+    if (/password|reset/.test(thread)) return "Customer can't reset their password - emails not arriving. AI offered backup-provider reset. Pending customer confirmation.\nTopics: password, account-recovery, deliverability";
     if (/refund|charge.*twice|duplicate/.test(thread)) return "Customer was double-charged for their July invoice. Refund of the duplicate has been initiated; will arrive in 3-5 business days.\nTopics: billing, duplicate-charge, refund";
     if (/webhook|signature/.test(thread)) return "Customer's webhook verification was failing because their framework was re-serializing the request body. Resolved by using raw-body middleware.\nTopics: webhook, signature, express";
     return "Customer reached out with a support question; an agent has responded and is awaiting follow-up.\nTopics: general, awaiting-customer";
@@ -247,7 +247,7 @@
   function mockKbAnswer(q) {
     var raw = (q || '').trim();
     q = raw.toLowerCase();
-    // Greetings + small talk — keep it warm, then nudge toward a real question.
+    // Greetings + small talk - keep it warm, then nudge toward a real question.
     if (/^(hi+|hello+|hey+|hola|salam|salaam|assalam|yo|sup|howdy|good\s+(morning|afternoon|evening|day))[\s!.?]*$/i.test(raw))
       return "👋 Hey! I'm happy to help. Most folks ask me about **billing & refunds**, **account access** (password reset, SSO, 2FA), or **technical setup** (API, webhooks, integrations). What's on your mind?";
     if (/^(thanks|thank\s*you|thx|ty|cheers|appreciate|brilliant|perfect|great)[\s!.]*$/i.test(raw))
@@ -255,36 +255,36 @@
     if (/^(yes|yeah|yep|sure|please|ok|okay)[\s!.]*$/i.test(raw))
       return "Got it. Could you share a bit more detail about what you're stuck on? The more specific the question, the better the answer.";
     if (/^(no|nope|nah|not really)[\s!.]*$/i.test(raw))
-      return "No worries. I'm here if you change your mind — just type a question or click *Open a ticket* to reach a human.";
+      return "No worries. I'm here if you change your mind - just type a question or click *Open a ticket* to reach a human.";
     if (/^bye|^goodbye|^see\s*ya|^later/i.test(raw))
       return "Take care! ☕ Come back any time.";
     if (/are\s+you\s+(a\s+)?(human|real|bot|ai|robot)/i.test(raw))
-      return "I'm an AI assistant powered by Claude. I can answer most questions instantly, and if I can't, I'll connect you with a human agent — just tap *Open a ticket*.";
+      return "I'm an AI assistant powered by Claude. I can answer most questions instantly, and if I can't, I'll connect you with a human agent - just tap *Open a ticket*.";
     if (/who\s+are\s+you|what\s+are\s+you|what\s+can\s+you\s+do/i.test(raw))
-      return "I'm Sanad — the AI support copilot for this demo. I'm trained on our knowledge base so I can answer most billing, account, and technical questions. For anything I'm not sure about, I'll point you to a human.";
+      return "I'm Sanad - the AI support copilot for this demo. I'm trained on our knowledge base so I can answer most billing, account, and technical questions. For anything I'm not sure about, I'll point you to a human.";
     if (/help/i.test(raw) && raw.length < 20)
-      return "Sure — what can I help with? Common topics:\n\n- **Billing** — refunds, invoices, payment methods\n- **Account** — password reset, 2FA, SSO, team invites\n- **Technical** — API, webhooks, integrations, embedding the widget\n\nOr describe your issue in your own words and I'll do my best.";
+      return "Sure - what can I help with? Common topics:\n\n- **Billing** - refunds, invoices, payment methods\n- **Account** - password reset, 2FA, SSO, team invites\n- **Technical** - API, webhooks, integrations, embedding the widget\n\nOr describe your issue in your own words and I'll do my best.";
 
-    // Intent matches — give a real answer with KB citation
-    if (/password|reset|forgot/.test(q)) return "To reset your password, click **Forgot password** on the login screen. We'll email a reset link valid for 30 minutes. If it doesn't arrive, check spam — corporate email gateways sometimes block our sender.\n\n[cite:Resetting your password]";
-    if (/2fa|two.factor|recovery|authenticator/.test(q)) return "Use one of your recovery codes on the 2FA prompt — click **Use recovery code**. If you've lost them, contact support and we'll verify your identity via email and reset 2FA within ~10 minutes during business hours.\n\n[cite:Recovering 2FA access]";
+    // Intent matches - give a real answer with KB citation
+    if (/password|reset|forgot/.test(q)) return "To reset your password, click **Forgot password** on the login screen. We'll email a reset link valid for 30 minutes. If it doesn't arrive, check spam - corporate email gateways sometimes block our sender.\n\n[cite:Resetting your password]";
+    if (/2fa|two.factor|recovery|authenticator/.test(q)) return "Use one of your recovery codes on the 2FA prompt - click **Use recovery code**. If you've lost them, contact support and we'll verify your identity via email and reset 2FA within ~10 minutes during business hours.\n\n[cite:Recovering 2FA access]";
     if (/sso|saml|okta|azure|google.?workspace|onelogin/.test(q)) return "SSO is available on Business and above. Set it up under **Settings → Security → SSO**. We support Okta, Azure AD / Entra ID, Google Workspace, OneLogin, and any SAML 2.0 IdP. Group claims auto-provision users to roles.\n\n[cite:Setting up SSO with SAML]";
     if (/webhook|signature|hmac/.test(q)) return "Compute HMAC-SHA256 of the **raw** request body (not parsed JSON) using your signing key, and compare it constant-time to the `Sanad-Signature` header. In Express, use `express.raw()` on the webhook route, not `express.json()`.\n\n[cite:Webhook signature verification]";
-    if (/refund|money back|cancel.*subscription|cancel.*plan/.test(q)) return "Refunds are no-questions-asked within 14 days of any new subscription. Reply to your purchase receipt with the word **refund**, or email billing@sanad.app — we process within 2 business days, hitting your card in 3-5 business days.\n\n[cite:Refund policy]";
+    if (/refund|money back|cancel.*subscription|cancel.*plan/.test(q)) return "Refunds are no-questions-asked within 14 days of any new subscription. Reply to your purchase receipt with the word **refund**, or email billing@sanad.app - we process within 2 business days, hitting your card in 3-5 business days.\n\n[cite:Refund policy]";
     if (/invoice|receipt|tax|trn|vat/.test(q)) return "Download PDF invoices going back 24 months from **Settings → Billing → Invoices**. UAE VAT (5%) is itemised; add your TRN under Settings → Billing → Tax info and it'll appear on all future invoices.\n\n[cite:Understanding your invoice]";
     if (/upgrade|downgrade|change.*plan|switch.*plan|annual|monthly/.test(q)) return "Change plans from **Settings → Billing → Change plan**. Upgrades take effect immediately with prorated charges; downgrades take effect at the end of your current cycle. Annual saves 20% vs monthly.\n\n[cite:Upgrading or downgrading your plan]";
-    if (/api|rate.?limit|429|sdk/.test(q)) return "Authenticate with a Bearer token from **Settings → Developers → API keys**. Limits: Free 100/min, Pro 500/min, Business 2000/min. 429 responses include a `Retry-After` header — respect it.\n\n[cite:API quickstart]";
+    if (/api|rate.?limit|429|sdk/.test(q)) return "Authenticate with a Bearer token from **Settings → Developers → API keys**. Limits: Free 100/min, Pro 500/min, Business 2000/min. 429 responses include a `Retry-After` header - respect it.\n\n[cite:API quickstart]";
     if (/embed|widget|install|script.*tag/.test(q)) return "Drop the widget into any page with `<script src=\"https://widget.sanad.app/embed.js\" data-workspace=\"ws_xxx\" async></script>`. Call `window.Sanad('identify', {...})` to thread messages for logged-in users.\n\n[cite:Embedding the chat widget]";
     if (/import|migrate|csv|intercom|zendesk|helpscout|front/.test(q)) return "Use **Admin → Import → From other tool**. We support Intercom, Zendesk, Help Scout, Front, and Freshdesk. Conversations, contacts, tags, and articles all come over. Agent assignments map by email.\n\n[cite:Importing from Intercom / Zendesk]";
     if (/slack|integration/.test(q)) return "Reconnect Slack via **Settings → Integrations → Slack**. The legacy tokens were deprecated this quarter, so existing connections need re-auth with the new OAuth scopes.";
     if (/data.?residency|gdpr|pdpl|compliance|where.*data/.test(q)) return "We host in eu-fra, us-east, and ap-bom. For UAE PDPL compliance ap-bom is the right region. Region migration takes ~30 min and is one-time.\n\n[cite:Data residency]";
     if (/(invite|add).*team|seat|user.*limit/.test(q)) return "Invite from **Settings → Team → Invite**. Up to 50 emails at once, or paste a comma-separated list. Roles: Admin, Agent, Viewer. Viewer is free; Admin and Agent count toward your seat limit.\n\n[cite:Inviting teammates]";
-    if (/dark mode|theme/.test(q)) return "Dark mode for the admin is on the Q3 roadmap. The customer widget already follows the system theme. I'll +1 your vote internally — it bumps the priority.";
+    if (/dark mode|theme/.test(q)) return "Dark mode for the admin is on the Q3 roadmap. The customer widget already follows the system theme. I'll +1 your vote internally - it bumps the priority.";
     if (/non.?profit|charity|education|discount/.test(q)) return "Yes! We offer **50% off Pro** for verified non-profits and education institutions. Send your registration document to support@sanad.app and we'll apply the credit within one business day.";
     if (/مرحبا|اهلا|سلام|شكرا/.test(raw))
       return "أهلاً بك! يسعدني مساعدتك. يمكنني الإجابة عن أسئلة الفوترة، الحساب، أو التقنية. ما الذي تحتاجه؟";
 
-    // Final catch-all — warmer than the original "no article" line
+    // Final catch-all - warmer than the original "no article" line
     return "Hmm, I'm not 100% sure I have a doc for that exactly. Could you rephrase or give me a bit more detail? Otherwise tap *Open a ticket* and a human will pick it up.";
   }
   function mockTranslate(text, to) {
@@ -294,10 +294,10 @@
   }
   function mockFAQ(opts) {
     var t = (opts.context && opts.context.article && opts.context.article.title) || 'this article';
-    return "Q: " + t + " — what's covered?\nA: This article explains the steps end-to-end with screenshots.\n\nQ: How long does it take?\nA: About 5 minutes for first-time users.\n\nQ: What if I get stuck?\nA: Contact support — we respond within one hour on Business tier.";
+    return "Q: " + t + " - what's covered?\nA: This article explains the steps end-to-end with screenshots.\n\nQ: How long does it take?\nA: About 5 minutes for first-time users.\n\nQ: What if I get stuck?\nA: Contact support - we respond within one hour on Business tier.";
   }
   function mockGaps() {
-    return "1. **Webhook retry behavior** — 4 recent tickets asked about expected retry windows; we don't have a dedicated article.\n2. **Importing from Front** — we list Intercom/Zendesk/HelpScout/Front but the Front-specific quirks aren't documented.\n3. **Slack token migration** — 6 customers hit the legacy-token deprecation; an article would prevent future tickets.";
+    return "1. **Webhook retry behavior** - 4 recent tickets asked about expected retry windows; we don't have a dedicated article.\n2. **Importing from Front** - we list Intercom/Zendesk/HelpScout/Front but the Front-specific quirks aren't documented.\n3. **Slack token migration** - 6 customers hit the legacy-token deprecation; an article would prevent future tickets.";
   }
 
   // ===================== Public API =====================
@@ -332,7 +332,7 @@
     kb_answer: "You are Sanad, answering a customer's question using the provided knowledge base. Be concise (3-5 sentences). When you use an article, append [cite:Article Title]. If no article covers it, say so and offer human handoff.",
     translate: "Translate the user's text to the requested language. Preserve meaning, tone, and any product names. Output only the translation.",
     faq: "You are Sanad. Given the article, generate 4-5 frequently-asked questions and short answers grounded in the article content. Format: Q: ...\\nA: ...\\n\\n",
-    gaps: "You are Sanad. Given recent support tickets and the current knowledge base, identify 3-5 article gaps — topics customers ask about that aren't well documented. Output a numbered markdown list with the suggested title in bold and why it's needed."
+    gaps: "You are Sanad. Given recent support tickets and the current knowledge base, identify 3-5 article gaps - topics customers ask about that aren't well documented. Output a numbered markdown list with the suggested title in bold and why it's needed."
   };
 
   /* ===================================================================
@@ -341,7 +341,7 @@
      Loads Qwen 2.5 0.5B Instruct from HuggingFace via transformers.js on
      demand. The download is ~280MB at q4 quantization; cached in the
      browser's Cache API so subsequent visits are instant. Pure ES module
-     import, lazy — nothing is downloaded until the user toggles it on.
+     import, lazy - nothing is downloaded until the user toggles it on.
      Falls back to the mock dictionary if transformers.js fails to load
      (e.g. WASM blocked, ad-block on CDN). */
   var TRANSFORMERS_URL = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.7.5';

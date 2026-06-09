@@ -1,10 +1,10 @@
-/* mock-api.js — fetch interceptor for /lahza/api/*. Backs the journal,
+/* mock-api.js - fetch interceptor for /lahza/api/*. Backs the journal,
  * mood, streak, insights, and settings endpoints using localStorage.
- * Same pattern as sanad/watad mock-api but ~5x simpler — no admin / staff /
- * approvals — this is a single-user app.
+ * Same pattern as sanad/watad mock-api but ~5x simpler - no admin / staff /
+ * approvals - this is a single-user app.
  *
  * CRITICAL: every regex route wraps the match assignment in parens:
- *   if ((m = path.match(...)) && method === '...') — the operator-precedence
+ *   if ((m = path.match(...)) && method === '...') - the operator-precedence
  * lesson from POS. Avoid the naked `if (m = ... && ...)` form. */
 (function () {
   'use strict';
@@ -22,7 +22,7 @@
   function jget(k, def) { try { return JSON.parse(localStorage.getItem(k)) || def; } catch (e) { return def; } }
   function jset(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
 
-  // History migration — wipe stale entries if the schema version doesn't match.
+  // History migration - wipe stale entries if the schema version doesn't match.
   (function migrate() {
     var v = jget(LS.histVersion, null);
     if (v !== HIST_VERSION) {
@@ -136,7 +136,7 @@
       var created = jget(LS.entries, []);
       var idx = created.findIndex(function (x) { return x.id === id; });
       if (idx === -1) {
-        // Patching a seed entry — clone into created store with the patch applied
+        // Patching a seed entry - clone into created store with the patch applied
         var seed = window.LAHZA_DATA.ENTRIES_SEED.find(function (x) { return x.id === id; });
         if (!seed) return { ok: false, error: 'not_found', status: 404 };
         var deletedSeed = jget(LS.deletedSeed, []);
@@ -185,7 +185,7 @@
   window.fetch = function (input, init) {
     var url = typeof input === 'string' ? input : (input && input.url) || '';
     var idx = url.indexOf('/lahza/api');
-    // /api/lahza/ai/* is handled by the Worker / LahzaAI engine — pass through.
+    // /api/lahza/ai/* is handled by the Worker / LahzaAI engine - pass through.
     if (idx === -1 || url.indexOf('/api/lahza/ai/') !== -1)
       return origFetch ? origFetch(input, init) : Promise.reject(new Error('no fetch'));
     init = init || {};
@@ -206,5 +206,5 @@
     });
   };
 
-  console.log('Lahza mock-api ready — /lahza/api/* intercepted');
+  console.log('Lahza mock-api ready - /lahza/api/* intercepted');
 })();

@@ -1,4 +1,4 @@
-/* Lahza service worker — scoped to /lahza/ ONLY. Never controls other parts
+/* Lahza service worker - scoped to /lahza/ ONLY. Never controls other parts
  * of saadm.dev. Cache-first for static assets, network-first for the app
  * shell and AI calls (so visitors always get the latest UI when online). */
 const CACHE_PREFIX = 'lahza-v';
@@ -39,17 +39,17 @@ self.addEventListener('activate', (e) => {
 
 self.addEventListener('fetch', (e) => {
   const url = new URL(e.request.url);
-  // Only handle requests within our scope. Defensive — the SW scope already
+  // Only handle requests within our scope. Defensive - the SW scope already
   // restricts to /lahza/, but be explicit.
   if (!url.pathname.startsWith('/lahza/')) return;
 
-  // AI calls — go to network, no caching (they vary by request body).
+  // AI calls - go to network, no caching (they vary by request body).
   if (url.pathname.startsWith('/api/lahza/ai/')) {
     e.respondWith(fetch(e.request).catch(() => new Response(JSON.stringify({ ok: false, fallback: true }), { headers: { 'Content-Type': 'application/json' }, status: 503 })));
     return;
   }
 
-  // HTML — network-first so fresh visitors get the latest UI; cache fallback for offline.
+  // HTML - network-first so fresh visitors get the latest UI; cache fallback for offline.
   if (e.request.mode === 'navigate' || url.pathname === '/lahza/' || url.pathname.endsWith('.html')) {
     e.respondWith(
       fetch(e.request).then((r) => {
@@ -61,7 +61,7 @@ self.addEventListener('fetch', (e) => {
     return;
   }
 
-  // Static assets — cache-first.
+  // Static assets - cache-first.
   e.respondWith(
     caches.match(e.request).then((cached) => cached || fetch(e.request).then((r) => {
       if (r.ok) { const copy = r.clone(); caches.open(CACHE).then((c) => c.put(e.request, copy)).catch(() => {}); }

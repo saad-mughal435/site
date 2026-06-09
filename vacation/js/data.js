@@ -186,7 +186,7 @@
       house_rules: spec.house_rules || ['No smoking indoors','No parties','Check-in 3 PM','Check-out 11 AM'],
       cancellation: spec.cancellation || ['flexible','moderate','strict'][seed % 3],
       instant_book: spec.instant_book !== false,
-      rating: 4.4 + ((seed * 7) % 60) / 100,  // 4.40–5.00
+      rating: 4.4 + ((seed * 7) % 60) / 100,  // 4.40-5.00
       review_count: 8 + (seed * 3) % 120,
       featured: !!spec.featured,
       verified: spec.verified !== false,
@@ -382,7 +382,7 @@
         listing_id: b.listing_id,
         host_id: b.host_id,
         guest_id: b.guest_id,
-        rating_overall: 4 + ((seed * 3) % 11) / 10,        // 4.0–5.0
+        rating_overall: 4 + ((seed * 3) % 11) / 10,        // 4.0-5.0
         rating_cleanliness: 4 + ((seed * 7) % 11) / 10,
         rating_communication: 4 + ((seed * 11) % 11) / 10,
         rating_value: 4 + ((seed * 13) % 11) / 10,

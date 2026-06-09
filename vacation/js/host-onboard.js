@@ -510,7 +510,7 @@
       + '<div style="margin-bottom:24px;">'
       +   '<strong>House rules</strong>'
       +   '<div style="margin-top:10px;display:grid;gap:6px;">'
-      +     ['No smoking indoors','No parties or events','No pets','Check-in 3 PM','Check-out 11 AM','Quiet hours 10 PM – 8 AM'].map(function (rule) {
+      +     ['No smoking indoors','No parties or events','No pets','Check-in 3 PM','Check-out 11 AM','Quiet hours 10 PM - 8 AM'].map(function (rule) {
             var on = state.amenities.house_rules.indexOf(rule) !== -1;
             return '<label class="v-check"><input type="checkbox" data-rule="' + esc(rule) + '" ' + (on ? 'checked' : '') + '> ' + esc(rule) + '</label>';
           }).join('')

@@ -1,4 +1,4 @@
-/* admin.js — Marsad admin SPA shell. Hash-routed, 9 sections. */
+/* admin.js - Marsad admin SPA shell. Hash-routed, 9 sections. */
 (function () {
   'use strict';
   var NAV = [

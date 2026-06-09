@@ -1,4 +1,4 @@
-/* journal.js — chronological feed with search + mood filter chips. */
+/* journal.js - chronological feed with search + mood filter chips. */
 (function () {
   'use strict';
   window.LahzaViews = window.LahzaViews || {};

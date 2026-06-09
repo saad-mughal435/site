@@ -119,7 +119,7 @@
         '<table class="wtd-table"><thead><tr><th>Meter</th><th style="text-align:right;">kWh today</th><th style="text-align:right;">% of total</th><th style="text-align:right;">vs yesterday</th></tr></thead><tbody>'
       + sorted.map(function (s) {
           var m = meterMap[s.id] || { name: s.id };
-          var deltaIcon = s.delta > 5 ? '🔺' : s.delta < -5 ? '🔻' : '—';
+          var deltaIcon = s.delta > 5 ? '🔺' : s.delta < -5 ? '🔻' : '-';
           var deltaCol = s.delta > 5 ? 'var(--wtd-amber)' : s.delta < -5 ? 'var(--wtd-green-2)' : 'var(--wtd-muted-light)';
           return '<tr>'
             + '<td><strong>' + esc(m.name) + '</strong></td>'
@@ -134,11 +134,11 @@
   function renderDr() {
     // Fabricated DEWA DSM windows
     var rows = [
-      { window: 'Sun 14:00–17:00', tariff_credit: 'AED 0.18/kWh', projected_curtailment: '120 kWh', opted_in: true },
-      { window: 'Mon 14:00–17:00', tariff_credit: 'AED 0.18/kWh', projected_curtailment: '120 kWh', opted_in: true },
-      { window: 'Tue 14:00–17:00', tariff_credit: 'AED 0.18/kWh', projected_curtailment: '120 kWh', opted_in: false },
-      { window: 'Wed 14:00–17:00', tariff_credit: 'AED 0.18/kWh', projected_curtailment: '120 kWh', opted_in: true },
-      { window: 'Thu 14:00–17:00', tariff_credit: 'AED 0.18/kWh', projected_curtailment: '120 kWh', opted_in: true }
+      { window: 'Sun 14:00-17:00', tariff_credit: 'AED 0.18/kWh', projected_curtailment: '120 kWh', opted_in: true },
+      { window: 'Mon 14:00-17:00', tariff_credit: 'AED 0.18/kWh', projected_curtailment: '120 kWh', opted_in: true },
+      { window: 'Tue 14:00-17:00', tariff_credit: 'AED 0.18/kWh', projected_curtailment: '120 kWh', opted_in: false },
+      { window: 'Wed 14:00-17:00', tariff_credit: 'AED 0.18/kWh', projected_curtailment: '120 kWh', opted_in: true },
+      { window: 'Thu 14:00-17:00', tariff_credit: 'AED 0.18/kWh', projected_curtailment: '120 kWh', opted_in: true }
     ];
     $('dr-table').innerHTML =
         '<thead><tr><th>Window</th><th>Tariff credit</th><th>Projected curtailment</th><th>Opt-in</th></tr></thead><tbody>'

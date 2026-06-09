@@ -1,4 +1,4 @@
-/* admin-sections.js — Marsad admin section renderers. */
+/* admin-sections.js - Marsad admin section renderers. */
 (function () {
   'use strict';
   var D = window.MARSAD_DATA;
@@ -73,7 +73,7 @@
                 + '<td style="font-family:var(--mrs-mono);font-weight:700;">' + esc(o.number) + '</td>'
                 + '<td>' + esc(o.customer_name) + (o.cod_aed ? '<br/><small style="color:var(--mrs-amber);">COD ' + MarsadApp.fmtMoney(o.cod_aed) + '</small>' : '') + '</td>'
                 + '<td style="font-size:12px;">' + esc(o.zone_name) + '</td>'
-                + '<td style="font-size:12px;">' + (dr ? esc(dr.name) : '<em>—</em>') + '</td>'
+                + '<td style="font-size:12px;">' + (dr ? esc(dr.name) : '<em>-</em>') + '</td>'
                 + '<td><span class="mrs-chip ' + MarsadApp.STATUS_COLOR[o.status] + '">' + esc(MarsadApp.STATUS_LABEL[o.status]) + '</span></td>'
                 + '<td style="font-family:var(--mrs-mono);font-size:11.5px;">' + slaTxt + '</td>'
                 + '<td style="font-family:var(--mrs-mono);font-size:11.5px;">' + esc(fmtDt(o.placed_at)) + '</td>'
@@ -141,7 +141,7 @@
           + '<td style="font-family:var(--mrs-mono);font-weight:700;">' + esc(v.reg) + '</td>'
           + '<td><span class="mrs-chip">' + esc(v.type) + '</span></td>'
           + '<td style="text-align:right;">' + v.capacity + '</td>'
-          + '<td>' + (dr ? esc(dr.name) : '<em>—</em>') + '</td>'
+          + '<td>' + (dr ? esc(dr.name) : '<em>-</em>') + '</td>'
           + '<td style="text-align:right;font-family:var(--mrs-mono);">' + Math.round(v.speed_kmh || 0) + ' km/h</td>'
           + '<td style="text-align:right;"><span class="mrs-fuel ' + fuelCls + '">' + Math.round(v.fuel_pct || 0) + '%</span></td>'
           + '<td style="text-align:right;font-family:var(--mrs-mono);font-size:12px;">' + esc(v.odo_km.toLocaleString()) + ' km</td>'

@@ -72,7 +72,7 @@
     return ''
       + '<div class="m-mortgage">'
       +   '<h3 style="margin:0 0 8px;">Mortgage estimate</h3>'
-      +   '<p class="m-text-muted" style="font-size:12px;margin:0 0 12px;">Illustrative only. UAE banks typically require 20–25% down for non-resident buyers.</p>'
+      +   '<p class="m-text-muted" style="font-size:12px;margin:0 0 12px;">Illustrative only. UAE banks typically require 20-25% down for non-resident buyers.</p>'
       +   '<div class="m-mortgage-row">'
       +     '<label class="m-field"><span>Down payment %</span><input class="m-input" id="mw-down" type="number" min="10" max="80" value="' + defaultDown + '"></label>'
       +     '<label class="m-field"><span>Interest rate %</span><input class="m-input" id="mw-rate" type="number" min="1" max="15" step="0.1" value="' + defaultRate + '"></label>'

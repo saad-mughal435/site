@@ -3,7 +3,7 @@
  * Lifted from sanad/js/ai-engine.js, renamed SanadAI → AskAI, with one
  * recruiter-grounded feature: `answer({question, history})` that retrieves
  * top-K docs from AskCorpus and asks Claude to reply grounded in them.
- * Same Live/Mock pattern — calls a Cloudflare Worker proxy at
+ * Same Live/Mock pattern - calls a Cloudflare Worker proxy at
  * /api/ask/ai/* when configured, falls back to a deterministic mock
  * dictionary otherwise. Reuses the same ANTHROPIC_API_KEY secret as Sanad.
  *
@@ -90,9 +90,9 @@
   function mockAnswer(question, retrieved) {
     var q = (question || '').toLowerCase();
 
-    // Out-of-scope guard rail — same shape as Live would produce
+    // Out-of-scope guard rail - same shape as Live would produce
     if (!retrieved.length || retrieved[0].score < 1.5) {
-      return "I'm not sure that's in my notes about Saad. The best move is to email him directly at saad@saadm.dev — he typically replies within 24 hours. [contact]";
+      return "I'm not sure that's in my notes about Saad. The best move is to email him directly at saad@saadm.dev - he typically replies within 24 hours. [contact]";
     }
 
     // Pick the top doc as the citation anchor; mention the second + third
@@ -103,8 +103,8 @@
 
     // Lightly question-aware preambles
     var lead = '';
-    if (/can\s+he|is\s+he\s+(available|open)|relocate|remote|hire|hiring/.test(q)) lead = 'Yes — ';
-    else if (/^(does|do|did)\s+he/.test(q)) lead = 'Yes — ';
+    if (/can\s+he|is\s+he\s+(available|open)|relocate|remote|hire|hiring/.test(q)) lead = 'Yes - ';
+    else if (/^(does|do|did)\s+he/.test(q)) lead = 'Yes - ';
     else if (/^(what|tell|show|describe|explain)/.test(q)) lead = '';
     else if (/^(who|where|when|why|how)/.test(q)) lead = '';
 
@@ -122,12 +122,12 @@
 
   // ==================== Public API ====================
   var SYS_PROMPT_TMPL = [
-    "You are Ask Saad — an AI assistant for visitors browsing Muhammad Saad's portfolio at saadm.dev.",
+    "You are Ask Saad - an AI assistant for visitors browsing Muhammad Saad's portfolio at saadm.dev.",
     "Saad is an Automation & Software Developer based in Dubai, open to relocate worldwide.",
     "",
     "Answer the visitor's question concisely (2-4 short sentences, no headers, no lists unless they specifically asked for one).",
     "Cite the relevant documents from CONTEXT below by placing their [doc-id] at the end of any sentence that uses them.",
-    "Do NOT invent facts not in CONTEXT — if the answer isn't there, say so politely and suggest emailing saad@saadm.dev.",
+    "Do NOT invent facts not in CONTEXT - if the answer isn't there, say so politely and suggest emailing saad@saadm.dev.",
     "Don't address the visitor by name. Refer to Muhammad Saad as 'Saad' (not 'Mr. Saad' or 'Muhammad').",
     "",
     "CONTEXT:"

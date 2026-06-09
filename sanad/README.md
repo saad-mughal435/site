@@ -1,4 +1,4 @@
-# Sanad — AI customer-support copilot demo
+# Sanad - AI customer-support copilot demo
 
 A SaaS-style helpdesk with **Claude** integrated at every touchpoint:
 suggested replies, summaries, sentiment analysis, auto-categorization, RAG

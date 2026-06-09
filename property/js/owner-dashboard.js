@@ -122,7 +122,7 @@
                 + '<td><strong>' + esc(l.title) + '</strong>' + (l.review_note ? '<div style="font-size:11px;color:#c2503f;">⚠ ' + esc(l.review_note) + '</div>' : '') + '</td>'
                 + '<td><span class="m-status-chip ' + esc(s) + '">' + esc(s.replace('_',' ')) + '</span></td>'
                 + '<td>' + aed(l.price_aed) + (l.transaction === 'rent' ? '/year' : '') + '</td>'
-                + '<td>' + (l.listed_at ? l.listed_at.slice(0,10) : '—') + '</td>'
+                + '<td>' + (l.listed_at ? l.listed_at.slice(0,10) : '-') + '</td>'
                 + '<td class="m-table-actions">'
                 +   '<a class="m-btn m-btn--ghost m-btn--sm" href="listing.html?id=' + esc(l.id) + '" target="_blank" rel="noopener">View</a>'
                 +   '<a class="m-btn m-btn--ghost m-btn--sm" href="owner-onboard.html?mode=edit&id=' + esc(l.id) + '">Edit</a>'
@@ -146,7 +146,7 @@
           ? '<div class="m-panel m-mt-2" style="background:white;border:1px solid var(--manzil-line);border-radius:10px;padding:0;overflow:auto;"><table class="m-table"><thead><tr><th>From</th><th>Listing</th><th>Message</th><th>Status</th><th>Date</th></tr></thead><tbody>'
             + items.map(function (q) {
               var l = (D.LISTINGS || []).find(function (x) { return x.id === q.listing_id; }) || {};
-              return '<tr><td>' + esc(q.name || '—') + '<div style="font-size:11px;color:var(--manzil-muted);">' + esc(q.email || '') + '</div></td><td>' + esc(l.title || q.listing_id) + '</td><td style="max-width:400px;">' + esc((q.message || '').slice(0, 120)) + (q.message && q.message.length > 120 ? '…' : '') + '</td><td><span class="m-chip ' + esc(q.status || 'new') + '">' + esc(q.status || 'new') + '</span></td><td>' + (q.created_at ? q.created_at.slice(0, 10) : '—') + '</td></tr>';
+              return '<tr><td>' + esc(q.name || '-') + '<div style="font-size:11px;color:var(--manzil-muted);">' + esc(q.email || '') + '</div></td><td>' + esc(l.title || q.listing_id) + '</td><td style="max-width:400px;">' + esc((q.message || '').slice(0, 120)) + (q.message && q.message.length > 120 ? '…' : '') + '</td><td><span class="m-chip ' + esc(q.status || 'new') + '">' + esc(q.status || 'new') + '</span></td><td>' + (q.created_at ? q.created_at.slice(0, 10) : '-') + '</td></tr>';
             }).join('')
             + '</tbody></table></div>'
           : '<div class="m-empty-illustration m-mt-2"><div class="m-empty-illustration-mark">📨</div><p>No inquiries on your listings yet.</p></div>');
@@ -163,7 +163,7 @@
           ? '<div class="m-panel m-mt-2" style="background:white;border:1px solid var(--manzil-line);border-radius:10px;padding:0;overflow:auto;"><table class="m-table"><thead><tr><th>Listing</th><th>Current status</th><th>Action</th></tr></thead><tbody>'
             + items.map(function (l) {
               var s = l.status || 'active';
-              return '<tr><td>' + esc(l.title) + '</td><td><span class="m-status-chip ' + esc(s) + '">' + esc(s.replace('_',' ')) + '</span></td><td>' + (s === 'active' ? '<button class="m-btn m-btn--ghost m-btn--sm" data-pause="' + esc(l.id) + '">Pause</button>' : (s === 'paused' ? '<button class="m-btn m-btn--ghost m-btn--sm" data-unpause="' + esc(l.id) + '">Unpause</button>' : '—')) + '</td></tr>';
+              return '<tr><td>' + esc(l.title) + '</td><td><span class="m-status-chip ' + esc(s) + '">' + esc(s.replace('_',' ')) + '</span></td><td>' + (s === 'active' ? '<button class="m-btn m-btn--ghost m-btn--sm" data-pause="' + esc(l.id) + '">Pause</button>' : (s === 'paused' ? '<button class="m-btn m-btn--ghost m-btn--sm" data-unpause="' + esc(l.id) + '">Unpause</button>' : '-')) + '</td></tr>';
             }).join('')
             + '</tbody></table></div>'
           : '<div class="m-empty-illustration m-mt-2"><div class="m-empty-illustration-mark">📅</div><p>No listings to manage availability for.</p></div>');

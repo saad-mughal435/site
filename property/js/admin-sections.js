@@ -537,7 +537,7 @@
       + '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;"><h2 style="margin:0;">Inquiries</h2>'
       +   '<div class="m-flex-wrap">'
       +     '<select id="iq-filter" class="m-select"><option value="">All statuses</option><option value="new">New</option><option value="contacted">Contacted</option><option value="scheduled">Scheduled</option><option value="negotiating">Negotiating</option><option value="won">Won</option><option value="lost">Lost</option></select>'
-      +     '<select id="iq-score" class="m-select"><option value="">Any score</option><option value="hot">🔥 Hot (4–5)</option><option value="warm">◐ Warm (3)</option><option value="cold">🧊 Cold (1–2)</option></select>'
+      +     '<select id="iq-score" class="m-select"><option value="">Any score</option><option value="hot">🔥 Hot (4-5)</option><option value="warm">◐ Warm (3)</option><option value="cold">🧊 Cold (1-2)</option></select>'
       +     '<span id="iq-count" class="m-text-muted" style="font-size:13px;align-self:center;"></span>'
       +     '<button class="m-btn m-btn--ghost m-btn--sm" onclick="ManzilAdminActions.exportInquiries()">⤓ CSV</button>'
       +   '</div>'
@@ -678,7 +678,7 @@
           { name: 'agency_id', label: 'Agency', type: 'select', options: d.AGENCIES.map(function (g) { return { value: g.id, label: g.name }; }) },
           { name: 'specialisation', label: 'Specialisation' },
           { name: 'years_exp', label: 'Years experience', type: 'number', value: 3 },
-          { name: 'rating', label: 'Rating (0–5)', type: 'number', value: 4.5 },
+          { name: 'rating', label: 'Rating (0-5)', type: 'number', value: 4.5 },
           { name: 'phone', label: 'Phone' },
           { name: 'email', label: 'Email' },
           { name: 'bio', label: 'Bio', type: 'textarea' }
@@ -1112,7 +1112,7 @@
           return '<tr>'
             + '<td>' + (a.owner_photo ? '<img src="' + a.owner_photo + '" style="width:36px;height:36px;border-radius:999px;object-fit:cover;">' : '👤') + '</td>'
             + '<td><strong>' + esc(a.owner_name) + '</strong><div class="m-text-muted" style="font-size:11px;">' + esc(a.owner_id) + '</div></td>'
-            + '<td>' + esc(a.submitted_at || '—') + '</td>'
+            + '<td>' + esc(a.submitted_at || '-') + '</td>'
             + '<td>' + a.document_count + ' docs · ' + a.submitted_doc_count + ' awaiting</td>'
             + '<td><span class="m-status-chip ' + esc(a.status) + '">' + esc(a.status.replace('_',' ')) + '</span></td>'
             + '<td class="m-table-actions"><button class="m-btn m-btn--ghost m-btn--sm" onclick="ManzilAdminActions.openVerification(\'' + a.owner_id + '\')">Review →</button></td>'
@@ -1161,7 +1161,7 @@
             + '<td><img src="' + (l.photos && l.photos[0]) + '" style="width:54px;height:36px;object-fit:cover;border-radius:4px;"></td>'
             + '<td><strong>' + esc(l.title) + '</strong><div class="m-text-muted" style="font-size:11px;">' + esc(l.id) + '</div></td>'
             + '<td>' + aed(l.price_aed) + (l.transaction === 'rent' ? '/year' : '') + '</td>'
-            + '<td>' + (l.listed_at ? l.listed_at.slice(0,10) : '—') + '</td>'
+            + '<td>' + (l.listed_at ? l.listed_at.slice(0,10) : '-') + '</td>'
             + '<td><span class="m-status-chip ' + esc(s) + '">' + esc(s.replace('_',' ')) + '</span></td>'
             + '<td class="m-table-actions"><button class="m-btn m-btn--ghost m-btn--sm" onclick="ManzilAdminActions.openListingReview(\'' + l.id + '\')">Review →</button></td>'
             + '</tr>';
@@ -1202,7 +1202,7 @@
       drawer.innerHTML = ''
         + '<div class="m-drawer">'
         +   '<div class="m-drawer-head"><div style="display:flex;gap:12px;align-items:center;">' + (o && o.photo ? '<img src="' + o.photo + '" style="width:44px;height:44px;border-radius:999px;object-fit:cover;">' : '👤')
-        +     '<div><h3 style="margin:0;">' + esc(o ? o.name : '(unknown)') + '</h3><div class="m-text-muted" style="font-size:12px;">' + esc(a.owner_id) + ' · submitted ' + (a.submitted_at || '—') + ' · <span class="m-status-chip ' + esc(a.status) + '">' + esc(a.status.replace('_',' ')) + '</span></div></div></div>'
+        +     '<div><h3 style="margin:0;">' + esc(o ? o.name : '(unknown)') + '</h3><div class="m-text-muted" style="font-size:12px;">' + esc(a.owner_id) + ' · submitted ' + (a.submitted_at || '-') + ' · <span class="m-status-chip ' + esc(a.status) + '">' + esc(a.status.replace('_',' ')) + '</span></div></div></div>'
         +     '<button class="m-btn m-btn--ghost m-btn--sm" data-drawer-close aria-label="Close">×</button></div>'
         +   '<div class="m-drawer-body">'
         +     (a.notes_from_admin ? '<div class="m-doc-reject-reason" style="margin-bottom:14px;"><strong>Admin notes:</strong> ' + esc(a.notes_from_admin) + '</div>' : '')
@@ -1267,7 +1267,7 @@
         +     '<p>' + esc(l.description) + '</p>'
         +     '<table class="m-table" style="margin-top:14px;">'
         +       '<tr><td><strong>Type / Transaction</strong></td><td>' + esc(l.type) + ' · ' + esc(l.transaction) + '</td></tr>'
-        +       '<tr><td><strong>Area</strong></td><td>' + esc(((d.AREAS || []).find(function (a) { return a.id === l.area_id; }) || {}).name || '—') + '</td></tr>'
+        +       '<tr><td><strong>Area</strong></td><td>' + esc(((d.AREAS || []).find(function (a) { return a.id === l.area_id; }) || {}).name || '-') + '</td></tr>'
         +       '<tr><td><strong>Price</strong></td><td>' + aed(l.price_aed) + (l.transaction === 'rent' ? '/year' : '') + '</td></tr>'
         +       '<tr><td><strong>Beds / Baths / Sqft</strong></td><td>' + l.beds + ' / ' + l.baths + ' / ' + l.sqft + '</td></tr>'
         +       '<tr><td><strong>Amenities</strong></td><td>' + (l.amenities || []).map(esc).join(', ') + '</td></tr>'

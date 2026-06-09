@@ -1,4 +1,4 @@
-/* data.js — Nabta HR + payroll seed.
+/* data.js - Nabta HR + payroll seed.
  * UAE-flavoured HRIS: 32 employees across 4 departments, leave balances,
  * 6 months of WPS payroll runs, recruitment pipeline with 18 candidates,
  * performance review cycle in flight, HR policy KB. */
@@ -94,7 +94,7 @@
     });
   }
 
-  // Leave requests — 14 in various states
+  // Leave requests - 14 in various states
   var LEAVE_TYPES = ['Annual','Sick','Maternity','Paternity','Unpaid','Compassionate','Hajj/Umrah'];
   var LEAVE_STATUSES = ['pending','approved','rejected','taken'];
   var LEAVE = [];
@@ -127,7 +127,7 @@
     });
   }
 
-  // Payroll runs — last 6 months + current draft
+  // Payroll runs - last 6 months + current draft
   var PAYROLL_RUNS = [];
   for (var m = 6; m >= 0; m--) {
     var d = new Date(); d.setMonth(d.getMonth() - m); d.setDate(1);
@@ -181,7 +181,7 @@
     });
   }
 
-  // Performance review cycle — Q2 in progress
+  // Performance review cycle - Q2 in progress
   var REVIEWS = EMPLOYEES.slice(0, 12).map(function (e, i) {
     return {
       id: 'rv-' + e.id,
@@ -196,12 +196,12 @@
     };
   });
 
-  // HR Policy KB — used by AI policy assistant
+  // HR Policy KB - used by AI policy assistant
   var POLICIES = [
     { id: 'pol-leave', title: 'Annual leave policy', body: "All UAE-based full-time employees accrue 30 calendar days of paid annual leave per year, vesting monthly. Carry-over capped at 15 days into the next calendar year. Sick leave: 15 days fully paid + 30 days half-paid per year per UAE Labour Law. Notice for annual leave: 2 weeks for stretches under 5 days; 4 weeks for longer. Approval via line manager + HR." },
-    { id: 'pol-wps',   title: 'WPS (Wage Protection System)', body: "All salaries are paid through the UAE WPS via Emirates NBD on the 28th of each month (or last working day before). SIF file generated on the 26th. Mismatch tolerance is AED 1 per employee — anything larger flags a payroll re-run. Bonuses + commissions are paid in a separate WPS batch on the 15th of the following month." },
-    { id: 'pol-visa',  title: 'Visa & residency', body: "Sila Trading sponsors employment visas under our DED 1234567 trade licence. Visa renewal 60 days before expiry — HR initiates, finance covers the AED 850 fee. Employees on visa transfer must serve their existing notice + arrange entry permit. NOC issued by HR director on request. New hires must be onsite within 60 days of visa issuance." },
-    { id: 'pol-gratuity', title: 'End-of-service gratuity', body: "Per UAE Labour Law (Federal Decree-Law No. 33 of 2021): 21 days of base salary per year for the first 5 years + 30 days per year thereafter, capped at 2 years' total salary. Calculated on basic salary only — not allowances. Forfeited only in case of gross misconduct. Payable within 14 days of last working day." },
+    { id: 'pol-wps',   title: 'WPS (Wage Protection System)', body: "All salaries are paid through the UAE WPS via Emirates NBD on the 28th of each month (or last working day before). SIF file generated on the 26th. Mismatch tolerance is AED 1 per employee - anything larger flags a payroll re-run. Bonuses + commissions are paid in a separate WPS batch on the 15th of the following month." },
+    { id: 'pol-visa',  title: 'Visa & residency', body: "Sila Trading sponsors employment visas under our DED 1234567 trade licence. Visa renewal 60 days before expiry - HR initiates, finance covers the AED 850 fee. Employees on visa transfer must serve their existing notice + arrange entry permit. NOC issued by HR director on request. New hires must be onsite within 60 days of visa issuance." },
+    { id: 'pol-gratuity', title: 'End-of-service gratuity', body: "Per UAE Labour Law (Federal Decree-Law No. 33 of 2021): 21 days of base salary per year for the first 5 years + 30 days per year thereafter, capped at 2 years' total salary. Calculated on basic salary only - not allowances. Forfeited only in case of gross misconduct. Payable within 14 days of last working day." },
     { id: 'pol-probation', title: 'Probation', body: "All new hires serve a 6-month probation. During probation, termination notice from either side is 14 days. After confirmation, notice becomes 30 days (or 60 days for managers and above). Probation can be extended once by 3 months with HR director approval." },
     { id: 'pol-remote', title: 'Remote & hybrid work', body: "Hybrid baseline: 3 days office + 2 days remote per week. Fully remote requires VP + HR sign-off and applies to specific roles only (engineering ICs, customer success, design). Time-zone overlap requirement: at least 4 working hours overlap with Gulf Standard Time. Equipment provided by company; expensed home-office set-up capped at AED 2,500 per employee." }
   ];
@@ -225,7 +225,7 @@
     end_of_service_calc: 'UAE-Labour-2021',
     currency: 'AED',
     model: 'claude-haiku-4-5-20251001',
-    system_prompt: "You are Nabta, an HR policy AI assistant for a UAE company. Answer based on the company's HR policies + UAE Labour Law (Federal Decree-Law No. 33 of 2021). Cite the specific policy id [pol-xxx] at the end of sentences that lean on it. Be precise about numbers, dates, and procedures. Don't speculate where the policy is silent — say so and recommend asking HR."
+    system_prompt: "You are Nabta, an HR policy AI assistant for a UAE company. Answer based on the company's HR policies + UAE Labour Law (Federal Decree-Law No. 33 of 2021). Cite the specific policy id [pol-xxx] at the end of sentences that lean on it. Be precise about numbers, dates, and procedures. Don't speculate where the policy is silent - say so and recommend asking HR."
   };
 
   window.NABTA_DATA = {

@@ -1,5 +1,5 @@
 /* =========================================================================
-   Lahza — AI journaling + mood tracking · design system
+   Lahza - AI journaling + mood tracking · design system
    Warm-dusk palette: deep indigo + coral + cream + sage. Mood-charting scale
    from calm-blue → joyful-yellow → tense-amber → low-violet. All classes
    prefixed `lz-*`, all CSS vars `--lz-*`. Mobile-first.
@@ -22,7 +22,7 @@
   --lz-cream:      #faf0e6;
   --lz-sage:       #87a96b;
 
-  /* Mood palette — coloured dots + chart fills */
+  /* Mood palette - coloured dots + chart fills */
   --lz-mood-calm:      #4dabf7;
   --lz-mood-joyful:    #ffd43b;
   --lz-mood-energized: #51cf66;
@@ -48,7 +48,7 @@
   --lz-phone-radius: 56px;
   --lz-phone-bezel: 6px;
 
-  /* Layout — fixed positions used by app shell */
+  /* Layout - fixed positions used by app shell */
   --lz-topbar-h:    52px;
   --lz-tabbar-h:    64px;
 }
@@ -77,7 +77,7 @@ button { font-family: inherit; cursor: pointer; }
 input, textarea, select { font-family: inherit; }
 
 /* =========================================================================
-   The "phone" — fullscreen on mobile, framed on desktop
+   The "phone" - fullscreen on mobile, framed on desktop
    ========================================================================= */
 .lz-phone {
   position: relative;
@@ -90,7 +90,7 @@ input, textarea, select { font-family: inherit; }
 }
 .lz-phone-notch { display: none; }
 
-/* Desktop chrome — hidden on mobile */
+/* Desktop chrome - hidden on mobile */
 .lz-desktop-chrome { display: none; }
 
 @media (min-width: 720px) {
@@ -213,7 +213,7 @@ input, textarea, select { font-family: inherit; }
 }
 
 /* =========================================================================
-   App shell — top bar, scrollable body, fixed tab bar, floating FAB
+   App shell - top bar, scrollable body, fixed tab bar, floating FAB
    ========================================================================= */
 .lz-app {
   flex: 1 1 0;

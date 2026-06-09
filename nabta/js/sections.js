@@ -1,4 +1,4 @@
-/* sections.js — Nabta SPA shell + 9 section renderers. Hash-routed. */
+/* sections.js - Nabta SPA shell + 9 section renderers. Hash-routed. */
 (function () {
   'use strict';
   var D = window.NABTA_DATA;
@@ -387,9 +387,9 @@
       return '<tr><td><strong>' + esc(r.employee_name) + '</strong></td>'
         + '<td>' + esc(r.cycle) + '</td>'
         + '<td><span class="nbt-chip ' + r.status + '">' + esc(r.status.replace(/_/g, ' ')) + '</span></td>'
-        + '<td style="text-align:right;font-family:var(--nbt-mono);font-weight:700;">' + (r.rating || '—') + '</td>'
-        + '<td style="text-align:right;font-family:var(--nbt-mono);">' + (r.goals_met_pct ? r.goals_met_pct + '%' : '—') + '</td>'
-        + '<td>' + (r.submitted_at ? App.fmtDate(r.submitted_at) : '—') + '</td>'
+        + '<td style="text-align:right;font-family:var(--nbt-mono);font-weight:700;">' + (r.rating || '-') + '</td>'
+        + '<td style="text-align:right;font-family:var(--nbt-mono);">' + (r.goals_met_pct ? r.goals_met_pct + '%' : '-') + '</td>'
+        + '<td>' + (r.submitted_at ? App.fmtDate(r.submitted_at) : '-') + '</td>'
         + '</tr>';
     }).join('');
     host.innerHTML =
@@ -408,7 +408,7 @@
           + '<h3 style="margin-bottom:8px;">' + esc(p.title) + ' <small style="font-family:var(--nbt-mono);color:var(--nbt-muted);font-weight:400;font-size:11px;">[' + p.id + ']</small></h3>'
           + '<p style="margin:0;font-size:14px;line-height:1.65;color:var(--nbt-card-ink-2);">' + esc(p.body) + '</p>'
           + '</div>';
-      }).join('') + '<div style="margin-top:14px;padding:14px;background:var(--nbt-emerald-bg);border:1px solid var(--nbt-emerald-line);border-radius:10px;font-size:13px;color:var(--nbt-emerald-dark);">✦ Use the <strong>AI assistant</strong> to ask questions about these policies — Claude grounds every answer in this knowledge base + UAE Labour Law and cites which policy it leaned on.</div>';
+      }).join('') + '<div style="margin-top:14px;padding:14px;background:var(--nbt-emerald-bg);border:1px solid var(--nbt-emerald-line);border-radius:10px;font-size:13px;color:var(--nbt-emerald-dark);">✦ Use the <strong>AI assistant</strong> to ask questions about these policies - Claude grounds every answer in this knowledge base + UAE Labour Law and cites which policy it leaned on.</div>';
     });
   };
 

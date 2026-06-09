@@ -1,4 +1,4 @@
-/* driver.js — Driver-facing view. Simplified UI showing the current
+/* driver.js - Driver-facing view. Simplified UI showing the current
  * job, route, and complete/handover buttons. Identical state pattern as
  * the dispatcher console but stripped to one driver's queue. */
 (function () {

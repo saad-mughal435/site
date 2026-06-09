@@ -1,11 +1,11 @@
-/* mock-api.js — Marsad fetch interceptor for /marsad/api/*.
+/* mock-api.js - Marsad fetch interceptor for /marsad/api/*.
  *
  * Backs the dispatcher console + driver view + admin SPA. Reads from
  * MARSAD_DATA seed + MarsadSim live state (for vehicle positions and
  * order status) + localStorage overrides (admin edits, assignments,
  * notes, audit, settings overrides).
  *
- * CRITICAL: every regex route wraps the match assignment in parens —
+ * CRITICAL: every regex route wraps the match assignment in parens -
  * the operator-precedence lesson from POS/Watad. */
 (function () {
   'use strict';

@@ -1,4 +1,4 @@
-/* mock-api.js — Nabta fetch interceptor for /nabta/api/*. localStorage-backed
+/* mock-api.js - Nabta fetch interceptor for /nabta/api/*. localStorage-backed
  * with seed merge. Regex routes wrapped in parens (POS lesson). */
 (function () {
   'use strict';
@@ -65,7 +65,7 @@
       pending_leave: pendingLeave,
       open_roles: openRoles,
       visa_expiring_60d: visaExpiring,
-      next_payroll_label: nextPayroll ? nextPayroll.label : '—',
+      next_payroll_label: nextPayroll ? nextPayroll.label : '-',
       next_payroll_total: nextPayroll ? nextPayroll.net_total : 0
     };
   }

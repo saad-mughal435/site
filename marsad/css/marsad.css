@@ -1,5 +1,5 @@
 /* =========================================================================
-   Marsad — fleet / logistics dispatcher console · design system
+   Marsad - fleet / logistics dispatcher console · design system
    Deep navy + warm-orange accent + electric cyan highlights. Mirrors the
    look of real dispatch software (Aramex, Onfleet, Bringg). All classes
    prefixed `mrs-*`, all CSS vars `--mrs-*`. Inherits foundation tokens
@@ -18,7 +18,7 @@
   --mrs-muted:      #8896b3;
 
   /* Brand accents */
-  --mrs-coral:      #fb923c;        /* primary — logistics warm action */
+  --mrs-coral:      #fb923c;        /* primary - logistics warm action */
   --mrs-coral-2:    #f97316;
   --mrs-cyan:       #22d3ee;        /* live / online / data */
   --mrs-amber:      #fbbf24;        /* warning */

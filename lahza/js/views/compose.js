@@ -1,4 +1,4 @@
-/* compose.js — Full-screen writing modal. AI prompt suggestions, mood
+/* compose.js - Full-screen writing modal. AI prompt suggestions, mood
  * picker, tag chips, save. After save, AI mood-detect fires async so the
  * entry card immediately gets a mood dot. */
 (function () {

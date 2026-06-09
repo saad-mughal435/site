@@ -36,7 +36,7 @@
     return Math.floor(diff / 604800) + 'w ago';
   }
   function fmtUnit(value, unit, places) {
-    if (value == null) return '—';
+    if (value == null) return '-';
     if (places == null) places = (unit === 'kWh' || unit === 'V') ? 0 : 1;
     return Number(value).toFixed(places) + (unit ? (' ' + unit) : '');
   }
@@ -84,7 +84,7 @@
     return { el: bg, close: close };
   }
 
-  // SVG line chart helper — pure SVG, no library. Returns an SVG string.
+  // SVG line chart helper - pure SVG, no library. Returns an SVG string.
   // points: array of {x, y} in data space. xRange/yRange: [min, max].
   // w/h: pixel dimensions. opts: { line, area, grid, band }.
   function lineChart(points, opts) {

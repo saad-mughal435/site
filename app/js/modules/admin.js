@@ -1382,7 +1382,7 @@ function formatNumber(value) {
 export async function forceFullSync() {
     if (!confirm(
         'WARNING: This will DELETE all cached inventory transactions from MongoDB and re-fetch every record from Sage.\n\n' +
-        'This may take 30–60 seconds. The inventory transactions page will be empty until the sync completes.\n\n' +
+        'This may take 30-60 seconds. The inventory transactions page will be empty until the sync completes.\n\n' +
         'Are you sure you want to proceed?'
     )) {
         return;

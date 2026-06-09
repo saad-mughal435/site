@@ -1,4 +1,4 @@
-/* today.js — Today view. AI prompt of the day + streak ring + recent strip. */
+/* today.js - Today view. AI prompt of the day + streak ring + recent strip. */
 (function () {
   'use strict';
   window.LahzaViews = window.LahzaViews || {};
@@ -37,7 +37,7 @@
         +   '<circle class="lz-streak-ring-fill"  cx="48" cy="48" r="' + r + '" stroke-width="6" stroke-dasharray="' + cir.toFixed(1) + '" stroke-dashoffset="' + (cir * (1 - ringPct)).toFixed(1) + '"/>'
         + '</svg>';
 
-      var ctaLabel = alreadyToday ? '✓ Already written today — add another' : '+ Write today’s entry';
+      var ctaLabel = alreadyToday ? '✓ Already written today - add another' : '+ Write today’s entry';
       var recentHtml = entries.length === 0
         ? '<div class="lz-card" style="text-align:center;color:var(--lz-muted);font-size:13.5px;padding:20px;">No entries yet. Start tonight.</div>'
         : entries.slice(0, 4).map(function (e) { return entryRow(e); }).join('');

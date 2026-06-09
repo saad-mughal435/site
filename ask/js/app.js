@@ -35,7 +35,7 @@
     return { el: bg, close: close };
   }
 
-  // tiny toast — only loaded if not already present (the demo pages provide it,
+  // tiny toast - only loaded if not already present (the demo pages provide it,
   // the homepage doesn't).
   if (!window.toast) {
     window.toast = function (msg, kind, ms) {

@@ -1,4 +1,4 @@
-/* app.js — Lahza shared helpers. Exposes window.LahzaApp + window.toast. */
+/* app.js - Lahza shared helpers. Exposes window.LahzaApp + window.toast. */
 (function () {
   'use strict';
 
@@ -44,7 +44,7 @@
     }).then(function (r) { return r.json().then(function (body) { return { ok: r.ok, status: r.status, body: body }; }); });
   }
 
-  // Bottom-sheet modal — slides up from the bottom of the phone. Mobile-native feel.
+  // Bottom-sheet modal - slides up from the bottom of the phone. Mobile-native feel.
   function showSheet(opts) {
     var backdrop = document.getElementById('sheet-backdrop');
     var sheet = document.getElementById('sheet');
@@ -110,13 +110,13 @@
       var d = new Date(todayMidnight.getTime() - i * 86400000);
       var key = d.toISOString().slice(0, 10);
       if (seenDates.has(key)) streak++;
-      else if (i === 0) continue;  // today might not have an entry yet — don't break streak
+      else if (i === 0) continue;  // today might not have an entry yet - don't break streak
       else break;
     }
     return streak;
   }
 
-  // Cross-site portfolio-demo banner — load ONLY when Lahza is being viewed
+  // Cross-site portfolio-demo banner - load ONLY when Lahza is being viewed
   // as a portfolio demo in a normal browser tab. Skip when installed as a
   // standalone PWA (the banner shouldn't appear in someone's installed app)
   // and skip on mobile (the iPhone-frame chrome isn't shown there anyway).

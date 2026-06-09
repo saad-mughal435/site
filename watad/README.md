@@ -1,4 +1,4 @@
-# Watad — smart-building / BMS operations console
+# Watad - smart-building / BMS operations console
 
 A live operator console for a commercial smart building. Live SVG floor plan
 plotting equipment as icons, simulated BACnet/Modbus telemetry stream,
@@ -7,7 +7,7 @@ orders, ASHRAE-overlaid energy curves, and an AI copilot trained on BMS
 patterns (explain alarm, suggest preventive maintenance, optimise setpoints).
 
 Built to demonstrate the intersection of **electrical engineering + operations
-software** — the exact gap UAE facilities-management (Imdaad / EFS / Farnek),
+software** - the exact gap UAE facilities-management (Imdaad / EFS / Farnek),
 building-automation (Schneider / Honeywell / Siemens), and data-centre
 operations (Khazna) recruiters hire for.
 
@@ -18,7 +18,7 @@ operations (Khazna) recruiters hire for.
 | **Demo** | Default | Telemetry simulator + deterministic mock AI replies. Every feature works realistically. Topbar shows **Demo mode**. |
 | **Live** | Cloudflare Worker at `/api/watad/ai/*` deployed AND `ANTHROPIC_API_KEY` set | Real Claude responses (Haiku 4.5 default). Topbar shows **Live · Haiku 4.5**. |
 
-Re-uses the same `ANTHROPIC_API_KEY` secret as the Sanad demo — set once,
+Re-uses the same `ANTHROPIC_API_KEY` secret as the Sanad demo - set once,
 both demos use it.
 
 ## Files
@@ -32,16 +32,16 @@ watad/
 ├── energy.html                Energy dashboard
 ├── admin.html                 Admin SPA (11 sections)
 ├── 404.html                   Branded not-found
-├── css/watad.css              Design system — dark navy + electric cyan
+├── css/watad.css              Design system - dark navy + electric cyan
 └── js/
     ├── data.js                Seed: building + 4 floors + 24 zones + 48
     │                          assets + 182 points + 30 alarms + 15 WOs
-    ├── telemetry-sim.js       The real-time data engine — 5s tick,
+    ├── telemetry-sim.js       The real-time data engine - 5s tick,
     │                          plausible value mutation per asset class,
     │                          alarm raise/clear, 288-sample history buffer
     │                          per point from a seeded RNG
     ├── mock-api.js            Fetch interceptor for /watad/api/*
-    ├── ai-engine.js           WatadAI — 3 BMS features (explainAlarm,
+    ├── ai-engine.js           WatadAI - 3 BMS features (explainAlarm,
     │                          suggestMaintenance, optimizeSetpoints).
     │                          Live + mock fallback.
     ├── app.js                 Shared helpers (window.WatadApp)
@@ -60,7 +60,7 @@ watad/
 
 The Worker proxy is **not bundled** with this repo (Cloudflare's
 "Workers with Static Assets" configuration requires a dashboard-side mode
-switch that hasn't been toggled yet — see `sanad/README.md` for the
+switch that hasn't been toggled yet - see `sanad/README.md` for the
 documented reference Worker that handles both `/api/sanad/ai/*` and
 `/api/watad/ai/*`). Once that's in place:
 

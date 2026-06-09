@@ -1,18 +1,18 @@
-# Lahza — AI journaling + mood-tracking PWA
+# Lahza - AI journaling + mood-tracking PWA
 
-A mobile-first **Progressive Web App** for personal journaling: a daily AI-suggested prompt, a few sentences, and Claude surfaces the patterns across the week. Installable on iOS, Android, and desktop via "Add to Home Screen" — no App Store, no native code.
+A mobile-first **Progressive Web App** for personal journaling: a daily AI-suggested prompt, a few sentences, and Claude surfaces the patterns across the week. Installable on iOS, Android, and desktop via "Add to Home Screen" - no App Store, no native code.
 
 Part of the [saadm.dev](https://saadm.dev/) portfolio. Live at <https://saadm.dev/lahza/>.
 
 ## What's inside
 
-- **Onboarding** — 3 swipeable cards on first visit (welcome → goal → reminder time)
-- **Today** — AI-suggested journal prompt + streak ring + quick recent-entries strip
-- **Compose** — full-screen writing view with mood emoji picker, tag chips, prompt-cycling
-- **Journal feed** — chronological cards with mood dots, search, filter by mood/tag
-- **Insights** — 7-day mood line chart + theme tags + AI weekly summary card
-- **AI Coach** — chat grounded in the user's last 14 entries via RAG, citation chips that open the cited entry in a bottom sheet
-- **Profile** — streak, total entries, language (EN/AR), theme, reset-demo
+- **Onboarding** - 3 swipeable cards on first visit (welcome → goal → reminder time)
+- **Today** - AI-suggested journal prompt + streak ring + quick recent-entries strip
+- **Compose** - full-screen writing view with mood emoji picker, tag chips, prompt-cycling
+- **Journal feed** - chronological cards with mood dots, search, filter by mood/tag
+- **Insights** - 7-day mood line chart + theme tags + AI weekly summary card
+- **AI Coach** - chat grounded in the user's last 14 entries via RAG, citation chips that open the cited entry in a bottom sheet
+- **Profile** - streak, total entries, language (EN/AR), theme, reset-demo
 
 ## How it behaves on the site
 
@@ -24,14 +24,14 @@ Same fetch interceptor pattern as the other demos (`mock-api.js` shims `/lahza/a
 
 ## Privacy
 
-**Entries stay on the device.** They live in your browser's `localStorage` and never leave it — except when Live AI mode is configured, in which case the **active question** is sent to the Claude API via a Cloudflare Worker proxy (the entry text is included as context for that single call, then discarded). Settings → Reset demo wipes everything.
+**Entries stay on the device.** They live in your browser's `localStorage` and never leave it - except when Live AI mode is configured, in which case the **active question** is sent to the Claude API via a Cloudflare Worker proxy (the entry text is included as context for that single call, then discarded). Settings → Reset demo wipes everything.
 
 ## Live-mode setup (optional)
 
 The Worker proxy is not bundled with this repo. To enable real Claude responses:
 
 1. Cloudflare → Workers & Pages → site → Settings → Variables and Secrets.
-2. Add (or reuse) Encrypted Secret: `ANTHROPIC_API_KEY` (value set in the dashboard — never in code or this README).
+2. Add (or reuse) Encrypted Secret: `ANTHROPIC_API_KEY` (value set in the dashboard - never in code or this README).
 3. *(Optional)* Plain text variable: `LAHZA_DEFAULT_MODEL` (defaults to `claude-haiku-4-5-20251001`).
 4. The Worker needs to handle `/api/lahza/ai/*`. If the existing Worker already routes Sanad and Watad, append the snippet below as a parallel branch and redeploy.
 
@@ -94,12 +94,12 @@ lahza/
 │   ├── icon-192.png          PWA icon 192×192
 │   ├── icon-512.png          PWA icon 512×512
 │   └── icon-maskable-512.png Maskable icon for Android home-screen
-├── css/lahza.css             Design system — warm-dusk palette, mood scale, phone-frame chrome
+├── css/lahza.css             Design system - warm-dusk palette, mood scale, phone-frame chrome
 └── js/
     ├── data.js               Seed: 14 days of fabricated entries, mood pools, tag pool
     ├── mock-api.js           Fetch interceptor for /lahza/api/* (entries/streak/mood/insights/settings)
     ├── app.js                window.LahzaApp helpers (jget/jset, fmtDate, showSheet, toast, MOOD_*, computeStreak)
-    ├── ai-engine.js          window.LahzaAI — health, suggestPrompt, detectMood, weeklyInsights, coachChat
+    ├── ai-engine.js          window.LahzaAI - health, suggestPrompt, detectMood, weeklyInsights, coachChat
     ├── router.js             Hash-routed view switcher + bottom tab bar + onboarding gate
     └── views/
         ├── onboarding.js     3-card swipe onboarding
@@ -119,10 +119,10 @@ python -m http.server 8000
 # open http://127.0.0.1:8000/lahza/
 ```
 
-The service worker requires `https://` or `localhost` to register. On `127.0.0.1`, it works. PWA install prompts (Chrome / Edge) fire after a brief engagement period — refresh, click around, the install icon appears in the address bar.
+The service worker requires `https://` or `localhost` to register. On `127.0.0.1`, it works. PWA install prompts (Chrome / Edge) fire after a brief engagement period - refresh, click around, the install icon appears in the address bar.
 
 ## What it proves
 
-This is the **first mobile-shaped demo** in the saadm.dev portfolio (the other eight are desktop-first dashboards / marketplaces / admin SPAs). It's also the fourth AI integration in the portfolio after Sanad (customer support), Watad (industrial operations), and Ask Saad (recruiter Q&A) — same Cloudflare Worker, same encrypted-secret pattern, four products.
+This is the **first mobile-shaped demo** in the saadm.dev portfolio (the other eight are desktop-first dashboards / marketplaces / admin SPAs). It's also the fourth AI integration in the portfolio after Sanad (customer support), Watad (industrial operations), and Ask Saad (recruiter Q&A) - same Cloudflare Worker, same encrypted-secret pattern, four products.
 
 Four domains, one engineering foundation.

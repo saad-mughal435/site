@@ -1,4 +1,4 @@
-/* map.js — Leaflet wrapper for the dispatcher console map.
+/* map.js - Leaflet wrapper for the dispatcher console map.
  *
  * Lifts the Leaflet pattern from /property/ (Manzil) but uses different
  * pin types: vehicles (van/bike icons that move tick-by-tick), orders
@@ -71,7 +71,7 @@
       + '<small>' + escape(o.customer_name) + '</small>'
       + '</div>';
     var existing = orderLayers[o.id];
-    if (existing) {                                  // idempotent update — no remove/re-add, popup stays open
+    if (existing) {                                  // idempotent update - no remove/re-add, popup stays open
       existing.setIcon(L.divIcon({ html: orderIconHtml(o.status), iconSize: [16, 16], iconAnchor: [8, 8], className: '' }));
       existing.setPopupContent(popup);
       return existing;

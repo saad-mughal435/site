@@ -1,6 +1,6 @@
-/* ai-engine.js — Nabta AI Policy Assistant.
+/* ai-engine.js - Nabta AI Policy Assistant.
  *
- * One core feature: policyChat({ question, history }) — RAG over the
+ * One core feature: policyChat({ question, history }) - RAG over the
  * 6 HR policies + UAE Labour Law facts, returns a grounded answer with
  * [pol-xxx] citation chips. Same Live/Mock fallback pattern. */
 (function () {
@@ -53,7 +53,7 @@
     var retrieved = (opts && opts.context && opts.context.retrieved) || [];
     // Keyword-driven replies grounded in retrieved policies
     if (/leave|annual leave|sick leave|carry over/.test(q)) {
-      return "Annual leave at Sila is **30 calendar days** per year, vesting monthly, with up to 15 days carryable into the next year. Sick leave is 15 days fully paid + 30 half-paid per UAE Labour Law. Submit via the Leave module — line manager + HR approval. [pol-leave]";
+      return "Annual leave at Sila is **30 calendar days** per year, vesting monthly, with up to 15 days carryable into the next year. Sick leave is 15 days fully paid + 30 half-paid per UAE Labour Law. Submit via the Leave module - line manager + HR approval. [pol-leave]";
     }
     if (/wps|salary|payroll|pay day|sif/.test(q)) {
       return "WPS is processed via Emirates NBD on the **28th** of each month (or the last working day before). SIF file is generated on the **26th** by Finance. Bonuses run separately on the 15th of the following month. Mismatch tolerance: AED 1 per employee. [pol-wps]";
@@ -62,7 +62,7 @@
       return "Visa renewals are initiated by HR **60 days** before expiry; the AED 850 fee is covered by Finance. NOC for transfers is issued by the HR director on request. New hires on a visa transfer must serve their existing notice and arrange an entry permit before joining. [pol-visa]";
     }
     if (/gratuity|end of service|eosb|severance/.test(q)) {
-      return "End-of-service gratuity follows UAE Labour Law (Federal Decree-Law No. 33 of 2021): **21 days** of basic salary per year for the first 5 years, then **30 days** per year thereafter, capped at 2 years' total salary. Calculated on basic salary only — allowances are excluded. Payable within 14 days of last working day. [pol-gratuity]";
+      return "End-of-service gratuity follows UAE Labour Law (Federal Decree-Law No. 33 of 2021): **21 days** of basic salary per year for the first 5 years, then **30 days** per year thereafter, capped at 2 years' total salary. Calculated on basic salary only - allowances are excluded. Payable within 14 days of last working day. [pol-gratuity]";
     }
     if (/probation|new hire/.test(q)) {
       return "Probation is **6 months**. Notice during probation is 14 days from either side; after confirmation, notice rises to 30 days (60 days for managers and above). Probation can be extended once by 3 months with HR director approval. [pol-probation]";
@@ -74,14 +74,14 @@
       var top = retrieved[0];
       return "Looking at our **" + top.title.toLowerCase() + "** policy: " + top.body.split('.')[0] + ". [" + top.id + "] For the full details, open the linked policy or ask HR directly.";
     }
-    return "I don't have a clear policy on that one in my knowledge base. Best to ask HR directly (hr@sila.demo) — they'll pull the current procedure and reply within a business day.";
+    return "I don't have a clear policy on that one in my knowledge base. Best to ask HR directly (hr@sila.demo) - they'll pull the current procedure and reply within a business day.";
   }
 
   var SYS_TMPL = [
     "You are Nabta, an HR policy AI assistant for Sila Trading FZ-LLC, a UAE-based company.",
     "Answer the visitor's question based on the COMPANY POLICIES below + UAE Labour Law (Federal Decree-Law No. 33 of 2021).",
     "Cite specific policies by their [pol-xxx] id at the end of any sentence that uses them.",
-    "Be precise about numbers, dates, and procedures — don't generalise.",
+    "Be precise about numbers, dates, and procedures - don't generalise.",
     "If the policies are silent on the topic, say so plainly and recommend asking HR (hr@sila.demo).",
     "Keep replies under 80 words. Direct, professional voice.",
     "",

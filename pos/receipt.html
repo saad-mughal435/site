@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Receipt — Qahwa POS</title>
+<title>Receipt - Qahwa POS</title>
 <meta name="robots" content="noindex" />
 <meta name="theme-color" content="#faf6ef" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2064%2064'%3E%3Crect%20width%3D'64'%20height%3D'64'%20rx%3D'14'%20fill%3D'%23faf6ef'/%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20font-family%3D'serif'%20font-weight%3D'700'%20font-size%3D'30'%20fill%3D'%232a1f17'%20text-anchor%3D'middle'%3ER%3C/text%3E%3C/svg%3E" />
@@ -65,7 +65,7 @@
               window.POS_DATA.MODIFIER_GROUPS.forEach(function (g) { var opt = g.options.find(function (o) { return o.id === oid; }); if (opt) found = opt.label; });
               return found || '';
             }).filter(Boolean).join(', ');
-            mods = mods ? '<div style="font-size:11px;color:var(--pos-muted-light);padding-inline-start:18px;">— ' + esc(mods) + '</div>' : '';
+            mods = mods ? '<div style="font-size:11px;color:var(--pos-muted-light);padding-inline-start:18px;">- ' + esc(mods) + '</div>' : '';
           }
           return '<div class="pos-receipt-line"><span>' + l.qty + '× ' + esc(p.name) + '</span><span>' + money(l.line_total || l.unit_price * l.qty).replace('AED ', '') + '</span></div>' + mods;
         }).join('')

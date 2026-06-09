@@ -135,7 +135,7 @@
   }
   function fmtDateRange(a, b) {
     if (!a || !b) return '';
-    return fmtDate(a) + ' – ' + fmtDate(b);
+    return fmtDate(a) + ' - ' + fmtDate(b);
   }
 
   /* ---------- Quote / price breakdown ---------- */

@@ -110,8 +110,8 @@
           +   '<table class="snd-table">'
           +     '<thead><tr><th>Subject</th><th>Customer</th><th>Category</th><th>Status</th><th>Assignee</th><th>Updated</th><th></th></tr></thead>'
           +     '<tbody>' + (rows.length ? rows.map(function (c) {
-                  var cu = custMap[c.customer_id] || { name: '—' };
-                  var cat = catMap[c.category_id] || { name: '—' };
+                  var cu = custMap[c.customer_id] || { name: '-' };
+                  var cat = catMap[c.category_id] || { name: '-' };
                   var ag = agMap[c.assignee_id] || null;
                   return '<tr>'
                     + '<td><div style="font-weight:600;">' + esc(c.subject) + '</div><div style="font-size:11.5px;color:var(--snd-muted-light);">' + esc((c.preview || '').slice(0, 90)) + '</div></td>'
@@ -151,7 +151,7 @@
           +   '<table class="snd-table">'
           +     '<thead><tr><th>Title</th><th>Category</th><th style="text-align:right;">Views</th><th style="text-align:right;">Helpful</th><th>Published</th><th></th></tr></thead>'
           +     '<tbody>' + arts.map(function (a) {
-                  var cat = catMap[a.category_id] || { name: '—', icon: '' };
+                  var cat = catMap[a.category_id] || { name: '-', icon: '' };
                   var score = (a.helpful_up || 0) - (a.helpful_down || 0);
                   return '<tr>'
                     + '<td style="font-weight:600;">' + esc(a.title) + '</td>'
@@ -174,7 +174,7 @@
             onMount: function (el) {
               SanadAI.findKbGaps().then(function (r) {
                 el.querySelector('#gap-body').innerHTML =
-                  (r.fallback ? '<div class="snd-mode-badge" style="margin-bottom:10px;">mock — enable live AI for real analysis</div>' : '')
+                  (r.fallback ? '<div class="snd-mode-badge" style="margin-bottom:10px;">mock - enable live AI for real analysis</div>' : '')
                   + '<div style="font-size:14px;">' + SanadApp.md(r.suggestions_md) + '</div>';
               });
             }
@@ -469,7 +469,7 @@
         '<div class="snd-kpi-grid" style="margin-bottom:18px;">'
         +   '<div class="snd-kpi"><div class="snd-kpi-label">Conversations (all time)</div><div class="snd-kpi-value">' + convs.length + '</div></div>'
         +   '<div class="snd-kpi"><div class="snd-kpi-label">AI calls</div><div class="snd-kpi-value">' + callLogs.length + '</div></div>'
-        +   '<div class="snd-kpi"><div class="snd-kpi-label">Satisfaction (👍/👎)</div><div class="snd-kpi-value" style="color:' + (satPct == null ? 'var(--snd-muted-light)' : satPct > 70 ? 'var(--snd-mint-2)' : satPct > 40 ? 'var(--snd-amber)' : 'var(--snd-rose)') + ';">' + (satPct == null ? '—' : satPct + '%') + '</div><div class="snd-kpi-sub">' + ups + ' up · ' + downs + ' down</div></div>'
+        +   '<div class="snd-kpi"><div class="snd-kpi-label">Satisfaction (👍/👎)</div><div class="snd-kpi-value" style="color:' + (satPct == null ? 'var(--snd-muted-light)' : satPct > 70 ? 'var(--snd-mint-2)' : satPct > 40 ? 'var(--snd-amber)' : 'var(--snd-rose)') + ';">' + (satPct == null ? '-' : satPct + '%') + '</div><div class="snd-kpi-sub">' + ups + ' up · ' + downs + ' down</div></div>'
         +   '<div class="snd-kpi"><div class="snd-kpi-label">Fallback rate</div><div class="snd-kpi-value" style="color:' + (fallbackPct > 30 ? 'var(--snd-amber)' : 'var(--snd-mint-2)') + ';">' + fallbackPct + '%</div><div class="snd-kpi-sub">mock vs live</div></div>'
         +   '<div class="snd-kpi"><div class="snd-kpi-label">Avg latency</div><div class="snd-kpi-value">' + avgLatency + ' ms</div></div>'
         +   '<div class="snd-kpi"><div class="snd-kpi-label">Total cost (mock $)</div><div class="snd-kpi-value">$' + totalCost.toFixed(3) + '</div></div>'
@@ -494,7 +494,7 @@
         +     '<h3 style="margin-bottom:10px;">AI calls by feature</h3>'
         +     '<table class="snd-table"><thead><tr><th>Feature</th><th style="text-align:right;">Calls</th><th style="text-align:right;">Sat.</th></tr></thead><tbody>' + Object.keys(byFeature).map(function (f) {
                 var s = byFeatureSat[f];
-                var sat = s ? Math.round(s.up / (s.up + s.down) * 100) + '%' : '—';
+                var sat = s ? Math.round(s.up / (s.up + s.down) * 100) + '%' : '-';
                 return '<tr><td style="font-weight:600;">' + esc(f) + '</td><td style="text-align:right;font-family:var(--font-mono);">' + byFeature[f] + '</td><td style="text-align:right;font-family:var(--font-mono);color:' + (s ? (s.up >= s.down ? 'var(--snd-mint-2)' : 'var(--snd-rose)') : 'var(--snd-muted-light)') + ';">' + sat + '</td></tr>';
               }).join('') + '</tbody></table>'
         +   '</div>'

@@ -473,7 +473,7 @@
         return;
       }
       paintStatus('paid');
-      markPaidBtn.remove();  // pending is gone — drop the button
+      markPaidBtn.remove();  // pending is gone - drop the button
       window.toast(`Order ${order.number || order.id} marked as paid`, 'success');
     });
 

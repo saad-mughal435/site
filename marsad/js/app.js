@@ -1,4 +1,4 @@
-/* app.js — Marsad shared helpers. Exposes window.MarsadApp. */
+/* app.js - Marsad shared helpers. Exposes window.MarsadApp. */
 (function () {
   'use strict';
   (function () { var s = document.createElement('script'); s.src = '/assets/portfolio-banner.js?v=20260514'; s.async = true; document.head.appendChild(s); })();
@@ -36,7 +36,7 @@
     return Math.floor(d / 86400) + 'd ago';
   }
   function fmtMoney(n, currency) {
-    if (n == null) return '—';
+    if (n == null) return '-';
     return (currency || 'AED') + ' ' + Number(n).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 });
   }
 

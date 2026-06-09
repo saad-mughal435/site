@@ -1,4 +1,4 @@
-# Cloudflare Pages — URL rewrites/redirects
+# Cloudflare Pages - URL rewrites/redirects
 # https://developers.cloudflare.com/pages/configuration/redirects/
 
 # If the live app's early auth gate ever fires before the bootstrap seeds
@@ -14,14 +14,14 @@
 # falls through to the 404 page. A proper fix would be a Workers single-page
 # -app asset handler, not a redirect rule.
 
-# Friendly URLs — permanent vanity shortcuts, so 301 (consolidates link equity
+# Friendly URLs - permanent vanity shortcuts, so 301 (consolidates link equity
 # from anything that links /cv, /resume, etc. onto the real page).
 /cv            /contact.html    301
 /resume        /contact.html    301
 /take-demo     /demo.html       301
 
 # Manzil Properties demo aliases
-# Note: do NOT add /property/admin → /property/admin.html — Cloudflare Pages
+# Note: do NOT add /property/admin → /property/admin.html - Cloudflare Pages
 # already serves admin.html when /property/admin is requested, and adding a
 # redirect causes a loop (CF strips .html → 307 to /admin, our rule sent it
 # back to /admin.html → loop).

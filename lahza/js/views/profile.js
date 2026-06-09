@@ -1,4 +1,4 @@
-/* profile.js — Profile + settings: streak, total entries, language, theme, reset. */
+/* profile.js - Profile + settings: streak, total entries, language, theme, reset. */
 (function () {
   'use strict';
   window.LahzaViews = window.LahzaViews || {};
@@ -39,7 +39,7 @@
       +   '<div class="lz-card" style="display:flex;align-items:center;justify-content:space-between;gap:10px;">'
       +     '<div>'
       +       '<div style="font-size:14px;font-weight:600;">' + esc(aiLabel) + '</div>'
-      +       '<div style="font-size:11.5px;color:var(--lz-muted);margin-top:2px;">' + (ai.live ? 'Real Claude via Worker proxy' : 'Deterministic mock — see README for Live setup') + '</div>'
+      +       '<div style="font-size:11.5px;color:var(--lz-muted);margin-top:2px;">' + (ai.live ? 'Real Claude via Worker proxy' : 'Deterministic mock - see README for Live setup') + '</div>'
       +     '</div>'
       +     '<span class="lz-mood-chip"' + (ai.live ? ' style="background:rgba(81,207,102,0.18);color:var(--lz-mood-energized);"' : '') + '>' + esc(ai.live ? 'LIVE' : 'DEMO') + '</span>'
       +   '</div>'
@@ -124,7 +124,7 @@
     return 'YOU';
   }
   function earliestDate(entries) {
-    if (!entries.length) return '—';
+    if (!entries.length) return '-';
     var oldest = entries[entries.length - 1];
     return new Date(oldest.ts).toLocaleDateString('en', { month: 'short', day: 'numeric', year: 'numeric' });
   }

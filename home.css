@@ -1,6 +1,6 @@
 /* =============================================================================
-   saadm.dev — Homepage (React build)
-   "Operations console" — a premium dual-theme system. Deep-ink glass + glow by
+   saadm.dev - Homepage (React build)
+   "Operations console" - a premium dual-theme system. Deep-ink glass + glow by
    default (dark), with a clean bright neutral light theme. Space Grotesk display,
    Inter body, JetBrains Mono for labels/data. A single accent (blueprint blue →
    teal gradient), glass panels, animated borders, soft glows. Theme is driven by
@@ -10,7 +10,7 @@
 :root,
 :root[data-theme="dark"] {
   /* ---- Surfaces ---------------------------------------------------------- */
-  --bg:          #07080d;   /* page — deep ink                          */
+  --bg:          #07080d;   /* page - deep ink                          */
   --bg-2:        #0b0e16;   /* recessed bands                           */
   --card:        linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.008));
   --card-solid:  #0d1019;   /* opaque card (timeline, demo)             */
@@ -32,7 +32,7 @@
   --grid:        rgba(255,255,255,0.04);
 
   /* ---- Accent ------------------------------------------------------------ */
-  --accent:      #6e8eff;   /* blueprint blue — the one accent          */
+  --accent:      #6e8eff;   /* blueprint blue - the one accent          */
   --accent-h:    #88a2ff;   /* hover                                    */
   --accent-press:#5170e6;   /* pressed                                  */
   --teal:        #5eead4;
@@ -137,7 +137,7 @@ body::before {
           mask-image: radial-gradient(ellipse 92% 60% at 50% 0%, #000 32%, transparent 100%);
   pointer-events: none;
 }
-/* Soft, STATIC accent glows — a calm professional backdrop (no animation). */
+/* Soft, STATIC accent glows - a calm professional backdrop (no animation). */
 body::after {
   content: "";
   position: fixed; inset: 0;
@@ -157,13 +157,13 @@ strong { font-weight: 600; color: var(--text); }
 
 .container { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gutter); }
 
-/* Every grid child can shrink — kills overflow from long mono/text content. */
+/* Every grid child can shrink - kills overflow from long mono/text content. */
 .hero > *, .stats > *, .about-grid > *, .projects-grid > *,
 .skills-grid > *, .contact-box > *, .hero-meta > *,
 .skill-card > .skill-chips > .skill-chip, .project > * { min-width: 0; }
 
 /* =============================================================================
-   REVEAL — scroll-triggered, calm
+   REVEAL - scroll-triggered, calm
    ============================================================================= */
 .reveal {
   opacity: 0;
@@ -188,7 +188,7 @@ strong { font-weight: 600; color: var(--text); }
 .stagger.inView > *:nth-child(7) { transition-delay: 450ms; }
 .stagger.inView > *:nth-child(8) { transition-delay: 510ms; }
 
-/* Word-by-word heading reveal — subtle. */
+/* Word-by-word heading reveal - subtle. */
 .word-reveal { display: inline; }
 .word-reveal .wr-word {
   display: inline-block;
@@ -198,7 +198,7 @@ strong { font-weight: 600; color: var(--text); }
 }
 .word-reveal.inView .wr-word { opacity: 1; transform: none; }
 
-/* Scroll progress — gradient hairline along the very top. */
+/* Scroll progress - gradient hairline along the very top. */
 .scroll-progress {
   position: fixed; top: 0; left: 0; right: 0;
   height: 2px;
@@ -210,7 +210,7 @@ strong { font-weight: 600; color: var(--text); }
 }
 
 /* =============================================================================
-   NAV — glass header that frosts on scroll
+   NAV - glass header that frosts on scroll
    ============================================================================= */
 .nav {
   position: sticky; top: 0; z-index: 50;
@@ -262,7 +262,7 @@ strong { font-weight: 600; color: var(--text); }
 .nav-links a:hover::after, .nav-links a.active::after { right: 0; }
 .nav-links a.active { color: var(--text); }
 
-/* Theme toggle — sun/moon pill */
+/* Theme toggle - sun/moon pill */
 .theme-toggle {
   flex: none;
   width: 40px; height: 40px;
@@ -357,7 +357,7 @@ strong { font-weight: 600; color: var(--text); }
   100% { box-shadow: 0 0 0 0 rgba(52,211,153,0); }
 }
 
-/* View toggle — "tailored for:" + segmented pills with a sliding indicator */
+/* View toggle - "tailored for:" + segmented pills with a sliding indicator */
 .view-toggle-wrap { display: flex; align-items: center; gap: 13px; margin-bottom: 26px; flex-wrap: wrap; }
 .view-toggle-hint {
   font-family: var(--mono); font-size: 10.5px; letter-spacing: 1.6px;
@@ -392,7 +392,7 @@ strong { font-weight: 600; color: var(--text); }
   z-index: 0;
 }
 
-/* Hero title — Space Grotesk, the centrepiece */
+/* Hero title - Space Grotesk, the centrepiece */
 .hero-title {
   font-family: var(--display);
   font-weight: 600;
@@ -412,7 +412,7 @@ strong { font-weight: 600; color: var(--text); }
 .hero-title .line:nth-child(1) span { animation-delay: 120ms; }
 .hero-title .line:nth-child(2) span { animation-delay: 300ms; }
 @keyframes titleRise { to { transform: none; } }
-/* Emphasised line — gradient clip */
+/* Emphasised line - gradient clip */
 .grad {
   display: inline-block;
   background: var(--grad);
@@ -451,7 +451,7 @@ strong { font-weight: 600; color: var(--text); }
 .arrow { transition: transform var(--t) var(--ease); }
 .btn:hover .arrow { transform: translateX(4px); }
 
-/* Hero meta — small spec table */
+/* Hero meta - small spec table */
 .hero-meta {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -475,7 +475,7 @@ strong { font-weight: 600; color: var(--text); }
 .view-fade { animation: viewFade 0.45s var(--ease); }
 @keyframes viewFade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
-/* Hero photo — framed plate with crop ticks + caption */
+/* Hero photo - framed plate with crop ticks + caption */
 .hero-photo {
   margin: 0; width: 100%; max-width: 360px;
   position: relative;
@@ -518,7 +518,7 @@ strong { font-weight: 600; color: var(--text); }
 }
 
 /* =============================================================================
-   STATS — measured readout row
+   STATS - measured readout row
    ============================================================================= */
 .stats {
   display: grid;
@@ -556,7 +556,7 @@ strong { font-weight: 600; color: var(--text); }
 .stat-lbl { font-size: 13px; color: var(--text-soft); line-height: 1.45; }
 
 /* =============================================================================
-   SECTIONS — heads with figure tags
+   SECTIONS - heads with figure tags
    ============================================================================= */
 .section { padding: 96px 30px; scroll-margin-top: 86px; position: relative; }
 .section-head { max-width: 760px; margin-bottom: 46px; }
@@ -611,7 +611,7 @@ strong { font-weight: 600; color: var(--text); }
 }
 .tag:hover { border-color: var(--border-acc); color: var(--accent); transform: translateY(-1px); }
 
-/* Aside "quick facts" — glass index card */
+/* Aside "quick facts" - glass index card */
 .aside-card {
   background: var(--card);
   border: 1px solid var(--border);
@@ -636,7 +636,7 @@ strong { font-weight: 600; color: var(--text); }
 .aside-card dd { margin: 0; font-size: 13.5px; color: var(--text); }
 
 /* =============================================================================
-   EXPERIENCE — timeline
+   EXPERIENCE - timeline
    ============================================================================= */
 .timeline { list-style: none; margin: 0; padding: 0 0 0 4px; position: relative; }
 .timeline::before {
@@ -676,7 +676,7 @@ strong { font-weight: 600; color: var(--text); }
 /* =============================================================================
    PROJECTS
    ============================================================================= */
-/* Flagship work — full-width feature cards (the demos live in their own slider). */
+/* Flagship work - full-width feature cards (the demos live in their own slider). */
 .projects-grid { display: grid; grid-template-columns: 1fr; gap: 24px; align-items: start; }
 .projects-grid > .project-section-heading { grid-column: 1 / -1; }
 @media (min-width: 760px) {
@@ -732,7 +732,7 @@ strong { font-weight: 600; color: var(--text); }
 .project-bullets li::before { content: "→"; color: var(--accent); position: absolute; left: 0; top: 0; }
 .project-bullets strong { color: var(--text); }
 .project-bullets code { font-family: var(--mono); background: var(--surface); border: 1px solid var(--border); border-radius: 5px; padding: 0 5px; font-size: 0.92em; color: var(--text); }
-/* Quiet tags — keep every tag, drop the visual noise (no fills, muted, smaller). */
+/* Quiet tags - keep every tag, drop the visual noise (no fills, muted, smaller). */
 .project-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
 .project-tags .tag { font-size: 10.5px; padding: 3px 9px; background: transparent; border-color: var(--border); color: var(--text-mute); }
 .project-tags .tag:hover { color: var(--text-soft); border-color: var(--border-2); transform: none; }
@@ -743,7 +743,7 @@ strong { font-weight: 600; color: var(--text); }
 .cta-tip em { font-style: normal; color: var(--accent); }
 
 /* =============================================================================
-   DEMOS — 3-column grid of compact demo cards (equal-height rows)
+   DEMOS - 3-column grid of compact demo cards (equal-height rows)
    ============================================================================= */
 .demos-sub { color: var(--text-soft); font-size: 14.5px; line-height: 1.6; margin: 14px 0 0; max-width: 70ch; }
 .demos-sub a { color: var(--link); text-decoration: underline; text-underline-offset: 2px; }
@@ -888,7 +888,7 @@ a.contact-v:hover { color: var(--accent-h); }
 @media print { .back-to-top { display: none !important; } }
 
 /* =============================================================================
-   SOCIAL RAIL — fixed left contact links (glass, theme-matched)
+   SOCIAL RAIL - fixed left contact links (glass, theme-matched)
    ============================================================================= */
 .social-rail {
   position: fixed; left: 18px; top: 50%; transform: translateY(-50%);

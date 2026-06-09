@@ -1,4 +1,4 @@
-/* router.js — Lahza hash router + bottom tab bar.
+/* router.js - Lahza hash router + bottom tab bar.
  * Routes: #today (default), #journal, #insights, #coach, #profile, #compose.
  * Compose is a full-screen modal-style view that overlays the app and has
  * its own back button (handled by views/compose.js). */
@@ -15,7 +15,7 @@
 
   function currentRoute() {
     var h = (window.location.hash || '#today').replace('#', '').split('/')[0];
-    // 'compose' is an overlay state — render the previously active tab too
+    // 'compose' is an overlay state - render the previously active tab too
     if (h === 'compose') return h;
     return TABS.find(function (t) { return t.id === h; }) ? h : 'today';
   }
@@ -69,7 +69,7 @@
     fab.addEventListener('click', function () { window.location.hash = 'compose'; });
   }
 
-  // Onboarding gate — shown on first visit
+  // Onboarding gate - shown on first visit
   function onboardingGate(after) {
     var s = window.LahzaApp.jget('lahza.settings', null) || window.LAHZA_DATA.SETTINGS;
     if (s.onboarded) return after();

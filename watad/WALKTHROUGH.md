@@ -8,9 +8,9 @@ between steps.**
 
 Each step lists:
 
-- **Do this** — the click / URL
-- **You'll see** — the visible result you can verify
-- **Under the hood** — what the code is actually doing (skip on first pass)
+- **Do this** - the click / URL
+- **You'll see** - the visible result you can verify
+- **Under the hood** - what the code is actually doing (skip on first pass)
 
 ---
 
@@ -20,7 +20,7 @@ Each step lists:
 |---|---|
 | **URL** | <https://saadm.dev/watad/> |
 | **Aliases** | `/bms` → console · `/building` → landing · `/facilities` → console |
-| **Mode** | Demo (default) — deterministic mock AI replies + simulated telemetry. **Live mode** is one Cloudflare Worker secret away; see `watad/README.md`. |
+| **Mode** | Demo (default) - deterministic mock AI replies + simulated telemetry. **Live mode** is one Cloudflare Worker secret away; see `watad/README.md`. |
 | **Browser** | Chrome / Edge / Safari / Firefox. **Tablet+ landscape recommended** (full floor-plan layout). Phones get a stacked fallback. |
 | **State** | Lives in `localStorage` under `watad.*` keys. The admin **Settings → Reset demo data** button wipes it. |
 | **Audio** | The console plays a Web Audio chime on every new urgent / critical alarm. Modern browsers require **at least one click on the page first** to unlock audio. |
@@ -30,14 +30,14 @@ tab and the demo open in another.
 
 ---
 
-## Step 1 — Landing page
+## Step 1 - Landing page
 
 **Do this:** open <https://saadm.dev/watad/>.
 
 **You'll see:**
 
 - Hero with headline *"Building operations, live on a floor plan."*
-- Three CTAs in the hero — **Open operations console**, **Energy dashboard**, **Open admin**.
+- Three CTAs in the hero - **Open operations console**, **Energy dashboard**, **Open admin**.
 - A mocked chiller-summary card on the right (CH-1, CHWS 44.2 °F, condenser 94.2 °F ⚠, AI snippet).
 - A mode badge top-right reading **Demo mode** (or **Live · Haiku 4.5** if the Worker proxy is configured).
 - Six explainer cards: live floor plan · simulated BACnet/Modbus stream · alarm management · predictive-maintenance WOs · energy dashboard · industrial AI copilot.
@@ -50,7 +50,7 @@ tab and the demo open in another.
 
 ---
 
-## Step 2 — Operations console · first paint
+## Step 2 - Operations console · first paint
 
 **Do this:** click **Open operations console** (or go to
 <https://saadm.dev/watad/console.html>).
@@ -59,17 +59,17 @@ tab and the demo open in another.
 
 - **Topbar:** Watad brand · Console / Work orders / Energy / Admin nav · BACnet status pill ("3 trunks · 182 points · gateway online") · Demo / Live mode badge.
 - **KPI strip (second row):**
-  - 🔴 **Active alarms** — at least **5 active** (the three time-of-day-insensitive seeded alarms always fire: CH-1 condenser high, CT-1 basin critical, L2 boardroom CO₂ over 1000 ppm — plus AHU-L2 filter ΔP warning and main-meter low PF warning).
-  - ⚡ **Real power** — live kW reading from the main meter, e.g. *242.3 kW*.
-  - 🌡 **Avg zone temp** — averaged across all `zone_temp` points, e.g. *73.4 °F*.
-  - 👥 **Occupancy** — % of occupancy sensors currently reading "present".
-  - 🌳 **Today kgCO₂** — `today_kwh × 0.4032` (UAE grid factor from settings).
+  - 🔴 **Active alarms** - at least **5 active** (the three time-of-day-insensitive seeded alarms always fire: CH-1 condenser high, CT-1 basin critical, L2 boardroom CO₂ over 1000 ppm - plus AHU-L2 filter ΔP warning and main-meter low PF warning).
+  - ⚡ **Real power** - live kW reading from the main meter, e.g. *242.3 kW*.
+  - 🌡 **Avg zone temp** - averaged across all `zone_temp` points, e.g. *73.4 °F*.
+  - 👥 **Occupancy** - % of occupancy sensors currently reading "present".
+  - 🌳 **Today kgCO₂** - `today_kwh × 0.4032` (UAE grid factor from settings).
 - **Main canvas:** Level 1 floor plan rendered as SVG with grid background, zone outlines, zone labels (Acme · East, Nour Legal, etc.), and equipment icons positioned at absolute pixel coordinates. Floor switcher above ("Roof / MEP", "Level 2", "Level 1", "Ground") with **Level 1** active.
 - **Alarm queue side panel (right ~360 px):** sorted **critical → urgent → warning → info → age desc**. The CT-1 basin-temp critical alarm sits at the top with a pulsing red dot. Each row has **Ack · Create WO · ✦ Explain · → (drill)** buttons.
-- **Trend strip (bottom 160 px):** three mini SVG line charts — **Real power**, **Avg zone temp** (with a green ASHRAE comfort band overlay 68-76 °F), **Active alarms**. Each card pre-populated with ~60 historical samples from the seeded RNG buffer so the lines aren't empty.
+- **Trend strip (bottom 160 px):** three mini SVG line charts - **Real power**, **Avg zone temp** (with a green ASHRAE comfort band overlay 68-76 °F), **Active alarms**. Each card pre-populated with ~60 historical samples from the seeded RNG buffer so the lines aren't empty.
 
 **Under the hood:** `console.js` calls `WatadSim.start()` which executes
-`_seedHistory()` first — 288 samples × 182 points generated from a
+`_seedHistory()` first - 288 samples × 182 points generated from a
 deterministic-feeling generator before paint. Then it calls
 `WatadFloorPlan.render()` (custom SVG with `<button class="wtd-equip">`
 absolute-positioned for each asset) and subscribes to sim ticks. Diff-rendering
@@ -77,7 +77,7 @@ on every tick keeps it flicker-free.
 
 ---
 
-## Step 3 — Operations console · live tick
+## Step 3 - Operations console · live tick
 
 **Do this:** stay on the console. Wait **~5 seconds** without clicking anything.
 
@@ -86,7 +86,7 @@ on every tick keeps it flicker-free.
 - The **Real power** KPI tile changes (gentle drift, e.g. 242.3 → 245.1 kW).
 - The trend-strip mini charts each advance by one sample.
 - Tooltip values on equipment icons (hover any chiller / AHU / FCU) update in real time.
-- Within **~60 seconds** a new alarm typically fires from a threshold breach — you'll hear a Web Audio chime (frequency varies by severity: critical 1100 Hz square wave + 250 ms double-pulse · urgent 880 Hz sine · info 660 Hz), a card flashes briefly red, and a toast appears bottom-right.
+- Within **~60 seconds** a new alarm typically fires from a threshold breach - you'll hear a Web Audio chime (frequency varies by severity: critical 1100 Hz square wave + 250 ms double-pulse · urgent 880 Hz sine · info 660 Hz), a card flashes briefly red, and a toast appears bottom-right.
 
 **Under the hood:** `WatadSim._tick()` runs every 5 s. For every point it
 calls `computeValueAt(p, asset, prev, ts, outdoor_temp_f)` which mutates the
@@ -98,7 +98,7 @@ Threshold breaches raise alarms; recovery clears them. Sim alarms also POST to
 
 ---
 
-## Step 4 — Drill into an asset (CH-1 chiller)
+## Step 4 - Drill into an asset (CH-1 chiller)
 
 **Do this:** in the floor plan, switch to **Roof / MEP** (top floor tab). You'll see two pulsing blue chiller icons (`❄ CH-1`, `❄ CH-2`) and two cooling-tower icons (`🌀 CT-1`, `🌀 CT-2`). Click **CH-1** (the leftmost chiller, alarming because its condenser temp is over 95 °F).
 
@@ -108,24 +108,24 @@ Threshold breaches raise alarms; recovery clears them. Sim alarms also POST to
 
 - **Header:** `❄ CH-1 · 250 TR` with a chip showing **URGENT · N active** and "last comm · HH:MM" stamp.
 - **Subtitle:** `chiller · Roof / MEP / Chiller Plant · Trane RTAC 250 · firmware 4.2.1`.
-- **📈 Last 24 hours · 6 points** — multi-line SVG overlay of CHWS / CHWR / condenser temp / load / power, with a colour-coded legend showing the current value of each.
-- **🔔 Alarms (N)** — at least the live condenser-temp urgent row, with an **Ack** button.
-- **🛠 Work orders (N)** — `wo-1: Replace CH-1 condenser fan motor bearing` (in-progress, urgent) and possibly `wo-5: PM — Chiller annual oil sample CH-2` if the seed pulled it in.
-- **🏷 Asset metadata** — ID, Type, Model, Firmware, Install date, Floor, Zone, Controller, Rated kW grid.
+- **📈 Last 24 hours · 6 points** - multi-line SVG overlay of CHWS / CHWR / condenser temp / load / power, with a colour-coded legend showing the current value of each.
+- **🔔 Alarms (N)** - at least the live condenser-temp urgent row, with an **Ack** button.
+- **🛠 Work orders (N)** - `wo-1: Replace CH-1 condenser fan motor bearing` (in-progress, urgent) and possibly `wo-5: PM - Chiller annual oil sample CH-2` if the seed pulled it in.
+- **🏷 Asset metadata** - ID, Type, Model, Firmware, Install date, Floor, Zone, Controller, Rated kW grid.
 - **Right side panel:**
   - **✦ AI suggested maintenance** card with a primary "Suggest now" button.
-  - **⚙ Manual override** card — setpoint inputs for CHWS (44 °F) appear here (operator-only, audit-logged).
-  - **📍 Live point readings** table — every point with its current value + timestamp, refreshed every 5 s in place.
+  - **⚙ Manual override** card - setpoint inputs for CHWS (44 °F) appear here (operator-only, audit-logged).
+  - **📍 Live point readings** table - every point with its current value + timestamp, refreshed every 5 s in place.
 
 **Under the hood:** asset.js parses `?id=` from the URL (defaults to
 `as-chiller-1` if missing) and calls `GET /watad/api/assets/<id>`. The
 mock-api returns `{ asset, points, alarms, work_orders }` in one shot. The
-24h chart is hand-rolled SVG (no library) — pulls `WatadSim.getHistory(id)`
+24h chart is hand-rolled SVG (no library) - pulls `WatadSim.getHistory(id)`
 for each analog point, computes a shared y-range, draws path elements.
 
 ---
 
-## Step 5 — Explain alarm with AI
+## Step 5 - Explain alarm with AI
 
 **Do this:** go back to the console (top nav). In the alarm queue, find the
 CH-1 condenser-temp alarm and click **✦ Explain**.
@@ -138,22 +138,22 @@ CH-1 condenser-temp alarm and click **✦ Explain**.
 
   > **Action:** Dispatch a technician to CH-1 within the hour to confirm condenser-water flow and basin condition.
   >
-  > **Likely cause:** Condenser-side approach has widened — most often refrigerant overcharge, condenser-coil fouling, or low CT basin level reducing heat rejection. Cross-check CT-1 fan VFD speed and basin temp. If both look normal, prioritise the chiller-side: schedule an oil-sample analysis and check for non-condensables.
+  > **Likely cause:** Condenser-side approach has widened - most often refrigerant overcharge, condenser-coil fouling, or low CT basin level reducing heat rejection. Cross-check CT-1 fan VFD speed and basin temp. If both look normal, prioritise the chiller-side: schedule an oil-sample analysis and check for non-condensables.
 
-- A mode chip — **mock** in Demo mode, **live** in Live mode.
+- A mode chip - **mock** in Demo mode, **live** in Live mode.
 - A model + latency line: `claude-haiku-4-5-20251001 · 312ms`.
 - A footer with **Close** and **Acknowledge alarm** buttons.
 
 **Under the hood:** `WatadAI.explainAlarm({alarm, asset})` builds a payload
 with the alarm + asset JSON, calls `/api/watad/ai/call`. In Demo mode that
 request fails (no Worker) and `mockReply()` runs the title through a
-regex-keyed dictionary in `ai-engine.js` — the condenser-temp branch matches
+regex-keyed dictionary in `ai-engine.js` - the condenser-temp branch matches
 on `/condenser.*temp.*(high|critical|94|95)/`. In Live mode the Worker
 proxies to Claude with the BMS-tuned system prompt.
 
 ---
 
-## Step 6 — Create work order from alarm
+## Step 6 - Create work order from alarm
 
 **Do this:** close the AI modal. On the same alarm row click **Create WO**.
 
@@ -161,9 +161,9 @@ proxies to Claude with the BMS-tuned system prompt.
 
 - A modal **Create work order from alarm** with these pre-filled fields:
   - **Title:** the alarm's title verbatim
-  - **Asset:** CH-1 · 250 TR (disabled — locked to the alarm's asset)
+  - **Asset:** CH-1 · 250 TR (disabled - locked to the alarm's asset)
   - **Priority:** **Urgent** (auto-bumped because alarm severity is urgent / critical)
-  - **Assignee:** dropdown of operators + technicians (Rashid, Amani, Omar, Noura, Saif — Layla excluded as admin)
+  - **Assignee:** dropdown of operators + technicians (Rashid, Amani, Omar, Noura, Saif - Layla excluded as admin)
   - **Due in (hours):** `1` for critical, `4` for urgent, `24` otherwise
   - **Description:** "Alarm: <title>\n\nFrom Watad console at <timestamp>."
 - Click **Create work order**.
@@ -180,7 +180,7 @@ to `watad.audit`.
 
 ---
 
-## Step 7 — Acknowledge an alarm
+## Step 7 - Acknowledge an alarm
 
 **Do this:** in the alarm queue, on any alarm, click **Ack**.
 
@@ -191,19 +191,19 @@ to `watad.audit`.
 - The **Active alarms** KPI tile decrements by 1.
 
 **Verify the audit:** open
-<https://saadm.dev/watad/admin.html#audit> — your action is at the top
+<https://saadm.dev/watad/admin.html#audit> - your action is at the top
 ("alarm.ack · <alarm-id>").
 
 **Under the hood:** `POST /watad/api/alarms/<id>/ack` with `{ack_by:
 'st-rashid'}`. The mock-api persists the ack timestamp under
 `watad.alarm.acks` keyed by id. Note: the seeded alarms in `data.js` and the
-sim alarms in `WatadSim.alarmsByPoint` are separate — Ack visually removes
+sim alarms in `WatadSim.alarmsByPoint` are separate - Ack visually removes
 from the side panel (which reads sim state). The seeded alarm shows up
 acknowledged in **Admin → Alarms** instead.
 
 ---
 
-## Step 8 — Switch floors
+## Step 8 - Switch floors
 
 **Do this:** at the top of the floor plan, click each floor tab in order:
 **Roof / MEP → Level 2 → Level 1 → Ground**.
@@ -212,8 +212,8 @@ acknowledged in **Admin → Alarms** instead.
 
 - Each floor renders a different wall layout, different zone labels (Mirage Studios on L2, Acme Capital · East on L1, Main Lobby on Ground, Chiller Plant on Roof), and different equipment placements.
 - The "X zones · Y assets · Zk ft²" meta in the floor head updates.
-- Roof has the two chillers + two cooling towers + main meter — that's where the heaviest alarming happens.
-- Ground has the lobby AHU + 4 FCUs + lobby lighting + ground meter + lobby occupancy sensor — only the meter pulses if any.
+- Roof has the two chillers + two cooling towers + main meter - that's where the heaviest alarming happens.
+- Ground has the lobby AHU + 4 FCUs + lobby lighting + ground meter + lobby occupancy sensor - only the meter pulses if any.
 
 **Under the hood:** `WatadFloorPlan.render(host, floorId)` rebuilds the SVG +
 icon buttons. Wall outlines are hand-tuned SVG `<path d="…">` strings in
@@ -222,7 +222,7 @@ FCU green, light amber, meter violet, sensors slate.
 
 ---
 
-## Step 9 — Energy dashboard
+## Step 9 - Energy dashboard
 
 **Do this:** click **Energy** in the top nav (or go to
 <https://saadm.dev/watad/energy.html>).
@@ -230,18 +230,18 @@ FCU green, light amber, meter violet, sensors slate.
 **You'll see:**
 
 - **Five KPI tiles:**
-  - **Today kWh** — sum of today's records across all 8 meters, with a `+/-N% vs yesterday` sub-line.
-  - **Cost today** — `AED ${kWh × 0.32}` (tariff from settings).
-  - **kgCO₂ today** — `kWh × 0.4032` (grid factor from settings).
-  - **Peak kW today** — `max(peak_kw)` from today's rows.
-  - **30-day total** — total MWh.
-- **Daily kWh — last 30 days** bar chart (~1000 × 240 SVG):
+  - **Today kWh** - sum of today's records across all 8 meters, with a `+/-N% vs yesterday` sub-line.
+  - **Cost today** - `AED ${kWh × 0.32}` (tariff from settings).
+  - **kgCO₂ today** - `kWh × 0.4032` (grid factor from settings).
+  - **Peak kW today** - `max(peak_kw)` from today's rows.
+  - **30-day total** - total MWh.
+- **Daily kWh - last 30 days** bar chart (~1000 × 240 SVG):
   - Y-axis: kWh labels.
   - X-axis: 30 daily bars, labelled every 5 days (MM-DD).
   - **ASHRAE 90.1 target band** shown as a translucent green horizontal band overlay (75-95 % of 30-day average).
   - Bars **green** when below band, **cyan** when inside, **amber** when above.
 - **Sub-meters · today** table sorted by today's kWh: each row shows kWh + % of total + vs-yesterday trend arrow (🔺 amber up, 🔻 green down, em-dash unchanged).
-- **DEWA DSM demand-response events** — 5 weekday windows (14:00-17:00) with AED 0.18/kWh tariff credit + 120 kWh projected curtailment + opt-in checkbox per row.
+- **DEWA DSM demand-response events** - 5 weekday windows (14:00-17:00) with AED 0.18/kWh tariff credit + 120 kWh projected curtailment + opt-in checkbox per row.
 - **✦ AI optimise setpoints** card with a "Suggest optimisations" button.
 
 **Under the hood:** energy.js calls `GET /watad/api/energy/history` (returns
@@ -251,7 +251,7 @@ bars paint over it.
 
 ---
 
-## Step 10 — AI optimise setpoints
+## Step 10 - AI optimise setpoints
 
 **Do this:** still on the Energy page, click **Suggest optimisations** in the
 AI card.
@@ -261,11 +261,11 @@ AI card.
 - Spinner ("Analysing occupancy + outdoor temp + setpoints…") for ~0.4-1.2 s.
 - Then **3 numbered suggestions** with **bold task names**, e.g.:
 
-  > 1. **Bump unoccupied-zone CSP from 75°F → 78°F** during 19:00–06:00 — occupancy is normal. Stays inside ASHRAE 55 night setback comfort window. **Est. saving: 38 kWh/day (~AED 12/day, ~AED 4,400/yr).**
+  > 1. **Bump unoccupied-zone CSP from 75°F → 78°F** during 19:00-06:00 - occupancy is normal. Stays inside ASHRAE 55 night setback comfort window. **Est. saving: 38 kWh/day (~AED 12/day, ~AED 4,400/yr).**
   >
-  > 2. **Pre-cool L1/L2 by 1°F from 06:00–07:00** to coast through the morning ramp at lower compressor lift. With outdoor at 96°F this morning, CH-1 lift is high. **Est. saving: 22 kWh/day (~AED 7/day, ~AED 2,600/yr).**
+  > 2. **Pre-cool L1/L2 by 1°F from 06:00-07:00** to coast through the morning ramp at lower compressor lift. With outdoor at 96°F this morning, CH-1 lift is high. **Est. saving: 22 kWh/day (~AED 7/day, ~AED 2,600/yr).**
   >
-  > 3. **Reset CHWS from 44°F → 45°F** between 11:00–15:00 when load profile is steady. Trane curves show ~1.6% kW reduction per °F reset. **Est. saving: 18 kWh/day (~AED 6/day, ~AED 2,100/yr).**
+  > 3. **Reset CHWS from 44°F → 45°F** between 11:00-15:00 when load profile is steady. Trane curves show ~1.6% kW reduction per °F reset. **Est. saving: 18 kWh/day (~AED 6/day, ~AED 2,100/yr).**
 
 - Footer: **Total annual saving: ~AED 9,100** with an A/B test recommendation.
 - Mode chip + model + latency line below.
@@ -277,7 +277,7 @@ suggestion text personalises against the current sim conditions.
 
 ---
 
-## Step 11 — Work orders module
+## Step 11 - Work orders module
 
 **Do this:** click **Work orders** in the top nav (or go to
 <https://saadm.dev/watad/workorders.html>).
@@ -289,7 +289,7 @@ suggestion text personalises against the current sim conditions.
 - Table columns: WO# · Title · Asset · Priority · Assignee · Created · Due · Status · (Open).
 - 15 seeded WOs + any you created in Step 6.
 
-**Now click the search box** and type `chiller` — table narrows to chiller WOs.
+**Now click the search box** and type `chiller` - table narrows to chiller WOs.
 
 **Click Open** on any row.
 
@@ -297,7 +297,7 @@ suggestion text personalises against the current sim conditions.
 
 - Modal opens with WO# / Asset / Priority headline, full description, parts list, two dropdowns (Status, Assignee), comments timeline, an **Add comment** input + button, and a **signature canvas** with **Clear** below.
 - The canvas accepts mouse + touch input. Sign your name with a squiggle.
-- Click **Add** after typing a comment — the modal re-opens with your new comment timestamped at the bottom.
+- Click **Add** after typing a comment - the modal re-opens with your new comment timestamped at the bottom.
 - Change **Status** → Save changes → toast `Saved`, the row's status chip updates in the underlying table when the modal closes.
 - **Delete** → confirm → row removed (persisted as a tombstone in `watad.wo.deleted`).
 
@@ -305,34 +305,34 @@ suggestion text personalises against the current sim conditions.
 /work-orders/<id>/comments` for the timeline append, `PUT /work-orders/<id>`
 for status/assignee, `DELETE /work-orders/<id>` for tombstone. The signature
 canvas uses raw 2D context paths; not saved server-side (it's a UX
-demonstration — the signature counts as proof-of-completion in the operator
+demonstration - the signature counts as proof-of-completion in the operator
 flow).
 
 ---
 
-## Step 12 — Admin · Dashboard
+## Step 12 - Admin · Dashboard
 
 **Do this:** click **Admin** in the top nav (or go to
 <https://saadm.dev/watad/admin.html>).
 
 **You'll see:**
 
-- Sidebar left: 11 sections grouped — **Operate** (Dashboard, Work orders) · **Building** (Assets, Points, Alarms, Schedules) · **Team** (Staff) · **Intelligence** (AI Console) · **Setup** (Integrations, Settings, Audit log).
+- Sidebar left: 11 sections grouped - **Operate** (Dashboard, Work orders) · **Building** (Assets, Points, Alarms, Schedules) · **Team** (Staff) · **Intelligence** (AI Console) · **Setup** (Integrations, Settings, Audit log).
 - Top bar: section title · mode badge · Layla Hassan / admin pill.
 - **Dashboard content:**
-  - **6 KPI tiles** — Alarms critical / urgent / warning + Live power + Avg zone temp + Occupancy.
+  - **6 KPI tiles** - Alarms critical / urgent / warning + Live power + Avg zone temp + Occupancy.
   - **Last 7 days · total kWh** bar chart (Sun-Sat).
-  - **Top alarming assets** — top-5 ranked by raise count.
-  - **Alarms by hour of day** heatmap — 24 cells, intensity by frequency (green → red).
-  - **Recent alarms** table — most recent 8 with severity + status chips.
+  - **Top alarming assets** - top-5 ranked by raise count.
+  - **Alarms by hour of day** heatmap - 24 cells, intensity by frequency (green → red).
+  - **Recent alarms** table - most recent 8 with severity + status chips.
 
 **Under the hood:** `GET /watad/api/admin/dashboard` returns one bundled
-payload — KPIs, recent alarms, top alarming, weekly_kwh series, by_hour
+payload - KPIs, recent alarms, top alarming, weekly_kwh series, by_hour
 array. Server-side aggregation in `mock-api.js → dashboardKpis()`.
 
 ---
 
-## Step 13 — Admin · Points (live values)
+## Step 13 - Admin · Points (live values)
 
 **Do this:** in the sidebar click **Points** (or visit
 <https://saadm.dev/watad/admin.html#points>).
@@ -341,8 +341,8 @@ array. Server-side aggregation in `mock-api.js → dashboardKpis()`.
 
 - Asset filter dropdown · search box · counter (e.g. "182 / 182 points").
 - Table: Point · Asset · Kind chip · Setpoint · Hi-alarm · Lo-alarm · **Current** (live).
-- The **Current** column shows live values from `WatadSim` — values refresh on every tick because the simulator is running in the background.
-- Filter to `as-chiller-1` to see all 6 of its points (Run status, CHWS, CHWR, Condenser temp, Load, Power) — Condenser temp will read ~99-103 °F (above its 95 °F hi-alarm, in amber).
+- The **Current** column shows live values from `WatadSim` - values refresh on every tick because the simulator is running in the background.
+- Filter to `as-chiller-1` to see all 6 of its points (Run status, CHWS, CHWR, Condenser temp, Load, Power) - Condenser temp will read ~99-103 °F (above its 95 °F hi-alarm, in amber).
 
 **Under the hood:** `GET /watad/api/points` returns the seeded register
 merged with any operator setpoint edits from `watad.point.edits`. The "Current"
@@ -350,7 +350,7 @@ column is decorated client-side using `WatadSim.getPoint(id).value`.
 
 ---
 
-## Step 14 — Admin · Alarms (history audit)
+## Step 14 - Admin · Alarms (history audit)
 
 **Do this:** click **Alarms** in the sidebar.
 
@@ -359,7 +359,7 @@ column is decorated client-side using `WatadSim.getPoint(id).value`.
 - Status filter chips (**all · active · cleared**) and severity chips
   (**all · critical · urgent · warning · info**).
 - Table columns: Severity · Title · Asset · Raised · Acked · Cleared.
-- **30 seeded alarms** mixed with any sim-raised alarms — 13 active /
+- **30 seeded alarms** mixed with any sim-raised alarms - 13 active /
   acknowledged + 17 cleared historical.
 - Acked column populated for alarms you Ack'd in Step 7; Cleared column for
   the 17 historical entries.
@@ -370,13 +370,13 @@ desc.
 
 ---
 
-## Step 15 — Admin · AI Console (test with sample)
+## Step 15 - Admin · AI Console (test with sample)
 
 **Do this:** click **AI Console** in the sidebar.
 
 **You'll see:**
 
-- **Model picker** — three radio cards: **Haiku 4.5** (fastest, cheapest) · **Sonnet 4.6** (balanced) · **Opus 4.7** (highest quality). Click to switch — the selected card highlights cyan.
+- **Model picker** - three radio cards: **Haiku 4.5** (fastest, cheapest) · **Sonnet 4.6** (balanced) · **Opus 4.7** (highest quality). Click to switch - the selected card highlights cyan.
 - **System prompt** textarea (editable, ~5 lines, pre-populated with the building-operator persona).
 - Three side-by-side knobs: **Temperature** (0.4 default) · **Max tokens** (600 default) · **Prompt cache** (Enabled / Disabled).
 - **Save AI settings** primary button.
@@ -397,7 +397,7 @@ AI invocation anywhere in the app.
 
 ---
 
-## Step 16 — Admin · Integrations
+## Step 16 - Admin · Integrations
 
 **Do this:** click **Integrations** in the sidebar.
 
@@ -413,7 +413,7 @@ and audits.
 
 ---
 
-## Step 17 — Admin · Schedules + Staff
+## Step 17 - Admin · Schedules + Staff
 
 **Do this:** click **Schedules**.
 
@@ -430,7 +430,7 @@ do.
 
 ---
 
-## Step 18 — Admin · Audit log + CSV export
+## Step 18 - Admin · Audit log + CSV export
 
 **Do this:** click **Audit log**.
 
@@ -449,7 +449,7 @@ rows. Toast confirms count.
 
 ---
 
-## Step 19 — Admin · Settings + Reset demo
+## Step 19 - Admin · Settings + Reset demo
 
 **Do this:** click **Settings**.
 
@@ -473,7 +473,7 @@ which restarts the simulator from t=0.
 
 ---
 
-## Step 20 — Friendly aliases + 404
+## Step 20 - Friendly aliases + 404
 
 **Do this:** try each in a new tab:
 
@@ -484,9 +484,9 @@ which restarts the simulator from t=0.
 
 ---
 
-## Step 21 — Optional: enable Live mode
+## Step 21 - Optional: enable Live mode
 
-Demo mode is good enough for any recruiter conversation — the mock replies
+Demo mode is good enough for any recruiter conversation - the mock replies
 are written in the same voice as the live Claude responses. But if you want
 to flip on real Claude:
 
@@ -526,11 +526,11 @@ Cost guardrails: ~AED 0.005 per `explain_alarm` call, ~AED 0.015 for
 
 ## What this demo proves to a recruiter
 
-- I can think in **real-time data shapes** — telemetry simulator with a subscriber pattern, not request/response CRUD.
-- I understand **industrial protocols** — BACnet IP / Modbus TCP / DALI lighting, schedules, point-types (analog / binary / multistate), hi-/lo-alarm thresholds.
-- I understand **facilities operations** — work-order pipelines, signature-on-completion, PM cycles, alarm severity rankings, schedule-driven occupancy, ASHRAE 90.1 + 55 references.
-- I can integrate **LLMs into operator workflows** safely — Live/Mock fallback, system-prompt control, cost tracking, model selection, audit on every call.
-- I ship **end-to-end**: design system, seed data, API, simulator, console, drill-ins, admin SPA, AI integration, 404, sitemap entries, friendly aliases — all without a framework.
+- I can think in **real-time data shapes** - telemetry simulator with a subscriber pattern, not request/response CRUD.
+- I understand **industrial protocols** - BACnet IP / Modbus TCP / DALI lighting, schedules, point-types (analog / binary / multistate), hi-/lo-alarm thresholds.
+- I understand **facilities operations** - work-order pipelines, signature-on-completion, PM cycles, alarm severity rankings, schedule-driven occupancy, ASHRAE 90.1 + 55 references.
+- I can integrate **LLMs into operator workflows** safely - Live/Mock fallback, system-prompt control, cost tracking, model selection, audit on every call.
+- I ship **end-to-end**: design system, seed data, API, simulator, console, drill-ins, admin SPA, AI integration, 404, sitemap entries, friendly aliases - all without a framework.
 
 This is the gap UAE facilities-management (Imdaad / EFS / Farnek),
 building-automation (Schneider / Honeywell / Siemens), energy utilities

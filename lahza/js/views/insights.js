@@ -1,4 +1,4 @@
-/* insights.js — 7-day mood line chart + theme tag list + AI weekly summary. */
+/* insights.js - 7-day mood line chart + theme tag list + AI weekly summary. */
 (function () {
   'use strict';
   window.LahzaViews = window.LahzaViews || {};
@@ -62,7 +62,7 @@
     });
     var validPts = pts.filter(function (p) { return p.y != null; });
     if (validPts.length === 0) {
-      // Empty state — no entries this week
+      // Empty state - no entries this week
       return '<div class="lz-chart" style="display:grid;place-items:center;color:var(--lz-muted);font-size:12.5px;">'
         + 'Write a few entries this week to see the chart fill in.'
         + '</div>';

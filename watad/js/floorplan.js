@@ -103,7 +103,7 @@
     var pts = pointsForAsset(asset.id).slice(0, 6);
     var rows = pts.map(function (p) {
       var snap = window.WatadSim && window.WatadSim.getPoint(p.id);
-      var v = snap ? WatadApp.fmtUnit(snap.value, p.unit) : '—';
+      var v = snap ? WatadApp.fmtUnit(snap.value, p.unit) : '-';
       return p.name + ': ' + v;
     }).join('<br/>');
     return '<strong style="display:block;margin-bottom:4px;color:var(--wtd-cyan);">' + esc(asset.name) + '</strong>'
@@ -170,7 +170,7 @@
     },
 
     refreshTooltips: function (host) {
-      // Rebuild tooltip contents with current sim values (cheap — just innerHTML
+      // Rebuild tooltip contents with current sim values (cheap - just innerHTML
       // swap on the .wtd-equip-tooltip child, no event re-attach).
       host.querySelectorAll('[data-asset-id]').forEach(function (el) {
         var a = D.ASSETS.find(function (x) { return x.id === el.getAttribute('data-asset-id'); });

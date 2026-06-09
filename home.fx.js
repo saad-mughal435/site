@@ -1,14 +1,14 @@
-/* home.fx.js — the scroll/motion layer for saadm.dev.
+/* home.fx.js - the scroll/motion layer for saadm.dev.
  *
  * Deliberately decoupled from the React app (home.app.js): it only touches the
  * DOM after render and adds smooth scroll, scroll-driven parallax, a custom
  * cursor, magnetic buttons and 3D card tilt. Everything is feature-detected and
  * wrapped in try/catch, and the heavy bits are skipped under prefers-reduced-
- * motion / touch — so if a CDN lib fails to load or anything throws, the plain
+ * motion / touch - so if a CDN lib fails to load or anything throws, the plain
  * (already-working) site is unaffected.
  *
  * Libraries (loaded via CDN in index.html): gsap + ScrollTrigger and
- * @studio-freight/lenis (smooth scroll). No WebGL — the backdrop is static CSS.
+ * @studio-freight/lenis (smooth scroll). No WebGL - the backdrop is static CSS.
  */
 (function () {
   'use strict';
@@ -53,7 +53,7 @@
 
     if (gsap && ST && !REDUCE) {
       gsap.registerPlugin(ST);
-      // Parallax the hero (transform only — the React CSS reveal still owns
+      // Parallax the hero (transform only - the React CSS reveal still owns
       // opacity, so these never fight). The hero is a stable, non-reveal node.
       if (document.querySelector('.hero-photo')) {
         gsap.to('.hero-photo', {

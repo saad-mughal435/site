@@ -84,7 +84,7 @@
         +     '<table class="pos-table">'
         +       '<thead><tr><th>Order</th><th>Time</th><th>Type</th><th>Status</th><th style="text-align:right;">Total</th></tr></thead>'
         +       '<tbody>' + (d.recent.length
-                  ? d.recent.map(function (o) { return '<tr><td style="font-family:var(--font-mono);">' + esc(o.order_no) + '</td><td>' + fmtDt(o.created_at) + '</td><td>' + esc(o.type || '—') + '</td><td>' + statusChip(o.status) + '</td><td style="text-align:right;font-family:var(--font-mono);font-weight:700;">' + money(o.total) + '</td></tr>'; }).join('')
+                  ? d.recent.map(function (o) { return '<tr><td style="font-family:var(--font-mono);">' + esc(o.order_no) + '</td><td>' + fmtDt(o.created_at) + '</td><td>' + esc(o.type || '-') + '</td><td>' + statusChip(o.status) + '</td><td style="text-align:right;font-family:var(--font-mono);font-weight:700;">' + money(o.total) + '</td></tr>'; }).join('')
                   : '<tr><td colspan="5" class="pos-table-empty">No orders yet.</td></tr>')
         +     '</tbody></table>'
         +   '</div>'
@@ -120,7 +120,7 @@
                     + '<td style="font-family:var(--font-mono);font-weight:600;">' + esc(o.order_no) + '</td>'
                     + '<td>' + fmtDt(o.created_at) + '</td>'
                     + '<td>' + (o.table_id ? '🪑 ' + esc(o.table_id.toUpperCase()) : '🛍 Takeaway') + '</td>'
-                    + '<td style="font-size:12px;">' + esc((window.POS_DATA.STAFF.find(function (s) { return s.id === o.cashier_id; }) || {}).name || '—') + '</td>'
+                    + '<td style="font-size:12px;">' + esc((window.POS_DATA.STAFF.find(function (s) { return s.id === o.cashier_id; }) || {}).name || '-') + '</td>'
                     + '<td>' + lineCount + '</td>'
                     + '<td>' + statusChip(o.status) + '</td>'
                     + '<td style="text-align:right;font-family:var(--font-mono);font-weight:700;">' + money(o.total) + '</td>'
@@ -158,7 +158,7 @@
           + '<div><div class="pos-kpi-label">Status</div><div>' + statusChip(o.status) + '</div></div>'
           + '<div><div class="pos-kpi-label">Type</div><div>' + (o.table_id ? '🪑 Table ' + esc(o.table_id.toUpperCase()) : '🛍 Takeaway') + '</div></div>'
           + '<div><div class="pos-kpi-label">Created</div><div>' + fmtDt(o.created_at) + '</div></div>'
-          + '<div><div class="pos-kpi-label">Completed</div><div>' + (o.completed_at ? fmtDt(o.completed_at) : '—') + '</div></div>'
+          + '<div><div class="pos-kpi-label">Completed</div><div>' + (o.completed_at ? fmtDt(o.completed_at) : '-') + '</div></div>'
           + '</div>'
           + '<table class="pos-table" style="margin-bottom:14px;">' + linesHtml + '</table>'
           + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;font-family:var(--font-mono);font-size:13px;background:var(--pos-bg-light);padding:12px;border-radius:8px;">'
@@ -365,7 +365,7 @@
                     + '<td style="font-family:var(--font-mono);">' + (c.display_order || 0) + '</td>'
                     + '<td style="font-size:20px;">' + esc(c.icon || '🍽') + '</td>'
                     + '<td style="font-weight:600;">' + esc(c.name) + '</td>'
-                    + '<td style="color:var(--pos-muted-light);">' + esc(c.name_ar || '—') + '</td>'
+                    + '<td style="color:var(--pos-muted-light);">' + esc(c.name_ar || '-') + '</td>'
                     + '<td>' + count + '</td>'
                     + '<td><button class="pos-btn" data-cat-edit="' + c.id + '" style="padding:5px 10px;min-height:30px;font-size:11px;">Edit</button>'
                     + ' <button class="pos-btn pos-btn--danger" data-cat-del="' + c.id + '" style="padding:5px 10px;min-height:30px;font-size:11px;">Delete</button></td>'
@@ -561,7 +561,7 @@
                     + '<td style="font-family:var(--font-mono);font-weight:600;">' + esc(d.code || d.name) + '</td>'
                     + '<td>' + esc(d.type) + '</td>'
                     + '<td style="font-family:var(--font-mono);">' + (d.type === 'pct' || d.type === 'percent' ? d.value + '%' : (d.type === 'fixed' || d.type === 'aed' ? money(d.value) : esc(d.type))) + '</td>'
-                    + '<td style="font-family:var(--font-mono);">' + (d.min_total ? money(d.min_total) : '—') + '</td>'
+                    + '<td style="font-family:var(--font-mono);">' + (d.min_total ? money(d.min_total) : '-') + '</td>'
                     + '<td>' + (d.active ? '<span class="pos-status-chip completed">Active</span>' : '<span class="pos-status-chip voided">Paused</span>') + '</td>'
                     + '<td><button class="pos-btn" data-tog="' + d.id + '" style="padding:5px 10px;min-height:30px;font-size:11px;">' + (d.active ? 'Pause' : 'Resume') + '</button>'
                     + ' <button class="pos-btn pos-btn--danger" data-rm="' + d.id + '" style="padding:5px 10px;min-height:30px;font-size:11px;">Delete</button></td>'
@@ -804,7 +804,7 @@
   function closeShiftModal(current, liveCash, refresh) {
     var expected = (current.opening_count_aed || 0) + liveCash;
     PosApp.showModal({
-      title: 'Close shift — cash count',
+      title: 'Close shift - cash count',
       body:
         '<p class="pos-text-muted" style="font-size:13.5px;margin:0 0 14px;">Count the drawer by denomination. Variance = counted − expected.</p>'
         + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;" id="denom-grid">'
@@ -842,7 +842,7 @@
   }
   function zReport(s) {
     PosApp.showModal({
-      title: 'Z-Report — shift ' + s.id.slice(-6),
+      title: 'Z-Report - shift ' + s.id.slice(-6),
       body:
         '<div style="font-family:var(--font-mono);font-size:13px;line-height:1.7;background:white;padding:18px;border:1px dashed var(--pos-line-light);">'
         + '<div style="text-align:center;font-family:var(--font-display);font-size:18px;font-weight:700;">QAHWA CAFÉ</div>'
@@ -850,7 +850,7 @@
         + '<hr style="border:0;border-top:1px dashed var(--pos-line-light);margin:10px 0;" />'
         + '<div style="display:flex;justify-content:space-between;"><span>Opened</span><span>' + fmtDt(s.opened_at) + '</span></div>'
         + '<div style="display:flex;justify-content:space-between;"><span>Closed</span><span>' + fmtDt(s.closed_at) + '</span></div>'
-        + '<div style="display:flex;justify-content:space-between;"><span>Closed by</span><span>' + esc(s.closed_by || '—') + '</span></div>'
+        + '<div style="display:flex;justify-content:space-between;"><span>Closed by</span><span>' + esc(s.closed_by || '-') + '</span></div>'
         + '<hr style="border:0;border-top:1px dashed var(--pos-line-light);margin:10px 0;" />'
         + '<div style="display:flex;justify-content:space-between;"><span>Orders</span><span>' + (s.orders_count || 0) + '</span></div>'
         + '<div style="display:flex;justify-content:space-between;"><span>Payments total</span><span>' + money(s.payments_total || 0) + '</span></div>'
@@ -860,7 +860,7 @@
         + '<div style="display:flex;justify-content:space-between;"><span>Counted</span><span>' + money(s.closing_count_aed || 0) + '</span></div>'
         + '<div style="display:flex;justify-content:space-between;font-weight:700;color:' + (Math.abs(s.variance || 0) > 5 ? 'var(--pos-danger)' : 'var(--pos-success)') + ';"><span>Variance</span><span>' + ((s.variance || 0) >= 0 ? '+' : '') + money(s.variance || 0) + '</span></div>'
         + '<hr style="border:0;border-top:1px dashed var(--pos-line-light);margin:10px 0;" />'
-        + '<div style="text-align:center;font-size:10.5px;color:var(--pos-muted-light);">— END OF SHIFT —</div>'
+        + '<div style="text-align:center;font-size:10.5px;color:var(--pos-muted-light);">- END OF SHIFT -</div>'
         + '</div>',
       foot: '<button class="pos-btn" data-modal-close style="margin-inline-start:auto;">Close</button><button class="pos-btn pos-btn--primary" onclick="window.print()">Print</button>'
     });
@@ -920,13 +920,13 @@
           +   '<div class="pos-panel">'
           +     '<div class="pos-panel-head"><h3>Top products</h3></div>'
           +     '<table class="pos-table"><thead><tr><th>Product</th><th style="text-align:right;">Qty</th><th style="text-align:right;">Revenue</th></tr></thead><tbody>'
-          +     (topProducts.length ? topProducts.slice(0, 10).map(function (p) { return '<tr><td>' + esc(p.name) + '</td><td style="text-align:right;font-family:var(--font-mono);">' + p.qty + '</td><td style="text-align:right;font-family:var(--font-mono);font-weight:600;">' + money(p.rev) + '</td></tr>'; }).join('') : '<tr><td colspan="3" class="pos-table-empty">—</td></tr>')
+          +     (topProducts.length ? topProducts.slice(0, 10).map(function (p) { return '<tr><td>' + esc(p.name) + '</td><td style="text-align:right;font-family:var(--font-mono);">' + p.qty + '</td><td style="text-align:right;font-family:var(--font-mono);font-weight:600;">' + money(p.rev) + '</td></tr>'; }).join('') : '<tr><td colspan="3" class="pos-table-empty">-</td></tr>')
           +     '</tbody></table>'
           +   '</div>'
           +   '<div class="pos-panel">'
           +     '<div class="pos-panel-head"><h3>By cashier</h3></div>'
           +     '<table class="pos-table"><thead><tr><th>Cashier</th><th style="text-align:right;">Orders</th><th style="text-align:right;">Revenue</th></tr></thead><tbody>'
-          +     (cashierRows.length ? cashierRows.map(function (c) { return '<tr><td>' + esc(c.name) + '</td><td style="text-align:right;font-family:var(--font-mono);">' + c.count + '</td><td style="text-align:right;font-family:var(--font-mono);font-weight:600;">' + money(c.total) + '</td></tr>'; }).join('') : '<tr><td colspan="3" class="pos-table-empty">—</td></tr>')
+          +     (cashierRows.length ? cashierRows.map(function (c) { return '<tr><td>' + esc(c.name) + '</td><td style="text-align:right;font-family:var(--font-mono);">' + c.count + '</td><td style="text-align:right;font-family:var(--font-mono);font-weight:600;">' + money(c.total) + '</td></tr>'; }).join('') : '<tr><td colspan="3" class="pos-table-empty">-</td></tr>')
           +     '</tbody></table>'
           +   '</div>'
           + '</div>'
@@ -1109,7 +1109,7 @@
           + '<div class="pos-card" style="margin-bottom:14px;">'
           + '<h3 style="margin-bottom:14px;">Operations</h3>'
           + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">'
-          +   '<label class="pos-field"><span>Opening hours</span><input class="pos-input" id="set-hours" value="' + esc(s.opening_hours || '07:00–22:00') + '" /></label>'
+          +   '<label class="pos-field"><span>Opening hours</span><input class="pos-input" id="set-hours" value="' + esc(s.opening_hours || '07:00-22:00') + '" /></label>'
           +   '<label class="pos-field"><span>Default printer name</span><input class="pos-input" id="set-print" value="' + esc(s.printer || 'Star TSP143IIIBI') + '" /></label>'
           + '</div></div>'
           + '<div class="pos-flex">'

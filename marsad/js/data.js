@@ -1,4 +1,4 @@
-/* data.js — Marsad fleet dispatcher seed.
+/* data.js - Marsad fleet dispatcher seed.
  *
  * Fictional last-mile courier business serving Dubai + Sharjah. Seed
  * generated from a deterministic RNG so first-paint maps are populated:
@@ -176,7 +176,7 @@
         sla_breached: slaBreached,
         delivered_at: status === 'delivered' ? isoAgo(Math.max(0, placedAgo - Math.floor(45 + rand() * 60))) : null,
         failed_reason: status === 'failed' ? pick(['Customer not home', 'Wrong address', 'Refused delivery', 'Damaged in transit']) : null,
-        notes: rand() < 0.25 ? pick(['Leave with concierge', 'Call before delivery', 'Gift — please be quick', 'Apartment 2103']) : ''
+        notes: rand() < 0.25 ? pick(['Leave with concierge', 'Call before delivery', 'Gift - please be quick', 'Apartment 2103']) : ''
       });
     }
   });

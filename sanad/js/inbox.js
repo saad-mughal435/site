@@ -126,7 +126,7 @@
 
     SanadApp.api('/conversations/' + id).then(function (r) {
       if (!r.body || !r.body.ok) { renderEmpty('Conversation not found. It may have been deleted or never existed.'); return; }
-      if (!r.body.conversation) { renderEmpty('Conversation data missing — try reloading the page.'); return; }
+      if (!r.body.conversation) { renderEmpty('Conversation data missing - try reloading the page.'); return; }
       state.conv = r.body;
       // Defensive: ensure messages is always an array, even if API returned nothing.
       if (!Array.isArray(state.conv.messages)) state.conv.messages = [];
@@ -186,7 +186,7 @@
                   var avatarStyle = person.photo || person.avatar ? 'background-image:url(' + (person.photo || person.avatar) + ');' : '';
                   var body = m.body;
                   var showTranslated = (m === msgs[lastInBoundIdx]) && state.showTranslated && state.translated;
-                  if (showTranslated) body = state.translated + '\n\n— translated from ' + (c.locale === 'ar' ? 'Arabic' : c.locale);
+                  if (showTranslated) body = state.translated + '\n\n- translated from ' + (c.locale === 'ar' ? 'Arabic' : c.locale);
                   return '<div class="snd-msg' + (isOut ? ' out' : '') + '">'
                     + '<div class="snd-msg-avatar" style="' + avatarStyle + '">' + ((person.photo || person.avatar) ? '' : initials(person.name)) + '</div>'
                     + '<div>'
@@ -272,7 +272,7 @@
           el.querySelector('#kb-go').addEventListener('click', function () {
             var pick = el.querySelector('#kb-pick').value;
             var art = arts.find(function (a) { return a.id === pick; });
-            state.composer = (state.composer + ' ' + art.title + ' — /kb/' + art.slug).trim();
+            state.composer = (state.composer + ' ' + art.title + ' - /kb/' + art.slug).trim();
             renderThread(); close();
           });
         }
@@ -451,7 +451,7 @@
           var rating = b.getAttribute('data-rate');
           state.aiRated.reply = rating;
           SanadAI.rateMessage(rating, { feature: 'reply', model: ai.reply.model, fallback: ai.reply.fallback });
-          window.toast(rating === 'up' ? 'Thanks — logged as helpful' : 'Thanks — logged as not helpful', rating === 'up' ? 'success' : 'warn');
+          window.toast(rating === 'up' ? 'Thanks - logged as helpful' : 'Thanks - logged as not helpful', rating === 'up' ? 'success' : 'warn');
           renderAI();
         });
       });
@@ -522,7 +522,7 @@
     if (h && /^cv-/.test(h)) {
       openConv(h);
     } else {
-      // No conversation targeted — on mobile, reveal the list so the recruiter
+      // No conversation targeted - on mobile, reveal the list so the recruiter
       // lands on something selectable instead of the empty thread state.
       var ib = document.querySelector('.snd-inbox');
       if (ib) ib.classList.add('show-list');

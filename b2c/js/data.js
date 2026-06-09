@@ -430,7 +430,7 @@
     const total = +(subtotal + shipping + tax).toFixed(2);
     let status = ORDER_STATUSES[Math.floor(Math.random() * ORDER_STATUSES.length)];
     // ~25% of orders are Cash on delivery (typical UAE / GCC e-commerce mix).
-    // For COD, cash is only collected at the door — so any order that hasn't
+    // For COD, cash is only collected at the door - so any order that hasn't
     // shipped yet is 'pending', not 'paid'.
     const isCod = Math.random() < 0.25;
     if (isCod && status === 'paid') status = 'pending';

@@ -7,14 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.4.0] - 2026-06-10 - Plain-ASCII typography + L2 viewer explainer
+
+### Changed
+
+- **Removed every em dash and en dash across the whole site** - homepage, demo apps, CSS/JS, docs and
+  the L2 viewer now use plain hyphens, for a clean ASCII look (141 files). Recompiled home.app.js;
+  cache-bust v=20260610b.
+
+### Added
+
+- **"What you are looking at" explainer** on the L2 viewer: a deep description of what the engine is
+  doing (ITCH feed -> decode -> O(1) order-ref reconstructor -> metrics + trade tape -> JSON snapshot
+  -> view), what each panel means (order book / cumulative depth chart / signals), and how the data is
+  produced (real wsbook --dump output, with ?ws= for live).
+
 ## [5.3.2] - 2026-06-10 - L2 viewer: depth-of-market chart + ticker header
 
 ### Added
 
-- **Cumulative depth-of-market chart** (the iconic bid/ask staircase) under the ladder — an SVG area
+- **Cumulative depth-of-market chart** (the iconic bid/ask staircase) under the ladder - an SVG area
   chart of cumulative size vs price, bids rising left / asks rising right with the spread gap and a mid
   marker, plus a price axis. The most recognisable "trading terminal" visual.
-- **Ticker header** — symbol, a large last price that flashes green/red on the tick direction, a
+- **Ticker header** - symbol, a large last price that flashes green/red on the tick direction, a
   spread/mid readout, and a pulsing live/recorded status badge.
 - **Mid-price sparkline** (session) in the signals panel.
 
@@ -31,7 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **The viewer's book was crossed** (best bid above best ask, negative spread) because it replayed the
   engine's *stress* synthetic feed, which lets resting orders pile up across the mid (the engine is a
   reconstructor, not a matcher). The recorded `book-replay.json` is now produced from a new
-  never-crossed generator (`make_synthetic_book`, every add priced inside the current best bid/ask) —
+  never-crossed generator (`make_synthetic_book`, every add priced inside the current best bid/ask) -
   a realistic L2 ladder with a tight ~1-bp spread, verified 0 crossed frames.
 
 ### Changed
@@ -62,9 +77,9 @@ the repo (analytics & signals, a windowed level store, sharded scaling, a WebSoc
 
 ### Added
 
-- **Live L2 book viewer** at `/hft-book/viewer.html` — a self-contained, theme-aware page that
+- **Live L2 book viewer** at `/hft-book/viewer.html` - a self-contained, theme-aware page that
   animates a **real recorded replay** (`book-replay.json`, 72 snapshots produced by the C++
-  `wsbook --dump` in CI — not a mock) of the engine reconstructing a NASDAQ ITCH 5.0 book: an L2
+  `wsbook --dump` in CI - not a mock) of the engine reconstructing a NASDAQ ITCH 5.0 book: an L2
   depth ladder (bids/asks with size bars), micro-price / spread / order-book-imbalance readout, and
   play/pause. Pass `?ws=ws://host:port` to watch a local `wsbook` live. Respects
   `prefers-reduced-motion` and the site's theme.
@@ -99,13 +114,13 @@ group. No restructuring; all existing content is preserved verbatim.
 
 ### Added
 
-- **`hft-orderbook` flagship card** leading the C++ group — a low-latency **C++17** NASDAQ
+- **`hft-orderbook` flagship card** leading the C++ group - a low-latency **C++17** NASDAQ
   TotalView-ITCH 5.0 **order-book reconstructor** with a lock-free **SPSC decode→book pipeline**,
   Google Benchmark microbenches + an `obreplay` throughput/latency tool, and a **MetaTrader 5**
   NDJSON-over-TCP bridge (MQL5 EA). GitHub + CI-runs links; green CI.
 - **`SoftwareSourceCode` JSON-LD entry** for hft-orderbook (ItemList position 9; the other C++
-  repos shift to 10–13) and a matching `<noscript>` fallback line.
-- **Skills nudge** — `Lock-free`, `Low-latency`, `Market data` added to *Backend & APIs*.
+  repos shift to 10-13) and a matching `<noscript>` fallback line.
+- **Skills nudge** - `Lock-free`, `Low-latency`, `Market data` added to *Backend & APIs*.
 
 ### Changed
 
@@ -116,7 +131,7 @@ group. No restructuring; all existing content is preserved verbatim.
 
 A full visual rebuild of the portfolio shell into a premium "operations console" system with
 a **visible light/dark theme toggle**. Deep-ink glass + glow by default, plus a clean bright
-neutral light theme — re-unifying the marketing shell with the dark demo apps. All content,
+neutral light theme - re-unifying the marketing shell with the dark demo apps. All content,
 SEO/JSON-LD, the Coding/Engineering view toggle, and functionality are preserved verbatim.
 
 ### Added
@@ -128,7 +143,7 @@ SEO/JSON-LD, the Coding/Engineering view toggle, and functionality are preserved
 - **WebGL/GSAP/Lenis animation layer is back on the homepage** (`home.fx.js`), now gated to
   capable desktops only (fine pointer, ≥1024px, not reduced-motion) and to the dark theme; the
   canvas is hidden in light mode, where the CSS glow background carries the look.
-- **Theme-aware portfolio demo banner** — the injected strip follows the visitor's theme.
+- **Theme-aware portfolio demo banner** - the injected strip follows the visitor's theme.
 
 ### Changed
 
@@ -136,7 +151,7 @@ SEO/JSON-LD, the Coding/Engineering view toggle, and functionality are preserved
   frosting, an animated dot-grid + drifting accent glows, gradient hero headline, glowing
   buttons, animated card borders, and soft glow hovers. The light theme is a clean bright
   neutral counterpart. Both themes are driven entirely by `[data-theme]` CSS variables.
-- **New type system** — display **Space Grotesk**, body **Inter**, labels/data **JetBrains
+- **New type system** - display **Space Grotesk**, body **Inter**, labels/data **JetBrains
   Mono** (replacing Fraunces + IBM Plex).
 - **`home.css`** fully rewritten as a dual-theme token system (dark default + light); every
   homepage class re-skinned, all selectors preserved so the React markup is unchanged except
@@ -151,25 +166,25 @@ SEO/JSON-LD, the Coding/Engineering view toggle, and functionality are preserved
 
 ### Notes
 
-- `index.v4.html` — the unshipped dark preview that informed this direction — is now redundant
+- `index.v4.html` - the unshipped dark preview that informed this direction - is now redundant
   and can be removed.
 - `og.png` social card still shows the previous design; regeneration is deferred.
 
-## [3.0.0] - 2026-06-05 - "Engineering Field Notes" — full portfolio-shell redesign
+## [3.0.0] - 2026-06-05 - "Engineering Field Notes" - full portfolio-shell redesign
 
 A ground-up redesign of the portfolio shell into a warm, light, editorial-technical
-system that reads like a precision engineering logbook — a deliberate break from the
+system that reads like a precision engineering logbook - a deliberate break from the
 generic dark dev-portfolio look.
 
 ### Changed
 
 - **New art direction (light "Engineering Field Notes").** Warm drafting-paper
   background, near-black ink, a single signal-red accent, a faint graph-paper grid,
-  hairline rules, figure-numbered section tags (`Fig. 01 — About`), and a framed
+  hairline rules, figure-numbered section tags (`Fig. 01 - About`), and a framed
   "Plate 01" headshot caption. Applied to the homepage, contact, 404, and the demo
   walkthrough as one cohesive system.
 - **New type system.** Display set in **Fraunces** (characterful serif, italic for
-  emphasis), body in **IBM Plex Sans**, technical labels/data in **IBM Plex Mono** —
+  emphasis), body in **IBM Plex Sans**, technical labels/data in **IBM Plex Mono** -
   replacing Inter + JetBrains Mono.
 - **`home.css`** fully rewritten for the new system (homepage React app).
 - **`styles.css`** fully rewritten (shared by contact, 404, demo) to the same system,
@@ -188,7 +203,7 @@ generic dark dev-portfolio look.
 - The WebGL (three.js) + GSAP/ScrollTrigger + Lenis "overkill" animation layer is no
   longer loaded on the **shell pages** (homepage, contact, 404, demo); motion is now
   calm, CSS-only (staggered load reveals, scroll-in fades, refined hover states). The
-  `home.fx.*` files remain in place — the demo sub-apps still reference them and are
+  `home.fx.*` files remain in place - the demo sub-apps still reference them and are
   unchanged in this pass.
 
 ## [2.11.3] - 2026-06-04 - Smooth round 3D sphere
@@ -228,7 +243,7 @@ generic dark dev-portfolio look.
 ### Added
 
 - The animation layer (WebGL particle background + GSAP/ScrollTrigger + Lenis
-  smooth scroll + custom cursor + magnetic buttons) now loads on **every page** —
+  smooth scroll + custom cursor + magnetic buttons) now loads on **every page** -
   80 demo / sub-pages injected, plus the homepage. Per the brief: full overkill
   everywhere. Assets referenced absolutely (`/home.fx.js`, `/home.fx.css`) so they
   work at any path depth.
@@ -244,7 +259,7 @@ generic dark dev-portfolio look.
 - On demos with an opaque full-page background the WebGL is hidden behind it (the
   custom cursor / smooth-scroll / magnetic still apply); the whole layer degrades
   gracefully if a CDN lib is blocked. Heavy interactive demos (maps, scrollable
-  admin, real-time canvases) carry the full layer too — watch for scroll/cursor
+  admin, real-time canvases) carry the full layer too - watch for scroll/cursor
   friction there.
 
 ## [2.10.1] - 2026-06-04 - Brighter particles + 3D tilt cards
@@ -278,7 +293,7 @@ generic dark dev-portfolio look.
 ### Added
 
 - **Headshot in the hero**: the professional photo (`saad.png`) now sits beside
-  the intro in a clean two-column hero — a real photo where the removed fake-code
+  the intro in a clean two-column hero - a real photo where the removed fake-code
   panel used to be.
 - **Deep-linkable view**: the Coding / Engineering toggle now reflects in the URL
   (`?view=…` via `history.replaceState`) and is read back on load, so a chosen
@@ -320,8 +335,8 @@ generic dark dev-portfolio look.
 ### Added
 
 - The **Ask Saad** recruiter chatbot's knowledge base (`ask/js/corpus.js`) now
-  includes the three open-source repos — **n8n-nodes-devtools**, **ShopFloor
-  API**, and **playwright-e2e** — so it can answer questions about Saad's
+  includes the three open-source repos - **n8n-nodes-devtools**, **ShopFloor
+  API**, and **playwright-e2e** - so it can answer questions about Saad's
   automation, Java / Spring Boot, npm-published, and test-automation work, with
   citation chips that open npm / GitHub. Bumped the corpus cache-buster.
 
@@ -331,7 +346,7 @@ generic dark dev-portfolio look.
 
 - **n8n-nodes-devtools is now published on npm** as
   [`@saadmughal435/n8n-nodes-devtools`](https://www.npmjs.com/package/@saadmughal435/n8n-nodes-devtools)
-  (v1.0.0 — scoped under the personal namespace because the bare name collided
+  (v1.0.0 - scoped under the personal namespace because the bare name collided
   with an existing package). The homepage project card now leads with a
   **"View on npm ↗"** CTA and shows an `npm install @saadmughal435/n8n-nodes-devtools`
   line; the README projects table and the no-JS fallback link npm too.
@@ -344,9 +359,9 @@ generic dark dev-portfolio look.
 
 ### Added
 
-- **New project — [n8n-nodes-devtools](https://github.com/saad-mughal435/n8n-nodes-devtools)**:
+- **New project - [n8n-nodes-devtools](https://github.com/saad-mughal435/n8n-nodes-devtools)**:
   a standalone **n8n community node in TypeScript** bundling developer & crypto
-  utilities — JWT sign/verify (HS256/RS256 with `exp`/`nbf` checks), hashing +
+  utilities - JWT sign/verify (HS256/RS256 with `exp`/`nbf` checks), hashing +
   HMAC (SHA-256/512), UUID / Nano ID, JSON↔CSV, base64, and regex extraction.
   Programmatic `INodeType` over a framework-free core, 20 Jest unit tests, ESLint
   (n8n rules), and a green lint + build + test GitHub Actions CI. Open source, MIT.
@@ -354,7 +369,7 @@ generic dark dev-portfolio look.
   project card (GitHub + CI links), and threaded **n8n / TypeScript / Node.js /
   Workflow Automation / JWT** through the hero stack, skills, the "Can I see
   Saad's code?" FAQ, the JSON-LD `knowsAbout`, the no-JS fallback, and
-  `package.json` keywords — so the portfolio now reads as an automation-tooling
+  `package.json` keywords - so the portfolio now reads as an automation-tooling
   shop alongside the Python/Java/JS work.
 
 ### Changed
@@ -393,7 +408,7 @@ generic dark dev-portfolio look.
 
 ### Added
 
-- **New project — [ShopFloor API](https://github.com/saad-mughal435/shopfloor-api)**: a
+- **New project - [ShopFloor API](https://github.com/saad-mughal435/shopfloor-api)**: a
   manufacturing-operations (MES/OEE) REST backend in **Spring Boot 3 / Java 21**.
   Job orders that compute OEE on close, downtime + root-cause logging, QC holds,
   and FIFO inventory; layered services, role-based JWT security, JPA +
@@ -403,7 +418,7 @@ generic dark dev-portfolio look.
   (links to the repo), and threaded **Java / Spring Boot / Spring Data JPA /
   PostgreSQL / Flyway / Maven / JUnit / Testcontainers / OpenAPI** through the
   hero stack, tech-stack chips, skills, marquee, FAQ, the JSON-LD `knowsAbout`,
-  the no-JS fallback, and `package.json` keywords — so the portfolio now reads
+  the no-JS fallback, and `package.json` keywords - so the portfolio now reads
   as a Java + Spring shop alongside the Python/JS work.
 
 ### Changed
@@ -417,11 +432,11 @@ generic dark dev-portfolio look.
 - **Removed the `/app/*  /app/index.html  200` rule from `_redirects`.**
   Cloudflare's `wrangler deploy` rejects it as an infinite-loop redirect
   (`.html` / `/index` stripping re-matches `/app/*`), which **failed the entire
-  deploy** — so every push from v2.6.0 onward never went live and the site
+  deploy** - so every push from v2.6.0 onward never went live and the site
   stayed frozen on the v2.5.0 build. Dropping the rule lets the deploy succeed
-  and ships v2.6.0–v2.6.4 at once. The MES app keeps its `/app/`-namespaced
+  and ships v2.6.0-v2.6.4 at once. The MES app keeps its `/app/`-namespaced
   client URLs; a deep-link hard-refresh falls through to the 404 (same as
-  before) — a real `/app/` single-page-app asset handler is a separate
+  before) - a real `/app/` single-page-app asset handler is a separate
   follow-up.
 
 ## [2.6.3] - 2026-06-01 - Professional hero copy + cache fix
@@ -473,7 +488,7 @@ generic dark dev-portfolio look.
 
 A multi-agent static audit of the homepage and all 12 demos (across
 accessibility, performance, SEO, responsive layout, security and correctness)
-surfaced 60 verified issues; this release fixes them. No new demos — existing
+surfaced 60 verified issues; this release fixes them. No new demos - existing
 surfaces made faster, more correct, and more accessible.
 
 ### Fixed - functional bugs (recruiter-visible)
@@ -551,32 +566,32 @@ surfaces made faster, more correct, and more accessible.
 
 ## [2.5.0] - 2026-05-21 - Marsad (10th) + Nabta (11th) + shared design tokens
 
-### Added — shared design tokens at `/tokens.css`
+### Added - shared design tokens at `/tokens.css`
 
 Brand + foundation tokens loaded by the homepage and the two new demos
 (Marsad, Nabta). Includes:
 
-- **Brand palette** — saadm.dev signature blue/teal/violet/coral/amber/gold/pink
-- **Neutral scale** — 12 steps from `--neutral-0` (#07080d) to `--neutral-1000` (white)
-- **Semantic colours** — status-ok / info / warning / urgent / critical / neutral
-- **Typography** — UI sans (Inter), display serif (Fraunces), monospace (JetBrains Mono),
+- **Brand palette** - saadm.dev signature blue/teal/violet/coral/amber/gold/pink
+- **Neutral scale** - 12 steps from `--neutral-0` (#07080d) to `--neutral-1000` (white)
+- **Semantic colours** - status-ok / info / warning / urgent / critical / neutral
+- **Typography** - UI sans (Inter), display serif (Fraunces), monospace (JetBrains Mono),
   Arabic (Tajawal). Modular type scale `--text-2xs` through `--text-6xl`.
-- **8px spacing scale** — `--space-1` (4px) through `--space-24` (96px)
-- **Radius scale** — `--radius-xs` (4px) through `--radius-2xl` (48px) + `--radius-full`
-- **Shadow ramp** — three elevation steps + atmospheric blue tint
-- **Easing** — `--ease` (smooth-out UI default), `--ease-in`, `--ease-out`, `--ease-bounce`
-- **Duration tokens** — `--duration-instant` through `--duration-slower`
-- **Z-index layer roles** — sticky / overlay / dropdown / modal / sheet / toast / tooltip / banner
-- **Layout** — page max-widths for prose / content / page / wide
+- **8px spacing scale** - `--space-1` (4px) through `--space-24` (96px)
+- **Radius scale** - `--radius-xs` (4px) through `--radius-2xl` (48px) + `--radius-full`
+- **Shadow ramp** - three elevation steps + atmospheric blue tint
+- **Easing** - `--ease` (smooth-out UI default), `--ease-in`, `--ease-out`, `--ease-bounce`
+- **Duration tokens** - `--duration-instant` through `--duration-slower`
+- **Z-index layer roles** - sticky / overlay / dropdown / modal / sheet / toast / tooltip / banner
+- **Layout** - page max-widths for prose / content / page / wide
 - **`prefers-reduced-motion`** auto-respected via `t-reduced-motion-safe`
 - **Light-mode opt-in** via `data-theme="light"` for new demos
 
 Existing demos (`/sanad/`, `/watad/`, `/b2c/`, `/b2b/`, `/property/`, etc)
-keep their own scoped `--xxx-*` design systems untouched — zero-risk change
+keep their own scoped `--xxx-*` design systems untouched - zero-risk change
 to anything shipped. New demos reference `/tokens.css` for spacing / radii
 / shadows so the visual rhythm stays consistent across the family.
 
-### Added — Marsad (10th demo) · real-time fleet dispatcher console
+### Added - Marsad (10th demo) · real-time fleet dispatcher console
 
 A live dispatcher console for a Dubai last-mile courier. ~4,500 LOC across
 6 HTML pages + 1 CSS + 11 JS modules.
@@ -603,9 +618,9 @@ A live dispatcher console for a Dubai last-mile courier. ~4,500 LOC across
 - **UAE-specific business logic** · per-zone SLAs (Marina 90 min ·
   Sharjah Al Nahda 150 min) · COD up to AED 500 · driver compensation
   rate per delivery + incentive · real Dubai geography in AI replies.
-- **`/marsad/` aliases** — `/dispatcher` `/fleet` `/marsad-driver`.
+- **`/marsad/` aliases** - `/dispatcher` `/fleet` `/marsad-driver`.
 
-### Added — Nabta (11th demo) · UAE HR + payroll SaaS
+### Added - Nabta (11th demo) · UAE HR + payroll SaaS
 
 A modern UAE-shaped HRIS. ~3,800 LOC across 3 HTML pages + 1 CSS + 5 JS
 modules. Single-SPA hash-routed because that's how real HRIS products
@@ -636,43 +651,43 @@ ship.
   a modal. Live + mock fallback.
 - **Settings + audit** · company settings (pay day, WPS code, leave
   caps, probation), audit log with actor + action + target + details.
-- **`/nabta/` aliases** — `/hr` `/payroll` `/wps`.
+- **`/nabta/` aliases** - `/hr` `/payroll` `/wps`.
 
 ### Portfolio integration
-- `demo.html` — 2 new demo cards (Marsad + Nabta). Intro "Nine" → "Eleven".
-- `index.html` PROJECTS — two new entries between Lahza and Pebble.
+- `demo.html` - 2 new demo cards (Marsad + Nabta). Intro "Nine" → "Eleven".
+- `index.html` PROJECTS - two new entries between Lahza and Pebble.
   Each card has 3 CTAs. Plus 2 new bullets in the "Other software
   demos" list.
-- `_headers` — cache rules for `/marsad/*` + `/nabta/*` + `/tokens.css`.
-- `_redirects` — 6 new friendly aliases.
-- `sitemap.xml` — 5 new entries.
-- `README.md` — 2 new rows in the demos table; intro "nine" → "eleven";
+- `_headers` - cache rules for `/marsad/*` + `/nabta/*` + `/tokens.css`.
+- `_redirects` - 6 new friendly aliases.
+- `sitemap.xml` - 5 new entries.
+- `README.md` - 2 new rows in the demos table; intro "nine" → "eleven";
   AI-integration count "four" → "six"; new mention of `/tokens.css`.
-- `humans.txt` — Marsad + Nabta added; AI feature count + map list updated.
-- `package.json` — 2.4.0 → 2.5.0.
+- `humans.txt` - Marsad + Nabta added; AI feature count + map list updated.
+- `package.json` - 2.4.0 → 2.5.0.
 
 ### AI integration count
 Six features now share the single Cloudflare Worker + encrypted
 `ANTHROPIC_API_KEY` secret:
 
-1. **Sanad** — customer support copilot
-2. **Watad** — facilities operations (3 features inside)
-3. **Ask Saad** — recruiter Q&A on the homepage
-4. **Lahza** — personal wellness (4 features inside)
-5. **Marsad** — fleet dispatch (4 features inside)
-6. **Nabta** — HR policy assistant
+1. **Sanad** - customer support copilot
+2. **Watad** - facilities operations (3 features inside)
+3. **Ask Saad** - recruiter Q&A on the homepage
+4. **Lahza** - personal wellness (4 features inside)
+5. **Marsad** - fleet dispatch (4 features inside)
+6. **Nabta** - HR policy assistant
 
 Same Worker, same key, six products. **No API key value anywhere in
-the repo** — only env-var references in the Worker handler. Each demo's
+the repo** - only env-var references in the Worker handler. Each demo's
 README documents the additive `/api/<demo>/ai/*` branch as a paste-able
 snippet.
 
 ### Mistake-prevention (from prior demos + this session)
 - All regex routes in mock-api.js wrap match in parens (POS lesson).
-- All CSS scoped with demo-specific prefix (`mrs-*`, `nbt-*`) — no bleed.
+- All CSS scoped with demo-specific prefix (`mrs-*`, `nbt-*`) - no bleed.
 - `?v=20260521a` cache-bust on every script + link tag.
 - Marsad's fleet-sim is in-memory only (vehicle positions don't persist
-  to localStorage — they'd be wrong on reload anyway).
+  to localStorage - they'd be wrong on reload anyway).
 - Nabta's payroll breakdown excludes the one employee on `status: 'notice'`
   to match UAE practice (final settlement is a separate process).
 - No `_worker.js` at site root; live mode is opt-in per demo.
@@ -681,11 +696,11 @@ snippet.
 ## [2.4.0] - 2026-05-20 - Lahza: AI journaling + mood-tracking mobile-first PWA (ninth demo)
 
 ### Added
-- **Lahza** at `/lahza/` — the portfolio's **first mobile-shaped demo**
+- **Lahza** at `/lahza/` - the portfolio's **first mobile-shaped demo**
   and its **fourth AI integration**. A Progressive Web App for personal
   journaling: one AI-suggested prompt a day, a few sentences, and
   Claude detects mood + surfaces weekly patterns. Installable on iOS,
-  Android, and desktop via "Add to Home Screen" — no App Store, no
+  Android, and desktop via "Add to Home Screen" - no App Store, no
   native compilation, no review queue.
 
   **Why:** the other eight demos are desktop-first dashboards / admin
@@ -700,13 +715,13 @@ snippet.
   service worker + 4 PNG/SVG icons.
 
 - **PWA shell** (`lahza/index.html` + `lahza/manifest.webmanifest` +
-  `lahza/sw.js`) — `display: standalone`, scope `/lahza/`, custom
+  `lahza/sw.js`) - `display: standalone`, scope `/lahza/`, custom
   service worker scoped exclusively to `/lahza/*` (never controls the
   homepage React SPA or any other demo). Network-first for HTML +
   AI calls, cache-first for static assets. Cache version key bumps
   on each deploy.
 
-- **Desktop "iPhone frame"** chrome (`lahza/css/lahza.css`) — on
+- **Desktop "iPhone frame"** chrome (`lahza/css/lahza.css`) - on
   viewports ≥ 720px the app renders inside a 390×844 phone-shaped
   CSS box (border-radius 56px, 4px bezel, notch cutout, soft drop
   shadow) centred on a soft gradient backdrop with install hint
@@ -732,7 +747,7 @@ snippet.
   dictionaries are mood-aware (a low-mood prompt suggestion differs
   from an energized one). Live mode reuses the same Cloudflare
   Worker proxy and the same encrypted `ANTHROPIC_API_KEY` secret as
-  the other three AI demos — set once, all four use it.
+  the other three AI demos - set once, all four use it.
 
 - **7 mobile views** (`lahza/js/views/*.js`):
   - Onboarding · 3 swipeable cards (welcome / patterns / privacy)
@@ -748,14 +763,14 @@ snippet.
   - Profile · streak + total entries + AI mode badge + language
     (EN/AR) + theme + reminder time + export-JSON + reset-demo
 
-- **Seed data** (`lahza/js/data.js`) — 14 days of fabricated journal
+- **Seed data** (`lahza/js/data.js`) - 14 days of fabricated journal
   entries generated by a deterministic seeded RNG so first-time
   visitors see a populated mood chart, journal feed, and insights
   view immediately. Entries describe a generic Dubai-based knowledge
-  worker (work, gym, family, weather) — intentionally NOT Saad's
+  worker (work, gym, family, weather) - intentionally NOT Saad's
   actual life, generic enough that no real person could pattern-match.
 
-- **Privacy by default** — entries live in `localStorage` only. They
+- **Privacy by default** - entries live in `localStorage` only. They
   never leave the device unless Live AI mode is enabled, in which
   case only the active question is sent to Claude via the Worker
   proxy. README and Profile view both state this explicitly.
@@ -764,32 +779,32 @@ snippet.
   keep their original language.
 
 ### Portfolio integration
-- `demo.html` — 9th demo card (intro "Eight" → "Nine").
-- `index.html` PROJECTS — new Lahza entry between Watad and Pebble,
+- `demo.html` - 9th demo card (intro "Eight" → "Nine").
+- `index.html` PROJECTS - new Lahza entry between Watad and Pebble,
   3 CTAs (Open app / AI Coach / Insights).
-- `_headers` — cache rules for `/lahza/css/*`, `/lahza/js/*`,
+- `_headers` - cache rules for `/lahza/css/*`, `/lahza/js/*`,
   `/lahza/icons/*`, `/lahza/manifest.webmanifest`, and
   `/lahza/sw.js` (with `Service-Worker-Allowed: /lahza/` header).
-- `_redirects` — friendly aliases `/journal`, `/mood`, `/coach`.
-- `sitemap.xml` — `/lahza/` entry.
-- `README.md` — new row in the demos table; intro "eight" → "nine".
-- `humans.txt` — Lahza added to the LLM + Mobile sections.
-- `package.json` — 2.3.0 → 2.4.0.
-- `ask/js/corpus.js` — new `demo-lahza` doc so the Ask Saad chatbot
+- `_redirects` - friendly aliases `/journal`, `/mood`, `/coach`.
+- `sitemap.xml` - `/lahza/` entry.
+- `README.md` - new row in the demos table; intro "eight" → "nine".
+- `humans.txt` - Lahza added to the LLM + Mobile sections.
+- `package.json` - 2.3.0 → 2.4.0.
+- `ask/js/corpus.js` - new `demo-lahza` doc so the Ask Saad chatbot
   cites Lahza when a recruiter asks about mobile / wellness / PWA work.
 
 ### Mistake-prevention (from prior demos)
 - Service worker registered with explicit `scope: '/lahza/'` so it
   never controls the homepage React SPA or any other demo.
 - `Service-Worker-Allowed` header sent in `_headers` defensively.
-- Every CSS class + variable scoped with `lz-` / `--lz-` — no bleed.
+- Every CSS class + variable scoped with `lz-` / `--lz-` - no bleed.
 - `HIST_VERSION` key on entries store + coach history so a future
   schema change wipes stale state cleanly.
 - `?v=20260520a` cache-bust on every script + link tag.
 - All regex routes in `mock-api.js` wrap the match assignment in
   parens (the POS / Watad / Ask lesson).
 - No `_worker.js` at site root; live mode is opt-in.
-- **No Anthropic API key value anywhere in the repo** — not in code,
+- **No Anthropic API key value anywhere in the repo** - not in code,
   not in README examples, not as a placeholder. The key lives in
   Cloudflare's encrypted secrets, set via the dashboard, referenced
   in the Worker by env var name only.
@@ -803,7 +818,7 @@ snippet.
 ## [2.3.0] - 2026-05-20 - Ask Saad: recruiter AI chatbot on the homepage
 
 ### Added
-- **Ask Saad** — a floating ✦ cyan chat bubble on the homepage and the
+- **Ask Saad** - a floating ✦ cyan chat bubble on the homepage and the
   contact page. Recruiters ask plain-English questions ("Does he know
   Python?" / "What did he build at Kingsley?" / "Can he relocate?") and
   get 2-4 sentence answers grounded in a pre-chunked corpus extracted
@@ -812,13 +827,13 @@ snippet.
 
   **Why:** the site now hosts eight interactive demos plus a long
   experience timeline + skills + FAQ. Recruiters in Dubai screen 50+
-  candidates a week — most won't browse all eight. Ask Saad is the
+  candidates a week - most won't browse all eight. Ask Saad is the
   30-second answer that drills them straight to the right demo.
 
   This is **a feature on the homepage, not a 9th demo**. The site still
   lists "Eight" interactive demos; Ask Saad adds a chat bubble.
 
-- **`ask/js/corpus.js`** — RAG knowledge base. ~40 documents extracted
+- **`ask/js/corpus.js`** - RAG knowledge base. ~40 documents extracted
   from existing homepage content blocks (`HERO_COPY` × 3, `FAQ_ITEMS`
   × 7, `EXPERIENCE` × 5, demo descriptions × 8, `STACK_GROUPS` × 9,
   `WhatThisProves` × 4, About prose, education, contact, quantified
@@ -826,10 +841,10 @@ snippet.
   or `scrollTo` anchor for citation drill-downs, and a hand-curated
   `tags[]` array. ~5 KB total.
 
-- **`ask/js/engine.js`** — `AskAI` namespace. Live/Mock pattern matching
+- **`ask/js/engine.js`** - `AskAI` namespace. Live/Mock pattern matching
   Sanad/Watad: `health()`, `retrieve(q, k)`, `answer({question,
   history})`, `rateMessage()`. Retrieval is keyword + tag overlap
-  (no embeddings, no vector DB — the corpus is small enough that
+  (no embeddings, no vector DB - the corpus is small enough that
   `tagOverlap × 2 + titleMatch × 1.5 + bodyTokenOverlap × 1` works
   great). Top-3 retrieved docs are passed to Claude in a `CONTEXT:`
   system-prompt block, each tagged `[doc-id]`. Claude cites by
@@ -838,25 +853,25 @@ snippet.
   the top doc's body with the same citation chips so Demo mode is
   realistic.
 
-- **`ask/js/chat.js`** — chat widget lifted from `sanad/js/chat.js`
+- **`ask/js/chat.js`** - chat widget lifted from `sanad/js/chat.js`
   and trimmed for this use case (no full-screen view, no local Qwen
   model, no "talk to a human" handoff, no KB-article side drawer).
   Keeps the typewriter animation, mode badge, 👍/👎 feedback per
   message, starter chips ("Does he know Python?" / "What did he
   build at Kingsley?" / "Can he relocate?" / "Tell me about Watad"),
   history persistence with `HIST_VERSION` schema-migration key.
-  Mounts itself once into the page as a sibling of the React tree —
+  Mounts itself once into the page as a sibling of the React tree -
   no conflict with the homepage SPA.
 
-- **`ask/css/ask.css`** — scoped `--ask-*` styles for the bubble +
+- **`ask/css/ask.css`** - scoped `--ask-*` styles for the bubble +
   chat window. Cyan + violet gradient to echo the existing site
   accent. Responsive: bubble + window reflow on mobile (`<480px`).
 
-- **`ask/js/app.js`** — tiny `AskApp` helper shim (escapeHtml,
+- **`ask/js/app.js`** - tiny `AskApp` helper shim (escapeHtml,
   jget/jset, showModal, toast). Lifted from `sanad/js/app.js` so
   chat.js doesn't have to import `SanadApp` across demos.
 
-- **`ask/README.md`** — operator quick-start + live-mode setup
+- **`ask/README.md`** - operator quick-start + live-mode setup
   (reference Cloudflare Worker handler for `/api/ask/ai/*`).
 
 ### Changed
@@ -867,10 +882,10 @@ snippet.
 - **`site/contact.html`**: loads the same Ask Saad assets. Adds a
   `✦ Or ask the AI` button in the form-actions row. When clicked
   the chat opens pre-filled with whatever the visitor has already
-  typed in the message textarea — no lost context.
+  typed in the message textarea - no lost context.
 - **`site/_headers`**: cache rules for `/ask/css/*` and `/ask/js/*`
   matching the other demos' pattern (`max-age=300, must-revalidate`).
-- **`site/README.md`**: new row in the features table — "Ask Saad —
+- **`site/README.md`**: new row in the features table - "Ask Saad -
   AI chatbot on the homepage".
 - **`site/package.json`**: 2.2.0 → 2.3.0. Minor bump for an additive
   feature, no breaking changes.
@@ -881,7 +896,7 @@ snippet.
 - Widget injected **after** `createRoot(...).render(<App />)` so the
   React tree owns `#root` exclusively. The widget DOM (`#ask-bubble`,
   `#ask-window`) lives as a body sibling.
-- Every CSS class + variable scoped with `ask-` / `--ask-` — no bleed
+- Every CSS class + variable scoped with `ask-` / `--ask-` - no bleed
   into the homepage or any demo.
 - `HIST_VERSION` key prevents stale canned-reply formats from showing
   up after a corpus update (same lesson as Sanad).
@@ -900,7 +915,7 @@ snippet.
 - **Watad** at `/watad/` - eighth interactive demo and the first one
   with a **real-time data shape** (the prior seven were request/response
   CRUD with optional polling). A live operator console for a commercial
-  smart building — the kind of software Imdaad / EFS / Schneider /
+  smart building - the kind of software Imdaad / EFS / Schneider /
   Honeywell ship to facilities teams. Designed to fill a specific gap
   in the portfolio: none of the existing seven demos proved Saad's
   electrical-engineering + industrial operations background, which is
@@ -915,7 +930,7 @@ snippet.
   pulse-on-alarm + zone heat tint + click-to-drill, severity-sorted
   alarm queue side panel with Web Audio cues + Acknowledge /
   Create-WO / ✦ AI-explain actions, bottom trend strip (3 mini SVG
-  line charts — kW, avg zone temp, alarm count). Subscribes to
+  line charts - kW, avg zone temp, alarm count). Subscribes to
   `WatadSim` and diff-renders every 5s with no flicker.
 - **Telemetry simulator** (`watad/js/telemetry-sim.js`) - the technical
   differentiator. ~310 LOC. Ticks every 5 seconds, mutates every
@@ -962,7 +977,7 @@ snippet.
   with AED estimates; `optimizeSetpoints({occupancy_pct,
   outdoor_temp_f, current_setpoints})` returns setpoint/schedule
   changes with estimated kWh + AED savings. Re-uses same
-  `ANTHROPIC_API_KEY` secret as Sanad — set once, both demos benefit.
+  `ANTHROPIC_API_KEY` secret as Sanad - set once, both demos benefit.
 - **Seed data** (`watad/js/data.js`) - Boulevard Tower B fictional
   building, 4 floors (Ground / L1 / L2 / Roof), 24 zones, 48 assets
   (2 chillers + 2 cooling towers + 4 AHUs + 20 FCUs + 7 lights + 7
@@ -1553,9 +1568,9 @@ snippet.
   costs, totals, debits, credits, balances, VAT, customs values, RM
   order values - read as "system broken" rather than "fabricated
   demo". Now derived from realistic AED unit costs (sugar 4.20 /
-  preforms 0.18 / caps 0.045 / labels 0.038 / FG cases 9.60–19.20).
+  preforms 0.18 / caps 0.045 / labels 0.038 / FG cases 9.60-19.20).
   Inventory scaled to factory levels (sugar 3.2t, preforms 480k,
-  caps 510k, labels 470k, FG 1.6–3.8k cases). Customers 80k-500k
+  caps 510k, labels 470k, FG 1.6-3.8k cases). Customers 80k-500k
   credit limits with believable balances. Quotations / proforma /
   Sage drafts / accounting drafts / cashbook / AR / AP / customs /
   FTA / RM orders / price list / GL sales all derive from those

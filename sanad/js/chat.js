@@ -112,7 +112,7 @@
       localPill = '<button class="snd-btn snd-btn--sm" id="local-toggle" disabled title="Downloading model…" style="background:rgba(139,92,246,.18);color:var(--snd-primary);border-color:rgba(139,92,246,.4);">⏳ ' + pct + '%</button>';
     } else if (state.local.ready && state.local.enabled) {
       var dev = (state.local.device === 'webgpu' ? 'WebGPU' : 'WASM');
-      localPill = '<button class="snd-btn snd-btn--sm" id="local-toggle" title="Local Qwen2.5-0.5B on ' + dev + ' — click to switch off" style="background:rgba(52,211,153,.18);color:var(--snd-mint);border-color:rgba(52,211,153,.4);">✨ Local · ' + dev + '</button>';
+      localPill = '<button class="snd-btn snd-btn--sm" id="local-toggle" title="Local Qwen2.5-0.5B on ' + dev + ' - click to switch off" style="background:rgba(52,211,153,.18);color:var(--snd-mint);border-color:rgba(52,211,153,.4);">✨ Local · ' + dev + '</button>';
     } else {
       localPill = '<button class="snd-btn snd-btn--sm" id="local-toggle" title="Run a real open-source LLM locally in your browser (~280MB one-time download)">✨ Try local AI</button>';
     }
@@ -195,7 +195,7 @@
           model: state.history[idx].model || 'unknown',
           fallback: !!state.history[idx].fallback
         });
-        window.toast(rating === 'up' ? 'Thanks — logged as helpful' : 'Logged as not helpful', rating === 'up' ? 'success' : 'warn');
+        window.toast(rating === 'up' ? 'Thanks - logged as helpful' : 'Logged as not helpful', rating === 'up' ? 'success' : 'warn');
         rerender();
       });
     });
@@ -205,16 +205,16 @@
   function toggleLocal() {
     if (state.local.loading) return;
     if (state.local.ready) {
-      // Already loaded — flip the preference. Model stays cached for free.
+      // Already loaded - flip the preference. Model stays cached for free.
       state.local.enabled = !state.local.enabled;
       SanadAI.preferLocal = state.local.enabled;
       SanadApp.jset(LOCAL_PREF_KEY, state.local.enabled);
-      window.toast(state.local.enabled ? '✨ Local AI on — Qwen 2.5 0.5B' : 'Switched back to demo / live mode', 'success');
+      window.toast(state.local.enabled ? '✨ Local AI on - Qwen 2.5 0.5B' : 'Switched back to demo / live mode', 'success');
       rerender();
       return;
     }
     // First time → confirm the download
-    var sizeNote = (typeof navigator !== 'undefined' && navigator.gpu) ? 'WebGPU detected — inference will be fast.' : 'Will run on WebAssembly (no WebGPU detected). Slower but works.';
+    var sizeNote = (typeof navigator !== 'undefined' && navigator.gpu) ? 'WebGPU detected - inference will be fast.' : 'Will run on WebAssembly (no WebGPU detected). Slower but works.';
     SanadApp.showModal({
       title: '✨ Run a real LLM in your browser?',
       body: '<p style="font-size:14px;line-height:1.6;">Downloads <strong>Qwen 2.5 0.5B Instruct</strong> (~280MB at q4 quantization, one-time, cached in your browser) and runs it 100% locally. No API key, no server round-trip, your messages never leave your machine.</p>'
@@ -261,7 +261,7 @@
       state.local.loading = false;
       state.local.enabled = false;
       SanadAI.preferLocal = false;
-      window.toast('Local AI failed to load — falling back to demo mode. ' + (e && e.message || ''), 'error', 4500);
+      window.toast('Local AI failed to load - falling back to demo mode. ' + (e && e.message || ''), 'error', 4500);
       rerender();
     });
   }
@@ -353,7 +353,7 @@
       }
     }).then(function (r) {
       window.toast('Ticket created. An agent will reply shortly.', 'success', 3500);
-      state.history.push({ role: 'assistant', content: "I've handed you off to our team. Someone will reply within our business hours (Sun–Thu 09:00–18:00 GST). You'll get an email at the address on file." });
+      state.history.push({ role: 'assistant', content: "I've handed you off to our team. Someone will reply within our business hours (Sun-Thu 09:00-18:00 GST). You'll get an email at the address on file." });
       saveHist(); rerender();
     });
   }

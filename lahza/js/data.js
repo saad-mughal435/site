@@ -1,9 +1,9 @@
-/* data.js — Lahza seed.
+/* data.js - Lahza seed.
  * Generates 14 days of fabricated journal entries from a deterministic
  * seeded RNG so a first-time visitor sees a populated mood chart, journal
- * feed, and insights view immediately — no waiting 14 days to feel "lived
+ * feed, and insights view immediately - no waiting 14 days to feel "lived
  * in". Entries describe a generic Dubai-based knowledge worker's life
- * (work, gym, family, weather) — intentionally NOT Saad's actual life. */
+ * (work, gym, family, weather) - intentionally NOT Saad's actual life. */
 (function () {
   'use strict';
 
@@ -20,7 +20,7 @@
   var rand = mulberry32(20260520);
   function pick(arr) { return arr[Math.floor(rand() * arr.length)]; }
 
-  // Pools — fabricated, generic, no real names/places beyond Dubai context
+  // Pools - fabricated, generic, no real names/places beyond Dubai context
   var PROMPTS = [
     "What surprised you today?",
     "Where did your energy go?",
@@ -47,10 +47,10 @@
   // Body fragments, mood-aware. Each line is a short journal-style sentence.
   var BODY_BY_MOOD = {
     joyful: [
-      "Closed the proposal early — felt light all afternoon.",
+      "Closed the proposal early - felt light all afternoon.",
       "Met up with old friends near Marina. Forgot how much I miss them.",
       "Cooked properly for the first time in weeks. The mess was worth it.",
-      "A small thing made the whole day work — a clean inbox at 5pm.",
+      "A small thing made the whole day work - a clean inbox at 5pm.",
       "Walked back from the office through the park. Took the long way on purpose."
     ],
     calm: [
@@ -76,7 +76,7 @@
     ],
     low: [
       "Body wasn't with it today. Got the minimum done, then closed the laptop early.",
-      "Skipped the gym. Don't know why — just couldn't get out the door.",
+      "Skipped the gym. Don't know why - just couldn't get out the door.",
       "Read three messages I didn't reply to. They'll still be there tomorrow.",
       "Quiet without being restful. The kind of quiet that needs a phone call.",
       "Heavy without a reason I can point at. Going to bed early."
@@ -101,7 +101,7 @@
     var pools = {
       0: ['calm', 'joyful', 'energized', 'neutral'],         // Sun (UAE work-week start, but easing in)
       1: ['energized', 'neutral', 'tense'],                  // Mon
-      2: ['tense', 'neutral', 'energized'],                  // Tue — usually hardest day
+      2: ['tense', 'neutral', 'energized'],                  // Tue - usually hardest day
       3: ['neutral', 'tense', 'calm', 'low'],                // Wed
       4: ['calm', 'joyful', 'energized'],                    // Thu (UAE Fri-eve mood)
       5: ['calm', 'joyful', 'low'],                          // Fri (weekend)
@@ -119,7 +119,7 @@
     var todayMidnight = new Date(); todayMidnight.setHours(0, 0, 0, 0);
     for (var i = daysBack; i >= 0; i--) {
       var day = new Date(todayMidnight.getTime() - i * 86400000);
-      // ~85% of days have an entry — the rest are gaps, which is realistic
+      // ~85% of days have an entry - the rest are gaps, which is realistic
       if (rand() < 0.15 && i !== 0) continue;
       var dow = day.getDay();
       var mood = moodForDayOfWeek(dow, i);
@@ -133,7 +133,7 @@
         var t = pick(TAG_POOL);
         if (tags.indexOf(t) === -1) tags.push(t);
       }
-      // Stable seed ID — does NOT include the timestamp so the ID doesn't
+      // Stable seed ID - does NOT include the timestamp so the ID doesn't
       // shift each day, which would orphan Coach citation chips after a
       // reload. User-created entries (in mock-api.js) use a Date.now() ID
       // and are kept separate.
