@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.1.1] - 2026-06-09 - hft-orderbook flagship card refresh (real data, hardening, perf A/B)
+
+Content refresh of the flagship C++ card after a major improvement pass on the repo. No layout or
+structural change.
+
+### Changed
+
+- **hft-orderbook card bullets** now reflect: real **BinaryFILE** captures + **multi-symbol**
+  routing by `stock_locate`; the lock-free pipeline **validated race-free by ThreadSanitizer**; the
+  **pluggable level store** benchmarked head-to-head (Google Benchmark); the MT5 bridge's **depth
+  publisher**; and the **ASan/UBSan + libFuzzer + clang `-Werror`** CI gates. New tags
+  (`Multi-symbol`, `Benchmarked`, `Sanitized + fuzzed`).
+- Updated the `SoftwareSourceCode` JSON-LD description and the `<noscript>` line to match; cache-bust
+  bumped to `?v=20260609d`.
+
 ## [5.1.0] - 2026-06-09 - Flagship C++ project: hft-orderbook (HFT market-data engine)
 
 Adds a flagship systems-programming project at the head of the "Systems programming in C++"
