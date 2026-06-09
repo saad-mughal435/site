@@ -4,10 +4,9 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>hft-orderbook — live L2 book viewer</title>
-<meta name="description" content="Watch the hft-orderbook C++ engine reconstruct a NASDAQ ITCH 5.0 limit-order book in real time: L2 depth, micro-price, order-book imbalance, spread and VWAP, streamed over a dependency-free WebSocket." />
+<meta name="description" content="Watch the hft-orderbook C++ engine reconstruct a NASDAQ ITCH 5.0 limit-order book in real time: L2 depth ladder, a cumulative depth-of-market chart, micro-price, order-book imbalance, spread and VWAP — streamed over a dependency-free WebSocket." />
 <link rel="canonical" href="https://saadm.dev/hft-book/viewer.html" />
 <script>
-  // Share the site's theme choice (set before first paint, no flash).
   (function () {
     try {
       var t = localStorage.getItem('theme');
@@ -18,106 +17,157 @@
 </script>
 <style>
   :root {
-    --bg: #0b0e17; --panel: #121726; --line: #1f2740; --ink: #e7ecf6; --mut: #828c9f;
-    --bid: #34d399; --bid-bar: rgba(52, 211, 153, 0.16);
-    --ask: #f87171; --ask-bar: rgba(248, 113, 113, 0.16);
+    --bg: #090c14; --panel: #111626; --panel2: #0d1220; --line: #1e2740; --ink: #e8edf8; --mut: #7e889c;
+    --bid: #2ee6a6; --bid-bar: rgba(46, 230, 166, 0.14); --bid-fill: rgba(46, 230, 166, 0.16);
+    --ask: #ff6b7a; --ask-bar: rgba(255, 107, 122, 0.14); --ask-fill: rgba(255, 107, 122, 0.16);
     --accent: #7aa2ff;
   }
   [data-theme="light"] {
-    --bg: #f6f8fc; --panel: #ffffff; --line: #e3e8f2; --ink: #0f172a; --mut: #54607a;
-    --bid: #0a8f5b; --bid-bar: rgba(10, 143, 91, 0.12);
-    --ask: #c23b3b; --ask-bar: rgba(194, 59, 59, 0.12);
+    --bg: #f4f7fc; --panel: #ffffff; --panel2: #fbfcfe; --line: #e4e9f3; --ink: #0f172a; --mut: #56627c;
+    --bid: #0a9d63; --bid-bar: rgba(10, 157, 99, 0.12); --bid-fill: rgba(10, 157, 99, 0.14);
+    --ask: #d23b48; --ask-bar: rgba(210, 59, 72, 0.10); --ask-fill: rgba(210, 59, 72, 0.12);
     --accent: #2c4f8f;
   }
   * { box-sizing: border-box; }
-  body {
-    margin: 0; background: var(--bg); color: var(--ink);
-    font: 15px/1.5 "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-    padding: 24px;
-  }
-  .wrap { max-width: 880px; margin: 0 auto; }
-  .head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
-  h1 { font-size: 1.2rem; margin: 0; letter-spacing: -0.01em; }
-  .badge { font: 600 0.66rem/1 "JetBrains Mono", ui-monospace, monospace; letter-spacing: 0.1em;
-           text-transform: uppercase; color: var(--accent); border: 1px solid var(--line);
-           border-radius: 999px; padding: 4px 9px; }
-  .sub { color: var(--mut); margin: 6px 0 18px; font-size: 0.9rem; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+    font: 15px/1.5 "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif; padding: 22px; }
+  .mono { font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace; font-variant-numeric: tabular-nums; }
+  .wrap { max-width: 920px; margin: 0 auto; }
+
+  /* ticker header */
+  .ticker { display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px 18px; }
+  .t-left { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .badge { font: 600 0.64rem/1 "JetBrains Mono", monospace; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent); border: 1px solid var(--line); border-radius: 999px; padding: 4px 9px; display: inline-flex; align-items: center; gap: 6px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+  .badge.live .dot { background: var(--bid); animation: pulse 1.4s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.25; } }
+  @media (prefers-reduced-motion: reduce) { .badge.live .dot { animation: none; } }
+  .t-name { font-weight: 700; font-size: 1.15rem; letter-spacing: 0.02em; }
+  .t-kind { color: var(--mut); font-size: 0.8rem; }
+  .t-right { text-align: right; }
+  .t-price { font-size: 1.7rem; font-weight: 700; letter-spacing: -0.01em; }
+  .t-price.up { color: var(--bid); } .t-price.down { color: var(--ask); }
+  .t-meta { color: var(--mut); font-size: 0.78rem; }
+
+  .sub { color: var(--mut); margin: 12px 2px 18px; font-size: 0.88rem; }
   .sub a, code { color: var(--accent); }
-  .grid { display: grid; grid-template-columns: 1.35fr 1fr; gap: 18px; }
-  @media (max-width: 700px) { .grid { grid-template-columns: 1fr; } }
-  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
-  .panel h2 { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.09em; color: var(--mut);
-              margin: 0 0 10px; display: flex; justify-content: space-between; }
-  .ladder { font-variant-numeric: tabular-nums; font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.84rem; }
-  .colhdr { display: grid; grid-template-columns: 1fr 1fr; padding: 0 8px 6px; color: var(--mut); font-size: 0.7rem; letter-spacing: 0.04em; }
+  code { font-size: 0.85em; }
+
+  .grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 16px; }
+  @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+  .panel h2 { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mut);
+    margin: 0 0 10px; display: flex; justify-content: space-between; align-items: center; }
+
+  .ladder { font-size: 0.84rem; }
+  .colhdr { display: grid; grid-template-columns: 1fr 1fr; padding: 0 8px 6px; color: var(--mut); font-size: 0.68rem; letter-spacing: 0.05em; }
   .colhdr span:last-child { text-align: right; }
   .row { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 2.5px 8px; border-radius: 5px; }
-  .row .bar { position: absolute; top: 1px; bottom: 1px; border-radius: 4px; transition: width 160ms ease; z-index: 0; }
+  .row .bar { position: absolute; top: 1px; bottom: 1px; border-radius: 4px; transition: width 180ms ease; z-index: 0; }
   .row .px, .row .qty { position: relative; z-index: 1; }
-  .row .qty { text-align: right; color: var(--ink); opacity: 0.82; }
+  .row .qty { text-align: right; opacity: 0.85; }
   .ask .px { color: var(--ask); } .ask .bar { right: 0; background: var(--ask-bar); }
   .bid .px { color: var(--bid); } .bid .bar { left: 0; background: var(--bid-bar); }
-  .row.best { background: rgba(122, 162, 255, 0.06); }
-  .row.best .px { font-weight: 600; }
-  .inside { display: flex; align-items: center; justify-content: center; gap: 12px;
-            padding: 9px; margin: 7px 0; border-top: 1px dashed var(--line); border-bottom: 1px dashed var(--line);
-            font-family: "JetBrains Mono", ui-monospace, monospace; }
+  .row.best { background: rgba(122, 162, 255, 0.07); }
+  .row.best .px { font-weight: 700; }
+  .inside { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 9px; margin: 7px 0;
+    border-top: 1px dashed var(--line); border-bottom: 1px dashed var(--line); }
   .inside .mid-px { font-weight: 700; font-size: 1.02rem; }
-  .inside .spr { color: var(--mut); font-size: 0.78rem; }
-  .metric { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+  .inside .spr { color: var(--mut); font-size: 0.76rem; }
+
+  .metric { display: flex; justify-content: space-between; padding: 6.5px 0; border-bottom: 1px solid var(--line); }
   .metric:last-of-type { border-bottom: 0; }
   .metric .k { color: var(--mut); }
-  .metric .v { font-family: "JetBrains Mono", ui-monospace, monospace; }
   .v.up { color: var(--bid); } .v.down { color: var(--ask); }
-  .imb { height: 9px; border-radius: 6px; background: var(--line); position: relative; margin: 4px 0 2px; overflow: hidden; }
-  .imb > span { position: absolute; top: 0; bottom: 0; transition: width 160ms ease; }
+  .imb { height: 9px; border-radius: 6px; background: var(--line); position: relative; margin: 6px 0 2px; overflow: hidden; }
+  .imb > span { position: absolute; top: 0; bottom: 0; transition: width 180ms ease; }
   .imb .pos { left: 50%; background: var(--bid); } .imb .neg { right: 50%; background: var(--ask); }
-  .imb-scale { display: flex; justify-content: space-between; color: var(--mut); font-size: 0.66rem; }
-  .controls { display: flex; align-items: center; gap: 12px; margin-top: 16px; color: var(--mut); font-size: 0.84rem; }
-  button { font: inherit; color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 8px; padding: 6px 13px; cursor: pointer; }
+  .imb-scale { display: flex; justify-content: space-between; color: var(--mut); font-size: 0.64rem; }
+  .spark { width: 100%; height: 34px; margin-top: 6px; display: block; }
+
+  .depth { margin-top: 16px; }
+  .depth svg { width: 100%; height: 180px; display: block; }
+  .axis { display: flex; justify-content: space-between; color: var(--mut); font-size: 0.7rem; padding: 4px 2px 0; }
+  .legend { display: flex; gap: 16px; font-size: 0.72rem; color: var(--mut); }
+  .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+  /* SVG colours via CSS (var() is not honoured in SVG presentation attributes) */
+  #bidArea { fill: var(--bid-fill); stroke: var(--bid); }
+  #askArea { fill: var(--ask-fill); stroke: var(--ask); }
+  #midLine { stroke: var(--mut); }
+  #sparkline { stroke: var(--accent); fill: none; }
+
+  .controls { display: flex; align-items: center; gap: 12px; margin-top: 14px; color: var(--mut); font-size: 0.82rem; }
+  button { font: inherit; color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 8px; padding: 6px 14px; cursor: pointer; }
   button:hover { border-color: var(--accent); }
   button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  .tag { font-size: 0.76rem; color: var(--mut); font-family: "JetBrains Mono", ui-monospace, monospace; }
+  .tag { font-size: 0.74rem; color: var(--mut); }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="head">
-    <h1>hft-orderbook — live L2 book</h1>
-    <span class="badge" id="mode">recorded</span>
+  <div class="ticker">
+    <div class="t-left">
+      <span class="badge" id="mode"><span class="dot"></span><span id="modetext">recorded</span></span>
+      <div>
+        <div class="t-name" id="symname">SYNTH</div>
+        <div class="t-kind">NASDAQ ITCH 5.0 · reconstructed in C++</div>
+      </div>
+    </div>
+    <div class="t-right">
+      <div class="t-price mono" id="last">—</div>
+      <div class="t-meta mono" id="topmeta">spread — · mid —</div>
+    </div>
   </div>
-  <p class="sub" id="status">A recorded replay of the C++ engine reconstructing a NASDAQ&nbsp;ITCH&nbsp;5.0
-    limit-order book. Pass <code>?ws=ws://host:port</code> to watch a local <code>wsbook</code> live. ·
+
+  <p class="sub" id="status">A recorded replay of the hft-orderbook engine reconstructing a live limit-order
+    book. Pass <code>?ws=ws://host:port</code> to watch a local <code>wsbook</code> live. ·
     <a href="https://github.com/saad-mughal435/hft-orderbook">source ↗</a></p>
 
   <div class="grid">
     <section class="panel" aria-label="Order book depth">
-      <h2><span>Depth · L2</span><span id="symhdr"></span></h2>
-      <div class="ladder">
+      <h2><span>Order book · L2</span><span class="mono" id="symhdr"></span></h2>
+      <div class="ladder mono">
         <div class="colhdr"><span>price</span><span>size</span></div>
         <div id="asks" role="list" aria-label="Ask levels"></div>
-        <div class="inside"><span class="mid-px" id="mid">—</span><span class="spr" id="spr"></span></div>
+        <div class="inside"><span class="mid-px mono" id="mid">—</span><span class="spr mono" id="spr"></span></div>
         <div id="bids" role="list" aria-label="Bid levels"></div>
       </div>
     </section>
 
     <section class="panel" aria-label="Microstructure signals">
       <h2><span>Signals</span></h2>
-      <div class="metric"><span class="k">mid</span><span class="v" id="m-mid">—</span></div>
-      <div class="metric"><span class="k">micro-price</span><span class="v" id="m-micro">—</span></div>
-      <div class="metric"><span class="k">spread</span><span class="v" id="m-spread">—</span></div>
-      <div class="metric"><span class="k">last trade</span><span class="v" id="m-last">—</span></div>
-      <div class="metric"><span class="k">VWAP</span><span class="v" id="m-vwap">—</span></div>
-      <div class="metric"><span class="k">volume</span><span class="v" id="m-vol">—</span></div>
-      <div class="metric"><span class="k">imbalance</span><span class="v" id="m-imb">—</span></div>
+      <div class="metric"><span class="k">micro-price</span><span class="v mono" id="m-micro">—</span></div>
+      <div class="metric"><span class="k">spread</span><span class="v mono" id="m-spread">—</span></div>
+      <div class="metric"><span class="k">last trade</span><span class="v mono" id="m-last">—</span></div>
+      <div class="metric"><span class="k">VWAP</span><span class="v mono" id="m-vwap">—</span></div>
+      <div class="metric"><span class="k">volume</span><span class="v mono" id="m-vol">—</span></div>
+      <div class="metric"><span class="k">imbalance</span><span class="v mono" id="m-imb">—</span></div>
       <div class="imb" aria-hidden="true"><span class="neg" id="imb-neg"></span><span class="pos" id="imb-pos"></span></div>
       <div class="imb-scale" aria-hidden="true"><span>asks</span><span>0</span><span>bids</span></div>
-      <div class="controls">
-        <button id="play" aria-label="Pause or resume the replay">Pause</button>
-        <span class="tag" id="seq">frame 0</span>
-      </div>
+      <h2 style="margin-top:16px"><span>mid · session</span></h2>
+      <svg class="spark" id="spark" viewBox="0 0 240 34" preserveAspectRatio="none" aria-hidden="true">
+        <polyline id="sparkline" stroke-width="1.5" vector-effect="non-scaling-stroke" points="" />
+      </svg>
     </section>
   </div>
+
+  <section class="panel depth" aria-label="Cumulative depth of market">
+    <h2><span>Cumulative depth</span>
+      <span class="legend"><span><i style="background:var(--bid)"></i>bids</span><span><i style="background:var(--ask)"></i>asks</span></span>
+    </h2>
+    <svg id="depth" viewBox="0 0 600 180" preserveAspectRatio="none" role="img" aria-label="Cumulative depth-of-market chart">
+      <path id="bidArea" stroke-width="1.5" vector-effect="non-scaling-stroke" d="" />
+      <path id="askArea" stroke-width="1.5" vector-effect="non-scaling-stroke" d="" />
+      <line id="midLine" stroke-width="1" stroke-dasharray="3 4" vector-effect="non-scaling-stroke" x1="300" y1="12" x2="300" y2="158" />
+    </svg>
+    <div class="axis mono"><span id="ax-lo">—</span><span id="ax-mid">—</span><span id="ax-hi">—</span></div>
+    <div class="controls">
+      <button id="play" aria-label="Pause or resume the replay">Pause</button>
+      <span class="tag mono" id="seq">frame 0</span>
+    </div>
+  </section>
 </div>
 
 <script>
@@ -125,30 +175,67 @@
   "use strict";
   var $ = function (id) { return document.getElementById(id); };
   var asksEl = $('asks'), bidsEl = $('bids'), midEl = $('mid'), sprEl = $('spr');
-  var statusEl = $('status'), modeEl = $('mode'), symHdr = $('symhdr');
-  var mMid = $('m-mid'), mMicro = $('m-micro'), mSpread = $('m-spread');
-  var mLast = $('m-last'), mVwap = $('m-vwap'), mVol = $('m-vol'), mImb = $('m-imb');
+  var statusEl = $('status'), modeEl = $('mode'), modeText = $('modetext'), symHdr = $('symhdr'), symName = $('symname');
+  var lastBig = $('last'), topMeta = $('topmeta');
+  var mMicro = $('m-micro'), mSpread = $('m-spread'), mLast = $('m-last'), mVwap = $('m-vwap'), mVol = $('m-vol'), mImb = $('m-imb');
   var imbPos = $('imb-pos'), imbNeg = $('imb-neg'), seqEl = $('seq'), playBtn = $('play');
+  var bidArea = $('bidArea'), askArea = $('askArea'), midLine = $('midLine');
+  var axLo = $('ax-lo'), axMid = $('ax-mid'), axHi = $('ax-hi'), sparkEl = $('sparkline');
+
+  var W = 600, H = 180, padX = 6, padTop = 12, baseY = 158;
+  var prevLast = null, midHist = [];
 
   function px(x) { return x == null ? '—' : Number(x).toFixed(4); }
   function qty(x) { return Number(x).toLocaleString('en-US'); }
-  function setCls(el, up) { el.className = 'v ' + (up > 0 ? 'up' : up < 0 ? 'down' : ''); }
+  function setCls(el, up) { el.className = 'v mono ' + (up > 0 ? 'up' : up < 0 ? 'down' : ''); }
 
   function rowHtml(side, p, q, pct, best) {
     return '<div class="row ' + side + (best ? ' best' : '') + '" role="listitem">' +
       '<span class="bar" style="width:' + pct.toFixed(1) + '%"></span>' +
-      '<span class="px">' + px(p) + '</span>' +
-      '<span class="qty">' + qty(q) + '</span></div>';
+      '<span class="px">' + px(p) + '</span><span class="qty">' + qty(q) + '</span></div>';
+  }
+
+  function depthArea(levels, X, Y) {  // levels: [[price, cum], ...] from inside outward
+    if (!levels.length) return '';
+    var d = 'M ' + X(levels[0][0]).toFixed(1) + ' ' + baseY;
+    for (var i = 0; i < levels.length; i++) d += ' L ' + X(levels[i][0]).toFixed(1) + ' ' + Y(levels[i][1]).toFixed(1);
+    return d + ' L ' + X(levels[levels.length - 1][0]).toFixed(1) + ' ' + baseY + ' Z';
+  }
+
+  function renderDepth(bids, asks, mid) {
+    if (!bids.length || !asks.length) { bidArea.setAttribute('d', ''); askArea.setAttribute('d', ''); return; }
+    var bc = 0, bidCum = bids.map(function (b) { bc += b[1]; return [b[0], bc]; });
+    var ac = 0, askCum = asks.map(function (a) { ac += a[1]; return [a[0], ac]; });
+    var maxCum = Math.max(bc, ac, 1);
+    var lo = bids[bids.length - 1][0], hi = asks[asks.length - 1][0];
+    var span = (hi - lo) || 1;
+    var X = function (p) { return padX + (p - lo) / span * (W - 2 * padX); };
+    var Y = function (c) { return baseY - c / maxCum * (baseY - padTop); };
+    bidArea.setAttribute('d', depthArea(bidCum, X, Y));
+    askArea.setAttribute('d', depthArea(askCum, X, Y));
+    var mx = X(mid).toFixed(1);
+    midLine.setAttribute('x1', mx); midLine.setAttribute('x2', mx);
+    axLo.textContent = px(lo); axMid.textContent = px(mid); axHi.textContent = px(hi);
+  }
+
+  function renderSpark(mid) {
+    if (mid == null) return;
+    midHist.push(mid);
+    if (midHist.length > 90) midHist.shift();
+    var n = midHist.length; if (n < 2) return;
+    var lo = Math.min.apply(null, midHist), hi = Math.max.apply(null, midHist), sp = (hi - lo) || 1;
+    var pts = '';
+    for (var i = 0; i < n; i++) pts += (i / (n - 1) * 240).toFixed(1) + ',' + (32 - (midHist[i] - lo) / sp * 30).toFixed(1) + ' ';
+    sparkEl.setAttribute('points', pts.trim());
   }
 
   function render(s) {
     if (!s) return;
-    var bids = s.bids || [], asks = s.asks || [];
-    var maxq = 1, i;
+    var bids = s.bids || [], asks = s.asks || [], i;
+    var maxq = 1;
     for (i = 0; i < bids.length; i++) if (bids[i][1] > maxq) maxq = bids[i][1];
     for (i = 0; i < asks.length; i++) if (asks[i][1] > maxq) maxq = asks[i][1];
 
-    // asks: worst (highest) at top, best (lowest) just above the inside strip
     var aHtml = '';
     for (i = Math.min(asks.length, 10) - 1; i >= 0; i--)
       aHtml += rowHtml('ask', asks[i][0], asks[i][1], (asks[i][1] / maxq) * 100, i === 0);
@@ -164,7 +251,17 @@
     sprEl.textContent = (sprPx != null ? 'spread ' + sprPx.toFixed(4) : '') +
       (s.spread_bps != null ? '  ·  ' + Number(s.spread_bps).toFixed(2) + ' bps' : '');
 
-    mMid.textContent = px(s.mid);
+    // ticker header: last price with tick direction
+    var shown = (s.last != null ? s.last : s.mid);
+    if (shown != null) {
+      lastBig.textContent = Number(shown).toFixed(4);
+      lastBig.className = 't-price mono ' + (prevLast == null ? '' : shown > prevLast ? 'up' : shown < prevLast ? 'down' : '');
+      prevLast = shown;
+    }
+    topMeta.textContent = (s.spread_bps != null ? 'spread ' + Number(s.spread_bps).toFixed(2) + ' bps' : 'spread —') +
+      '  ·  mid ' + px(s.mid);
+    if (s.symbol) { symHdr.textContent = s.symbol; symName.textContent = s.symbol; }
+
     mMicro.textContent = px(s.microprice);
     mSpread.textContent = (s.spread_bps != null ? Number(s.spread_bps).toFixed(2) + ' bps' : '—');
     setCls(mSpread, s.spread_bps);
@@ -172,18 +269,20 @@
     mVwap.textContent = (s.vwap != null ? px(s.vwap) : '—');
     mVol.textContent = (s.volume != null ? qty(s.volume) : '—');
     var imb = s.imbalance || 0;
-    mImb.textContent = imb.toFixed(3);
-    setCls(mImb, imb);
+    mImb.textContent = imb.toFixed(3); setCls(mImb, imb);
     imbPos.style.width = (imb > 0 ? imb * 50 : 0) + '%';
     imbNeg.style.width = (imb < 0 ? -imb * 50 : 0) + '%';
     seqEl.textContent = 'frame ' + (s.seq == null ? '?' : s.seq);
-    if (s.symbol) symHdr.textContent = s.symbol;
+
+    var midLineP = (bestBid != null && bestAsk != null) ? (bestBid + bestAsk) / 2 : s.mid;
+    renderDepth(bids, asks, midLineP);
+    renderSpark(s.mid);
   }
 
   // --- live WebSocket mode (?ws=ws://host:port) ---
   var wsUrl = new URLSearchParams(location.search).get('ws');
   if (wsUrl) {
-    modeEl.textContent = 'live';
+    modeEl.className = 'badge live'; modeText.textContent = 'live';
     statusEl.innerHTML = 'Live from <code>' + wsUrl + '</code> · ' +
       '<a href="https://github.com/saad-mughal435/hft-orderbook">source ↗</a>';
     try {
@@ -198,13 +297,12 @@
   // --- recorded replay mode (default) ---
   var frames = [], idx = 0, timer = null, playing = true;
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
   function step() { if (frames.length) { render(frames[idx]); idx = (idx + 1) % frames.length; } }
   function play() { if (timer) return; playing = true; playBtn.textContent = 'Pause'; timer = setInterval(step, 240); }
   function pause() { playing = false; playBtn.textContent = 'Resume'; if (timer) { clearInterval(timer); timer = null; } }
   playBtn.addEventListener('click', function () { playing ? pause() : play(); });
 
-  fetch('book-replay.json?v=2').then(function (r) { return r.json(); }).then(function (data) {
+  fetch('book-replay.json?v=3').then(function (r) { return r.json(); }).then(function (data) {
     frames = Array.isArray(data) ? data : [];
     if (!frames.length) { statusEl.textContent = 'No recorded data found.'; return; }
     render(frames[0]); idx = 1;

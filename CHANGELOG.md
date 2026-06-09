@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.3.2] - 2026-06-10 - L2 viewer: depth-of-market chart + ticker header
+
+### Added
+
+- **Cumulative depth-of-market chart** (the iconic bid/ask staircase) under the ladder — an SVG area
+  chart of cumulative size vs price, bids rising left / asks rising right with the spread gap and a mid
+  marker, plus a price axis. The most recognisable "trading terminal" visual.
+- **Ticker header** — symbol, a large last price that flashes green/red on the tick direction, a
+  spread/mid readout, and a pulsing live/recorded status badge.
+- **Mid-price sparkline** (session) in the signals panel.
+
+### Changed
+
+- Refined layout, spacing and monospace typography across the viewer; cache-bust the recorded data to
+  `?v=3`. (SVG colours moved to CSS since `var()` isn't honoured in SVG presentation attributes; strokes
+  use `non-scaling-stroke`.)
+
 ## [5.3.1] - 2026-06-10 - L2 viewer: clean (uncrossed) book + terminal polish
 
 ### Fixed
