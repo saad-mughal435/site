@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.3.0] - 2026-06-10 - hft-orderbook: HFT-role positioning (FIX, MoldUDP64, microsecond)
+
+Refreshes the flagship C++ card to position the engine for an HFT / low-latency C++ role after adding
+the order-entry and real-time-feed halves of a trading stack.
+
+### Changed
+
+- **Flagship card** sharpened: **MoldUDP64** UDP multicast feed (with sequence-gap detection),
+  **FIX 4.4** order entry (market data in, orders out), and a **sub-microsecond** lock-free pipeline
+  with `PAUSE` busy-wait + core pinning. New "Market connectivity" and "FIX 4.4 order entry" bullets;
+  added tags (`MoldUDP64`, `UDP multicast`, `FIX 4.4`, `Order entry`, `Sub-microsecond`).
+- **Skills**: added `FIX protocol` and `UDP multicast` to *Backend & APIs*.
+- JSON-LD description + `<noscript>` line updated to match. Recompiled `home.app.js`; cache-bust
+  `?v=20260610a`.
+
 ## [5.2.0] - 2026-06-09 - hft-orderbook: live L2 WebSocket book viewer + next-round refresh
 
 Adds an interactive demo and refreshes the flagship C++ card after a second deep improvement pass on
