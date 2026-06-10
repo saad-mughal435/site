@@ -1,7 +1,7 @@
 /* ai-engine.js - The Sanad AI client.
    - Calls the Cloudflare Worker proxy at /api/sanad/ai/* when live.
    - Falls back to a deterministic mock dictionary when the Worker is
-     unreachable or the ANTHROPIC_API_KEY secret isn't configured.
+     unreachable or the LLM_API_KEY secret isn't configured.
    - Each feature builds its own feature-specific system prompt and posts
      {model, system, messages, max_tokens, stream?} to the proxy.
    - Logs every call to /sanad/api/admin/ai-logs (which writes to localStorage)
@@ -17,8 +17,8 @@
   function health() {
     if (modeCache) return Promise.resolve(modeCache);
     return fetch('/api/sanad/ai/health').then(function (r) { return r.json(); })
-      .then(function (j) { modeCache = { live: !!j.live, model: j.model || 'claude-haiku-4-5-20251001' }; return modeCache; })
-      .catch(function () { modeCache = { live: false, model: 'claude-haiku-4-5-20251001' }; return modeCache; });
+      .then(function (j) { modeCache = { live: !!j.live, model: j.model || 'fast' }; return modeCache; })
+      .catch(function () { modeCache = { live: false, model: 'fast' }; return modeCache; });
   }
 
   function logCall(feature, payload) {
@@ -35,7 +35,7 @@
     // opts = { feature, system, messages, max_tokens?, stream?, model? }
     var started = Date.now();
     return settings().then(function (s) {
-      var model = opts.model || s.model || 'claude-haiku-4-5-20251001';
+      var model = opts.model || s.model || 'fast';
       var payload = {
         model: model,
         system: opts.system,
@@ -187,7 +187,7 @@
   }
 
   // Apply a "tone overlay" to a generated reply. In live mode the same
-  // tone instruction is sent to Claude via the system prompt; in mock
+  // tone instruction is sent to the model via the system prompt; in mock
   // mode we apply lightweight text transformations so the user sees a
   // visible difference when they pick a different tone.
   function applyTone(text, tone) {
@@ -259,7 +259,7 @@
     if (/^bye|^goodbye|^see\s*ya|^later/i.test(raw))
       return "Take care! ☕ Come back any time.";
     if (/are\s+you\s+(a\s+)?(human|real|bot|ai|robot)/i.test(raw))
-      return "I'm an AI assistant powered by Claude. I can answer most questions instantly, and if I can't, I'll connect you with a human agent - just tap *Open a ticket*.";
+      return "I'm an AI assistant powered by AI. I can answer most questions instantly, and if I can't, I'll connect you with a human agent - just tap *Open a ticket*.";
     if (/who\s+are\s+you|what\s+are\s+you|what\s+can\s+you\s+do/i.test(raw))
       return "I'm Sanad - the AI support copilot for this demo. I'm trained on our knowledge base so I can answer most billing, account, and technical questions. For anything I'm not sure about, I'll point you to a human.";
     if (/help/i.test(raw) && raw.length < 20)
@@ -501,7 +501,7 @@
 
     kbAnswer: function (opts) {
       // opts = { question, history?, stream?, onToken? }
-      // Smaller KB context for local (token-budget) than for hosted Claude.
+      // Smaller KB context for local (token-budget) than for hosted AI.
       var localCtx = KB.slice(0, 8).map(function (a) { return '## ' + a.title + '\n' + (a.body_md || '').slice(0, 350); }).join('\n\n');
       var kbCtx = KB.slice(0, 20).map(function (a) { return '## ' + a.title + '\n' + (a.body_md || '').slice(0, 800); }).join('\n\n');
       var msgs = (opts.history || []).slice(-6).map(function (h) { return { role: h.role, content: h.content }; });

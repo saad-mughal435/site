@@ -9,8 +9,8 @@
   function health() {
     if (modeCache) return Promise.resolve(modeCache);
     return fetch('/api/nabta/ai/health').then(function (r) { return r.json(); })
-      .then(function (j) { modeCache = { live: !!j.live, model: j.model || 'claude-haiku-4-5-20251001' }; return modeCache; })
-      .catch(function () { modeCache = { live: false, model: 'claude-haiku-4-5-20251001' }; return modeCache; });
+      .then(function (j) { modeCache = { live: !!j.live, model: j.model || 'fast' }; return modeCache; })
+      .catch(function () { modeCache = { live: false, model: 'fast' }; return modeCache; });
   }
 
   function retrieve(query, policies) {
@@ -26,7 +26,7 @@
 
   function call(opts) {
     var started = Date.now();
-    var model = opts.model || 'claude-haiku-4-5-20251001';
+    var model = opts.model || 'fast';
     return fetch('/api/nabta/ai/call', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

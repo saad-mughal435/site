@@ -59,7 +59,7 @@
       + '</div>';
     WatadAI.health().then(function (h) {
       var el = document.getElementById('a-mode');
-      var nm = h.model.indexOf('haiku') !== -1 ? 'Haiku 4.5' : h.model.indexOf('sonnet') !== -1 ? 'Sonnet 4.6' : 'Opus 4.7';
+      var nm = h.model.indexOf("fast") !== -1 ? 'Fast' : h.model.indexOf("balanced") !== -1 ? 'Balanced' : 'Max';
       el.className = h.live ? 'wtd-mode-badge live' : 'wtd-mode-badge';
       el.textContent = h.live ? 'Live · ' + nm : 'Demo mode';
     });

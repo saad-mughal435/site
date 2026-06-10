@@ -3,7 +3,7 @@
  * BMS-specialised feature cases: explain_alarm, suggest_maintenance,
  * optimize_setpoints. Same Live/Mock pattern - calls Cloudflare Worker proxy
  * at /api/watad/ai/* when configured, falls back to a deterministic mock
- * dictionary otherwise. Re-uses the same ANTHROPIC_API_KEY secret as Sanad.
+ * dictionary otherwise. Re-uses the same LLM_API_KEY secret as Sanad.
  *
  * Every call is logged to /watad/api/admin/ai-logs (which writes to
  * localStorage) so the admin analytics tab can track usage + cost +
@@ -16,8 +16,8 @@
   function health() {
     if (modeCache) return Promise.resolve(modeCache);
     return fetch('/api/watad/ai/health').then(function (r) { return r.json(); })
-      .then(function (j) { modeCache = { live: !!j.live, model: j.model || 'claude-haiku-4-5-20251001' }; return modeCache; })
-      .catch(function () { modeCache = { live: false, model: 'claude-haiku-4-5-20251001' }; return modeCache; });
+      .then(function (j) { modeCache = { live: !!j.live, model: j.model || 'fast' }; return modeCache; })
+      .catch(function () { modeCache = { live: false, model: 'fast' }; return modeCache; });
   }
 
   function logCall(feature, payload) {
@@ -30,7 +30,7 @@
   function call(opts) {
     var started = Date.now();
     return settings().then(function (s) {
-      var model = opts.model || s.model || 'claude-haiku-4-5-20251001';
+      var model = opts.model || s.model || 'fast';
       var payload = {
         model: model,
         system: opts.system,

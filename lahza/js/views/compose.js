@@ -65,7 +65,7 @@
       +       '<div class="lz-field-label">Tags</div>'
       +       '<div id="cmp-tags">' + tagChipsHtml + '</div>'
       +     '</div>'
-      +     '<p style="font-size:11.5px;color:var(--lz-muted);margin-top:14px;">Stays in your browser. If you skip the mood, Claude will guess one from the text after you save.</p>'
+      +     '<p style="font-size:11.5px;color:var(--lz-muted);margin-top:14px;">Stays in your browser. If you skip the mood, AI will guess one from the text after you save.</p>'
       +   '</div>'
       + '</div>';
 
@@ -136,7 +136,7 @@
       LahzaApp.api('/entries', { method: 'POST', body: entry }).then(function (r) {
         if (!r.body.ok) { window.toast('Could not save', 'error'); saveBtn.disabled = false; saveBtn.textContent = 'Save'; return; }
         var saved = r.body.entry;
-        window.toast(selectedMood ? 'Saved' : 'Saved · Claude is reading the mood…', 'success');
+        window.toast(selectedMood ? 'Saved' : 'Saved · AI is reading the mood…', 'success');
 
         // If user didn't pick a mood, ask AI to detect
         if (!selectedMood) {

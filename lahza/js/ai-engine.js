@@ -16,13 +16,13 @@
   function health() {
     if (modeCache) return Promise.resolve(modeCache);
     return fetch('/api/lahza/ai/health').then(function (r) { return r.json(); })
-      .then(function (j) { modeCache = { live: !!j.live, model: j.model || 'claude-haiku-4-5-20251001' }; return modeCache; })
-      .catch(function () { modeCache = { live: false, model: 'claude-haiku-4-5-20251001' }; return modeCache; });
+      .then(function (j) { modeCache = { live: !!j.live, model: j.model || 'fast' }; return modeCache; })
+      .catch(function () { modeCache = { live: false, model: 'fast' }; return modeCache; });
   }
 
   function call(opts) {
     var started = Date.now();
-    var model = opts.model || 'claude-haiku-4-5-20251001';
+    var model = opts.model || 'fast';
     var payload = {
       model: model,
       system: opts.system,
@@ -173,7 +173,7 @@
         temperature: 0.8,
         context: ctx
       }).then(function (r) {
-        // Strip surrounding quotes if Claude adds them
+        // Strip surrounding quotes if AI adds them
         return { text: r.text.replace(/^["'`]|["'`]$/g, '').trim(), model: r.model, latency_ms: r.latency_ms, fallback: r.fallback };
       });
     },

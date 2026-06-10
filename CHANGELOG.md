@@ -644,7 +644,7 @@ ship.
   expected salary range.
 - **Performance reviews** · Q2-2026 cycle · 12 reviews across status
   (not started / in progress / submitted) · rating + goals-met %.
-- **AI policy assistant** (`NabtaAI`) · Claude grounded in 6 HR
+- **AI policy assistant** (`NabtaAI`) · an LLM grounded in 6 HR
   policies (leave, WPS, visa, gratuity, probation, remote) + UAE
   Labour Law (Federal Decree-Law No. 33 of 2021). Every reply cites
   by `[pol-xxx]`. Click a citation chip → opens the source policy in
@@ -668,7 +668,7 @@ ship.
 
 ### AI integration count
 Six features now share the single Cloudflare Worker + encrypted
-`ANTHROPIC_API_KEY` secret:
+`LLM_API_KEY` secret:
 
 1. **Sanad** - customer support copilot
 2. **Watad** - facilities operations (3 features inside)
@@ -691,7 +691,7 @@ snippet.
 - Nabta's payroll breakdown excludes the one employee on `status: 'notice'`
   to match UAE practice (final settlement is a separate process).
 - No `_worker.js` at site root; live mode is opt-in per demo.
-- No Claude co-author trailer on commits.
+- No AI co-author trailer on commits.
 
 ## [2.4.0] - 2026-05-20 - Lahza: AI journaling + mood-tracking mobile-first PWA (ninth demo)
 
@@ -699,7 +699,7 @@ snippet.
 - **Lahza** at `/lahza/` - the portfolio's **first mobile-shaped demo**
   and its **fourth AI integration**. A Progressive Web App for personal
   journaling: one AI-suggested prompt a day, a few sentences, and
-  Claude detects mood + surfaces weekly patterns. Installable on iOS,
+  AI detects mood + surfaces weekly patterns. Installable on iOS,
   Android, and desktop via "Add to Home Screen" - no App Store, no
   native compilation, no review queue.
 
@@ -746,7 +746,7 @@ snippet.
   Same Live/Mock fallback pattern as Sanad / Watad / Ask Saad. Mock
   dictionaries are mood-aware (a low-mood prompt suggestion differs
   from an energized one). Live mode reuses the same Cloudflare
-  Worker proxy and the same encrypted `ANTHROPIC_API_KEY` secret as
+  Worker proxy and the same encrypted `LLM_API_KEY` secret as
   the other three AI demos - set once, all four use it.
 
 - **7 mobile views** (`lahza/js/views/*.js`):
@@ -772,7 +772,7 @@ snippet.
 
 - **Privacy by default** - entries live in `localStorage` only. They
   never leave the device unless Live AI mode is enabled, in which
-  case only the active question is sent to Claude via the Worker
+  case only the active question is sent to the model via the Worker
   proxy. README and Profile view both state this explicitly.
 
 - **EN + AR locale toggle** in Profile. UI flips RTL; entry bodies
@@ -804,7 +804,7 @@ snippet.
 - All regex routes in `mock-api.js` wrap the match assignment in
   parens (the POS / Watad / Ask lesson).
 - No `_worker.js` at site root; live mode is opt-in.
-- **No Anthropic API key value anywhere in the repo** - not in code,
+- **No LLM API key value anywhere in the repo** - not in code,
   not in README examples, not as a placeholder. The key lives in
   Cloudflare's encrypted secrets, set via the dashboard, referenced
   in the Worker by env var name only.
@@ -846,8 +846,8 @@ snippet.
   history})`, `rateMessage()`. Retrieval is keyword + tag overlap
   (no embeddings, no vector DB - the corpus is small enough that
   `tagOverlap × 2 + titleMatch × 1.5 + bodyTokenOverlap × 1` works
-  great). Top-3 retrieved docs are passed to Claude in a `CONTEXT:`
-  system-prompt block, each tagged `[doc-id]`. Claude cites by
+  great). Top-3 retrieved docs are passed to AI in a `CONTEXT:`
+  system-prompt block, each tagged `[doc-id]`. AI cites by
   `[doc-id]` at sentence endings; the client parses those into
   citation chips. Mock fallback returns a templated answer built from
   the top doc's body with the same citation chips so Demo mode is
@@ -966,7 +966,7 @@ snippet.
   Work orders (admin lens), Staff (with permission matrix for
   operator / tech / admin), Integrations (BACnet IP / Modbus TCP /
   DALI / MQTT / Maximo CMMS / ServiceNow), AI Console (model
-  selector for Haiku 4.5 / Sonnet 4.6 / Opus 4.7 + editable system
+  selector for Fast / Balanced / Max + editable system
   prompt + test-with-sample), Settings (energy tariff, CO₂ factor,
   ASHRAE band, units, reset-demo), Audit log with CSV export.
 - **WatadAI** (`watad/js/ai-engine.js`) - lifted from `sanad/js/ai-engine.js`,
@@ -977,7 +977,7 @@ snippet.
   with AED estimates; `optimizeSetpoints({occupancy_pct,
   outdoor_temp_f, current_setpoints})` returns setpoint/schedule
   changes with estimated kWh + AED savings. Re-uses same
-  `ANTHROPIC_API_KEY` secret as Sanad - set once, both demos benefit.
+  `LLM_API_KEY` secret as Sanad - set once, both demos benefit.
 - **Seed data** (`watad/js/data.js`) - Boulevard Tower B fictional
   building, 4 floors (Ground / L1 / L2 / Roof), 24 zones, 48 assets
   (2 chillers + 2 cooling towers + 4 AHUs + 20 FCUs + 7 lights + 7
@@ -1013,7 +1013,7 @@ snippet.
 ### Added
 - **Sanad** at `/sanad/` - seventh interactive demo and the first one
   with real LLM integration. A SaaS-style customer-support helpdesk
-  with Claude woven into every screen rather than bolted on as a
+  with AI woven into every screen rather than bolted on as a
   separate chat widget. ~5,200 LOC across 6 HTML pages + 1 CSS + 10
   JS modules.
 - **Agent inbox** (`sanad/inbox.html`) - three-column layout:
@@ -1047,7 +1047,7 @@ snippet.
   clusters recent tickets and proposes new articles), Categories
   (CRUD with auto-tag toggle), Agents (list + permission matrix for
   agent / lead / admin), Customers (directory with LTV), **AI
-  Console** (model selector for Haiku 4.5 / Sonnet 4.6 / Opus 4.7,
+  Console** (model selector for Fast / Balanced / Max,
   editable system prompt with test-with-sample preview, temperature
   / max-tokens / cache toggles), Analytics (daily volume bars,
   by-category split, AI calls by feature, fallback rate, latency,
@@ -1086,7 +1086,7 @@ snippet.
   Admin), six-feature explainer grid, two-minute walkthrough.
 - **404** branded not-found.
 - **`sanad/README.md`** documents how to enable live mode (set
-  `ANTHROPIC_API_KEY` as a Cloudflare Worker secret), the cost
+  `LLM_API_KEY` as a Cloudflare Worker secret), the cost
   guardrails, and the file layout. Includes a copy-pasteable Worker
   reference implementation.
 
@@ -1095,9 +1095,9 @@ snippet.
   "Demo mode" badge and all AI features return realistic
   pattern-matched mock responses. The demo works 100% offline and
   never breaks for visitors.
-- To enable **Live mode** (real Claude responses), the repo's
+- To enable **Live mode** (real AI responses), the repo's
   Cloudflare Worker needs a `_worker.js` at root that proxies
-  `/api/sanad/ai/*` to Anthropic with a server-side secret. The
+  `/api/sanad/ai/*` to the LLM provider with a server-side secret. The
   initial attempt to add this Worker (commit 036a7ea) failed the
   Cloudflare Workers Builds twice in a row - the build config
   doesn't auto-detect `_worker.js` alongside `assets.directory:

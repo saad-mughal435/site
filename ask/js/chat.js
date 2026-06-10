@@ -156,7 +156,7 @@
       + '</div>'
       + '<div class="ask-body" id="ask-body">' + msgsHtml + typingHtml + '</div>'
       + '<div class="ask-foot">'
-      +   '<div class="ask-foot-reset"><a id="ask-reset">Start over</a> · powered by Claude · saad@saadm.dev</div>'
+      +   '<div class="ask-foot-reset"><a id="ask-reset">Start over</a> · powered by AI · saad@saadm.dev</div>'
       +   '<div class="ask-input-row">'
       +     '<textarea class="ask-input" id="ask-input" placeholder="Ask anything about Saad…" rows="1"' + (state.generating ? ' disabled' : '') + '></textarea>'
       +     '<button class="ask-send" id="ask-send" aria-label="Send" disabled>↑</button>'
@@ -171,10 +171,10 @@
     AskAI.health().then(function (h) {
       var el = document.getElementById('ask-mode-badge');
       if (!el) return;
-      var nm = h.model.indexOf('haiku') !== -1 ? 'Haiku 4.5' : h.model.indexOf('sonnet') !== -1 ? 'Sonnet 4.6' : 'Opus 4.7';
+      var nm = h.model.indexOf("fast") !== -1 ? 'Fast' : h.model.indexOf("balanced") !== -1 ? 'Balanced' : 'Max';
       el.className = h.live ? 'ask-mode-badge live' : 'ask-mode-badge';
       el.textContent = h.live ? 'Live · ' + nm : 'Demo mode';
-      el.title = h.live ? 'Real Claude responses via Worker proxy' : 'Pattern-matched mock replies - see ask/README.md';
+      el.title = h.live ? 'Real AI responses via Worker proxy' : 'Pattern-matched mock replies - see ask/README.md';
     });
   }
 

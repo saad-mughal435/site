@@ -792,15 +792,15 @@ const DEMO_PROJECTS = [
   {
     domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
     title: 'Sanad - AI customer-support copilot',
-    desc: <Fragment>A SaaS-style helpdesk with Claude integrated at every touchpoint. Built to demonstrate <strong>real LLM wiring</strong> end-to-end - system prompts, streaming, prompt caching, server-side key handling via a Cloudflare Worker proxy, graceful mock fallback when the key isn't set, and cost tracking - not just an OpenAI playground demo. Works offline in deterministic mock mode out of the box.</Fragment>,
+    desc: <Fragment>A SaaS-style helpdesk with an LLM integrated at every touchpoint. Built to demonstrate <strong>real LLM wiring</strong> end-to-end - system prompts, streaming, prompt caching, server-side key handling via a Cloudflare Worker proxy, graceful mock fallback when the key isn't set, and cost tracking - not just an OpenAI playground demo. Works offline in deterministic mock mode out of the box.</Fragment>,
     bullets: [
       <Fragment><strong>Agent inbox with AI sidebar</strong>: suggested reply (with KB citations), conversation summary, sentiment, auto-category, EN↔AR translation, AI-drafted quick-action reasons. Click "Insert" to push the AI's draft into the composer.</Fragment>,
       <Fragment><strong>Customer chat widget</strong>: streaming AI replies grounded in the knowledge base with clickable citation chips. "Talk to a human" creates a real ticket in the agent inbox.</Fragment>,
       <Fragment><strong>Knowledge base</strong>: 77 articles in 6 categories, tiny custom markdown renderer, admin-only AI actions per article (<em>Generate FAQ</em>, <em>Suggest improvements</em>, <em>Translate to Arabic</em>), plus a "Find gaps" feature that clusters recent tickets and proposes new articles.</Fragment>,
-      <Fragment><strong>11-section admin SPA</strong>: dashboard with sentiment split + hourly heatmap + AI-cost ticker, conversations, KB CRUD, categories, agents with permission matrix, customers, <strong>AI Console</strong> (model selector Haiku 4.5 / Sonnet 4.6 / Opus 4.7, editable system prompt with test-with-sample preview, temperature / max-tokens / cache toggles), analytics (daily volume, by-category, fallback rate, latency, cost, CSV export), integrations, settings, audit log.</Fragment>,
-      <Fragment><strong>Live + mock modes</strong>: detects whether a Cloudflare Worker proxy with ANTHROPIC_API_KEY is configured via <code>GET /api/sanad/ai/health</code> and shows a Live/Demo badge in the topbar. Every feature gracefully falls back to a deterministic pattern-matched mock when no key is set - the demo never breaks for visitors.</Fragment>,
+      <Fragment><strong>11-section admin SPA</strong>: dashboard with sentiment split + hourly heatmap + AI-cost ticker, conversations, KB CRUD, categories, agents with permission matrix, customers, <strong>AI Console</strong> (model selector Fast / Balanced / Max, editable system prompt with test-with-sample preview, temperature / max-tokens / cache toggles), analytics (daily volume, by-category, fallback rate, latency, cost, CSV export), integrations, settings, audit log.</Fragment>,
+      <Fragment><strong>Live + mock modes</strong>: detects whether a Cloudflare Worker proxy with LLM_API_KEY is configured via <code>GET /api/sanad/ai/health</code> and shows a Live/Demo badge in the topbar. Every feature gracefully falls back to a deterministic pattern-matched mock when no key is set - the demo never breaks for visitors.</Fragment>,
     ],
-    tags: ['Vanilla JS (ES6+)', 'Claude API', 'CF Worker proxy', 'RAG (lite)', 'Streaming', 'Prompt caching', 'Server-side keys', 'Mock fallback', 'EN/AR i18n', 'localStorage'],
+    tags: ['Vanilla JS (ES6+)', 'LLM API', 'CF Worker proxy', 'RAG (lite)', 'Streaming', 'Prompt caching', 'Server-side keys', 'Mock fallback', 'EN/AR i18n', 'localStorage'],
     ctas: [
       { label: 'Open inbox ↗', href: 'sanad/inbox.html', target: '_blank', primary: true },
       { label: 'Try chat widget ↗', href: 'sanad/chat.html', target: '_blank' },
@@ -818,9 +818,9 @@ const DEMO_PROJECTS = [
       <Fragment><strong>Alarm management</strong> · severity ranks (info / warning / urgent / critical), audio cue on new urgent/critical, Acknowledge / Create-WO / ✦ AI-explain actions per alarm card. Rule editor in admin.</Fragment>,
       <Fragment><strong>Energy + sustainability</strong> · 30-day daily kWh bar chart with ASHRAE 90.1 reference band overlay, sub-meter breakdown with % of total + trend, DEWA DSM demand-response opt-in panel, kgCO₂ tile using UAE grid factor.</Fragment>,
       <Fragment><strong>10-section admin SPA</strong> · Dashboard (KPIs + 7-day energy bars + alarms-by-hour heatmap + top alarming assets), Assets, Points (with live current value column), Alarms (full audit + filters), Schedules, Work orders, Staff (RBAC), Integrations (BACnet / Modbus / DALI / MQTT / Maximo / ServiceNow), AI Console (model selector + system prompt + test-with-sample), Settings + Audit.</Fragment>,
-      <Fragment><strong>3 BMS-tuned AI features</strong> · <em>Explain alarm</em> returns Action + Likely cause grounded in point values; <em>Suggest maintenance</em> proposes preventive tasks ranked by priority with AED estimates; <em>Optimise setpoints</em> reads occupancy + outdoor temp + current setpoints and proposes setpoint/schedule changes with estimated AED savings. Live Claude when a Worker proxy is configured; deterministic mock fallback otherwise.</Fragment>,
+      <Fragment><strong>3 BMS-tuned AI features</strong> · <em>Explain alarm</em> returns Action + Likely cause grounded in point values; <em>Suggest maintenance</em> proposes preventive tasks ranked by priority with AED estimates; <em>Optimise setpoints</em> reads occupancy + outdoor temp + current setpoints and proposes setpoint/schedule changes with estimated AED savings. Live AI when a Worker proxy is configured; deterministic mock fallback otherwise.</Fragment>,
     ],
-    tags: ['Vanilla JS (ES6+)', 'CSS Grid', 'SVG floor plan', 'Real-time telemetry sim', 'BACnet/Modbus (simulated)', 'Web Audio API', 'Claude API', 'CF Worker proxy', 'ASHRAE 90.1 band', 'localStorage', 'Mock fallback'],
+    tags: ['Vanilla JS (ES6+)', 'CSS Grid', 'SVG floor plan', 'Real-time telemetry sim', 'BACnet/Modbus (simulated)', 'Web Audio API', 'LLM API', 'CF Worker proxy', 'ASHRAE 90.1 band', 'localStorage', 'Mock fallback'],
     ctas: [
       { label: 'Open console ↗', href: 'watad/console.html', target: '_blank', primary: true },
       { label: 'Energy dashboard ↗', href: 'watad/energy.html', target: '_blank' },
@@ -836,17 +836,17 @@ const DEMO_PROJECTS = [
       On desktop it renders inside a stylised iPhone frame; on mobile it's
       fullscreen and edge-to-edge; installed to a home screen it opens as a
       standalone window with no browser chrome. One AI-suggested prompt a day,
-      a few sentences, and Claude surfaces the mood + themes + patterns across
+      a few sentences, and the model surfaces the mood + themes + patterns across
       the week - same Cloudflare Worker pattern as the other AI demos.</Fragment>,
     bullets: [
       <Fragment><strong>PWA installable</strong> on iOS, Android, and desktop via "Add to Home Screen". No App Store, no native compilation. Custom service worker scoped to <code>/lahza/</code> only.</Fragment>,
       <Fragment><strong>4 AI features</strong> · <em>Suggest prompt</em> (time-of-day + mood aware), <em>Detect mood</em> (returns structured JSON of mood + emotions from the entry text), <em>Weekly insights</em> (RAG over the last 7 entries, themes + wins + concerns), <em>AI Coach chat</em> (RAG over the last 14 entries, citation chips that open the cited entry in a bottom sheet).</Fragment>,
       <Fragment><strong>7 mobile views</strong> · Onboarding (3-card swipe), Today (AI prompt + streak ring + recent strip), Compose (full-screen modal with mood emoji picker), Journal (chronological feed with mood filter chips), Insights (7-day mood SVG chart + theme tags + AI summary), AI Coach chat, Profile (locale EN/AR, theme, export-JSON, reset).</Fragment>,
-      <Fragment><strong>Privacy by default</strong> · entries live in <code>localStorage</code> only. In Live AI mode, only the active question is sent to Claude via the Worker proxy.</Fragment>,
+      <Fragment><strong>Privacy by default</strong> · entries live in <code>localStorage</code> only. In Live AI mode, only the active question is sent to the model via the Worker proxy.</Fragment>,
       <Fragment><strong>14-day fabricated seed</strong> from a deterministic RNG so first-time visitors see a populated mood chart, recent feed, and themes without waiting two weeks.</Fragment>,
       <Fragment><strong>Fourth AI demo</strong> in the portfolio after Sanad (helpdesk), Watad (operations) and Ask Saad (recruiter Q&A) - same Worker, same encrypted-secret pattern, four products.</Fragment>,
     ],
-    tags: ['Vanilla JS (ES6+)', 'PWA', 'Service Worker', 'Web App Manifest', 'Mobile-first', 'CSS Grid', 'SVG chart', 'Claude API', 'CF Worker proxy', 'RAG', 'localStorage', 'Mock fallback', 'i18n EN/AR'],
+    tags: ['Vanilla JS (ES6+)', 'PWA', 'Service Worker', 'Web App Manifest', 'Mobile-first', 'CSS Grid', 'SVG chart', 'LLM API', 'CF Worker proxy', 'RAG', 'localStorage', 'Mock fallback', 'i18n EN/AR'],
     ctas: [
       { label: 'Open app ↗', href: 'lahza/', target: '_blank', primary: true },
       { label: 'AI Coach ↗', href: 'lahza/#coach', target: '_blank' },
@@ -865,7 +865,7 @@ const DEMO_PROJECTS = [
       <Fragment><strong>9-section admin SPA</strong> · Dashboard (KPIs + top zones + driver leaderboard), Orders (filter + search), Drivers, Vehicles (with fuel + last-ping), Zones, Integrations (Shopify · Twilio · Google Maps · QuickBooks), AI Console, Settings, Audit log.</Fragment>,
       <Fragment><strong>UAE-shaped business logic</strong> · per-zone SLAs (Marina 90 min · Sharjah 150 min) · COD up to AED 500 · WPS-style driver compensation · Sheikh Mohammed Bin Zayed Road traffic context in the AI replies.</Fragment>,
     ],
-    tags: ['Vanilla JS (ES6+)', 'Leaflet + OpenStreetMap', 'Real-time sim', 'CSS Grid', 'Web Audio API', 'Claude API', 'CF Worker proxy', 'Mock fallback', 'RAG', 'localStorage'],
+    tags: ['Vanilla JS (ES6+)', 'Leaflet + OpenStreetMap', 'Real-time sim', 'CSS Grid', 'Web Audio API', 'LLM API', 'CF Worker proxy', 'Mock fallback', 'RAG', 'localStorage'],
     ctas: [
       { label: 'Open dispatcher ↗', href: 'marsad/console.html', target: '_blank', primary: true },
       { label: 'Driver view ↗', href: 'marsad/driver.html', target: '_blank' },
@@ -875,16 +875,16 @@ const DEMO_PROJECTS = [
   {
     domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
     title: 'Nabta - UAE HR + payroll SaaS',
-    desc: <Fragment>A modern <strong>UAE-shaped HRIS</strong>: 32 employees across 5 departments, leave management with line-manager + HR approval, <strong>WPS-compliant payroll runs</strong> through Emirates NBD, recruitment kanban, performance review cycle, and a Claude-powered HR policy assistant grounded in the company handbook + UAE Labour Law (Federal Decree-Law No. 33 of 2021). The kind of software every Dubai / Abu Dhabi mid-size company actually runs but typically buys (Bayzat / GulfTalent / Zimyo) rather than builds.</Fragment>,
+    desc: <Fragment>A modern <strong>UAE-shaped HRIS</strong>: 32 employees across 5 departments, leave management with line-manager + HR approval, <strong>WPS-compliant payroll runs</strong> through Emirates NBD, recruitment kanban, performance review cycle, and an AI-powered HR policy assistant grounded in the company handbook + UAE Labour Law (Federal Decree-Law No. 33 of 2021). The kind of software every Dubai / Abu Dhabi mid-size company actually runs but typically buys (Bayzat / GulfTalent / Zimyo) rather than builds.</Fragment>,
     bullets: [
       <Fragment><strong>Employees module</strong> · 32 employees with full UAE-specific fields (Emirates ID, passport, visa expiry, IBAN, base + allowances) · filter by department / status · per-employee profile sheet with leave balance.</Fragment>,
       <Fragment><strong>Leave management</strong> · 7 leave types (Annual, Sick, Maternity, Paternity, Unpaid, Compassionate, Hajj/Umrah) · pending → approved / rejected workflow · line-manager + HR sign-off · per-employee balance tracking (30 annual + 15 sick per UAE Labour Law).</Fragment>,
       <Fragment><strong>WPS payroll runs</strong> · 6 months of historical runs + current draft · per-employee breakdown (base + allowances − deductions = net) · "Generate WPS SIF + Finalize" flow · pay-day 28th via Emirates NBD.</Fragment>,
       <Fragment><strong>Recruitment kanban</strong> · 4 open roles · 22 candidates · lead / applied / interview / offer / hired stages · source tracking · rating · expected salary range.</Fragment>,
       <Fragment><strong>Performance reviews</strong> · Q2-2026 cycle in flight · 12 reviews across status (not started / in progress / submitted) · rating + goals-met %.</Fragment>,
-      <Fragment><strong>AI policy assistant</strong> · Claude grounded in 6 HR policies (leave, WPS, visa, gratuity, probation, remote) + UAE Labour Law. Every reply cites the specific policy by <code>[pol-xxx]</code>. Click a citation chip → opens the source policy.</Fragment>,
+      <Fragment><strong>AI policy assistant</strong> · an LLM grounded in 6 HR policies (leave, WPS, visa, gratuity, probation, remote) + UAE Labour Law. Every reply cites the specific policy by <code>[pol-xxx]</code>. Click a citation chip → opens the source policy.</Fragment>,
     ],
-    tags: ['Vanilla JS (ES6+)', 'CSS Grid', 'Hash-routed SPA', 'localStorage', 'Mock API (fetch shim)', 'Claude API', 'CF Worker proxy', 'RAG (policy KB)', 'Mock fallback', 'UAE WPS', 'UAE Labour Law 2021'],
+    tags: ['Vanilla JS (ES6+)', 'CSS Grid', 'Hash-routed SPA', 'localStorage', 'Mock API (fetch shim)', 'LLM API', 'CF Worker proxy', 'RAG (policy KB)', 'Mock fallback', 'UAE WPS', 'UAE Labour Law 2021'],
     ctas: [
       { label: 'Open app ↗', href: 'nabta/app.html', target: '_blank', primary: true },
       { label: 'Run payroll ↗', href: 'nabta/app.html#payroll', target: '_blank' },

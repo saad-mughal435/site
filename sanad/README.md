@@ -1,6 +1,6 @@
 # Sanad - AI customer-support copilot demo
 
-A SaaS-style helpdesk with **Claude** integrated at every touchpoint:
+A SaaS-style helpdesk with **AI** integrated at every touchpoint:
 suggested replies, summaries, sentiment analysis, auto-categorization, RAG
 chat with knowledge-base citations, and translation (EN ↔ AR).
 
@@ -9,7 +9,7 @@ chat with knowledge-base citations, and translation (EN ↔ AR).
 | Mode | When | Behaviour |
 | --- | --- | --- |
 | **Demo** | Default | Falls back to a deterministic pattern-matched response dictionary. Every feature works realistically. Topbar shows **Demo mode**. |
-| **Live** | A Cloudflare Worker proxy at `/api/sanad/ai/*` is deployed AND `ANTHROPIC_API_KEY` is set | Real Claude responses (Haiku 4.5 default). Topbar shows **Live · Haiku 4.5**. |
+| **Live** | A Cloudflare Worker proxy at `/api/sanad/ai/*` is deployed AND `LLM_API_KEY` is set | Real AI responses (Fast default). Topbar shows **Live · Fast**. |
 
 The site visitor never sees the demo break either way. Out of the box,
 this repo ships in **Demo mode** only.
@@ -30,22 +30,21 @@ Once Saad enables that, the steps are:
      async fetch(request, env) {
        const url = new URL(request.url);
        if (url.pathname === '/api/sanad/ai/health') {
-         return Response.json({ ok: true, live: !!env.ANTHROPIC_API_KEY,
-           model: env.SANAD_DEFAULT_MODEL || 'claude-haiku-4-5-20251001' });
+         return Response.json({ ok: true, live: !!env.LLM_API_KEY,
+           model: env.SANAD_DEFAULT_MODEL || 'fast' });
        }
        if (url.pathname.startsWith('/api/sanad/ai/')) {
-         if (!env.ANTHROPIC_API_KEY)
+         if (!env.LLM_API_KEY)
            return Response.json({ ok: false, error: 'no_key', fallback: true }, { status: 503 });
          const body = await request.json();
-         const r = await fetch('https://api.anthropic.com/v1/messages', {
+         const r = await fetch('https://api.your-llm-provider.com/v1/chat', {
            method: 'POST',
            headers: {
-             'x-api-key': env.ANTHROPIC_API_KEY,
-             'anthropic-version': '2023-06-01',
+             'x-api-key': env.LLM_API_KEY,
              'content-type': 'application/json'
            },
            body: JSON.stringify({
-             model: body.model || env.SANAD_DEFAULT_MODEL || 'claude-haiku-4-5-20251001',
+             model: body.model || env.SANAD_DEFAULT_MODEL || 'fast',
              max_tokens: body.max_tokens || 800,
              system: body.system,
              messages: body.messages,
@@ -59,16 +58,16 @@ Once Saad enables that, the steps are:
    };
    ```
 2. Cloudflare dashboard → **Workers & Pages → site → Settings → Variables and Secrets**
-   - Add Encrypted Secret: `ANTHROPIC_API_KEY = sk-ant-...`
-   - *(Optional)* Plain text: `SANAD_DEFAULT_MODEL = claude-haiku-4-5-20251001`
-3. Push or trigger a redeploy. The topbar badge flips to **Live · Haiku 4.5**.
+   - Add Encrypted Secret: `LLM_API_KEY = sk-ant-...`
+   - *(Optional)* Plain text: `SANAD_DEFAULT_MODEL = fast`
+3. Push or trigger a redeploy. The topbar badge flips to **Live · Fast**.
 
 ## Cost guardrails (when live)
 
-- **Claude Haiku 4.5** at ~$0.80 input / $4.00 output per 1M tokens. A
+- **AI Fast** at ~$0.80 input / $4.00 output per 1M tokens. A
   suggested reply ≈ 500 in + 150 out tokens ≈ **$0.001 per call**.
 - Add a rate limit (e.g. 20 req/min per IP) in the Worker to cap abuse.
-- Switch to **Sonnet 4.6** or **Opus 4.7** from the in-app **AI Console**.
+- Switch to **Balanced** or **Max** from the in-app **AI Console**.
 - Prompt caching: send the system prompt as a content array with
   `cache_control: { type: 'ephemeral' }` to save ~90% on repeats.
 

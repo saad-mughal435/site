@@ -2,10 +2,10 @@
  *
  * Lifted from sanad/js/ai-engine.js, renamed SanadAI → AskAI, with one
  * recruiter-grounded feature: `answer({question, history})` that retrieves
- * top-K docs from AskCorpus and asks Claude to reply grounded in them.
+ * top-K docs from AskCorpus and asks AI to reply grounded in them.
  * Same Live/Mock pattern - calls a Cloudflare Worker proxy at
  * /api/ask/ai/* when configured, falls back to a deterministic mock
- * dictionary otherwise. Reuses the same ANTHROPIC_API_KEY secret as Sanad.
+ * dictionary otherwise. Reuses the same LLM_API_KEY secret as Sanad.
  *
  * Exposes window.AskAI.
  */
@@ -16,8 +16,8 @@
   function health() {
     if (modeCache) return Promise.resolve(modeCache);
     return fetch('/api/ask/ai/health').then(function (r) { return r.json(); })
-      .then(function (j) { modeCache = { live: !!j.live, model: j.model || 'claude-haiku-4-5-20251001' }; return modeCache; })
-      .catch(function () { modeCache = { live: false, model: 'claude-haiku-4-5-20251001' }; return modeCache; });
+      .then(function (j) { modeCache = { live: !!j.live, model: j.model || 'fast' }; return modeCache; })
+      .catch(function () { modeCache = { live: false, model: 'fast' }; return modeCache; });
   }
 
   // ==================== Retrieval ====================
@@ -56,10 +56,10 @@
   }
 
   // ==================== Live call ====================
-  function callClaude(opts) {
+  function callModel(opts) {
     var started = Date.now();
     var payload = {
-      model: opts.model || 'claude-haiku-4-5-20251001',
+      model: opts.model || 'fast',
       system: opts.system,
       messages: opts.messages,
       max_tokens: opts.max_tokens || 500,
@@ -155,7 +155,7 @@
       });
       var messages = history.concat([{ role: 'user', content: ctx.question }]);
 
-      return callClaude({
+      return callModel({
         feature: 'answer',
         system: buildSystemPrompt(retrieved),
         messages: messages,

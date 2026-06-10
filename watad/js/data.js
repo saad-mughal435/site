@@ -276,7 +276,7 @@
     co2_factor: 0.4032,           // kgCO₂ per kWh (UAE grid average 2024)
     ashrae_band_low: 68,
     ashrae_band_high: 76,
-    model: 'claude-haiku-4-5-20251001',
+    model: 'fast',
     temperature: 0.4,
     max_tokens: 600,
     cache_enabled: true,

@@ -73,7 +73,7 @@
     if (IS_ADMIN) {
       html += '<div class="snd-card snd-mt-3" style="background:linear-gradient(135deg,rgba(139,92,246,.04),rgba(52,211,153,.04));border-color:rgba(139,92,246,.25);">'
         + '<h3 style="margin-bottom:6px;">✦ AI actions</h3>'
-        + '<p class="snd-text-muted" style="font-size:13px;margin:0 0 10px;">Admin-only. Generate derived content from this article using Claude (or the mock if no key is set).</p>'
+        + '<p class="snd-text-muted" style="font-size:13px;margin:0 0 10px;">Admin-only. Generate derived content from this article using AI (or the mock if no key is set).</p>'
         + '<div class="snd-flex">'
         +   '<button class="snd-btn snd-btn--primary" id="ai-faq">Generate FAQ</button>'
         +   '<button class="snd-btn" id="ai-improve">Suggest improvements</button>'

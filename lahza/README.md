@@ -1,6 +1,6 @@
 # Lahza - AI journaling + mood-tracking PWA
 
-A mobile-first **Progressive Web App** for personal journaling: a daily AI-suggested prompt, a few sentences, and Claude surfaces the patterns across the week. Installable on iOS, Android, and desktop via "Add to Home Screen" - no App Store, no native code.
+A mobile-first **Progressive Web App** for personal journaling: a daily AI-suggested prompt, a few sentences, and the model surfaces the patterns across the week. Installable on iOS, Android, and desktop via "Add to Home Screen" - no App Store, no native code.
 
 Part of the [saadm.dev](https://saadm.dev/) portfolio. Live at <https://saadm.dev/lahza/>.
 
@@ -20,19 +20,19 @@ Part of the [saadm.dev](https://saadm.dev/) portfolio. Live at <https://saadm.de
 - **Mobile visit:** fullscreen, edge-to-edge, looks native inside the browser tab.
 - **Installed PWA:** opens in a standalone window with no browser chrome. Indistinguishable from a native app at a glance.
 
-Same fetch interceptor pattern as the other demos (`mock-api.js` shims `/lahza/api/*` to localStorage). Same Live/Mock fallback for AI calls (`/api/lahza/ai/*` → Cloudflare Worker → Claude, or deterministic mock dictionary if no Worker is configured).
+Same fetch interceptor pattern as the other demos (`mock-api.js` shims `/lahza/api/*` to localStorage). Same Live/Mock fallback for AI calls (`/api/lahza/ai/*` → Cloudflare Worker → AI, or deterministic mock dictionary if no Worker is configured).
 
 ## Privacy
 
-**Entries stay on the device.** They live in your browser's `localStorage` and never leave it - except when Live AI mode is configured, in which case the **active question** is sent to the Claude API via a Cloudflare Worker proxy (the entry text is included as context for that single call, then discarded). Settings → Reset demo wipes everything.
+**Entries stay on the device.** They live in your browser's `localStorage` and never leave it - except when Live AI mode is configured, in which case the **active question** is sent to the LLM API via a Cloudflare Worker proxy (the entry text is included as context for that single call, then discarded). Settings → Reset demo wipes everything.
 
 ## Live-mode setup (optional)
 
-The Worker proxy is not bundled with this repo. To enable real Claude responses:
+The Worker proxy is not bundled with this repo. To enable real AI responses:
 
 1. Cloudflare → Workers & Pages → site → Settings → Variables and Secrets.
-2. Add (or reuse) Encrypted Secret: `ANTHROPIC_API_KEY` (value set in the dashboard - never in code or this README).
-3. *(Optional)* Plain text variable: `LAHZA_DEFAULT_MODEL` (defaults to `claude-haiku-4-5-20251001`).
+2. Add (or reuse) Encrypted Secret: `LLM_API_KEY` (value set in the dashboard - never in code or this README).
+3. *(Optional)* Plain text variable: `LAHZA_DEFAULT_MODEL` (defaults to `fast`).
 4. The Worker needs to handle `/api/lahza/ai/*`. If the existing Worker already routes Sanad and Watad, append the snippet below as a parallel branch and redeploy.
 
 ### Reference Worker handler
@@ -44,23 +44,22 @@ if (url.pathname.startsWith('/api/lahza/ai/')) {
   if (url.pathname === '/api/lahza/ai/health') {
     return Response.json({
       ok: true,
-      live: !!env.ANTHROPIC_API_KEY,
-      model: env.LAHZA_DEFAULT_MODEL || 'claude-haiku-4-5-20251001'
+      live: !!env.LLM_API_KEY,
+      model: env.LAHZA_DEFAULT_MODEL || 'fast'
     });
   }
-  if (!env.ANTHROPIC_API_KEY) {
+  if (!env.LLM_API_KEY) {
     return Response.json({ ok: false, error: 'no_key', fallback: true }, { status: 503 });
   }
   const body = await request.json();
-  const r = await fetch('https://api.anthropic.com/v1/messages', {
+  const r = await fetch('https://api.your-llm-provider.com/v1/chat', {
     method: 'POST',
     headers: {
-      'x-api-key': env.ANTHROPIC_API_KEY,
-      'anthropic-version': '2023-06-01',
+      'x-api-key': env.LLM_API_KEY,
       'content-type': 'application/json'
     },
     body: JSON.stringify({
-      model: body.model || env.LAHZA_DEFAULT_MODEL || 'claude-haiku-4-5-20251001',
+      model: body.model || env.LAHZA_DEFAULT_MODEL || 'fast',
       max_tokens: body.max_tokens || 500,
       system: body.system,
       messages: body.messages

@@ -71,7 +71,7 @@
       <div class="wtd-landing-card"><span class="wtd-emoji">🔔</span><h3>Alarm management</h3><p>Severity-sorted queue with Ack / Create-WO / ✦ AI-explain actions, audio cue on new urgent/critical alarm, rule editor in admin.</p></div>
       <div class="wtd-landing-card"><span class="wtd-emoji">🛠</span><h3>Predictive-maintenance WOs</h3><p>Status pipeline (open → in-progress → completed), priority + assignee, comments timeline, signature capture canvas. Spawn directly from an alarm.</p></div>
       <div class="wtd-landing-card"><span class="wtd-emoji">⚡</span><h3>Energy dashboard</h3><p>30-day kWh bar chart with ASHRAE 90.1 reference band, sub-meter breakdown, demand-response opt-in, cost + kgCO₂ tiles, AED tariff.</p></div>
-      <div class="wtd-landing-card"><span class="wtd-emoji">✦</span><h3>Industrial AI copilot</h3><p>Three BMS-tuned features: explain alarm (with action + likely cause), suggest preventive maintenance, optimise setpoints with estimated kWh savings. Live Claude when configured, deterministic mock otherwise.</p></div>
+      <div class="wtd-landing-card"><span class="wtd-emoji">✦</span><h3>Industrial AI copilot</h3><p>Three BMS-tuned features: explain alarm (with action + likely cause), suggest preventive maintenance, optimise setpoints with estimated kWh savings. Live AI when configured, deterministic mock otherwise.</p></div>
     </div>
   </section>
 
@@ -89,18 +89,18 @@
   </section>
 
   <footer class="wtd-landing-foot">
-    Demo built by Muhammad Saad · part of <a href="/" style="color:var(--wtd-cyan-3);">saadm.dev</a> portfolio · works offline (Demo mode) or with a Cloudflare Worker + Anthropic key (Live mode)
+    Demo built by Muhammad Saad · part of <a href="/" style="color:var(--wtd-cyan-3);">saadm.dev</a> portfolio · works offline (Demo mode) or with a Cloudflare Worker + LLM API key (Live mode)
   </footer>
 </div>
 
-<script src="js/data.js?v=20260518b"></script>
+<script src="js/data.js?v=20260610c"></script>
 <script src="js/mock-api.js?v=20260518b"></script>
-<script src="js/ai-engine.js?v=20260518b"></script>
+<script src="js/ai-engine.js?v=20260610c"></script>
 <script src="js/app.js?v=20260518b"></script>
 <script>
   WatadAI.health().then(function (h) {
     var el = document.getElementById('mode-badge');
-    var nm = h.model.indexOf('haiku') !== -1 ? 'Haiku 4.5' : h.model.indexOf('sonnet') !== -1 ? 'Sonnet 4.6' : 'Opus 4.7';
+    var nm = h.model.indexOf("fast") !== -1 ? 'Fast' : h.model.indexOf("balanced") !== -1 ? 'Balanced' : 'Max';
     el.className = h.live ? 'wtd-mode-badge live' : 'wtd-mode-badge';
     el.textContent = h.live ? 'Live · ' + nm : 'Demo mode';
   });

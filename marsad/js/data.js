@@ -235,7 +235,7 @@
     rate_per_delivery_aed: 18,
     incentive_per_delivery_aed: 3,
     cod_commission_pct: 1.5,
-    model: 'claude-haiku-4-5-20251001',
+    model: 'fast',
     temperature: 0.4,
     system_prompt: "You are Marsad, an AI dispatcher copilot for a last-mile courier in Dubai. Be concise, direct, and operational. Always lead with the action."
   };

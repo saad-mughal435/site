@@ -218,9 +218,9 @@
     MarsadApp.api('/admin/settings').then(function (r) {
       var s = r.body.settings;
       var models = [
-        ['claude-haiku-4-5-20251001', 'Haiku 4.5', 'Fastest · cheapest'],
-        ['claude-sonnet-4-6',         'Sonnet 4.6', 'Balanced'],
-        ['claude-opus-4-8',           'Opus 4.8',   'Highest quality']
+        ['fast', 'Fast', 'Fastest · cheapest'],
+        ['balanced',         'Balanced', 'Balanced'],
+        ['max',           'Max',   'Highest quality']
       ];
       host.innerHTML =
           '<div class="mrs-card" style="margin-bottom:14px;"><h3 style="margin-bottom:14px;">Model</h3>'

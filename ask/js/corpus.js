@@ -78,9 +78,9 @@
     {
       id: 'faq-stack',
       title: "Saad's tech stack",
-      body: "Python, FastAPI, MongoDB, React, JavaScript (ES6+), Docker, Linux, nginx, Cloudflare, Git, REST APIs, JWT auth, Pandas, OpenPyXL, scikit-learn, Sage Evolution integration, Claude API. Comfortable with the full lifecycle from data-model design through deployment and ops.",
+      body: "Python, FastAPI, MongoDB, React, JavaScript (ES6+), Docker, Linux, nginx, Cloudflare, Git, REST APIs, JWT auth, Pandas, OpenPyXL, scikit-learn, Sage Evolution integration, LLM API. Comfortable with the full lifecycle from data-model design through deployment and ops.",
       scrollTo: '#stack',
-      tags: ['stack', 'tech', 'python', 'fastapi', 'mongodb', 'react', 'javascript', 'docker', 'linux', 'cloudflare', 'sage', 'claude']
+      tags: ['stack', 'tech', 'python', 'fastapi', 'mongodb', 'react', 'javascript', 'docker', 'linux', 'cloudflare', 'sage', 'llm']
     },
     {
       id: 'faq-location',
@@ -173,16 +173,16 @@
     {
       id: 'demo-sanad',
       title: 'Sanad - AI customer-support copilot',
-      body: "A SaaS-style helpdesk with Claude integrated at every touchpoint. Built to demonstrate real LLM wiring end-to-end - system prompts, streaming, prompt caching, server-side key handling via a Cloudflare Worker proxy, graceful mock fallback when the key isn't set, and cost tracking. Agent inbox with AI sidebar (suggested reply with KB citations, summary, sentiment, auto-category, EN↔AR translation). Customer chat widget with RAG-grounded streaming replies. Knowledge base with 77 articles, admin-only AI actions per article (Generate FAQ, Suggest improvements, Translate). 11-section admin SPA including AI Console (model selector Haiku 4.5 / Sonnet 4.6 / Opus 4.7, editable system prompt, temperature, cache toggles). Live + mock modes - detects ANTHROPIC_API_KEY via /api/sanad/ai/health.",
+      body: "A SaaS-style helpdesk with an LLM integrated at every touchpoint. Built to demonstrate real LLM wiring end-to-end - system prompts, streaming, prompt caching, server-side key handling via a Cloudflare Worker proxy, graceful mock fallback when the key isn't set, and cost tracking. Agent inbox with AI sidebar (suggested reply with KB citations, summary, sentiment, auto-category, EN↔AR translation). Customer chat widget with RAG-grounded streaming replies. Knowledge base with 77 articles, admin-only AI actions per article (Generate FAQ, Suggest improvements, Translate). 11-section admin SPA including AI Console (model selector Fast / Balanced / Max, editable system prompt, temperature, cache toggles). Live + mock modes - detects LLM_API_KEY via /api/sanad/ai/health.",
       link: '/sanad/',
-      tags: ['demo', 'sanad', 'ai', 'claude', 'anthropic', 'copilot', 'helpdesk', 'rag', 'streaming', 'kb', 'knowledge-base', 'inbox', 'chat', 'mock-fallback', 'live-mode', 'cf-worker']
+      tags: ['demo', 'sanad', 'ai', 'llm', 'genai', 'copilot', 'helpdesk', 'rag', 'streaming', 'kb', 'knowledge-base', 'inbox', 'chat', 'mock-fallback', 'live-mode', 'cf-worker']
     },
     {
       id: 'demo-watad',
       title: 'Watad - smart-building / BMS operations console',
-      body: "A live operator console for a commercial smart building - the kind of software Imdaad / EFS / Schneider / Honeywell ship to facilities teams. Live SVG floor plan with HVAC, lighting, metering and sensor equipment plotted as icons at absolute pixel coordinates, simulated BACnet/Modbus telemetry stream (5-second tick mutating ~200 points plausibly per asset class + outdoor temp + occupancy), severity-sorted alarm queue with audio cues, predictive-maintenance work orders with signature canvas, ASHRAE 90.1-overlaid energy curves, DEWA DSM demand-response panel, and a 10-section admin SPA. 3 BMS-tuned AI features: Explain alarm, Suggest maintenance, Optimise setpoints - Live Claude when configured, deterministic mock otherwise. The first portfolio demo with a real-time data shape - proves Saad can think beyond REST.",
+      body: "A live operator console for a commercial smart building - the kind of software Imdaad / EFS / Schneider / Honeywell ship to facilities teams. Live SVG floor plan with HVAC, lighting, metering and sensor equipment plotted as icons at absolute pixel coordinates, simulated BACnet/Modbus telemetry stream (5-second tick mutating ~200 points plausibly per asset class + outdoor temp + occupancy), severity-sorted alarm queue with audio cues, predictive-maintenance work orders with signature canvas, ASHRAE 90.1-overlaid energy curves, DEWA DSM demand-response panel, and a 10-section admin SPA. 3 BMS-tuned AI features: Explain alarm, Suggest maintenance, Optimise setpoints - Live AI when configured, deterministic mock otherwise. The first portfolio demo with a real-time data shape - proves Saad can think beyond REST.",
       link: '/watad/',
-      tags: ['demo', 'watad', 'bms', 'building', 'facilities', 'scada', 'real-time', 'telemetry', 'bacnet', 'modbus', 'ashrae', 'hvac', 'energy', 'sustainability', 'ai', 'claude', 'imdaad', 'efs', 'schneider', 'honeywell']
+      tags: ['demo', 'watad', 'bms', 'building', 'facilities', 'scada', 'real-time', 'telemetry', 'bacnet', 'modbus', 'ashrae', 'hvac', 'energy', 'sustainability', 'ai', 'llm', 'imdaad', 'efs', 'schneider', 'honeywell']
     },
     {
       id: 'demo-pebble-b2c',
@@ -194,23 +194,23 @@
     {
       id: 'demo-lahza',
       title: 'Lahza - AI journaling + mood-tracking mobile PWA',
-      body: "Saad's first mobile-shaped demo and his fourth AI integration. A Progressive Web App for personal journaling: one AI-suggested prompt a day, a few sentences, and Claude detects mood + surfaces weekly patterns. Installable on iOS, Android, and desktop via 'Add to Home Screen' - no App Store, no native compilation. On desktop it renders inside a stylised iPhone frame; on mobile it's fullscreen; installed PWA opens as a standalone window with no browser chrome. 4 AI features: suggest prompt (time-of-day + recent-mood aware), detect mood (returns structured JSON), weekly insights (RAG over last 7 entries), AI Coach chat (RAG over last 14 entries with citation chips that open the cited entry in a bottom sheet). 7 views: onboarding, today, compose, journal feed, insights chart, AI Coach, profile. EN + AR locale. Entries stay in localStorage - privacy-by-default. Same Cloudflare Worker pattern as the other AI demos.",
+      body: "Saad's first mobile-shaped demo and his fourth AI integration. A Progressive Web App for personal journaling: one AI-suggested prompt a day, a few sentences, and AI detects mood + surfaces weekly patterns. Installable on iOS, Android, and desktop via 'Add to Home Screen' - no App Store, no native compilation. On desktop it renders inside a stylised iPhone frame; on mobile it's fullscreen; installed PWA opens as a standalone window with no browser chrome. 4 AI features: suggest prompt (time-of-day + recent-mood aware), detect mood (returns structured JSON), weekly insights (RAG over last 7 entries), AI Coach chat (RAG over last 14 entries with citation chips that open the cited entry in a bottom sheet). 7 views: onboarding, today, compose, journal feed, insights chart, AI Coach, profile. EN + AR locale. Entries stay in localStorage - privacy-by-default. Same Cloudflare Worker pattern as the other AI demos.",
       link: '/lahza/',
-      tags: ['demo', 'lahza', 'mobile', 'pwa', 'app', 'journaling', 'wellness', 'mood', 'tracker', 'ai-coach', 'consumer', 'ios', 'android', 'standalone', 'serviceworker', 'manifest', 'rag', 'claude']
+      tags: ['demo', 'lahza', 'mobile', 'pwa', 'app', 'journaling', 'wellness', 'mood', 'tracker', 'ai-coach', 'consumer', 'ios', 'android', 'standalone', 'serviceworker', 'manifest', 'rag', 'llm']
     },
     {
       id: 'demo-marsad',
       title: 'Marsad - fleet / logistics dispatcher console',
       body: "A live real-time dispatcher console for a Dubai last-mile courier - the kind of software Aramex, Noon Express, and Talabat run internally. 16 drivers across 3 shifts, 12 vans + 4 motorbikes, 96 in-flight orders across 6 service zones (Marina, JLT, Downtown, Business Bay, Deira, Sharjah Al Nahda). Live Leaflet map with vehicle pins that move every 4 seconds toward their assigned drop-off. Order queue with SLA-breach detection + Web Audio chime. 4 AI dispatcher features: explainDelay (cites real cause), suggestReroute (re-sequences by SLA), batchOptimize (assigns pending across idle drivers), dispatcherChat (conversational copilot grounded in live state). Driver-side simplified view. 9-section admin SPA. Saad's fifth AI integration and his second real-time-data-shape demo. ~4,500 LOC.",
       link: '/marsad/',
-      tags: ['demo', 'marsad', 'fleet', 'logistics', 'dispatcher', 'maps', 'leaflet', 'last-mile', 'courier', 'real-time', 'sla', 'aramex', 'noon', 'talabat', 'driver', 'ai-dispatcher', 'claude', 'dubai']
+      tags: ['demo', 'marsad', 'fleet', 'logistics', 'dispatcher', 'maps', 'leaflet', 'last-mile', 'courier', 'real-time', 'sla', 'aramex', 'noon', 'talabat', 'driver', 'ai-dispatcher', 'llm', 'dubai']
     },
     {
       id: 'demo-nabta',
       title: 'Nabta - UAE HR + payroll SaaS',
-      body: "A modern UAE-shaped HRIS. 32 employees across 5 departments with full UAE fields (Emirates ID, passport, visa expiry, IBAN, base + allowances). Leave management with line-manager + HR approval workflow (7 leave types per UAE Labour Law). WPS-compliant payroll runs via Emirates NBD - per-employee breakdown + Generate WPS SIF + Finalize flow, pay-day 28th. Recruitment kanban: 4 open roles, 22 candidates, lead/applied/interview/offer/hired pipeline. Q2-2026 performance review cycle. Claude HR policy assistant grounded in 6 HR policies (leave, WPS, visa, gratuity, probation, remote) + UAE Labour Law (Federal Decree-Law No. 33 of 2021). Every AI reply cites by [pol-xxx] with click-to-open citations. Saad's sixth AI integration. Single hash-routed SPA, 9 sections.",
+      body: "A modern UAE-shaped HRIS. 32 employees across 5 departments with full UAE fields (Emirates ID, passport, visa expiry, IBAN, base + allowances). Leave management with line-manager + HR approval workflow (7 leave types per UAE Labour Law). WPS-compliant payroll runs via Emirates NBD - per-employee breakdown + Generate WPS SIF + Finalize flow, pay-day 28th. Recruitment kanban: 4 open roles, 22 candidates, lead/applied/interview/offer/hired pipeline. Q2-2026 performance review cycle. AI HR policy assistant grounded in 6 HR policies (leave, WPS, visa, gratuity, probation, remote) + UAE Labour Law (Federal Decree-Law No. 33 of 2021). Every AI reply cites by [pol-xxx] with click-to-open citations. Saad's sixth AI integration. Single hash-routed SPA, 9 sections.",
       link: '/nabta/',
-      tags: ['demo', 'nabta', 'hr', 'hris', 'payroll', 'wps', 'wage-protection-system', 'uae', 'employees', 'leave', 'recruitment', 'kanban', 'performance', 'reviews', 'policy', 'labour-law', 'b2b', 'saas', 'ai', 'claude', 'rag']
+      tags: ['demo', 'nabta', 'hr', 'hris', 'payroll', 'wps', 'wage-protection-system', 'uae', 'employees', 'leave', 'recruitment', 'kanban', 'performance', 'reviews', 'policy', 'labour-law', 'b2b', 'saas', 'ai', 'llm', 'rag']
     },
 
     /* ===================== Open-source repos (3) ===================== */
@@ -289,9 +289,9 @@
     {
       id: 'stack-ai',
       title: 'AI / ML',
-      body: "Claude API integration (used in Sanad + Watad portfolio demos with a Cloudflare Worker proxy for server-side key handling, prompt caching, mock fallback, cost tracking). OpenAI API. LangChain (basic). scikit-learn for traditional ML model training during the Omdena ML internship.",
+      body: "LLM API integration (used in Sanad + Watad portfolio demos with a Cloudflare Worker proxy for server-side key handling, prompt caching, mock fallback, cost tracking). OpenAI API. LangChain (basic). scikit-learn for traditional ML model training during the Omdena ML internship.",
       scrollTo: '#stack',
-      tags: ['stack', 'ai', 'ml', 'claude', 'anthropic', 'openai', 'langchain', 'scikit-learn', 'rag', 'prompt-caching']
+      tags: ['stack', 'ai', 'ml', 'llm', 'genai', 'openai', 'langchain', 'scikit-learn', 'rag', 'prompt-caching']
     },
     {
       id: 'stack-industrial',

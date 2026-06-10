@@ -372,7 +372,7 @@
     AI_LOGS.push({
       id: 'ail-' + a,
       feature: feat,
-      model: a % 7 === 0 ? 'claude-sonnet-4-6' : 'claude-haiku-4-5-20251001',
+      model: a % 7 === 0 ? 'balanced' : 'fast',
       tokens_in: tIn,
       tokens_out: tOut,
       cost_usd: +((tIn * 0.0000008) + (tOut * 0.000004)).toFixed(5),
@@ -398,7 +398,7 @@
     languages: ['en', 'ar'],
     greeting: "👋 Hi there! I'm the Sanad assistant. I can help with billing, account, or technical questions. What can I do for you?",
     human_handoff_keywords: ['human', 'agent', 'person', 'representative', 'وكيل', 'بشر'],
-    model: 'claude-haiku-4-5-20251001',
+    model: 'fast',
     temperature: 0.4,
     max_tokens: 800,
     cache_enabled: true,

@@ -174,8 +174,8 @@
     reminder_time: '21:00',
     goal: 'Once a day, anytime',
     onboarded: false,
-    model: 'claude-haiku-4-5-20251001',
-    privacy_note: 'Entries are stored only in your browser. They never leave your device unless you enable Live AI mode (which sends only the active question to the Claude API via a Cloudflare Worker proxy).'
+    model: 'fast',
+    privacy_note: 'Entries are stored only in your browser. They never leave your device unless you enable Live AI mode (which sends only the active question to the LLM API via a Cloudflare Worker proxy).'
   };
 
   var ENTRIES = generateEntries(14);

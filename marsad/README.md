@@ -9,7 +9,7 @@ Part of the [saadm.dev](https://saadm.dev/) portfolio. Live at <https://saadm.de
 - **Dispatcher console** (`console.html`) - live Leaflet map + KPI strip + order queue + driver list + AI batch-assign + dispatcher chat
 - **Driver view** (`driver.html`) - simplified UI for a single driver: current job, route, COD pill, complete / handover, today's earnings
 - **Admin SPA** (`admin.html`) - 9 sections: Dashboard, Orders, Drivers, Vehicles, Zones, Integrations, AI Console, Settings, Audit log
-- **AI features**: 3 wired into the UI - `explainDelay`, `batchOptimize`, `dispatcherChat` - plus a `suggestReroute` helper (mock + system prompt ready, not yet surfaced in the UI). Live Claude when a Cloudflare Worker is configured; deterministic mock otherwise.
+- **AI features**: 3 wired into the UI - `explainDelay`, `batchOptimize`, `dispatcherChat` - plus a `suggestReroute` helper (mock + system prompt ready, not yet surfaced in the UI). Live AI when a Cloudflare Worker is configured; deterministic mock otherwise.
 
 ## How it behaves on the site
 
@@ -22,8 +22,8 @@ The fleet simulator state lives in memory only - no localStorage persistence for
 Same secret as Sanad/Watad/Ask/Lahza - set once, all five features use it.
 
 1. Cloudflare → Workers & Pages → site → Settings → Variables and Secrets
-2. Confirm `ANTHROPIC_API_KEY` is set (added during Sanad's live-mode setup - value lives in CF's encrypted store).
-3. *(Optional)* Plain variable: `MARSAD_DEFAULT_MODEL` (defaults to `claude-haiku-4-5-20251001`).
+2. Confirm `LLM_API_KEY` is set (added during Sanad's live-mode setup - value lives in CF's encrypted store).
+3. *(Optional)* Plain variable: `MARSAD_DEFAULT_MODEL` (defaults to `fast`).
 4. Extend the existing Worker with a `/api/marsad/ai/*` branch - see snippet below.
 
 ### Reference Worker handler
@@ -33,23 +33,22 @@ if (url.pathname.startsWith('/api/marsad/ai/')) {
   if (url.pathname === '/api/marsad/ai/health') {
     return Response.json({
       ok: true,
-      live: !!env.ANTHROPIC_API_KEY,
-      model: env.MARSAD_DEFAULT_MODEL || 'claude-haiku-4-5-20251001'
+      live: !!env.LLM_API_KEY,
+      model: env.MARSAD_DEFAULT_MODEL || 'fast'
     });
   }
-  if (!env.ANTHROPIC_API_KEY) {
+  if (!env.LLM_API_KEY) {
     return Response.json({ ok: false, error: 'no_key', fallback: true }, { status: 503 });
   }
   const body = await request.json();
-  const r = await fetch('https://api.anthropic.com/v1/messages', {
+  const r = await fetch('https://api.your-llm-provider.com/v1/chat', {
     method: 'POST',
     headers: {
-      'x-api-key': env.ANTHROPIC_API_KEY,
-      'anthropic-version': '2023-06-01',
+      'x-api-key': env.LLM_API_KEY,
       'content-type': 'application/json'
     },
     body: JSON.stringify({
-      model: body.model || env.MARSAD_DEFAULT_MODEL || 'claude-haiku-4-5-20251001',
+      model: body.model || env.MARSAD_DEFAULT_MODEL || 'fast',
       max_tokens: body.max_tokens || 500,
       system: body.system,
       messages: body.messages

@@ -59,7 +59,7 @@
       <div class="mrs-landing-card"><span class="emoji">🗺</span><h3>Live Leaflet map</h3><p>Real Dubai coordinates · vehicles tick every 4 seconds · hub + zones + delivery pins coloured by status. Click any vehicle/order/driver to focus the map.</p></div>
       <div class="mrs-landing-card"><span class="emoji">📦</span><h3>Order queue + SLA tracking</h3><p>Pending / assigned / in-transit / breach. Per-zone SLAs (Marina 90 min · Sharjah 150 min). Audio chime on breach.</p></div>
       <div class="mrs-landing-card"><span class="emoji">🚐</span><h3>Driver + vehicle live state</h3><p>16 drivers across 3 shifts · 12 vans + 4 bikes · live speed, fuel, last-ping. Click → focus on the map.</p></div>
-      <div class="mrs-landing-card"><span class="emoji">✦</span><h3>AI dispatcher copilot</h3><p><em>Explain delay</em> · <em>Suggest reroute</em> · <em>Batch-assign pending</em> · <em>Dispatcher chat</em>. Live Claude when a Worker is configured; deterministic mock otherwise.</p></div>
+      <div class="mrs-landing-card"><span class="emoji">✦</span><h3>AI dispatcher copilot</h3><p><em>Explain delay</em> · <em>Suggest reroute</em> · <em>Batch-assign pending</em> · <em>Dispatcher chat</em>. Live AI when a Worker is configured; deterministic mock otherwise.</p></div>
       <div class="mrs-landing-card"><span class="emoji">📱</span><h3>Driver-side view</h3><p>Simplified mobile-shaped UI for the driver: current job, route, COD pill, complete / handover buttons, today's earnings.</p></div>
       <div class="mrs-landing-card"><span class="emoji">⚙</span><h3>9-section admin SPA</h3><p>Dashboard · Orders · Drivers · Vehicles · Zones · Integrations · AI Console · Settings · Audit log.</p></div>
     </div>
@@ -83,14 +83,14 @@
   </footer>
 </div>
 
-<script src="js/data.js?v=20260521a"></script>
+<script src="js/data.js?v=20260610c"></script>
 <script src="js/mock-api.js?v=20260521a"></script>
-<script src="js/ai-engine.js?v=20260521a"></script>
+<script src="js/ai-engine.js?v=20260610c"></script>
 <script src="js/app.js?v=20260521a"></script>
 <script>
   MarsadAI.health().then(function (h) {
     var el = document.getElementById('mode-badge'); if (!el) return;
-    var nm = h.model.indexOf('haiku') !== -1 ? 'Haiku 4.5' : h.model.indexOf('sonnet') !== -1 ? 'Sonnet 4.6' : 'Opus 4.8';
+    var nm = h.model.indexOf("fast") !== -1 ? 'Fast' : h.model.indexOf("balanced") !== -1 ? 'Balanced' : 'Max';
     el.className = h.live ? 'mrs-mode-badge live' : 'mrs-mode-badge';
     el.textContent = h.live ? 'Live · ' + nm : 'Demo mode';
   });

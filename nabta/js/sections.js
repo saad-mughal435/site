@@ -60,7 +60,7 @@
       + '</div>';
     NabtaAI.health().then(function (h) {
       var el = $('mode-badge');
-      var nm = h.model.indexOf('haiku') !== -1 ? 'Haiku 4.5' : h.model.indexOf('sonnet') !== -1 ? 'Sonnet 4.6' : 'Opus 4.7';
+      var nm = h.model.indexOf("fast") !== -1 ? 'Fast' : h.model.indexOf("balanced") !== -1 ? 'Balanced' : 'Max';
       el.className = h.live ? 'nbt-mode-badge live' : 'nbt-mode-badge';
       el.textContent = h.live ? 'Live · ' + nm : 'Demo mode';
     });
@@ -408,7 +408,7 @@
           + '<h3 style="margin-bottom:8px;">' + esc(p.title) + ' <small style="font-family:var(--nbt-mono);color:var(--nbt-muted);font-weight:400;font-size:11px;">[' + p.id + ']</small></h3>'
           + '<p style="margin:0;font-size:14px;line-height:1.65;color:var(--nbt-card-ink-2);">' + esc(p.body) + '</p>'
           + '</div>';
-      }).join('') + '<div style="margin-top:14px;padding:14px;background:var(--nbt-emerald-bg);border:1px solid var(--nbt-emerald-line);border-radius:10px;font-size:13px;color:var(--nbt-emerald-dark);">✦ Use the <strong>AI assistant</strong> to ask questions about these policies - Claude grounds every answer in this knowledge base + UAE Labour Law and cites which policy it leaned on.</div>';
+      }).join('') + '<div style="margin-top:14px;padding:14px;background:var(--nbt-emerald-bg);border:1px solid var(--nbt-emerald-line);border-radius:10px;font-size:13px;color:var(--nbt-emerald-dark);">✦ Use the <strong>AI assistant</strong> to ask questions about these policies - AI grounds every answer in this knowledge base + UAE Labour Law and cites which policy it leaned on.</div>';
     });
   };
 

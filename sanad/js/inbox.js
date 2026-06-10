@@ -28,13 +28,13 @@
   function renderModeBadge() {
     SanadAI.health().then(function (h) {
       var el = $('mode-badge');
-      var modelName = h.model.indexOf('haiku') !== -1 ? 'Haiku 4.5'
-                    : h.model.indexOf('sonnet') !== -1 ? 'Sonnet 4.6'
-                    : h.model.indexOf('opus') !== -1 ? 'Opus 4.7' : h.model;
+      var modelName = h.model.indexOf("fast") !== -1 ? 'Fast'
+                    : h.model.indexOf("balanced") !== -1 ? 'Balanced'
+                    : h.model.indexOf("max") !== -1 ? 'Max' : h.model;
       if (h.live) {
         el.className = 'snd-mode-badge live';
         el.textContent = 'Live · ' + modelName;
-        el.title = 'Connected to Claude via the Worker proxy. Each call costs ~$0.001.';
+        el.title = 'Connected to the model via the Worker proxy. Each call costs ~$0.001.';
       } else {
         el.className = 'snd-mode-badge';
         el.textContent = 'Demo mode';

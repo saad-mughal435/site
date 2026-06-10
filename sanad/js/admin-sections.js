@@ -363,9 +363,9 @@
     SanadApp.api('/admin/settings').then(function (r) {
       var s = r.body.settings;
       var models = [
-        ['claude-haiku-4-5-20251001', 'Haiku 4.5', 'Fastest · cheapest (~$0.001/call)'],
-        ['claude-sonnet-4-6',         'Sonnet 4.6', 'Balanced · ~10× the cost'],
-        ['claude-opus-4-7',           'Opus 4.7',   'Highest quality · ~30× the cost']
+        ['fast', 'Fast', 'Fastest · cheapest (~$0.001/call)'],
+        ['balanced',         'Balanced', 'Balanced · ~10× the cost'],
+        ['max',           'Max',   'Highest quality · ~30× the cost']
       ];
       host.innerHTML =
         '<div class="snd-card" style="margin-bottom:18px;">'

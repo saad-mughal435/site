@@ -39,7 +39,7 @@ tab and the demo open in another.
 - Hero with headline *"Building operations, live on a floor plan."*
 - Three CTAs in the hero - **Open operations console**, **Energy dashboard**, **Open admin**.
 - A mocked chiller-summary card on the right (CH-1, CHWS 44.2 °F, condenser 94.2 °F ⚠, AI snippet).
-- A mode badge top-right reading **Demo mode** (or **Live · Haiku 4.5** if the Worker proxy is configured).
+- A mode badge top-right reading **Demo mode** (or **Live · Fast** if the Worker proxy is configured).
 - Six explainer cards: live floor plan · simulated BACnet/Modbus stream · alarm management · predictive-maintenance WOs · energy dashboard · industrial AI copilot.
 - A "Two-minute walkthrough" card with 7 numbered steps that link to the relevant pages.
 
@@ -141,7 +141,7 @@ CH-1 condenser-temp alarm and click **✦ Explain**.
   > **Likely cause:** Condenser-side approach has widened - most often refrigerant overcharge, condenser-coil fouling, or low CT basin level reducing heat rejection. Cross-check CT-1 fan VFD speed and basin temp. If both look normal, prioritise the chiller-side: schedule an oil-sample analysis and check for non-condensables.
 
 - A mode chip - **mock** in Demo mode, **live** in Live mode.
-- A model + latency line: `claude-haiku-4-5-20251001 · 312ms`.
+- A model + latency line: `fast · 312ms`.
 - A footer with **Close** and **Acknowledge alarm** buttons.
 
 **Under the hood:** `WatadAI.explainAlarm({alarm, asset})` builds a payload
@@ -149,7 +149,7 @@ with the alarm + asset JSON, calls `/api/watad/ai/call`. In Demo mode that
 request fails (no Worker) and `mockReply()` runs the title through a
 regex-keyed dictionary in `ai-engine.js` - the condenser-temp branch matches
 on `/condenser.*temp.*(high|critical|94|95)/`. In Live mode the Worker
-proxies to Claude with the BMS-tuned system prompt.
+proxies to AI with the BMS-tuned system prompt.
 
 ---
 
@@ -376,7 +376,7 @@ desc.
 
 **You'll see:**
 
-- **Model picker** - three radio cards: **Haiku 4.5** (fastest, cheapest) · **Sonnet 4.6** (balanced) · **Opus 4.7** (highest quality). Click to switch - the selected card highlights cyan.
+- **Model picker** - three radio cards: **Fast** (fastest, cheapest) · **Balanced** (balanced) · **Max** (highest quality). Click to switch - the selected card highlights cyan.
 - **System prompt** textarea (editable, ~5 lines, pre-populated with the building-operator persona).
 - Three side-by-side knobs: **Temperature** (0.4 default) · **Max tokens** (600 default) · **Prompt cache** (Enabled / Disabled).
 - **Save AI settings** primary button.
@@ -389,7 +389,7 @@ desc.
 - Loading spinner ("Generating sample alarm explanation…").
 - A card with the title **Sample alarm explanation** + mode chip (mock / live) + the same two-paragraph format you saw in Step 5 (using a fake CH-1 condenser-temp alarm). Latency + model footer.
 
-**Change the model from Haiku to Sonnet, then click Save AI settings.**
+**Change the model from Fast to Balanced, then click Save AI settings.**
 
 **You'll see:** toast `AI settings saved`. The setting persists to
 `watad.settings.overrides` and is read back by `WatadAI.call()` on the next
@@ -487,15 +487,15 @@ which restarts the simulator from t=0.
 ## Step 21 - Optional: enable Live mode
 
 Demo mode is good enough for any recruiter conversation - the mock replies
-are written in the same voice as the live Claude responses. But if you want
-to flip on real Claude:
+are written in the same voice as the live AI responses. But if you want
+to flip on real AI:
 
 1. Cloudflare → Workers & Pages → site → Settings → Variables and Secrets.
-2. Add (or reuse from Sanad) `ANTHROPIC_API_KEY = sk-ant-…`.
+2. Add (or reuse from Sanad) `LLM_API_KEY = sk-ant-…`.
 3. Extend the existing `_worker.js` with the `/api/watad/ai/*` handler
    (snippet at the bottom of `watad/README.md`).
 4. Push or trigger a redeploy.
-5. Reload any Watad page. The mode badge flips to **Live · Haiku 4.5** and
+5. Reload any Watad page. The mode badge flips to **Live · Fast** and
    `WatadAI.health()` returns `{live: true}`.
 
 Cost guardrails: ~AED 0.005 per `explain_alarm` call, ~AED 0.015 for

@@ -15,8 +15,8 @@
   function health() {
     if (modeCache) return Promise.resolve(modeCache);
     return fetch('/api/marsad/ai/health').then(function (r) { return r.json(); })
-      .then(function (j) { modeCache = { live: !!j.live, model: j.model || 'claude-haiku-4-5-20251001' }; return modeCache; })
-      .catch(function () { modeCache = { live: false, model: 'claude-haiku-4-5-20251001' }; return modeCache; });
+      .then(function (j) { modeCache = { live: !!j.live, model: j.model || 'fast' }; return modeCache; })
+      .catch(function () { modeCache = { live: false, model: 'fast' }; return modeCache; });
   }
 
   function logCall(feature, rec) {
@@ -27,7 +27,7 @@
 
   function call(opts) {
     var started = Date.now();
-    var model = opts.model || 'claude-haiku-4-5-20251001';
+    var model = opts.model || 'fast';
     return fetch('/api/marsad/ai/call', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -128,7 +128,7 @@
     if (/idle|spare|capacity/.test(q)) return 'Three idle drivers right now: 2 at the hub, 1 in JLT just back from a drop. Total spare capacity ~28 parcels across the two vans + 4 on the bike.';
     if (/fuel/.test(q)) return 'Two vehicles below the 25% fuel threshold: V03 (van, Yusuf) at 18%, M02 (bike, Bilal) at 22%. Recommend Yusuf swing past the hub for a top-up after his current drop.';
     if (/peak|busy|rush/.test(q)) return 'Peak window today projects 16:30-19:00 based on last 14-day pattern. Downtown + Business Bay clusters dominate. Suggest pre-staging 2 vans in the BB micro-hub before 16:00.';
-    return 'I read the live fleet state for every reply. Try asking about SLAs, idle capacity, fuel, peak windows, or a specific driver/zone. (For full questions: live Claude needs a Cloudflare Worker - see README.)';
+    return 'I read the live fleet state for every reply. Try asking about SLAs, idle capacity, fuel, peak windows, or a specific driver/zone. (For full questions: live AI needs a Cloudflare Worker - see README.)';
   }
 
   var SYS = {

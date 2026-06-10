@@ -54,10 +54,10 @@
   SanadAI.health().then(function (h) {
     var el = $('mode-badge');
     if (!el) return;
-    var name = h.model.indexOf('haiku') !== -1 ? 'Haiku 4.5' : h.model.indexOf('sonnet') !== -1 ? 'Sonnet 4.6' : 'Opus 4.7';
+    var name = h.model.indexOf("fast") !== -1 ? 'Fast' : h.model.indexOf("balanced") !== -1 ? 'Balanced' : 'Max';
     el.className = h.live ? 'snd-mode-badge live' : 'snd-mode-badge';
     el.textContent = h.live ? 'Live · ' + name : 'Demo mode';
-    el.title = h.live ? 'Real Claude responses' : 'Pattern-matched mock replies';
+    el.title = h.live ? 'Real AI responses' : 'Pattern-matched mock replies';
   });
 
   // ---------- Render chat window ----------
@@ -118,7 +118,7 @@
     }
     var subline = state.local.ready && state.local.enabled
       ? 'Running locally · Qwen 2.5 0.5B'
-      : 'Usually replies in seconds · powered by Claude';
+      : 'Usually replies in seconds · powered by AI';
 
     host.innerHTML =
       '<div class="snd-chat-head">'

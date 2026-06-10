@@ -20,7 +20,7 @@
   };
 
   function render(app, s, streak, entries, ai) {
-    var aiLabel = ai.live ? 'Live · Haiku 4.5' : 'Demo mode';
+    var aiLabel = ai.live ? 'Live · Fast' : 'Demo mode';
     var aiClass = ai.live ? 'success' : '';
     app.innerHTML =
         '<div class="lz-topbar"><div class="lz-topbar-title">Profile</div></div>'
@@ -39,7 +39,7 @@
       +   '<div class="lz-card" style="display:flex;align-items:center;justify-content:space-between;gap:10px;">'
       +     '<div>'
       +       '<div style="font-size:14px;font-weight:600;">' + esc(aiLabel) + '</div>'
-      +       '<div style="font-size:11.5px;color:var(--lz-muted);margin-top:2px;">' + (ai.live ? 'Real Claude via Worker proxy' : 'Deterministic mock - see README for Live setup') + '</div>'
+      +       '<div style="font-size:11.5px;color:var(--lz-muted);margin-top:2px;">' + (ai.live ? 'Real AI via Worker proxy' : 'Deterministic mock - see README for Live setup') + '</div>'
       +     '</div>'
       +     '<span class="lz-mood-chip"' + (ai.live ? ' style="background:rgba(81,207,102,0.18);color:var(--lz-mood-energized);"' : '') + '>' + esc(ai.live ? 'LIVE' : 'DEMO') + '</span>'
       +   '</div>'

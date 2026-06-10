@@ -16,9 +16,9 @@ operations (Khazna) recruiters hire for.
 | Mode | When | Behaviour |
 | --- | --- | --- |
 | **Demo** | Default | Telemetry simulator + deterministic mock AI replies. Every feature works realistically. Topbar shows **Demo mode**. |
-| **Live** | Cloudflare Worker at `/api/watad/ai/*` deployed AND `ANTHROPIC_API_KEY` set | Real Claude responses (Haiku 4.5 default). Topbar shows **Live · Haiku 4.5**. |
+| **Live** | Cloudflare Worker at `/api/watad/ai/*` deployed AND `LLM_API_KEY` set | Real AI responses (Fast default). Topbar shows **Live · Fast**. |
 
-Re-uses the same `ANTHROPIC_API_KEY` secret as the Sanad demo - set once,
+Re-uses the same `LLM_API_KEY` secret as the Sanad demo - set once,
 both demos use it.
 
 ## Files
@@ -65,10 +65,10 @@ documented reference Worker that handles both `/api/sanad/ai/*` and
 `/api/watad/ai/*`). Once that's in place:
 
 1. Cloudflare → Workers & Pages → site → Settings → Variables and Secrets
-2. Add (or reuse) Encrypted Secret: `ANTHROPIC_API_KEY = sk-ant-…`
-3. *(Optional)* Plain text variable: `WATAD_DEFAULT_MODEL = claude-haiku-4-5-20251001`
+2. Add (or reuse) Encrypted Secret: `LLM_API_KEY = sk-ant-…`
+3. *(Optional)* Plain text variable: `WATAD_DEFAULT_MODEL = fast`
 4. Push or trigger a redeploy. Watad's topbar flips from **Demo mode** to
-   **Live · Haiku 4.5** automatically.
+   **Live · Fast** automatically.
 
 Reference Worker handler for the proxy:
 
@@ -76,21 +76,20 @@ Reference Worker handler for the proxy:
 // inside _worker.js fetch() handler, alongside the Sanad branch:
 if (url.pathname.startsWith('/api/watad/ai/')) {
   if (url.pathname === '/api/watad/ai/health') {
-    return Response.json({ ok: true, live: !!env.ANTHROPIC_API_KEY,
-      model: env.WATAD_DEFAULT_MODEL || 'claude-haiku-4-5-20251001' });
+    return Response.json({ ok: true, live: !!env.LLM_API_KEY,
+      model: env.WATAD_DEFAULT_MODEL || 'fast' });
   }
-  if (!env.ANTHROPIC_API_KEY)
+  if (!env.LLM_API_KEY)
     return Response.json({ ok: false, error: 'no_key', fallback: true }, { status: 503 });
   const body = await request.json();
-  const r = await fetch('https://api.anthropic.com/v1/messages', {
+  const r = await fetch('https://api.your-llm-provider.com/v1/chat', {
     method: 'POST',
     headers: {
-      'x-api-key': env.ANTHROPIC_API_KEY,
-      'anthropic-version': '2023-06-01',
+      'x-api-key': env.LLM_API_KEY,
       'content-type': 'application/json'
     },
     body: JSON.stringify({
-      model: body.model || env.WATAD_DEFAULT_MODEL || 'claude-haiku-4-5-20251001',
+      model: body.model || env.WATAD_DEFAULT_MODEL || 'fast',
       max_tokens: body.max_tokens || 600,
       system: body.system,
       messages: body.messages,
@@ -103,7 +102,7 @@ if (url.pathname.startsWith('/api/watad/ai/')) {
 
 ## Cost guardrails (when live)
 
-- **Claude Haiku 4.5** at ~$0.80/M input + ~$4/M output tokens.
+- **AI Fast** at ~$0.80/M input + ~$4/M output tokens.
 - `explain_alarm` ≈ $0.001/call.
 - `suggest_maintenance` ≈ $0.003/call (longer context).
 - `optimize_setpoints` ≈ $0.005/call.

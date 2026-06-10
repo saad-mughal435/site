@@ -1,6 +1,6 @@
 # Nabta - HR + payroll SaaS for UAE companies
 
-A modern UAE-shaped HRIS demo. 32 employees across 5 departments, leave management with approval workflow, WPS-compliant payroll runs, recruitment kanban, performance reviews, and a Claude-powered HR policy assistant grounded in the company handbook + UAE Labour Law.
+A modern UAE-shaped HRIS demo. 32 employees across 5 departments, leave management with approval workflow, WPS-compliant payroll runs, recruitment kanban, performance reviews, and an AI-powered HR policy assistant grounded in the company handbook + UAE Labour Law.
 
 Part of the [saadm.dev](https://saadm.dev/) portfolio. Live at <https://saadm.dev/nabta/>.
 
@@ -13,16 +13,16 @@ Part of the [saadm.dev](https://saadm.dev/) portfolio. Live at <https://saadm.de
 - **Recruitment** - kanban: lead / applied / interview / offer / hired. 4 open roles · 22 candidates · source + rating + expected salary tracking.
 - **Performance** - Q2-2026 review cycle. 12 reviews across status (not started / in progress / submitted). Rating + goals-met %.
 - **Policies** - 6 HR policies (leave, WPS, visa, gratuity, probation, remote) + UAE Labour Law context. Used as the RAG corpus for the AI assistant.
-- **AI policy assistant** - Claude grounded in the 6 policies + UAE Labour Law. Every answer cites the policy it leans on with `[pol-xxx]` chips that open the source. Live + mock fallback.
+- **AI policy assistant** - an LLM grounded in the 6 policies + UAE Labour Law. Every answer cites the policy it leans on with `[pol-xxx]` chips that open the source. Live + mock fallback.
 - **Settings + Audit** - company settings (pay day, WPS code, leave caps, probation), audit log with action history.
 
 ## Live-mode setup (optional)
 
-Same Cloudflare Worker + Anthropic key as the other AI demos. Set once, all six AI integrations across the portfolio use it.
+Same Cloudflare Worker + LLM API key as the other AI demos. Set once, all six AI integrations across the portfolio use it.
 
 1. Cloudflare → Workers & Pages → site → Settings → Variables and Secrets.
-2. Confirm `ANTHROPIC_API_KEY` is set (value lives in the encrypted secret store - never in this repo).
-3. *(Optional)* `NABTA_DEFAULT_MODEL` (defaults to `claude-haiku-4-5-20251001`).
+2. Confirm `LLM_API_KEY` is set (value lives in the encrypted secret store - never in this repo).
+3. *(Optional)* `NABTA_DEFAULT_MODEL` (defaults to `fast`).
 4. Extend the existing Worker with a `/api/nabta/ai/*` branch - same shape as the Sanad / Watad / Ask / Lahza / Marsad handlers.
 
 ### Reference Worker handler
@@ -32,23 +32,22 @@ if (url.pathname.startsWith('/api/nabta/ai/')) {
   if (url.pathname === '/api/nabta/ai/health') {
     return Response.json({
       ok: true,
-      live: !!env.ANTHROPIC_API_KEY,
-      model: env.NABTA_DEFAULT_MODEL || 'claude-haiku-4-5-20251001'
+      live: !!env.LLM_API_KEY,
+      model: env.NABTA_DEFAULT_MODEL || 'fast'
     });
   }
-  if (!env.ANTHROPIC_API_KEY) {
+  if (!env.LLM_API_KEY) {
     return Response.json({ ok: false, error: 'no_key', fallback: true }, { status: 503 });
   }
   const body = await request.json();
-  const r = await fetch('https://api.anthropic.com/v1/messages', {
+  const r = await fetch('https://api.your-llm-provider.com/v1/chat', {
     method: 'POST',
     headers: {
-      'x-api-key': env.ANTHROPIC_API_KEY,
-      'anthropic-version': '2023-06-01',
+      'x-api-key': env.LLM_API_KEY,
       'content-type': 'application/json'
     },
     body: JSON.stringify({
-      model: body.model || env.NABTA_DEFAULT_MODEL || 'claude-haiku-4-5-20251001',
+      model: body.model || env.NABTA_DEFAULT_MODEL || 'fast',
       max_tokens: body.max_tokens || 500,
       system: body.system,
       messages: body.messages
@@ -66,7 +65,7 @@ The policy assistant uses a focused RAG retrieve (top-3 of 6 policies) + a short
 
 - ~700 input tokens (system + 3 retrieved policies + 1-2 history turns + question)
 - ~120 output tokens
-- ≈ $0.0010 / call with Haiku 4.5
+- ≈ $0.0010 / call with Fast
 - With prompt caching: ≈ $0.0002 / call on cache hit (the system prompt + policy corpus are stable, perfect for caching)
 
 A visitor playing with the demo for 5 min triggers ~6 calls = **~$0.006 / visitor**. Worker rate-limit 30 calls/min/IP.

@@ -12,13 +12,13 @@
     },
     {
       icon: '✦',
-      title: 'Claude reads the patterns.',
+      title: 'AI reads the patterns.',
       body: 'After a few entries, your AI Coach can answer questions like "Why was Tuesday hard?" - grounded in your own writing, with citations.'
     },
     {
       icon: '🔒',
       title: 'Your entries stay in your browser.',
-      body: 'Nothing is uploaded by default. localStorage only. You decide when (and whether) to ask Claude anything.'
+      body: 'Nothing is uploaded by default. localStorage only. You decide when (and whether) to ask AI anything.'
     }
   ];
 
