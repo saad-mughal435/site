@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.10.0] - 2026-06-11 - Professional read: restrained motion + one role story
+
+### Changed
+
+- **Motion layer slimmed to smooth scroll + subtle parallax.** The custom cursor, magnetic
+  buttons and 3D card tilt are removed (code and CSS, not just disabled) - content-first.
+  home.fx.js/css cache-busted across all 78 referencing pages.
+- **One role story everywhere: backend, software engineering, ERP/MES, automation.** The
+  six-track enumerations (including NOC, web development, technical operations and the noscript
+  block's industrial maintenance) are gone from the homepage contact copy, FAQ + FAQPage JSON-LD,
+  meta description, noscript fallback, contact page, and package.json. The Engineering view
+  toggle still carries the industrial story for those who look.
+- **Code-view project order:** ShopFloor API, hft-orderbook, n8n-nodes-devtools, then
+  playwright-e2e - backend reviewers meet the Java backend and the systems flagship first.
+  Content unchanged, order only.
+
 ## [5.9.9] - 2026-06-11 - Honest CI, WebP headshot, corpus and copy hygiene
 
 ### Changed

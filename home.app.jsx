@@ -357,7 +357,7 @@ function Stats({ view }) {
 const FAQ_ITEMS = [
   {
     q: 'Is Saad available for hire?',
-    a: <Fragment>Yes - open to automation, backend, full-stack, ERP / MES, IT-operations, and NOC roles. {AVAILABILITY}, and available immediately. Reach out via the <a href="contact.html">contact form</a>, email <a href="mailto:saad@saadm.dev">saad@saadm.dev</a>, or WhatsApp <a href="https://wa.me/971502578065" target="_blank" rel="noopener">+971 50 257 8065</a>.</Fragment>,
+    a: <Fragment>Yes - open to backend, software engineering, ERP / MES, and automation roles. {AVAILABILITY}, and available immediately. Reach out via the <a href="contact.html">contact form</a>, email <a href="mailto:saad@saadm.dev">saad@saadm.dev</a>, or WhatsApp <a href="https://wa.me/971502578065" target="_blank" rel="noopener">+971 50 257 8065</a>.</Fragment>,
   },
   {
     q: 'What does the Kingsley MES / ERP platform do?',
@@ -639,27 +639,27 @@ const PROJECTS = [
     ctaSubtitle: 'Live on a free instance - the first request after idle can take ~50s to wake. Log in with manager / password.',
   },
   {
-    domain: 'code', kind: 'Test automation · Open source · CI', year: '2026',
-    sectionEyebrow: 'Quality engineering',
-    sectionHeading: 'Tested like production software',
-    sectionBlurb: 'Automated quality gates for the work above: a Playwright suite drives this very site and the ShopFloor API across real browsers and devices, runs in GitHub Actions on every push and nightly, and doubles as a production uptime check.',
-    title: 'playwright-e2e - Cross-browser test automation',
-    desc: <Fragment>A <strong>Playwright + TypeScript</strong> end-to-end suite that tests <strong>this portfolio</strong>
-      and the live <strong>ShopFloor API</strong>. Browser specs cover load smoke, the React render, SEO / JSON-LD,
-      navigation, the contact form, every project demo, and the Lahza PWA; API specs cover JWT auth and read-only
-      domain endpoints - all green in CI across five browser and device targets.</Fragment>,
+    domain: 'code', kind: 'C++17 HFT engine · ITCH 5.0 · MoldUDP64 · FIX 4.4 · MT5 · CI', year: '2026',
+    sectionEyebrow: 'Systems & C++',
+    sectionHeading: 'Systems programming in C++',
+    sectionBlurb: 'Five dependency-light C++17 repositories - modern CMake, unit tests (Catch2 fetched by CMake), and green GitHub Actions CI - led by a low-latency HFT market-data engine and spanning the operations, systems, networking and industrial-protocol domains the rest of this portfolio covers.',
+    title: 'hft-orderbook - low-latency HFT engine (ITCH 5.0 · MoldUDP64 · FIX · MT5)',
+    desc: <Fragment>A low-latency <strong>C++17</strong> trading-infrastructure engine. It reconstructs limit-order books from the real <strong>NASDAQ TotalView-ITCH 5.0</strong> feed - over <strong>BinaryFILE</strong> captures and the <strong>MoldUDP64</strong> UDP multicast transport - derives microstructure signals, scales across cores, speaks <strong>FIX 4.4</strong> order entry and a <strong>MetaTrader 5</strong> bridge, and can be <strong>watched reconstructing the book in the browser</strong> (a synthetic ITCH session replayed through the real engine; point it at a live wsbook feed with <code>?ws=</code>). ITCH is pre-matched, so this is a <strong>reconstructor, not a matching engine</strong> - the hot path is an O(1) <code>order_ref → order</code> map.</Fragment>,
     bullets: [
-      <Fragment><strong>Cross-browser + mobile</strong> - Chromium, Firefox, WebKit, plus Pixel 7 and iPhone 14 emulation</Fragment>,
-      <Fragment><strong>Browser + API testing</strong> - DOM, SEO and PWA checks alongside read-only ShopFloor API auth and endpoint tests</Fragment>,
-      <Fragment><strong>Accessibility</strong> - axe-core WCAG 2.0 / 2.1 A &amp; AA scan, gated on critical + serious issues</Fragment>,
-      <Fragment><strong>GitHub Actions CI</strong> - every push, a nightly cron, and manual dispatch; uploads the HTML report</Fragment>,
+      <Fragment><strong>Market connectivity</strong> - ITCH 5.0 decode by manual big-endian byte assembly (never a packed-struct cast over the wire); reads real <strong>BinaryFILE</strong> files and the <strong>MoldUDP64</strong> UDP feed with <strong>sequence-gap detection</strong>; routes every message to a per-symbol book by <code>stock_locate</code></Fragment>,
+      <Fragment><strong>Lock-free, sub-microsecond, sharded</strong> - a wait-free SPSC ring (<code>alignas(64)</code> cache-line split, <code>PAUSE</code> busy-wait) feeds a decode → book pipeline in well under 100&nbsp;ns/msg; symbols shard across pinnable worker threads, one ring each - all <strong>validated race-free by ThreadSanitizer</strong></Fragment>,
+      <Fragment><strong>Pluggable book, measured</strong> - templated over its price-level store: a <code>std::map</code> baseline, a flat sorted vector, and a <strong>price-tick-indexed windowed array</strong> (the canonical L2 structure, ~24% faster in the A/B) - all three parity-tested and benchmarked head-to-head with Google Benchmark</Fragment>,
+      <Fragment><strong>Microstructure signals + browser viewer</strong> - micro-price, order-book imbalance and spread (bps) plus a trade tape with VWAP / OHLCV, streamed as JSON over a <strong>dependency-free WebSocket</strong> (hand-rolled SHA-1 + RFC-6455 frame codec) to a browser L2 book viewer</Fragment>,
+      <Fragment><strong>FIX 4.4 order entry</strong> - a compact FIX codec (NewOrderSingle / ExecutionReport) with auto BodyLength + CheckSum: the order-entry counterpart to the ITCH market-data side (market data in, orders out)</Fragment>,
+      <Fragment><strong>MetaTrader 5 bridge</strong> - versioned NDJSON over TCP, an <code>ITCHBridge.mq5</code> EA, and a depth/signal publisher that streams the reconstructed book back; a mock-client integration test runs the full ticks → orders → acks round trip in CI without Windows</Fragment>,
+      <Fragment><strong>Hardened & verified</strong> - every push runs ThreadSanitizer, Address / UB sanitizers, a <strong>libFuzzer</strong> decode harness and a clang <code>-Werror</code> build alongside <code>ctest</code> and a benchmark smoke</Fragment>,
     ],
-    tags: ['Playwright', 'TypeScript', 'E2E Testing', 'API Testing', 'axe-core / a11y', 'Cross-browser', 'GitHub Actions', 'CI'],
+    tags: ['C++17', 'HFT', 'NASDAQ ITCH 5.0', 'Lock-free', 'Low-latency', 'Sub-microsecond', 'MoldUDP64', 'UDP multicast', 'FIX 4.4', 'Order entry', 'Market data', 'Multi-symbol', 'Microstructure signals', 'Order-book imbalance', 'Sharded', 'WebSocket', 'MetaTrader 5', 'Benchmarked', 'Sanitized + fuzzed', 'CMake', 'GitHub Actions'],
     ctas: [
-      { label: 'View source on GitHub ↗', href: 'https://github.com/saad-mughal435/playwright-e2e', target: '_blank', primary: true, prominent: true },
-      { label: 'CI runs ↗', href: 'https://github.com/saad-mughal435/playwright-e2e/actions', target: '_blank' },
+      { label: 'View on GitHub ↗', href: 'https://github.com/saad-mughal435/hft-orderbook', target: '_blank', primary: true, prominent: true },
+      { label: 'L2 viewer ↗', href: '/hft-book/viewer.html', target: '_blank', prominent: true },
+      { label: 'CI runs ↗', href: 'https://github.com/saad-mughal435/hft-orderbook/actions', target: '_blank' },
     ],
-    ctaSubtitle: 'Cross-browser E2E + API + accessibility - green in CI, runs nightly against production.',
   },
   {
     domain: 'all', kind: 'Open-source n8n node · TypeScript · CI-tested', year: '2026',
@@ -687,27 +687,27 @@ const PROJECTS = [
     ctaSubtitle: 'Published on npm · MIT · green CI - npm install @saadmughal435/n8n-nodes-devtools',
   },
   {
-    domain: 'code', kind: 'C++17 HFT engine · ITCH 5.0 · MoldUDP64 · FIX 4.4 · MT5 · CI', year: '2026',
-    sectionEyebrow: 'Systems & C++',
-    sectionHeading: 'Systems programming in C++',
-    sectionBlurb: 'Five dependency-light C++17 repositories - modern CMake, unit tests (Catch2 fetched by CMake), and green GitHub Actions CI - led by a low-latency HFT market-data engine and spanning the operations, systems, networking and industrial-protocol domains the rest of this portfolio covers.',
-    title: 'hft-orderbook - low-latency HFT engine (ITCH 5.0 · MoldUDP64 · FIX · MT5)',
-    desc: <Fragment>A low-latency <strong>C++17</strong> trading-infrastructure engine. It reconstructs limit-order books from the real <strong>NASDAQ TotalView-ITCH 5.0</strong> feed - over <strong>BinaryFILE</strong> captures and the <strong>MoldUDP64</strong> UDP multicast transport - derives microstructure signals, scales across cores, speaks <strong>FIX 4.4</strong> order entry and a <strong>MetaTrader 5</strong> bridge, and can be <strong>watched reconstructing the book in the browser</strong> (a synthetic ITCH session replayed through the real engine; point it at a live wsbook feed with <code>?ws=</code>). ITCH is pre-matched, so this is a <strong>reconstructor, not a matching engine</strong> - the hot path is an O(1) <code>order_ref → order</code> map.</Fragment>,
+    domain: 'code', kind: 'Test automation · Open source · CI', year: '2026',
+    sectionEyebrow: 'Quality engineering',
+    sectionHeading: 'Tested like production software',
+    sectionBlurb: 'Automated quality gates for the work above: a Playwright suite drives this very site and the ShopFloor API across real browsers and devices, runs in GitHub Actions on every push and nightly, and doubles as a production uptime check.',
+    title: 'playwright-e2e - Cross-browser test automation',
+    desc: <Fragment>A <strong>Playwright + TypeScript</strong> end-to-end suite that tests <strong>this portfolio</strong>
+      and the live <strong>ShopFloor API</strong>. Browser specs cover load smoke, the React render, SEO / JSON-LD,
+      navigation, the contact form, every project demo, and the Lahza PWA; API specs cover JWT auth and read-only
+      domain endpoints - all green in CI across five browser and device targets.</Fragment>,
     bullets: [
-      <Fragment><strong>Market connectivity</strong> - ITCH 5.0 decode by manual big-endian byte assembly (never a packed-struct cast over the wire); reads real <strong>BinaryFILE</strong> files and the <strong>MoldUDP64</strong> UDP feed with <strong>sequence-gap detection</strong>; routes every message to a per-symbol book by <code>stock_locate</code></Fragment>,
-      <Fragment><strong>Lock-free, sub-microsecond, sharded</strong> - a wait-free SPSC ring (<code>alignas(64)</code> cache-line split, <code>PAUSE</code> busy-wait) feeds a decode → book pipeline in well under 100&nbsp;ns/msg; symbols shard across pinnable worker threads, one ring each - all <strong>validated race-free by ThreadSanitizer</strong></Fragment>,
-      <Fragment><strong>Pluggable book, measured</strong> - templated over its price-level store: a <code>std::map</code> baseline, a flat sorted vector, and a <strong>price-tick-indexed windowed array</strong> (the canonical L2 structure, ~24% faster in the A/B) - all three parity-tested and benchmarked head-to-head with Google Benchmark</Fragment>,
-      <Fragment><strong>Microstructure signals + browser viewer</strong> - micro-price, order-book imbalance and spread (bps) plus a trade tape with VWAP / OHLCV, streamed as JSON over a <strong>dependency-free WebSocket</strong> (hand-rolled SHA-1 + RFC-6455 frame codec) to a browser L2 book viewer</Fragment>,
-      <Fragment><strong>FIX 4.4 order entry</strong> - a compact FIX codec (NewOrderSingle / ExecutionReport) with auto BodyLength + CheckSum: the order-entry counterpart to the ITCH market-data side (market data in, orders out)</Fragment>,
-      <Fragment><strong>MetaTrader 5 bridge</strong> - versioned NDJSON over TCP, an <code>ITCHBridge.mq5</code> EA, and a depth/signal publisher that streams the reconstructed book back; a mock-client integration test runs the full ticks → orders → acks round trip in CI without Windows</Fragment>,
-      <Fragment><strong>Hardened & verified</strong> - every push runs ThreadSanitizer, Address / UB sanitizers, a <strong>libFuzzer</strong> decode harness and a clang <code>-Werror</code> build alongside <code>ctest</code> and a benchmark smoke</Fragment>,
+      <Fragment><strong>Cross-browser + mobile</strong> - Chromium, Firefox, WebKit, plus Pixel 7 and iPhone 14 emulation</Fragment>,
+      <Fragment><strong>Browser + API testing</strong> - DOM, SEO and PWA checks alongside read-only ShopFloor API auth and endpoint tests</Fragment>,
+      <Fragment><strong>Accessibility</strong> - axe-core WCAG 2.0 / 2.1 A &amp; AA scan, gated on critical + serious issues</Fragment>,
+      <Fragment><strong>GitHub Actions CI</strong> - every push, a nightly cron, and manual dispatch; uploads the HTML report</Fragment>,
     ],
-    tags: ['C++17', 'HFT', 'NASDAQ ITCH 5.0', 'Lock-free', 'Low-latency', 'Sub-microsecond', 'MoldUDP64', 'UDP multicast', 'FIX 4.4', 'Order entry', 'Market data', 'Multi-symbol', 'Microstructure signals', 'Order-book imbalance', 'Sharded', 'WebSocket', 'MetaTrader 5', 'Benchmarked', 'Sanitized + fuzzed', 'CMake', 'GitHub Actions'],
+    tags: ['Playwright', 'TypeScript', 'E2E Testing', 'API Testing', 'axe-core / a11y', 'Cross-browser', 'GitHub Actions', 'CI'],
     ctas: [
-      { label: 'View on GitHub ↗', href: 'https://github.com/saad-mughal435/hft-orderbook', target: '_blank', primary: true, prominent: true },
-      { label: 'L2 viewer ↗', href: '/hft-book/viewer.html', target: '_blank', prominent: true },
-      { label: 'CI runs ↗', href: 'https://github.com/saad-mughal435/hft-orderbook/actions', target: '_blank' },
+      { label: 'View source on GitHub ↗', href: 'https://github.com/saad-mughal435/playwright-e2e', target: '_blank', primary: true, prominent: true },
+      { label: 'CI runs ↗', href: 'https://github.com/saad-mughal435/playwright-e2e/actions', target: '_blank' },
     ],
+    ctaSubtitle: 'Cross-browser E2E + API + accessibility - green in CI, runs nightly against production.',
   },
   {
     domain: 'code', kind: 'C++17 library + CLI · Open source · CI', year: '2026',
@@ -1129,8 +1129,8 @@ function Contact() {
         <div className="contact-left">
           <span className="section-tag">Fig. 07 - Contact</span>
           <h2>Let&rsquo;s build something that ships.</h2>
-          <p>If you&rsquo;re hiring for automation, ERP/MES, manufacturing systems, backend engineering, IT operations, or
-            Python-heavy technical roles in the UAE or remote, I&rsquo;d love to talk.</p>
+          <p>I build backend and operations software - ERP/MES platforms, APIs, and the tooling
+            around them. If that fits a role you&rsquo;re working on, in the UAE or remote, I&rsquo;d be glad to talk.</p>
           <MagneticBtn as="a" href="contact.html" className="btn btn-primary">
             Open contact form <span className="arrow">→</span>
           </MagneticBtn>
