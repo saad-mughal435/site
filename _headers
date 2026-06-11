@@ -70,7 +70,7 @@
 /nabta/js/*
   Cache-Control: public, max-age=300, must-revalidate
 /tokens.css
-  Cache-Control: public, max-age=300, must-revalidate
+  Cache-Control: public, max-age=604800
 /assets/*
   Cache-Control: public, max-age=300, must-revalidate
 
@@ -78,17 +78,23 @@
 /*.html
   Cache-Control: public, max-age=0, must-revalidate
 
-# Site CSS / JS at root - short cache
+# Site CSS / JS at root. Files referenced with ?v= cache-bust params everywhere
+# get a week; files loaded WITHOUT ?v= (script.js, demo.js, contact.js) stay at
+# a day so updates still reach repeat visitors.
 /home.css
-  Cache-Control: public, max-age=86400
+  Cache-Control: public, max-age=604800
 /home.app.js
-  Cache-Control: public, max-age=300, must-revalidate
+  Cache-Control: public, max-age=604800
+/home.fx.js
+  Cache-Control: public, max-age=604800
+/home.fx.css
+  Cache-Control: public, max-age=604800
 /styles.css
-  Cache-Control: public, max-age=86400
+  Cache-Control: public, max-age=604800
 /script.js
   Cache-Control: public, max-age=86400
 /demo.css
-  Cache-Control: public, max-age=86400
+  Cache-Control: public, max-age=604800
 /demo.js
   Cache-Control: public, max-age=86400
 /contact.js
