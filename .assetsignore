@@ -1,5 +1,6 @@
 node_modules/
 home.app.jsx
+home.app.compiled.js
 package.json
 package-lock.json
 wrangler.jsonc

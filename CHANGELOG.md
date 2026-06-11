@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.9.1] - 2026-06-11 - Minified bundle + self-hosted React
+
+### Performance
+
+- **home.app.js is now minified** (babel -> terser in build:home): 103 KB -> 81 KB raw, with the
+  remaining weight being content strings; gzips much smaller. The unminified compiled
+  intermediate is neither committed nor served.
+- **React + ReactDOM are self-hosted** from /vendor/ (pinned 18.3.1 production UMD builds)
+  instead of unpkg - removes a third-party availability dependency and the SRI question for the
+  homepage's render path; the unpkg preconnect is gone.
+
 ## [5.9.0] - 2026-06-11 - Repo hygiene and truthfulness pass
 
 ### Removed

@@ -1,6 +1,6 @@
 {
   "name": "saadm.dev",
-  "version": "5.9.0",
+  "version": "5.9.1",
   "private": true,
   "description": "Personal portfolio for Muhammad Saad - Electrical & Automation Engineer / ERP-OEE Developer / Full-Stack. Currently UAE-based, open to relocate worldwide. Static site (HTML + React via CDN + Vanilla CSS), deployed on Cloudflare Pages.",
   "homepage": "https://saadm.dev/",
@@ -45,7 +45,7 @@
     "dev": "python -m http.server 8000 --bind 127.0.0.1",
     "serve": "python -m http.server 8000 --bind 127.0.0.1",
     "start": "python -m http.server 8000 --bind 127.0.0.1",
-    "build:home": "babel home.app.jsx --presets @babel/preset-react -o home.app.js",
+    "build:home": "babel home.app.jsx --presets @babel/preset-react -o home.app.compiled.js && terser home.app.compiled.js --compress --mangle -o home.app.js && del home.app.compiled.js",
     "format": "prettier --write \"**/*.{html,css,js,json,md}\" --ignore-path .gitignore",
     "format:check": "prettier --check \"**/*.{html,css,js,json,md}\" --ignore-path .gitignore",
     "validate": "echo \"Static site - no build step. Validation runs in CI.\"",
@@ -57,6 +57,7 @@
   "devDependencies": {
     "@babel/cli": "^7.24.0",
     "@babel/preset-react": "^7.24.0",
-    "prettier": "^3.3.0"
+    "prettier": "^3.3.0",
+    "terser": "^5.48.0"
   }
 }
