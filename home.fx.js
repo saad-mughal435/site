@@ -7,8 +7,12 @@
  * motion / touch - so if a CDN lib fails to load or anything throws, the plain
  * (already-working) site is unaffected.
  *
- * Libraries (loaded via CDN in index.html): gsap + ScrollTrigger and
- * @studio-freight/lenis (smooth scroll). No WebGL - the backdrop is static CSS.
+ * Libraries (gsap + ScrollTrigger and @studio-freight/lenis): this file
+ * injects them itself, and only on capable desktops (pointer: fine, width
+ * >= 1024px, no reduced-motion) - phones and touch devices never download
+ * them. Pages that still carry static <script> tags keep working: the loader
+ * is a no-op when window.gsap is already present. No WebGL - the backdrop is
+ * static CSS.
  */
 (function () {
   'use strict';
@@ -21,6 +25,31 @@
   // screens and reduced-motion get the plain (already-working) page.
   var BIG = true;
   try { BIG = window.matchMedia('(min-width: 1024px)').matches; } catch (e) {}
+
+  /* ============================================== On-demand CDN motion libs */
+  // Injected here instead of <script> tags in every page head so phones and
+  // reduced-motion users never pay for them. cb ALWAYS fires - initMotion
+  // already degrades gracefully when a lib is missing or a CDN fetch fails.
+  var FX_LIBS = [
+    'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js',
+    'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js',
+    'https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js'
+  ];
+  function ensureLibs(cb) {
+    if (window.gsap && window.ScrollTrigger && window.Lenis) { cb(); return; }
+    if (REDUCE || !FINE || !BIG) { cb(); return; }
+    var left = FX_LIBS.length;
+    function done() { left--; if (left === 0) cb(); }
+    for (var i = 0; i < FX_LIBS.length; i++) {
+      var s = document.createElement('script');
+      s.src = FX_LIBS[i];
+      s.async = false; /* preserve gsap -> ScrollTrigger execution order */
+      s.crossOrigin = 'anonymous';
+      s.onload = done;
+      s.onerror = done; /* never block boot on a failed fetch */
+      document.head.appendChild(s);
+    }
+  }
 
   /* =================================================== Smooth scroll + GSAP */
   function initMotion() {
@@ -169,7 +198,9 @@
     try { if (!REDUCE && FINE) initCursor(); } catch (e) {}
     try { if (FINE) initMagnetic(); } catch (e) {}
     try { if (!REDUCE && FINE && BIG) initTilt(); } catch (e) {}
-    whenContent(function () { try { initMotion(); } catch (e) {} });
+    ensureLibs(function () {
+      whenContent(function () { try { initMotion(); } catch (e) {} });
+    });
     document.documentElement.classList.add('fx-ready');
   }
 

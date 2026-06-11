@@ -303,7 +303,7 @@ function Hero({ view, setView }) {
       </div>
       <div className="hero-right">
         <figure className="hero-photo">
-          <img src="saad.png" width="400" height="500" loading="eager" decoding="async"
+          <img src="saad.png" width="400" height="500" loading="eager" decoding="async" fetchpriority="high"
                alt="Muhammad Saad - Automation & Software Developer, Dubai" />
           <figcaption><span className="plate-no">Plate 01</span> M. Saad · Automation &amp; Software · Dubai, UAE</figcaption>
         </figure>

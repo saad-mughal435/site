@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.5.0] - 2026-06-11 - Performance pass: conditional motion libs, dead three.js sweep, og.png, fonts
+
+### Performance
+
+- **Removed the dead three.js stack from all 77 demo/app pages** - every demo page carried 7
+  `three@0.137.5` script tags (plus gsap/ScrollTrigger/lenis) left over from the WebGL backdrop era,
+  but no file in the repo references THREE anymore. Roughly 170 KB gzipped of never-executed JS gone
+  from every demo page a recruiter opens.
+- **gsap + ScrollTrigger + lenis now load on demand** - home.fx.js injects them itself, and only on
+  capable desktops (pointer: fine, >= 1024px, no reduced-motion). Phones, tablets and reduced-motion
+  users no longer download ~130 KB of motion JS that never ran for them. Anchor scrolling falls back
+  to the existing CSS `scroll-behavior: smooth`. Desktop behaviour is unchanged.
+- **og.png cut from 474 KB to 46 KB** - the generator (scripts/build-og.py) now palette-quantizes
+  with Floyd-Steinberg dithering; visually identical at link-preview scale. Cache-bust
+  `og.png?v=20260612` across 25 pages.
+- **Google Fonts trimmed to the weights actually used** - dropped Inter 700, JetBrains Mono 500/700
+  and Space Grotesk 500 (verified against home.css); ~4 fewer woff2 files per first visit.
+- **Hero photo prioritised for LCP** - `<link rel="preload" as="image">` for saad.png in the head
+  plus `fetchpriority="high"` on the hero img, so the largest paint no longer waits for React to
+  render before the browser discovers it. Removed the now-unneeded jsdelivr preconnect.
+
 ## [5.4.0] - 2026-06-10 - Plain-ASCII typography + L2 viewer explainer
 
 ### Changed

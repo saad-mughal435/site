@@ -467,6 +467,7 @@ function Hero({
     height: "500",
     loading: "eager",
     decoding: "async",
+    fetchpriority: "high",
     alt: "Muhammad Saad - Automation & Software Developer, Dubai"
   }), /*#__PURE__*/React.createElement("figcaption", null, /*#__PURE__*/React.createElement("span", {
     className: "plate-no"
