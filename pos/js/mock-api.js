@@ -209,7 +209,10 @@
       audit('order.create', newO.id, newO.type);
       return { ok: true, order: newO };
     }
-    if ((m = path.match(/^\/orders\/([^\/]+)$/)) && method === 'GET') {
+    // NOTE: 'kitchen' must fall through to the literal /orders/kitchen route
+    // below - this generic by-id matcher would otherwise shadow it and the
+    // KDS would poll an eternal not_found.
+    if ((m = path.match(/^\/orders\/([^\/]+)$/)) && m[1] !== 'kitchen' && method === 'GET') {
       var o = orders().find(function (x) { return x.id === m[1] || x.order_no === m[1]; });
       if (!o) return { ok: false, error: 'not_found' };
       return { ok: true, order: o };

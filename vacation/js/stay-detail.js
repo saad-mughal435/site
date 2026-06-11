@@ -71,7 +71,7 @@
     if (q) {
       box.innerHTML += ''
         + '<div class="v-reserve-breakdown">'
-        +   '<div><span>AED ' + listing.base_nightly_aed.toLocaleString() + ' × ' + q.nights + ' night' + (q.nights === 1 ? '' : 's') + '</span><span data-price-aed-exact="' + q.nightly_subtotal + '">' + VacationApp.formatPriceExact(q.nightly_subtotal) + '</span></div>'
+        +   '<div><span>AED ' + listing.base_nightly_aed.toLocaleString() + ' × ' + q.nights + ' night' + (q.nights === 1 ? '' : 's') + (q.weekend_nights > 0 ? ' (incl. weekend rate × ' + q.weekend_nights + ')' : '') + '</span><span data-price-aed-exact="' + q.nightly_subtotal + '">' + VacationApp.formatPriceExact(q.nightly_subtotal) + '</span></div>'
         +   (q.cleaning_fee ? '<div><span>Cleaning fee</span><span data-price-aed-exact="' + q.cleaning_fee + '">' + VacationApp.formatPriceExact(q.cleaning_fee) + '</span></div>' : '')
         +   '<div><span>Service fee (10%)</span><span data-price-aed-exact="' + q.service_fee + '">' + VacationApp.formatPriceExact(q.service_fee) + '</span></div>'
         +   '<div><span>VAT (5%)</span><span data-price-aed-exact="' + q.vat + '">' + VacationApp.formatPriceExact(q.vat) + '</span></div>'

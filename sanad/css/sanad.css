@@ -75,6 +75,12 @@ body.sanad {
   margin: 0;
   overflow: hidden;
 }
+/* The saadm.dev fx layer (home.fx.css) sets html.lenis body { height: auto }
+   for smooth scroll, which out-specifies body.sanad and collapses the page to
+   the banner height - with overflow:hidden that made the whole inbox
+   click-dead on desktop. Re-assert the app-shell height when lenis is on. */
+html.lenis body.sanad { height: 100vh; }
+
 /* Portfolio banner gets natural height. Inbox/chat/etc. fill what's left. */
 body.sanad > .snd-inbox,
 body.sanad > .pos-terminal { flex: 1 1 0; min-height: 0; height: auto !important; }

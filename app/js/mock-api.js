@@ -1242,9 +1242,9 @@
       { code: 'PRJ-DEMO', name: 'Demo Project' },
       { code: 'PRJ-EXP',  name: 'Demo Expansion' },
     ]);
-    if (path === '/accounting/cashbook')       return jsonResponse(ACCOUNTING_CASHBOOK);
-    if (path === '/accounting/ar')             return jsonResponse(ACCOUNTING_AR);
-    if (path === '/accounting/ap')             return jsonResponse(ACCOUNTING_AP);
+    if (path === '/accounting/cashbook')       return jsonResponse({ entries: ACCOUNTING_CASHBOOK });
+    if (path === '/accounting/ar')             return jsonResponse({ entries: ACCOUNTING_AR });
+    if (path === '/accounting/ap')             return jsonResponse({ entries: ACCOUNTING_AP });
     if (path === '/accounting/drafts') {
       const mod = query.module;
       return jsonResponse(mod ? ACCOUNTING_DRAFTS.filter(d => d.module === mod) : ACCOUNTING_DRAFTS);

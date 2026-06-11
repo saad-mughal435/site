@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.9.5] - 2026-06-11 - Deep-check fixes: four real demo bugs
+
+Found by a browser-level sweep + flow tests (Playwright against production) across all demos.
+
+### Fixed
+
+- **POS kitchen display never showed orders** - the generic `/orders/:id` mock route matched
+  `/orders/kitchen` before the literal kitchen route, so the KDS polled an eternal not_found
+  while the terminal and admin both showed orders in the kitchen. Route now lets `kitchen`
+  fall through (pos/js/mock-api.js).
+- **Sanad inbox was click-dead on desktop** - the fx layer's `html.lenis body { height: auto }`
+  out-specified `body.sanad { height: 100vh }`, collapsing the page behind `overflow: hidden`
+  so nothing was hit-testable. `html.lenis body.sanad { height: 100vh }` re-asserts the app
+  shell (sanad/css/sanad.css). Mobile was never affected (fx does not load there).
+- **MES /app/ Accounting tabs threw `entries.slice is not a function`** - the mock returned
+  bare arrays while the module reads `.entries`; on an array that resolves to
+  `Array.prototype.entries` (a function) and the `|| []` guard never fires. Mock now returns
+  the `{entries: [...]}` envelope (app/js/mock-api.js).
+- **Manzil mortgage calculator showed "AED Infinity"** when the tenure field was cleared -
+  `computeMortgage` now clamps/guards all inputs (property/js/app.js).
+- Vacation reserve sidebar now labels the weekend rate in its per-night line, so
+  `AED 1,450 x 3 nights` no longer appears to disagree with its own subtotal
+  (vacation/js/stay-detail.js).
+- Contact page "Email me" CV link is underlined (axe link-in-text-block, both themes).
+
 ## [5.9.4] - 2026-06-11 - Recheck fixes
 
 ### Fixed

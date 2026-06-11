@@ -510,6 +510,11 @@
 
   // ---------- Mortgage compute ----------
   function computeMortgage(price, downPct, ratePct, years) {
+    // Guard typed-out / cleared inputs: an empty tenure gives n = 0 and the annuity formula divides by zero (rendered as AED Infinity).
+    price = Math.max(0, Number(price) || 0);
+    downPct = Math.min(100, Math.max(0, Number(downPct) || 0));
+    ratePct = Math.max(0, Number(ratePct) || 0);
+    years = Math.max(1, Number(years) || 1);
     var down = price * (downPct / 100);
     var loan = price - down;
     var monthlyRate = (ratePct / 100) / 12;
