@@ -32,7 +32,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
 <script>(function(){try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.setAttribute('data-theme',t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='light'?'#f5f7fc':'#07080d');}catch(e){}})();</script>
 <link rel="stylesheet" href="styles.css?v=20260609c" />
-<link rel="stylesheet" href="demo.css?v=20260605b" />
+<link rel="stylesheet" href="demo.css?v=20260611i" />
 </head>
 <body>
 
@@ -90,6 +90,7 @@
       <div class="demo-card-title">ERP system</div>
       <div class="demo-card-sub">Kingsley MES/ERP - production walkthrough with 20+ integrated modules and 6 PDF templates.</div>
       <div class="demo-card-stack">Python · FastAPI · MongoDB · SQL Server · Docker · Nginx · Sage</div>
+      <div class="demo-card-tech">Technically: fetch-interceptor mock API, 20+ hash-routed modules, server-side PDF pipeline mirrored in-browser</div>
       <div class="demo-card-cta">Scroll down ↓</div>
     </a>
     <a href="https://shopfloor-api-lvb0.onrender.com/" target="_blank" rel="noopener" class="demo-card" data-target="shopfloor">
@@ -97,6 +98,7 @@
       <div class="demo-card-title">MES/OEE backend (Java)</div>
       <div class="demo-card-sub">ShopFloor API - the same operations domain as the ERP above, rebuilt as a clean REST backend: job orders that compute OEE on close, downtime + root cause, QC holds, FIFO inventory. Role-based JWT security, JPA + PostgreSQL/Flyway, interactive OpenAPI/Swagger, Docker, green CI. Log in with manager / password (free instance, ~50s to wake if idle).</div>
       <div class="demo-card-stack">Java 21 · Spring Boot 3 · Spring Data JPA · Spring Security · PostgreSQL · Flyway · OpenAPI · Testcontainers</div>
+      <div class="demo-card-tech">Technically: OEE computed on job-order close, JWT roles, Flyway-migrated schema, Testcontainers integration tests</div>
       <div class="demo-card-cta">Open live demo ↗</div>
     </a>
     <a href="b2c/index.html" target="_blank" rel="noopener" class="demo-card" data-target="b2c">
@@ -104,6 +106,7 @@
       <div class="demo-card-title">B2C storefront</div>
       <div class="demo-card-sub">Pebble &amp; Co. - DTC commerce with catalog, cart, multi-step checkout, customer account, Shopify-style admin.</div>
       <div class="demo-card-stack">HTML5 · CSS Grid · Vanilla JS · Mock API · Admin dashboard</div>
+      <div class="demo-card-tech">Technically: cart and multi-step checkout state in localStorage, in-browser mock API, Shopify-style admin</div>
       <div class="demo-card-cta">Open storefront ↗</div>
     </a>
     <a href="b2b/index.html" target="_blank" rel="noopener" class="demo-card" data-target="b2b">
@@ -111,6 +114,7 @@
       <div class="demo-card-title">B2B wholesale</div>
       <div class="demo-card-sub">Anvil Supply Co. - wholesale portal with tier pricing, MOQs, contract discounts, quote &amp; approval workflows.</div>
       <div class="demo-card-stack">Tier pricing · Approval workflow · Role-based UI · Admin queue</div>
+      <div class="demo-card-tech">Technically: contract-tier price resolution, over-limit purchase orders routed to an approval queue</div>
       <div class="demo-card-cta">Open portal ↗</div>
     </a>
     <a href="property/index.html" target="_blank" rel="noopener" class="demo-card" data-target="manzil">
@@ -118,6 +122,7 @@
       <div class="demo-card-title">Property marketplace</div>
       <div class="demo-card-sub">Manzil Properties - Dubai real-estate marketplace with map search, agent profiles, mortgage calculator, leads pipeline and a 13-section admin.</div>
       <div class="demo-card-stack">Leaflet maps · Mock API · Admin SPA · i18n EN/AR · AED/USD/GBP/EUR</div>
+      <div class="demo-card-tech">Technically: Leaflet map search over 65+ listings, amortisation math, document-upload verification queue, RTL i18n</div>
       <div class="demo-card-cta">Open marketplace ↗</div>
     </a>
     <a href="vacation/index.html" target="_blank" rel="noopener" class="demo-card" data-target="vacation">
@@ -125,6 +130,7 @@
       <div class="demo-card-title">Vacation Homes</div>
       <div class="demo-card-sub">UAE short-stay booking marketplace. Date-range picker, availability calendar with conflict check, per-night pricing breakdown, 11-section admin.</div>
       <div class="demo-card-stack">Custom calendar · Booking flow · Leaflet maps · Mock API · Admin SPA</div>
+      <div class="demo-card-tech">Technically: hand-rolled date-range picker with conflict-check booking (409 on race), weekend-rate pricing, host onboarding wizard</div>
       <div class="demo-card-cta">Open marketplace ↗</div>
     </a>
     <a href="pos/index.html" target="_blank" rel="noopener" class="demo-card" data-target="pos">
@@ -132,6 +138,7 @@
       <div class="demo-card-title">Café POS</div>
       <div class="demo-card-sub">Qahwa POS - counter-side café &amp; quick-service POS with cashier terminal, kitchen display, modifier-driven menus, shift cash reconciliation, and a 14-section admin.</div>
       <div class="demo-card-stack">PIN auth · Touch UI · KDS polling · Web Audio · Mock API · Admin SPA</div>
+      <div class="demo-card-tech">Technically: modifier-priced cart math, 5s-poll kitchen display with audio cues, shift cash reconciliation and Z-reports</div>
       <div class="demo-card-cta">Open POS ↗</div>
     </a>
     <a href="sanad/index.html" target="_blank" rel="noopener" class="demo-card" data-target="sanad">
@@ -139,6 +146,7 @@
       <div class="demo-card-title">AI support copilot</div>
       <div class="demo-card-sub">Sanad - SaaS helpdesk with AI integrated everywhere. Agent inbox with AI sidebar (suggested reply / summary / sentiment / category / translate), RAG chat widget, knowledge base with AI actions, 11-section admin with editable system prompt + model selector.</div>
       <div class="demo-card-stack">LLM API · CF Worker proxy · RAG · Streaming · EN/AR · Mock fallback</div>
+      <div class="demo-card-tech">Technically: streaming LLM proxy via a CF Worker, RAG over a 77-article KB with citation chips, deterministic mock fallback</div>
       <div class="demo-card-cta">Open copilot ↗</div>
     </a>
     <a href="watad/index.html" target="_blank" rel="noopener" class="demo-card" data-target="watad">
@@ -146,6 +154,7 @@
       <div class="demo-card-title">Smart-building BMS</div>
       <div class="demo-card-sub">Watad - operator console for a commercial smart building. Live SVG floor plan with HVAC/lighting/metering equipment as icons, simulated BACnet/Modbus telemetry stream, alarm queue with audio cues, predictive-maintenance work orders, ASHRAE-overlaid energy curves, 3 BMS-tuned AI features (explain alarm / suggest maintenance / optimise setpoints).</div>
       <div class="demo-card-stack">Real-time telemetry sim · SVG floor plan · BACnet/Modbus · Web Audio · LLM API · Mock fallback</div>
+      <div class="demo-card-tech">Technically: ~200-point telemetry simulator on a 5s tick, severity-ranked alarm queue, SVG floor plan bound to live values</div>
       <div class="demo-card-cta">Open BMS ↗</div>
     </a>
     <a href="lahza/" target="_blank" rel="noopener" class="demo-card" data-target="lahza">
@@ -153,6 +162,7 @@
       <div class="demo-card-title">AI journaling app</div>
       <div class="demo-card-sub">Lahza - mobile-first Progressive Web App. AI-suggested daily prompt, mood detection from your entry text, weekly RAG insights, and an AI Coach you can chat with about your own writing (with citation chips that open the cited entry). Desktop visit shows an iPhone frame; mobile is fullscreen; installed PWA opens as a standalone window with no browser chrome.</div>
       <div class="demo-card-stack">PWA · Service Worker · Web App Manifest · Mobile-first · LLM API · RAG · CF Worker proxy</div>
+      <div class="demo-card-tech">Technically: installable PWA with scoped service worker, entries kept in localStorage, weekly RAG insights over your own entries</div>
       <div class="demo-card-cta">Open app ↗</div>
     </a>
     <a href="marsad/console.html" target="_blank" rel="noopener" class="demo-card" data-target="marsad">
@@ -160,6 +170,7 @@
       <div class="demo-card-title">Fleet dispatcher</div>
       <div class="demo-card-sub">Marsad - dispatcher console for a Dubai last-mile courier. Live Leaflet map with 16 vehicles ticking toward 96 in-flight orders across 6 zones · SLA-breach audio cue · 4 AI dispatcher features (explain delay / reroute / batch-assign / chat) · driver-side view · 9-section admin SPA.</div>
       <div class="demo-card-stack">Leaflet · Real-time sim · Web Audio · LLM API · CF Worker proxy · Mock fallback</div>
+      <div class="demo-card-tech">Technically: 16 vehicles ticking every 4s on real Dubai geography, SLA-breach detection, driver-side mobile view</div>
       <div class="demo-card-cta">Open dispatcher ↗</div>
     </a>
     <a href="nabta/app.html" target="_blank" rel="noopener" class="demo-card" data-target="nabta">
@@ -167,6 +178,7 @@
       <div class="demo-card-title">HR + payroll SaaS</div>
       <div class="demo-card-sub">Nabta - UAE-shaped HRIS. 32 employees · WPS-compliant payroll via Emirates NBD · leave with line-manager + HR approval · recruitment kanban · performance reviews · AI policy assistant grounded in 6 HR policies + UAE Labour Law (Federal Decree-Law No. 33 of 2021).</div>
       <div class="demo-card-stack">Hash-routed SPA · UAE WPS · RAG (policies) · LLM API · Mock fallback</div>
+      <div class="demo-card-tech">Technically: WPS-format payroll runs, two-step leave approvals, policy assistant grounded in cited HR documents</div>
       <div class="demo-card-cta">Open app ↗</div>
     </a>
   </div>
