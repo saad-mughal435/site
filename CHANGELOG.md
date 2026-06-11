@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.5.2] - 2026-06-11 - SEO and meta hygiene
+
+### Fixed
+
+- **Lahza finally unfurls when shared** - the PWA landing page had no Open Graph or Twitter tags at
+  all, so WhatsApp/LinkedIn links rendered blank. Added the full block plus a canonical.
+- **L2 viewer is now a first-class shareable page** - og/twitter tags, theme-color, robots index,
+  favicon, and a sitemap.xml entry for /hft-book/viewer.html.
+- **/app/ has a way home** - the live MES/ERP demo shell had no link back to the portfolio; added a
+  quiet fixed "Built by Muhammad Saad - saadm.dev" pill bottom-left.
+- **index.v4.html no longer competes with the homepage** - the old v4 preview was still
+  `index, follow`; now `noindex, follow`.
+
+## [5.5.1] - 2026-06-11 - Cache TTLs
+
+### Changed
+
+- Root assets that are always referenced with `?v=` cache-bust params (home.css, home.app.js,
+  home.fx.js, home.fx.css, styles.css, demo.css, tokens.css) now cache for a week instead of a
+  day/5 minutes. Files loaded without `?v=` (script.js, demo.js, contact.js) stay at a day.
+
 ## [5.5.0] - 2026-06-11 - Performance pass: conditional motion libs, dead three.js sweep, og.png, fonts
 
 ### Performance
