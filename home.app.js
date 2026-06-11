@@ -287,7 +287,8 @@ function Nav() {
     href: "demo.html",
     target: "_blank",
     rel: "noopener",
-    onClick: close
+    onClick: close,
+    "aria-label": "Open the full demo gallery in a new tab"
   }, "Demo \u2197"), /*#__PURE__*/React.createElement("a", {
     href: "contact.html",
     onClick: close
@@ -384,7 +385,7 @@ const HERO_COPY = {
   code: {
     title: ['Software for operations.', 'Automation behind it.'],
     sub: /*#__PURE__*/React.createElement(Fragment, null, "I\u2019m ", /*#__PURE__*/React.createElement("strong", null, "Saad"), " - an ", /*#__PURE__*/React.createElement("strong", null, "Automation & Software Developer"), " focused on ERP systems, dashboards, backend tools, and web applications. I build software that replaces manual work - spreadsheets, paper logs, copy-paste reports, inventory tracking, admin panels, and business workflows - with automation that runs itself."),
-    stack: 'Python · FastAPI · Java · Spring Boot · PostgreSQL · Docker · n8n · TypeScript',
+    stack: 'Python · FastAPI · Java · Spring Boot · C++17 · PostgreSQL · Docker · TypeScript',
     cta: {
       href: 'app/index.html',
       label: 'Launch live app ↗',
@@ -441,6 +442,18 @@ function Hero({
     target: copy.cta.target,
     rel: 'noopener'
   } : {}), copy.cta.label)), /*#__PURE__*/React.createElement("div", {
+    className: "hero-tracks"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "meta-k"
+  }, "Two tracks"), /*#__PURE__*/React.createElement("span", null, "Python/FastAPI ERP + backend systems \xB7 C++17 low-latency market data", ' ', "(", /*#__PURE__*/React.createElement("a", {
+    href: "https://github.com/saad-mughal435/hft-orderbook",
+    target: "_blank",
+    rel: "noopener"
+  }, "hft-orderbook"), ' ', "\xB7 ", /*#__PURE__*/React.createElement("a", {
+    href: "hft-book/viewer.html",
+    target: "_blank",
+    rel: "noopener"
+  }, "live L2 viewer \u2197"), ")")), /*#__PURE__*/React.createElement("div", {
     className: "hero-meta"
   }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", {
     className: "meta-k"
@@ -670,7 +683,7 @@ function Experience({
     className: "section-head"
   }, /*#__PURE__*/React.createElement("span", {
     className: "section-tag"
-  }, "Fig. 02 - Experience"), /*#__PURE__*/React.createElement("h2", null, /*#__PURE__*/React.createElement(WordReveal, null, "A short career, but a wide one."))), /*#__PURE__*/React.createElement("ol", {
+  }, "Fig. 03 - Experience"), /*#__PURE__*/React.createElement("h2", null, /*#__PURE__*/React.createElement(WordReveal, null, "A short career, but a wide one."))), /*#__PURE__*/React.createElement("ol", {
     className: "timeline"
   }, items.map((e, i) => /*#__PURE__*/React.createElement(Reveal, {
     as: "li",
@@ -899,7 +912,7 @@ const PROJECTS = [{
   }]
 }];
 
-/* Product demos - shown after Skills as a 3-column grid (compact cards). */
+/* Product demos - shown directly after Projects as a 3-column grid (compact cards). */
 const DEMO_PROJECTS = [{
   domain: 'code',
   kind: 'Disconnected demo · Portfolio piece',
@@ -1196,7 +1209,7 @@ function Projects({
     className: "section-head"
   }, /*#__PURE__*/React.createElement("span", {
     className: "section-tag"
-  }, "Fig. 03 - Selected Work"), /*#__PURE__*/React.createElement("h2", null, /*#__PURE__*/React.createElement(WordReveal, null, "Production software, backends and open source."))), /*#__PURE__*/React.createElement(Reveal, {
+  }, "Fig. 04 - Selected Work"), /*#__PURE__*/React.createElement("h2", null, /*#__PURE__*/React.createElement(WordReveal, null, "Production software, backends and open source."))), /*#__PURE__*/React.createElement(Reveal, {
     stagger: true,
     className: "projects-grid"
   }, items.map(p => /*#__PURE__*/React.createElement(Fragment, {
@@ -1211,7 +1224,7 @@ function Projects({
 }
 
 /* =========================================================
-   DEMOS - product demos as a horizontal slider (after Skills)
+   DEMOS - product demos as a 3-column grid (after Projects)
    ========================================================= */
 function Demos({
   view
@@ -1227,7 +1240,7 @@ function Demos({
     className: "section-tag"
   }, "Fig. 05 - Demos"), /*#__PURE__*/React.createElement("h2", null, /*#__PURE__*/React.createElement(WordReveal, null, "Product demos built around real workflows.")), /*#__PURE__*/React.createElement("p", {
     className: "demos-sub"
-  }, "Browser-based demos - B2B portals, marketplaces, booking, POS, AI copilots and dashboards. Open any to explore the full build. ", /*#__PURE__*/React.createElement("a", {
+  }, "Ten browser-based product demos - B2B portals, marketplaces, booking, POS, AI copilots and operations consoles. Each opens as a full product you can click through. ", /*#__PURE__*/React.createElement("a", {
     href: "demo.html",
     target: "_blank",
     rel: "noopener"
@@ -1301,7 +1314,7 @@ function Skills({
     className: "section-head"
   }, /*#__PURE__*/React.createElement("span", {
     className: "section-tag"
-  }, "Fig. 04 - Skills"), /*#__PURE__*/React.createElement("h2", null, /*#__PURE__*/React.createElement(WordReveal, null, "Skills I use to build and run operations software."))), /*#__PURE__*/React.createElement(Reveal, {
+  }, "Fig. 06 - Skills"), /*#__PURE__*/React.createElement("h2", null, /*#__PURE__*/React.createElement(WordReveal, null, "Skills I use to build and run operations software."))), /*#__PURE__*/React.createElement(Reveal, {
     stagger: true,
     className: "skills-grid"
   }, items.map(s => /*#__PURE__*/React.createElement(SkillCard, {
@@ -1323,7 +1336,7 @@ function Contact() {
     className: "contact-left"
   }, /*#__PURE__*/React.createElement("span", {
     className: "section-tag"
-  }, "Fig. 06 - Contact"), /*#__PURE__*/React.createElement("h2", null, "Let\u2019s build something that ships."), /*#__PURE__*/React.createElement("p", null, "If you\u2019re hiring for automation, ERP/MES, manufacturing systems, backend engineering, IT operations, or Python-heavy technical roles in the UAE or remote, I\u2019d love to talk."), /*#__PURE__*/React.createElement(MagneticBtn, {
+  }, "Fig. 07 - Contact"), /*#__PURE__*/React.createElement("h2", null, "Let\u2019s build something that ships."), /*#__PURE__*/React.createElement("p", null, "If you\u2019re hiring for automation, ERP/MES, manufacturing systems, backend engineering, IT operations, or Python-heavy technical roles in the UAE or remote, I\u2019d love to talk."), /*#__PURE__*/React.createElement(MagneticBtn, {
     as: "a",
     href: "contact.html",
     className: "btn btn-primary"
@@ -1341,6 +1354,13 @@ function Contact() {
   }, "Phone"), /*#__PURE__*/React.createElement("a", {
     className: "contact-v",
     href: "tel:+971502578065"
+  }, "+971 50 257 8065")), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+    className: "contact-k"
+  }, "WhatsApp"), /*#__PURE__*/React.createElement("a", {
+    className: "contact-v",
+    href: "https://wa.me/971502578065",
+    target: "_blank",
+    rel: "noopener"
   }, "+971 50 257 8065")), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
     className: "contact-k"
   }, "LinkedIn"), /*#__PURE__*/React.createElement("a", {
@@ -1426,9 +1446,9 @@ function App() {
     view: view
   }), /*#__PURE__*/React.createElement(Projects, {
     view: view
-  }), /*#__PURE__*/React.createElement(Skills, {
-    view: view
   }), /*#__PURE__*/React.createElement(Demos, {
+    view: view
+  }), /*#__PURE__*/React.createElement(Skills, {
     view: view
   }), /*#__PURE__*/React.createElement(FAQ, null), /*#__PURE__*/React.createElement(Contact, null)), /*#__PURE__*/React.createElement(Footer, null));
 }

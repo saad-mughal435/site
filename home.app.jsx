@@ -182,7 +182,7 @@ function Nav() {
           <a href="#experience" className={active === 'experience' ? 'active' : ''} aria-current={active === 'experience' ? 'page' : undefined} onClick={close}>Experience</a>
           <a href="#projects" className={active === 'projects' ? 'active' : ''} aria-current={active === 'projects' ? 'page' : undefined} onClick={close}>Projects</a>
           <a href="#skills" className={active === 'skills' ? 'active' : ''} aria-current={active === 'skills' ? 'page' : undefined} onClick={close}>Skills</a>
-          <a href="demo.html" target="_blank" rel="noopener" onClick={close}>Demo ↗</a>
+          <a href="demo.html" target="_blank" rel="noopener" onClick={close} aria-label="Open the full demo gallery in a new tab">Demo ↗</a>
           <a href="contact.html" onClick={close}>Contact</a>
         </nav>
         <ThemeToggle />
@@ -263,7 +263,7 @@ const HERO_COPY = {
       ERP systems, dashboards, backend tools, and web applications. I build software that replaces manual work
       - spreadsheets, paper logs, copy-paste reports, inventory tracking, admin panels, and business
       workflows - with automation that runs itself.</Fragment>,
-    stack: 'Python · FastAPI · Java · Spring Boot · PostgreSQL · Docker · n8n · TypeScript',
+    stack: 'Python · FastAPI · Java · Spring Boot · C++17 · PostgreSQL · Docker · TypeScript',
     cta: { href: 'app/index.html', label: 'Launch live app ↗', target: '_blank' },
   },
 };
@@ -292,6 +292,12 @@ function Hero({ view, setView }) {
              href={copy.cta.href}
              {...(copy.cta.target ? { target: copy.cta.target, rel: 'noopener' } : {})}
           >{copy.cta.label}</a>
+        </div>
+        <div className="hero-tracks">
+          <span className="meta-k">Two tracks</span>
+          <span>Python/FastAPI ERP + backend systems · C++17 low-latency market data
+            {' '}(<a href="https://github.com/saad-mughal435/hft-orderbook" target="_blank" rel="noopener">hft-orderbook</a>
+            {' '}· <a href="hft-book/viewer.html" target="_blank" rel="noopener">live L2 viewer ↗</a>)</span>
         </div>
         <div className="hero-meta">
           <div><span className="meta-k">Currently</span><span className="meta-v">Kingsley Beverage FZCO · Dubai</span></div>
@@ -494,7 +500,7 @@ function Experience({ view }) {
   return (
     <section id="experience" className="section container">
       <Reveal className="section-head">
-        <span className="section-tag">Fig. 02 - Experience</span>
+        <span className="section-tag">Fig. 03 - Experience</span>
         <h2><WordReveal>A short career, but a wide one.</WordReveal></h2>
       </Reveal>
       <ol className="timeline">
@@ -708,7 +714,7 @@ const PROJECTS = [
   },
 ];
 
-/* Product demos - shown after Skills as a 3-column grid (compact cards). */
+/* Product demos - shown directly after Projects as a 3-column grid (compact cards). */
 const DEMO_PROJECTS = [
   {
     domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
@@ -959,7 +965,7 @@ function Projects({ view }) {
   return (
     <section id="projects" className="section container">
       <Reveal className="section-head">
-        <span className="section-tag">Fig. 03 - Selected Work</span>
+        <span className="section-tag">Fig. 04 - Selected Work</span>
         <h2><WordReveal>Production software, backends and open source.</WordReveal></h2>
       </Reveal>
       <Reveal stagger className="projects-grid">
@@ -981,7 +987,7 @@ function Projects({ view }) {
 }
 
 /* =========================================================
-   DEMOS - product demos as a horizontal slider (after Skills)
+   DEMOS - product demos as a 3-column grid (after Projects)
    ========================================================= */
 function Demos({ view }) {
   const items = DEMO_PROJECTS.filter((p) => view === 'all' || p.domain === view || p.domain === 'all');
@@ -991,7 +997,7 @@ function Demos({ view }) {
       <Reveal className="section-head">
         <span className="section-tag">Fig. 05 - Demos</span>
         <h2><WordReveal>Product demos built around real workflows.</WordReveal></h2>
-        <p className="demos-sub">Browser-based demos - B2B portals, marketplaces, booking, POS, AI copilots and dashboards. Open any to explore the full build. <a href="demo.html" target="_blank" rel="noopener">Full gallery ↗</a></p>
+        <p className="demos-sub">Ten browser-based product demos - B2B portals, marketplaces, booking, POS, AI copilots and operations consoles. Each opens as a full product you can click through. <a href="demo.html" target="_blank" rel="noopener">Full gallery ↗</a></p>
       </Reveal>
       <Reveal stagger className="demos-grid">
         {items.map((p) => <ProjectCard key={p.title} p={p} compact />)}
@@ -1042,7 +1048,7 @@ function Skills({ view }) {
   return (
     <section id="skills" className="section container">
       <Reveal className="section-head">
-        <span className="section-tag">Fig. 04 - Skills</span>
+        <span className="section-tag">Fig. 06 - Skills</span>
         <h2><WordReveal>Skills I use to build and run operations software.</WordReveal></h2>
       </Reveal>
       <Reveal stagger className="skills-grid">
@@ -1060,7 +1066,7 @@ function Contact() {
     <section id="contact" className="section container">
       <Reveal className="contact-box">
         <div className="contact-left">
-          <span className="section-tag">Fig. 06 - Contact</span>
+          <span className="section-tag">Fig. 07 - Contact</span>
           <h2>Let&rsquo;s build something that ships.</h2>
           <p>If you&rsquo;re hiring for automation, ERP/MES, manufacturing systems, backend engineering, IT operations, or
             Python-heavy technical roles in the UAE or remote, I&rsquo;d love to talk.</p>
@@ -1071,6 +1077,7 @@ function Contact() {
         <ul className="contact-list">
           <li><span className="contact-k">Email</span><a className="contact-v" href="mailto:saad@saadm.dev">saad@saadm.dev</a></li>
           <li><span className="contact-k">Phone</span><a className="contact-v" href="tel:+971502578065">+971 50 257 8065</a></li>
+          <li><span className="contact-k">WhatsApp</span><a className="contact-v" href="https://wa.me/971502578065" target="_blank" rel="noopener">+971 50 257 8065</a></li>
           <li><span className="contact-k">LinkedIn</span><a className="contact-v" href="https://www.linkedin.com/in/muhammadsaad435/" target="_blank" rel="noopener">/in/muhammadsaad435</a></li>
           <li><span className="contact-k">Based in</span><span className="contact-v">{AVAILABILITY}</span></li>
         </ul>
@@ -1137,8 +1144,8 @@ function App() {
         <About />
         <Experience view={view} />
         <Projects view={view} />
-        <Skills view={view} />
         <Demos view={view} />
+        <Skills view={view} />
         <FAQ />
         <Contact />
       </main>

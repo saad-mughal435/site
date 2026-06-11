@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.6.0] - 2026-06-11 - Homepage restructure: Demos before Skills + dual-track hero
+
+### Changed
+
+- **Demos now render directly after Projects** - the ten product demos read before the skills chip
+  wall instead of being buried under it. Fig tags renumbered (Experience 03, Projects 04, Demos 05,
+  Skills 06, Contact 07; 02 reserved for the upcoming Proof section).
+- **Dual-track hero line** - a quiet mono "Two tracks" line under the CTAs, identical in every view:
+  Python/FastAPI ERP + backend systems and C++17 low-latency market data, with direct links to
+  hft-orderbook and the live L2 viewer. The HFT story no longer hides behind the view toggle.
+  The code-view stack string now includes C++17.
+- The Get-in-touch nav pill hides at <= 1000px (it duplicates the Contact link) so the nav links
+  never crowd the theme toggle at mid widths.
+
+### Added
+
+- WhatsApp row in the homepage contact list (it existed on contact.html and the rail but not here).
+- aria-label on the nav "Demo" link clarifying it opens the gallery in a new tab.
+
 ## [5.5.2] - 2026-06-11 - SEO and meta hygiene
 
 ### Fixed

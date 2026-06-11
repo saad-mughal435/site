@@ -451,6 +451,17 @@ strong { font-weight: 600; color: var(--text); }
 .arrow { transition: transform var(--t) var(--ease); }
 .btn:hover .arrow { transform: translateX(4px); }
 
+/* Hero tracks - the dual-track line, visible in every view (no toggle needed) */
+.hero-tracks {
+  display: flex; flex-direction: column; gap: 4px;
+  margin: 0 0 18px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--text-soft);
+}
+.hero-tracks a { color: var(--accent); text-decoration: none; }
+.hero-tracks a:hover { text-decoration: underline; }
+
 /* Hero meta - small spec table */
 .hero-meta {
   display: grid;
@@ -921,6 +932,12 @@ a.contact-v:hover { color: var(--accent-h); }
   .project.featured { grid-column: auto; }
   .skills-grid { grid-template-columns: repeat(2, 1fr); }
   .contact-box { grid-template-columns: 1fr; padding: 36px; }
+}
+
+/* The Get-in-touch pill duplicates the Contact link - drop it earlier so the
+   nav links (now 7 with Notes) never crowd the toggle at mid widths. */
+@media (max-width: 1000px) {
+  .nav-cta { display: none; }
 }
 
 @media (max-width: 760px) {
