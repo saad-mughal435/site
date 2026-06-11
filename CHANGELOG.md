@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.9.0] - 2026-06-11 - Repo hygiene and truthfulness pass
+
+### Removed
+
+- **Internal tooling no longer ships with the site** - the scripts/ directory (profile/repo setup
+  helpers, OG-card and CV-stub generators), push.bat, run.bat and the orphaned index.v4.html are
+  gone from the repository; a new .assetsignore also stops home.app.jsx, package files and
+  node_modules from being served in production.
+- meta keywords tags (ignored by search engines for years) and the profile:gender OG tag.
+- "Tailored CVs" wording on the contact path - no CV downloads are promised until real PDFs exist.
+
+### Changed
+
+- **Order-book viewer copy now states exactly what it shows**: a synthetic ITCH session (generated
+  by hft-orderbook's gencap) replayed through the real reconstruction engine, with ?ws= for a live
+  wsbook feed. "Live" wording removed from the homepage, viewer head/explainer, notes, changelog
+  and project card; real BinaryFILE captures are credited to the benchmark suite where they belong.
+- **/app/ described accurately and licensed correctly**: the Kingsley MES/ERP demo UI is published
+  with Kingsley Beverage FZCO's permission, all data fabricated; it is now explicitly excluded
+  from the repo's MIT license (see app/LICENSE-NOTICE.md). One leftover real customer name in a QC
+  form placeholder replaced; a sweep for other real names came back clean.
+- Admin section counts corrected to match the code (Manzil 13, Vacation Homes 11); duplicate
+  "AI-powered AI" phrasing fixed; humans.txt and sitemap lastmod dates refreshed; og.png
+  cache-bust no longer uses a future date.
+
 ## [5.8.0] - 2026-06-11 - Engineering notes at /notes/
 
 ### Added
@@ -32,7 +57,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **"Verifiable, not just claimed." (Fig. 02 - Proof)** between About and Experience - four quiet
-  cards, each a claim a recruiter can check in one click: the production MES/ERP at Kingsley (with
+  cards, each a claim that can be checked in one click: the production MES/ERP at Kingsley (with
   the public walkthrough), open-source repos with green GitHub Actions CI, the published npm
   package @saadmughal435/n8n-nodes-devtools, and the Omdena open collaborations. Same card
   language as the stats row; no carousels, no avatars, no invented counts.
@@ -48,7 +73,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Skills 06, Contact 07; 02 reserved for the upcoming Proof section).
 - **Dual-track hero line** - a quiet mono "Two tracks" line under the CTAs, identical in every view:
   Python/FastAPI ERP + backend systems and C++17 low-latency market data, with direct links to
-  hft-orderbook and the live L2 viewer. The HFT story no longer hides behind the view toggle.
+  hft-orderbook and the L2 viewer. The HFT story no longer hides behind the view toggle.
   The code-view stack string now includes C++17.
 - The Get-in-touch nav pill hides at <= 1000px (it duplicates the Contact link) so the nav links
   never crowd the theme toggle at mid widths.
@@ -86,7 +111,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Removed the dead three.js stack from all 77 demo/app pages** - every demo page carried 7
   `three@0.137.5` script tags (plus gsap/ScrollTrigger/lenis) left over from the WebGL backdrop era,
   but no file in the repo references THREE anymore. Roughly 170 KB gzipped of never-executed JS gone
-  from every demo page a recruiter opens.
+  from every demo page.
 - **gsap + ScrollTrigger + lenis now load on demand** - home.fx.js injects them itself, and only on
   capable desktops (pointer: fine, >= 1024px, no reduced-motion). Phones, tablets and reduced-motion
   users no longer download ~130 KB of motion JS that never ran for them. Anchor scrolling falls back
@@ -163,20 +188,20 @@ the order-entry and real-time-feed halves of a trading stack.
 - JSON-LD description + `<noscript>` line updated to match. Recompiled `home.app.js`; cache-bust
   `?v=20260610a`.
 
-## [5.2.0] - 2026-06-09 - hft-orderbook: live L2 WebSocket book viewer + next-round refresh
+## [5.2.0] - 2026-06-09 - hft-orderbook: L2 WebSocket book viewer + next-round refresh
 
 Adds an interactive demo and refreshes the flagship C++ card after a second deep improvement pass on
 the repo (analytics & signals, a windowed level store, sharded scaling, a WebSocket viewer).
 
 ### Added
 
-- **Live L2 book viewer** at `/hft-book/viewer.html` - a self-contained, theme-aware page that
-  animates a **real recorded replay** (`book-replay.json`, 72 snapshots produced by the C++
-  `wsbook --dump` in CI - not a mock) of the engine reconstructing a NASDAQ ITCH 5.0 book: an L2
+- **L2 book viewer** at `/hft-book/viewer.html` - a self-contained, theme-aware page that
+  animates a recorded replay (`book-replay.json`, 72 snapshots produced by the C++
+  `wsbook --dump` from a synthetic ITCH session) of the engine reconstructing a book: an L2
   depth ladder (bids/asks with size bars), micro-price / spread / order-book-imbalance readout, and
   play/pause. Pass `?ws=ws://host:port` to watch a local `wsbook` live. Respects
   `prefers-reduced-motion` and the site's theme.
-- **"Live L2 viewer ↗"** CTA on the flagship card.
+- **"L2 viewer ↗"** CTA on the flagship card.
 
 ### Changed
 
@@ -427,7 +452,7 @@ generic dark dev-portfolio look.
 
 ### Added
 
-- The **Ask Saad** recruiter chatbot's knowledge base (`ask/js/corpus.js`) now
+- The **Ask Saad** site chatbot's knowledge base (`ask/js/corpus.js`) now
   includes the three open-source repos - **n8n-nodes-devtools**, **ShopFloor
   API**, and **playwright-e2e** - so it can answer questions about Saad's
   automation, Java / Spring Boot, npm-published, and test-automation work, with
@@ -486,7 +511,7 @@ generic dark dev-portfolio look.
 - ShopFloor API is now **deployed live** (Render, free tier) at a public
   Swagger UI. Both the homepage project card and the `/demo` chooser card now
   link **"Open live API (Swagger) ↗"** (with the GitHub source as a secondary
-  link on the homepage card), so recruiters can log in (`manager` / `password`)
+  link on the homepage card), so visitors can log in (`manager` / `password`)
   and exercise the real endpoints, not just read the code.
 
 ## [2.7.1] - 2026-06-01 - ShopFloor in the /demo chooser

@@ -3,23 +3,23 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>hft-orderbook - live L2 book viewer</title>
-<meta name="description" content="Watch the hft-orderbook C++ engine reconstruct a NASDAQ ITCH 5.0 limit-order book in real time: L2 depth ladder, a cumulative depth-of-market chart, micro-price, order-book imbalance, spread and VWAP - streamed over a dependency-free WebSocket." />
+<title>hft-orderbook - L2 book viewer</title>
+<meta name="description" content="Watch the hft-orderbook C++ engine reconstruct a NASDAQ ITCH 5.0 limit-order book - a synthetic session replayed through the real engine: L2 depth ladder, a cumulative depth-of-market chart, micro-price, order-book imbalance, spread and VWAP. Connects to a live wsbook feed via ?ws=." />
 <link rel="canonical" href="https://saadm.dev/hft-book/viewer.html" />
 <meta name="theme-color" content="#090c14" />
 <meta name="robots" content="index, follow" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='12'%20fill='%2307080d'/%3E%3Ctext%20x='50%25'%20y='58%25'%20font-family='Space%20Grotesk,sans-serif'%20font-weight='700'%20font-size='34'%20fill='%23edf1f8'%20text-anchor='middle'%3ES%3C/text%3E%3Crect%20x='18'%20y='47'%20width='28'%20height='3'%20fill='%236e8eff'/%3E%3C/svg%3E" />
 <meta property="og:type" content="website" />
-<meta property="og:title" content="hft-orderbook - live L2 limit-order-book viewer" />
-<meta property="og:description" content="Watch a C++17 engine reconstruct a NASDAQ ITCH 5.0 limit-order book live: L2 depth ladder, cumulative depth chart, micro-price, imbalance, spread and VWAP." />
+<meta property="og:title" content="hft-orderbook - L2 limit-order-book viewer" />
+<meta property="og:description" content="Watch a C++17 engine reconstruct a NASDAQ ITCH 5.0 limit-order book: L2 depth ladder, cumulative depth chart, micro-price, imbalance, spread and VWAP. Synthetic-session replay; live via ?ws=." />
 <meta property="og:url" content="https://saadm.dev/hft-book/viewer.html" />
-<meta property="og:image" content="https://saadm.dev/og.png?v=20260612" />
+<meta property="og:image" content="https://saadm.dev/og.png?v=20260611" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="hft-orderbook - live L2 limit-order-book viewer" />
-<meta name="twitter:description" content="C++17 engine reconstructing a NASDAQ ITCH 5.0 order book live - depth ladder, signals and trade tape over WebSocket." />
-<meta name="twitter:image" content="https://saadm.dev/og.png?v=20260612" />
+<meta name="twitter:title" content="hft-orderbook - L2 limit-order-book viewer" />
+<meta name="twitter:description" content="C++17 engine reconstructing a NASDAQ ITCH 5.0 order book - depth ladder, signals and trade tape over WebSocket. Synthetic-session replay; live via ?ws=." />
+<meta name="twitter:image" content="https://saadm.dev/og.png?v=20260611" />
 <script>
   (function () {
     try {
@@ -147,8 +147,8 @@
     </div>
   </div>
 
-  <p class="sub" id="status">A recorded replay of the hft-orderbook engine reconstructing a live limit-order
-    book. Pass <code>?ws=ws://host:port</code> to watch a local <code>wsbook</code> live. ·
+  <p class="sub" id="status">A replay of the hft-orderbook engine reconstructing a synthetic ITCH session.
+    Pass <code>?ws=ws://host:port</code> to watch a local <code>wsbook</code> live. ·
     <a href="https://github.com/saad-mughal435/hft-orderbook">source ↗</a></p>
 
   <div class="grid">
@@ -202,7 +202,7 @@
       order-by-order market-data feed: every add, execute, cancel, delete and replace carries an 8-byte
       order reference, and the exchange has already matched. So the engine is a
       <b>reconstructor, not a matching engine</b>: it applies each message to an O(1) order-reference map
-      to rebuild the live resting book, then derives signals from it.</p>
+      to rebuild the resting book, then derives signals from it.</p>
 
     <div class="flow mono">
       <b>ITCH 5.0 feed</b><span class="arr">&#8594;</span>decode (manual big-endian)<span class="arr">&#8594;</span>O(1) order-ref book<span class="arr">&#8594;</span>metrics + trade tape<span class="arr">&#8594;</span>JSON snapshot<span class="arr">&#8594;</span><b>this view</b>
@@ -227,10 +227,12 @@
     </dl>
 
     <p class="muted">The decode, reconstruction, metrics and streaming all run in C++ (a lock-free
-      pipeline, sub-microsecond per message); the browser is only the view. The data here is real engine
-      output - a recorded capture produced by <code>wsbook --dump</code> and replayed in a loop. Append
-      <code>?ws=ws://host:port</code> to drive this same view live from a local <code>wsbook</code> over a
-      dependency-free WebSocket (hand-rolled SHA-1 + RFC-6455).</p>
+      pipeline, sub-microsecond per message); the browser is only the view. The session shown here is
+      <b>synthetic</b> - ITCH messages produced by the repo's <code>gencap</code> generator, run through
+      the real engine, captured with <code>wsbook --dump</code> and replayed in a loop (real BinaryFILE
+      captures are exercised in the benchmark suite). Append <code>?ws=ws://host:port</code> to drive
+      this same view live from a local <code>wsbook</code> over a dependency-free WebSocket
+      (hand-rolled SHA-1 + RFC-6455).</p>
   </section>
 </div>
 

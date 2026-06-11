@@ -1,0 +1,9 @@
+node_modules/
+home.app.jsx
+package.json
+package-lock.json
+wrangler.jsonc
+push.bat
+run.bat
+scripts/
+.assetsignore

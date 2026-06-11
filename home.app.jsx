@@ -298,7 +298,7 @@ function Hero({ view, setView }) {
           <span className="meta-k">Two tracks</span>
           <span>Python/FastAPI ERP + backend systems · C++17 low-latency market data
             {' '}(<a href="https://github.com/saad-mughal435/hft-orderbook" target="_blank" rel="noopener">hft-orderbook</a>
-            {' '}· <a href="hft-book/viewer.html" target="_blank" rel="noopener">live L2 viewer ↗</a>)</span>
+            {' '}· <a href="hft-book/viewer.html" target="_blank" rel="noopener">L2 viewer ↗</a>)</span>
         </div>
         <div className="hero-meta">
           <div><span className="meta-k">Currently</span><span className="meta-v">Kingsley Beverage FZCO · Dubai</span></div>
@@ -692,12 +692,12 @@ const PROJECTS = [
     sectionHeading: 'Systems programming in C++',
     sectionBlurb: 'Five dependency-light C++17 repositories - modern CMake, unit tests (Catch2 fetched by CMake), and green GitHub Actions CI - led by a low-latency HFT market-data engine and spanning the operations, systems, networking and industrial-protocol domains the rest of this portfolio covers.',
     title: 'hft-orderbook - low-latency HFT engine (ITCH 5.0 · MoldUDP64 · FIX · MT5)',
-    desc: <Fragment>A low-latency <strong>C++17</strong> trading-infrastructure engine. It reconstructs limit-order books from the real <strong>NASDAQ TotalView-ITCH 5.0</strong> feed - over <strong>BinaryFILE</strong> captures and the <strong>MoldUDP64</strong> UDP multicast transport - derives microstructure signals, scales across cores, speaks <strong>FIX 4.4</strong> order entry and a <strong>MetaTrader 5</strong> bridge, and can be <strong>watched reconstructing the book live in the browser</strong>. ITCH is pre-matched, so this is a <strong>reconstructor, not a matching engine</strong> - the hot path is an O(1) <code>order_ref → order</code> map.</Fragment>,
+    desc: <Fragment>A low-latency <strong>C++17</strong> trading-infrastructure engine. It reconstructs limit-order books from the real <strong>NASDAQ TotalView-ITCH 5.0</strong> feed - over <strong>BinaryFILE</strong> captures and the <strong>MoldUDP64</strong> UDP multicast transport - derives microstructure signals, scales across cores, speaks <strong>FIX 4.4</strong> order entry and a <strong>MetaTrader 5</strong> bridge, and can be <strong>watched reconstructing the book in the browser</strong> (a synthetic ITCH session replayed through the real engine; point it at a live wsbook feed with <code>?ws=</code>). ITCH is pre-matched, so this is a <strong>reconstructor, not a matching engine</strong> - the hot path is an O(1) <code>order_ref → order</code> map.</Fragment>,
     bullets: [
       <Fragment><strong>Market connectivity</strong> - ITCH 5.0 decode by manual big-endian byte assembly (never a packed-struct cast over the wire); reads real <strong>BinaryFILE</strong> files and the <strong>MoldUDP64</strong> UDP feed with <strong>sequence-gap detection</strong>; routes every message to a per-symbol book by <code>stock_locate</code></Fragment>,
       <Fragment><strong>Lock-free, sub-microsecond, sharded</strong> - a wait-free SPSC ring (<code>alignas(64)</code> cache-line split, <code>PAUSE</code> busy-wait) feeds a decode → book pipeline in well under 100&nbsp;ns/msg; symbols shard across pinnable worker threads, one ring each - all <strong>validated race-free by ThreadSanitizer</strong></Fragment>,
       <Fragment><strong>Pluggable book, measured</strong> - templated over its price-level store: a <code>std::map</code> baseline, a flat sorted vector, and a <strong>price-tick-indexed windowed array</strong> (the canonical L2 structure, ~24% faster in the A/B) - all three parity-tested and benchmarked head-to-head with Google Benchmark</Fragment>,
-      <Fragment><strong>Microstructure signals + live viewer</strong> - micro-price, order-book imbalance and spread (bps) plus a trade tape with VWAP / OHLCV, streamed as JSON over a <strong>dependency-free WebSocket</strong> (hand-rolled SHA-1 + RFC-6455 frame codec) to a browser L2 book viewer</Fragment>,
+      <Fragment><strong>Microstructure signals + browser viewer</strong> - micro-price, order-book imbalance and spread (bps) plus a trade tape with VWAP / OHLCV, streamed as JSON over a <strong>dependency-free WebSocket</strong> (hand-rolled SHA-1 + RFC-6455 frame codec) to a browser L2 book viewer</Fragment>,
       <Fragment><strong>FIX 4.4 order entry</strong> - a compact FIX codec (NewOrderSingle / ExecutionReport) with auto BodyLength + CheckSum: the order-entry counterpart to the ITCH market-data side (market data in, orders out)</Fragment>,
       <Fragment><strong>MetaTrader 5 bridge</strong> - versioned NDJSON over TCP, an <code>ITCHBridge.mq5</code> EA, and a depth/signal publisher that streams the reconstructed book back; a mock-client integration test runs the full ticks → orders → acks round trip in CI without Windows</Fragment>,
       <Fragment><strong>Hardened & verified</strong> - every push runs ThreadSanitizer, Address / UB sanitizers, a <strong>libFuzzer</strong> decode harness and a clang <code>-Werror</code> build alongside <code>ctest</code> and a benchmark smoke</Fragment>,
@@ -705,7 +705,7 @@ const PROJECTS = [
     tags: ['C++17', 'HFT', 'NASDAQ ITCH 5.0', 'Lock-free', 'Low-latency', 'Sub-microsecond', 'MoldUDP64', 'UDP multicast', 'FIX 4.4', 'Order entry', 'Market data', 'Multi-symbol', 'Microstructure signals', 'Order-book imbalance', 'Sharded', 'WebSocket', 'MetaTrader 5', 'Benchmarked', 'Sanitized + fuzzed', 'CMake', 'GitHub Actions'],
     ctas: [
       { label: 'View on GitHub ↗', href: 'https://github.com/saad-mughal435/hft-orderbook', target: '_blank', primary: true, prominent: true },
-      { label: 'Live L2 viewer ↗', href: '/hft-book/viewer.html', target: '_blank', prominent: true },
+      { label: 'L2 viewer ↗', href: '/hft-book/viewer.html', target: '_blank', prominent: true },
       { label: 'CI runs ↗', href: 'https://github.com/saad-mughal435/hft-orderbook/actions', target: '_blank' },
     ],
   },
@@ -800,12 +800,12 @@ const DEMO_PROJECTS = [
     title: 'Manzil Properties - Dubai marketplace',
     desc: <Fragment>A Dubai real-estate marketplace demo: 65+ listings, map-and-list search on
       Leaflet/OpenStreetMap, agent and agency profiles, a mortgage calculator with full amortisation,
-      and a 15-section admin panel - plus a 6-step owner listing wizard feeding a verification queue.</Fragment>,
+      and a 13-section admin panel - plus a 6-step owner listing wizard feeding a verification queue.</Fragment>,
     bullets: [
       <Fragment>10 customer pages: home, search (list/map), listing detail, agents, agencies, areas, mortgage, compare, account</Fragment>,
       <Fragment>Map view with price-labelled pins, hover sync with list, single-pin detail map</Fragment>,
       <Fragment><strong>Owner-side: 6-step listing wizard</strong> (save-and-resume drafts, map-pin selector, transaction-type branching for buy/rent/off-plan, document upload - Emirates ID + Title Deed + DLD permit + NOC + IBAN) feeding an <strong>admin verification queue</strong> with approve / request-changes / reject</Fragment>,
-      <Fragment>15-section admin SPA: dashboard, listings, inquiries pipeline, viewings calendar, agents, agencies, customers, analytics, promotions, content CMS, moderation, settings, audit, <strong>owner approvals, listing approvals</strong></Fragment>,
+      <Fragment>13-section admin SPA: dashboard, listings, inquiries pipeline, viewings calendar, agents, agencies, customers, analytics, promotions, content CMS, moderation, settings and audit, with <strong>owner approval + listing approval</strong> queues</Fragment>,
       <Fragment>AED/USD/GBP/EUR currency switcher, EN/AR locale toggle with RTL layout</Fragment>,
     ],
     tags: ['HTML5', 'CSS Grid', 'Vanilla JS (ES6+)', 'Owner onboarding wizard', 'Document upload', 'Verification queue', 'Leaflet · OpenStreetMap', 'localStorage', 'Mock API', 'Hash-routed SPA', 'i18n EN/AR', 'Multi-currency'],
@@ -820,12 +820,12 @@ const DEMO_PROJECTS = [
     title: 'Vacation Homes - UAE short-stay booking',
     desc: <Fragment>A UAE short-stay booking marketplace demo: 55 homes across 10 destinations, a hand-rolled
       date-range picker and availability calendar with conflict-check, per-night pricing with weekend surcharge
-      and 5% VAT, and a 13-section admin SPA - plus a host listing wizard with a manual approval queue.</Fragment>,
+      and 5% VAT, and an 11-section admin SPA - plus a host listing wizard with a manual approval queue.</Fragment>,
     bullets: [
       <Fragment>Hand-rolled <strong>date-range picker</strong> + availability calendar (no library) with blocked / booked / available states</Fragment>,
       <Fragment><strong>Conflict-check booking flow</strong>: POST /bookings returns 409 if dates were just taken; UI bounces back with a toast</Fragment>,
       <Fragment><strong>Host-side: 6-step listing wizard</strong> (save-and-resume drafts, map-pin selector, document upload - Emirates ID + ownership + DTCM permit + IBAN) feeding an <strong>admin verification queue</strong> for manual approval; listings stay off-market until live</Fragment>,
-      <Fragment>9 guest pages + 13-section admin SPA + host dashboard: dashboard, listings (CRUD + bulk + status pipeline + CSV), bookings, hosts (Superhost verify), guests, reviews, payments/payouts, promotions, destinations, <strong>host approvals + listing approvals (approve / request-changes / reject)</strong>, settings, audit</Fragment>,
+      <Fragment>9 guest pages + 11-section admin SPA + host dashboard: dashboard, listings (CRUD + bulk + status pipeline + CSV), bookings, hosts (Superhost verify), guests, reviews, payments/payouts, promotions, destinations, <strong>host approvals + listing approvals (approve / request-changes / reject)</strong>, settings, audit</Fragment>,
       <Fragment>Full pricing breakdown: nightly subtotal × nights + weekend surcharge + cleaning + 10% service fee + 5% VAT</Fragment>,
     ],
     tags: ['HTML5', 'CSS Grid', 'Vanilla JS (ES6+)', 'Multi-step wizard', 'Document upload', 'Verification queue', 'Custom date-range picker', 'Leaflet maps', 'localStorage', 'Mock API', 'Hash-routed SPA'],
