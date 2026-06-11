@@ -152,14 +152,14 @@
     {
       id: 'demo-manzil',
       title: 'Manzil Properties - Dubai real-estate marketplace',
-      body: "A Dubai real-estate marketplace demo with 65+ listings across Marina, Downtown, Palm Jumeirah, JBR, Business Bay, DIFC, Arabian Ranches and more. Map-and-list search using Leaflet/OpenStreetMap, agent and agency profiles with verified RERA-style permits, mortgage calculator with full amortisation schedule, comparable-based valuation tool, investment yield calculator, and a 15-section admin SPA. Owner-side: 6-step listing wizard (save-and-resume drafts, map-pin selector, document upload - Emirates ID + Title Deed + DLD permit + NOC + IBAN) feeding an admin verification queue. AED/USD/GBP/EUR currency switcher, EN/AR locale toggle with RTL layout.",
+      body: "A Dubai real-estate marketplace demo with 65+ listings across Marina, Downtown, Palm Jumeirah, JBR, Business Bay, DIFC, Arabian Ranches and more. Map-and-list search using Leaflet/OpenStreetMap, agent and agency profiles with verified RERA-style permits, mortgage calculator with full amortisation schedule, comparable-based valuation tool, investment yield calculator, and a 13-section admin SPA. Owner-side: 6-step listing wizard (save-and-resume drafts, map-pin selector, document upload - Emirates ID + Title Deed + DLD permit + NOC + IBAN) feeding an admin verification queue. AED/USD/GBP/EUR currency switcher, EN/AR locale toggle with RTL layout.",
       link: '/property/',
       tags: ['demo', 'manzil', 'real-estate', 'property', 'dubai', 'marketplace', 'leaflet', 'maps', 'mortgage', 'rera', 'ar', 'rtl', 'admin', 'currency']
     },
     {
       id: 'demo-vacation',
       title: 'Vacation Homes - UAE short-stay booking',
-      body: "A UAE short-stay booking marketplace demo with 55+ vacation homes across 10 destinations (Dubai Marina, Palm Jumeirah, Hatta Mountains, RAK Beach, Fujairah, Liwa Desert and more). Hand-rolled date-range picker, availability calendar with conflict-check, per-night pricing with weekend surcharge and 5% VAT breakdown. Conflict-check booking flow returns 409 if dates were just taken; UI bounces back with a toast. Host-side: 6-step listing wizard (save-and-resume drafts, map-pin selector, document upload - Emirates ID + ownership + DTCM permit + IBAN) feeding an admin verification queue. 12-section admin SPA + host dashboard.",
+      body: "A UAE short-stay booking marketplace demo with 54 vacation homes across 10 destinations (Dubai Marina, Palm Jumeirah, Hatta Mountains, RAK Beach, Fujairah, Liwa Desert and more). Hand-rolled date-range picker, availability calendar with conflict-check, per-night pricing with weekend surcharge and 5% VAT breakdown. Conflict-check booking flow returns 409 if dates were just taken; UI bounces back with a toast. Host-side: 6-step listing wizard (save-and-resume drafts, map-pin selector, document upload - Emirates ID + ownership + DTCM permit + IBAN) feeding an admin verification queue. 11-section admin SPA + host dashboard.",
       link: '/vacation/',
       tags: ['demo', 'vacation', 'booking', 'short-stay', 'airbnb', 'dubai', 'uae', 'date-picker', 'host', 'admin', 'dtcm', 'verification']
     },

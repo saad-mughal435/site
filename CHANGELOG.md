@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.9.4] - 2026-06-11 - Recheck fixes
+
+### Fixed
+
+- **Dead CV download buttons removed from contact.html** - three buttons still pointed at the
+  deleted cv/ PDFs and 404ed at the exact moment a recruiter shows intent. Replaced with a
+  one-line "email me for a CV" note until a real PDF exists.
+- **Ask Saad chatbot corpus brought in line with the truth pass** - Manzil 15 -> 13 sections,
+  Vacation Homes 12 -> 11 sections and 55+ -> 54 stays (cache-bust corpus.js?v=20260611a).
+- README no longer instructs contributors to use the deleted run.bat / push.bat.
+
 ## [5.9.3] - 2026-06-11 - Fix CSP regression on the /app/ MES demo
 
 ### Fixed

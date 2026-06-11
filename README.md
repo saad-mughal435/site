@@ -80,7 +80,6 @@ contact form, shared design tokens at `/tokens.css`.
 ├── robots.txt             # Crawl directives
 ├── _headers               # Cloudflare HTTP headers (cache, security)
 ├── _redirects             # Cloudflare URL rewrites
-├── run.bat / push.bat     # Windows dev convenience scripts
 ├── package.json           # Dev scripts (no runtime deps)
 ├── app/                   # Disconnected live MES/ERP demo
 │   ├── index.html
@@ -124,8 +123,6 @@ npm run dev
 
 # Option 2: directly
 python -m http.server 8000 --bind 127.0.0.1
-
-# Option 3 (Windows): double-click run.bat
 ```
 
 Then open <http://127.0.0.1:8000>.
@@ -137,7 +134,6 @@ No build step. No webpack. No bundler. Edit a file, refresh.
 Pushes to `main` auto-deploy on Cloudflare Pages.
 
 ```bash
-# Quick deploy (Windows: double-click push.bat instead)
 git add .
 git commit -m "feat: my change"
 git pull --rebase origin main
