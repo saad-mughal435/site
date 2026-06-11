@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.7.0] - 2026-06-11 - Proof section
+
+### Added
+
+- **"Verifiable, not just claimed." (Fig. 02 - Proof)** between About and Experience - four quiet
+  cards, each a claim a recruiter can check in one click: the production MES/ERP at Kingsley (with
+  the public walkthrough), open-source repos with green GitHub Actions CI, the published npm
+  package @saadmughal435/n8n-nodes-devtools, and the Omdena open collaborations. Same card
+  language as the stats row; no carousels, no avatars, no invented counts.
+- Quote slots (`PROOF_QUOTES`) ship empty and render nothing - short manager/colleague quotes can
+  be added later without any markup changes.
+
 ## [5.6.0] - 2026-06-11 - Homepage restructure: Demos before Skills + dual-track hero
 
 ### Changed

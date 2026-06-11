@@ -633,6 +633,78 @@ function About() {
 }
 
 /* =========================================================
+   PROOF - verifiable signals, no testimonial gimmicks.
+   Every card is a claim a recruiter can check in one click
+   (except the Kingsley line, which is claim-only by design).
+   ========================================================= */
+const PROOF_ITEMS = [{
+  k: 'In production',
+  v: 'MES/ERP platform running daily at Kingsley Beverage FZCO, Dubai - sole developer, live since 2025.',
+  link: {
+    href: 'demo.html',
+    label: 'See the walkthrough ↗',
+    target: '_blank'
+  }
+}, {
+  k: 'Open source',
+  v: 'Public repos with green GitHub Actions CI - Java, TypeScript and C++17, tests on every push.',
+  link: {
+    href: 'https://github.com/saad-mughal435',
+    label: 'github.com/saad-mughal435 ↗',
+    target: '_blank'
+  }
+}, {
+  k: 'Published',
+  v: 'n8n community node on npm: @saadmughal435/n8n-nodes-devtools - unit-tested, MIT-licensed.',
+  link: {
+    href: 'https://www.npmjs.com/package/@saadmughal435/n8n-nodes-devtools',
+    label: 'View on npm ↗',
+    target: '_blank'
+  }
+}, {
+  k: 'Open collab',
+  v: 'ML contributor on global Omdena collaborations - 50+ contributor teams, accessibility and air-quality projects.',
+  link: {
+    href: 'https://www.omdena.com/',
+    label: 'omdena.com ↗',
+    target: '_blank'
+  }
+}];
+// Short quotes from a manager / colleague. Leave empty to ship only the
+// verifiable items above; fill in when the text is confirmed:
+//   { text: '...', name: 'Full Name', role: 'Title, Company' }
+const PROOF_QUOTES = [];
+function ProofStrip() {
+  return /*#__PURE__*/React.createElement("section", {
+    id: "proof",
+    className: "section container"
+  }, /*#__PURE__*/React.createElement(Reveal, {
+    className: "section-head"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "section-tag"
+  }, "Fig. 02 - Proof"), /*#__PURE__*/React.createElement("h2", null, /*#__PURE__*/React.createElement(WordReveal, null, "Verifiable, not just claimed."))), /*#__PURE__*/React.createElement(Reveal, {
+    stagger: true,
+    className: "proof-grid"
+  }, PROOF_ITEMS.map(item => /*#__PURE__*/React.createElement("div", {
+    className: "proof-card",
+    key: item.k
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "meta-k"
+  }, item.k), /*#__PURE__*/React.createElement("p", null, item.v), /*#__PURE__*/React.createElement("a", _extends({
+    href: item.link.href
+  }, item.link.target ? {
+    target: item.link.target,
+    rel: 'noopener'
+  } : {}), item.link.label)))), PROOF_QUOTES.length > 0 && /*#__PURE__*/React.createElement(Reveal, {
+    stagger: true,
+    className: "proof-quotes"
+  }, PROOF_QUOTES.map(q => /*#__PURE__*/React.createElement("figure", {
+    className: "proof-quote",
+    key: q.name
+  }, /*#__PURE__*/React.createElement("blockquote", null, q.text), /*#__PURE__*/React.createElement("figcaption", null, q.name, " \xB7 ", q.role)))));
+}
+
+/* =========================================================
    EXPERIENCE
    ========================================================= */
 const EXPERIENCE = [{
@@ -1442,7 +1514,7 @@ function App() {
     setView: setView
   }), /*#__PURE__*/React.createElement(Stats, {
     view: view
-  }), /*#__PURE__*/React.createElement(About, null), /*#__PURE__*/React.createElement(Experience, {
+  }), /*#__PURE__*/React.createElement(About, null), /*#__PURE__*/React.createElement(ProofStrip, null), /*#__PURE__*/React.createElement(Experience, {
     view: view
   }), /*#__PURE__*/React.createElement(Projects, {
     view: view

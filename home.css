@@ -647,6 +647,49 @@ strong { font-weight: 600; color: var(--text); }
 .aside-card dd { margin: 0; font-size: 13.5px; color: var(--text); }
 
 /* =============================================================================
+   PROOF - verifiable-signal cards (same visual language as .stat)
+   ============================================================================= */
+.proof-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.proof-card {
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 22px 22px 20px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--t) var(--ease), border-color var(--t) ease, box-shadow var(--t) ease;
+}
+.proof-card::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px;
+  background: var(--grad); transform: scaleX(0); transform-origin: 0 50%;
+  transition: transform 0.5s var(--ease);
+}
+.proof-card:hover { transform: translateY(-4px); border-color: var(--border-acc); box-shadow: var(--glow), var(--shadow); }
+.proof-card:hover::before { transform: scaleX(1); }
+.proof-card p { margin: 0; font-size: 13.5px; color: var(--text-soft); line-height: 1.55; flex: 1; }
+.proof-card a {
+  font-family: var(--mono); font-size: 12px;
+  color: var(--accent); text-decoration: none;
+}
+.proof-card a:hover { text-decoration: underline; }
+
+.proof-quotes { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 26px; }
+.proof-quote {
+  margin: 0; padding: 20px 22px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--accent);
+  border-radius: var(--r);
+}
+.proof-quote blockquote { margin: 0 0 12px; font-size: 14.5px; color: var(--text); line-height: 1.6; }
+.proof-quote figcaption { font-family: var(--mono); font-size: 11.5px; color: var(--text-mute); }
+
+/* =============================================================================
    EXPERIENCE - timeline
    ============================================================================= */
 .timeline { list-style: none; margin: 0; padding: 0 0 0 4px; position: relative; }
@@ -761,7 +804,7 @@ strong { font-weight: 600; color: var(--text); }
 .demos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: stretch; }
 .demo-slide .project-desc { font-size: 14px; }
 @media (max-width: 1020px) { .demos-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 640px)  { .demos-grid { grid-template-columns: 1fr; } }
+@media (max-width: 640px)  { .demos-grid { grid-template-columns: 1fr; } .proof-grid { grid-template-columns: 1fr; } }
 
 /* =============================================================================
    SKILLS
@@ -927,6 +970,8 @@ a.contact-v:hover { color: var(--accent-h); }
   .hero-photo { max-width: 280px; }
   .stats { grid-template-columns: repeat(2, 1fr); padding-bottom: 60px; }
   .stat { padding: 20px 18px 18px; }
+  .proof-grid { grid-template-columns: repeat(2, 1fr); }
+  .proof-quotes { grid-template-columns: 1fr; }
   .about-grid { grid-template-columns: 1fr; gap: 32px; }
   .projects-grid { grid-template-columns: 1fr; }
   .project.featured { grid-column: auto; }

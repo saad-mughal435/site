@@ -431,6 +431,62 @@ function About() {
 }
 
 /* =========================================================
+   PROOF - verifiable signals, no testimonial gimmicks.
+   Every card is a claim a recruiter can check in one click
+   (except the Kingsley line, which is claim-only by design).
+   ========================================================= */
+const PROOF_ITEMS = [
+  { k: 'In production',
+    v: 'MES/ERP platform running daily at Kingsley Beverage FZCO, Dubai - sole developer, live since 2025.',
+    link: { href: 'demo.html', label: 'See the walkthrough ↗', target: '_blank' } },
+  { k: 'Open source',
+    v: 'Public repos with green GitHub Actions CI - Java, TypeScript and C++17, tests on every push.',
+    link: { href: 'https://github.com/saad-mughal435', label: 'github.com/saad-mughal435 ↗', target: '_blank' } },
+  { k: 'Published',
+    v: 'n8n community node on npm: @saadmughal435/n8n-nodes-devtools - unit-tested, MIT-licensed.',
+    link: { href: 'https://www.npmjs.com/package/@saadmughal435/n8n-nodes-devtools', label: 'View on npm ↗', target: '_blank' } },
+  { k: 'Open collab',
+    v: 'ML contributor on global Omdena collaborations - 50+ contributor teams, accessibility and air-quality projects.',
+    link: { href: 'https://www.omdena.com/', label: 'omdena.com ↗', target: '_blank' } },
+];
+// Short quotes from a manager / colleague. Leave empty to ship only the
+// verifiable items above; fill in when the text is confirmed:
+//   { text: '...', name: 'Full Name', role: 'Title, Company' }
+const PROOF_QUOTES = [];
+
+function ProofStrip() {
+  return (
+    <section id="proof" className="section container">
+      <Reveal className="section-head">
+        <span className="section-tag">Fig. 02 - Proof</span>
+        <h2><WordReveal>Verifiable, not just claimed.</WordReveal></h2>
+      </Reveal>
+      <Reveal stagger className="proof-grid">
+        {PROOF_ITEMS.map((item) => (
+          <div className="proof-card" key={item.k}>
+            <span className="meta-k">{item.k}</span>
+            <p>{item.v}</p>
+            <a href={item.link.href}
+               {...(item.link.target ? { target: item.link.target, rel: 'noopener' } : {})}
+            >{item.link.label}</a>
+          </div>
+        ))}
+      </Reveal>
+      {PROOF_QUOTES.length > 0 && (
+        <Reveal stagger className="proof-quotes">
+          {PROOF_QUOTES.map((q) => (
+            <figure className="proof-quote" key={q.name}>
+              <blockquote>{q.text}</blockquote>
+              <figcaption>{q.name} · {q.role}</figcaption>
+            </figure>
+          ))}
+        </Reveal>
+      )}
+    </section>
+  );
+}
+
+/* =========================================================
    EXPERIENCE
    ========================================================= */
 const EXPERIENCE = [
@@ -1142,6 +1198,7 @@ function App() {
         <Hero view={view} setView={setView} />
         <Stats view={view} />
         <About />
+        <ProofStrip />
         <Experience view={view} />
         <Projects view={view} />
         <Demos view={view} />
