@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.9.8] - 2026-06-11 - CSP: drop unsafe-eval and the Tailwind CDN
+
+### Security
+
+- With /app/ on precompiled Tailwind (5.9.7), the enforced Content-Security-Policy no longer
+  allows 'unsafe-eval' or cdn.tailwindcss.com in script-src/style-src. Nothing served by the
+  site evaluates code at runtime anymore. Browser-verified on /app/ (modules, dark mode,
+  reception) before and after tightening.
+
 ## [5.9.7] - 2026-06-11 - /app/ Tailwind precompiled (no more runtime JIT)
 
 ### Changed
