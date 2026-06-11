@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.8.0] - 2026-06-11 - Engineering notes at /notes/
+
+### Added
+
+- **/notes/ - three engineering write-ups in the v5 shell** (same nav, fonts, theme bootstrap,
+  social rail as contact.html; new notes.css article typography on existing tokens):
+  - *Reconstructing the NASDAQ book: ITCH 5.0 decode and a lock-free SPSC pipeline* - real code
+    from hft-orderbook (big-endian readers, SPSC ring), the BinaryFILE/MoldUDP64 split, the
+    measured level-store A/B with its caveats, and the sanitizer CI story.
+  - *An open OEE engine: building ShopFloor API next to a production MES* - the
+    private-production / open-companion frame, the OeeCalculator edge cases, compute-at-close,
+    Flyway + validate, Testcontainers.
+  - *What running Krones lines taught me about writing operations software* - essay; the 6 a.m.
+    handover, beating paper, the report as the product, honest measurement.
+- Per-article TechArticle JSON-LD + OG/Twitter cards; CollectionPage + ItemList on the index;
+  4 new sitemap.xml entries. Code samples render as plain bordered pre blocks (no fake window
+  chrome), copied from the public repos.
+- **Notes in the navigation** - homepage nav (7th link) + footer + noscript block + a 5th FAQ
+  entry (mirrored in the FAQPage JSON-LD); contact.html and demo.html navs updated.
+
 ## [5.7.0] - 2026-06-11 - Proof section
 
 ### Added

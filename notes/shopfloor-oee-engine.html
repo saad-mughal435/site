@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#07080d" />
+<meta name="color-scheme" content="dark light" />
+<title>An open OEE engine: building ShopFloor API next to a production MES | Saad - Engineering notes</title>
+<meta name="description" content="The MES/ERP I built for a Dubai beverage plant is private, so I rebuilt the manufacturing domain in the open: ShopFloor API, a Spring Boot 3 / Java 21 backend with a pure OEE calculator, job-order state machine, Flyway migrations and Testcontainers tests." />
+<link rel="canonical" href="https://saadm.dev/notes/shopfloor-oee-engine.html" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='12'%20fill='%2307080d'/%3E%3Ctext%20x='50%25'%20y='58%25'%20font-family='Space%20Grotesk,sans-serif'%20font-weight='700'%20font-size='34'%20fill='%23edf1f8'%20text-anchor='middle'%3ES%3C/text%3E%3Crect%20x='18'%20y='47'%20width='28'%20height='3'%20fill='%236e8eff'/%3E%3C/svg%3E" />
+<link rel="apple-touch-icon" href="/saad.png" />
+
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="Saad - saadm.dev" />
+<meta property="og:title" content="An open OEE engine: building ShopFloor API next to a production MES" />
+<meta property="og:description" content="The production MES is private, so the domain got rebuilt in the open - Spring Boot 3, a pure OEE calculator with the edge cases handled, Flyway, JWT roles and Testcontainers." />
+<meta property="og:url" content="https://saadm.dev/notes/shopfloor-oee-engine.html" />
+<meta property="og:image" content="https://saadm.dev/og.png?v=20260612" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="An open OEE engine: building ShopFloor API next to a production MES" />
+<meta name="twitter:description" content="Spring Boot 3 / Java 21 OEE backend built in the open as a companion to a private production MES - the math, the edge cases, and the tests." />
+<meta name="twitter:image" content="https://saadm.dev/og.png?v=20260612" />
+<meta name="robots" content="index, follow, max-snippet:-1" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "An open OEE engine: building ShopFloor API next to a production MES",
+  "datePublished": "2026-06-11",
+  "author": { "@type": "Person", "name": "Muhammad Saad", "url": "https://saadm.dev/" },
+  "mainEntityOfPage": "https://saadm.dev/notes/shopfloor-oee-engine.html",
+  "about": "https://github.com/saad-mughal435/shopfloor-api",
+  "programmingLanguage": "Java"
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+<script>(function(){try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.setAttribute('data-theme',t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='light'?'#f5f7fc':'#07080d');}catch(e){}})();</script>
+<link rel="stylesheet" href="/styles.css?v=20260609c" />
+<link rel="stylesheet" href="/notes/notes.css?v=20260612a" />
+</head>
+<body>
+
+<!-- ================= NAV ================= -->
+<header class="nav">
+  <div class="container nav-inner">
+    <a href="/index.html#top" class="logo">
+      <img class="logo-photo" width="36" height="36" decoding="async" src="/saad.png" alt="Saad" />
+      <span class="logo-text">Saad</span>
+    </a>
+    <nav class="nav-links">
+      <a href="/index.html#about">About</a>
+      <a href="/index.html#experience">Experience</a>
+      <a href="/index.html#projects">Projects</a>
+      <a href="/notes/" class="active" aria-current="page">Notes</a>
+      <a href="/demo.html" target="_blank" rel="noopener">Demo ↗</a>
+      <a href="/contact.html">Contact</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Toggle light or dark theme" title="Toggle light / dark">
+      <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" /></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" /><path d="M12 2v2.4M12 19.6V22M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M2 12h2.4M19.6 12H22M4.9 19.1l1.7-1.7M17.4 6.6l1.7-1.7" /></svg>
+    </button>
+    <a class="nav-cta" href="mailto:saad@saadm.dev">Email direct</a>
+  </div>
+</header>
+
+<main class="notes-page">
+  <article class="note-wrap">
+    <header class="note-head">
+      <span class="section-tag">Engineering note · 02</span>
+      <h1>An open OEE engine: building ShopFloor API next to a production MES</h1>
+      <div class="note-meta">
+        <span>2026-06-11</span>
+        <span>~6 min read</span>
+        <a href="https://github.com/saad-mughal435/shopfloor-api" target="_blank" rel="noopener">github.com/saad-mughal435/shopfloor-api ↗</a>
+      </div>
+    </header>
+
+    <div class="note-body">
+      <p>At Kingsley Beverage in Dubai I am the sole developer of the MES/ERP platform that runs
+        the plant's daily reporting. That system is private - it carries real production data and
+        will stay behind the company's walls. Which creates a familiar portfolio problem: the work
+        I am most qualified to talk about is the work I cannot show.</p>
+      <p><strong>ShopFloor API</strong> is the answer: the same manufacturing domain - lines, job
+        orders, downtime, OEE - rebuilt from scratch in the open, as a Spring Boot 3 / Java 21
+        backend with PostgreSQL, Flyway, JWT roles and a live Swagger UI. Not a copy of the
+        production code (none of it is), but the same problems, solved where anyone can read the
+        solution.</p>
+
+      <h2>1. OEE in one pure class</h2>
+      <p>Overall Equipment Effectiveness is the manufacturing KPI: <strong>Availability x
+        Performance x Quality</strong>. Each factor looks trivial until real shift data arrives.
+        The whole calculation lives in one dependency-free component, which makes it trivially
+        unit-testable:</p>
+
+      <p class="note-code-label">service/OeeCalculator.java</p>
+      <pre class="note-code"><code>int totalUnits = goodUnits + rejectUnits;
+int runTimeMinutes = Math.max(0, plannedRuntimeMinutes - downtimeMinutes);
+
+BigDecimal availability = ratio(
+        BigDecimal.valueOf(runTimeMinutes),
+        BigDecimal.valueOf(plannedRuntimeMinutes));
+
+BigDecimal idealMinutes = ratedUnitsPerHour &lt;= 0
+        ? BigDecimal.ZERO
+        : BigDecimal.valueOf((long) totalUnits * 60)
+                .divide(BigDecimal.valueOf(ratedUnitsPerHour), WORKING_SCALE, RoundingMode.HALF_UP);
+BigDecimal performance = ratio(idealMinutes, BigDecimal.valueOf(runTimeMinutes));
+
+BigDecimal quality = ratio(
+        BigDecimal.valueOf(goodUnits),
+        BigDecimal.valueOf(totalUnits));</code></pre>
+
+      <p>The interesting part is what the helper refuses to do. <code>ratio()</code> guards
+        divide-by-zero (a shift with zero planned minutes, a batch with zero units) and
+        <strong>clamps every factor to [0, 1]</strong>. The clamp matters because real lines
+        sometimes run above their rated speed - operators push a machine past nameplate - and a
+        naive Performance of 1.07 multiplies through to an OEE over 100%, which destroys the
+        metric's credibility with the people it is supposed to convince. <code>BigDecimal</code>
+        with a fixed working scale, not <code>double</code>, because these numbers end up on
+        reports that get compared line-by-line; nobody should ever have to explain a
+        floating-point wobble in a management meeting.</p>
+
+      <h2>2. Compute at the moment of truth, not on a timer</h2>
+      <p>OEE is calculated when a job order closes - a state-machine transition
+        (<code>PLANNED → RUNNING → COMPLETED</code>) - rather than by a scheduled job that sweeps
+        the table. The production system taught me that: cron-style recomputation means a report
+        pulled at 7:00 and one pulled at 7:20 can disagree, and the factory's trust in the number
+        dies right there. Computing once, at close, from final inputs, makes the figure stable and
+        auditable - the same event-driven shape the private MES uses.</p>
+
+      <h2>3. A schema that cannot drift</h2>
+      <p>Every table is created by a versioned <strong>Flyway</strong> migration, and Hibernate
+        runs in <code>validate</code> mode - it checks the entity mapping against the migrated
+        schema and refuses to boot on a mismatch, instead of silently "fixing" the database with
+        <code>ddl-auto</code>. On a one-developer project this discipline looks like overhead
+        until the first time it catches a column you renamed in the entity but not the migration.
+        It boots clean on a fresh PostgreSQL every CI run, which is itself the test.</p>
+
+      <h2>4. Tests that earn the green badge</h2>
+      <p>The CI badge is only worth what runs under it: JUnit 5 unit tests on the calculator (the
+        zero-division, over-speed and rounding cases each have one), MockMvc tests on the
+        controllers and JWT role rules, and <strong>Testcontainers</strong> integration tests that
+        start a real PostgreSQL in Docker - so the SQL, the migrations and the transaction
+        boundaries are exercised against the same engine production would use, not H2's
+        approximation of it.</p>
+
+      <h2>5. What the factory version taught the open version</h2>
+      <ul>
+        <li><strong>Downtime needs reason codes from day one.</strong> A single "downtime minutes"
+          number answers "how bad"; only categorised reasons answer "what do we fix first".</li>
+        <li><strong>Roles are a domain concept, not a security afterthought.</strong> An operator
+          logs production; a supervisor approves it; a manager reads it. The JWT roles mirror the
+          shop-floor hierarchy because that is what makes the data trustworthy.</li>
+        <li><strong>FIFO inventory is harder than it looks.</strong> Consuming raw material against
+          job orders in arrival order, with partial lots, is where spreadsheet logic quietly breaks
+          - and exactly the kind of invariant a relational schema with constraints should own.</li>
+      </ul>
+      <p>The repo is live - code, migrations, tests and the Swagger playground - at
+        <a href="https://github.com/saad-mughal435/shopfloor-api" target="_blank" rel="noopener">
+        github.com/saad-mughal435/shopfloor-api</a>. If you want to see the production story it
+        shadows, the <a href="/demo.html">MES/ERP walkthrough</a> shows the shape of the real
+        platform without the real data.</p>
+    </div>
+
+    <footer class="note-foot">
+      <a href="/notes/">← All notes</a>
+      <a href="/notes/krones-operations-software.html">Next: What running Krones lines taught me →</a>
+      <span class="note-foot-mute">Questions? <a href="mailto:saad@saadm.dev">saad@saadm.dev</a></span>
+    </footer>
+  </article>
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-copy">© <span id="year"></span> Saad. Built with HTML, CSS, and a healthy disrespect for manual work.</div>
+    <div class="footer-links">
+      <a href="mailto:saad@saadm.dev">Email</a>
+      <a href="https://wa.me/971502578065" target="_blank" rel="noopener">WhatsApp</a>
+      <a href="https://www.linkedin.com/in/muhammadsaad435/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/saad-mughal435" target="_blank" rel="noopener">GitHub</a>
+      <a href="/index.html#top">← Back to home</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/script.js"></script>
+
+<!-- ================= BACK TO TOP ================= -->
+<button class="back-to-top" id="back-to-top" type="button" aria-label="Scroll back to top" title="Back to top">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>
+</button>
+<script>
+(function () {
+  var btn = document.getElementById('back-to-top');
+  if (!btn) return;
+  var threshold = 280;
+  var ticking = false;
+  function scrollY() {
+    return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+  }
+  function update() {
+    btn.classList.toggle('visible', scrollY() > threshold);
+    ticking = false;
+  }
+  function onScroll() {
+    if (!ticking) { requestAnimationFrame(update); ticking = true; }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  document.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
+  btn.addEventListener('click', function () {
+    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    } else if (window.scrollTo) {
+      try { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+      catch (e) { window.scrollTo(0, 0); }
+    }
+    btn.blur();
+  });
+  update();
+})();
+</script>
+
+<!-- ================= LEFT CONTACT RAIL ================= -->
+<aside class="social-rail" aria-label="Contact Saad">
+  <a class="social-link" href="mailto:saad@saadm.dev" aria-label="Email Saad" title="Email">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v.4l-10 6L2 6.4V6Zm0 2.7V18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8.7l-9.47 5.68a1 1 0 0 1-1.06 0L2 8.7Z"/></svg>
+  </a>
+  <a class="social-link" href="https://wa.me/971502578065" target="_blank" rel="noopener" aria-label="WhatsApp Saad" title="WhatsApp">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885M20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.358.101 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.582 0 11.94-5.358 11.943-11.893a11.821 11.821 0 0 0-3.416-8.452"/></svg>
+  </a>
+  <a class="social-link" href="https://github.com/saad-mughal435" target="_blank" rel="noopener" aria-label="Saad on GitHub" title="GitHub">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+  </a>
+  <a class="social-link" href="https://www.linkedin.com/in/muhammadsaad435/" target="_blank" rel="noopener" aria-label="Saad on LinkedIn" title="LinkedIn">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg>
+  </a>
+  <span class="social-rail-line" aria-hidden="true"></span>
+</aside>
+</body>
+</html>

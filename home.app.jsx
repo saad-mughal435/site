@@ -182,6 +182,7 @@ function Nav() {
           <a href="#experience" className={active === 'experience' ? 'active' : ''} aria-current={active === 'experience' ? 'page' : undefined} onClick={close}>Experience</a>
           <a href="#projects" className={active === 'projects' ? 'active' : ''} aria-current={active === 'projects' ? 'page' : undefined} onClick={close}>Projects</a>
           <a href="#skills" className={active === 'skills' ? 'active' : ''} aria-current={active === 'skills' ? 'page' : undefined} onClick={close}>Skills</a>
+          <a href="notes/" onClick={close} title="Engineering notes - short technical write-ups">Notes</a>
           <a href="demo.html" target="_blank" rel="noopener" onClick={close} aria-label="Open the full demo gallery in a new tab">Demo ↗</a>
           <a href="contact.html" onClick={close}>Contact</a>
         </nav>
@@ -369,6 +370,10 @@ const FAQ_ITEMS = [
   {
     q: 'Can I see Saad\'s code?',
     a: <Fragment>Yes - try the <a href="demo.html" target="_blank" rel="noopener">interactive MES/ERP demo</a> (all data fabricated for privacy) and the live <a href="https://shopfloor-api-lvb0.onrender.com/" target="_blank" rel="noopener">ShopFloor API</a> in Java / Spring Boot, plus the open-source <a href="https://github.com/saad-mughal435/n8n-nodes-devtools" target="_blank" rel="noopener">n8n-nodes-devtools</a> automation node in TypeScript. Open source is on GitHub at <a href="https://github.com/saad-mughal435" target="_blank" rel="noopener">github.com/saad-mughal435</a>.</Fragment>,
+  },
+  {
+    q: 'Does Saad write about his engineering work?',
+    a: <Fragment>Yes - short engineering notes at <a href="notes/">saadm.dev/notes</a>: reconstructing the NASDAQ ITCH 5.0 order book in C++17, building the open ShopFloor OEE engine in Spring Boot, and what running Krones lines taught him about operations software.</Fragment>,
   },
 ];
 
@@ -1156,6 +1161,7 @@ function Footer() {
           <a href="mailto:saad@saadm.dev">Email</a>
           <a href="https://www.linkedin.com/in/muhammadsaad435/" target="_blank" rel="noopener">LinkedIn</a>
           <a href="https://github.com/saad-mughal435" target="_blank" rel="noopener">GitHub</a>
+          <a href="notes/">Notes</a>
           <a href="#top">Back to top ↑</a>
         </div>
       </div>

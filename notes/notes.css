@@ -1,0 +1,114 @@
+/* =========================================================
+   notes.css - article typography for /notes/
+   Layers on styles.css tokens, so light + dark come free.
+   ========================================================= */
+
+.notes-page { max-width: 1100px; margin: 0 auto; padding: 56px 30px 80px; }
+
+/* ---------- listing (index) ---------- */
+.notes-head { max-width: 720px; margin-bottom: 42px; }
+.notes-head h1 {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(30px, 4.5vw, 44px);
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+  margin: 14px 0 14px;
+  color: var(--ink);
+}
+.notes-head p { color: var(--ink-soft); font-size: 15.5px; line-height: 1.65; margin: 0; }
+
+.note-list { display: grid; gap: 16px; list-style: none; margin: 0; padding: 0; }
+.note-list-item {
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  transition: transform var(--t) var(--ease), border-color var(--t) ease, box-shadow var(--t) ease;
+}
+.note-list-item:hover { transform: translateY(-3px); border-color: var(--border-acc); box-shadow: var(--shadow); }
+.note-list-item > a { display: block; padding: 24px 26px; text-decoration: none; }
+.note-list-meta {
+  font-family: var(--mono); font-size: 11.5px; color: var(--ink-mute);
+  text-transform: uppercase; letter-spacing: 1.2px;
+  display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 10px;
+}
+.note-list-item h2 {
+  font-family: var(--display); font-weight: 600;
+  font-size: clamp(19px, 2.6vw, 24px); letter-spacing: -0.015em; line-height: 1.25;
+  color: var(--ink); margin: 0 0 8px;
+}
+.note-list-item p { color: var(--ink-soft); font-size: 14px; line-height: 1.6; margin: 0 0 12px; }
+.note-list-more { font-family: var(--mono); font-size: 12px; color: var(--signal); }
+.note-list-item:hover .note-list-more { text-decoration: underline; }
+
+/* ---------- article ---------- */
+.note-wrap { max-width: 72ch; margin: 0 auto; }
+.note-head { margin-bottom: 38px; }
+.note-head h1 {
+  font-family: var(--display); font-weight: 600;
+  font-size: clamp(28px, 4vw, 40px); letter-spacing: -0.02em; line-height: 1.15;
+  color: var(--ink); margin: 14px 0 16px;
+}
+.note-meta {
+  display: flex; flex-wrap: wrap; gap: 8px 18px;
+  font-family: var(--mono); font-size: 12px; color: var(--ink-mute);
+}
+.note-meta a { color: var(--signal); text-decoration: none; }
+.note-meta a:hover { text-decoration: underline; }
+
+.note-body { color: var(--ink-soft); font-size: 15.5px; line-height: 1.75; }
+.note-body h2 {
+  font-family: var(--display); font-weight: 600;
+  font-size: 22px; letter-spacing: -0.01em; line-height: 1.3;
+  color: var(--ink); margin: 44px 0 14px;
+}
+.note-body h3 {
+  font-family: var(--sans); font-weight: 600; font-size: 16.5px;
+  color: var(--ink); margin: 30px 0 10px;
+}
+.note-body p { margin: 0 0 18px; }
+.note-body strong { color: var(--ink); }
+.note-body a { color: var(--signal); text-decoration: none; }
+.note-body a:hover { text-decoration: underline; }
+.note-body ul, .note-body ol { margin: 0 0 18px; padding-left: 24px; }
+.note-body li { margin-bottom: 8px; }
+.note-body blockquote {
+  margin: 0 0 18px; padding: 14px 20px;
+  border-left: 2px solid var(--signal);
+  background: var(--panel);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  color: var(--ink);
+}
+
+/* Plain bordered code blocks - intentionally NOT the fake-window chrome. */
+.note-code-label {
+  font-family: var(--mono); font-size: 11px; color: var(--ink-mute);
+  text-transform: uppercase; letter-spacing: 1.2px;
+  margin: 0 0 6px;
+}
+.note-code {
+  margin: 0 0 22px; padding: 18px 20px;
+  background: var(--panel);
+  border: 1px solid var(--rule-2);
+  border-radius: var(--radius-sm);
+  overflow-x: auto;
+}
+.note-code code {
+  font-family: var(--mono); font-size: 13px; line-height: 1.6;
+  color: var(--ink); white-space: pre;
+}
+
+.note-foot {
+  margin-top: 48px; padding-top: 26px;
+  border-top: 1px solid var(--rule);
+  display: flex; flex-wrap: wrap; gap: 12px 26px;
+  font-family: var(--mono); font-size: 12.5px;
+}
+.note-foot a { color: var(--signal); text-decoration: none; }
+.note-foot a:hover { text-decoration: underline; }
+.note-foot .note-foot-mute { color: var(--ink-mute); }
+
+@media (max-width: 760px) {
+  .notes-page { padding: 36px 20px 60px; }
+  .note-list-item > a { padding: 20px; }
+}

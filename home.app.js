@@ -284,6 +284,10 @@ function Nav() {
     "aria-current": active === 'skills' ? 'page' : undefined,
     onClick: close
   }, "Skills"), /*#__PURE__*/React.createElement("a", {
+    href: "notes/",
+    onClick: close,
+    title: "Engineering notes - short technical write-ups"
+  }, "Notes"), /*#__PURE__*/React.createElement("a", {
     href: "demo.html",
     target: "_blank",
     rel: "noopener",
@@ -584,6 +588,11 @@ const FAQ_ITEMS = [{
     target: "_blank",
     rel: "noopener"
   }, "github.com/saad-mughal435"), ".")
+}, {
+  q: 'Does Saad write about his engineering work?',
+  a: /*#__PURE__*/React.createElement(Fragment, null, "Yes - short engineering notes at ", /*#__PURE__*/React.createElement("a", {
+    href: "notes/"
+  }, "saadm.dev/notes"), ": reconstructing the NASDAQ ITCH 5.0 order book in C++17, building the open ShopFloor OEE engine in Spring Boot, and what running Krones lines taught him about operations software.")
 }];
 function FAQ() {
   return /*#__PURE__*/React.createElement("section", {
@@ -1473,6 +1482,8 @@ function Footer() {
     target: "_blank",
     rel: "noopener"
   }, "GitHub"), /*#__PURE__*/React.createElement("a", {
+    href: "notes/"
+  }, "Notes"), /*#__PURE__*/React.createElement("a", {
     href: "#top"
   }, "Back to top \u2191"))));
 }
