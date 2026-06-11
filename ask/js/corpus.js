@@ -1,9 +1,9 @@
 /* corpus.js - The RAG knowledge base for Ask Saad.
  *
  * ~40 pre-chunked documents extracted from site/index.html content blocks
- * (HERO_COPY 488-514, FAQ_ITEMS 731-760, EXPERIENCE 835-895, PROJECTS 927-1080,
- *  STACK_GROUPS 695-705, About prose 784-830, WhatThisProves 1153-1177,
- *  SKILLS 1279-1294, Person JSON-LD 42-94, contact.html, watad/WALKTHROUGH.md).
+ * (hero copy, FAQ, experience, projects, skills, About prose, Person JSON-LD,
+ *  contact.html, watad/WALKTHROUGH.md). Re-chunk this file whenever those
+ *  source sections change, or the bot will drift from the live site.
  *
  * Each doc shape:
  *   {

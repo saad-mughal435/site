@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.9.9] - 2026-06-11 - Honest CI, WebP headshot, corpus and copy hygiene
+
+### Changed
+
+- **The Lint workflow can now actually fail.** All three jobs ran with swallowed exits
+  (`|| true`, `fail: false`) - a green badge that could never turn red. Now: node --check parses
+  every served script, html-validate runs a tuned-but-honest ruleset over the shell pages, notes
+  and the L2 viewer (367 issues triaged: stylistic rules that conflict with deliberate choices are
+  disabled with written rationale, 131 th elements gained scope="col", two intentional role=list
+  divs carry inline disables), and the offline link check fails the job (root-dir fixed - its 12
+  "errors" were all one false positive).
+- **Headshot served as WebP** (20 KB vs the 84 KB palette PNG) everywhere it renders; PNG remains
+  only for the apple-touch-icon and JSON-LD image.
+- Chatbot corpus header no longer cites hardcoded index.html line numbers (they rotted on every
+  release); replaced with a re-chunk maintenance note. Demos section copy now mentions the two
+  earlier-work cards so the card count reads consistently. Proof section's Omdena card links to
+  LinkedIn (where the role is listed) instead of the generic omdena.com homepage.
+- One git author identity going forward (saad@saadm.dev) + .mailmap for the historical mix.
+
 ## [5.9.8] - 2026-06-11 - CSP: drop unsafe-eval and the Tailwind CDN
 
 ### Security

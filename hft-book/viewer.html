@@ -156,8 +156,10 @@
       <h2><span>Order book · L2</span><span class="mono" id="symhdr"></span></h2>
       <div class="ladder mono">
         <div class="colhdr"><span>price</span><span>size</span></div>
+        <!-- [html-validate-disable-next prefer-native-element -- JS-rendered ladder rows; role=list is intentional] -->
         <div id="asks" role="list" aria-label="Ask levels"></div>
         <div class="inside"><span class="mid-px mono" id="mid">-</span><span class="spr mono" id="spr"></span></div>
+        <!-- [html-validate-disable-next prefer-native-element] -->
         <div id="bids" role="list" aria-label="Bid levels"></div>
       </div>
     </section>

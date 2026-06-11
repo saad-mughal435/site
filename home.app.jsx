@@ -174,7 +174,7 @@ function Nav() {
     <header className={'nav' + (scrolled ? ' scrolled' : '') + (open ? ' menu-open' : '')}>
       <div className="container nav-inner">
         <a className="logo" href="#top" onClick={close}>
-          <img className="logo-photo" width="38" height="38" decoding="async" src="saad.png" alt="Saad - Automation Engineer and ERP Developer in Dubai" />
+          <img className="logo-photo" width="38" height="38" decoding="async" src="saad.webp" alt="Saad - Automation Engineer and ERP Developer in Dubai" />
           <span>Saad</span>
         </a>
         <nav className={'nav-links' + (open ? ' open' : '')}>
@@ -310,7 +310,7 @@ function Hero({ view, setView }) {
       </div>
       <div className="hero-right">
         <figure className="hero-photo">
-          <img src="saad.png" width="400" height="500" loading="eager" decoding="async" fetchpriority="high"
+          <img src="saad.webp" width="400" height="500" loading="eager" decoding="async" fetchpriority="high"
                alt="Muhammad Saad - Automation & Software Developer, Dubai" />
           <figcaption><span className="plate-no">Plate 01</span> M. Saad · Automation &amp; Software · Dubai, UAE</figcaption>
         </figure>
@@ -452,7 +452,7 @@ const PROOF_ITEMS = [
     link: { href: 'https://www.npmjs.com/package/@saadmughal435/n8n-nodes-devtools', label: 'View on npm ↗', target: '_blank' } },
   { k: 'Open collab',
     v: 'ML contributor on global Omdena collaborations - 50+ contributor teams, accessibility and air-quality projects.',
-    link: { href: 'https://www.omdena.com/', label: 'omdena.com ↗', target: '_blank' } },
+    link: { href: 'https://www.linkedin.com/in/muhammadsaad435/', label: 'On LinkedIn ↗', target: '_blank' } },
 ];
 // Short quotes from a manager / colleague. Leave empty to ship only the
 // verifiable items above; fill in when the text is confirmed:
@@ -1058,7 +1058,7 @@ function Demos({ view }) {
       <Reveal className="section-head">
         <span className="section-tag">Fig. 05 - Demos</span>
         <h2><WordReveal>Product demos built around real workflows.</WordReveal></h2>
-        <p className="demos-sub">Ten browser-based product demos - B2B portals, marketplaces, booking, POS, AI copilots and operations consoles. Each opens as a full product you can click through. <a href="demo.html" target="_blank" rel="noopener">Full gallery ↗</a></p>
+        <p className="demos-sub">Ten browser-based product demos - B2B portals, marketplaces, booking, POS, AI copilots and operations consoles - plus two earlier-work cards (PTCL tooling, Omdena). Each demo opens as a full product you can click through. <a href="demo.html" target="_blank" rel="noopener">Full gallery ↗</a></p>
       </Reveal>
       <Reveal stagger className="demos-grid">
         {items.map((p) => <ProjectCard key={p.title} p={p} compact />)}

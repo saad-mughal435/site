@@ -107,6 +107,8 @@
 # Headshot - cache aggressively
 /saad.png
   Cache-Control: public, max-age=31536000, immutable
+/saad.webp
+  Cache-Control: public, max-age=31536000, immutable
 /og.png
   Cache-Control: public, max-age=86400, must-revalidate
 

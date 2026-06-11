@@ -40,7 +40,7 @@
 <header class="nav no-print">
   <div class="container nav-inner">
     <a href="index.html#top" class="logo">
-      <img class="logo-photo" width="36" height="36" decoding="async" src="saad.png" alt="Saad" />
+      <img class="logo-photo" width="36" height="36" decoding="async" src="saad.webp" alt="Saad" />
       <span class="logo-text">Saad</span>
     </a>
     <nav class="nav-links">
@@ -445,7 +445,7 @@
         <div class="card">
           <div class="card-head"><h3>Job orders list</h3><div class="card-sub">demo records · all values are placeholders</div></div>
           <table class="data-table">
-            <thead><tr><th>JO #</th><th>Customer</th><th>Product</th><th>Qty</th><th>Unit cost</th><th>Total</th><th>Line</th><th>Status</th><th></th></tr></thead>
+            <thead><tr><th scope="col">JO #</th><th scope="col">Customer</th><th scope="col">Product</th><th scope="col">Qty</th><th scope="col">Unit cost</th><th scope="col">Total</th><th scope="col">Line</th><th scope="col">Status</th><th scope="col"></th></tr></thead>
             <tbody>
               <tr>
                 <td><code>JO-DEMO-1</code></td><td>Demo Customer Ltd</td><td>Sample Beverage 500 mL</td>
@@ -497,7 +497,7 @@
           <div class="card">
             <div class="card-head"><h3>Picking sheet</h3><div class="card-sub">RMs required for <code>JO-DEMO-1</code></div></div>
             <table class="data-table compact">
-              <thead><tr><th>RM</th><th>Description</th><th>Req</th><th>Stock</th><th>Cost</th></tr></thead>
+              <thead><tr><th scope="col">RM</th><th scope="col">Description</th><th scope="col">Req</th><th scope="col">Stock</th><th scope="col">Cost</th></tr></thead>
               <tbody>
                 <tr><td><code>RM-WATER</code></td><td>Demo Water</td><td>2,400 L</td><td>8,400 L</td><td>AED 1,560</td></tr>
                 <tr><td><code>RM-SUGAR</code></td><td>Demo Sugar</td><td>385 kg</td><td>1,150 kg</td><td>AED 1,232</td></tr>
@@ -582,7 +582,7 @@
         <div class="card">
           <div class="card-head"><h3>Batches today</h3><div class="card-sub">demo</div></div>
           <table class="data-table">
-            <thead><tr><th>Batch</th><th>JO</th><th>Product</th><th>Qty</th><th>Reject</th><th>OEE</th><th>Status</th></tr></thead>
+            <thead><tr><th scope="col">Batch</th><th scope="col">JO</th><th scope="col">Product</th><th scope="col">Qty</th><th scope="col">Reject</th><th scope="col">OEE</th><th scope="col">Status</th></tr></thead>
             <tbody>
               <tr><td><code>DEMO-0001</code></td><td><code>JO-DEMO-1</code></td><td>Sample Beverage 500 mL</td><td>4,820</td><td>38</td><td>82%</td><td><span class="pill pill-green">Closed</span></td></tr>
               <tr><td><code>DEMO-0002</code></td><td><code>JO-DEMO-2</code></td><td>Sample Beverage 1 L</td><td>3,180</td><td>52</td><td>78%</td><td><span class="pill pill-blue">In progress</span></td></tr>
@@ -616,7 +616,7 @@
           <div class="card">
             <div class="card-head"><h3>Recipe-A1 · Sample Beverage 500 mL</h3><div class="card-sub">v1 · released</div></div>
             <table class="data-table compact">
-              <thead><tr><th>Step</th><th>Ingredient</th><th>Qty</th><th>UoM</th></tr></thead>
+              <thead><tr><th scope="col">Step</th><th scope="col">Ingredient</th><th scope="col">Qty</th><th scope="col">UoM</th></tr></thead>
               <tbody>
                 <tr><td>1</td><td>Demo Water</td><td>0.42</td><td>L</td></tr>
                 <tr><td>2</td><td>Demo Sugar</td><td>0.080</td><td>kg</td></tr>
@@ -630,7 +630,7 @@
           <div class="card">
             <div class="card-head"><h3>Recipe-B2 · Sample Beverage 1 L</h3><div class="card-sub">v1 · released</div></div>
             <table class="data-table compact">
-              <thead><tr><th>Step</th><th>Ingredient</th><th>Qty</th><th>UoM</th></tr></thead>
+              <thead><tr><th scope="col">Step</th><th scope="col">Ingredient</th><th scope="col">Qty</th><th scope="col">UoM</th></tr></thead>
               <tbody>
                 <tr><td>1</td><td>Demo Water</td><td>0.86</td><td>L</td></tr>
                 <tr><td>2</td><td>Demo Sugar</td><td>0.165</td><td>kg</td></tr>
@@ -717,7 +717,7 @@
         <div class="card">
           <div class="card-head"><h3>Batch <code>DEMO-0001</code> · QC sheet</h3><div class="card-sub">demo measurements</div></div>
           <table class="data-table">
-            <thead><tr><th>Check</th><th>UoM</th><th>Min</th><th>Max</th><th>Measured</th><th>Result</th></tr></thead>
+            <thead><tr><th scope="col">Check</th><th scope="col">UoM</th><th scope="col">Min</th><th scope="col">Max</th><th scope="col">Measured</th><th scope="col">Result</th></tr></thead>
             <tbody>
               <tr><td>Brix</td><td>°Bx</td><td>10.2</td><td>10.8</td><td>10.55</td><td><span class="pill pill-green">PASS</span></td></tr>
               <tr><td>pH</td><td>-</td><td>3.20</td><td>3.50</td><td>3.32</td><td><span class="pill pill-green">PASS</span></td></tr>
@@ -774,7 +774,7 @@
         <div class="card">
           <div class="card-head"><h3>Yield by batch · last 5</h3></div>
           <table class="data-table">
-            <thead><tr><th>Batch</th><th>Product</th><th>Theoretical</th><th>Actual</th><th>Variance</th><th>Yield %</th></tr></thead>
+            <thead><tr><th scope="col">Batch</th><th scope="col">Product</th><th scope="col">Theoretical</th><th scope="col">Actual</th><th scope="col">Variance</th><th scope="col">Yield %</th></tr></thead>
             <tbody>
               <tr><td><code>DEMO-0001</code></td><td>Sample Beverage 500 mL</td><td>4,858</td><td>4,820</td><td>-38</td><td>99.2%</td></tr>
               <tr><td><code>DEMO-0002</code></td><td>Sample Beverage 1 L</td><td>3,232</td><td>3,180</td><td>-52</td><td>98.4%</td></tr>
@@ -812,7 +812,7 @@
         <div class="card">
           <div class="card-head"><h3>Stock items</h3><div class="card-sub">demo</div></div>
           <table class="data-table">
-            <thead><tr><th>Code</th><th>Description</th><th>Type</th><th>On hand</th><th>Reserved</th><th>UoM</th><th>Unit cost</th><th>Value</th></tr></thead>
+            <thead><tr><th scope="col">Code</th><th scope="col">Description</th><th scope="col">Type</th><th scope="col">On hand</th><th scope="col">Reserved</th><th scope="col">UoM</th><th scope="col">Unit cost</th><th scope="col">Value</th></tr></thead>
             <tbody>
               <tr><td><code>RM-WATER</code></td><td>Demo Water</td><td>RM</td><td>8,400</td><td>2,400</td><td>L</td><td>AED 0.65</td><td>AED 5,460</td></tr>
               <tr><td><code>RM-SUGAR</code></td><td>Demo Sugar</td><td>RM</td><td>1,150</td><td>480</td><td>kg</td><td>AED 3.20</td><td>AED 3,680</td></tr>
@@ -846,7 +846,7 @@
         <div class="card">
           <div class="card-head"><h3>GRN list</h3></div>
           <table class="data-table">
-            <thead><tr><th>GRN #</th><th>Date</th><th>PO #</th><th>Supplier</th><th>Items</th><th>Value</th><th>Status</th></tr></thead>
+            <thead><tr><th scope="col">GRN #</th><th scope="col">Date</th><th scope="col">PO #</th><th scope="col">Supplier</th><th scope="col">Items</th><th scope="col">Value</th><th scope="col">Status</th></tr></thead>
             <tbody>
               <tr><td><code>GRN-0001</code></td><td>2026-05-13</td><td><code>PO-DEMO-1</code></td><td>Demo Supplier Co</td><td>5 items</td><td>AED 18,420</td><td><span class="pill pill-green">Posted</span></td></tr>
               <tr><td><code>GRN-0002</code></td><td>2026-05-12</td><td><code>PO-DEMO-2</code></td><td>Acme Materials</td><td>3 items</td><td>AED 9,840</td><td><span class="pill pill-amber">Awaiting QC</span></td></tr>
@@ -873,7 +873,7 @@
         <div class="card">
           <div class="card-head"><h3>Suggested reorders</h3></div>
           <table class="data-table">
-            <thead><tr><th>RM</th><th>Stock</th><th>Reorder pt</th><th>Lead time</th><th>Suggested qty</th><th>Supplier</th></tr></thead>
+            <thead><tr><th scope="col">RM</th><th scope="col">Stock</th><th scope="col">Reorder pt</th><th scope="col">Lead time</th><th scope="col">Suggested qty</th><th scope="col">Supplier</th></tr></thead>
             <tbody>
               <tr><td><code>RM-SUGAR</code></td><td>1,150 kg</td><td>800 kg</td><td>7 days</td><td>1,500 kg</td><td>Demo Supplier Co</td></tr>
               <tr><td><code>RM-FLAVOR</code></td><td>245 L</td><td>200 L</td><td>14 days</td><td>500 L</td><td>Acme Materials</td></tr>
@@ -901,7 +901,7 @@
         <div class="card">
           <div class="card-head"><h3>Quotations</h3></div>
           <table class="data-table">
-            <thead><tr><th>Quote #</th><th>Date</th><th>Customer</th><th>Product</th><th>Qty</th><th>Unit</th><th>Total</th><th>Status</th></tr></thead>
+            <thead><tr><th scope="col">Quote #</th><th scope="col">Date</th><th scope="col">Customer</th><th scope="col">Product</th><th scope="col">Qty</th><th scope="col">Unit</th><th scope="col">Total</th><th scope="col">Status</th></tr></thead>
             <tbody>
               <tr><td><code>QT-0001</code></td><td>2026-05-13</td><td>Demo Customer Ltd</td><td>Sample Beverage 500 mL</td><td>4,800 cs</td><td>AED 8.45</td><td>AED 40,560</td><td><span class="pill pill-amber">Sent</span></td></tr>
               <tr><td><code>QT-0002</code></td><td>2026-05-12</td><td>Acme Beverages</td><td>Sample Beverage 1 L</td><td>3,200 cs</td><td>AED 11.20</td><td>AED 35,840</td><td><span class="pill pill-green">Accepted</span></td></tr>
@@ -928,7 +928,7 @@
         <div class="card">
           <div class="card-head"><h3>PI list</h3></div>
           <table class="data-table">
-            <thead><tr><th>PI #</th><th>Date</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th></th></tr></thead>
+            <thead><tr><th scope="col">PI #</th><th scope="col">Date</th><th scope="col">Customer</th><th scope="col">Items</th><th scope="col">Total</th><th scope="col">Status</th><th scope="col"></th></tr></thead>
             <tbody>
               <tr><td><code>PI-0001</code></td><td>2026-05-13</td><td>Demo Customer Ltd</td><td>4,800 cs</td><td>AED 40,560</td><td><span class="pill pill-blue">Issued</span></td><td><button class="link-btn" data-pdf="invoice" data-pi="PI-0001">Generate PDF</button></td></tr>
             </tbody>
@@ -986,7 +986,7 @@
         <div class="card">
           <div class="card-head"><h3>Suppliers</h3></div>
           <table class="data-table">
-            <thead><tr><th>Code</th><th>Name</th><th>Materials</th><th>Lead time</th><th>Payment</th><th>Status</th></tr></thead>
+            <thead><tr><th scope="col">Code</th><th scope="col">Name</th><th scope="col">Materials</th><th scope="col">Lead time</th><th scope="col">Payment</th><th scope="col">Status</th></tr></thead>
             <tbody>
               <tr><td><code>SUP-001</code></td><td>Demo Supplier Co</td><td>RM-SUGAR, RM-WATER</td><td>7 days</td><td>Net 30</td><td><span class="pill pill-green">Active</span></td></tr>
               <tr><td><code>SUP-002</code></td><td>Acme Materials</td><td>RM-FLAVOR, RM-PREFORM</td><td>14 days</td><td>Net 60</td><td><span class="pill pill-green">Active</span></td></tr>
@@ -1014,7 +1014,7 @@
         <div class="card">
           <div class="card-head"><h3>POs</h3></div>
           <table class="data-table">
-            <thead><tr><th>PO #</th><th>Date</th><th>Supplier</th><th>Items</th><th>Total</th><th>Status</th></tr></thead>
+            <thead><tr><th scope="col">PO #</th><th scope="col">Date</th><th scope="col">Supplier</th><th scope="col">Items</th><th scope="col">Total</th><th scope="col">Status</th></tr></thead>
             <tbody>
               <tr><td><code>PO-DEMO-1</code></td><td>2026-05-13</td><td>Demo Supplier Co</td><td>5 items</td><td>AED 18,420</td><td><span class="pill pill-green">Received</span></td></tr>
               <tr><td><code>PO-DEMO-2</code></td><td>2026-05-12</td><td>Acme Materials</td><td>3 items</td><td>AED 9,840</td><td><span class="pill pill-amber">Partial</span></td></tr>
@@ -1087,7 +1087,7 @@
         <div class="card">
           <div class="card-head"><h3>Draft entries</h3></div>
           <table class="data-table">
-            <thead><tr><th>Ref</th><th>Date</th><th>Account</th><th>Description</th><th>Debit</th><th>Credit</th></tr></thead>
+            <thead><tr><th scope="col">Ref</th><th scope="col">Date</th><th scope="col">Account</th><th scope="col">Description</th><th scope="col">Debit</th><th scope="col">Credit</th></tr></thead>
             <tbody>
               <tr><td><code>SE-0001</code></td><td>2026-05-13</td><td>5000 · Demo COGS</td><td>JO-DEMO-1 closing</td><td>AED 28,392</td><td>-</td></tr>
               <tr><td><code>SE-0001</code></td><td>2026-05-13</td><td>1300 · Demo Inventory</td><td>JO-DEMO-1 closing</td><td>-</td><td>AED 28,392</td></tr>
@@ -1119,7 +1119,7 @@
         <div class="card">
           <div class="card-head"><h3>Forecast by SKU</h3></div>
           <table class="data-table">
-            <thead><tr><th>SKU</th><th>Last month</th><th>Forecast</th><th>Bookings</th><th>Coverage</th></tr></thead>
+            <thead><tr><th scope="col">SKU</th><th scope="col">Last month</th><th scope="col">Forecast</th><th scope="col">Bookings</th><th scope="col">Coverage</th></tr></thead>
             <tbody>
               <tr><td>FG-500ML</td><td>22,400 cs</td><td>26,000 cs</td><td>24,250 cs</td><td>93%</td></tr>
               <tr><td>FG-1L</td><td>14,800 cs</td><td>16,500 cs</td><td>15,890 cs</td><td>96%</td></tr>
@@ -1149,7 +1149,7 @@
         <div class="card">
           <div class="card-head"><h3>Excise declarations</h3></div>
           <table class="data-table">
-            <thead><tr><th>Period</th><th>Items</th><th>Excise qty</th><th>Excise value</th><th>Status</th></tr></thead>
+            <thead><tr><th scope="col">Period</th><th scope="col">Items</th><th scope="col">Excise qty</th><th scope="col">Excise value</th><th scope="col">Status</th></tr></thead>
             <tbody>
               <tr><td>2026-05</td><td>3 SKUs</td><td>180,400 L</td><td>AED 90,200</td><td><span class="pill pill-amber">Draft</span></td></tr>
               <tr><td>2026-04</td><td>3 SKUs</td><td>164,800 L</td><td>AED 82,400</td><td><span class="pill pill-green">Submitted</span></td></tr>
@@ -1287,7 +1287,7 @@
           <div class="card">
             <div class="card-head"><h3>Users &amp; roles</h3></div>
             <table class="data-table compact">
-              <thead><tr><th>User</th><th>Role</th><th>Status</th></tr></thead>
+              <thead><tr><th scope="col">User</th><th scope="col">Role</th><th scope="col">Status</th></tr></thead>
               <tbody>
                 <tr><td>demo.user</td><td>Supervisor</td><td><span class="pill pill-green">Active</span></td></tr>
                 <tr><td>demo.qc</td><td>QC Analyst</td><td><span class="pill pill-green">Active</span></td></tr>
@@ -1300,7 +1300,7 @@
           <div class="card">
             <div class="card-head"><h3>Lines</h3></div>
             <table class="data-table compact">
-              <thead><tr><th>Line</th><th>Speed</th><th>Status</th></tr></thead>
+              <thead><tr><th scope="col">Line</th><th scope="col">Speed</th><th scope="col">Status</th></tr></thead>
               <tbody>
                 <tr><td>Line A</td><td>9,600 bph</td><td><span class="pill pill-green">Running</span></td></tr>
                 <tr><td>Line B</td><td>7,200 bph</td><td><span class="pill pill-amber">Idle</span></td></tr>
@@ -1393,7 +1393,7 @@
     </section>
 
     <table class="doc-table">
-      <thead><tr><th>Item</th><th>Description</th><th class="r">Qty</th><th class="r">Unit cost</th><th class="r">Total</th></tr></thead>
+      <thead><tr><th scope="col">Item</th><th scope="col">Description</th><th class="r">Qty</th><th class="r">Unit cost</th><th class="r">Total</th></tr></thead>
       <tbody>
         <tr><td>1</td><td>__PRODUCT__</td><td class="r">4,800 cs</td><td class="r">AED 8.45</td><td class="r">AED 40,560</td></tr>
       </tbody>
@@ -1446,7 +1446,7 @@
     </section>
 
     <table class="doc-table">
-      <thead><tr><th>RM code</th><th>Description</th><th class="r">Required</th><th class="r">Available</th><th class="r">Unit cost</th><th class="r">Sub-total</th></tr></thead>
+      <thead><tr><th scope="col">RM code</th><th scope="col">Description</th><th class="r">Required</th><th class="r">Available</th><th class="r">Unit cost</th><th class="r">Sub-total</th></tr></thead>
       <tbody>
         <tr><td>RM-WATER</td><td>Demo Water</td><td class="r">2,400 L</td><td class="r">8,400 L</td><td class="r">AED 0.65</td><td class="r">AED 1,560</td></tr>
         <tr><td>RM-SUGAR</td><td>Demo Sugar</td><td class="r">385 kg</td><td class="r">1,150 kg</td><td class="r">AED 3.20</td><td class="r">AED 1,232</td></tr>
@@ -1495,7 +1495,7 @@
     </section>
 
     <table class="doc-table">
-      <thead><tr><th>Check</th><th>UoM</th><th class="r">Min</th><th class="r">Max</th><th class="r">Measured</th><th class="c">Result</th></tr></thead>
+      <thead><tr><th scope="col">Check</th><th scope="col">UoM</th><th class="r">Min</th><th class="r">Max</th><th class="r">Measured</th><th class="c">Result</th></tr></thead>
       <tbody>
         <tr><td>Brix</td><td>°Bx</td><td class="r">10.2</td><td class="r">10.8</td><td class="r">10.55</td><td class="c">PASS</td></tr>
         <tr><td>pH</td><td>-</td><td class="r">3.20</td><td class="r">3.50</td><td class="r">3.32</td><td class="c">PASS</td></tr>
@@ -1549,7 +1549,7 @@
     </section>
 
     <table class="doc-table">
-      <thead><tr><th>#</th><th>Description</th><th class="r">Qty</th><th class="r">Unit</th><th class="r">Amount</th></tr></thead>
+      <thead><tr><th scope="col">#</th><th scope="col">Description</th><th class="r">Qty</th><th class="r">Unit</th><th class="r">Amount</th></tr></thead>
       <tbody>
         <tr><td>1</td><td>Sample Beverage 500 mL (case of 24)</td><td class="r">4,800 cs</td><td class="r">AED 8.45</td><td class="r">AED 40,560</td></tr>
       </tbody>
@@ -1597,7 +1597,7 @@
     </section>
 
     <table class="doc-table">
-      <thead><tr><th>#</th><th>Product</th><th class="r">Cases</th><th class="r">Units / case</th><th class="r">Total units</th></tr></thead>
+      <thead><tr><th scope="col">#</th><th scope="col">Product</th><th class="r">Cases</th><th class="r">Units / case</th><th class="r">Total units</th></tr></thead>
       <tbody>
         <tr><td>1</td><td>Sample Beverage 500 mL</td><td class="r">4,800</td><td class="r">24</td><td class="r">115,200</td></tr>
       </tbody>
@@ -1640,7 +1640,7 @@
     </section>
 
     <table class="doc-table">
-      <thead><tr><th>Ref</th><th>Account</th><th>Description</th><th class="r">Debit</th><th class="r">Credit</th></tr></thead>
+      <thead><tr><th scope="col">Ref</th><th scope="col">Account</th><th scope="col">Description</th><th class="r">Debit</th><th class="r">Credit</th></tr></thead>
       <tbody>
         <tr><td>SE-0001</td><td>5000 · Demo COGS</td><td>JO-DEMO-1 closing</td><td class="r">AED 28,392</td><td class="r">-</td></tr>
         <tr><td>SE-0001</td><td>1300 · Demo Inventory</td><td>JO-DEMO-1 closing</td><td class="r">-</td><td class="r">AED 28,392</td></tr>
@@ -1670,7 +1670,7 @@
     </header>
 
     <table class="doc-table">
-      <thead><tr><th>Time</th><th>Tank</th><th>Recipe</th><th>Action</th><th>Operator</th></tr></thead>
+      <thead><tr><th scope="col">Time</th><th scope="col">Tank</th><th scope="col">Recipe</th><th scope="col">Action</th><th scope="col">Operator</th></tr></thead>
       <tbody>
         <tr><td>08:00</td><td>Tank 1</td><td>Recipe-A1</td><td>Charge water (2,400 L)</td><td>demo.user</td></tr>
         <tr><td>08:05</td><td>Tank 1</td><td>Recipe-A1</td><td>Charge sugar (385 kg)</td><td>demo.user</td></tr>
@@ -1709,7 +1709,7 @@
     </section>
 
     <table class="doc-table">
-      <thead><tr><th>RM</th><th>Description</th><th class="r">Qty</th><th class="r">UoM</th><th class="r">Unit cost</th><th class="r">Total</th></tr></thead>
+      <thead><tr><th scope="col">RM</th><th scope="col">Description</th><th class="r">Qty</th><th class="r">UoM</th><th class="r">Unit cost</th><th class="r">Total</th></tr></thead>
       <tbody>
         <tr><td>RM-SUGAR</td><td>Demo Sugar</td><td class="r">1,500</td><td class="r">kg</td><td class="r">AED 3.20</td><td class="r">AED 4,800</td></tr>
         <tr><td>RM-WATER</td><td>Demo Water</td><td class="r">8,000</td><td class="r">L</td><td class="r">AED 0.65</td><td class="r">AED 5,200</td></tr>

@@ -1,3 +1,9 @@
+# Real checks that really fail. Rationale for what is NOT here:
+#  - prettier: the site is hand-formatted (CRLF, deliberate spacing); a format
+#    checker would fail by design, and a swallowed failure is worse than none.
+#  - the stylistic html-validate rules disabled in .htmlvalidate.json are
+#    deliberate site choices (inline styles in the noscript fallback, div-in-
+#    button in the demo mock shells); structural and a11y rules stay on.
 name: Lint
 
 on:
@@ -8,47 +14,46 @@ on:
   workflow_dispatch:
 
 jobs:
-  prettier:
-    name: Prettier check
+  js-syntax:
+    name: JS syntax
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
-
-      - name: Install Prettier
-        run: npm install --no-save prettier@^3.3.0
-
-      - name: Run Prettier (non-blocking, report-only)
-        run: npx prettier --check "**/*.{html,css,js,json,md}" --ignore-path .gitignore || true
+      - name: node --check every served script
+        run: |
+          set -e
+          find . -name '*.js' -not -path './node_modules/*' -not -name '*.min.js' -print0 \
+            | xargs -0 -n1 node --check
+          echo "all scripts parse"
 
   html-validate:
     name: HTML validation
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
       - name: Install html-validate
         run: npm install --no-save html-validate@^9
-
-      - name: Validate top-level HTML
-        run: |
-          npx html-validate index.html contact.html demo.html || true
+      - name: Validate shell pages, notes and the L2 viewer
+        run: >
+          npx html-validate
+          index.html contact.html demo.html 404.html
+          notes/index.html notes/itch-orderbook-reconstruction.html
+          notes/shopfloor-oee-engine.html notes/krones-operations-software.html
+          hft-book/viewer.html
 
   links:
     name: Link check
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Check internal links
+      - uses: actions/checkout@v4
+      - name: Check internal links (failures fail the job)
         uses: lycheeverse/lychee-action@v2
         with:
-          args: --offline --no-progress "*.html" "*.md"
-          fail: false
+          args: --offline --no-progress --root-dir ${{ github.workspace }} "*.html" "*.md"
+          fail: true
