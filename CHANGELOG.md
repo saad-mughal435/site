@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.9.3] - 2026-06-11 - Fix CSP regression on the /app/ MES demo
+
+### Fixed
+
+- The enforced CSP in 5.9.2 dropped `cdn.tailwindcss.com` and `unsafe-eval`, which broke the
+  Kingsley MES demo at /app/ (it uses the Tailwind Play CDN, which compiles classes in the browser
+  and requires both) - the page rendered unstyled with a full-size logo. Restored both to the
+  (still enforced) policy. Follow-up: self-host a compiled Tailwind build for /app/ so `unsafe-eval`
+  can be dropped again site-wide.
+
 ## [5.9.1] - 2026-06-11 - Minified bundle + self-hosted React
 
 ### Performance
