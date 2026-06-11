@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.9.7] - 2026-06-11 - /app/ Tailwind precompiled (no more runtime JIT)
+
+### Changed
+
+- The MES demo no longer loads the Tailwind Play CDN (runtime JIT compiler that forces
+  'unsafe-eval' into the site CSP). Utilities are now precompiled into app/css/tailwind.css
+  (55 KB minified) via `npm run build:appcss` (tailwindcss v3, default config - the app's dark
+  theme lives in the hand-written dark.css, no dark: variants). The compiled sheet loads after
+  dark.css to preserve the cascade order the runtime injection had. Re-run build:appcss whenever
+  app/ markup adds new utility classes.
+
 ## [5.9.5] - 2026-06-11 - Deep-check fixes: four real demo bugs
 
 Found by a browser-level sweep + flow tests (Playwright against production) across all demos.
