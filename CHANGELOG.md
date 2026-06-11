@@ -11,11 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Every demo card on demo.html carries a one-line ""Technically:"" summary (what the demo
+- Every demo card on demo.html carries a one-line "Technically:" summary (what the demo
   actually exercises - conflict-check booking, 5s-poll KDS, streaming LLM proxy, WPS payroll
   runs, etc.) so engineers can triage the gallery without opening each app.
 - Marsad and Nabta landings get OG/Twitter blocks (they were the last two without link previews).
-- B2B and B2C landings get the standard ""<- saadm.dev"" back-link in the hero (they were
+- B2B and B2C landings get the standard "<- saadm.dev" back-link in the hero (they were
   footer-only).
 
 ## [5.10.0] - 2026-06-11 - Professional read: restrained motion + one role story
