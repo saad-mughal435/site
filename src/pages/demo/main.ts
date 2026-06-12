@@ -34,3 +34,24 @@ import '../../lib/back-to-top';
   const hash = location.hash.replace('#', '');
   if (hash && document.getElementById('view-' + hash)) show(hash);
 })();
+
+// Gallery category filter (progressive enhancement: the chip bar ships with
+// [hidden] in the HTML, so without JS every card simply stays visible).
+(function () {
+  const bar = document.querySelector<HTMLElement>('.demo-filter');
+  const cards = document.querySelectorAll<HTMLElement>('.demo-chooser .demo-card');
+  if (!bar || !cards.length) return;
+
+  const chips = bar.querySelectorAll<HTMLButtonElement>('.demo-chip');
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      const filter = chip.dataset.filter || 'all';
+      chips.forEach(c => c.setAttribute('aria-pressed', String(c === chip)));
+      cards.forEach(card => {
+        card.hidden = filter !== 'all' && card.dataset.category !== filter;
+      });
+    });
+  });
+
+  bar.hidden = false;
+})();
