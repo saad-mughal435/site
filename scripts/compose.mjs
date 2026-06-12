@@ -1,9 +1,9 @@
 // Compose the deployable asset directory (dist/) from an explicit allowlist.
 // Fail-loud: a missing source is a build failure, never a silent omission.
-// Wave 1 of the v6 migration: `vite build` runs first (and empties dist/),
-// producing contact.html, demo.html, 404.html, notes/*.html and static/*;
-// compose then layers everything Vite does not own (homepage, demo apps,
-// platform config, images) on top. Never wipe dist/ here.
+// `vite build` runs first (and empties dist/), producing index.html,
+// contact.html, demo.html, 404.html, notes/*.html and static/*; compose then
+// layers everything Vite does not own (demo apps, platform config, images)
+// on top. Never wipe dist/ here.
 import { cpSync, existsSync, mkdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -14,14 +14,13 @@ const DIST = join(ROOT, 'dist');
 const DIRS = [
   'app', 'ask', 'assets', 'b2b', 'b2c', 'hft-book', 'lahza', 'marsad',
   'nabta', 'pos', 'property', 'sanad', 'vacation', 'watad',
-  'vendor', '.well-known',
+  '.well-known',
 ];
 
 const FILES = [
-  // shell pages (homepage only - the rest are Vite entries now)
-  'index.html',
-  // homepage css/js (until wave 2 moves the React home app into src/)
-  'home.css', 'home.fx.css', 'home.fx.js', 'home.app.js', 'tokens.css',
+  // kept at root FOREVER: ~78 demo pages (marsad, nabta, b2b, ...) load these
+  // as plain /home.fx.js + /home.fx.css + /tokens.css tags - never delete them.
+  'home.fx.js', 'home.fx.css', 'tokens.css',
   // platform config + SEO files
   '_headers', '_redirects', 'robots.txt', 'sitemap.xml', 'humans.txt',
   'BingSiteAuth.xml',

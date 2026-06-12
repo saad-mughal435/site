@@ -43,7 +43,7 @@ jobs:
       - name: Validate shell pages, notes and the L2 viewer
         run: >
           npx html-validate
-          index.html src/contact.html src/demo.html src/404.html
+          src/index.html src/contact.html src/demo.html src/404.html
           src/notes/index.html src/notes/itch-orderbook-reconstruction.html
           src/notes/shopfloor-oee-engine.html src/notes/krones-operations-software.html
           hft-book/viewer.html

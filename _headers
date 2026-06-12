@@ -78,30 +78,14 @@
 /*.html
   Cache-Control: public, max-age=0, must-revalidate
 
-# Site CSS / JS at root. Files referenced with ?v= cache-bust params everywhere
-# get a week; files loaded WITHOUT ?v= (script.js, demo.js, contact.js) stay at
-# a day so updates still reach repeat visitors.
-/home.css
-  Cache-Control: public, max-age=604800
-/home.app.js
-  Cache-Control: public, max-age=604800
+# Root motion layer - still loaded as /home.fx.js + /home.fx.css by the demo pages
 /home.fx.js
   Cache-Control: public, max-age=604800
 /home.fx.css
   Cache-Control: public, max-age=604800
-/styles.css
-  Cache-Control: public, max-age=604800
-/script.js
-  Cache-Control: public, max-age=86400
-/demo.css
-  Cache-Control: public, max-age=604800
-/demo.js
-  Cache-Control: public, max-age=86400
-/contact.js
-  Cache-Control: public, max-age=86400
 
-# Vendor libs - filenames carry the version, safe to cache long
-/vendor/*
+# Vite-built bundles - filenames carry a content hash, safe to cache forever
+/static/*
   Cache-Control: public, max-age=31536000, immutable
 
 # Headshot - cache aggressively
