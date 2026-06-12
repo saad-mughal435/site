@@ -14,7 +14,7 @@ Unsplash photographers - for the real-estate marketplace imagery in /property/.
 The CSS / web platform working groups - for shipping the platform.
 
 /* SITE */
-Last update: 2026-06-11
+Last update: 2026-06-12
 Language: English (with Arabic surfaces in /property/, /vacation/, /sanad/, /lahza/, /nabta/)
 Doctype: HTML5
 Frameworks: React 19 bundled with Vite (homepage only); vanilla everywhere else.
@@ -24,6 +24,6 @@ Mobile: /lahza/ is the first mobile-shaped demo - installable PWA with service w
 Maps: /property/ and /marsad/ both render real Dubai geography via Leaflet + OpenStreetMap (Manzil = property pins, Marsad = live fleet vehicles).
 Design tokens: /tokens.css holds brand + foundation tokens shared across the homepage and newer demos.
 Standards: WCAG 2.1 AA targets, prefers-reduced-motion respected.
-Build: one local transpile for the homepage (npm run build:home: home.app.jsx -> home.app.js); everything else is hand-written. Push to main, Cloudflare Pages serves the static files.
+Build: Vite builds the shell from src/ into a composed dist/ (npm run build); the demos are hand-written static apps copied alongside. Push to main, Cloudflare Workers Builds deploys.
 Components: hand-written, no UI library.
 Software: VS Code, Git, Cloudflare Pages, GitHub Actions, Prettier.

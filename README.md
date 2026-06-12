@@ -2,12 +2,12 @@
 
 # saadm.dev
 
-**Portfolio for Muhammad Saad - Electrical & Automation Engineer · ERP/OEE Developer · Full-Stack.**
+**Portfolio for Muhammad Saad - Automation & Software Developer (backend, ERP/MES).**
 **Currently UAE-based · Open to relocate worldwide.**
 
 [![Live](https://img.shields.io/badge/live-saadm.dev-7c9cff?style=flat-square)](https://saadm.dev/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-5eead4?style=flat-square)](LICENSE)
-[![Cloudflare Pages](https://img.shields.io/badge/deploy-Cloudflare%20Pages-f6821f?style=flat-square&logo=cloudflare&logoColor=white)](https://pages.cloudflare.com/)
+[![Cloudflare Workers](https://img.shields.io/badge/deploy-Cloudflare%20Workers-f6821f?style=flat-square&logo=cloudflare&logoColor=white)](https://workers.cloudflare.com/)
 [![Built with](https://img.shields.io/badge/built%20with-React%20%2B%20Vanilla%20CSS-c4b5fd?style=flat-square&logo=react&logoColor=white)](#tech-stack)
 [![Lint](https://github.com/saad-mughal435/site/actions/workflows/lint.yml/badge.svg)](https://github.com/saad-mughal435/site/actions/workflows/lint.yml)
 [![Open to relocate](https://img.shields.io/badge/open%20to-relocate%20worldwide-1f7a55?style=flat-square)](https://saadm.dev/contact.html)
