@@ -1,4 +1,5 @@
-# Keep language stats honest: vendored/generated code excluded from linguist
-vendor/* linguist-vendored
-home.app.js linguist-generated
+# Keep language stats honest: generated code excluded from linguist
 app/css/tailwind.css linguist-generated
+
+# Vite source tree is authored LF (everything else on this site is CRLF)
+src/** text eol=lf

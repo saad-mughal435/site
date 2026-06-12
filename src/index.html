@@ -11,7 +11,7 @@
 <meta name="author" content="Saad" />
 <link rel="canonical" href="https://saadm.dev/" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='12'%20fill='%2307080d'/%3E%3Ctext%20x='50%25'%20y='58%25'%20font-family='Space%20Grotesk,sans-serif'%20font-weight='700'%20font-size='34'%20fill='%23edf1f8'%20text-anchor='middle'%3ES%3C/text%3E%3Crect%20x='18'%20y='47'%20width='28'%20height='3'%20fill='%236e8eff'/%3E%3C/svg%3E" />
-<link rel="apple-touch-icon" href="saad.png" />
+<link rel="apple-touch-icon" href="/saad.png" />
 
 <!-- Open Graph -->
 <meta property="og:type" content="profile" />
@@ -226,10 +226,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
-<link rel="preload" as="image" href="saad.webp" fetchpriority="high" />
+<link rel="preload" as="image" href="/saad.webp" fetchpriority="high" />
 <script>(function(){try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.setAttribute('data-theme',t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='light'?'#f5f7fc':'#07080d');}catch(e){}})();</script>
-<link rel="stylesheet" href="home.css?v=20260612c" />
-<link rel="stylesheet" href="home.fx.css?v=20260611h" />
+<script type="module" src="./pages/home/main.tsx"></script>
 </head>
 <body>
 
@@ -303,54 +302,10 @@
   </div>
 </noscript>
 
-<!-- React + ReactDOM self-hosted (vendor/). Homepage app is precompiled + minified: home.app.jsx -> home.app.js (run: npm run build:home) -->
-<script defer src="vendor/react.18.3.1.min.js"></script>
-<script defer src="vendor/react-dom.18.3.1.min.js"></script>
-
-<script src="home.app.js?v=20260611h" defer></script>
-
 <!-- ================= BACK TO TOP ================= -->
 <button class="back-to-top" id="back-to-top" type="button" aria-label="Scroll back to top" title="Back to top">
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>
 </button>
-<script>
-(function () {
-  var btn = document.getElementById('back-to-top');
-  if (!btn) return;
-  var threshold = 280;
-  var ticking = false;
-  function scrollY() {
-    return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-  }
-  function update() {
-    btn.classList.toggle('visible', scrollY() > threshold);
-    ticking = false;
-  }
-  function onScroll() {
-    if (!ticking) { requestAnimationFrame(update); ticking = true; }
-  }
-  // Listen on both window and document so we catch scroll regardless of root.
-  window.addEventListener('scroll', onScroll, { passive: true });
-  document.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onScroll, { passive: true });
-  btn.addEventListener('click', function () {
-    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced) {
-      window.scrollTo(0, 0);
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-    } else if (window.scrollTo) {
-      try { window.scrollTo({ top: 0, behavior: 'smooth' }); }
-      catch (e) { window.scrollTo(0, 0); }
-    }
-    btn.blur();
-  });
-  update();
-})();
-</script>
-<!-- ============ Scroll/motion layer - desktop, decoupled from React ============ -->
-<!-- home.fx.js injects gsap/ScrollTrigger/lenis itself, only on pointer:fine + >=1024px + no reduced-motion desktops. -->
-<script src="home.fx.js?v=20260611h" defer></script>
 
 <!-- ================= LEFT CONTACT RAIL ================= -->
 <aside class="social-rail" aria-label="Contact Saad">

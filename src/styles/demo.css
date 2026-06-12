@@ -4,6 +4,10 @@
    restyles the app-shell as a crisp light admin UI with an ink sidebar.
    ============================================================================ */
 
+/* Amber text needs a brighter shade on the dark panels to hit WCAG AA. */
+:root { --amber-text: #d9a44a; }
+[data-theme="light"] { --amber-text: #9a6b18; }
+
 /* ---------- Notice banner (fabricated-data disclaimer) ---------- */
 .demo-banner {
   background: var(--panel-hi);
@@ -23,7 +27,7 @@
   padding: 4px 10px;
   border-radius: 999px;
   background: var(--signal);
-  color: #fff;
+  color: var(--on-accent);
   font-weight: 600;
   flex-shrink: 0;
 }
@@ -85,7 +89,7 @@
 .brand { display: flex; align-items: center; gap: 10px; padding: 4px 8px 18px; border-bottom: 1px solid rgba(255,255,255,0.10); margin-bottom: 14px; }
 .brand-mark {
   width: 34px; height: 34px; border-radius: var(--radius-sm);
-  background: var(--signal); color: #fff;
+  background: var(--signal); color: var(--on-accent);
   font-family: var(--display); font-style: italic; font-weight: 600; font-size: 17px;
   display: flex; align-items: center; justify-content: center;
 }
@@ -104,6 +108,10 @@
 .app-nav-link:hover { background: rgba(255,255,255,0.06); color: #f4efe3; }
 .app-nav-link.active { background: rgba(110,142,255,0.20); color: #fff; box-shadow: inset 2px 0 0 var(--signal); }
 .app-nav-link.active .ico { color: var(--signal); }
+
+/* The ⌘K hint sits on the fixed-dark sidebar, so its color cannot follow the
+   theme ink (near-invisible in light mode); pin it to the sidebar palette. */
+.app-search .hint { font-family: var(--mono); font-size: 11px; color: #a99e86; }
 
 .sidebar-bottom { margin-top: auto; padding-top: 14px; }
 .sidebar-help {
@@ -144,6 +152,12 @@
 .kpi-trend { font-family: var(--mono); font-size: 11px; color: var(--ink-mute); }
 .kpi-trend.up { color: var(--ok); }
 .kpi-trend.down { color: var(--signal); }
+/* Light theme: the small green/grey annotations need darker shades for AA contrast. */
+[data-theme="light"] .kpi-trend.up,
+[data-theme="light"] .tag-qc,
+[data-theme="light"] .pill-green,
+[data-theme="light"] .url-lock { color: #0b7a44; }
+[data-theme="light"] .chart .bar b { color: var(--ink-soft); }
 
 /* ---------- Charts ---------- */
 .chart { display: flex; align-items: flex-end; gap: 10px; height: 160px; padding: 10px 4px 0; }
@@ -161,7 +175,7 @@
 .tag-prod { background: var(--panel-hi); color: var(--blue); border: 1px solid var(--rule-2); }
 .tag-qc   { background: var(--panel-hi); color: var(--ok); border: 1px solid var(--rule-2); }
 .tag-inv  { background: var(--panel-hi); color: var(--ink-soft); border: 1px solid var(--rule-2); }
-.tag-acc  { background: var(--panel-hi); color: #9a6b18; border: 1px solid var(--rule-2); }
+.tag-acc  { background: var(--panel-hi); color: var(--amber-text); border: 1px solid var(--rule-2); }
 .tag-dis  { background: var(--panel-hi); color: var(--signal); border: 1px solid var(--rule-2); }
 .act-msg  { font-size: 13px; color: var(--ink); }
 .act-msg code { font-family: var(--mono); color: var(--ink); background: var(--panel-hi); border: 1px solid var(--rule); padding: 1px 5px; border-radius: 3px; }
@@ -179,7 +193,7 @@
 /* ---------- Pills ---------- */
 .pill { display: inline-block; font-family: var(--mono); font-size: 11px; padding: 3px 8px; border-radius: 999px; font-weight: 600; letter-spacing: 0.3px; border: 1px solid var(--rule-2); }
 .pill-blue  { background: var(--panel-hi); color: var(--blue); }
-.pill-amber { background: var(--panel-hi); color: #9a6b18; }
+.pill-amber { background: var(--panel-hi); color: var(--amber-text); }
 .pill-green { background: var(--panel-hi); color: var(--ok); }
 .pill-grey  { background: var(--panel-hi); color: var(--ink-mute); }
 
@@ -246,7 +260,18 @@
 @media (max-width: 560px) { .kpi-row { grid-template-columns: repeat(2, 1fr); } .window-user { display: none; } }
 
 /* ---------- Demo chooser ---------- */
+.demo-filter { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.demo-filter[hidden] { display: none; }
+.demo-chip {
+  font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.4px;
+  padding: 7px 14px; border-radius: 999px; cursor: pointer;
+  background: var(--panel); border: 1px solid var(--rule-2); color: var(--ink-soft);
+  transition: border-color .2s ease, background .2s ease, color .2s ease;
+}
+.demo-chip:hover { border-color: var(--ink); color: var(--ink); }
+.demo-chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--panel-hi); }
 .demo-chooser { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 22px; }
+.demo-card[hidden] { display: none; }
 .demo-card {
   display: flex; flex-direction: column; gap: 8px;
   padding: 22px 22px 18px;
@@ -262,6 +287,19 @@
 .demo-card:hover::before { transform: scaleY(1); }
 .demo-card.active { background: linear-gradient(180deg, var(--panel-hi), var(--panel)); border-color: var(--ink); }
 .demo-card.active::after { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--signal); }
+.demo-card-thumb {
+  display: block; width: 100%; height: auto; aspect-ratio: 1200 / 630; object-fit: cover;
+  border: 1px solid var(--rule-2); border-radius: var(--radius-sm);
+  margin-bottom: 6px; background: var(--panel-hi);
+}
+.demo-card-thumb-none {
+  display: grid; place-items: center;
+  border-style: dashed;
+}
+.demo-card-thumb-none span {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--ink-mute); text-align: center; padding: 0 16px;
+}
 .demo-card-eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--signal); margin-bottom: 2px; }
 .demo-card-title { font-family: var(--display); font-weight: 500; font-size: 22px; letter-spacing: -0.01em; color: var(--ink); }
 .demo-card-sub { font-size: 13.5px; line-height: 1.55; color: var(--ink-soft); margin-bottom: 4px; }

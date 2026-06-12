@@ -11,7 +11,7 @@
 <meta name="color-scheme" content="dark light" />
 <link rel="canonical" href="https://saadm.dev/demo.html" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='12'%20fill='%2307080d'/%3E%3Ctext%20x='50%25'%20y='58%25'%20font-family='Space%20Grotesk,sans-serif'%20font-weight='700'%20font-size='34'%20fill='%23edf1f8'%20text-anchor='middle'%3ES%3C/text%3E%3Crect%20x='18'%20y='47'%20width='28'%20height='3'%20fill='%236e8eff'/%3E%3C/svg%3E" />
-<link rel="apple-touch-icon" href="saad.png" />
+<link rel="apple-touch-icon" href="/saad.png" />
 
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Saad - saadm.dev" />
@@ -31,8 +31,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
 <script>(function(){try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.setAttribute('data-theme',t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='light'?'#f5f7fc':'#07080d');}catch(e){}})();</script>
-<link rel="stylesheet" href="styles.css?v=20260609c" />
-<link rel="stylesheet" href="demo.css?v=20260611i" />
+<script type="module" src="./pages/demo/main.ts"></script>
 </head>
 <body>
 
@@ -40,7 +39,7 @@
 <header class="nav no-print">
   <div class="container nav-inner">
     <a href="index.html#top" class="logo">
-      <img class="logo-photo" width="36" height="36" decoding="async" src="saad.webp" alt="Saad" />
+      <img class="logo-photo" width="36" height="36" decoding="async" src="/saad.webp" alt="Saad" />
       <span class="logo-text">Saad</span>
     </a>
     <nav class="nav-links">
@@ -84,8 +83,17 @@
     a fleet / logistics dispatcher console, and a UAE HR + payroll SaaS. The ERP walkthrough is the one open below - click any tab to switch.
   </p>
 
+  <div class="demo-filter" role="group" aria-label="Filter demos by category" hidden>
+    <button type="button" class="demo-chip" aria-pressed="true" data-filter="all">All</button>
+    <button type="button" class="demo-chip" aria-pressed="false" data-filter="commerce">Commerce</button>
+    <button type="button" class="demo-chip" aria-pressed="false" data-filter="ops">Operations &amp; Industrial</button>
+    <button type="button" class="demo-chip" aria-pressed="false" data-filter="ai">AI</button>
+    <button type="button" class="demo-chip" aria-pressed="false" data-filter="booking">Booking &amp; Property</button>
+  </div>
+
   <div class="demo-chooser">
-    <a href="#erp-demo" class="demo-card active" data-target="erp">
+    <a href="#erp-demo" class="demo-card active" data-target="erp" data-category="ops">
+      <div class="demo-card-thumb demo-card-thumb-none" aria-hidden="true"><span>MES / ERP · walkthrough below</span></div>
       <div class="demo-card-eyebrow">Default · open below</div>
       <div class="demo-card-title">ERP system</div>
       <div class="demo-card-sub">Kingsley MES/ERP - production walkthrough with 20+ integrated modules and 6 PDF templates.</div>
@@ -93,7 +101,8 @@
       <div class="demo-card-tech">Technically: fetch-interceptor mock API, 20+ hash-routed modules, server-side PDF pipeline mirrored in-browser</div>
       <div class="demo-card-cta">Scroll down ↓</div>
     </a>
-    <a href="https://shopfloor-api-lvb0.onrender.com/" target="_blank" rel="noopener" class="demo-card" data-target="shopfloor">
+    <a href="https://shopfloor-api-lvb0.onrender.com/" target="_blank" rel="noopener" class="demo-card" data-target="shopfloor" data-category="ops">
+      <div class="demo-card-thumb demo-card-thumb-none" aria-hidden="true"><span>REST API · OpenAPI / Swagger</span></div>
       <div class="demo-card-eyebrow">Live · interactive · Java / Spring Boot</div>
       <div class="demo-card-title">MES/OEE backend (Java)</div>
       <div class="demo-card-sub">ShopFloor API - the same operations domain as the ERP above, rebuilt as a clean REST backend: job orders that compute OEE on close, downtime + root cause, QC holds, FIFO inventory. Role-based JWT security, JPA + PostgreSQL/Flyway, interactive OpenAPI/Swagger, Docker, green CI. Log in with manager / password (free instance, ~50s to wake if idle).</div>
@@ -101,7 +110,8 @@
       <div class="demo-card-tech">Technically: OEE computed on job-order close, JWT roles, Flyway-migrated schema, Testcontainers integration tests</div>
       <div class="demo-card-cta">Open live demo ↗</div>
     </a>
-    <a href="b2c/index.html" target="_blank" rel="noopener" class="demo-card" data-target="b2c">
+    <a href="b2c/index.html" target="_blank" rel="noopener" class="demo-card" data-target="b2c" data-category="commerce">
+      <img class="demo-card-thumb" src="/b2c/og.jpg" alt="" loading="lazy" decoding="async" width="1200" height="630" />
       <div class="demo-card-eyebrow">Live · opens in new tab</div>
       <div class="demo-card-title">B2C storefront</div>
       <div class="demo-card-sub">Pebble &amp; Co. - DTC commerce with catalog, cart, multi-step checkout, customer account, Shopify-style admin.</div>
@@ -109,7 +119,8 @@
       <div class="demo-card-tech">Technically: cart and multi-step checkout state in localStorage, in-browser mock API, Shopify-style admin</div>
       <div class="demo-card-cta">Open storefront ↗</div>
     </a>
-    <a href="b2b/index.html" target="_blank" rel="noopener" class="demo-card" data-target="b2b">
+    <a href="b2b/index.html" target="_blank" rel="noopener" class="demo-card" data-target="b2b" data-category="commerce">
+      <img class="demo-card-thumb" src="/b2b/og.jpg" alt="" loading="lazy" decoding="async" width="1200" height="630" />
       <div class="demo-card-eyebrow">Live · opens in new tab</div>
       <div class="demo-card-title">B2B wholesale</div>
       <div class="demo-card-sub">Anvil Supply Co. - wholesale portal with tier pricing, MOQs, contract discounts, quote &amp; approval workflows.</div>
@@ -117,7 +128,8 @@
       <div class="demo-card-tech">Technically: contract-tier price resolution, over-limit purchase orders routed to an approval queue</div>
       <div class="demo-card-cta">Open portal ↗</div>
     </a>
-    <a href="property/index.html" target="_blank" rel="noopener" class="demo-card" data-target="manzil">
+    <a href="property/index.html" target="_blank" rel="noopener" class="demo-card" data-target="manzil" data-category="booking">
+      <img class="demo-card-thumb" src="/property/og.jpg" alt="" loading="lazy" decoding="async" width="1200" height="630" />
       <div class="demo-card-eyebrow">Live · opens in new tab</div>
       <div class="demo-card-title">Property marketplace</div>
       <div class="demo-card-sub">Manzil Properties - Dubai real-estate marketplace with map search, agent profiles, mortgage calculator, leads pipeline and a 13-section admin.</div>
@@ -125,7 +137,8 @@
       <div class="demo-card-tech">Technically: Leaflet map search over 65+ listings, amortisation math, document-upload verification queue, RTL i18n</div>
       <div class="demo-card-cta">Open marketplace ↗</div>
     </a>
-    <a href="vacation/index.html" target="_blank" rel="noopener" class="demo-card" data-target="vacation">
+    <a href="vacation/index.html" target="_blank" rel="noopener" class="demo-card" data-target="vacation" data-category="booking">
+      <img class="demo-card-thumb" src="/vacation/og.jpg" alt="" loading="lazy" decoding="async" width="1200" height="630" />
       <div class="demo-card-eyebrow">Live · opens in new tab</div>
       <div class="demo-card-title">Vacation Homes</div>
       <div class="demo-card-sub">UAE short-stay booking marketplace. Date-range picker, availability calendar with conflict check, per-night pricing breakdown, 11-section admin.</div>
@@ -133,7 +146,8 @@
       <div class="demo-card-tech">Technically: hand-rolled date-range picker with conflict-check booking (409 on race), weekend-rate pricing, host onboarding wizard</div>
       <div class="demo-card-cta">Open marketplace ↗</div>
     </a>
-    <a href="pos/index.html" target="_blank" rel="noopener" class="demo-card" data-target="pos">
+    <a href="pos/index.html" target="_blank" rel="noopener" class="demo-card" data-target="pos" data-category="commerce">
+      <img class="demo-card-thumb" src="/pos/og.jpg" alt="" loading="lazy" decoding="async" width="1200" height="630" />
       <div class="demo-card-eyebrow">Live · opens in new tab</div>
       <div class="demo-card-title">Café POS</div>
       <div class="demo-card-sub">Qahwa POS - counter-side café &amp; quick-service POS with cashier terminal, kitchen display, modifier-driven menus, shift cash reconciliation, and a 14-section admin.</div>
@@ -141,7 +155,8 @@
       <div class="demo-card-tech">Technically: modifier-priced cart math, 5s-poll kitchen display with audio cues, shift cash reconciliation and Z-reports</div>
       <div class="demo-card-cta">Open POS ↗</div>
     </a>
-    <a href="sanad/index.html" target="_blank" rel="noopener" class="demo-card" data-target="sanad">
+    <a href="sanad/index.html" target="_blank" rel="noopener" class="demo-card" data-target="sanad" data-category="ai">
+      <img class="demo-card-thumb" src="/sanad/og.jpg" alt="" loading="lazy" decoding="async" width="1200" height="630" />
       <div class="demo-card-eyebrow">Live · opens in new tab</div>
       <div class="demo-card-title">AI support copilot</div>
       <div class="demo-card-sub">Sanad - SaaS helpdesk with AI integrated everywhere. Agent inbox with AI sidebar (suggested reply / summary / sentiment / category / translate), RAG chat widget, knowledge base with AI actions, 11-section admin with editable system prompt + model selector.</div>
@@ -149,7 +164,8 @@
       <div class="demo-card-tech">Technically: streaming LLM proxy via a CF Worker, RAG over a 77-article KB with citation chips, deterministic mock fallback</div>
       <div class="demo-card-cta">Open copilot ↗</div>
     </a>
-    <a href="watad/index.html" target="_blank" rel="noopener" class="demo-card" data-target="watad">
+    <a href="watad/index.html" target="_blank" rel="noopener" class="demo-card" data-target="watad" data-category="ops">
+      <img class="demo-card-thumb" src="/watad/og.jpg" alt="" loading="lazy" decoding="async" width="1200" height="630" />
       <div class="demo-card-eyebrow">Live · opens in new tab</div>
       <div class="demo-card-title">Smart-building BMS</div>
       <div class="demo-card-sub">Watad - operator console for a commercial smart building. Live SVG floor plan with HVAC/lighting/metering equipment as icons, simulated BACnet/Modbus telemetry stream, alarm queue with audio cues, predictive-maintenance work orders, ASHRAE-overlaid energy curves, 3 BMS-tuned AI features (explain alarm / suggest maintenance / optimise setpoints).</div>
@@ -157,7 +173,8 @@
       <div class="demo-card-tech">Technically: ~200-point telemetry simulator on a 5s tick, severity-ranked alarm queue, SVG floor plan bound to live values</div>
       <div class="demo-card-cta">Open BMS ↗</div>
     </a>
-    <a href="lahza/" target="_blank" rel="noopener" class="demo-card" data-target="lahza">
+    <a href="lahza/" target="_blank" rel="noopener" class="demo-card" data-target="lahza" data-category="ai">
+      <img class="demo-card-thumb" src="/lahza/og.jpg" alt="" loading="lazy" decoding="async" width="1200" height="630" />
       <div class="demo-card-eyebrow">Live · mobile-first PWA · install to home screen</div>
       <div class="demo-card-title">AI journaling app</div>
       <div class="demo-card-sub">Lahza - mobile-first Progressive Web App. AI-suggested daily prompt, mood detection from your entry text, weekly RAG insights, and an AI Coach you can chat with about your own writing (with citation chips that open the cited entry). Desktop visit shows an iPhone frame; mobile is fullscreen; installed PWA opens as a standalone window with no browser chrome.</div>
@@ -165,7 +182,8 @@
       <div class="demo-card-tech">Technically: installable PWA with scoped service worker, entries kept in localStorage, weekly RAG insights over your own entries</div>
       <div class="demo-card-cta">Open app ↗</div>
     </a>
-    <a href="marsad/console.html" target="_blank" rel="noopener" class="demo-card" data-target="marsad">
+    <a href="marsad/console.html" target="_blank" rel="noopener" class="demo-card" data-target="marsad" data-category="ops">
+      <img class="demo-card-thumb" src="/marsad/og.jpg" alt="" loading="lazy" decoding="async" width="1200" height="630" />
       <div class="demo-card-eyebrow">Live · opens in new tab</div>
       <div class="demo-card-title">Fleet dispatcher</div>
       <div class="demo-card-sub">Marsad - dispatcher console for a Dubai last-mile courier. Live Leaflet map with 16 vehicles ticking toward 96 in-flight orders across 6 zones · SLA-breach audio cue · 4 AI dispatcher features (explain delay / reroute / batch-assign / chat) · driver-side view · 9-section admin SPA.</div>
@@ -173,7 +191,8 @@
       <div class="demo-card-tech">Technically: 16 vehicles ticking every 4s on real Dubai geography, SLA-breach detection, driver-side mobile view</div>
       <div class="demo-card-cta">Open dispatcher ↗</div>
     </a>
-    <a href="nabta/app.html" target="_blank" rel="noopener" class="demo-card" data-target="nabta">
+    <a href="nabta/app.html" target="_blank" rel="noopener" class="demo-card" data-target="nabta" data-category="ai">
+      <img class="demo-card-thumb" src="/nabta/og.jpg" alt="" loading="lazy" decoding="async" width="1200" height="630" />
       <div class="demo-card-eyebrow">Live · opens in new tab</div>
       <div class="demo-card-title">HR + payroll SaaS</div>
       <div class="demo-card-sub">Nabta - UAE-shaped HRIS. 32 employees · WPS-compliant payroll via Emirates NBD · leave with line-manager + HR approval · recruitment kanban · performance reviews · AI policy assistant grounded in 6 HR policies + UAE Labour Law (Federal Decree-Law No. 33 of 2021).</div>
@@ -1774,47 +1793,10 @@
 <!-- ================= TOAST ================= -->
 <div class="toast" id="toast" hidden></div>
 
-<script src="script.js"></script>
-<script src="demo.js"></script>
-
 <!-- ================= BACK TO TOP ================= -->
 <button class="back-to-top" id="back-to-top" type="button" aria-label="Scroll back to top" title="Back to top">
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>
 </button>
-<script>
-(function () {
-  var btn = document.getElementById('back-to-top');
-  if (!btn) return;
-  var threshold = 280;
-  var ticking = false;
-  function scrollY() {
-    return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-  }
-  function update() {
-    btn.classList.toggle('visible', scrollY() > threshold);
-    ticking = false;
-  }
-  function onScroll() {
-    if (!ticking) { requestAnimationFrame(update); ticking = true; }
-  }
-  window.addEventListener('scroll', onScroll, { passive: true });
-  document.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onScroll, { passive: true });
-  btn.addEventListener('click', function () {
-    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced) {
-      window.scrollTo(0, 0);
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-    } else if (window.scrollTo) {
-      try { window.scrollTo({ top: 0, behavior: 'smooth' }); }
-      catch (e) { window.scrollTo(0, 0); }
-    }
-    btn.blur();
-  });
-  update();
-})();
-</script>
 <!-- ================= LEFT CONTACT RAIL ================= -->
 <aside class="social-rail" aria-label="Contact Saad">
   <a class="social-link" href="mailto:saad@saadm.dev" aria-label="Email Saad" title="Email">

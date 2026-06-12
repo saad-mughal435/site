@@ -1,22 +1,24 @@
 /* =========================================================
    Saad - Portfolio interactions
+   TypeScript port of the former root script.js (wave 1 of the
+   v6 Vite migration). Behavior is intentionally identical.
    ========================================================= */
 
 /* ---------- year in footer ---------- */
 (function setYear() {
   const y = document.getElementById('year');
-  if (y) y.textContent = new Date().getFullYear();
+  if (y) y.textContent = String(new Date().getFullYear());
 })();
 
 /* ---------- View toggle (All / Engineering / Coding) ---------- */
 (function viewToggle() {
-  const pills = document.querySelectorAll('.vt-pill');
+  const pills = document.querySelectorAll<HTMLElement>('.vt-pill');
   if (!pills.length) return;
   const KEY = 'portfolio_view';
   const valid = new Set(['all', 'eng', 'code']);
 
-  function setView(view) {
-    if (!valid.has(view)) view = 'all';
+  function setView(view: string | null | undefined) {
+    if (!view || !valid.has(view)) view = 'all';
     document.body.classList.remove('view-all', 'view-eng', 'view-code');
     document.body.classList.add('view-' + view);
     pills.forEach(p => p.setAttribute('aria-selected', p.dataset.view === view ? 'true' : 'false'));
@@ -25,12 +27,12 @@
 
   pills.forEach(p => p.addEventListener('click', () => setView(p.dataset.view)));
 
-  let initial = 'all';
+  let initial: string | null = 'all';
   try { initial = localStorage.getItem(KEY) || 'all'; } catch (_) {}
   // honor ?view=eng / ?view=code if present
   try {
     const q = new URLSearchParams(window.location.search).get('view');
-    if (valid.has(q)) initial = q;
+    if (q && valid.has(q)) initial = q;
   } catch (_) {}
   setView(initial);
 })();
@@ -53,12 +55,12 @@
 /* ---------- scroll-spy: highlight current section in nav ---------- */
 (function scrollSpy() {
   const sections = document.querySelectorAll('main section[id]');
-  const links = document.querySelectorAll('.nav-links a');
+  const links = document.querySelectorAll<HTMLAnchorElement>('.nav-links a');
   if (!sections.length || !links.length) return;
 
-  const map = new Map();
+  const map = new Map<string, HTMLAnchorElement>();
   links.forEach(a => {
-    const id = a.getAttribute('href').replace('#', '');
+    const id = (a.getAttribute('href') || '').replace('#', '');
     map.set(id, a);
   });
 
@@ -78,11 +80,11 @@
 
 /* ---------- subtle parallax on hero code window ---------- */
 (function heroTilt() {
-  const win = document.querySelector('.code-window');
-  const hero = document.querySelector('.hero');
+  const win = document.querySelector<HTMLElement>('.code-window');
+  const hero = document.querySelector<HTMLElement>('.hero');
   if (!win || !hero) return;
 
-  let frame;
+  let frame: number;
   hero.addEventListener('mousemove', (e) => {
     const r = hero.getBoundingClientRect();
     const x = (e.clientX - r.left) / r.width - 0.5;
@@ -100,11 +102,11 @@
 
 /* ---------- copy email on click in contact list ---------- */
 (function copyEmail() {
-  const links = document.querySelectorAll('a.contact-v[href^="mailto:"]');
+  const links = document.querySelectorAll<HTMLAnchorElement>('a.contact-v[href^="mailto:"]');
   links.forEach(a => {
-    a.addEventListener('click', (e) => {
+    a.addEventListener('click', () => {
       // let default mailto happen; also copy to clipboard quietly
-      const email = a.textContent.trim();
+      const email = (a.textContent || '').trim();
       if (navigator.clipboard) navigator.clipboard.writeText(email).catch(() => {});
     });
   });
@@ -112,7 +114,7 @@
 
 /* ---------- theme toggle (light / dark, persisted across pages) ---------- */
 (function themeToggle() {
-  function setTheme(t) {
+  function setTheme(t: string) {
     if (t !== 'light' && t !== 'dark') t = 'dark';
     document.documentElement.setAttribute('data-theme', t);
     try { localStorage.setItem('theme', t); } catch (_) {}

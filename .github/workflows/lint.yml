@@ -25,7 +25,8 @@ jobs:
       - name: node --check every served script
         run: |
           set -e
-          find . -name '*.js' -not -path './node_modules/*' -not -name '*.min.js' -print0 \
+          find . -name '*.js' -not -path './node_modules/*' -not -path './src/*' \
+            -not -path './dist/*' -not -name '*.min.js' -print0 \
             | xargs -0 -n1 node --check
           echo "all scripts parse"
 
@@ -42,9 +43,9 @@ jobs:
       - name: Validate shell pages, notes and the L2 viewer
         run: >
           npx html-validate
-          index.html contact.html demo.html 404.html
-          notes/index.html notes/itch-orderbook-reconstruction.html
-          notes/shopfloor-oee-engine.html notes/krones-operations-software.html
+          src/index.html src/contact.html src/demo.html src/404.html
+          src/notes/index.html src/notes/itch-orderbook-reconstruction.html
+          src/notes/shopfloor-oee-engine.html src/notes/krones-operations-software.html
           hft-book/viewer.html
 
   links:
@@ -52,8 +53,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+      # The shell pages cross-link each other, and since wave 1 of the v6
+      # migration some of them only exist in the built output - so build
+      # dist/ and link-check that instead of the source tree.
+      - run: npm ci
+      - run: npm run build
       - name: Check internal links (failures fail the job)
         uses: lycheeverse/lychee-action@v2
         with:
-          args: --offline --no-progress --root-dir ${{ github.workspace }} "*.html" "*.md"
+          args: --offline --no-progress --root-dir ${{ github.workspace }}/dist "dist/*.html" "dist/*.md"
           fail: true

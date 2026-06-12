@@ -1,8 +1,10 @@
 // Compose the deployable asset directory (dist/) from an explicit allowlist.
 // Fail-loud: a missing source is a build failure, never a silent omission.
-// Phase 1 of the v6 migration: dist/ mirrors exactly what the root served,
-// so flipping wrangler's assets.directory to ./dist changes nothing visible.
-import { cpSync, existsSync, mkdirSync, rmSync } from 'node:fs';
+// `vite build` runs first (and empties dist/), producing index.html,
+// contact.html, demo.html, 404.html, notes/*.html and static/*; compose then
+// layers everything Vite does not own (demo apps, platform config, images)
+// on top. Never wipe dist/ here.
+import { cpSync, existsSync, mkdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -11,16 +13,14 @@ const DIST = join(ROOT, 'dist');
 
 const DIRS = [
   'app', 'ask', 'assets', 'b2b', 'b2c', 'hft-book', 'lahza', 'marsad',
-  'nabta', 'notes', 'pos', 'property', 'sanad', 'vacation', 'watad',
-  'vendor', '.well-known',
+  'nabta', 'pos', 'property', 'sanad', 'vacation', 'watad',
+  '.well-known',
 ];
 
 const FILES = [
-  // shell pages
-  'index.html', 'contact.html', 'demo.html', '404.html',
-  // shell css/js (until Phase 2 moves these into src/)
-  'home.css', 'home.fx.css', 'home.fx.js', 'home.app.js',
-  'styles.css', 'tokens.css', 'script.js', 'demo.css', 'demo.js', 'contact.js',
+  // kept at root FOREVER: ~78 demo pages (marsad, nabta, b2b, ...) load these
+  // as plain /home.fx.js + /home.fx.css + /tokens.css tags - never delete them.
+  'home.fx.js', 'home.fx.css', 'tokens.css',
   // platform config + SEO files
   '_headers', '_redirects', 'robots.txt', 'sitemap.xml', 'humans.txt',
   'BingSiteAuth.xml',
@@ -30,7 +30,6 @@ const FILES = [
   'README.md', 'CHANGELOG.md', 'CONTRIBUTING.md', 'SECURITY.md', 'LICENSE',
 ];
 
-rmSync(DIST, { recursive: true, force: true });
 mkdirSync(DIST, { recursive: true });
 
 let copied = 0;

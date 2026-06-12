@@ -1,26 +1,32 @@
 /* =========================================================
-   Contact form - Saad
-   - Submits via Formsubmit.co AJAX endpoint
-   - Inline validation + success/error state
-   - mailto: fallback button stays in sync with form contents
+   Contact page entry (replaces styles.css + script.js + contact.js)
+   - Shell CSS + shared shell interactions + back-to-top
+   - Contact form: submits via Formsubmit.co AJAX endpoint,
+     inline validation + success/error state, mailto: fallback
+     button stays in sync with form contents.
+   The Ask Saad chatbot stays as plain /ask/... tags in the HTML.
    ========================================================= */
 
+import '../../styles/shell.css';
+import '../../lib/shell';
+import '../../lib/back-to-top';
+
 (function () {
-  const form    = document.getElementById('contact-form');
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
   if (!form) return;
 
-  const btn     = document.getElementById('submit-btn');
-  const status  = document.getElementById('form-status');
-  const mailto  = document.getElementById('mailto-fallback');
+  const btn     = document.getElementById('submit-btn') as HTMLButtonElement;
+  const status  = document.getElementById('form-status') as HTMLElement;
+  const mailto  = document.getElementById('mailto-fallback') as HTMLAnchorElement;
   const counter = document.getElementById('char-count');
 
   const fields = {
-    name:    form.querySelector('#f-name'),
-    email:   form.querySelector('#f-email'),
-    company: form.querySelector('#f-company'),
-    topic:   form.querySelector('#f-topic'),
-    message: form.querySelector('#f-message'),
-    honey:   form.querySelector('input[name="_honey"]'),
+    name:    form.querySelector('#f-name') as HTMLInputElement,
+    email:   form.querySelector('#f-email') as HTMLInputElement,
+    company: form.querySelector('#f-company') as HTMLInputElement,
+    topic:   form.querySelector('#f-topic') as HTMLSelectElement,
+    message: form.querySelector('#f-message') as HTMLTextAreaElement,
+    honey:   form.querySelector('input[name="_honey"]') as HTMLInputElement | null,
   };
 
   const ENDPOINT      = 'https://formsubmit.co/ajax/saad@saadm.dev';
@@ -32,7 +38,7 @@
     if (fields.message.value.length > MAX_MSG_CHARS) {
       fields.message.value = fields.message.value.slice(0, MAX_MSG_CHARS);
     }
-    if (counter) counter.textContent = fields.message.value.length;
+    if (counter) counter.textContent = String(fields.message.value.length);
     updateMailto();
   });
 
@@ -61,7 +67,7 @@
   function validate() {
     let ok = true;
     [fields.name, fields.email, fields.message].forEach(el => {
-      const row = el.closest('.form-row');
+      const row = el.closest('.form-row') as HTMLElement;
       row.classList.remove('invalid');
       let valid = el.value.trim().length > 0;
       if (el.type === 'email') valid = valid && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value.trim());
@@ -80,7 +86,7 @@
   }
 
   /* ---------- status helpers ---------- */
-  function showStatus(kind, html) {
+  function showStatus(kind: 'success' | 'error', html: string) {
     status.className = 'form-status show ' + kind;
     status.innerHTML = html;
   }
@@ -104,7 +110,7 @@
 
     btn.classList.add('loading');
     btn.disabled = true;
-    btn.querySelector('.btn-label').textContent = 'Sending';
+    btn.querySelector('.btn-label')!.textContent = 'Sending';
 
     const payload = new FormData(form);
 
@@ -138,7 +144,7 @@
     } finally {
       btn.classList.remove('loading');
       btn.disabled = false;
-      btn.querySelector('.btn-label').textContent = 'Send message';
+      btn.querySelector('.btn-label')!.textContent = 'Send message';
     }
   });
 })();
