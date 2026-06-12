@@ -71,7 +71,7 @@ function initMotion(gsap: any, ScrollTrigger: any, Lenis: any, reduce: boolean):
   }
 }
 
-// React 18 may flush its first render a tick after main.tsx runs, so wait
+// React 19 may flush its first render a tick after main.tsx runs, so wait
 // for the hero to exist before wiring GSAP triggers to real DOM nodes.
 function whenContent(cb: () => void): void {
   let tries = 0;

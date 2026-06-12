@@ -17,7 +17,7 @@ The CSS / web platform working groups - for shipping the platform.
 Last update: 2026-06-11
 Language: English (with Arabic surfaces in /property/, /vacation/, /sanad/, /lahza/, /nabta/)
 Doctype: HTML5
-Frameworks: React 18 via CDN (homepage only), JSX precompiled to home.app.js (no runtime Babel); vanilla everywhere else.
+Frameworks: React 19 bundled with Vite (homepage only); vanilla everywhere else.
 LLM: hosted model (Fast / Balanced / Max tiers) - wired through a single Cloudflare Worker proxy used by six features: /sanad/ (helpdesk), /watad/ (BMS), homepage /ask/ (site chatbot), /lahza/ (journaling PWA), /marsad/ (fleet dispatcher), /nabta/ (HR policy assistant).
 Real-time: /watad/ (BMS telemetry, 5s tick, ~180 points) + /marsad/ (fleet dispatch, 4s vehicle ticks across a Leaflet map).
 Mobile: /lahza/ is the first mobile-shaped demo - installable PWA with service worker, custom manifest, and a stylised iPhone frame on desktop.

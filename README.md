@@ -33,7 +33,7 @@ contact form, shared design tokens at `/tokens.css`.
 
 | Page | What it does |
 |------|--------------|
-| [`/`](https://saadm.dev/) | Home. React 18 SPA (no build step) with animated hero, view-toggle (Coding / Engineering), tech-stack chips, timeline, projects, skills, FAQ. |
+| [`/`](https://saadm.dev/) | Home. React 19 SPA (Vite-built) with animated hero, view-toggle (Coding / Engineering), tech-stack chips, timeline, projects, skills, FAQ. |
 | [`/contact.html`](https://saadm.dev/contact.html) | Contact form, posts to [Formsubmit.co](https://formsubmit.co) → email inbox. |
 | [`/demo.html`](https://saadm.dev/demo.html) | Static screenshot-style walkthrough of the MES/ERP project (fabricated data). |
 | [`/app/`](https://saadm.dev/app/) | Disconnected demo of the Kingsley MES/ERP frontend UI, running entirely in the browser with a fetch interceptor - all data fabricated; published with Kingsley Beverage FZCO's permission. Auto-logs in as admin. |
@@ -56,7 +56,7 @@ contact form, shared design tokens at `/tokens.css`.
 | Layer | Tools |
 |-------|-------|
 | **Markup / styling** | Semantic HTML5, modern CSS3 (Grid, Flexbox, custom properties, `@keyframes`) |
-| **Frontend** | React 18 via CDN + Babel-standalone (no build step) for the homepage; Vanilla JS for `contact.html` / `demo.html` / `app/` |
+| **Frontend** | React 19 bundled with Vite for the homepage; Vanilla JS for `contact.html` / `demo.html` / `app/` |
 | **Animations** | Scroll-triggered `IntersectionObserver` reveals, count-up stats, cursor-tilt 3D code window, magnetic CTAs, sliding view-toggle indicator, gradient orbs |
 | **SEO** | Per-page meta, Open Graph, Twitter Cards, JSON-LD (Person, FAQPage, WebSite), canonical URLs, `sitemap.xml`, `robots.txt` |
 | **Hosting** | Cloudflare Pages - auto-deploy on push to `main` |
@@ -67,7 +67,7 @@ contact form, shared design tokens at `/tokens.css`.
 
 ```
 .
-├── index.html             # React 18 home (single-file SPA)
+├── index.html             # React 19 home (Vite-built SPA)
 ├── contact.html           # Contact form
 ├── demo.html              # Static MES/ERP walkthrough
 ├── home.css               # Home page styles + animations

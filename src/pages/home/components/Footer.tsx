@@ -6,7 +6,7 @@ export function Footer() {
     <footer className="footer">
       <div className="container footer-inner">
         <div className="footer-copy">© {new Date().getFullYear()} Muhammad Saad - Automation &amp; Software Developer. Hand-built with vanilla CSS.
-          <span className="react-badge" title="This homepage is a React 18 single-page app (precompiled JSX, no build-time framework)">⚛ Built with React 18</span>
+          <span className="react-badge" title="This homepage is a React 19 single-page app (bundled with Vite)">⚛ Built with React 19</span>
         </div>
         <div className="footer-links">
           <a href="mailto:saad@saadm.dev">Email</a>

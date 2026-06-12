@@ -7,6 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.0.0] - 2026-06-12 - Shell rebuilt on Vite + React
+
+### Changed
+
+- **Shell pages now build from `src/` via Vite.** The homepage, contact, demo, 404 and the
+  three notes pages are authored as Vite entries (`src/*.html`, `src/notes/*.html`) with
+  TypeScript modules and shared CSS under `src/`. Output ships hashed assets under `/static/`;
+  React 19, gsap and lenis are bundled by Vite, replacing the CDN/vendor files the shell
+  previously loaded at runtime.
+- **Deploys from the composed `dist/`** (the v5.11.0 single-artifact pipeline): `vite build`
+  produces the shell, then `scripts/compose.mjs` layers the demo apps, platform config and
+  images on top from an explicit fail-loud allowlist.
+- **Demo hub is now a gallery.** Each of the 12 chooser cards carries a lazy-loaded screenshot
+  thumbnail (the demo's own `og.jpg`, fixed 1200x630 box so nothing shifts on load; the ERP
+  walkthrough and the external ShopFloor API card use a quiet no-image variant), and the grid
+  gains keyboard-accessible category filter chips (All / Commerce / Operations & Industrial /
+  AI / Booking & Property). Without JavaScript the chips stay hidden and all cards show. Card
+  copy, the ERP walkthrough below and all demo apps are unchanged.
+- Footer badge and stack notes now say React 19 (the bundled version); they previously claimed
+  React 18.
+
+### Unchanged
+
+- Demo apps are untouched; public URLs, SEO meta and JSON-LD are preserved byte-for-byte;
+  the Content-Security-Policy is unchanged. `_headers` is pruned of retired root files and
+  `/static/` assets are served immutable.
+
 ## [5.10.1] - 2026-06-11 - Demo frame: technical lines, link previews, back-links
 
 ### Added
