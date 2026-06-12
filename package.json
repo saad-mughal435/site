@@ -43,6 +43,7 @@
   ],
   "scripts": {
     "dev": "python -m http.server 8000 --bind 127.0.0.1",
+    "build": "node scripts/compose.mjs",
     "serve": "python -m http.server 8000 --bind 127.0.0.1",
     "start": "python -m http.server 8000 --bind 127.0.0.1",
     "build:home": "babel home.app.jsx --presets @babel/preset-react -o home.app.compiled.js && terser home.app.compiled.js --compress --mangle -o home.app.js && del home.app.compiled.js",
