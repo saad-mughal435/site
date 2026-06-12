@@ -18,7 +18,7 @@ jobs:
     name: JS syntax
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-node@v5
         with:
           node-version: '20'
@@ -34,7 +34,7 @@ jobs:
     name: HTML validation
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-node@v5
         with:
           node-version: '20'
@@ -52,7 +52,7 @@ jobs:
     name: Link check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-node@v5
         with:
           node-version: '22'
