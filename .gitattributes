@@ -2,3 +2,6 @@
 vendor/* linguist-vendored
 home.app.js linguist-generated
 app/css/tailwind.css linguist-generated
+
+# Vite source tree is authored LF (everything else on this site is CRLF)
+src/** text eol=lf

@@ -11,7 +11,7 @@
 <meta name="color-scheme" content="dark light" />
 <link rel="canonical" href="https://saadm.dev/demo.html" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='12'%20fill='%2307080d'/%3E%3Ctext%20x='50%25'%20y='58%25'%20font-family='Space%20Grotesk,sans-serif'%20font-weight='700'%20font-size='34'%20fill='%23edf1f8'%20text-anchor='middle'%3ES%3C/text%3E%3Crect%20x='18'%20y='47'%20width='28'%20height='3'%20fill='%236e8eff'/%3E%3C/svg%3E" />
-<link rel="apple-touch-icon" href="saad.png" />
+<link rel="apple-touch-icon" href="/saad.png" />
 
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Saad - saadm.dev" />
@@ -31,8 +31,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
 <script>(function(){try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.setAttribute('data-theme',t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='light'?'#f5f7fc':'#07080d');}catch(e){}})();</script>
-<link rel="stylesheet" href="styles.css?v=20260609c" />
-<link rel="stylesheet" href="demo.css?v=20260611i" />
+<script type="module" src="./pages/demo/main.ts"></script>
 </head>
 <body>
 
@@ -40,7 +39,7 @@
 <header class="nav no-print">
   <div class="container nav-inner">
     <a href="index.html#top" class="logo">
-      <img class="logo-photo" width="36" height="36" decoding="async" src="saad.webp" alt="Saad" />
+      <img class="logo-photo" width="36" height="36" decoding="async" src="/saad.webp" alt="Saad" />
       <span class="logo-text">Saad</span>
     </a>
     <nav class="nav-links">
@@ -1774,47 +1773,10 @@
 <!-- ================= TOAST ================= -->
 <div class="toast" id="toast" hidden></div>
 
-<script src="script.js"></script>
-<script src="demo.js"></script>
-
 <!-- ================= BACK TO TOP ================= -->
 <button class="back-to-top" id="back-to-top" type="button" aria-label="Scroll back to top" title="Back to top">
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>
 </button>
-<script>
-(function () {
-  var btn = document.getElementById('back-to-top');
-  if (!btn) return;
-  var threshold = 280;
-  var ticking = false;
-  function scrollY() {
-    return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-  }
-  function update() {
-    btn.classList.toggle('visible', scrollY() > threshold);
-    ticking = false;
-  }
-  function onScroll() {
-    if (!ticking) { requestAnimationFrame(update); ticking = true; }
-  }
-  window.addEventListener('scroll', onScroll, { passive: true });
-  document.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onScroll, { passive: true });
-  btn.addEventListener('click', function () {
-    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced) {
-      window.scrollTo(0, 0);
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-    } else if (window.scrollTo) {
-      try { window.scrollTo({ top: 0, behavior: 'smooth' }); }
-      catch (e) { window.scrollTo(0, 0); }
-    }
-    btn.blur();
-  });
-  update();
-})();
-</script>
 <!-- ================= LEFT CONTACT RAIL ================= -->
 <aside class="social-rail" aria-label="Contact Saad">
   <a class="social-link" href="mailto:saad@saadm.dev" aria-label="Email Saad" title="Email">

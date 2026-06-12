@@ -50,8 +50,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
 <script>(function(){try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.setAttribute('data-theme',t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='light'?'#f5f7fc':'#07080d');}catch(e){}})();</script>
-<link rel="stylesheet" href="/styles.css?v=20260609c" />
-<link rel="stylesheet" href="/notes/notes.css?v=20260612a" />
+<script type="module" src="../pages/notes/main.ts"></script>
 </head>
 <body>
 
@@ -135,46 +134,10 @@
   </div>
 </footer>
 
-<script src="/script.js"></script>
-
 <!-- ================= BACK TO TOP ================= -->
 <button class="back-to-top" id="back-to-top" type="button" aria-label="Scroll back to top" title="Back to top">
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>
 </button>
-<script>
-(function () {
-  var btn = document.getElementById('back-to-top');
-  if (!btn) return;
-  var threshold = 280;
-  var ticking = false;
-  function scrollY() {
-    return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-  }
-  function update() {
-    btn.classList.toggle('visible', scrollY() > threshold);
-    ticking = false;
-  }
-  function onScroll() {
-    if (!ticking) { requestAnimationFrame(update); ticking = true; }
-  }
-  window.addEventListener('scroll', onScroll, { passive: true });
-  document.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onScroll, { passive: true });
-  btn.addEventListener('click', function () {
-    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced) {
-      window.scrollTo(0, 0);
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-    } else if (window.scrollTo) {
-      try { window.scrollTo({ top: 0, behavior: 'smooth' }); }
-      catch (e) { window.scrollTo(0, 0); }
-    }
-    btn.blur();
-  });
-  update();
-})();
-</script>
 
 <!-- ================= LEFT CONTACT RAIL ================= -->
 <aside class="social-rail" aria-label="Contact Saad">
