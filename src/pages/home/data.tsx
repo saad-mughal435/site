@@ -1,247 +1,87 @@
 /* ============================================================================
-   home.app.jsx  -  SOURCE OF TRUTH for the saadm.dev homepage React app.
-   The browser loads the compiled home.app.js; there is NO runtime Babel.
-   After editing this file, regenerate the shipped JS and commit BOTH:
-       npm run build:home
-       (= babel home.app.jsx --presets @babel/preset-react -o home.app.js)
-   React / ReactDOM are CDN globals (index.html), so this uses the classic
-   JSX runtime (React.createElement) - do NOT add ES module imports.
+   data.tsx - every piece of homepage copy, verbatim from the retired
+   home.app.jsx. Constants only; the components live in ./components/.
    ============================================================================ */
-
-const { useState, useEffect, useRef, useMemo, useCallback, Fragment } = React;
-const { createRoot } = ReactDOM;
+import { Fragment } from 'react';
+import type { ReactNode } from 'react';
 
 /* =========================================================
    SINGLE-SOURCE FACTS  -  defined once, referenced everywhere
    ========================================================= */
-const KINGSLEY = { departments: 5, reportingSpeedup: 60 };
-const AVAILABILITY = 'UAE-based, open to relocate worldwide, and happy with on-site, hybrid, or remote work';
+export const KINGSLEY = { departments: 5, reportingSpeedup: 60 };
+export const AVAILABILITY = 'UAE-based, open to relocate worldwide, and happy with on-site, hybrid, or remote work';
 
 /* =========================================================
-   HOOKS
+   SHARED TYPES
    ========================================================= */
-function useInView(ref, opts = {}) {
-  const [inView, setInView] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    // No IntersectionObserver (very old browser) -> just show the content.
-    if (typeof IntersectionObserver === 'undefined') { setInView(true); return; }
-    // threshold 0 fires as soon as the element enters the viewport, so it works
-    // for any height. (A 0.12 threshold can never be met by a container taller
-    // than ~8x the viewport - e.g. the single-column projects grid on mobile -
-    // which would leave its cards stuck at opacity:0.)
-    const io = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setInView(true); io.disconnect(); } },
-      { threshold: 0, rootMargin: '0px 0px -60px 0px', ...opts }
-    );
-    io.observe(el);
-    // Failsafe: never leave content permanently hidden if the observer never fires.
-    const t = setTimeout(() => setInView(true), 1800);
-    return () => { io.disconnect(); clearTimeout(t); };
-  }, []);
-  return inView;
+export interface Cta {
+  label: string;
+  href: string;
+  target?: string;
+  primary?: boolean;
+  prominent?: boolean;
 }
 
-function useScrollPos() {
-  const [scrolled, setScrolled] = useState(false);
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-  return scrolled;
+export interface View { key: string; label: string }
+
+export interface HeroCopy {
+  title: string[];
+  sub: ReactNode;
+  stack: string;
+  cta: Cta;
 }
 
-function useScrollProgress() {
-  const [p, setP] = useState(0);
-  useEffect(() => {
-    const onScroll = () => {
-      const h = document.documentElement;
-      const max = h.scrollHeight - h.clientHeight;
-      setP(max > 0 ? (h.scrollTop / max) * 100 : 0);
-    };
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-  return p;
+export interface Stat { num: number; suffix: string; label: string; domain: string }
+
+export interface FaqItem { q: string; a: ReactNode }
+
+export interface ProofItem {
+  k: string;
+  v: string;
+  link: { href: string; label: string; target?: string };
 }
 
-/* =========================================================
-   PRIMITIVES
-   ========================================================= */
-function Reveal({ children, className = '', stagger = false, as: Tag = 'div', ...rest }) {
-  const ref = useRef(null);
-  const inView = useInView(ref);
-  return (
-    <Tag
-      ref={ref}
-      className={(stagger ? 'stagger ' : 'reveal ') + (inView ? 'inView ' : '') + className}
-      {...rest}
-    >
-      {children}
-    </Tag>
-  );
+export interface ProofQuote { text: string; name: string; role: string }
+
+export interface ExperienceItem {
+  domain: string;
+  title: string;
+  when: string;
+  company: string;
+  points: ReactNode[];
 }
 
-function ScrollProgress() {
-  const p = useScrollProgress();
-  return <div className="scroll-progress" aria-hidden="true" style={{ transform: `scaleX(${p / 100})` }} />;
+export interface Project {
+  domain: string;
+  kind: string;
+  year: string;
+  title: string;
+  desc: ReactNode;
+  bullets: ReactNode[];
+  tags: string[];
+  featured?: boolean;
+  sectionEyebrow?: string;
+  sectionHeading?: string;
+  sectionBlurb?: string;
+  ctas?: Cta[];
+  ctaSubtitle?: ReactNode;
+  ctaTip?: ReactNode;
 }
 
-function WordReveal({ children, className = '', as: Tag = 'span' }) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { threshold: 0.2 });
-  const text = typeof children === 'string' ? children : '';
-  if (!text) return <Tag className={className} ref={ref}>{children}</Tag>;
-  const words = text.split(' ');
-  return (
-    <Tag ref={ref} className={'word-reveal ' + className + (inView ? ' inView' : '')}>
-      {words.map((w, i) => (
-        <span key={i} className="wr-word" style={{ transitionDelay: (i * 70) + 'ms' }}>
-          {w}{i < words.length - 1 ? ' ' : ''}
-        </span>
-      ))}
-    </Tag>
-  );
-}
-
-// Static card + button wrappers. Kept as thin components so call sites stay
-// unchanged; the 3D-tilt and magnetic-follow effects were removed for a calmer,
-// more professional feel. `intensity` is accepted and ignored.
-function TiltCard({ children, intensity, className = '', tag: Tag = 'div', ...rest }) {
-  return <Tag className={className} {...rest}>{children}</Tag>;
-}
-
-function MagneticBtn({ as: Tag = 'a', children, className = 'btn btn-primary', ...rest }) {
-  return <Tag className={className} {...rest}>{children}</Tag>;
-}
-
-/* =========================================================
-   NAV
-   ========================================================= */
-function ThemeToggle() {
-  const [theme, setTheme] = useState(() => {
-    try { return document.documentElement.getAttribute('data-theme') || 'dark'; }
-    catch (_) { return 'dark'; }
-  });
-  const apply = (t) => {
-    try {
-      document.documentElement.setAttribute('data-theme', t);
-      localStorage.setItem('theme', t);
-      const m = document.querySelector('meta[name="theme-color"]');
-      if (m) m.setAttribute('content', t === 'light' ? '#f5f7fc' : '#07080d');
-    } catch (_) {}
-    setTheme(t);
-  };
-  return (
-    <button
-      className="theme-toggle"
-      type="button"
-      aria-label="Toggle light or dark theme"
-      aria-pressed={theme === 'light'}
-      title="Toggle light / dark"
-      onClick={() => apply(theme === 'light' ? 'dark' : 'light')}
-    >
-      <svg className="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" /></svg>
-      <svg className="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" /><path d="M12 2v2.4M12 19.6V22M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M2 12h2.4M19.6 12H22M4.9 19.1l1.7-1.7M17.4 6.6l1.7-1.7" /></svg>
-    </button>
-  );
-}
-
-function Nav() {
-  const scrolled = useScrollPos();
-  const [active, setActive] = useState('');
-  const [open, setOpen] = useState(false);
-  useEffect(() => {
-    const sections = document.querySelectorAll('section[id]');
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => { if (e.isIntersecting) setActive(e.target.id); });
-    }, { rootMargin: '-45% 0px -50% 0px', threshold: 0.01 });
-    sections.forEach((s) => io.observe(s));
-    return () => io.disconnect();
-  }, []);
-  // Close mobile menu when a link is clicked or window resizes wide
-  useEffect(() => {
-    const onResize = () => { if (window.innerWidth > 760) setOpen(false); };
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
-  const close = () => setOpen(false);
-  return (
-    <header className={'nav' + (scrolled ? ' scrolled' : '') + (open ? ' menu-open' : '')}>
-      <div className="container nav-inner">
-        <a className="logo" href="#top" onClick={close}>
-          <img className="logo-photo" width="38" height="38" decoding="async" src="saad.webp" alt="Saad - Automation Engineer and ERP Developer in Dubai" />
-          <span>Saad</span>
-        </a>
-        <nav className={'nav-links' + (open ? ' open' : '')}>
-          <a href="#about" className={active === 'about' ? 'active' : ''} aria-current={active === 'about' ? 'page' : undefined} onClick={close}>About</a>
-          <a href="#experience" className={active === 'experience' ? 'active' : ''} aria-current={active === 'experience' ? 'page' : undefined} onClick={close}>Experience</a>
-          <a href="#projects" className={active === 'projects' ? 'active' : ''} aria-current={active === 'projects' ? 'page' : undefined} onClick={close}>Projects</a>
-          <a href="#skills" className={active === 'skills' ? 'active' : ''} aria-current={active === 'skills' ? 'page' : undefined} onClick={close}>Skills</a>
-          <a href="notes/" onClick={close} title="Engineering notes - short technical write-ups">Notes</a>
-          <a href="demo.html" target="_blank" rel="noopener" onClick={close} aria-label="Open the full demo gallery in a new tab">Demo ↗</a>
-          <a href="contact.html" onClick={close}>Contact</a>
-        </nav>
-        <ThemeToggle />
-        <a className="nav-cta" href="contact.html">Get in touch <span className="arrow">→</span></a>
-        <button
-          className={'nav-burger' + (open ? ' open' : '')}
-          aria-label="Toggle navigation menu"
-          aria-expanded={open}
-          onClick={() => setOpen(v => !v)}
-        >
-          <span></span><span></span><span></span>
-        </button>
-      </div>
-    </header>
-  );
-}
+export interface SkillGroup { domain: string; title: string; items: string[] }
 
 /* =========================================================
    VIEW TOGGLE
    ========================================================= */
-const VIEWS = [
+export const VIEWS: View[] = [
   { key: 'code', label: 'Coding' },
   { key: 'eng',  label: 'Engineering' },
 ];
 
-function ViewToggle({ view, setView }) {
-  const wrapRef = useRef(null);
-  const [indicator, setIndicator] = useState({ left: 4, width: 0 });
-  const recompute = () => {
-    if (!wrapRef.current) return;
-    const btn = wrapRef.current.querySelector('.vt-pill.active');
-    if (!btn) return;
-    setIndicator({ left: btn.offsetLeft, width: btn.offsetWidth });
-  };
-  useEffect(() => { recompute(); }, [view]);
-  useEffect(() => {
-    window.addEventListener('resize', recompute);
-    return () => window.removeEventListener('resize', recompute);
-  }, []);
-  return (
-    <div className="view-toggle" ref={wrapRef} role="group" aria-label="Switch portfolio view">
-      <div className="vt-indicator" style={{ left: indicator.left + 'px', width: indicator.width + 'px' }}></div>
-      {VIEWS.map((v) => (
-        <button
-          key={v.key}
-          className={'vt-pill' + (view === v.key ? ' active' : '')}
-          onClick={() => setView(v.key)}
-          aria-pressed={view === v.key}
-        >{v.label}</button>
-      ))}
-    </div>
-  );
-}
-
 /* =========================================================
    HERO
    ========================================================= */
-const HERO_COPY = {
+export const HERO_COPY: Record<string, HeroCopy> = {
   all: {
     title: ['Software for operations.', 'Automation behind it.'],
     sub: <Fragment>I&rsquo;m <strong>Saad</strong> - an <strong>Automation &amp; Software Developer</strong> focused on
@@ -269,60 +109,10 @@ const HERO_COPY = {
   },
 };
 
-function Hero({ view, setView }) {
-  const copy = HERO_COPY[view] || HERO_COPY.all;
-  return (
-    <section className="hero container" id="top">
-      <div className="hero-left">
-        <div className="eyebrow"><span className="led" aria-hidden="true"></span> Currently available in the UAE · Open to relocate worldwide</div>
-        <div className="view-toggle-wrap">
-          <span className="view-toggle-hint">Tailored for:</span>
-          <ViewToggle view={view} setView={setView} />
-        </div>
-        <h1 className="hero-title view-fade" key={'t-' + view}>
-          {copy.title.map((line, i) => (
-            <span className="line" key={i}>
-              <span>{i === copy.title.length - 1 ? <span className="grad">{line}</span> : line}</span>
-            </span>
-          ))}
-        </h1>
-        <p className="hero-sub view-fade" key={'s-' + view}>{copy.sub}</p>
-        <div className="hero-cta">
-          <MagneticBtn as="a" href="contact.html" className="btn btn-primary">Contact me <span className="arrow">→</span></MagneticBtn>
-          <a className="btn btn-ghost view-fade" key={'c-' + view}
-             href={copy.cta.href}
-             {...(copy.cta.target ? { target: copy.cta.target, rel: 'noopener' } : {})}
-          >{copy.cta.label}</a>
-        </div>
-        <div className="hero-tracks">
-          <span className="meta-k">Two tracks</span>
-          <span>Python/FastAPI ERP + backend systems · C++17 low-latency market data
-            {' '}(<a href="https://github.com/saad-mughal435/hft-orderbook" target="_blank" rel="noopener">hft-orderbook</a>
-            {' '}· <a href="hft-book/viewer.html" target="_blank" rel="noopener">L2 viewer ↗</a>)</span>
-        </div>
-        <div className="hero-meta">
-          <div><span className="meta-k">Currently</span><span className="meta-v">Kingsley Beverage FZCO · Dubai</span></div>
-          <div className="view-fade" key={'m-' + view}>
-            <span className="meta-k">Stack</span><span className="meta-v">{copy.stack}</span>
-          </div>
-          <div><span className="meta-k">Open to</span><span className="meta-v">On-site · Hybrid · Remote</span></div>
-        </div>
-      </div>
-      <div className="hero-right">
-        <figure className="hero-photo">
-          <img src="saad.webp" width="400" height="500" loading="eager" decoding="async" fetchpriority="high"
-               alt="Muhammad Saad - Automation & Software Developer, Dubai" />
-          <figcaption><span className="plate-no">Plate 01</span> M. Saad · Automation &amp; Software · Dubai, UAE</figcaption>
-        </figure>
-      </div>
-    </section>
-  );
-}
-
 /* =========================================================
    STATS
    ========================================================= */
-const STATS_ALL = [
+export const STATS_ALL: Stat[] = [
   { num: KINGSLEY.reportingSpeedup, suffix: '%',    label: 'reduction in production reporting time', domain: 'code' },
   { num: KINGSLEY.departments,      suffix: '',     label: 'departments digitised through MES/ERP workflows', domain: 'code' },
   { num: 2,    suffix: ' yrs', label: 'industrial & telecom-ops experience', domain: 'all' },
@@ -331,30 +121,10 @@ const STATS_ALL = [
   { num: 6,    suffix: '+ yrs',label: 'writing Python since university - projects, internships, production', domain: 'code' },
 ];
 
-function Stat({ s }) {
-  return (
-    <div className="stat">
-      <div className="stat-num">
-        {s.suffix.includes('%') ? '~' : ''}{s.num.toLocaleString()}{s.suffix}
-      </div>
-      <div className="stat-lbl">{s.label}</div>
-    </div>
-  );
-}
-
-function Stats({ view }) {
-  const list = STATS_ALL.filter((s) => view === 'all' || s.domain === view || s.domain === 'all');
-  return (
-    <section className="stats container" id="stats">
-      {list.map((s) => <Stat key={s.label} s={s} />)}
-    </section>
-  );
-}
-
 /* =========================================================
    FAQ - long-tail keyword capture + FAQPage rich result
    ========================================================= */
-const FAQ_ITEMS = [
+export const FAQ_ITEMS: FaqItem[] = [
   {
     q: 'Is Saad available for hire?',
     a: <Fragment>Yes - open to backend, software engineering, ERP / MES, and automation roles. {AVAILABILITY}, and available immediately. Reach out via the <a href="contact.html">contact form</a>, email <a href="mailto:saad@saadm.dev">saad@saadm.dev</a>, or WhatsApp <a href="https://wa.me/971502578065" target="_blank" rel="noopener">+971 50 257 8065</a>.</Fragment>,
@@ -377,70 +147,12 @@ const FAQ_ITEMS = [
   },
 ];
 
-function FAQ() {
-  return (
-    <section id="faq" className="section container">
-      <Reveal className="section-head">
-        <span className="section-tag">Appendix - FAQ</span>
-        <h2>About Muhammad Saad - engineering background, software delivery focus.</h2>
-      </Reveal>
-      <Reveal stagger className="faq-list">
-        {FAQ_ITEMS.map((f, i) => (
-          <details className="faq-item" key={i} open={i === 0}>
-            <summary>{f.q}</summary>
-            <div className="faq-answer">{f.a}</div>
-          </details>
-        ))}
-      </Reveal>
-    </section>
-  );
-}
-
-/* =========================================================
-   ABOUT
-   ========================================================= */
-function About() {
-  return (
-    <section id="about" className="section container">
-      <Reveal className="section-head">
-        <span className="section-tag">Fig. 01 - About</span>
-        <h2><WordReveal>I sit between the factory floor and the keyboard.</WordReveal></h2>
-      </Reveal>
-      <div className="about-grid">
-        <Reveal className="about-copy">
-          <p>I&rsquo;m an <strong>Automation &amp; Software Developer</strong> at Kingsley Beverage FZCO in Dubai, where I&rsquo;m
-            the sole developer of the MES/ERP platform running across the plant - and also work hands-on as
-            <strong> Automation Engineer</strong> and <strong>IT Administrator</strong>. My engineering background
-            (B.Sc. Electrical / Computer Engineering, COMSATS Islamabad) lets me run and support the Krones beverage
-            lines and troubleshoot production issues, then build the software <em>around</em> that workflow - the
-            machine automation is OEM-locked, so my work is the OEE reporting, QC records, inventory, and management
-            dashboards that sit on top of it.</p>
-          <p>Before Kingsley I spent two years as a <strong>NOC Engineer at PTCL</strong> on GPON / PSTN / broadband
-            infrastructure, where I shipped a Python tool that auto-generated configuration scripts from tickets and
-            removed hours of manual prep a day. The throughline: I look at slow, manual operational work and rebuild
-            it in code - which is exactly the automation, backend, and ERP/MES work I want to keep doing.</p>
-        </Reveal>
-        <Reveal className="aside-card">
-          <div className="aside-card-head">// quick facts</div>
-          <dl>
-            <dt>Location</dt><dd>UAE-based · Open to relocate worldwide</dd>
-            <dt>Education</dt><dd>B.Sc. Electrical Engineering - Computer Engineering Major - COMSATS Islamabad (2024)</dd>
-            <dt>Languages</dt><dd>English (IELTS) · Urdu</dd>
-            <dt>Open to</dt><dd>On-site · Hybrid · Remote</dd>
-            <dt>Status</dt><dd><span className="led" style={{ marginRight: 6 }}></span>Open to work</dd>
-          </dl>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
-
 /* =========================================================
    PROOF - verifiable signals, no testimonial gimmicks.
    Every card is a claim a recruiter can check in one click
    (except the Kingsley line, which is claim-only by design).
    ========================================================= */
-const PROOF_ITEMS = [
+export const PROOF_ITEMS: ProofItem[] = [
   { k: 'In production',
     v: 'MES/ERP platform running daily at Kingsley Beverage FZCO, Dubai - sole developer, live since 2025.',
     link: { href: 'demo.html', label: 'See the walkthrough ↗', target: '_blank' } },
@@ -457,44 +169,12 @@ const PROOF_ITEMS = [
 // Short quotes from a manager / colleague. Leave empty to ship only the
 // verifiable items above; fill in when the text is confirmed:
 //   { text: '...', name: 'Full Name', role: 'Title, Company' }
-const PROOF_QUOTES = [];
-
-function ProofStrip() {
-  return (
-    <section id="proof" className="section container">
-      <Reveal className="section-head">
-        <span className="section-tag">Fig. 02 - Proof</span>
-        <h2><WordReveal>Verifiable, not just claimed.</WordReveal></h2>
-      </Reveal>
-      <Reveal stagger className="proof-grid">
-        {PROOF_ITEMS.map((item) => (
-          <div className="proof-card" key={item.k}>
-            <span className="meta-k">{item.k}</span>
-            <p>{item.v}</p>
-            <a href={item.link.href}
-               {...(item.link.target ? { target: item.link.target, rel: 'noopener' } : {})}
-            >{item.link.label}</a>
-          </div>
-        ))}
-      </Reveal>
-      {PROOF_QUOTES.length > 0 && (
-        <Reveal stagger className="proof-quotes">
-          {PROOF_QUOTES.map((q) => (
-            <figure className="proof-quote" key={q.name}>
-              <blockquote>{q.text}</blockquote>
-              <figcaption>{q.name} · {q.role}</figcaption>
-            </figure>
-          ))}
-        </Reveal>
-      )}
-    </section>
-  );
-}
+export const PROOF_QUOTES: ProofQuote[] = [];
 
 /* =========================================================
    EXPERIENCE
    ========================================================= */
-const EXPERIENCE = [
+export const EXPERIENCE: ExperienceItem[] = [
   { domain: 'all',
     title: 'Automation & Software Developer · ERP Developer · IT Administrator',
     when: 'Jul 2025 - Present',
@@ -556,37 +236,10 @@ const EXPERIENCE = [
   },
 ];
 
-function Experience({ view }) {
-  const items = EXPERIENCE.filter((e) => view === 'all' || e.domain === view || e.domain === 'all');
-  return (
-    <section id="experience" className="section container">
-      <Reveal className="section-head">
-        <span className="section-tag">Fig. 03 - Experience</span>
-        <h2><WordReveal>A short career, but a wide one.</WordReveal></h2>
-      </Reveal>
-      <ol className="timeline">
-        {items.map((e, i) => (
-          <Reveal as="li" key={e.title + i} className="t-item">
-            <div className="t-marker"></div>
-            <div className="t-card">
-              <div className="t-head">
-                <h3>{e.title}</h3>
-                <span className="t-when">{e.when}</span>
-              </div>
-              <div className="t-company">{e.company}</div>
-              <ul className="t-points">{e.points.map((p, j) => <li key={j}>{p}</li>)}</ul>
-            </div>
-          </Reveal>
-        ))}
-      </ol>
-    </section>
-  );
-}
-
 /* =========================================================
    PROJECTS
    ========================================================= */
-const PROJECTS = [
+export const PROJECTS: Project[] = [
   {
     domain: 'all', featured: true, kind: 'Production system · Live interactive demo', year: '2025 - Present',
     sectionEyebrow: 'Featured manufacturing system',
@@ -776,7 +429,7 @@ const PROJECTS = [
 ];
 
 /* Product demos - shown directly after Projects as a 3-column grid (compact cards). */
-const DEMO_PROJECTS = [
+export const DEMO_PROJECTS: Project[] = [
   {
     domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
     title: 'Anvil Supply Co. - B2B wholesale portal',
@@ -992,87 +645,12 @@ const DEMO_PROJECTS = [
   },
 ];
 
-function ProjectCard({ p, compact }) {
-  // compact = slider card: summary + tags + links (the bullet detail lives on
-  // each demo's own page), so the row of demos stays scannable.
-  return (
-    <TiltCard tag="article" intensity={compact ? 4 : 5}
-      className={'project' + (p.featured ? ' featured' : '') + (compact ? ' demo-slide' : '')}>
-      <div className="project-meta">
-        <span className="project-kind">{p.kind}</span>
-        <span className="project-year">{p.year}</span>
-      </div>
-      <h3 className="project-title">{p.title}</h3>
-      <p className="project-desc">{p.desc}</p>
-      {!compact && <ul className="project-bullets">{p.bullets.map((b, i) => <li key={i}>{b}</li>)}</ul>}
-      <div className="project-tags">{p.tags.map((t) => <span key={t} className="tag">{t}</span>)}</div>
-      {p.ctas && (
-        <div className="project-cta">
-          {p.ctas.map((c) => (
-            <a key={c.label} href={c.href}
-               className={'btn ' + (c.primary ? 'btn-primary' : 'btn-ghost') + (c.prominent ? ' btn-prominent' : '')}
-               {...(c.target ? { target: c.target, rel: 'noopener' } : {})}>{c.label}</a>
-          ))}
-          {!compact && p.ctaSubtitle && <div className="cta-subtitle">{p.ctaSubtitle}</div>}
-          {!compact && p.ctaTip && <div className="cta-tip">{p.ctaTip}</div>}
-        </div>
-      )}
-    </TiltCard>
-  );
-}
-
-function Projects({ view }) {
-  const items = PROJECTS.filter((p) => view === 'all' || p.domain === view || p.domain === 'all');
-  return (
-    <section id="projects" className="section container">
-      <Reveal className="section-head">
-        <span className="section-tag">Fig. 04 - Selected Work</span>
-        <h2><WordReveal>Production software, backends and open source.</WordReveal></h2>
-      </Reveal>
-      <Reveal stagger className="projects-grid">
-        {items.map((p) => (
-          <Fragment key={p.title}>
-            {p.sectionHeading && (
-              <div className="project-section-heading">
-                <span className="section-tag">{p.sectionEyebrow}</span>
-                <h3>{p.sectionHeading}</h3>
-                {p.sectionBlurb && <p>{p.sectionBlurb}</p>}
-              </div>
-            )}
-            <ProjectCard p={p} />
-          </Fragment>
-        ))}
-      </Reveal>
-    </section>
-  );
-}
-
-/* =========================================================
-   DEMOS - product demos as a 3-column grid (after Projects)
-   ========================================================= */
-function Demos({ view }) {
-  const items = DEMO_PROJECTS.filter((p) => view === 'all' || p.domain === view || p.domain === 'all');
-  if (!items.length) return null;
-  return (
-    <section id="demos" className="section container">
-      <Reveal className="section-head">
-        <span className="section-tag">Fig. 05 - Demos</span>
-        <h2><WordReveal>Product demos built around real workflows.</WordReveal></h2>
-        <p className="demos-sub">Ten browser-based product demos - B2B portals, marketplaces, booking, POS, AI copilots and operations consoles - plus two earlier-work cards (PTCL tooling, Omdena). Each demo opens as a full product you can click through. <a href="demo.html" target="_blank" rel="noopener">Full gallery ↗</a></p>
-      </Reveal>
-      <Reveal stagger className="demos-grid">
-        {items.map((p) => <ProjectCard key={p.title} p={p} compact />)}
-      </Reveal>
-    </section>
-  );
-}
-
 /* =========================================================
    SKILLS
    ========================================================= */
 // Grouped chip cards - no tier badges, no percentages. Each card shows the
 // areas the section title implies. Lets the viewer scan instead of judge.
-const SKILLS = [
+export const SKILLS: SkillGroup[] = [
   { domain: 'code', title: 'Backend & APIs', items:
     ['Python', 'FastAPI', 'Java', 'Spring Boot', 'Spring Data JPA', 'C++17', 'Lock-free', 'Low-latency', 'Market data', 'Market microstructure', 'FIX protocol', 'UDP multicast', 'TypeScript', 'Node.js', 'REST APIs', 'JWT Auth', 'OpenAPI / Swagger', 'Pydantic', 'async I/O'] },
   { domain: 'all', title: 'Manufacturing Systems', items:
@@ -1088,133 +666,3 @@ const SKILLS = [
   { domain: 'all', title: 'Learning / Expanding', items:
     ['React', 'Tailwind CSS', 'PLC / Siemens basics', 'scikit-learn'] },
 ];
-
-function SkillCard({ s }) {
-  const ref = useRef(null);
-  const inView = useInView(ref);
-  return (
-    <div ref={ref} className={'skill-card' + (inView ? ' inView' : '')}>
-      <h3>{s.title}</h3>
-      <div className="skill-chips">
-        {s.items.map((name) => (
-          <span className="skill-chip" key={name}>{name}</span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function Skills({ view }) {
-  const items = SKILLS.filter((s) => view === 'all' || s.domain === view || s.domain === 'all');
-  return (
-    <section id="skills" className="section container">
-      <Reveal className="section-head">
-        <span className="section-tag">Fig. 06 - Skills</span>
-        <h2><WordReveal>Skills I use to build and run operations software.</WordReveal></h2>
-      </Reveal>
-      <Reveal stagger className="skills-grid">
-        {items.map((s) => <SkillCard key={s.title} s={s} />)}
-      </Reveal>
-    </section>
-  );
-}
-
-/* =========================================================
-   CONTACT
-   ========================================================= */
-function Contact() {
-  return (
-    <section id="contact" className="section container">
-      <Reveal className="contact-box">
-        <div className="contact-left">
-          <span className="section-tag">Fig. 07 - Contact</span>
-          <h2>Let&rsquo;s build something that ships.</h2>
-          <p>I build backend and operations software - ERP/MES platforms, APIs, and the tooling
-            around them. If that fits a role you&rsquo;re working on, in the UAE or remote, I&rsquo;d be glad to talk.</p>
-          <MagneticBtn as="a" href="contact.html" className="btn btn-primary">
-            Open contact form <span className="arrow">→</span>
-          </MagneticBtn>
-        </div>
-        <ul className="contact-list">
-          <li><span className="contact-k">Email</span><a className="contact-v" href="mailto:saad@saadm.dev">saad@saadm.dev</a></li>
-          <li><span className="contact-k">Phone</span><a className="contact-v" href="tel:+971502578065">+971 50 257 8065</a></li>
-          <li><span className="contact-k">WhatsApp</span><a className="contact-v" href="https://wa.me/971502578065" target="_blank" rel="noopener">+971 50 257 8065</a></li>
-          <li><span className="contact-k">LinkedIn</span><a className="contact-v" href="https://www.linkedin.com/in/muhammadsaad435/" target="_blank" rel="noopener">/in/muhammadsaad435</a></li>
-          <li><span className="contact-k">Based in</span><span className="contact-v">{AVAILABILITY}</span></li>
-        </ul>
-      </Reveal>
-    </section>
-  );
-}
-
-/* =========================================================
-   FOOTER
-   ========================================================= */
-function Footer() {
-  return (
-    <footer className="footer">
-      <div className="container footer-inner">
-        <div className="footer-copy">© {new Date().getFullYear()} Muhammad Saad - Automation &amp; Software Developer. Hand-built with vanilla CSS.
-          <span className="react-badge" title="This homepage is a React 18 single-page app (precompiled JSX, no build-time framework)">⚛ Built with React 18</span>
-        </div>
-        <div className="footer-links">
-          <a href="mailto:saad@saadm.dev">Email</a>
-          <a href="https://www.linkedin.com/in/muhammadsaad435/" target="_blank" rel="noopener">LinkedIn</a>
-          <a href="https://github.com/saad-mughal435" target="_blank" rel="noopener">GitHub</a>
-          <a href="notes/">Notes</a>
-          <a href="#top">Back to top ↑</a>
-        </div>
-      </div>
-    </footer>
-  );
-}
-
-/* =========================================================
-   APP
-   ========================================================= */
-function App() {
-  const [view, setView] = useState(() => {
-    try {
-      const q = new URLSearchParams(window.location.search).get('view');
-      if (q === 'eng' || q === 'code' || q === 'all') return q;
-      const stored = localStorage.getItem('portfolio_view');
-      return stored === 'eng' || stored === 'code' || stored === 'all' ? stored : 'code';
-    } catch (_) { return 'code'; }
-  });
-  // Persist the active view and reflect it in the URL (?view=) so the page is
-  // deep-linkable / shareable in a given mode. replaceState keeps it out of the
-  // back-button history.
-  useEffect(() => {
-    try { localStorage.setItem('portfolio_view', view); } catch (_) {}
-    try {
-      const url = new URL(window.location.href);
-      if (url.searchParams.get('view') !== view) {
-        url.searchParams.set('view', view);
-        window.history.replaceState(null, '', url);
-      }
-    } catch (_) {}
-  }, [view]);
-
-  return (
-    <Fragment>
-      <a href="#top" className="skip-link">Skip to content</a>
-      <ScrollProgress />
-      <Nav />
-      <main>
-        <Hero view={view} setView={setView} />
-        <Stats view={view} />
-        <About />
-        <ProofStrip />
-        <Experience view={view} />
-        <Projects view={view} />
-        <Demos view={view} />
-        <Skills view={view} />
-        <FAQ />
-        <Contact />
-      </main>
-      <Footer />
-    </Fragment>
-  );
-}
-
-createRoot(document.getElementById('root')).render(<App />);

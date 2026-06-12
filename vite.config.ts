@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 import { fileURLToPath } from 'node:url';
 
 // Output paths must equal today's URLs exactly: contact.html, demo.html,
@@ -10,12 +11,14 @@ const entry = (p: string) => fileURLToPath(new URL(p, import.meta.url));
 export default defineConfig({
   root: 'src',
   publicDir: false,
+  plugins: [react()],
   build: {
     outDir: '../dist',
     emptyOutDir: true,
     assetsDir: 'static',
     rollupOptions: {
       input: {
+        home: entry('src/index.html'),
         contact: entry('src/contact.html'),
         demo: entry('src/demo.html'),
         notfound: entry('src/404.html'),

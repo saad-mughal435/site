@@ -1074,3 +1074,28 @@ a:focus-visible, button:focus-visible, .btn:focus-visible, summary:focus-visible
   .reveal, .stagger > *, .skill-card, .word-reveal .wr-word, .hero-title .line span { opacity: 1 !important; transform: none !important; }
   body::after { animation: none; }
 }
+
+/* =========================================================
+   Motion layer styles - appended from the retired home.fx.css
+   (loaded after the rules above, same order as the old
+   home.css + home.fx.css link pair).
+   ========================================================= */
+
+/* Content sits above the static CSS backdrop; the hero lets it show through. */
+#root { position: relative; z-index: 1; }
+.hero { background: transparent; }
+
+/* ---- Gentle float on the hero headshot ---- */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-photo img { animation: fx-float 6s ease-in-out infinite; }
+}
+@keyframes fx-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* ---- Lenis smooth scroll ---- */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
