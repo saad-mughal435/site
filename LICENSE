@@ -1,4 +1,13 @@
-MIT License
+MIT License - WITH ONE EXCEPTION
+
+EXCEPTION: This license does NOT apply to the /app/ directory. The code in
+/app/ is the frontend UI of the MES/ERP system built for Kingsley Beverage
+FZCO (Dubai), published with their permission as a fabricated-data demo for
+portfolio demonstration only. It is not licensed for use, copying,
+modification or redistribution; all rights to that code remain with Kingsley
+Beverage FZCO. See app/LICENSE-NOTICE.md.
+
+The MIT license below applies to everything else in this repository.
 
 Copyright (c) 2026 Saad
 
