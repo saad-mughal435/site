@@ -7,145 +7,145 @@
        noindex" error). Deep content pages rely on self-referential canonicals. -->
   <url>
     <loc>https://saadm.dev/</loc>
-    <lastmod>2026-06-12</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://saadm.dev/contact.html</loc>
-    <lastmod>2026-06-12</lastmod>
+    <loc>https://saadm.dev/contact</loc>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://saadm.dev/demo.html</loc>
-    <lastmod>2026-06-12</lastmod>
+    <loc>https://saadm.dev/demo</loc>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://saadm.dev/property/index.html</loc>
-    <lastmod>2026-06-11</lastmod>
+    <loc>https://saadm.dev/property/</loc>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://saadm.dev/property/search.html</loc>
-    <lastmod>2026-06-11</lastmod>
+    <loc>https://saadm.dev/property/search</loc>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://saadm.dev/property/areas.html</loc>
-    <lastmod>2026-06-11</lastmod>
+    <loc>https://saadm.dev/property/areas</loc>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://saadm.dev/property/mortgage.html</loc>
-    <lastmod>2026-06-11</lastmod>
+    <loc>https://saadm.dev/property/mortgage</loc>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://saadm.dev/property/valuation.html</loc>
-    <lastmod>2026-06-11</lastmod>
+    <loc>https://saadm.dev/property/valuation</loc>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://saadm.dev/property/yield.html</loc>
-    <lastmod>2026-06-11</lastmod>
+    <loc>https://saadm.dev/property/yield</loc>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://saadm.dev/property/owner-onboard.html</loc>
-    <lastmod>2026-06-11</lastmod>
+    <loc>https://saadm.dev/property/owner-onboard</loc>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://saadm.dev/vacation/index.html</loc>
-    <lastmod>2026-06-11</lastmod>
+    <loc>https://saadm.dev/vacation/</loc>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://saadm.dev/vacation/search.html</loc>
-    <lastmod>2026-06-11</lastmod>
+    <loc>https://saadm.dev/vacation/search</loc>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://saadm.dev/vacation/destinations.html</loc>
-    <lastmod>2026-06-11</lastmod>
+    <loc>https://saadm.dev/vacation/destinations</loc>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://saadm.dev/vacation/host.html</loc>
-    <lastmod>2026-06-11</lastmod>
+    <loc>https://saadm.dev/vacation/host</loc>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://saadm.dev/vacation/host-onboard.html</loc>
-    <lastmod>2026-06-11</lastmod>
+    <loc>https://saadm.dev/vacation/host-onboard</loc>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://saadm.dev/pos/index.html</loc>
-    <lastmod>2026-06-11</lastmod>
+    <loc>https://saadm.dev/pos/</loc>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://saadm.dev/sanad/index.html</loc>
-    <lastmod>2026-06-11</lastmod>
+    <loc>https://saadm.dev/sanad/</loc>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://saadm.dev/sanad/kb.html</loc>
-    <lastmod>2026-06-11</lastmod>
+    <loc>https://saadm.dev/sanad/kb</loc>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://saadm.dev/watad/index.html</loc>
-    <lastmod>2026-06-11</lastmod>
+    <loc>https://saadm.dev/watad/</loc>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://saadm.dev/hft-book/viewer.html</loc>
-    <lastmod>2026-06-11</lastmod>
+    <loc>https://saadm.dev/hft-book/viewer</loc>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://saadm.dev/notes/</loc>
-    <lastmod>2026-06-12</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://saadm.dev/notes/itch-orderbook-reconstruction.html</loc>
-    <lastmod>2026-06-12</lastmod>
+    <loc>https://saadm.dev/notes/itch-orderbook-reconstruction</loc>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://saadm.dev/notes/shopfloor-oee-engine.html</loc>
-    <lastmod>2026-06-12</lastmod>
+    <loc>https://saadm.dev/notes/shopfloor-oee-engine</loc>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://saadm.dev/notes/krones-operations-software.html</loc>
-    <lastmod>2026-06-12</lastmod>
+    <loc>https://saadm.dev/notes/krones-operations-software</loc>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
