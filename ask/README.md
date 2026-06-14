@@ -44,7 +44,7 @@ No embeddings, no vector DB - the corpus is ~5 KB total, simple substring + toke
 The Worker proxy is **not bundled** with this repo (Cloudflare's "Workers with Static Assets" configuration requires a dashboard-side mode switch - see `sanad/README.md` for the documented reference Worker). Once that's in place:
 
 1. Cloudflare → Workers & Pages → site → Settings → Variables and Secrets
-2. Add (or reuse) Encrypted Secret: `LLM_API_KEY = sk-ant-…`
+2. Add (or reuse) Encrypted Secret: `LLM_API_KEY = <your-api-key>`
 3. *(Optional)* Plain text variable: `ASK_DEFAULT_MODEL = fast`
 4. Push or trigger a redeploy. The chat's mode badge flips from **Demo mode** to **Live · Fast** automatically.
 

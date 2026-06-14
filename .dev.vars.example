@@ -5,7 +5,7 @@
 
 # Required for Sanad live AI mode. Without it the demo falls back to a
 # deterministic mock (the demo still works, just no real AI calls).
-LLM_API_KEY=sk-ant-...
+LLM_API_KEY=<your-api-key>
 
 # Optional. Default model the Sanad proxy uses when the client doesn't
 # specify one. Allowed: fast, balanced,

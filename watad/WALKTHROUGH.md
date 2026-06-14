@@ -491,7 +491,7 @@ are written in the same voice as the live AI responses. But if you want
 to flip on real AI:
 
 1. Cloudflare → Workers & Pages → site → Settings → Variables and Secrets.
-2. Add (or reuse from Sanad) `LLM_API_KEY = sk-ant-…`.
+2. Add (or reuse from Sanad) `LLM_API_KEY = <your-api-key>`.
 3. Extend the existing `_worker.js` with the `/api/watad/ai/*` handler
    (snippet at the bottom of `watad/README.md`).
 4. Push or trigger a redeploy.

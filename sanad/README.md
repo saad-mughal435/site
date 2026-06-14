@@ -58,7 +58,7 @@ Once Saad enables that, the steps are:
    };
    ```
 2. Cloudflare dashboard → **Workers & Pages → site → Settings → Variables and Secrets**
-   - Add Encrypted Secret: `LLM_API_KEY = sk-ant-...`
+   - Add Encrypted Secret: `LLM_API_KEY = <your-api-key>`
    - *(Optional)* Plain text: `SANAD_DEFAULT_MODEL = fast`
 3. Push or trigger a redeploy. The topbar badge flips to **Live · Fast**.
 

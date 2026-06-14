@@ -65,7 +65,7 @@ documented reference Worker that handles both `/api/sanad/ai/*` and
 `/api/watad/ai/*`). Once that's in place:
 
 1. Cloudflare → Workers & Pages → site → Settings → Variables and Secrets
-2. Add (or reuse) Encrypted Secret: `LLM_API_KEY = sk-ant-…`
+2. Add (or reuse) Encrypted Secret: `LLM_API_KEY = <your-api-key>`
 3. *(Optional)* Plain text variable: `WATAD_DEFAULT_MODEL = fast`
 4. Push or trigger a redeploy. Watad's topbar flips from **Demo mode** to
    **Live · Fast** automatically.
