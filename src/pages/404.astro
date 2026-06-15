@@ -1,3 +1,9 @@
+---
+// 404 page. Deliberately does NOT load lib/shell: the inline head script
+// below wires the theme toggle via document-level delegation, and the shell's
+// per-button listener on top would toggle twice per click. Only shell.css.
+import '../styles/shell.css';
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,9 +18,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
-<script>(function(){function s(t){if(t!=='light'&&t!=='dark')t='dark';document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('theme',t);}catch(e){}var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='light'?'#f5f7fc':'#07080d');}var t;try{t=localStorage.getItem('theme');}catch(e){}if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';s(t);document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.theme-toggle');if(!b)return;var c=document.documentElement.getAttribute('data-theme')||'dark';s(c==='light'?'dark':'light');});})();</script>
-<script type="module" src="./pages/notfound/main.ts"></script>
-<style>
+<script is:inline>(function(){function s(t){if(t!=='light'&&t!=='dark')t='dark';document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('theme',t);}catch(e){}var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='light'?'#f5f7fc':'#07080d');}var t;try{t=localStorage.getItem('theme');}catch(e){}if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';s(t);document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.theme-toggle');if(!b)return;var c=document.documentElement.getAttribute('data-theme')||'dark';s(c==='light'?'dark':'light');});})();</script>
+<style is:inline>
   .err-wrap { min-height: 78vh; display: grid; place-items: center; padding: 48px 24px; }
   .err {
     max-width: 620px;

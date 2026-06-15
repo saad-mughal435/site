@@ -1,3 +1,7 @@
+---
+import '../../styles/shell.css';
+import '../../styles/notes.css';
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,8 +45,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
-<script>(function(){try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.setAttribute('data-theme',t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='light'?'#f5f7fc':'#07080d');}catch(e){}})();</script>
-<script type="module" src="../pages/notes/main.ts"></script>
+<script is:inline>(function(){try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.setAttribute('data-theme',t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='light'?'#f5f7fc':'#07080d');}catch(e){}})();</script>
 </head>
 <body>
 
@@ -110,15 +113,15 @@
       <p class="note-code-label">src/itch/decoder.cpp</p>
       <pre class="note-code"><code>// Big-endian (network order) field readers. Portable: no reliance on host
 // endianness, alignment, or struct packing.
-inline std::uint16_t rd16(const std::uint8_t* p) {
+inline std::uint16_t rd16(const std::uint8_t* p) &#123;
     return static_cast&lt;std::uint16_t&gt;((std::uint16_t(p[0]) &lt;&lt; 8) | p[1]);
-}
-inline std::uint64_t rd_be(const std::uint8_t* p, int n) {
+&#125;
+inline std::uint64_t rd_be(const std::uint8_t* p, int n) &#123;
     std::uint64_t v = 0;
     for (int i = 0; i &lt; n; ++i) v = (v &lt;&lt; 8) | p[i];
     return v;
-}
-inline std::uint64_t rd48(const std::uint8_t* p) { return rd_be(p, 6); }</code></pre>
+&#125;
+inline std::uint64_t rd48(const std::uint8_t* p) &#123; return rd_be(p, 6); &#125;</code></pre>
 
       <p>Compilers see straight through this - the shifts fold into single byte-swap instructions -
         so the safety costs nothing. Every message type also validates its exact on-wire length
@@ -161,17 +164,17 @@ inline std::uint64_t rd48(const std::uint8_t* p) { return rd_be(p, 6); }</code><
         counters with acquire/release ordering:</p>
 
       <p class="note-code-label">include/core/spsc_ring.hpp</p>
-      <pre class="note-code"><code>bool push(const T&amp; item) {
+      <pre class="note-code"><code>bool push(const T&amp; item) &#123;
     const std::size_t head = head_.load(std::memory_order_relaxed);
     const std::size_t next = head + 1;
-    if (next - tail_cache_ &gt; cap_) {                 // maybe full -&gt; refresh
+    if (next - tail_cache_ &gt; cap_) &#123;                 // maybe full -&gt; refresh
         tail_cache_ = tail_.load(std::memory_order_acquire);
         if (next - tail_cache_ &gt; cap_) return false;  // genuinely full
-    }
+    &#125;
     slots_[head &amp; mask_] = item;
     head_.store(next, std::memory_order_release);     // publish the slot
     return true;
-}</code></pre>
+&#125;</code></pre>
 
       <p>The details that matter: capacity is rounded to a power of two so the wrap is a single
         AND; <code>head_</code> and <code>tail_</code> live on separate <code>alignas(64)</code>
@@ -242,5 +245,9 @@ inline std::uint64_t rd48(const std::uint8_t* p) { return rd_be(p, 6); }</code><
   </a>
   <span class="social-rail-line" aria-hidden="true"></span>
 </aside>
+<script>
+  import '../../lib/shell';
+  import '../../lib/back-to-top';
+</script>
 </body>
 </html>

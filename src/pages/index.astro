@@ -1,3 +1,12 @@
+---
+// Home page. The React app was never server-rendered (it mounted via
+// createRoot into #root and reads localStorage/?view= during render), so it
+// hydrates as a `client:only` island for EXACT parity — `client:load` would
+// SSR a default 'code' view and then mismatch on the client. The <noscript>
+// résumé below remains the no-JS / crawler fallback, unchanged.
+import { App } from '../components/home/App';
+import '../styles/home.css';
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -227,12 +236,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
 <link rel="preload" as="image" href="/saad.webp" fetchpriority="high" />
-<script>(function(){try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.setAttribute('data-theme',t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='light'?'#f5f7fc':'#07080d');}catch(e){}})();</script>
-<script type="module" src="./pages/home/main.tsx"></script>
+<script is:inline>(function(){try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.setAttribute('data-theme',t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='light'?'#f5f7fc':'#07080d');}catch(e){}})();</script>
 </head>
 <body>
 
-<div id="root"></div>
+<div id="root"><App client:only="react" /></div>
 
 <noscript>
   <div style="padding:40px 28px; max-width:780px; margin:24px auto; background:#ffffff; border-radius:14px; color:#3a4458; font-family:'Inter',system-ui,sans-serif; line-height:1.6;">
@@ -323,5 +331,11 @@
   </a>
   <span class="social-rail-line" aria-hidden="true"></span>
 </aside>
+
+<script>
+  import '../lib/back-to-top';
+  import { initFx } from '../components/home/fx';
+  initFx();
+</script>
 </body>
 </html>

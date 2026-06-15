@@ -1,3 +1,7 @@
+---
+import '../styles/shell.css';
+import '../styles/hft-latency.css';
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,8 +32,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
-<script>(function(){try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.setAttribute('data-theme',t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='light'?'#f5f7fc':'#07080d');}catch(e){}})();</script>
-<script type="module" src="./pages/hft-latency/main.ts"></script>
+<script is:inline>(function(){try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.setAttribute('data-theme',t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='light'?'#f5f7fc':'#07080d');}catch(e){}})();</script>
 </head>
 <body>
 
@@ -190,5 +193,10 @@
   </a>
   <span class="social-rail-line" aria-hidden="true"></span>
 </aside>
+<script>
+  import '../lib/shell';
+  import '../lib/back-to-top';
+  import '../scripts/hft-latency';
+</script>
 </body>
 </html>

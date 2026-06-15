@@ -10,6 +10,7 @@ Thumbs.db
 *.log
 node_modules/
 dist/
+.astro/
 .cache/
 
 # Helper / private files that should never be in git

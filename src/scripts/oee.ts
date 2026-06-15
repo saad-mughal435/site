@@ -11,10 +11,7 @@
    factor clamped to [0, 1]. No Infinity / NaN ever.
    ========================================================= */
 
-import '../../styles/shell.css';
-import '../../styles/oee.css';
-import '../../lib/shell';
-import '../../lib/back-to-top';
+// shell.css + oee.css + lib/shell + lib/back-to-top loaded by oee.astro.
 
 /* ---------- inputs ---------- */
 interface Inputs {

@@ -4,11 +4,7 @@
    - Sidebar nav for the MES/ERP showcase (port of demo.js)
    ========================================================= */
 
-import '../../styles/shell.css';
-import '../../styles/demo.css';
-import '../../lib/shell';
-import '../../lib/back-to-top';
-
+// shell.css + demo.css + lib/shell + lib/back-to-top are loaded by demo.astro.
 (function () {
   const links = document.querySelectorAll<HTMLElement>('.app-nav-link[data-view]');
   const views = document.querySelectorAll('.view');

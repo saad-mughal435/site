@@ -1,9 +1,12 @@
-// Compose the deployable asset directory (dist/) from an explicit allowlist.
-// Fail-loud: a missing source is a build failure, never a silent omission.
-// `vite build` runs first (and empties dist/), producing index.html,
-// contact.html, demo.html, 404.html, notes/*.html and static/*; compose then
-// layers everything Vite does not own (demo apps, platform config, images)
-// on top. Never wipe dist/ here.
+// Compose the deployable dist/ from an explicit allowlist of things Astro does
+// NOT own yet: the (still-static) demo apps + the repo-root docs that must also
+// live at the repo root for GitHub. `astro build` runs first (and empties dist/),
+// producing the shell pages, /static/* hashed assets, and everything in public/
+// (home.fx.*, tokens.css, _headers, _redirects, SEO files, images, .well-known).
+// compose then layers the demos + docs on top. Fail-loud: a missing source is a
+// build failure, never a silent omission. It also asserts the public/ passthrough
+// actually landed, so a broken Astro public copy can't ship a site with no
+// _headers / _redirects. Never wipe dist/ here.
 import { cpSync, existsSync, mkdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -11,26 +14,32 @@ import { fileURLToPath } from 'node:url';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = join(ROOT, 'dist');
 
+// Demo apps - still hand-written static, copied verbatim. Each migrates to Astro
+// in a later phase; remove it from this list as its rebuild reaches parity.
 const DIRS = [
   'app', 'ask', 'assets', 'b2b', 'b2c', 'hft-book', 'lahza', 'marsad',
   'nabta', 'pos', 'property', 'sanad', 'vacation', 'watad',
-  '.well-known',
 ];
 
+// Repo-root docs: kept at root so GitHub renders them; also served verbatim.
 const FILES = [
-  // kept at root FOREVER: ~78 demo pages (marsad, nabta, b2b, ...) load these
-  // as plain /home.fx.js + /home.fx.css + /tokens.css tags - never delete them.
-  'home.fx.js', 'home.fx.css', 'tokens.css',
-  // platform config + SEO files
-  '_headers', '_redirects', 'robots.txt', 'sitemap.xml', 'humans.txt',
-  'BingSiteAuth.xml',
-  // images
-  'og.png', 'saad.png', 'saad.webp',
-  // public docs (served today; harmless and honest)
   'README.md', 'CHANGELOG.md', 'CONTRIBUTING.md', 'SECURITY.md', 'LICENSE',
 ];
 
+// Provided by public/ via `astro build`. Assert they reached dist/ so a broken
+// public copy fails the build loudly instead of deploying a headless site.
+const PUBLIC_REQUIRED = [
+  '_headers', '_redirects', 'tokens.css', 'home.fx.js', 'home.fx.css',
+  'robots.txt', 'sitemap.xml', 'og.png', 'saad.webp', '.well-known/security.txt',
+];
+
 mkdirSync(DIST, { recursive: true });
+
+for (const f of PUBLIC_REQUIRED) {
+  if (!existsSync(join(DIST, f))) {
+    throw new Error(`compose: public/ asset missing from dist/: ${f} (did astro public copy fail?)`);
+  }
+}
 
 let copied = 0;
 for (const d of DIRS) {
@@ -45,4 +54,4 @@ for (const f of FILES) {
   cpSync(src, join(DIST, f));
   copied++;
 }
-console.log(`compose: ${copied} entries -> dist/`);
+console.log(`compose: ${copied} entries + ${PUBLIC_REQUIRED.length} public assets verified -> dist/`);

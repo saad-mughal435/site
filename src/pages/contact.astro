@@ -1,3 +1,9 @@
+---
+// Contact page. shell.css in frontmatter; lib/shell + lib/back-to-top + the
+// form module (scripts/contact) bundled at end of body. The Ask Saad chatbot
+// stays as plain /ask/* script tags (is:inline = served verbatim, unbundled).
+import '../styles/shell.css';
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,8 +36,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
-<script>(function(){try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.setAttribute('data-theme',t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='light'?'#f5f7fc':'#07080d');}catch(e){}})();</script>
-<script type="module" src="./pages/contact/main.ts"></script>
+<script is:inline>(function(){try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.setAttribute('data-theme',t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='light'?'#f5f7fc':'#07080d');}catch(e){}})();</script>
 <link rel="stylesheet" href="/ask/css/ask.css?v=20260520a" />
 </head>
 <body>
@@ -224,11 +229,11 @@
 </button>
 
 <!-- ================= ASK SAAD CHATBOT ================= -->
-<script src="/ask/js/app.js?v=20260520a"></script>
-<script src="/ask/js/corpus.js?v=20260611a"></script>
-<script src="/ask/js/engine.js?v=20260610c"></script>
-<script src="/ask/js/chat.js?v=20260610c"></script>
-<script>
+<script is:inline src="/ask/js/app.js?v=20260520a"></script>
+<script is:inline src="/ask/js/corpus.js?v=20260611a"></script>
+<script is:inline src="/ask/js/engine.js?v=20260610c"></script>
+<script is:inline src="/ask/js/chat.js?v=20260610c"></script>
+<script is:inline>
 (function () {
   // Wire the "Or ask the AI" button next to the Send button.
   // If the visitor has already typed their message, forward it to the chat
@@ -262,5 +267,11 @@
   </a>
   <span class="social-rail-line" aria-hidden="true"></span>
 </aside>
+
+<script>
+  import '../lib/shell';
+  import '../lib/back-to-top';
+  import '../scripts/contact';
+</script>
 </body>
 </html>

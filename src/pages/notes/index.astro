@@ -1,3 +1,7 @@
+---
+import '../../styles/shell.css';
+import '../../styles/notes.css';
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,31 +9,51 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <meta name="theme-color" content="#07080d" />
 <meta name="color-scheme" content="dark light" />
-<title>OEE playground | Muhammad Saad - ShopFloor API math in the browser</title>
-<meta name="description" content="Interactive OEE calculator running the exact math from the open-source ShopFloor API: OEE = Availability x Performance x Quality, with every divide-by-zero and over-speed case guarded. Computed live in your browser." />
-<link rel="canonical" href="https://saadm.dev/oee" />
+<title>Engineering notes | Muhammad Saad - Automation & Software Developer</title>
+<meta name="description" content="Short engineering write-ups by Muhammad Saad: reconstructing the NASDAQ ITCH 5.0 order book in C++17, building an open OEE engine in Spring Boot next to a production MES, and what running Krones beverage lines taught him about operations software." />
+<link rel="canonical" href="https://saadm.dev/notes/" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='12'%20fill='%2307080d'/%3E%3Ctext%20x='50%25'%20y='58%25'%20font-family='Space%20Grotesk,sans-serif'%20font-weight='700'%20font-size='34'%20fill='%23edf1f8'%20text-anchor='middle'%3ES%3C/text%3E%3Crect%20x='18'%20y='47'%20width='28'%20height='3'%20fill='%236e8eff'/%3E%3C/svg%3E" />
 <link rel="apple-touch-icon" href="/saad.png" />
 
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Saad - saadm.dev" />
-<meta property="og:title" content="OEE playground - Muhammad Saad" />
-<meta property="og:description" content="An interactive OEE calculator running the exact open-source ShopFloor API math: Availability x Performance x Quality, fully guarded, computed in your browser." />
-<meta property="og:url" content="https://saadm.dev/oee" />
+<meta property="og:title" content="Engineering notes - Muhammad Saad" />
+<meta property="og:description" content="Short write-ups on real work: C++17 order-book reconstruction, an open Spring Boot OEE engine, and operations-software lessons from the factory floor." />
+<meta property="og:url" content="https://saadm.dev/notes/" />
 <meta property="og:image" content="https://saadm.dev/og.png?v=20260611" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="OEE playground - Muhammad Saad" />
-<meta name="twitter:description" content="Compute OEE (Availability x Performance x Quality) live, using the same math as the open-source ShopFloor API." />
+<meta name="twitter:title" content="Engineering notes - Muhammad Saad" />
+<meta name="twitter:description" content="C++17 order-book reconstruction, an open Spring Boot OEE engine, and operations-software lessons from the factory floor." />
 <meta name="twitter:image" content="https://saadm.dev/og.png?v=20260611" />
 <meta name="robots" content="index, follow, max-snippet:-1" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Engineering notes - Muhammad Saad",
+  "url": "https://saadm.dev/notes/",
+  "author": { "@type": "Person", "name": "Muhammad Saad", "url": "https://saadm.dev/" },
+  "mainEntity": {
+    "@type": "ItemList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "url": "https://saadm.dev/notes/itch-orderbook-reconstruction.html",
+        "name": "Reconstructing the NASDAQ book: ITCH 5.0 decode and a lock-free SPSC pipeline" },
+      { "@type": "ListItem", "position": 2, "url": "https://saadm.dev/notes/shopfloor-oee-engine.html",
+        "name": "An open OEE engine: building ShopFloor API next to a production MES" },
+      { "@type": "ListItem", "position": 3, "url": "https://saadm.dev/notes/krones-operations-software.html",
+        "name": "What running Krones lines taught me about writing operations software" }
+    ]
+  }
+}
+</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
-<script>(function(){try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.setAttribute('data-theme',t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='light'?'#f5f7fc':'#07080d');}catch(e){}})();</script>
-<script type="module" src="./pages/oee/main.ts"></script>
+<script is:inline>(function(){try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.setAttribute('data-theme',t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='light'?'#f5f7fc':'#07080d');}catch(e){}})();</script>
 </head>
 <body>
 
@@ -44,7 +68,7 @@
       <a href="/index.html#about">About</a>
       <a href="/index.html#experience">Experience</a>
       <a href="/index.html#projects">Projects</a>
-      <a href="/notes/">Notes</a>
+      <a href="/notes/" class="active" aria-current="page">Notes</a>
       <a href="/demo.html" target="_blank" rel="noopener">Demo ↗</a>
       <a href="/contact.html">Contact</a>
     </nav>
@@ -56,105 +80,47 @@
   </div>
 </header>
 
-<main class="oee-page">
-  <header class="oee-head">
-    <span class="section-tag">ShopFloor API · OEE</span>
-    <h1>OEE playground.</h1>
-    <p><strong>OEE = Availability x Performance x Quality</strong> - the headline manufacturing KPI for
-      how much good output a line actually produced versus its theoretical best. This runs the same math
-      as my open-source
-      <a href="https://github.com/saad-mughal435/shopfloor-api" target="_blank" rel="noopener">ShopFloor API</a>,
-      a Spring Boot service built next to a production MES. Every value is computed in your browser - change
-      an input and the result updates instantly. Each factor is clamped to the 0-100% range and every
-      division is guarded, so there is no <code>Infinity</code> or <code>NaN</code>, ever.</p>
+<main class="notes-page">
+  <header class="notes-head">
+    <span class="section-tag">Engineering notes</span>
+    <h1>Write-ups from real work.</h1>
+    <p>Short, technical and honest: how things were built, what was measured, and what the factory
+      floor keeps teaching me about software. Every claim links to public code or gets called an
+      estimate.</p>
   </header>
 
-  <div class="oee-grid">
-    <!-- INPUTS -->
-    <section class="oee-card oee-inputs" aria-labelledby="oee-inputs-title">
-      <h2 id="oee-inputs-title">Inputs</h2>
-
-      <div class="oee-field">
-        <label for="oee-planned">Planned runtime <span class="oee-unit">min</span></label>
-        <input type="number" id="oee-planned" inputmode="numeric" min="0" step="1" value="480" />
-      </div>
-      <div class="oee-field">
-        <label for="oee-downtime">Downtime <span class="oee-unit">min</span></label>
-        <input type="number" id="oee-downtime" inputmode="numeric" min="0" step="1" value="55" />
-      </div>
-      <div class="oee-field">
-        <label for="oee-rated">Rated speed <span class="oee-unit">units/hour</span></label>
-        <input type="number" id="oee-rated" inputmode="numeric" min="0" step="1" value="1200" />
-      </div>
-      <div class="oee-field">
-        <label for="oee-good">Good units</label>
-        <input type="number" id="oee-good" inputmode="numeric" min="0" step="1" value="7600" />
-      </div>
-      <div class="oee-field">
-        <label for="oee-reject">Reject units</label>
-        <input type="number" id="oee-reject" inputmode="numeric" min="0" step="1" value="240" />
-      </div>
-
-      <div class="oee-presets" role="group" aria-label="Edge-case presets">
-        <p class="oee-presets-label">Edge cases (prove the guards):</p>
-        <button type="button" class="oee-preset" data-preset="zero-downtime">Zero downtime</button>
-        <button type="button" class="oee-preset" data-preset="over-speed">Over-speed (raw perf &gt; 100%)</button>
-        <button type="button" class="oee-preset" data-preset="all-rejects">All rejects</button>
-        <button type="button" class="oee-preset" data-preset="zero-planned">Zero planned time</button>
-      </div>
-    </section>
-
-    <!-- RESULTS -->
-    <section class="oee-card oee-results" aria-labelledby="oee-results-title">
-      <h2 id="oee-results-title">Result</h2>
-
-      <div class="oee-headline">
-        <div class="oee-headline-val" id="oee-value" aria-live="polite">--</div>
-        <div class="oee-headline-label">Overall OEE</div>
-      </div>
-
-      <div class="oee-factors">
-        <div class="oee-factor">
-          <div class="oee-factor-top"><span>Availability</span><span class="oee-factor-pct" id="oee-avail-pct">--</span></div>
-          <div class="oee-meter"><span class="oee-meter-fill" id="oee-avail-bar" style="width:0%"></span></div>
-        </div>
-        <div class="oee-factor">
-          <div class="oee-factor-top"><span>Performance</span><span class="oee-factor-pct" id="oee-perf-pct">--</span></div>
-          <div class="oee-meter"><span class="oee-meter-fill" id="oee-perf-bar" style="width:0%"></span></div>
-        </div>
-        <div class="oee-factor">
-          <div class="oee-factor-top"><span>Quality</span><span class="oee-factor-pct" id="oee-qual-pct">--</span></div>
-          <div class="oee-meter"><span class="oee-meter-fill" id="oee-qual-bar" style="width:0%"></span></div>
-        </div>
-      </div>
-
-      <p class="oee-flag" id="oee-flag" hidden></p>
-
-      <div class="oee-breakdown" aria-live="polite">
-        <p class="oee-breakdown-title">How it was computed</p>
-        <ul class="oee-steps" id="oee-steps"></ul>
-      </div>
-    </section>
-  </div>
-
-  <section class="oee-about" aria-labelledby="oee-about-title">
-    <h2 id="oee-about-title">The math (same as the API)</h2>
-    <p>Run time is planned time minus downtime, floored at zero. Availability is run time over planned
-      time. Performance compares the ideal time the produced units <em>should</em> have taken at rated
-      speed against the actual run time. Quality is good units over total units. Each factor is clamped
-      to [0, 1]; multiply the three for OEE. Divide-by-zero anywhere (no planned time, no run time, no
-      units, no rated speed) returns 0 for that factor instead of blowing up - this mirrors a real guard
-      in the Java source.</p>
-    <p class="lat-code-label oee-code-label">Java · OeeCalculator</p>
-    <pre class="oee-code"><code>runTime      = max(0, planned - downtime)
-availability = clamp01(runTime / planned)
-idealMinutes = rated &lt;= 0 ? 0 : total * 60 / rated
-performance  = clamp01(idealMinutes / runTime)
-quality      = clamp01(good / total)
-oee          = availability * performance * quality</code></pre>
-    <p class="oee-meta"><a href="https://github.com/saad-mughal435/shopfloor-api" target="_blank" rel="noopener">ShopFloor API source ↗</a>
-      <a href="/notes/shopfloor-oee-engine.html">Read the engineering note →</a></p>
-  </section>
+  <ul class="note-list">
+    <li class="note-list-item">
+      <a href="/notes/itch-orderbook-reconstruction.html">
+        <div class="note-list-meta"><span>Note 01</span><span>2026-06-11</span><span>C++17 · HFT</span><span>~7 min</span></div>
+        <h2>Reconstructing the NASDAQ book: ITCH 5.0 decode and a lock-free SPSC pipeline</h2>
+        <p>Safe big-endian decoding instead of struct casts, BinaryFILE vs MoldUDP64 with gap
+          detection, a price-level store chosen by a measured A/B, and a wait-free ring verified
+          with ThreadSanitizer - plus the browser L2 viewer that renders the result.</p>
+        <span class="note-list-more">Read the note →</span>
+      </a>
+    </li>
+    <li class="note-list-item">
+      <a href="/notes/shopfloor-oee-engine.html">
+        <div class="note-list-meta"><span>Note 02</span><span>2026-06-11</span><span>Java · Spring Boot · MES</span><span>~6 min</span></div>
+        <h2>An open OEE engine: building ShopFloor API next to a production MES</h2>
+        <p>The production system is private, so the domain got rebuilt in the open: a pure OEE
+          calculator with the divide-by-zero and over-speed cases handled, compute-at-close instead
+          of cron, Flyway with Hibernate validate, and Testcontainers against real PostgreSQL.</p>
+        <span class="note-list-more">Read the note →</span>
+      </a>
+    </li>
+    <li class="note-list-item">
+      <a href="/notes/krones-operations-software.html">
+        <div class="note-list-meta"><span>Note 03</span><span>2026-06-11</span><span>Essay · Operations</span><span>~5 min</span></div>
+        <h2>What running Krones lines taught me about writing operations software</h2>
+        <p>Design for the 6 a.m. handover, beat paper before you beat Excel, ask for less data and
+          get better data, treat the report as the product, and measure honestly - from someone who
+          runs the lines and writes the software.</p>
+        <span class="note-list-more">Read the note →</span>
+      </a>
+    </li>
+  </ul>
 </main>
 
 <!-- ================= FOOTER ================= -->
@@ -192,5 +158,9 @@ oee          = availability * performance * quality</code></pre>
   </a>
   <span class="social-rail-line" aria-hidden="true"></span>
 </aside>
+<script>
+  import '../../lib/shell';
+  import '../../lib/back-to-top';
+</script>
 </body>
 </html>

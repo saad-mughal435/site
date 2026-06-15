@@ -5,12 +5,8 @@
    reused from src/lib.
    ========================================================= */
 
-import '../../styles/shell.css';
-import '../../styles/hft-latency.css';
-import '../../lib/shell';
-import '../../lib/back-to-top';
-
-import data from './data.json';
+// shell.css + hft-latency.css + lib/shell + lib/back-to-top loaded by hft-latency.astro.
+import data from './hft-latency.data.json';
 
 /* ---------- types (mirror data.json; defensive about extra fields) ---------- */
 type Pct = 'p50_ns' | 'p95_ns' | 'p99_ns' | 'max_ns';

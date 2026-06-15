@@ -7,10 +7,7 @@
    The Ask Saad chatbot stays as plain /ask/... tags in the HTML.
    ========================================================= */
 
-import '../../styles/shell.css';
-import '../../lib/shell';
-import '../../lib/back-to-top';
-
+// shell.css + lib/shell + lib/back-to-top are loaded by contact.astro.
 (function () {
   const form = document.getElementById('contact-form') as HTMLFormElement | null;
   if (!form) return;
