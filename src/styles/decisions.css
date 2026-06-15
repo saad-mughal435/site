@@ -1,0 +1,95 @@
+/* =========================================================
+   decisions.css - engineering decisions log (/decisions)
+   /uses-style list of real architecture/tooling choices,
+   each with reasoning + the trade-off accepted, grouped by
+   project. Layers on shell.css tokens; light + dark free.
+   ========================================================= */
+
+.dec-page { max-width: 1100px; margin: 0 auto; padding: 56px 30px 80px; }
+
+/* ---------- head ---------- */
+.dec-head { max-width: 760px; margin-bottom: 40px; }
+.dec-head h1 {
+  font-family: var(--display); font-weight: 600;
+  font-size: clamp(30px, 4.5vw, 44px); letter-spacing: -0.02em; line-height: 1.12;
+  margin: 14px 0 14px; color: var(--ink);
+}
+.dec-head p { color: var(--ink-soft); font-size: 15.5px; line-height: 1.65; margin: 0; }
+.dec-head p a { color: var(--signal); text-decoration: none; }
+.dec-head p a:hover { text-decoration: underline; }
+
+/* ---------- project group ---------- */
+.dec-group { margin: 0 0 14px; }
+.dec-group-head {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 14px;
+  padding: 26px 0 14px; margin-top: 18px;
+  border-top: 1px solid var(--rule-2);
+}
+.dec-group:first-of-type .dec-group-head { border-top: 0; padding-top: 4px; margin-top: 0; }
+.dec-group-head h2 {
+  font-family: var(--display); font-weight: 600;
+  font-size: clamp(20px, 2.6vw, 26px); letter-spacing: -0.015em; line-height: 1.2;
+  color: var(--ink); margin: 0;
+}
+.dec-group-head .dec-group-meta {
+  font-family: var(--mono); font-size: 12px; color: var(--ink-mute);
+}
+.dec-group-head a { color: var(--signal); text-decoration: none; }
+.dec-group-head a:hover { text-decoration: underline; }
+.dec-group-sub { color: var(--ink-soft); font-size: 14px; line-height: 1.55; margin: 0 0 16px; max-width: 760px; }
+
+/* ---------- decision entries ---------- */
+.dec-list { display: grid; gap: 14px; list-style: none; margin: 0; padding: 0; }
+.dec-item {
+  background: var(--panel); border: 1px solid var(--rule);
+  border-radius: var(--radius); padding: 22px 24px;
+  transition: border-color var(--t) ease, transform var(--t) var(--ease), box-shadow var(--t) ease;
+}
+.dec-item:hover { border-color: var(--rule-2); transform: translateY(-2px); box-shadow: var(--shadow); }
+
+.dec-item-num {
+  font-family: var(--mono); font-size: 11px; color: var(--ink-mute);
+  letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 8px;
+}
+.dec-item h3 {
+  font-family: var(--display); font-weight: 600;
+  font-size: 17.5px; letter-spacing: -0.01em; line-height: 1.3;
+  color: var(--ink); margin: 0 0 12px;
+}
+.dec-item h3 .dec-vs { color: var(--ink-mute); font-weight: 500; }
+
+.dec-row { display: grid; grid-template-columns: 86px 1fr; gap: 6px 16px; align-items: baseline; }
+.dec-row + .dec-row { margin-top: 10px; }
+.dec-key {
+  font-family: var(--mono); font-size: 10.5px; color: var(--ink-mute);
+  text-transform: uppercase; letter-spacing: 1.2px; padding-top: 2px;
+}
+.dec-row.dec-why .dec-key { color: var(--signal); }
+.dec-val { color: var(--ink-soft); font-size: 14.5px; line-height: 1.6; margin: 0; }
+.dec-val strong { color: var(--ink); }
+.dec-val code {
+  font-family: var(--mono); font-size: 0.88em; color: var(--ink);
+  background: var(--signal-wash); padding: 1px 5px; border-radius: 3px;
+}
+.dec-val a { color: var(--signal); text-decoration: none; }
+.dec-val a:hover { text-decoration: underline; }
+.dec-tradeoff .dec-val { color: var(--ink-mute); }
+.dec-tradeoff .dec-val strong { color: var(--ink-soft); }
+
+/* ---------- foot ---------- */
+.dec-foot {
+  margin-top: 44px; padding-top: 26px;
+  border-top: 1px solid var(--rule);
+  display: flex; flex-wrap: wrap; gap: 12px 26px;
+  font-family: var(--mono); font-size: 12.5px;
+}
+.dec-foot a { color: var(--signal); text-decoration: none; }
+.dec-foot a:hover { text-decoration: underline; }
+.dec-foot .dec-foot-mute { color: var(--ink-mute); }
+
+@media (max-width: 760px) {
+  .dec-page { padding: 36px 20px 60px; }
+  .dec-item { padding: 18px 18px; }
+  .dec-row { grid-template-columns: 1fr; gap: 2px; }
+  .dec-key { padding-top: 0; }
+}

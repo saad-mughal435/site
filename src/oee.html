@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#07080d" />
+<meta name="color-scheme" content="dark light" />
+<title>OEE playground | Muhammad Saad - ShopFloor API math in the browser</title>
+<meta name="description" content="Interactive OEE calculator running the exact math from the open-source ShopFloor API: OEE = Availability x Performance x Quality, with every divide-by-zero and over-speed case guarded. Computed live in your browser." />
+<link rel="canonical" href="https://saadm.dev/oee" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='12'%20fill='%2307080d'/%3E%3Ctext%20x='50%25'%20y='58%25'%20font-family='Space%20Grotesk,sans-serif'%20font-weight='700'%20font-size='34'%20fill='%23edf1f8'%20text-anchor='middle'%3ES%3C/text%3E%3Crect%20x='18'%20y='47'%20width='28'%20height='3'%20fill='%236e8eff'/%3E%3C/svg%3E" />
+<link rel="apple-touch-icon" href="/saad.png" />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Saad - saadm.dev" />
+<meta property="og:title" content="OEE playground - Muhammad Saad" />
+<meta property="og:description" content="An interactive OEE calculator running the exact open-source ShopFloor API math: Availability x Performance x Quality, fully guarded, computed in your browser." />
+<meta property="og:url" content="https://saadm.dev/oee" />
+<meta property="og:image" content="https://saadm.dev/og.png?v=20260611" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="OEE playground - Muhammad Saad" />
+<meta name="twitter:description" content="Compute OEE (Availability x Performance x Quality) live, using the same math as the open-source ShopFloor API." />
+<meta name="twitter:image" content="https://saadm.dev/og.png?v=20260611" />
+<meta name="robots" content="index, follow, max-snippet:-1" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+<script>(function(){try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.setAttribute('data-theme',t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='light'?'#f5f7fc':'#07080d');}catch(e){}})();</script>
+<script type="module" src="./pages/oee/main.ts"></script>
+</head>
+<body>
+
+<!-- ================= NAV ================= -->
+<header class="nav">
+  <div class="container nav-inner">
+    <a href="/index.html#top" class="logo">
+      <img class="logo-photo" width="36" height="36" decoding="async" src="/saad.webp" alt="Saad" />
+      <span class="logo-text">Saad</span>
+    </a>
+    <nav class="nav-links">
+      <a href="/index.html#about">About</a>
+      <a href="/index.html#experience">Experience</a>
+      <a href="/index.html#projects">Projects</a>
+      <a href="/notes/">Notes</a>
+      <a href="/demo.html" target="_blank" rel="noopener">Demo ↗</a>
+      <a href="/contact.html">Contact</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Toggle light or dark theme" title="Toggle light / dark">
+      <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" /></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" /><path d="M12 2v2.4M12 19.6V22M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M2 12h2.4M19.6 12H22M4.9 19.1l1.7-1.7M17.4 6.6l1.7-1.7" /></svg>
+    </button>
+    <a class="nav-cta" href="mailto:saad@saadm.dev">Email direct</a>
+  </div>
+</header>
+
+<main class="oee-page">
+  <header class="oee-head">
+    <span class="section-tag">ShopFloor API · OEE</span>
+    <h1>OEE playground.</h1>
+    <p><strong>OEE = Availability x Performance x Quality</strong> - the headline manufacturing KPI for
+      how much good output a line actually produced versus its theoretical best. This runs the same math
+      as my open-source
+      <a href="https://github.com/saad-mughal435/shopfloor-api" target="_blank" rel="noopener">ShopFloor API</a>,
+      a Spring Boot service built next to a production MES. Every value is computed in your browser - change
+      an input and the result updates instantly. Each factor is clamped to the 0-100% range and every
+      division is guarded, so there is no <code>Infinity</code> or <code>NaN</code>, ever.</p>
+  </header>
+
+  <div class="oee-grid">
+    <!-- INPUTS -->
+    <section class="oee-card oee-inputs" aria-labelledby="oee-inputs-title">
+      <h2 id="oee-inputs-title">Inputs</h2>
+
+      <div class="oee-field">
+        <label for="oee-planned">Planned runtime <span class="oee-unit">min</span></label>
+        <input type="number" id="oee-planned" inputmode="numeric" min="0" step="1" value="480" />
+      </div>
+      <div class="oee-field">
+        <label for="oee-downtime">Downtime <span class="oee-unit">min</span></label>
+        <input type="number" id="oee-downtime" inputmode="numeric" min="0" step="1" value="55" />
+      </div>
+      <div class="oee-field">
+        <label for="oee-rated">Rated speed <span class="oee-unit">units/hour</span></label>
+        <input type="number" id="oee-rated" inputmode="numeric" min="0" step="1" value="1200" />
+      </div>
+      <div class="oee-field">
+        <label for="oee-good">Good units</label>
+        <input type="number" id="oee-good" inputmode="numeric" min="0" step="1" value="7600" />
+      </div>
+      <div class="oee-field">
+        <label for="oee-reject">Reject units</label>
+        <input type="number" id="oee-reject" inputmode="numeric" min="0" step="1" value="240" />
+      </div>
+
+      <div class="oee-presets" role="group" aria-label="Edge-case presets">
+        <p class="oee-presets-label">Edge cases (prove the guards):</p>
+        <button type="button" class="oee-preset" data-preset="zero-downtime">Zero downtime</button>
+        <button type="button" class="oee-preset" data-preset="over-speed">Over-speed (raw perf &gt; 100%)</button>
+        <button type="button" class="oee-preset" data-preset="all-rejects">All rejects</button>
+        <button type="button" class="oee-preset" data-preset="zero-planned">Zero planned time</button>
+      </div>
+    </section>
+
+    <!-- RESULTS -->
+    <section class="oee-card oee-results" aria-labelledby="oee-results-title">
+      <h2 id="oee-results-title">Result</h2>
+
+      <div class="oee-headline">
+        <div class="oee-headline-val" id="oee-value" aria-live="polite">--</div>
+        <div class="oee-headline-label">Overall OEE</div>
+      </div>
+
+      <div class="oee-factors">
+        <div class="oee-factor">
+          <div class="oee-factor-top"><span>Availability</span><span class="oee-factor-pct" id="oee-avail-pct">--</span></div>
+          <div class="oee-meter"><span class="oee-meter-fill" id="oee-avail-bar" style="width:0%"></span></div>
+        </div>
+        <div class="oee-factor">
+          <div class="oee-factor-top"><span>Performance</span><span class="oee-factor-pct" id="oee-perf-pct">--</span></div>
+          <div class="oee-meter"><span class="oee-meter-fill" id="oee-perf-bar" style="width:0%"></span></div>
+        </div>
+        <div class="oee-factor">
+          <div class="oee-factor-top"><span>Quality</span><span class="oee-factor-pct" id="oee-qual-pct">--</span></div>
+          <div class="oee-meter"><span class="oee-meter-fill" id="oee-qual-bar" style="width:0%"></span></div>
+        </div>
+      </div>
+
+      <p class="oee-flag" id="oee-flag" hidden></p>
+
+      <div class="oee-breakdown" aria-live="polite">
+        <p class="oee-breakdown-title">How it was computed</p>
+        <ul class="oee-steps" id="oee-steps"></ul>
+      </div>
+    </section>
+  </div>
+
+  <section class="oee-about" aria-labelledby="oee-about-title">
+    <h2 id="oee-about-title">The math (same as the API)</h2>
+    <p>Run time is planned time minus downtime, floored at zero. Availability is run time over planned
+      time. Performance compares the ideal time the produced units <em>should</em> have taken at rated
+      speed against the actual run time. Quality is good units over total units. Each factor is clamped
+      to [0, 1]; multiply the three for OEE. Divide-by-zero anywhere (no planned time, no run time, no
+      units, no rated speed) returns 0 for that factor instead of blowing up - this mirrors a real guard
+      in the Java source.</p>
+    <p class="lat-code-label oee-code-label">Java · OeeCalculator</p>
+    <pre class="oee-code"><code>runTime      = max(0, planned - downtime)
+availability = clamp01(runTime / planned)
+idealMinutes = rated &lt;= 0 ? 0 : total * 60 / rated
+performance  = clamp01(idealMinutes / runTime)
+quality      = clamp01(good / total)
+oee          = availability * performance * quality</code></pre>
+    <p class="oee-meta"><a href="https://github.com/saad-mughal435/shopfloor-api" target="_blank" rel="noopener">ShopFloor API source ↗</a>
+      <a href="/notes/shopfloor-oee-engine.html">Read the engineering note →</a></p>
+  </section>
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-copy">© <span id="year"></span> Saad. Built with HTML, CSS, and a healthy disrespect for manual work.</div>
+    <div class="footer-links">
+      <a href="mailto:saad@saadm.dev">Email</a>
+      <a href="https://wa.me/971502578065" target="_blank" rel="noopener">WhatsApp</a>
+      <a href="https://www.linkedin.com/in/muhammadsaad435/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/saad-mughal435" target="_blank" rel="noopener">GitHub</a>
+      <a href="/index.html#top">← Back to home</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ================= BACK TO TOP ================= -->
+<button class="back-to-top" id="back-to-top" type="button" aria-label="Scroll back to top" title="Back to top">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>
+</button>
+
+<!-- ================= LEFT CONTACT RAIL ================= -->
+<aside class="social-rail" aria-label="Contact Saad">
+  <a class="social-link" href="mailto:saad@saadm.dev" aria-label="Email Saad" title="Email">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v.4l-10 6L2 6.4V6Zm0 2.7V18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8.7l-9.47 5.68a1 1 0 0 1-1.06 0L2 8.7Z"/></svg>
+  </a>
+  <a class="social-link" href="https://wa.me/971502578065" target="_blank" rel="noopener" aria-label="WhatsApp Saad" title="WhatsApp">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885M20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.358.101 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.582 0 11.94-5.358 11.943-11.893a11.821 11.821 0 0 0-3.416-8.452"/></svg>
+  </a>
+  <a class="social-link" href="https://github.com/saad-mughal435" target="_blank" rel="noopener" aria-label="Saad on GitHub" title="GitHub">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+  </a>
+  <a class="social-link" href="https://www.linkedin.com/in/muhammadsaad435/" target="_blank" rel="noopener" aria-label="Saad on LinkedIn" title="LinkedIn">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg>
+  </a>
+  <span class="social-rail-line" aria-hidden="true"></span>
+</aside>
+</body>
+</html>

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#07080d" />
+<meta name="color-scheme" content="dark light" />
+<title>Case study: building a production MES/ERP at Kingsley Beverage | Muhammad Saad</title>
+<meta name="description" content="An engineering case study of the production MES/ERP that Muhammad Saad designed, built and runs at Kingsley Beverage FZCO in Dubai: sole developer, in production since 2025, replacing Excel and paper across 5 departments with Sage Evolution integration - Python/FastAPI, MongoDB, SQL Server, Docker, Nginx, React. Context, constraints, architecture, trade-offs and outcomes. All specifics sanitized." />
+<link rel="canonical" href="https://saadm.dev/case-study" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='12'%20fill='%2307080d'/%3E%3Ctext%20x='50%25'%20y='58%25'%20font-family='Space%20Grotesk,sans-serif'%20font-weight='700'%20font-size='34'%20fill='%23edf1f8'%20text-anchor='middle'%3ES%3C/text%3E%3Crect%20x='18'%20y='47'%20width='28'%20height='3'%20fill='%236e8eff'/%3E%3C/svg%3E" />
+<link rel="apple-touch-icon" href="/saad.png" />
+
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="Saad - saadm.dev" />
+<meta property="og:title" content="Case study: building a production MES/ERP at Kingsley Beverage" />
+<meta property="og:description" content="Sole developer of a production MES/ERP for a Dubai beverage plant - the context, constraints, architecture, trade-offs and outcomes, with all specifics sanitized." />
+<meta property="og:url" content="https://saadm.dev/case-study" />
+<meta property="og:image" content="https://saadm.dev/og.png?v=20260611" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Case study: building a production MES/ERP at Kingsley Beverage" />
+<meta name="twitter:description" content="An engineering case study of a production MES/ERP for a Dubai beverage plant - context, constraints, architecture, trade-offs and outcomes. All specifics sanitized." />
+<meta name="twitter:image" content="https://saadm.dev/og.png?v=20260611" />
+<meta name="robots" content="index, follow, max-snippet:-1" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Case study: building a production MES/ERP at Kingsley Beverage",
+  "datePublished": "2026-06-14",
+  "author": { "@type": "Person", "name": "Muhammad Saad", "url": "https://saadm.dev/" },
+  "mainEntityOfPage": "https://saadm.dev/case-study",
+  "about": "Production Manufacturing Execution System and ERP for a beverage plant - production planning, QC, batch and expiry tracking, FIFO inventory, dispatch, accounts and Sage Evolution integration.",
+  "image": "https://saadm.dev/og.png?v=20260611"
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+<script>(function(){try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.setAttribute('data-theme',t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='light'?'#f5f7fc':'#07080d');}catch(e){}})();</script>
+<script type="module" src="./pages/case-study/main.ts"></script>
+</head>
+<body>
+
+<!-- ================= NAV ================= -->
+<header class="nav">
+  <div class="container nav-inner">
+    <a href="/index.html#top" class="logo">
+      <img class="logo-photo" width="36" height="36" decoding="async" src="/saad.webp" alt="Saad" />
+      <span class="logo-text">Saad</span>
+    </a>
+    <nav class="nav-links">
+      <a href="/index.html#about">About</a>
+      <a href="/index.html#experience">Experience</a>
+      <a href="/index.html#projects">Projects</a>
+      <a href="/notes/">Notes</a>
+      <a href="/demo.html" target="_blank" rel="noopener">Demo ↗</a>
+      <a href="/contact.html">Contact</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Toggle light or dark theme" title="Toggle light / dark">
+      <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" /></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" /><path d="M12 2v2.4M12 19.6V22M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M2 12h2.4M19.6 12H22M4.9 19.1l1.7-1.7M17.4 6.6l1.7-1.7" /></svg>
+    </button>
+    <a class="nav-cta" href="mailto:saad@saadm.dev">Email direct</a>
+  </div>
+</header>
+
+<main class="cs-page">
+  <article class="cs-wrap">
+    <header class="cs-head">
+      <span class="section-tag">Engineering case study</span>
+      <h1>Building a production MES/ERP at Kingsley Beverage</h1>
+      <p class="cs-lede">A single operations platform that replaced spreadsheets and paper across
+        five departments of a Dubai beverage plant - designed, built and run by one developer, in
+        production since 2025. Published with Kingsley's permission; every specific below is
+        sanitized, so there are no real customers, suppliers, brands or production figures here.</p>
+      <div class="cs-meta">
+        <span>2026-06-14</span>
+        <span>~8 min read</span>
+        <a href="/demo.html" target="_blank" rel="noopener">Sanitized demo ↗</a>
+        <a href="https://github.com/saad-mughal435/shopfloor-api" target="_blank" rel="noopener">Open companion: ShopFloor API ↗</a>
+      </div>
+
+      <dl class="cs-facts">
+        <div class="cs-fact"><dt>Role</dt><dd>Sole developer &amp; operator</dd></div>
+        <div class="cs-fact"><dt>Status</dt><dd>In production since 2025</dd></div>
+        <div class="cs-fact"><dt>Scope</dt><dd>5 departments, ~20 modules</dd></div>
+        <div class="cs-fact"><dt>Stack</dt><dd>Python/FastAPI, Mongo, SQL Server, Docker, React</dd></div>
+      </dl>
+    </header>
+
+    <div class="cs-body">
+      <h2><span class="cs-step">01</span>The problem: a plant run from spreadsheets</h2>
+      <p>Before the platform, the plant ran on Excel files and paper. Production plans lived in one
+        workbook; QC seam-check and batch records on clipboards; inventory and expiry in another
+        spreadsheet; dispatch on printed sheets; and the daily numbers were re-keyed by hand into a
+        management report each morning. None of it was wrong, exactly - it was just spread across
+        files that did not talk to each other, owned by different people, and reconciled by memory.
+        The same quantity got typed three times into three documents, and when they disagreed,
+        someone spent the start of their day finding out which was right.</p>
+      <p>The cost was not one big failure but a steady tax: time lost re-entering data, batch and
+        expiry traceability that depended on a single person remembering where the sheet was, and a
+        morning report that was only as fresh as whoever had finished typing. The goal was narrow
+        and concrete - one system of record for the plant's operations, with the daily report
+        falling out of it automatically rather than being assembled by hand.</p>
+
+      <h2><span class="cs-step">02</span>Constraints that shaped every decision</h2>
+      <ul class="cs-cards">
+        <li class="cs-card">
+          <h3>The machine layer is OEM-locked</h3>
+          <p>The production lines are Krones - superb, and entirely closed. The PLC layer is the
+            vendor's domain, warranty-locked, and not something a plant developer should touch. So
+            the platform lives <em>around</em> the automation, not inside it: it captures
+            production, downtime, QC and batch data and turns it into reports, while the machines
+            keep running the line.</p>
+          <p class="cs-tradeoff"><strong>Trade-off:</strong> no direct telemetry from the PLCs;
+            operator-entered data is the source of truth, so the forms have to be trustworthy.</p>
+        </li>
+        <li class="cs-card">
+          <h3>One developer, end to end</h3>
+          <p>Data model, backend, frontend, deployment, ops and support are all mine. That rules
+            out anything that needs a team to keep alive - exotic infrastructure, a microservice
+            sprawl, a build pipeline only one consultant understands. The bias is toward boring,
+            durable choices I can debug at 6 a.m. without a second opinion.</p>
+          <p class="cs-tradeoff"><strong>Trade-off:</strong> deliberately conservative tech;
+            cleverness is a liability when there is no one to hand it to.</p>
+        </li>
+        <li class="cs-card">
+          <h3>The users are operators, mid-shift</h3>
+          <p>This software is read by a night-shift operator handing over at 6 a.m., on a shared
+            terminal next to a machine, while three things need attention. One screen per question,
+            big numbers first, state that survives an interruption.</p>
+          <p class="cs-tradeoff"><strong>Trade-off:</strong> fewer fields, fewer features - every
+            extra input is a tax collected on every unit, every shift, forever.</p>
+        </li>
+        <li class="cs-card">
+          <h3>It has to beat paper, honestly</h3>
+          <p>Paper boots instantly, never loses a session and survives a network outage. A digital
+            form does not win by being digital; it wins by being at least as fast to fill in and
+            then doing what paper cannot - totalling itself, flagging the out-of-range value,
+            landing in the report without being retyped.</p>
+          <p class="cs-tradeoff"><strong>Trade-off:</strong> if a form is slower than the
+            clipboard, the floor quietly goes back to the clipboard - so speed beat polish.</p>
+        </li>
+      </ul>
+
+      <h2><span class="cs-step">03</span>Architecture</h2>
+      <p>The shape is deliberately simple: role-specific web UIs for each department feed a set of
+        FastAPI services, which read and write two stores - MongoDB for the document-shaped
+        operational data (production logs, QC records, batches) and SQL Server where relational
+        integrity and the accounts side need it. A custom adapter syncs the relevant records into
+        Sage Evolution so finance keeps its system of record. Reports are rendered server-side as
+        PDFs - six templates - because the report is what management actually opens. The whole thing
+        runs in Docker on a Linux VM, behind a Cloudflare-fronted nginx.</p>
+
+      <figure class="cs-figure">
+        <svg class="cs-diagram" viewBox="0 0 760 430" role="img"
+             aria-label="Architecture: operators, QC, stores and finance use role-based web UIs that call FastAPI services; the services read and write MongoDB and SQL Server, sync to Sage Evolution through a custom adapter, and render PDF reports server-side. Everything runs in Docker on a Linux VM behind a Cloudflare-fronted nginx.">
+          <!-- deployment band -->
+          <rect class="d-band" x="14" y="14" width="732" height="402" rx="10" />
+          <text class="d-band-label" x="28" y="34">Docker on a Linux VM · Cloudflare-fronted nginx</text>
+
+          <!-- arrowheads -->
+          <defs>
+            <marker id="ah" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+              <path class="d-arrow" d="M0 0 L6 3 L0 6 Z" />
+            </marker>
+            <marker id="aha" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+              <path class="d-arrow-accent" d="M0 0 L6 3 L0 6 Z" />
+            </marker>
+          </defs>
+
+          <!-- USERS column -->
+          <text class="d-sub" x="34" y="64">USERS (role-based UI)</text>
+          <rect class="d-node" x="30" y="74" width="150" height="40" rx="8" />
+          <text class="d-label" x="46" y="99">Operators</text>
+          <rect class="d-node" x="30" y="124" width="150" height="40" rx="8" />
+          <text class="d-label" x="46" y="149">QC</text>
+          <rect class="d-node" x="30" y="174" width="150" height="40" rx="8" />
+          <text class="d-label" x="46" y="199">Stores / dispatch</text>
+          <rect class="d-node" x="30" y="224" width="150" height="40" rx="8" />
+          <text class="d-label" x="46" y="249">Finance</text>
+
+          <!-- flows users -> API -->
+          <path class="d-flow" d="M180 94 H300" marker-end="url(#ah)" />
+          <path class="d-flow" d="M180 144 H300" marker-end="url(#ah)" />
+          <path class="d-flow" d="M180 194 H300" marker-end="url(#ah)" />
+          <path class="d-flow" d="M180 244 H300" marker-end="url(#ah)" />
+
+          <!-- API core -->
+          <rect class="d-node-accent" x="302" y="92" width="156" height="160" rx="10" />
+          <text class="d-label" x="322" y="120">FastAPI services</text>
+          <text class="d-sub" x="322" y="140">~20 modules</text>
+          <text class="d-sub" x="322" y="162">production · QC</text>
+          <text class="d-sub" x="322" y="178">batch / expiry</text>
+          <text class="d-sub" x="322" y="194">inventory (FIFO)</text>
+          <text class="d-sub" x="322" y="210">dispatch · accounts</text>
+          <text class="d-sub" x="322" y="232">role-based access</text>
+
+          <!-- data stores -->
+          <rect class="d-node" x="560" y="74" width="170" height="44" rx="8" />
+          <text class="d-label" x="578" y="93">MongoDB</text>
+          <text class="d-sub" x="578" y="109">operational documents</text>
+
+          <rect class="d-node" x="560" y="134" width="170" height="44" rx="8" />
+          <text class="d-label" x="578" y="153">SQL Server</text>
+          <text class="d-sub" x="578" y="169">relational / accounts</text>
+
+          <rect class="d-node" x="560" y="194" width="170" height="44" rx="8" />
+          <text class="d-label" x="578" y="213">Sage adapter</text>
+          <text class="d-sub" x="578" y="229">→ Sage Evolution</text>
+
+          <!-- flows API -> stores -->
+          <path class="d-flow" d="M458 130 H560" marker-end="url(#ah)" />
+          <path class="d-flow" d="M458 160 H560" marker-end="url(#ah)" />
+          <path class="d-flow" d="M458 200 H560" marker-end="url(#ah)" />
+
+          <!-- PDF reports (the product) -->
+          <rect class="d-node-accent" x="302" y="300" width="156" height="64" rx="10" />
+          <text class="d-label" x="322" y="328">PDF reports</text>
+          <text class="d-sub" x="322" y="346">6 templates · server-side</text>
+          <text class="d-sub" x="322" y="360">→ GM's inbox</text>
+          <path class="d-flow-accent" d="M380 252 V300" marker-end="url(#aha)" />
+        </svg>
+        <figcaption class="cs-figcaption">The real shape, sanitized: role-based UIs → FastAPI
+          services → MongoDB + SQL Server + a Sage Evolution adapter, with PDF reports rendered
+          server-side as the user-facing output. The diagram draws itself in your current theme.</figcaption>
+      </figure>
+
+      <h2><span class="cs-step">04</span>Key decisions &amp; trade-offs</h2>
+      <ul class="cs-cards">
+        <li class="cs-card">
+          <h3>The report is the product, so PDFs are first-class</h3>
+          <p>The GM does not log into a dashboard at 7 a.m.; they open the PDF in their inbox. So
+            the database, the APIs and the admin screens all exist to make one correct, consistent,
+            on-time document arrive. Effort went into report layouts that scan in thirty seconds and
+            numbers that reconcile across departments.</p>
+          <p class="cs-tradeoff"><strong>Trade-off:</strong> heavier investment in a server-side
+            PDF pipeline than a typical CRUD app, for a deliverable some would treat as an
+            afterthought.</p>
+        </li>
+        <li class="cs-card">
+          <h3>Compute the numbers at close, not on a cron</h3>
+          <p>Figures are computed at the event - when a job or shift closes, from final inputs -
+            not by a scheduled sweep of the tables. A report pulled at 7:00 and one pulled at 7:20
+            must agree, or the floor stops trusting the number. Computing once, at close, makes
+            every figure stable and auditable.</p>
+          <p class="cs-tradeoff"><strong>Trade-off:</strong> the close transition carries more
+            logic and has to be correct under interruption, instead of a simpler "recalculate
+            everything periodically".</p>
+        </li>
+        <li class="cs-card">
+          <h3>The UI mirrors the five departments</h3>
+          <p>Roles are a domain concept, not a security afterthought: an operator logs production, a
+            supervisor approves it, finance reads it. The interface is partitioned the way the plant
+            is, so each user sees their job and nothing else - which is also what keeps the data
+            clean.</p>
+          <p class="cs-tradeoff"><strong>Trade-off:</strong> more screens to build and maintain
+            than a single shared view, traded for far lower training cost and fewer wrong entries.</p>
+        </li>
+        <li class="cs-card">
+          <h3>FIFO inventory as an enforced invariant</h3>
+          <p>Raw material is consumed against jobs in arrival order, with partial lots - exactly
+            where spreadsheet logic quietly breaks, and exactly the kind of rule the data layer
+            should own rather than trust a human to follow. Expiry tracking rides on the same lot
+            model.</p>
+          <p class="cs-tradeoff"><strong>Trade-off:</strong> a stricter inventory model that
+            sometimes refuses a shortcut an operator wants - the right friction for traceability.</p>
+        </li>
+        <li class="cs-card">
+          <h3>Sage stays the system of record for finance</h3>
+          <p>Rather than rebuild accounting, a custom adapter syncs the relevant records into Sage
+            Evolution, so finance keeps the tool they audit in and the plant data lands there
+            without re-keying.</p>
+          <p class="cs-tradeoff"><strong>Trade-off:</strong> a integration surface to own and keep
+            in sync, accepted to avoid reinventing - and re-certifying - an accounting system.</p>
+        </li>
+      </ul>
+
+      <h2><span class="cs-step">05</span>Outcome</h2>
+      <div class="cs-outcome">
+        <div class="cs-stat">
+          <div class="cs-stat-num">~60%</div>
+          <div class="cs-stat-lbl">less time on production reporting</div>
+          <div class="cs-stat-note">estimate - see below</div>
+        </div>
+        <div class="cs-stat">
+          <div class="cs-stat-num">5</div>
+          <div class="cs-stat-lbl">departments live on one system of record</div>
+          <div class="cs-stat-note">running daily</div>
+        </div>
+        <div class="cs-stat">
+          <div class="cs-stat-num">1</div>
+          <div class="cs-stat-lbl">developer, end to end</div>
+          <div class="cs-stat-note">build + run + support</div>
+        </div>
+      </div>
+      <p class="cs-estimate">
+        <span class="cs-estimate-tag">Estimate, not a measurement</span>
+        The platform cut production reporting time by an estimated <strong>~60%</strong>. I say
+        "estimated" deliberately: the before-state was spread across spreadsheets, paper and
+        people's evenings, and nobody ever timed it with a stopwatch. There is no clean baseline to
+        subtract from, so the figure is a considered estimate of the morning re-keying and
+        reconciliation that the system removed - not a benchmark. The factory floor has a finely
+        tuned detector for inflated numbers, and the fastest way to lose the room is to claim
+        precision you do not have.
+      </p>
+      <p>What is not an estimate: the system is in production, all five departments run on it daily,
+        and the morning report is generated rather than assembled. The honest headline is that the
+        plant now has one place where its operational truth lives.</p>
+
+      <h2><span class="cs-step">06</span>What I would do differently, and next</h2>
+      <p>With hindsight I would split the two data stores along a cleaner line from the start -
+        Mongo and SQL Server each ended up holding things that, in retrospect, belonged on the other
+        side, and the boundary is something I have since had to tend. I would also write the
+        downtime reason codes as a first-class taxonomy on day one rather than letting them grow:
+        a single "downtime minutes" number answers "how bad", but only categorised reasons answer
+        "what do we fix first".</p>
+      <p>Next on the list is automated test coverage around the close-of-shift computations and the
+        Sage sync - the two places where a silent error is most expensive - and tighter monitoring
+        so "the report did not arrive" is caught by a check rather than by the GM. Some of that
+        thinking already lives in the open: I rebuilt this domain publicly as
+        <a href="https://github.com/saad-mughal435/shopfloor-api" target="_blank" rel="noopener">ShopFloor
+        API</a>, a Spring Boot OEE backend with the compute-at-close state machine, FIFO inventory
+        and Testcontainers tests - the same problems, solved where anyone can read the solution. If
+        you want to see the shape of the real platform without the real data, the
+        <a href="/demo.html">sanitized walkthrough</a> runs the actual UI against an in-browser mock
+        API.</p>
+    </div>
+
+    <footer class="cs-foot">
+      <a href="/notes/">Engineering notes</a>
+      <a href="/demo.html">Sanitized MES demo →</a>
+      <a href="https://github.com/saad-mughal435/shopfloor-api" target="_blank" rel="noopener">ShopFloor API →</a>
+      <span class="cs-foot-mute">Questions? <a href="mailto:saad@saadm.dev">saad@saadm.dev</a></span>
+    </footer>
+  </article>
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-copy">© <span id="year"></span> Saad. Built with HTML, CSS, and a healthy disrespect for manual work.</div>
+    <div class="footer-links">
+      <a href="mailto:saad@saadm.dev">Email</a>
+      <a href="https://wa.me/971502578065" target="_blank" rel="noopener">WhatsApp</a>
+      <a href="https://www.linkedin.com/in/muhammadsaad435/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/saad-mughal435" target="_blank" rel="noopener">GitHub</a>
+      <a href="/index.html#top">← Back to home</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ================= BACK TO TOP ================= -->
+<button class="back-to-top" id="back-to-top" type="button" aria-label="Scroll back to top" title="Back to top">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>
+</button>
+
+<!-- ================= LEFT CONTACT RAIL ================= -->
+<aside class="social-rail" aria-label="Contact Saad">
+  <a class="social-link" href="mailto:saad@saadm.dev" aria-label="Email Saad" title="Email">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v.4l-10 6L2 6.4V6Zm0 2.7V18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8.7l-9.47 5.68a1 1 0 0 1-1.06 0L2 8.7Z"/></svg>
+  </a>
+  <a class="social-link" href="https://wa.me/971502578065" target="_blank" rel="noopener" aria-label="WhatsApp Saad" title="WhatsApp">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885M20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.358.101 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.582 0 11.94-5.358 11.943-11.893a11.821 11.821 0 0 0-3.416-8.452"/></svg>
+  </a>
+  <a class="social-link" href="https://github.com/saad-mughal435" target="_blank" rel="noopener" aria-label="Saad on GitHub" title="GitHub">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+  </a>
+  <a class="social-link" href="https://www.linkedin.com/in/muhammadsaad435/" target="_blank" rel="noopener" aria-label="Saad on LinkedIn" title="LinkedIn">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg>
+  </a>
+  <span class="social-rail-line" aria-hidden="true"></span>
+</aside>
+</body>
+</html>

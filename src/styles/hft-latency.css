@@ -1,0 +1,166 @@
+/* =========================================================
+   hft-latency.css - decode-to-book latency explorer
+   Layers on shell.css tokens, so light + dark come free.
+   ========================================================= */
+
+.lat-page { max-width: 1000px; margin: 0 auto; padding: 56px 30px 80px; }
+
+/* ---------- header ---------- */
+.lat-head { max-width: 760px; margin-bottom: 38px; }
+.lat-head h1 {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(30px, 4.5vw, 44px);
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+  margin: 14px 0 18px;
+  color: var(--ink);
+}
+.lat-head p { color: var(--ink-soft); font-size: 15.5px; line-height: 1.7; margin: 0 0 14px; }
+.lat-head p:last-child { margin-bottom: 0; }
+.lat-head code,
+.lat-repro p code {
+  font-family: var(--mono); font-size: 0.9em;
+  background: var(--panel); border: 1px solid var(--rule);
+  border-radius: 5px; padding: 1px 5px; color: var(--ink);
+}
+.lat-caveat { font-size: 14.5px; color: var(--ink-mute); }
+
+/* ---------- shared card ---------- */
+.lat-chart-card,
+.lat-table-card,
+.lat-repro {
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 26px 28px;
+  margin-bottom: 22px;
+}
+.lat-chart-card h2,
+.lat-table-card h2,
+.lat-repro h2 {
+  font-family: var(--display); font-weight: 600;
+  font-size: 21px; letter-spacing: -0.01em; line-height: 1.3;
+  color: var(--ink); margin: 0 0 6px;
+}
+
+/* ---------- chart top + controls ---------- */
+.lat-chart-top {
+  display: flex; flex-wrap: wrap; gap: 16px;
+  align-items: flex-start; justify-content: space-between;
+  margin-bottom: 22px;
+}
+.lat-chart-sub { color: var(--ink-mute); font-size: 13.5px; margin: 0; max-width: 46ch; }
+
+.lat-controls { display: inline-flex; gap: 0; border: 1px solid var(--rule-2); border-radius: var(--radius-sm); overflow: hidden; flex-shrink: 0; }
+.lat-pct {
+  font-family: var(--mono); font-size: 12.5px; font-weight: 500;
+  letter-spacing: 0.4px;
+  padding: 9px 15px; min-height: 40px;
+  background: transparent; color: var(--ink-mute);
+  border: 0; border-right: 1px solid var(--rule);
+  cursor: pointer;
+  transition: background var(--t-fast) ease, color var(--t-fast) ease;
+}
+.lat-pct:last-child { border-right: 0; }
+.lat-pct:hover { color: var(--ink); background: var(--signal-wash); }
+.lat-pct[aria-pressed="true"] { background: var(--signal); color: var(--on-accent); }
+.lat-pct:focus-visible { outline: 2px solid var(--signal); outline-offset: -2px; }
+
+/* ---------- bar chart ---------- */
+.lat-chart { display: grid; gap: 12px; }
+.lat-row { display: grid; grid-template-columns: 130px 1fr; gap: 14px; align-items: center; }
+.lat-row-label {
+  font-family: var(--mono); font-size: 12.5px; color: var(--ink-soft);
+  text-align: right; line-height: 1.25;
+}
+.lat-row-label .lat-row-count {
+  display: block; font-size: 10.5px; color: var(--ink-mute); margin-top: 2px;
+}
+.lat-row-overall .lat-row-label { color: var(--ink); font-weight: 600; }
+
+.lat-bar-track { position: relative; height: 30px; }
+.lat-bar-svg { display: block; width: 100%; height: 30px; overflow: visible; }
+.lat-bar-rect {
+  fill: var(--signal); rx: 4;
+  transition: width var(--t) var(--ease), fill var(--t-fast) ease;
+}
+.lat-row-overall .lat-bar-rect { fill: var(--blue); }
+.lat-bar-value-html {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  font-family: var(--mono); font-size: 11.5px; color: var(--ink);
+  white-space: nowrap; pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lat-bar-rect { transition: none; }
+}
+
+/* ---------- max note ---------- */
+.lat-note {
+  margin: 20px 0 0; padding: 12px 16px;
+  border-left: 2px solid var(--signal);
+  background: var(--signal-wash);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  color: var(--ink-soft); font-size: 13.5px; line-height: 1.6;
+}
+.lat-note strong { font-family: var(--mono); color: var(--ink); }
+
+/* ---------- table ---------- */
+.lat-table-scroll { overflow-x: auto; }
+.lat-cap {
+  text-align: left; caption-side: top;
+  font-family: var(--mono); font-size: 12px; color: var(--ink-mute);
+  margin-bottom: 12px;
+}
+.lat-table { width: 100%; border-collapse: collapse; min-width: 540px; }
+.lat-table th, .lat-table td {
+  padding: 10px 12px; text-align: left;
+  border-bottom: 1px solid var(--rule);
+  font-size: 13.5px;
+}
+.lat-table thead th {
+  font-family: var(--mono); font-size: 11px; text-transform: uppercase;
+  letter-spacing: 1px; color: var(--ink-mute); font-weight: 600;
+  border-bottom: 1px solid var(--rule-2);
+}
+.lat-table tbody th { font-weight: 500; color: var(--ink); }
+.lat-table .lat-num { text-align: right; font-family: var(--mono); color: var(--ink-soft); }
+.lat-table tbody tr:last-child td,
+.lat-table tbody tr:last-child th { border-bottom: 0; }
+.lat-table tbody tr.lat-tr-overall th,
+.lat-table tbody tr.lat-tr-overall td {
+  border-top: 1px solid var(--rule-2);
+  color: var(--ink); font-weight: 600;
+  background: var(--signal-wash);
+}
+
+/* ---------- reproduce ---------- */
+.lat-repro p { color: var(--ink-soft); font-size: 15px; line-height: 1.7; margin: 0 0 14px; }
+.lat-code-label {
+  font-family: var(--mono); font-size: 11px; color: var(--ink-mute) !important;
+  text-transform: uppercase; letter-spacing: 1.2px;
+  margin: 0 0 6px !important;
+}
+.lat-code {
+  margin: 0 0 18px; padding: 16px 18px;
+  background: var(--paper-2);
+  border: 1px solid var(--rule-2);
+  border-radius: var(--radius-sm);
+  overflow-x: auto;
+}
+.lat-code code {
+  font-family: var(--mono); font-size: 12.5px; line-height: 1.6;
+  color: var(--ink); white-space: pre;
+}
+.lat-links { display: flex; flex-wrap: wrap; gap: 10px 24px; margin: 0 0 14px; }
+.lat-links a { font-family: var(--mono); font-size: 13px; color: var(--signal); }
+.lat-links a:hover { text-decoration: underline; }
+.lat-meta { font-family: var(--mono); font-size: 11.5px; color: var(--ink-mute); margin: 0; }
+
+@media (max-width: 720px) {
+  .lat-page { padding: 36px 20px 60px; }
+  .lat-chart-card, .lat-table-card, .lat-repro { padding: 20px; }
+  .lat-row { grid-template-columns: 96px 1fr; gap: 10px; }
+  .lat-row-label { font-size: 11px; }
+}

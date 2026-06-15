@@ -1,0 +1,168 @@
+/* =========================================================
+   case-study.css - Kingsley MES/ERP engineering case study
+   Layers on shell.css tokens, so light + dark come free.
+   Reuses the .note-* article conventions; adds case-study
+   primitives (meta strip, constraint/decision cards, the
+   hand-drawn architecture diagram, outcome figures).
+   ========================================================= */
+
+.cs-page { max-width: 1100px; margin: 0 auto; padding: 56px 30px 80px; }
+.cs-wrap { max-width: 78ch; margin: 0 auto; }
+
+/* ---------- head ---------- */
+.cs-head { margin-bottom: 34px; }
+.cs-head h1 {
+  font-family: var(--display); font-weight: 600;
+  font-size: clamp(28px, 4vw, 42px); letter-spacing: -0.02em; line-height: 1.14;
+  color: var(--ink); margin: 14px 0 16px;
+}
+.cs-head .cs-lede {
+  color: var(--ink-soft); font-size: 16.5px; line-height: 1.7; margin: 0 0 18px;
+  max-width: 70ch;
+}
+.cs-meta {
+  display: flex; flex-wrap: wrap; gap: 8px 18px;
+  font-family: var(--mono); font-size: 12px; color: var(--ink-mute);
+}
+.cs-meta a { color: var(--signal); text-decoration: none; }
+.cs-meta a:hover { text-decoration: underline; }
+
+/* ---------- fact strip ---------- */
+.cs-facts {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+  margin: 26px 0 6px; border-top: 1px solid var(--rule-2);
+}
+.cs-fact { padding: 16px 18px 16px 0; border-right: 1px solid var(--rule); }
+.cs-fact:last-child { border-right: 0; }
+.cs-fact dt {
+  font-family: var(--mono); font-size: 10.5px; color: var(--ink-mute);
+  text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 6px;
+}
+.cs-fact dd { margin: 0; font-size: 14px; color: var(--ink); line-height: 1.4; }
+
+/* ---------- body (reuses note-body idiom) ---------- */
+.cs-body { color: var(--ink-soft); font-size: 15.5px; line-height: 1.75; }
+.cs-body h2 {
+  font-family: var(--display); font-weight: 600;
+  font-size: 22px; letter-spacing: -0.01em; line-height: 1.3;
+  color: var(--ink); margin: 46px 0 14px;
+}
+.cs-body h2 .cs-step {
+  font-family: var(--mono); font-size: 13px; color: var(--signal);
+  margin-right: 10px; font-weight: 500;
+}
+.cs-body h3 {
+  font-family: var(--sans); font-weight: 600; font-size: 16.5px;
+  color: var(--ink); margin: 30px 0 10px;
+}
+.cs-body p { margin: 0 0 18px; }
+.cs-body strong { color: var(--ink); }
+.cs-body a { color: var(--signal); text-decoration: none; }
+.cs-body a:hover { text-decoration: underline; }
+.cs-body ul, .cs-body ol { margin: 0 0 18px; padding-left: 24px; }
+.cs-body li { margin-bottom: 8px; }
+.cs-body code {
+  font-family: var(--mono); font-size: 0.88em; color: var(--ink);
+  background: var(--signal-wash); padding: 1px 5px; border-radius: 3px;
+}
+
+/* estimate callout - the labelled ~60% honesty box */
+.cs-estimate {
+  margin: 0 0 18px; padding: 16px 20px;
+  border-left: 2px solid var(--signal);
+  background: var(--panel);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  color: var(--ink-soft); font-size: 14.5px; line-height: 1.65;
+}
+.cs-estimate strong { color: var(--ink); }
+.cs-estimate .cs-estimate-tag {
+  display: inline-block; font-family: var(--mono); font-size: 10px;
+  letter-spacing: 1.4px; text-transform: uppercase; color: var(--signal);
+  margin-bottom: 6px;
+}
+
+/* ---------- constraint / decision cards ---------- */
+.cs-cards { display: grid; gap: 14px; margin: 6px 0 22px; padding: 0; list-style: none; }
+.cs-card {
+  background: var(--panel); border: 1px solid var(--rule);
+  border-radius: var(--radius); padding: 18px 20px;
+  transition: border-color var(--t) ease;
+}
+.cs-card:hover { border-color: var(--rule-2); }
+.cs-card h3 {
+  margin: 0 0 6px; font-family: var(--display); font-weight: 600;
+  font-size: 16px; letter-spacing: -0.01em; color: var(--ink);
+}
+.cs-card p { margin: 0; font-size: 14px; line-height: 1.6; color: var(--ink-soft); }
+.cs-card p + p { margin-top: 8px; }
+.cs-card .cs-tradeoff {
+  font-family: var(--mono); font-size: 12px; color: var(--ink-mute);
+  margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--rule);
+}
+.cs-card .cs-tradeoff strong { color: var(--signal); font-weight: 500; }
+
+/* ---------- architecture diagram (inline SVG, theme-aware) ---------- */
+.cs-figure {
+  margin: 8px 0 8px; padding: 22px 20px 12px;
+  background: var(--panel); border: 1px solid var(--rule-2);
+  border-radius: var(--radius); overflow-x: auto;
+}
+.cs-diagram {
+  width: 100%; height: auto; min-width: 560px;
+  color: var(--ink); /* drives currentColor strokes/labels */
+  display: block; margin: 0 auto;
+}
+.cs-diagram .d-node {
+  fill: var(--panel-hi); stroke: var(--rule-2); stroke-width: 1.4;
+}
+.cs-diagram .d-node-accent { fill: var(--signal-wash); stroke: var(--border-acc); stroke-width: 1.4; }
+.cs-diagram .d-label { fill: var(--ink); font-family: var(--sans); font-size: 12.5px; font-weight: 600; }
+.cs-diagram .d-sub { fill: var(--ink-mute); font-family: var(--mono); font-size: 10px; }
+.cs-diagram .d-flow { stroke: var(--ink-mute); stroke-width: 1.3; fill: none; }
+.cs-diagram .d-flow-accent { stroke: var(--signal); stroke-width: 1.6; fill: none; }
+.cs-diagram .d-arrow { fill: var(--ink-mute); }
+.cs-diagram .d-arrow-accent { fill: var(--signal); }
+.cs-diagram .d-band { fill: none; stroke: var(--rule); stroke-width: 1; stroke-dasharray: 4 4; }
+.cs-diagram .d-band-label {
+  fill: var(--ink-mute); font-family: var(--mono); font-size: 9.5px;
+  letter-spacing: 1.2px; text-transform: uppercase;
+}
+.cs-figcaption {
+  font-family: var(--mono); font-size: 11.5px; color: var(--ink-mute);
+  margin: 12px 2px 0; line-height: 1.5;
+}
+
+/* ---------- outcome figures ---------- */
+.cs-outcome {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+  margin: 6px 0 22px;
+}
+.cs-stat {
+  background: var(--panel); border: 1px solid var(--rule);
+  border-radius: var(--radius); padding: 18px 20px;
+}
+.cs-stat .cs-stat-num {
+  font-family: var(--mono); font-weight: 600; font-size: 28px;
+  letter-spacing: -0.02em; color: var(--ink); margin-bottom: 4px;
+  font-feature-settings: "tnum";
+}
+.cs-stat .cs-stat-lbl { font-size: 13px; color: var(--ink-soft); line-height: 1.45; }
+.cs-stat .cs-stat-note { font-family: var(--mono); font-size: 10.5px; color: var(--ink-mute); margin-top: 6px; }
+
+/* ---------- foot ---------- */
+.cs-foot {
+  margin-top: 48px; padding-top: 26px;
+  border-top: 1px solid var(--rule);
+  display: flex; flex-wrap: wrap; gap: 12px 26px;
+  font-family: var(--mono); font-size: 12.5px;
+}
+.cs-foot a { color: var(--signal); text-decoration: none; }
+.cs-foot a:hover { text-decoration: underline; }
+.cs-foot .cs-foot-mute { color: var(--ink-mute); }
+
+@media (max-width: 760px) {
+  .cs-page { padding: 36px 20px 60px; }
+  .cs-facts { grid-template-columns: repeat(2, 1fr); }
+  .cs-fact:nth-child(2) { border-right: 0; }
+  .cs-outcome { grid-template-columns: 1fr; }
+}
