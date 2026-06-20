@@ -292,6 +292,30 @@ export const PROJECTS: Project[] = [
     ctaSubtitle: 'Live on a free instance - the first request after idle can take ~50s to wake. Log in with manager / password.',
   },
   {
+    domain: 'all', kind: 'Full-stack app · Live demo · Open source · Django / DRF', year: '2026',
+    sectionEyebrow: 'Full-stack Django',
+    sectionHeading: 'An IT service desk, end to end in Django',
+    sectionBlurb: 'A real, persistent, authenticated ITSM system - not a mock. Tickets with an SLA clock and breach detection, an audit timeline, role-based access via Django Groups, an analytics dashboard, AI triage, and notifications. Three surfaces over one data model: the Django admin, server-rendered pages, and a REST API with Swagger.',
+    title: 'Service Desk - IT helpdesk / ITSM',
+    desc: <Fragment>An internal IT service desk in <strong>Django 6 + Django REST Framework</strong>: incidents
+      and service requests move through a status workflow with <strong>SLA due dates and breach
+      detection</strong>, every change lands on an audit timeline, and access is gated by
+      <strong>Django Groups</strong> (requesters / agents / managers). Postgres on Neon, WhiteNoise
+      static, gunicorn, deployed on Render with green CI.</Fragment>,
+    bullets: [
+      <Fragment><strong>Three surfaces, one model</strong> - the Django admin, server-rendered pages, and a DRF API with <strong>OpenAPI / Swagger</strong> (drf-spectacular)</Fragment>,
+      <Fragment><strong>SLA engine</strong> - per-priority policies, breach detection, an escalation sweep, and in-app + email notifications</Fragment>,
+      <Fragment><strong>AI triage and assist</strong> - suggest category/priority, summarise a thread, draft a reply (Anthropic Claude, with a deterministic mock fallback so the demo always works)</Fragment>,
+      <Fragment><strong>Analytics dashboard</strong> - SLA compliance, resolution time and volume trends, plus health probes and API throttling</Fragment>,
+    ],
+    tags: ['Python 3.14', 'Django 6', 'Django REST Framework', 'PostgreSQL', 'Neon', 'drf-spectacular', 'OpenAPI / Swagger', 'Anthropic Claude', 'WhiteNoise', 'gunicorn', 'Docker', 'pytest', 'ruff', 'GitHub Actions'],
+    ctas: [
+      { label: 'Open live demo ↗', href: 'https://servicedesk-f3b4.onrender.com/', target: '_blank', primary: true, prominent: true },
+      { label: 'View source on GitHub ↗', href: 'https://github.com/saad-mughal435/servicedesk', target: '_blank' },
+    ],
+    ctaSubtitle: 'Live on a free instance - the first request after idle can take ~30-60s to wake. Log in with agent / demo12345.',
+  },
+  {
     domain: 'code', kind: 'C++17 HFT engine · ITCH 5.0 · MoldUDP64 · FIX 4.4 · MT5 · CI', year: '2026',
     sectionEyebrow: 'Systems & C++',
     sectionHeading: 'Systems programming in C++',
