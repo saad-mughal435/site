@@ -105,7 +105,7 @@ export const HERO_COPY: Record<string, HeroCopy> = {
       - spreadsheets, paper logs, copy-paste reports, inventory tracking, admin panels, and business
       workflows - with automation that runs itself.</Fragment>,
     stack: 'Python · FastAPI · Java · Spring Boot · C++17 · PostgreSQL · Docker · TypeScript',
-    cta: { href: 'app/index.html', label: 'Launch live app ↗', target: '_blank' },
+    cta: { href: 'demo.html', label: 'Explore demos ↗', target: '_blank' },
   },
 };
 
