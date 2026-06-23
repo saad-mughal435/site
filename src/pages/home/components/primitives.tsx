@@ -2,7 +2,7 @@
    PRIMITIVES - Reveal, WordReveal, ScrollProgress, TiltCard,
    MagneticBtn. Behaviour verbatim from home.app.jsx.
    ========================================================= */
-import { useRef } from 'react';
+import { Fragment, useRef } from 'react';
 import type { ElementType, ReactNode } from 'react';
 import { useInView, useScrollProgress } from '../hooks';
 
@@ -48,9 +48,14 @@ export function WordReveal({ children, className = '', as: Tag = 'span' }: WordR
   return (
     <Tag ref={ref} className={'word-reveal ' + className + (inView ? ' inView' : '')}>
       {words.map((w, i) => (
-        <span key={i} className="wr-word" style={{ transitionDelay: (i * 70) + 'ms' }}>
-          {w}{i < words.length - 1 ? ' ' : ''}
-        </span>
+        // The inter-word space lives OUTSIDE the inline-block span. A trailing
+        // space inside an inline-block box is trimmed, which would mash the
+        // words together ("A short" -> "Ashort"); as a sibling text node it
+        // renders as a real space and still wraps normally.
+        <Fragment key={i}>
+          <span className="wr-word" style={{ transitionDelay: (i * 70) + 'ms' }}>{w}</span>
+          {i < words.length - 1 ? ' ' : ''}
+        </Fragment>
       ))}
     </Tag>
   );
