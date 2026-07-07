@@ -68,3 +68,10 @@
 /hr         /nabta/app.html        301
 /payroll    /nabta/app.html#payroll 301
 /wps        /nabta/app.html#payroll 301
+
+# Property Management friendly aliases (top-level vanity only - never /x/y -> /x/y.html)
+/property-management  /property-management/index.html     301
+/pm-demo              /property-management/index.html     301
+/tenant-portal        /property-management/tenant.html    301
+/landlord-portal      /property-management/landlord.html  301
+/manager-console      /property-management/manager.html   301

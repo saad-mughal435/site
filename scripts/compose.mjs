@@ -13,7 +13,7 @@ const DIST = join(ROOT, 'dist');
 
 const DIRS = [
   'app', 'ask', 'assets', 'b2b', 'b2c', 'hft-book', 'lahza', 'marsad',
-  'nabta', 'pos', 'property', 'sanad', 'vacation', 'watad',
+  'nabta', 'pos', 'property', 'property-management', 'sanad', 'vacation', 'watad',
   '.well-known',
 ];
 

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Property Management - tenant, landlord, manager, vendor & inspector portals</title>
+<meta name="description" content="A five-role property-management platform demo: tenants pay rent and raise maintenance, landlords track returns, managers run the portfolio, vendors close work orders, inspectors run handovers. Synthetic data, fully client-side." />
+<meta name="robots" content="noindex" />
+<meta name="theme-color" content="#4f5bd5" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Property Management - multi-role property platform demo" />
+<meta property="og:description" content="Tenant, Landlord, Property Manager, Vendor and Inspector portals off one shared mock API." />
+<meta property="og:image" content="https://saadm.dev/property-management/og.jpg?v=20260707" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A//www.w3.org/2000/svg'%20viewBox%3D'0%200%2064%2064'%3E%3Crect%20width%3D'64'%20height%3D'64'%20rx%3D'14'%20fill%3D'%234f5bd5'/%3E%3Ctext%20x%3D'50%25'%20y%3D'56%25'%20font-family%3D'sans-serif'%20font-weight%3D'800'%20font-size%3D'26'%20fill%3D'white'%20text-anchor%3D'middle'%3EPM%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/tokens.css?v=20260707a" />
+<link rel="stylesheet" href="css/property-management.css?v=20260707a" />
+</head>
+<body class="pm">
+<div class="pm-hub">
+  <div class="pm-hub-hero">
+    <div class="pm-brand-mark">PM</div>
+    <h1>Property Management</h1>
+    <p>One platform for every stakeholder in a residential community. Pick a role to sign in as a seeded persona - the same synthetic Dubai portfolio powers all five portals, and your changes flow across them.</p>
+    <span class="pm-hub-tag">Portfolio demo · fabricated data · fully client-side</span>
+  </div>
+  <div class="pm-role-cards" id="role-cards"></div>
+
+  <div class="pm-hub-features">
+    <div class="pm-feature"><b>Rent &amp; leasing</b>UAE Ejari leases, post-dated cheque schedules, simulated payments, receipts &amp; arrears.</div>
+    <div class="pm-feature"><b>Maintenance</b>Work-order state machine with SLA timers, vendor dispatch &amp; tenant ratings.</div>
+    <div class="pm-feature"><b>Money</b>Collection, owner statements, ROI/yield &amp; approvals - printable, all synthetic.</div>
+    <div class="pm-feature"><b>Community</b>Amenity booking, visitor passes, messaging &amp; a plain help desk.</div>
+    <div class="pm-feature"><b>Inspections</b>Move-in / move-out / snagging checklists feeding deposit reconciliation.</div>
+    <div class="pm-feature"><b>Under the hood</b>Vanilla JS, one shared engine + mock API, localStorage state. No backend, no AI.</div>
+  </div>
+  <p class="pm-demo-note">All names, figures, Emirates IDs, IBANs, cheque numbers and dates are fabricated for demonstration.</p>
+</div>
+
+<script src="js/data.js?v=20260707a"></script>
+<script src="js/engine.js?v=20260707a"></script>
+<script src="js/app.js?v=20260707a"></script>
+<script>
+(function () {
+  var ROLES = [
+    { role: 'tenant', icon: '&#127968;', title: 'Tenant', desc: 'Pay rent, raise &amp; track maintenance, book amenities, register visitors and message the building team.' },
+    { role: 'landlord', icon: '&#128188;', title: 'Landlord / Owner', desc: 'Portfolio value, occupancy, ROI &amp; yield, rent-collection status, owner statements and cost approvals.' },
+    { role: 'manager', icon: '&#128203;', title: 'Property Manager', desc: 'Run the whole portfolio: units, tenants, leases, rent collection, maintenance dispatch, help desk &amp; reports.' },
+    { role: 'vendor', icon: '&#128295;', title: 'Vendor', desc: 'Accept assigned work orders, schedule, log cost and complete jobs - driving the SLA clock.' },
+    { role: 'inspector', icon: '&#128269;', title: 'Inspector', desc: 'Run move-in / move-out / snagging inspections, rate condition and submit a report for deposit reconciliation.' }
+  ];
+  var host = document.getElementById('role-cards');
+  host.innerHTML = ROLES.map(function (r) {
+    var people = PMApp.personas(r.role).slice(0, 3);
+    var links = people.map(function (p) {
+      return '<a class="pm-role-persona" href="' + PMApp.ROLE_PAGE[r.role] + '?' + r.role + '=' + p.id + '">'
+        + PMUI.avatar(p.name, 210, 28) + '<span><b>' + PMApp.escapeHtml(p.name) + '</b><small>' + PMApp.escapeHtml(p.sub) + '</small></span></a>';
+    }).join('');
+    return '<div class="pm-role-card" style="--role:var(--pm-role-' + r.role + ')">'
+      + '<h3><span class="ic">' + r.icon + '</span>' + r.title + '</h3>'
+      + '<p>' + r.desc + '</p>'
+      + '<div class="pm-role-personas">' + links + '</div></div>';
+  }).join('');
+})();
+</script>
+</body>
+</html>
