@@ -475,6 +475,32 @@ export const PROJECTS: Project[] = [
       { label: 'CI runs ↗', href: 'https://github.com/saad-mughal435/modbus-codec/actions', target: '_blank' },
     ],
   },
+  {
+    domain: 'all', kind: 'Client-side product demo · Portfolio piece', year: '2026',
+    sectionEyebrow: 'Product build',
+    sectionHeading: 'A full property platform, client-side',
+    sectionBlurb: 'A property-management platform built as five role portals - tenant, landlord, manager, vendor and inspector - off one shared in-browser engine: a maintenance SLA state machine, a rent-cheque schedule with simulated payments and printable receipts, and inspection-to-deposit reconciliation. No backend and no AI - a single source of truth per capability, five projections. Also shown in the Demos section below.',
+    title: 'Property Management - Happy Tenant + Happy Landlord platform',
+    desc: <Fragment>A property-management platform with <strong>five role portals</strong> - tenant, landlord,
+      property manager, vendor and inspector - off <strong>one shared client-side engine</strong>. Tenants pay
+      rent and raise maintenance; landlords track returns; managers run the whole portfolio; vendors close work
+      orders; inspectors run handovers. No backend, no AI - a deterministic seed + fetch-interceptor mock API +
+      localStorage, with a single source of truth per capability (one engine, five projections).</Fragment>,
+    bullets: [
+      <Fragment><strong>Five role-scoped portals</strong> off one shared engine + mock API - tenant, vendor and inspector are mobile-first; manager and landlord are hash-routed consoles - with a live role / persona switcher</Fragment>,
+      <Fragment><strong>Maintenance SLA state machine</strong>, a rent-cheque schedule with simulated payments &amp; printable receipts, and an <strong>inspection → deposit reconciliation</strong> flow feeding a room-by-room checklist</Fragment>,
+      <Fragment><strong>Inline-SVG charts</strong>, printable owner statements (hidden-iframe print), a notification center and a plain help-desk - <strong>no duplicated logic</strong> across portals</Fragment>,
+      <Fragment><strong>UAE-shaped</strong> - AED, Ejari tenancy contracts, post-dated cheques, DEWA, security-deposit rules; every figure fabricated for the demo</Fragment>,
+    ],
+    tags: ['Vanilla JS (ES6+)', 'Shared engine', 'Mock API (fetch shim)', 'localStorage', 'Inline-SVG charts', 'Role-scoped SPA', 'Hidden-iframe print', 'State machine', 'UAE (AED / Ejari)'],
+    ctas: [
+      { label: 'Open the portals ↗', href: 'property-management/index.html', target: '_blank', primary: true, prominent: true },
+      { label: 'Tenant ↗', href: 'property-management/tenant.html', target: '_blank' },
+      { label: 'Landlord ↗', href: 'property-management/landlord.html', target: '_blank' },
+      { label: 'Manager ↗', href: 'property-management/manager.html', target: '_blank' },
+    ],
+    ctaSubtitle: 'Client-side demo - five role portals off one shared engine; every figure fabricated for privacy.',
+  },
 ];
 
 /* Product demos - shown directly after Projects as a 3-column grid (compact cards). */
@@ -557,6 +583,24 @@ export const DEMO_PROJECTS: Project[] = [
       { label: 'Tenant ↗', href: 'property-management/tenant.html', target: '_blank' },
       { label: 'Landlord ↗', href: 'property-management/landlord.html', target: '_blank' },
       { label: 'Manager ↗', href: 'property-management/manager.html', target: '_blank' },
+    ],
+  },
+  {
+    domain: 'all', kind: 'Full-stack app · Django + DRF / React SPA · Open source', year: '2026',
+    title: 'FixFlow - property-maintenance ticketing (full-stack)',
+    desc: <Fragment>A real full-stack build (not a client-side mock): a <strong>Django 6 + DRF</strong> API and a
+      separate <strong>React 19 + TypeScript</strong> SPA. Customers raise requests routed to a department (skill
+      group); a dispatcher assigns a skill-matched, available technician; the technician works it to completion.
+      JWT auth, role-scoped data, an SLA clock, 29 tests + green CI, and a one-blueprint deploy to Render + Neon.</Fragment>,
+    bullets: [
+      <Fragment>Skill-based routing - technician ↔ skills many-to-many, with an assignment guard on skill + availability</Fragment>,
+      <Fragment>Four role portals (customer / dispatcher / technician / manager) over one JWT API</Fragment>,
+      <Fragment>Django + DRF + Postgres/Neon backend; React + Vite SPA; green GitHub Actions CI</Fragment>,
+    ],
+    tags: ['Django 6', 'DRF', 'SimpleJWT', 'React 19', 'TypeScript', 'Vite', 'PostgreSQL', 'Neon', 'pytest', 'ruff', 'Docker', 'Render'],
+    ctas: [
+      { label: 'View source on GitHub ↗', href: 'https://github.com/saad-mughal435/fixflow', target: '_blank', primary: true },
+      { label: 'CI runs ↗', href: 'https://github.com/saad-mughal435/fixflow/actions', target: '_blank' },
     ],
   },
   {
