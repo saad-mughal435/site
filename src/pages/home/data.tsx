@@ -316,6 +316,31 @@ export const PROJECTS: Project[] = [
     ctaSubtitle: 'Live on a free instance - the first request after idle can take ~30-60s to wake. Log in with agent / demo12345.',
   },
   {
+    domain: 'all', kind: 'Full-stack app · Open source · Django + DRF / React SPA', year: '2026',
+    sectionEyebrow: 'Full-stack + SPA',
+    sectionHeading: 'A skill-routed maintenance ticketing system',
+    sectionBlurb: 'A property-maintenance ticketing platform split into a Django REST API and a separate React single-page app. Customers raise requests routed to a department (skill group); a dispatcher assigns a technician who actually holds that skill and is free; the technician works it to completion. One person can hold many skills, and the assignment guard enforces it. JWT auth, role-scoped data, an SLA clock, green CI, and a one-blueprint deploy to Render + Neon.',
+    title: 'FixFlow - property-maintenance ticketing (DRF API + React SPA)',
+    desc: <Fragment>A property-maintenance service desk in <strong>Django 6 + Django REST Framework</strong> with a
+      separate <strong>React 19 + TypeScript</strong> SPA. Customers self-register and raise a request against a
+      <strong>department (skill group)</strong>; a dispatcher assigns a <strong>skill-matched, available
+      technician</strong>; the technician works it start → complete. <strong>JWT auth</strong>, role-scoped
+      querysets, an SLA clock, and an OpenAPI schema - Postgres on Neon, deployable via a two-service Render
+      blueprint.</Fragment>,
+    bullets: [
+      <Fragment><strong>Skill-based routing</strong> - a department is both the skill group and the inbox; technicians hold <strong>many skills</strong> (many-to-many), and the assignment guard enforces skill + availability at the model <em>and</em> service layer</Fragment>,
+      <Fragment><strong>Four role portals</strong> - customer, dispatcher, technician and manager, each a distinct signed-in surface over one API, with live-polling lists and a role-aware request detail (timeline, worklog, lifecycle actions)</Fragment>,
+      <Fragment><strong>JWT + role-scoped API</strong> - SimpleJWT auth, Django-Groups permissions, one <code>visible_requests()</code> scoper, per-priority SLA due dates + breach detection, and a drf-spectacular OpenAPI schema</Fragment>,
+      <Fragment><strong>Tested + CI + deployable</strong> - 29 pytest tests + ruff (backend) and a typecheck + Vite build (frontend), both green in GitHub Actions; docker-compose for local Postgres and a Render + Neon blueprint for one-click go-live</Fragment>,
+    ],
+    tags: ['Django 6', 'Django REST Framework', 'SimpleJWT', 'React 19', 'TypeScript', 'Vite', 'PostgreSQL', 'Neon', 'drf-spectacular', 'OpenAPI / Swagger', 'pytest', 'ruff', 'Docker', 'Render', 'GitHub Actions'],
+    ctas: [
+      { label: 'View source on GitHub ↗', href: 'https://github.com/saad-mughal435/fixflow', target: '_blank', primary: true, prominent: true },
+      { label: 'CI runs ↗', href: 'https://github.com/saad-mughal435/fixflow/actions', target: '_blank' },
+    ],
+    ctaSubtitle: 'Django + DRF API + React SPA · 29 tests + green CI · one-blueprint deploy to Render + Neon (live URL to follow once deployed).',
+  },
+  {
     domain: 'code', kind: 'C++17 HFT engine · ITCH 5.0 · MoldUDP64 · FIX 4.4 · MT5 · CI', year: '2026',
     sectionEyebrow: 'Systems & C++',
     sectionHeading: 'Systems programming in C++',
@@ -510,6 +535,28 @@ export const DEMO_PROJECTS: Project[] = [
       { label: 'Open marketplace ↗', href: 'vacation/index.html', target: '_blank', primary: true },
       { label: 'List a property ↗', href: 'vacation/host-onboard.html', target: '_blank' },
       { label: 'Open admin ↗', href: 'vacation/admin.html', target: '_blank' },
+    ],
+  },
+  {
+    domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
+    title: 'Property Management - Happy Tenant + Happy Landlord platform',
+    desc: <Fragment>A property-management platform with <strong>five role portals</strong> - tenant, landlord,
+      property manager, vendor and inspector - off <strong>one shared client-side engine</strong>. Tenants pay
+      rent and raise maintenance; landlords track returns; managers run the whole portfolio; vendors close work
+      orders; inspectors run handovers. No backend, no AI - a deterministic seed + fetch-interceptor mock API +
+      localStorage, with a single source of truth per capability (one engine, five projections).</Fragment>,
+    bullets: [
+      <Fragment><strong>Five role-scoped portals</strong> off one shared engine + mock API - tenant, vendor and inspector are mobile-first; manager and landlord are hash-routed consoles - with a live role / persona switcher</Fragment>,
+      <Fragment><strong>Maintenance SLA state machine</strong>, a rent-cheque schedule with simulated payments &amp; printable receipts, and an <strong>inspection → deposit reconciliation</strong> flow feeding a room-by-room checklist</Fragment>,
+      <Fragment><strong>Inline-SVG charts</strong>, printable owner statements (hidden-iframe print), a notification center and a plain help-desk - <strong>no duplicated logic</strong> across portals</Fragment>,
+      <Fragment><strong>UAE-shaped</strong> - AED, Ejari tenancy contracts, post-dated cheques, DEWA, security-deposit rules; every figure fabricated for the demo</Fragment>,
+    ],
+    tags: ['Vanilla JS (ES6+)', 'Shared engine', 'Mock API (fetch shim)', 'localStorage', 'Inline-SVG charts', 'Role-scoped SPA', 'Hidden-iframe print', 'State machine', 'UAE (AED / Ejari)'],
+    ctas: [
+      { label: 'Open the portals ↗', href: 'property-management/index.html', target: '_blank', primary: true },
+      { label: 'Tenant ↗', href: 'property-management/tenant.html', target: '_blank' },
+      { label: 'Landlord ↗', href: 'property-management/landlord.html', target: '_blank' },
+      { label: 'Manager ↗', href: 'property-management/manager.html', target: '_blank' },
     ],
   },
   {
