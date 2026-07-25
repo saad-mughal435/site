@@ -11,6 +11,7 @@ Thumbs.db
 node_modules/
 dist/
 .cache/
+.astro/
 
 # Helper / private files that should never be in git
 *_DO_NOT_PUBLISH*/

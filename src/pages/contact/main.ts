@@ -29,7 +29,8 @@ import '../../lib/back-to-top';
     honey:   form.querySelector('input[name="_honey"]') as HTMLInputElement | null,
   };
 
-  const ENDPOINT      = 'https://formsubmit.co/ajax/saad@saadm.dev';
+  // Formsubmit alias for saad@saadm.dev - keeps the raw address out of the JS bundle.
+  const ENDPOINT      = 'https://formsubmit.co/ajax/56f048e96405a5c15ba9447f5cad6a3f';
   const TARGET_EMAIL  = 'saad@saadm.dev';
   const MAX_MSG_CHARS = 2000;
 
