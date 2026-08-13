@@ -321,3 +321,42 @@
 .demo-card:not(.active) .demo-card-cta { color: var(--blue); }
 
 @media (max-width: 880px) { .demo-chooser { grid-template-columns: 1fr; } }
+
+/* ---------- Mobile length ----------------------------------------------------
+   At 390x844 this page ran 15,746px - about 19 screens, longer than the
+   homepage - and 8,734px of that was the fifteen chooser cards at ~582px each.
+   Capping the cards would defeat the page, whose whole job is the gallery, so
+   the card gets compact instead: thumbnail, title, stack and the CTA, with the
+   paragraph-length description clamped. Everything stays in the DOM. */
+@media (max-width: 760px) {
+  .demo-card { padding: 14px 16px; gap: 6px; }
+
+  /* The longest part of each card by far - several of these run to 60+ words,
+     and the page they open says the same thing with more room. */
+  .demo-card-sub {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 0;
+  }
+
+  /* The intro prose names every one of the fifteen demos in a sentence, which
+     the grid directly below then lists anyway. */
+  .demo-intro .hero-sub {
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .demo-intro { padding: 34px 20px 22px; }
+
+  /* Thumbnails became the tallest part of each card once the prose was clamped -
+     2,394px across the fifteen. Keep them (this is a gallery; the picture is the
+     point) but crop to a letterbox rather than the full 1200x630 card, which is
+     ~160px tall at this width. */
+  .demo-card-thumb { aspect-ratio: 1200 / 380; }
+
+  /* Four columns of meta tiles stack into four full-width rows here. */
+  .demo-meta { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 18px; }
+}

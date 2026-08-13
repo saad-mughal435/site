@@ -98,6 +98,13 @@
   color: var(--ink); white-space: pre;
 }
 
+/* Inline code inside prose - NOT the <pre> blocks above, which scroll on their
+   own. A long identifier with no spaces in it (say
+   `static_assert(std::is_trivially_copyable_v<T>)`, 392px) is a single
+   unbreakable token: it cannot wrap, so it pushes past a 390px viewport and
+   gets clipped by the overflow-x:hidden on <body>. Let those break. */
+.note-body :not(pre) > code { overflow-wrap: anywhere; }
+
 .note-foot {
   margin-top: 48px; padding-top: 26px;
   border-top: 1px solid var(--rule);
