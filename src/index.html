@@ -73,7 +73,7 @@
     "Django", "Django REST Framework",
     "FastAPI", "REST APIs", "JSON", "JWT Authentication", "OpenAPI", "Swagger",
     "MongoDB", "PostgreSQL", "SQL Server", "SQLite", "Flyway", "Motor", "pymongo", "pyodbc",
-    "Pandas", "NumPy", "scikit-learn", "Matplotlib", "OpenPyXL",
+    "pandas", "NumPy", "scikit-learn", "Matplotlib", "OpenPyXL",
     "Docker", "Docker Compose", "Linux", "nginx", "Cloudflare", "Let's Encrypt",
     "Git", "GitHub", "Maven", "JUnit", "Testcontainers", "Bash", "SSH", "Cron",
     "PDF Generation", "fpdf", "pdfplumber", "pypdf",
@@ -108,7 +108,7 @@
     { "@type": "Question", "name": "What does the Kingsley MES / ERP platform do?",
       "acceptedAnswer": { "@type": "Answer", "text": "It replaces spreadsheets and paper across 5 departments - production planning, QC, batch and expiry tracking, inventory with FIFO, dispatch, accounts, and Sage Evolution integration - with OEE monitoring and print-ready PDF reports generated server-side. Saad designed, built, and runs it end-to-end in Python/FastAPI, MongoDB + SQL Server, Docker and nginx, cutting production reporting time by roughly 60%." } },
     { "@type": "Question", "name": "What is Saad's tech stack?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Python, FastAPI, Java, Spring Boot, MongoDB, PostgreSQL, JavaScript, React, Docker, Linux, nginx, Cloudflare, Git, REST APIs, JWT auth, Pandas, and Sage Evolution integration - comfortable across the full lifecycle from data-model design through deployment and ops." } },
+      "acceptedAnswer": { "@type": "Answer", "text": "Python, FastAPI, Java, Spring Boot, MongoDB, PostgreSQL, JavaScript, React, Docker, Linux, nginx, Cloudflare, Git, REST APIs, JWT auth, pandas, and Sage Evolution integration - comfortable across the full lifecycle from data-model design through deployment and ops." } },
     { "@type": "Question", "name": "Can I see Saad's code?",
       "acceptedAnswer": { "@type": "Answer", "text": "Yes - try the interactive MES/ERP demo at saadm.dev/demo.html (all data fabricated for privacy) and the live ShopFloor API in Java / Spring Boot, plus the open-source n8n-nodes-devtools automation node in TypeScript. Open source is on GitHub at github.com/saad-mughal435." } },
     { "@type": "Question", "name": "Does Saad write about his engineering work?",
@@ -142,7 +142,7 @@
       "applicationCategory": "BusinessApplication", "operatingSystem": "Web",
       "url": "https://saadm.dev/demo.html",
       "author": { "@type": "Person", "name": "Muhammad Saad" },
-      "description": "Production MES/ERP/OEE platform for a beverage plant - production planning, QC, batch tracking, inventory/FIFO, dispatch, accounts, Sage Evolution integration, OEE monitoring and server-side PDF reporting. Python, FastAPI, MongoDB, SQL Server, Docker, Nginx." } },
+      "description": "Production MES/ERP/OEE platform for a beverage plant - production planning, QC, batch tracking, inventory/FIFO, dispatch, accounts, Sage Evolution integration, OEE monitoring and server-side PDF reporting. Python, FastAPI, MongoDB, SQL Server, Docker, nginx." } },
     { "@type": "ListItem", "position": 2, "item": {
       "@type": "SoftwareSourceCode", "name": "ShopFloor API - MES / OEE backend",
       "url": "https://github.com/saad-mughal435/shopfloor-api",
@@ -194,7 +194,7 @@
       "codeRepository": "https://github.com/saad-mughal435/hft-orderbook",
       "programmingLanguage": "C++",
       "author": { "@type": "Person", "name": "Muhammad Saad" },
-      "description": "Low-latency C++17 trading-infrastructure engine: reconstructs limit-order books from real NASDAQ TotalView-ITCH 5.0 over both BinaryFILE files and the MoldUDP64 UDP multicast feed (with sequence-gap detection); an O(1) order_ref map and a price-tick-indexed windowed level store; microstructure signals (micro-price, order-book imbalance) + a VWAP/OHLCV trade tape; a lock-free SPSC pipeline sharded across cores (ThreadSanitizer-validated, PAUSE busy-wait, sub-microsecond per message); a FIX 4.4 order-entry codec; a dependency-free WebSocket L2 viewer; and a MetaTrader 5 bridge. Verified by ASan/UBSan, a libFuzzer harness and a clang -Werror build. CMake, Catch2, GitHub Actions CI." } },
+      "description": "Low-latency C++17 trading-infrastructure engine: reconstructs limit-order books from real NASDAQ TotalView-ITCH 5.0 over both BinaryFILE files and the MoldUDP64 UDP multicast feed (with sequence-gap detection); an O(1) order_ref map and a price-tick-indexed windowed level store; microstructure signals (micro-price, order-book imbalance) + a VWAP/OHLCV trade tape; a wait-free SPSC pipeline sharded across cores (no races observed under ThreadSanitizer in CI, PAUSE busy-wait, well under 100 ns per message); a FIX 4.4 order-entry codec; a dependency-free WebSocket L2 viewer; and a MetaTrader 5 bridge. Verified by ASan/UBSan, a libFuzzer harness and a clang -Werror build. CMake, Catch2, GitHub Actions CI." } },
     { "@type": "ListItem", "position": 10, "item": {
       "@type": "SoftwareSourceCode", "name": "oee-core - OEE & downtime analytics (C++17)",
       "url": "https://github.com/saad-mughal435/oee-core",
@@ -254,7 +254,7 @@
 
     <h3 style="color:#1b1712; margin:24px 0 8px; font-size:16px;">Featured manufacturing system</h3>
     <ul style="padding-left:18px; margin:0 0 18px;">
-      <li><strong>Kingsley MES / ERP / OEE platform</strong> - sole developer. One operations platform replacing Excel + paper across <em>production planning, QC seam-check, batch tracking + expiry, inventory + FIFO, dispatch, accounts, Sage Evolution integration, OEE monitoring</em>, and 8 print-ready PDF document templates. Python · FastAPI · MongoDB · SQL Server · Docker · Nginx · React. <a href="demo.html" style="color:#2c4f8f;">Walkthrough →</a> · <a href="app/index.html" style="color:#2c4f8f;">Live app →</a></li>
+      <li><strong>Kingsley MES / ERP / OEE platform</strong> - sole developer. One operations platform replacing Excel + paper across <em>production planning, QC seam-check, batch tracking + expiry, inventory + FIFO, dispatch, accounts, Sage Evolution integration, OEE monitoring</em>, and 8 print-ready PDF document templates. Python · FastAPI · MongoDB · SQL Server · Docker · nginx · React. <a href="demo.html" style="color:#2c4f8f;">Walkthrough →</a> · <a href="app/index.html" style="color:#2c4f8f;">Live app →</a></li>
     </ul>
 
     <h3 style="color:#1b1712; margin:18px 0 8px; font-size:16px;">Other software demos</h3>

@@ -76,7 +76,7 @@
       <h1>An open OEE engine: building ShopFloor API next to a production MES</h1>
       <div class="note-meta">
         <span>2026-06-11</span>
-        <span>~6 min read</span>
+        <span>~4 min read</span>
         <a href="https://github.com/saad-mughal435/shopfloor-api" target="_blank" rel="noopener">github.com/saad-mughal435/shopfloor-api ↗</a>
       </div>
     </header>
@@ -93,10 +93,11 @@
         solution.</p>
 
       <h2>1. OEE in one pure class</h2>
-      <p>Overall Equipment Effectiveness is the manufacturing KPI: <strong>Availability x
-        Performance x Quality</strong>. Each factor looks trivial until real shift data arrives.
-        The whole calculation lives in one dependency-free component, which makes it trivially
-        unit-testable:</p>
+      <p>Overall Equipment Effectiveness is the manufacturing KPI: <strong>Availability &times;
+        Performance &times; Quality</strong>. Each factor looks trivial until real shift data arrives.
+        The whole calculation lives in one class with no injected collaborators - it is a Spring
+        <code>@Component</code>, but it takes five <code>int</code>s and returns four numbers, so it
+        is trivially unit-testable:</p>
 
       <p class="note-code-label">service/OeeCalculator.java</p>
       <pre class="note-code"><code>int totalUnits = goodUnits + rejectUnits;
@@ -118,13 +119,35 @@ BigDecimal quality = ratio(
 
       <p>The interesting part is what the helper refuses to do. <code>ratio()</code> guards
         divide-by-zero (a shift with zero planned minutes, a batch with zero units) and
-        <strong>clamps every factor to [0, 1]</strong>. The clamp matters because real lines
-        sometimes run above their rated speed - operators push a machine past nameplate - and a
+        <strong>clamps every factor to [0, 1]</strong> - both bounds. The clamp matters because real
+        lines sometimes run above their rated speed - operators push a machine past nameplate - and a
         naive Performance of 1.07 multiplies through to an OEE over 100%, which destroys the
-        metric's credibility with the people it is supposed to convince. <code>BigDecimal</code>
-        with a fixed working scale, not <code>double</code>, because these numbers end up on
-        reports that get compared line-by-line; nobody should ever have to explain a
-        floating-point wobble in a management meeting.</p>
+        metric's credibility with the people it is supposed to convince.</p>
+
+      <p>Two honest caveats, because this is the paragraph that invites you to go and read the code.</p>
+
+      <p><strong>The upper clamp is a defensible choice, not an obviously correct one.</strong>
+        Standard OEE practice treats a Performance above 100% as a <em>signal</em> - it usually means
+        the ideal cycle time or the unit count is misconfigured, not that the line beat physics.
+        Silently clamping hides that. The version I would defend in a review is: clamp for display,
+        keep the raw value, and raise a data-quality flag. The clamp is what ships today.</p>
+
+      <p><strong>The divide-by-zero guard returns 0, and 0 is a real value.</strong> An unconfigured
+        nameplate speed drives Performance to zero and reports a confident OEE of 0%, which looks
+        identical to a catastrophic shift. That is the same failure I just argued against two
+        paragraphs up: a number the reader cannot distinguish from a real one. The right shape is an
+        explicit <code>INSUFFICIENT_DATA</code> rather than a zero, and the same goes for
+        <code>Math.max(0, planned - downtime)</code>, which quietly swallows a data-entry error where
+        logged downtime exceeds planned runtime. Both are on the list.</p>
+
+      <p><code>BigDecimal</code> with a fixed working scale, not <code>double</code> - though the
+        usual argument for it does not survive contact with this code. <code>ratio()</code> divides at
+        scale 8 and immediately rounds to 4, so each factor is rounded <em>before</em> the three are
+        multiplied, which introduces about 1e-4 of error - more than <code>double</code> would at
+        report precision. The real reason is not accuracy, it is <strong>determinism</strong>: the
+        rounding is specified, identical on every machine and every JVM, and reproducible when
+        somebody asks why last Tuesday's figure was 82.1% and not 82.2%. "Floating-point wobble" is
+        the wrong justification; auditability is the right one.</p>
 
       <h2>2. Compute at the moment of truth, not on a timer</h2>
       <p>OEE is calculated when a job order closes - a state-machine transition

@@ -76,7 +76,7 @@
       <h1>Reconstructing the NASDAQ book: ITCH 5.0 decode and a lock-free SPSC pipeline</h1>
       <div class="note-meta">
         <span>2026-06-11</span>
-        <span>~7 min read</span>
+        <span>~5 min read</span>
         <a href="https://github.com/saad-mughal435/hft-orderbook" target="_blank" rel="noopener">github.com/saad-mughal435/hft-orderbook ↗</a>
         <a href="/hft-book/viewer.html" target="_blank" rel="noopener">L2 viewer ↗</a>
       </div>
@@ -87,8 +87,8 @@
         TotalView-ITCH 5.0 feed and rebuilds the limit order book for every symbol in the stream,
         live. This note covers the four design decisions I would defend in a code review: how the
         bytes are decoded, how the two transports share one decoder, how the price-level store was
-        chosen by measurement instead of taste, and how the thread hand-off stays wait-free and
-        provably race-free.</p>
+        chosen by measurement instead of taste, and how the thread hand-off stays wait-free - and
+        what the sanitizer gate around it does and does not prove.</p>
 
       <h2>1. A reconstructor, not a matching engine</h2>
       <p>ITCH is a post-match feed: the exchange has already crossed the orders, and the stream
@@ -120,8 +120,13 @@ inline std::uint64_t rd_be(const std::uint8_t* p, int n) {
 }
 inline std::uint64_t rd48(const std::uint8_t* p) { return rd_be(p, 6); }</code></pre>
 
-      <p>Compilers see straight through this - the shifts fold into single byte-swap instructions -
-        so the safety costs nothing. Every message type also validates its exact on-wire length
+      <p>Compilers see straight through the fixed-width readers - the 2-, 4- and 8-byte cases fold
+        into a single <code>bswap</code> or <code>movbe</code> - so the safety costs nothing there.
+        Be precise about the limit, though: <code>rd_be(p, n)</code> with a runtime <code>n</code>
+        does not fold, and neither does the 6-byte <code>rd48</code> above, which is the one this
+        snippet showcases. Those stay a short byte loop. It is still the right trade - a handful of
+        cycles on the timestamp field against a class of undefined behaviour - but "it compiles away"
+        is only true for the widths the hardware has an instruction for. Every message type also validates its exact on-wire length
         before any field is read, which is what lets the libFuzzer harness hammer the decoder with
         garbage without ever finding an out-of-bounds read.</p>
 
@@ -143,22 +148,38 @@ inline std::uint64_t rd48(const std::uint8_t* p) { return rd_be(p, 6); }</code><
         drift:</p>
       <ul>
         <li><code>std::map</code> - the baseline; pointer-chasing red-black tree.</li>
-        <li>a sorted flat vector - contiguous, cache-friendly, but O(n) inserts away from the touch.</li>
+        <li>a sorted flat vector - contiguous and cache-friendly, but an insert away from the
+          inside costs an O(n) memmove to shift the tail of the vector.</li>
         <li>a <strong>windowed array indexed by price tick</strong> around the inside - the canonical
           L2 structure.</li>
       </ul>
-      <p>On the recorded benchmark run, the windowed array came out <strong>about 24% faster than
-        the map baseline</strong> - because order flow clusters tightly around the best prices, so
-        almost every update lands in a small, hot, contiguous window. The honest caveat from the
-        README applies: those are relative, same-runner figures from virtualized CI hardware - a
-        fair A/B, not an absolute latency claim. The point of the exercise is the discipline: all
-        three stores stay in the tree, parity-checked, so the trade-off is measured rather than
-        folklore.</p>
+      <p>On the recorded benchmark run, the windowed array cost <strong>about 20% less per
+        message</strong> than the map baseline - 89 down to 71 ns/msg, which is about 1.25&times; the
+        throughput - because order flow clusters tightly around the best prices, so almost every
+        update lands in a small, hot, contiguous window.</p>
+      <p>Four caveats, all of which I would rather state than be asked: those are relative,
+        same-runner figures from virtualised CI hardware, so it is a fair A/B and not an absolute
+        latency claim; it is <strong>n=1</strong>, with no repetitions and no variance reported;
+        the map and flat stores tie at ~89 ns and do <em>not</em> rank stably against each other
+        across runs, so read this as one clear winner and two that are indistinguishable here; and
+        the workload comes from my own <code>gencap</code> generator, whose clustering near the
+        inside is precisely the property that favours the structure that won. A generator that
+        spread order flow across a wide price range would narrow the gap. The point of the exercise
+        is the discipline: all three stores stay in the tree, parity-checked, so the trade-off is
+        measured rather than assumed.</p>
 
       <h2>5. The hand-off: a wait-free SPSC ring</h2>
       <p>Decode and book-building run on separate pinned threads, connected by a bounded
         single-producer / single-consumer ring. No locks, no CAS loops - just two monotonic
         counters with acquire/release ordering:</p>
+      <p>The two words are not interchangeable, and an interviewer will ask. <em>Lock-free</em>
+        guarantees that <em>some</em> thread makes progress; <em>wait-free</em> is stronger and
+        guarantees that <em>every</em> thread completes in a bounded number of steps. This ring is
+        wait-free: <code>push()</code> and <code>pop()</code> have no retry loop, so neither side can
+        be stalled by the other. That bound only holds if copying the element is itself bounded,
+        which is why the class carries a
+        <code>static_assert(std::is_trivially_copyable_v&lt;T&gt;)</code> - a <code>T</code> whose
+        assignment allocates would give the guarantee away silently.</p>
 
       <p class="note-code-label">include/core/spsc_ring.hpp</p>
       <pre class="note-code"><code>bool push(const T&amp; item) {
@@ -175,7 +196,10 @@ inline std::uint64_t rd48(const std::uint8_t* p) { return rd_be(p, 6); }</code><
 
       <p>The details that matter: capacity is rounded to a power of two so the wrap is a single
         AND; <code>head_</code> and <code>tail_</code> live on separate <code>alignas(64)</code>
-        cache lines so the two cores never false-share; and each side keeps a cached copy of the
+        cache lines, so on x86-64 the two cores do not false-share the other side's hot counter
+        (64 is the line size there and on most ARM, but it is not a universal guarantee - Intel's
+        L2 adjacent-line prefetcher and Apple Silicon's 128-byte lines are why Folly and DPDK pad
+        to 128); and each side keeps a cached copy of the
         other's counter, only paying the cross-core acquire when the ring looks full or empty.
         The consumer spins with a PAUSE-instruction busy-wait rather than sleeping, which is the
         right trade when the next message is microseconds away.</p>
@@ -183,6 +207,20 @@ inline std::uint64_t rd48(const std::uint8_t* p) { return rd_be(p, 6); }</code><
         <strong>ThreadSanitizer</strong> (data races), <strong>ASan/UBSan</strong> (memory and UB),
         a <strong>libFuzzer</strong> target on the decoder, and a clang <code>-Werror</code> build.
         A lock-free structure without a sanitizer gate is a future incident report.</p>
+      <p>But be exact about what that buys. TSan is a <em>dynamic</em> detector: it reports races in
+        the interleavings a run actually executed, and it does not verify that the memory orderings
+        are strong enough. A <code>relaxed</code> where <code>release</code> was required compiles to
+        the same instructions under x86-64's TSO and would sail through every green run here, then
+        break on ARM. So the claim is <strong>no races observed under TSan across the CI
+        matrix</strong> - evidence, not proof. Proving the orderings needs a model checker
+        (CDSChecker, GenMC, Relacy) or herd7 litmus tests, which this project does not have yet.</p>
+      <p>A worked example of exactly that gap, from this repo: <code>size_approx()</code> used to load
+        <code>head_</code> before <code>tail_</code>. With both sides running, the consumer can
+        advance <code>tail_</code> past the head value already read, and the unsigned subtraction
+        wraps to about 2^64 - so a draining ring reported as nearly full. Both loads were correctly
+        synchronised, so it was never a data race, and TSan was structurally blind to it. It took an
+        invariant assertion to catch. Reading <code>tail_</code> first fixes it, because
+        <code>tail &lt;= head</code> is monotonic.</p>
 
       <h2>6. Watching it work</h2>
       <p>The <a href="/hft-book/viewer.html">L2 viewer</a> renders the result: the depth
@@ -190,7 +228,7 @@ inline std::uint64_t rd48(const std::uint8_t* p) { return rd_be(p, 6); }</code><
         streamed as JSON snapshots over a dependency-free WebSocket. The in-browser demo replays a
         synthetic session (generated by <code>gencap</code>, run through the real engine); pass
         <code>?ws=</code> to watch a local <code>wsbook</code> live. It is the same reconstruction
-        code the benchmarks measure, replaying a synthetic session.</p>
+        code the benchmarks measure.</p>
 
       <h2>What I would do next</h2>
       <p>Three candidates, in order: kernel-bypass receive (AF_XDP or a userspace stack) to take

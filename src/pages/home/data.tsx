@@ -181,7 +181,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   },
   {
     q: 'What is Saad\'s tech stack?',
-    a: <Fragment>Python, FastAPI, Java, Spring Boot, MongoDB, PostgreSQL, JavaScript, React, Docker, Linux, nginx, Cloudflare, Git, REST APIs, JWT auth, Pandas, and Sage Evolution integration - comfortable across the full lifecycle from data-model design through deployment and ops.</Fragment>,
+    a: <Fragment>Python, FastAPI, Java, Spring Boot, MongoDB, PostgreSQL, JavaScript, React, Docker, Linux, nginx, Cloudflare, Git, REST APIs, JWT auth, pandas, and Sage Evolution integration - comfortable across the full lifecycle from data-model design through deployment and ops.</Fragment>,
   },
   {
     q: 'Can I see Saad\'s code?',
@@ -228,7 +228,7 @@ export const PROOF_QUOTES: ProofQuote[] = [];
 export const EXPERIENCE: ExperienceItem[] = [
   { domain: 'all',
     title: 'Automation & Software Developer · ERP Developer · IT Administrator',
-    when: 'Jul 2025 - Present',
+    when: 'Jul 2025 – Present',
     company: 'Kingsley Beverage FZCO · Dubai, UAE',
     points: [
       <Fragment><strong>Designed and shipped a full MES/ERP platform from scratch</strong> across PPC, inventory, QC, accounts, production reporting, and Sage integration - sole developer, currently running in production.</Fragment>,
@@ -240,7 +240,7 @@ export const EXPERIENCE: ExperienceItem[] = [
   },
   { domain: 'all',
     title: 'NOC Engineer',
-    when: 'Jul 2023 - Jul 2025',
+    when: 'Jul 2023 – Jul 2025',
     company: 'PTCL · Rawalpindi, Pakistan',
     points: [
       <Fragment>Backend operations for <em>GPON</em>, <em>PSTN</em>, and broadband network infrastructure at telecom scale.</Fragment>,
@@ -264,12 +264,12 @@ export const EXPERIENCE: ExperienceItem[] = [
     company: 'Omdena · Remote',
     points: [
       <Fragment>Contributed to ML models for <em>accessibility (vision-impaired navigation)</em> and <em>environmental monitoring (air-quality forecasting)</em> on global Omdena collaborations.</Fragment>,
-      <Fragment>Built Python ML pipelines using <em>scikit-learn, NumPy, Pandas, Jupyter</em> as part of a globally distributed <strong>50+ contributor team</strong> - data cleaning, feature engineering, training, evaluation.</Fragment>,
+      <Fragment>Built Python ML pipelines using <em>scikit-learn, NumPy, pandas, Jupyter</em> as part of a globally distributed <strong>50+ contributor team</strong> - data cleaning, feature engineering, training, evaluation.</Fragment>,
     ],
   },
   { domain: 'eng',
     title: 'Technical Engineering Intern',
-    when: 'Jun - Aug 2023',
+    when: 'Jun – Aug 2023',
     company: 'Kingsley Beverage FZCO · Dubai, UAE',
     points: [
       'First exposure to Krones machines; authored SOPs, work instructions, and quality manuals.',
@@ -278,7 +278,7 @@ export const EXPERIENCE: ExperienceItem[] = [
   },
   { domain: 'eng',
     title: 'Network Engineering Intern',
-    when: 'Jun - Aug 2022',
+    when: 'Jun – Aug 2022',
     company: 'PTCL · Rawalpindi, Pakistan',
     points: [
       'Maintained power systems, wireless communication, and switching equipment.',
@@ -292,7 +292,7 @@ export const EXPERIENCE: ExperienceItem[] = [
    ========================================================= */
 export const PROJECTS: Project[] = [
   {
-    domain: 'all ai', featured: true, kind: 'Production system · Live interactive demo', year: '2025 - Present',
+    domain: 'all ai', featured: true, kind: 'Production system · Live interactive demo', year: '2025 – Present',
     sectionEyebrow: 'Featured manufacturing system',
     sectionHeading: 'The platform behind the factory floor',
     sectionBlurb: 'Internal operations platform built around the beverage production workflow. Replaces Excel + paper across production planning, QC seam-check, batch tracking + expiry, inventory + FIFO, dispatch, accounts, Sage Evolution integration, OEE monitoring - plus 8 print-ready PDF document templates. Sole developer, end-to-end, running in production today at a beverage plant. The platform does not modify Krones machine automation; it digitises the surrounding work.',
@@ -307,10 +307,10 @@ export const PROJECTS: Project[] = [
     bullets: [
       <Fragment><strong>20+ integrated modules</strong>: PPC · job orders · inventory · recipes/BOM · QC seam-check · batch &amp; expiry tracking · dispatch · accounts · OEE · GRN · customs · Sage Evolution integration</Fragment>,
       <Fragment><strong>8 print-ready PDF templates</strong>: job order summary, picking sheet, QC batch report, proforma invoice, delivery advice, Sage batch export, mixing operations, RM order draft - all generated server-side from live data</Fragment>,
-      <Fragment><strong>Full stack ownership</strong> (data model → API → UI → infra → deployment): Python/FastAPI service, MongoDB + SQL Server, React/vanilla JS frontends, Docker, Nginx, JWT auth with row-level RBAC</Fragment>,
+      <Fragment><strong>Full stack ownership</strong> (data model → API → UI → infra → deployment): Python/FastAPI service, MongoDB + SQL Server, React/vanilla JS frontends, Docker, nginx, JWT auth with row-level RBAC</Fragment>,
       <Fragment><strong>~60%</strong> less time to produce the daily production report (my own before/after estimate, not audited) · <strong>5 departments</strong> on one system · operators, QC, stores, finance and management each have their own workflow</Fragment>,
     ],
-    tags: ['Python', 'FastAPI', 'MongoDB', 'SQL Server', 'Docker', 'Nginx', 'TLS', 'JWT', 'RBAC', 'Sage Evolution', 'pandas', 'openpyxl', 'fpdf', 'OEE', 'Manufacturing'],
+    tags: ['Python', 'FastAPI', 'MongoDB', 'SQL Server', 'Docker', 'nginx', 'TLS', 'JWT', 'RBAC', 'Sage Evolution', 'pandas', 'openpyxl', 'fpdf', 'OEE', 'Manufacturing'],
     ctaSubtitle: 'Live interactive demo - every value fabricated for privacy, every workflow faithful to the real system',
     ctaTip: <Fragment><strong>Best first view:</strong> open the <em>static walkthrough</em> for the 3-minute tour, then jump into the <em>live interactive demo</em>.</Fragment>,
     ctas: [
@@ -540,7 +540,7 @@ export const PROJECTS: Project[] = [
     bullets: [
       <Fragment><strong>Five role-scoped portals</strong> off one shared engine + mock API - tenant, vendor and inspector are mobile-first; manager and landlord are hash-routed consoles - with a live role / persona switcher</Fragment>,
       <Fragment><strong>Maintenance SLA state machine</strong>, a rent-cheque schedule with simulated payments &amp; printable receipts, and an <strong>inspection → deposit reconciliation</strong> flow feeding a room-by-room checklist</Fragment>,
-      <Fragment><strong>Inline-SVG charts</strong>, printable owner statements (hidden-iframe print), a notification center and a plain help-desk - <strong>no duplicated logic</strong> across portals</Fragment>,
+      <Fragment><strong>Inline-SVG charts</strong>, printable owner statements (hidden-iframe print), a notification centre and a plain help-desk - <strong>no duplicated logic</strong> across portals</Fragment>,
       <Fragment><strong>UAE-shaped</strong> - AED, Ejari tenancy contracts, post-dated cheques, DEWA, security-deposit rules; every figure fabricated for the demo</Fragment>,
     ],
     tags: ['Vanilla JS (ES6+)', 'Shared engine', 'Mock API (fetch shim)', 'localStorage', 'Inline-SVG charts', 'Role-scoped SPA', 'Hidden-iframe print', 'State machine', 'UAE (AED / Ejari)'],
@@ -741,7 +741,7 @@ export const DEMO_PROJECTS: Project[] = [
     bullets: [
       <Fragment><strong>Employees module</strong> · 32 employees with full UAE-specific fields (Emirates ID, passport, visa expiry, IBAN, base + allowances) · filter by department / status · per-employee profile sheet with leave balance.</Fragment>,
       <Fragment><strong>Leave management</strong> · 7 leave types (Annual, Sick, Maternity, Paternity, Unpaid, Compassionate, Hajj/Umrah) · pending → approved / rejected workflow · line-manager + HR sign-off · per-employee balance tracking (30 annual + 15 sick per UAE Labour Law).</Fragment>,
-      <Fragment><strong>WPS payroll runs</strong> · 6 months of historical runs + current draft · per-employee breakdown (base + allowances − deductions = net) · "Generate WPS SIF + Finalize" flow · pay-day 28th via Emirates NBD.</Fragment>,
+      <Fragment><strong>WPS payroll runs</strong> · 6 months of historical runs + current draft · per-employee breakdown (base + allowances − deductions = net) · "Generate WPS SIF + Finalise" flow · pay-day 28th via Emirates NBD.</Fragment>,
       <Fragment><strong>Recruitment kanban</strong> · 4 open roles · 22 candidates · lead / applied / interview / offer / hired stages · source tracking · rating · expected salary range.</Fragment>,
       <Fragment><strong>Performance reviews</strong> · Q2-2026 cycle in flight · 12 reviews across status (not started / in progress / submitted) · rating + goals-met %.</Fragment>,
       <Fragment><strong>AI policy assistant</strong> · an LLM grounded in 6 HR policies (leave, WPS, visa, gratuity, probation, remote) + UAE Labour Law. Every reply cites the specific policy by <code>[pol-xxx]</code>. Click a citation chip → opens the source policy.</Fragment>,
@@ -772,7 +772,7 @@ export const DEMO_PROJECTS: Project[] = [
     ],
   },
   {
-    domain: 'code', kind: 'Internal Tool', year: '2023 - 2025',
+    domain: 'code', kind: 'Internal Tool', year: '2023 – 2025',
     title: 'PSTN Config Auto-Generator',
     desc: 'Python tool that ingested PTCL service-tickets and emitted ready-to-run configuration scripts using a structured database of area codes, number ranges, and network parameters.',
     bullets: [
@@ -787,7 +787,7 @@ export const DEMO_PROJECTS: Project[] = [
     title: 'Omdena - AI for Accessibility',
     desc: 'Contributed to ML models for accessibility applications and environmental monitoring on a global Omdena collaboration - data, training, evaluation, deployment.',
     bullets: ['Hands-on model training & evaluation','Worked in a distributed contributor team'],
-    tags: ['scikit-learn', 'NumPy', 'Pandas'],
+    tags: ['scikit-learn', 'NumPy', 'pandas'],
   },
 ];
 

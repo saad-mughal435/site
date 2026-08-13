@@ -15,7 +15,7 @@ export function About() {
           <p>I&rsquo;m an <strong>Automation &amp; Software Developer</strong> at Kingsley Beverage FZCO in Dubai, where I&rsquo;m
             the sole developer of the MES/ERP platform running across the plant - and also work hands-on as
             <strong> Automation Engineer</strong> and <strong>IT Administrator</strong>. My engineering background
-            (B.Sc. Electrical / Computer Engineering, COMSATS Islamabad) lets me run and support the Krones beverage
+            (B.Sc. Electrical / Computer Engineering, COMSATS University Islamabad) lets me run and support the Krones beverage
             lines and troubleshoot production issues, then build the software <em>around</em> that workflow - the
             machine automation is OEM-locked, so my work is the OEE reporting, QC records, inventory, and management
             dashboards that sit on top of it.</p>
@@ -28,7 +28,7 @@ export function About() {
           <div className="aside-card-head">// quick facts</div>
           <dl>
             <dt>Location</dt><dd>UAE-based · Open to relocate worldwide</dd>
-            <dt>Education</dt><dd>B.Sc. Electrical Engineering - Computer Engineering Major - COMSATS Islamabad (2024)</dd>
+            <dt>Education</dt><dd>B.Sc. Electrical Engineering - Computer Engineering Major - COMSATS University Islamabad (2024)</dd>
             <dt>Languages</dt><dd>English (IELTS) · Urdu</dd>
             <dt>Open to</dt><dd>On-site · Hybrid · Remote</dd>
             <dt>Status</dt><dd><span className="led" style={{ marginRight: 6 }}></span>Open to work</dd>
