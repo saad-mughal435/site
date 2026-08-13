@@ -405,7 +405,19 @@ strong { font-weight: 600; color: var(--text); }
   color: var(--text);
   overflow-wrap: anywhere;
 }
-.hero-title .line { display: block; overflow: hidden; max-width: 100%; }
+/* `overflow: hidden` is the mask that makes titleRise work - the span starts at
+   translateY(110%) and slides up out of it. But line-height is 1.0, so descenders
+   (p, y, g) fall outside the line box and the mask sliced them flat. Extend the
+   mask downward and pull it back by the same amount, so descenders survive and
+   the vertical rhythm is unchanged. Only showed up once a headline had a
+   descender on the gradient line. */
+.hero-title .line {
+  display: block;
+  overflow: hidden;
+  max-width: 100%;
+  padding-bottom: 0.16em;
+  margin-bottom: -0.16em;
+}
 .hero-title .line span {
   display: block; max-width: 100%;
   transform: translateY(110%);
