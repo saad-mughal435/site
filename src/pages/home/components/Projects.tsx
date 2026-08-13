@@ -40,7 +40,7 @@ export function ProjectCard({ p, compact, beyondCap }: { p: Project; compact?: b
    the reader ask for the rest, rather than making everyone scroll past all of
    them. Desktop is unaffected - the cap is applied only inside the mobile media
    query, and `show-all` lifts it. */
-const MOBILE_CAP = 6;
+const MOBILE_CAP = 3;
 
 export function Projects({ view }: { view: string }) {
   const items = viewItems(PROJECTS, view);
