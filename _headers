@@ -1,7 +1,24 @@
 # Cloudflare Pages - HTTP headers
 # https://developers.cloudflare.com/pages/configuration/headers/
 
+# HSTS is a COMMITMENT, not a toggle: once a browser has seen this header it
+# refuses plain HTTP for this domain until max-age expires, and there is no way
+# to reach those users and tell them otherwise.
+#
+# Deliberately conservative to start:
+#   max-age=86400      one day, so a mistake ages out by tomorrow
+#   no includeSubDomains  would cover every future subdomain, incl. any staging host
+#   no preload         submits the domain to a list baked into browser binaries;
+#                      removal takes months. Do not add it casually.
+# Once this has run clean for a few days, raise max-age to 15552000 (6 months).
+#
+# NOTE: this is only half the job. http://saadm.dev/ still answers 200 because
+# "Always Use HTTPS" is a Cloudflare zone setting, not a header - HSTS only binds
+# a browser that has already reached the site over HTTPS once. Turn that on in
+# SSL/TLS -> Edge Certificates, and add a www -> apex 301 redirect rule.
 /*
+  Strict-Transport-Security: max-age=86400
+  Cross-Origin-Opener-Policy: same-origin
   X-Content-Type-Options: nosniff
   X-Frame-Options: SAMEORIGIN
   Referrer-Policy: strict-origin-when-cross-origin
