@@ -819,6 +819,12 @@ strong { font-weight: 600; color: var(--text); }
 .demos-sub a { color: var(--link); text-decoration: underline; text-underline-offset: 2px; }
 .demos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: stretch; }
 .demo-slide .project-desc { font-size: 14px; }
+/* Mobile-only "see the rest" affordance under the truncated demos grid.
+   Declared here, ahead of the media queries, so the max-width:760px override
+   later in the file wins - defining it after them silently loses the cascade. */
+.demos-more { display: none; justify-content: center; margin-top: 18px; }
+.projects-more { display: none; justify-content: center; margin-top: 20px; }
+
 @media (max-width: 1020px) { .demos-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 640px)  { .demos-grid { grid-template-columns: 1fr; } .proof-grid { grid-template-columns: 1fr; } }
 
@@ -1048,6 +1054,58 @@ a.contact-v:hover { color: var(--accent-h); }
   .project { padding: 22px 20px; }
 
   .skills-grid { grid-template-columns: 1fr; gap: 14px; }
+
+  /* ---------- Mobile length ------------------------------------------------
+     Measured at 390x844 this page ran 37,918px - roughly 45 screens of
+     scrolling - and 69% of it was the Projects and Demos card walls: 25 cards
+     each carrying a title, meta, full description, bullet list, tag row and a
+     stack of CTAs.
+
+     On a phone the card becomes a SUMMARY. Title, kind/year, a few lines of
+     description and the primary action; the detail lives on the page the card
+     links to, which is one tap away. Nothing is removed from the DOM, so
+     crawlers and the desktop layout are unaffected. */
+
+  /* Hero photo: dropped on mobile so the headline and the intro are the first
+     screen rather than a portrait pushing them below the fold. */
+  .hero-right { display: none; }
+  .hero { gap: 0; }
+
+  .project-bullets { display: none; }
+  .cta-subtitle, .cta-tip { display: none; }
+
+  .project-desc {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Tags wrap into 4-5 rows each at this width. Keep enough to signal the
+     stack, drop the tail. */
+  .project-tags .tag:nth-child(n + 7) { display: none; }
+
+  /* Keep the primary action (and one secondary); the rest are reachable from
+     the page it opens. */
+  .project-cta .btn:nth-of-type(n + 3) { display: none; }
+
+  /* The demos grid is 13 cards deep. Show the first six and offer the gallery,
+     which is the same content organised better for a phone. */
+  .demos-grid > *:nth-child(n + 7) { display: none; }
+  .demos-more { display: flex; }
+
+  /* Section blurbs restate, in a paragraph, what the card immediately below
+     already says. Keep the eyebrow and heading for wayfinding, drop the prose. */
+  .project-section-heading p { display: none; }
+
+  /* Selected Work is twelve cards. Show six; "Show N more" lifts the cap in
+     place. React tags both the card and its section heading, so nothing is left
+     orphaned above a hidden card. */
+  .projects-grid:not(.show-all) .beyond-cap { display: none; }
+  .projects-more { display: flex; }
+
+  /* Skill cards list up to 21 chips each, which wraps to six rows on a phone. */
+  .skill-chips .skill-chip:nth-child(n + 11) { display: none; }
 
   .contact-box { padding: 28px 22px; gap: 28px; }
   .contact-list li { grid-template-columns: 80px 1fr; gap: 12px; }

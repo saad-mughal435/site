@@ -38,6 +38,16 @@ export function Demos({ view }: { view: string }) {
       <Reveal stagger className="demos-grid">
         {items.map((p) => <ProjectCard key={p.title} p={p} compact />)}
       </Reveal>
+      {/* Mobile caps this grid at six cards (see home.css). Without this the
+          remaining ones would vanish with nothing to say so. Hidden on desktop,
+          where the whole grid is visible anyway. */}
+      {items.length > 6 && (
+        <div className="demos-more">
+          <a className="btn btn-ghost" href="demo.html" target="_blank" rel="noopener">
+            See all {items.length} demos ↗
+          </a>
+        </div>
+      )}
     </section>
   );
 }
