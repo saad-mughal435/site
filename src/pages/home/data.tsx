@@ -9,6 +9,9 @@ import type { ReactNode } from 'react';
    SINGLE-SOURCE FACTS  -  defined once, referenced everywhere
    ========================================================= */
 export const KINGSLEY = { departments: 5, reportingSpeedup: 60 };
+/* Served from the site root; listed in scripts/compose.mjs so the build fails
+   loudly rather than shipping a dead download link. */
+export const CV_HREF = '/Muhammad_Saad_CV_2026.pdf';
 export const AVAILABILITY = 'UAE-based, open to relocate worldwide, and happy with on-site, hybrid, or remote work';
 
 /* =========================================================
@@ -174,7 +177,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   },
   {
     q: 'What does the Kingsley MES / ERP platform do?',
-    a: <Fragment>It replaces spreadsheets and paper across {KINGSLEY.departments} departments - production planning, QC, batch &amp; expiry tracking, inventory with FIFO, dispatch, accounts, and Sage Evolution integration - with OEE monitoring and print-ready PDF reports generated server-side from live data. Saad designed, built, and runs it end-to-end (Python / FastAPI, MongoDB + SQL Server, Docker, nginx), cutting production reporting time by roughly {KINGSLEY.reportingSpeedup}%.</Fragment>,
+    a: <Fragment>It replaces spreadsheets and paper across {KINGSLEY.departments} departments - production planning, QC, batch &amp; expiry tracking, inventory with FIFO, dispatch, accounts, and Sage Evolution integration - with OEE monitoring and print-ready PDF reports generated server-side from live data. Saad designed, built, and runs it end-to-end (Python / FastAPI, MongoDB + SQL Server, Docker, nginx), cutting the time to produce the daily production report by an estimated {KINGSLEY.reportingSpeedup}%.</Fragment>,
   },
   {
     q: 'What is Saad\'s tech stack?',
@@ -205,10 +208,15 @@ export const PROOF_ITEMS: ProofItem[] = [
   { k: 'Published',
     v: 'n8n community node on npm: @saadmughal435/n8n-nodes-devtools - unit-tested, MIT-licensed.',
     link: { href: 'https://www.npmjs.com/package/@saadmughal435/n8n-nodes-devtools', label: 'View on npm ↗', target: '_blank' } },
-  { k: 'Open collab',
-    v: 'ML contributor on global Omdena collaborations - 50+ contributor teams, accessibility and air-quality projects.',
-    link: { href: 'https://www.linkedin.com/in/muhammadsaad435/', label: 'On LinkedIn ↗', target: '_blank' } },
+  { k: 'Tested',
+    v: 'This site and the ShopFloor API are covered by a Playwright suite - browser, API and axe-core accessibility specs, green in CI and run nightly against production.',
+    link: { href: 'https://github.com/saad-mughal435/playwright-e2e/actions', label: 'See the CI runs ↗', target: '_blank' } },
 ];
+/* The Omdena ML contribution used to sit here, with LinkedIn as its evidence
+   link - but Omdena is deliberately not on the LinkedIn profile while its dates
+   are unresolved, so that card was the one PROOF item whose "check it in one
+   click" led nowhere. It is still listed under Experience as a claim. Restore it
+   here once the dates are confirmed and it is on LinkedIn. */
 // Short quotes from a manager / colleague. Leave empty to ship only the
 // verifiable items above; fill in when the text is confirmed:
 //   { text: '...', name: 'Full Name', role: 'Title, Company' }
@@ -224,7 +232,7 @@ export const EXPERIENCE: ExperienceItem[] = [
     company: 'Kingsley Beverage FZCO · Dubai, UAE',
     points: [
       <Fragment><strong>Designed and shipped a full MES/ERP platform from scratch</strong> across PPC, inventory, QC, accounts, production reporting, and Sage integration - sole developer, currently running in production.</Fragment>,
-      <Fragment><strong>Reduced production reporting time by an estimated ~60%</strong> through automated OEE monitoring, batch tracking, PDF reports, and centralised workflows across <strong>5 departments</strong>.</Fragment>,
+      <Fragment><strong>Cut the time to produce the daily production report by an estimated ~60%</strong> through automated OEE monitoring, batch tracking, server-generated PDF reports, and centralised workflows across <strong>5 departments</strong>. That figure is my own before/after estimate of the reporting task, not an audited measurement.</Fragment>,
       <Fragment>Administer the underlying stack end-to-end - <em>Linux VM, MongoDB, Sage integration, Cloudflare-fronted nginx</em>, user accounts, backups, and deployment.</Fragment>,
       <Fragment>Run and support the <em>Krones</em> beverage production lines, coordinate operators during shifts, and troubleshoot production issues across blow molding, filling, Checkmate inspection, Variopac FS packaging, palletizing, and PET preform handling. The Krones machine automation is OEM-locked; my work focuses on line support and the surrounding ERP / OEE / reporting workflows.</Fragment>,
       'Support root-cause analysis and commissioning across interconnected line machines; author SOPs and operator instructions.',
@@ -236,9 +244,9 @@ export const EXPERIENCE: ExperienceItem[] = [
     company: 'PTCL · Rawalpindi, Pakistan',
     points: [
       <Fragment>Backend operations for <em>GPON</em>, <em>PSTN</em>, and broadband network infrastructure at telecom scale.</Fragment>,
-      <Fragment>Monitored national network performance via <em>SolarWinds NMS</em>; resolved faults using Huawei and Nokia tooling with minimal subscriber downtime.</Fragment>,
-      <Fragment>Managed full incident lifecycle through <em>Oracle CRM</em>; partnered with the switching dept on PSTN migrations completed with zero outages.</Fragment>,
-      <Fragment><strong>Built a Python tool</strong> that auto-generated PSTN configuration scripts from incoming tickets, removing manual prep work entirely and cutting provisioning time dramatically.</Fragment>,
+      <Fragment>Monitored national network performance via <em>SolarWinds NMS</em>; resolved faults using Huawei and Nokia tooling, working to the NOC&rsquo;s restoration targets.</Fragment>,
+      <Fragment>Managed full incident lifecycle through <em>Oracle CRM</em>; partnered with the switching dept on PSTN migrations, which ran without a customer-visible outage.</Fragment>,
+      <Fragment><strong>Built a Python tool</strong> that auto-generated PSTN configuration scripts from incoming tickets, replacing the manual Excel prep step for that workflow. It went into the live 24/7 environment; the time saved was never formally measured, so treat the speed-up as an estimate.</Fragment>,
     ],
   },
   { domain: 'code',
@@ -287,20 +295,20 @@ export const PROJECTS: Project[] = [
     domain: 'all ai', featured: true, kind: 'Production system · Live interactive demo', year: '2025 - Present',
     sectionEyebrow: 'Featured manufacturing system',
     sectionHeading: 'The platform behind the factory floor',
-    sectionBlurb: 'Internal operations platform built around the beverage production workflow. Replaces Excel + paper across production planning, QC seam-check, batch tracking + expiry, inventory + FIFO, dispatch, accounts, Sage Evolution integration, OEE monitoring - plus 6 print-ready PDF document templates. Sole developer, end-to-end, running in production today at a beverage plant. The platform does not modify Krones machine automation; it digitises the surrounding work.',
+    sectionBlurb: 'Internal operations platform built around the beverage production workflow. Replaces Excel + paper across production planning, QC seam-check, batch tracking + expiry, inventory + FIFO, dispatch, accounts, Sage Evolution integration, OEE monitoring - plus 8 print-ready PDF document templates. Sole developer, end-to-end, running in production today at a beverage plant. The platform does not modify Krones machine automation; it digitises the surrounding work.',
     title: 'Kingsley MES / ERP / OEE Platform',
     desc: <Fragment>An internal full-stack operations platform that ends manual workflows - spreadsheets, paper
       logs, copy-paste reports, ticket prep - across production planning, QC, batch tracking, inventory, dispatch,
       accounts, and Sage integration. The platform sits <em>around</em> the production line (Krones machine
-      automation is locked OEM; this software digitises the operator-, QC-, stores-, and finance-side workflow).
+      automation is locked OEM; this software digitises the operator-, QC-, stores-, and finance-side workflow).{' '}
       <strong>Sole developer</strong>, end-to-end, currently running in production. The &quot;Launch live app&quot;
       demo is interactive with the same UI and workflows - every value is fabricated for privacy but the structure
       is faithful to the real system.</Fragment>,
     bullets: [
       <Fragment><strong>20+ integrated modules</strong>: PPC · job orders · inventory · recipes/BOM · QC seam-check · batch &amp; expiry tracking · dispatch · accounts · OEE · GRN · customs · Sage Evolution integration</Fragment>,
-      <Fragment><strong>6 print-ready PDF templates</strong>: proforma invoice, packing list, picking sheet, batch report, GRN, recipe sheet - all generated server-side from live data</Fragment>,
+      <Fragment><strong>8 print-ready PDF templates</strong>: job order summary, picking sheet, QC batch report, proforma invoice, delivery advice, Sage batch export, mixing operations, RM order draft - all generated server-side from live data</Fragment>,
       <Fragment><strong>Full stack ownership</strong> (data model → API → UI → infra → deployment): Python/FastAPI service, MongoDB + SQL Server, React/vanilla JS frontends, Docker, Nginx, JWT auth with row-level RBAC</Fragment>,
-      <Fragment><strong>~60%</strong> faster production reporting · <strong>5 departments</strong> on one system · operators, QC, stores, finance and management each have their own workflow</Fragment>,
+      <Fragment><strong>~60%</strong> less time to produce the daily production report (my own before/after estimate, not audited) · <strong>5 departments</strong> on one system · operators, QC, stores, finance and management each have their own workflow</Fragment>,
     ],
     tags: ['Python', 'FastAPI', 'MongoDB', 'SQL Server', 'Docker', 'Nginx', 'TLS', 'JWT', 'RBAC', 'Sage Evolution', 'pandas', 'openpyxl', 'fpdf', 'OEE', 'Manufacturing'],
     ctaSubtitle: 'Live interactive demo - every value fabricated for privacy, every workflow faithful to the real system',
@@ -342,7 +350,7 @@ export const PROJECTS: Project[] = [
     title: 'Service Desk - IT helpdesk / ITSM',
     desc: <Fragment>An internal IT service desk in <strong>Django 6 + Django REST Framework</strong>: incidents
       and service requests move through a status workflow with <strong>SLA due dates and breach
-      detection</strong>, every change lands on an audit timeline, and access is gated by
+      detection</strong>, every change lands on an audit timeline, and access is gated by{' '}
       <strong>Django Groups</strong> (requesters / agents / managers). Postgres on Neon, WhiteNoise
       static, gunicorn, deployed on Render with green CI.</Fragment>,
     bullets: [
@@ -365,7 +373,7 @@ export const PROJECTS: Project[] = [
     sectionBlurb: 'A property-maintenance ticketing platform split into a Django REST API and a separate React single-page app. Customers raise requests routed to a department (skill group); a dispatcher assigns a technician who actually holds that skill and is free; the technician works it to completion. One person can hold many skills, and the assignment guard enforces it. JWT auth, role-scoped data, an SLA clock, green CI, and a one-blueprint deploy to Render + Neon.',
     title: 'FixFlow - property-maintenance ticketing (DRF API + React SPA)',
     desc: <Fragment>A property-maintenance service desk in <strong>Django 6 + Django REST Framework</strong> with a
-      separate <strong>React 19 + TypeScript</strong> SPA. Customers self-register and raise a request against a
+      separate <strong>React 19 + TypeScript</strong> SPA. Customers self-register and raise a request against a{' '}
       <strong>department (skill group)</strong>; a dispatcher assigns a <strong>skill-matched, available
       technician</strong>; the technician works it start → complete. <strong>JWT auth</strong>, role-scoped
       querysets, an SLA clock, and an OpenAPI schema - Postgres on Neon, deployable via a two-service Render
@@ -392,14 +400,14 @@ export const PROJECTS: Project[] = [
     desc: <Fragment>A low-latency <strong>C++17</strong> trading-infrastructure engine. It reconstructs limit-order books from the real <strong>NASDAQ TotalView-ITCH 5.0</strong> feed - over <strong>BinaryFILE</strong> captures and the <strong>MoldUDP64</strong> UDP multicast transport - derives microstructure signals, scales across cores, speaks <strong>FIX 4.4</strong> order entry and a <strong>MetaTrader 5</strong> bridge, and can be <strong>watched reconstructing the book in the browser</strong> (a synthetic ITCH session replayed through the real engine; point it at a live wsbook feed with <code>?ws=</code>). ITCH is pre-matched, so this is a <strong>reconstructor, not a matching engine</strong> - the hot path is an O(1) <code>order_ref → order</code> map.</Fragment>,
     bullets: [
       <Fragment><strong>Market connectivity</strong> - ITCH 5.0 decode by manual big-endian byte assembly (never a packed-struct cast over the wire); reads real <strong>BinaryFILE</strong> files and the <strong>MoldUDP64</strong> UDP feed with <strong>sequence-gap detection</strong>; routes every message to a per-symbol book by <code>stock_locate</code></Fragment>,
-      <Fragment><strong>Lock-free, sub-microsecond, sharded</strong> - a wait-free SPSC ring (<code>alignas(64)</code> cache-line split, <code>PAUSE</code> busy-wait) feeds a decode → book pipeline in well under 100&nbsp;ns/msg; symbols shard across pinnable worker threads, one ring each - all <strong>validated race-free by ThreadSanitizer</strong></Fragment>,
-      <Fragment><strong>Pluggable book, measured</strong> - templated over its price-level store: a <code>std::map</code> baseline, a flat sorted vector, and a <strong>price-tick-indexed windowed array</strong> (the canonical L2 structure, ~24% faster in the A/B) - all three parity-tested and benchmarked head-to-head with Google Benchmark</Fragment>,
+      <Fragment><strong>Wait-free, sharded, &lt;100&nbsp;ns/msg</strong> - a wait-free SPSC ring (<code>alignas(64)</code> cache-line split, <code>PAUSE</code> busy-wait) feeds a decode → book pipeline in well under 100&nbsp;ns/msg; symbols shard across pinnable worker threads, one ring each - with <strong>no races observed under ThreadSanitizer</strong> across the CI matrix (a dynamic detector, so that is evidence, not proof - verifying the memory orderings themselves needs a model checker)</Fragment>,
+      <Fragment><strong>Pluggable book, measured</strong> - templated over its price-level store: a <code>std::map</code> baseline, a flat sorted vector, and a <strong>price-tick-indexed windowed array</strong> (the canonical L2 structure, ~20% lower per-message cost than the map baseline on one run - 89 → 71 ns/msg) - all three parity-tested and benchmarked head-to-head with Google Benchmark</Fragment>,
       <Fragment><strong>Microstructure signals + browser viewer</strong> - micro-price, order-book imbalance and spread (bps) plus a trade tape with VWAP / OHLCV, streamed as JSON over a <strong>dependency-free WebSocket</strong> (hand-rolled SHA-1 + RFC-6455 frame codec) to a browser L2 book viewer</Fragment>,
       <Fragment><strong>FIX 4.4 order entry</strong> - a compact FIX codec (NewOrderSingle / ExecutionReport) with auto BodyLength + CheckSum: the order-entry counterpart to the ITCH market-data side (market data in, orders out)</Fragment>,
       <Fragment><strong>MetaTrader 5 bridge</strong> - versioned NDJSON over TCP, an <code>ITCHBridge.mq5</code> EA, and a depth/signal publisher that streams the reconstructed book back; a mock-client integration test runs the full ticks → orders → acks round trip in CI without Windows</Fragment>,
       <Fragment><strong>Hardened & verified</strong> - every push runs ThreadSanitizer, Address / UB sanitizers, a <strong>libFuzzer</strong> decode harness and a clang <code>-Werror</code> build alongside <code>ctest</code> and a benchmark smoke</Fragment>,
     ],
-    tags: ['C++17', 'HFT', 'NASDAQ ITCH 5.0', 'Lock-free', 'Low-latency', 'Sub-microsecond', 'MoldUDP64', 'UDP multicast', 'FIX 4.4', 'Order entry', 'Market data', 'Multi-symbol', 'Microstructure signals', 'Order-book imbalance', 'Sharded', 'WebSocket', 'MetaTrader 5', 'Benchmarked', 'Sanitized + fuzzed', 'CMake', 'GitHub Actions'],
+    tags: ['C++17', 'HFT', 'NASDAQ ITCH 5.0', 'Wait-free', 'Low-latency', '<100 ns/msg', 'MoldUDP64', 'UDP multicast', 'FIX 4.4', 'Order entry', 'Market data', 'Multi-symbol', 'Microstructure signals', 'Order-book imbalance', 'Sharded', 'WebSocket', 'MetaTrader 5', 'Benchmarked', 'Sanitized + fuzzed', 'CMake', 'GitHub Actions'],
     ctas: [
       { label: 'View on GitHub ↗', href: 'https://github.com/saad-mughal435/hft-orderbook', target: '_blank', primary: true, prominent: true },
       { label: 'L2 viewer ↗', href: '/hft-book/viewer.html', target: '_blank', prominent: true },
@@ -413,9 +421,9 @@ export const PROJECTS: Project[] = [
     sectionBlurb: 'A published n8n community node that packages the developer and crypto primitives workflows keep reaching for - JWT, hashing, IDs, conversions, regex - behind a clean Resource / Operation UI. The logic is kept pure and unit-tested with green CI; the kind of TypeScript tooling that turns up in real automation and integration work.',
     title: 'n8n-nodes-devtools - n8n community node',
     desc: <Fragment>A standalone <strong>n8n community node</strong> in <strong>TypeScript</strong> that bundles the
-      utilities every real workflow reaches for: <strong>JWT sign / verify</strong> (HS256/RS256, with
+      utilities every real workflow reaches for: <strong>JWT sign / verify</strong> (HS256/RS256, with{' '}
       <code>exp</code> / <code>nbf</code> checks), hashing and <strong>HMAC</strong>, UUID / Nano ID, JSON ↔ CSV
-      and base64, and <strong>regex extraction</strong> with named groups. A programmatic <code>INodeType</code>
+      and base64, and <strong>regex extraction</strong> with named groups. A programmatic <code>INodeType</code>{' '}
       over a framework-free core, so the behaviour is <strong>fully unit-tested</strong> with green CI.</Fragment>,
     bullets: [
       <Fragment><strong>JWT sign / verify</strong> - HS256/384/512 + RS256; verification checks the signature and <code>exp</code> / <code>nbf</code> and lets you pin the accepted algorithms</Fragment>,
@@ -437,7 +445,7 @@ export const PROJECTS: Project[] = [
     sectionHeading: 'Tested like production software',
     sectionBlurb: 'Automated quality gates for the work above: a Playwright suite drives this very site and the ShopFloor API across real browsers and devices, runs in GitHub Actions on every push and nightly, and doubles as a production uptime check.',
     title: 'playwright-e2e - Cross-browser test automation',
-    desc: <Fragment>A <strong>Playwright + TypeScript</strong> end-to-end suite that tests <strong>this portfolio</strong>
+    desc: <Fragment>A <strong>Playwright + TypeScript</strong> end-to-end suite that tests <strong>this portfolio</strong>{' '}
       and the live <strong>ShopFloor API</strong>. Browser specs cover load smoke, the React render, SEO / JSON-LD,
       navigation, the contact form, every project demo, and the Lahza PWA; API specs cover JWT auth and read-only
       domain endpoints - all green in CI across five browser and device targets.</Fragment>,
@@ -665,7 +673,7 @@ export const DEMO_PROJECTS: Project[] = [
   {
     domain: 'code ai', kind: 'Disconnected demo · Portfolio piece', year: '2026',
     title: 'Watad - smart-building / BMS operations console',
-    desc: <Fragment>A live operator console for a commercial smart building - the kind of software Imdaad / EFS / Schneider / Honeywell ship to facilities teams. Live SVG floor plan with HVAC, lighting, metering and sensor equipment plotted as icons, a simulated BACnet/Modbus telemetry stream (5-second tick mutating ~200 points plausibly per asset class + outdoor temp + occupancy), severity-sorted alarm queue with audio cues, predictive-maintenance work orders, ASHRAE-overlaid energy curves, and an industrial-AI copilot. The <strong>first portfolio demo with a real-time data shape</strong> - proves I can think beyond REST.</Fragment>,
+    desc: <Fragment>A live operator console for a commercial smart building - the shape a facilities team actually works in: one screen that has to answer &quot;what is wrong right now, how bad, and who is going&quot;. Live SVG floor plan with HVAC, lighting, metering and sensor equipment plotted as icons, a simulated BACnet/Modbus telemetry stream (5-second tick mutating ~200 points plausibly per asset class + outdoor temp + occupancy), severity-sorted alarm queue with audio cues, predictive-maintenance work orders, ASHRAE-overlaid energy curves, and an industrial-AI copilot. The <strong>first portfolio demo with a real-time data shape</strong> - state that changes under you, rather than a request/response CRUD screen.</Fragment>,
     bullets: [
       <Fragment><strong>Live SVG floor plan</strong> · 4 floors, 48 assets at absolute pixel coordinates. Equipment icons pulse red when their associated point is in alarm. Click any chiller / AHU / FCU / light / meter to drill into a 24h overlaid trend chart.</Fragment>,
       <Fragment><strong>Real-time telemetry simulator</strong> · ~200 points across the building, 5-second tick, plausible values per asset class (chiller load tracks outdoor temp, FCU zone temp drifts when occupied, sub-meters accumulate kWh), 288-sample history buffer per point regenerated from a seeded RNG so charts always look populated.</Fragment>,
@@ -710,7 +718,7 @@ export const DEMO_PROJECTS: Project[] = [
   {
     domain: 'code ai', kind: 'Disconnected demo · Portfolio piece', year: '2026',
     title: 'Marsad - fleet / logistics dispatcher console',
-    desc: <Fragment>A live <strong>dispatcher console for a Dubai last-mile courier</strong>. 16 drivers, 12 vans + 4 motorbikes, 96 in-flight orders across 6 service zones (Marina, JLT, Downtown, Business Bay, Deira, Sharjah Al Nahda). Real Leaflet map with vehicle pins that tick toward their next drop every 4 seconds. The fleet simulator + AI dispatcher copilot are the technical differentiators - recognisably the same shape Aramex / Noon Express / Talabat run internally.</Fragment>,
+    desc: <Fragment>A live <strong>dispatcher console for a Dubai last-mile courier</strong>. 16 drivers, 12 vans + 4 motorbikes, 96 in-flight orders across 6 service zones (Marina, JLT, Downtown, Business Bay, Deira, Sharjah Al Nahda). Real Leaflet map with vehicle pins that tick toward their next drop every 4 seconds. The fleet simulator + AI dispatcher copilot are the technical differentiators - the shape any last-mile operation needs: live vehicle state, SLA pressure per zone, and a dispatcher deciding who goes where next.</Fragment>,
     bullets: [
       <Fragment><strong>Live map with real coordinates</strong> · Leaflet + Carto dark tiles, real Dubai lat/lng. Vehicle pins move toward their assigned drop-off · order pins flip green on delivery · audio chime on SLA breach.</Fragment>,
       <Fragment><strong>Real-time fleet simulator</strong> · 4-second tick · 96 orders + 16 vehicles · plausible movement (vehicles head toward their next drop, deliver within 120m, then pick the next assignment). Pure JS, no map provider beyond tiles.</Fragment>,
@@ -729,7 +737,7 @@ export const DEMO_PROJECTS: Project[] = [
   {
     domain: 'code ai', kind: 'Disconnected demo · Portfolio piece', year: '2026',
     title: 'Nabta - UAE HR + payroll SaaS',
-    desc: <Fragment>A modern <strong>UAE-shaped HRIS</strong>: 32 employees across 5 departments, leave management with line-manager + HR approval, <strong>WPS-compliant payroll runs</strong> through Emirates NBD, recruitment kanban, performance review cycle, and an AI-powered HR policy assistant grounded in the company handbook + UAE Labour Law (Federal Decree-Law No. 33 of 2021). The kind of software every Dubai / Abu Dhabi mid-size company actually runs but typically buys (Bayzat / GulfTalent / Zimyo) rather than builds.</Fragment>,
+    desc: <Fragment>A modern <strong>UAE-shaped HRIS</strong>: 32 employees across 5 departments, leave management with line-manager + HR approval, <strong>WPS-compliant payroll runs</strong> through Emirates NBD, recruitment kanban, performance review cycle, and an AI-powered HR policy assistant grounded in the company handbook + UAE Labour Law (Federal Decree-Law No. 33 of 2021). The kind of system every Dubai / Abu Dhabi mid-size company runs and almost always buys rather than builds - which makes it a good test of whether the domain rules (WPS files, visa expiry, gratuity, Labour Law leave entitlements) have actually been modelled or just mocked up.</Fragment>,
     bullets: [
       <Fragment><strong>Employees module</strong> · 32 employees with full UAE-specific fields (Emirates ID, passport, visa expiry, IBAN, base + allowances) · filter by department / status · per-employee profile sheet with leave balance.</Fragment>,
       <Fragment><strong>Leave management</strong> · 7 leave types (Annual, Sick, Maternity, Paternity, Unpaid, Compassionate, Hajj/Umrah) · pending → approved / rejected workflow · line-manager + HR sign-off · per-employee balance tracking (30 annual + 15 sick per UAE Labour Law).</Fragment>,
@@ -767,7 +775,11 @@ export const DEMO_PROJECTS: Project[] = [
     domain: 'code', kind: 'Internal Tool', year: '2023 - 2025',
     title: 'PSTN Config Auto-Generator',
     desc: 'Python tool that ingested PTCL service-tickets and emitted ready-to-run configuration scripts using a structured database of area codes, number ranges, and network parameters.',
-    bullets: ['Eliminated manual ticket prep','Faster provisioning + lower error rate','Zero-outage PSTN migrations'],
+    bullets: [
+      'Replaced the manual Excel prep step for PSTN provisioning tickets',
+      'Fewer transcription errors, because the parameters came from the database rather than being retyped',
+      'Used on live PSTN migrations that ran without a customer-visible outage',
+    ],
     tags: ['Python', 'SQLite', 'Templates', 'Telecom'],
   },
   {

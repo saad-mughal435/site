@@ -196,6 +196,17 @@
 .pill-amber { background: var(--panel-hi); color: var(--amber-text); }
 .pill-green { background: var(--panel-hi); color: var(--ok); }
 .pill-grey  { background: var(--panel-hi); color: var(--ink-mute); }
+.pill-red   { background: var(--panel-hi); color: var(--red); border-color: var(--red); }
+
+/* Inline explanatory note under a table - used where the demo data is
+   deliberately showing a failure path (an out-of-spec QC reading, a short
+   pick) so it reads as the validation working, not as a data error. */
+.app-note { font-size: 13px; line-height: 1.55; color: var(--ink-mute); margin: 10px 0 0; padding: 10px 12px; border-left: 2px solid var(--amber-text); background: var(--panel-hi); border-radius: 0 6px 6px 0; }
+.app-note strong { color: var(--ink); }
+
+/* Shows the arithmetic behind each OEE factor, so the ring can be checked
+   rather than taken on trust. */
+.ring-calc { display: block; font-family: var(--mono); font-size: 10.5px; color: var(--ink-mute); letter-spacing: 0.2px; margin-top: 1px; }
 
 /* ---------- KV grid ---------- */
 .kv-grid { display: grid; grid-template-columns: 130px 1fr; gap: 8px 14px; margin: 0; }

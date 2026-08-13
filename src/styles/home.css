@@ -1103,3 +1103,41 @@ html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
 .lenis.lenis-stopped { overflow: hidden; }
+
+/* ---------- Inline links in body copy ----------------------------------
+   Lighthouse `link-in-text-block`: a link inside a block of text has to be
+   distinguishable by something other than colour. The accent (#6e8eff) against
+   secondary copy (#b5bdcc) measures 1.59:1, well under the 3:1 minimum, so
+   these need an underline rather than a lighter blue.
+
+   Scoped to prose containers on purpose - buttons, tags, nav and card CTAs
+   already carry their own affordance and must not pick this up. */
+.hero-tracks a,
+.hero-sub a,
+.demos-sub a,
+.about-copy a,
+.faq-answer a,
+.project-desc a,
+.project-bullets a,
+.cta-subtitle a,
+.cta-tip a,
+.proof-card a,
+.footer-copy a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+}
+.hero-tracks a:hover,
+.hero-sub a:hover,
+.demos-sub a:hover,
+.about-copy a:hover,
+.faq-answer a:hover,
+.project-desc a:hover,
+.project-bullets a:hover,
+.cta-subtitle a:hover,
+.cta-tip a:hover,
+.proof-card a:hover,
+.footer-copy a:hover { text-decoration-thickness: 2px; }
+
+/* Contact block now has two actions (form + CV download) rather than one. */
+.contact-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }

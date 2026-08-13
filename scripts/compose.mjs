@@ -26,6 +26,9 @@ const FILES = [
   'BingSiteAuth.xml',
   // images
   'og.png', 'saad.png', 'saad.webp',
+  // CV - linked from the nav and the contact block. compose is fail-loud, so if
+  // this is ever removed the build breaks rather than shipping a 404 download.
+  'Muhammad_Saad_CV_2026.pdf',
   // public docs (served today; harmless and honest)
   'README.md', 'CHANGELOG.md', 'CONTRIBUTING.md', 'SECURITY.md', 'LICENSE',
 ];

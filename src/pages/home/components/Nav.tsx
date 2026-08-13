@@ -2,6 +2,7 @@
    NAV - ThemeToggle + Nav, verbatim behaviour from home.app.jsx
    ========================================================= */
 import { useEffect, useState } from 'react';
+import { CV_HREF } from '../data';
 import { useScrollPos } from '../hooks';
 
 export function ThemeToggle() {
@@ -66,6 +67,7 @@ export function Nav() {
           <a href="#skills" className={active === 'skills' ? 'active' : ''} aria-current={active === 'skills' ? 'page' : undefined} onClick={close}>Skills</a>
           <a href="notes/" onClick={close} title="Engineering notes - short technical write-ups">Notes</a>
           <a href="demo.html" target="_blank" rel="noopener" onClick={close} aria-label="Open the full demo gallery in a new tab">Demo ↗</a>
+          <a href={CV_HREF} download onClick={close} title="Download CV as PDF">CV</a>
           <a href="contact.html" onClick={close}>Contact</a>
         </nav>
         <ThemeToggle />

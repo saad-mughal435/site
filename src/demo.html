@@ -72,15 +72,20 @@
 
 <!-- ================= DEMO CHOOSER ================= -->
 <section class="container no-print" style="padding-top:36px; padding-bottom:8px;">
-  <span class="section-tag">Eleven demos · all interactive · all data fabricated</span>
+  <span class="section-tag">Fifteen demos · all interactive · all data fabricated</span>
   <h1 class="hero-title" style="font-size:clamp(26px,3.4vw,40px); margin-top:10px;">
     Choose a demo to explore.
   </h1>
   <p class="hero-sub" style="max-width:760px;">
-    Eleven different shapes of software I have shipped or built: an internal MES/ERP system, a direct-to-consumer storefront,
-    a B2B wholesale portal, a Dubai real-estate marketplace, a UAE short-stay booking marketplace, a café / quick-service POS,
-    an AI customer-support copilot, a smart-building / BMS operations console, a mobile-first AI journaling PWA,
-    a fleet / logistics dispatcher console, and a UAE HR + payroll SaaS. The ERP walkthrough is the one open below - click any tab to switch.
+    <strong>One of these is a production system.</strong> The Kingsley MES/ERP platform runs daily at a Dubai beverage
+    plant; what you can open here is a faithful walkthrough of it with every value fabricated. Three more are open-source
+    services you can run yourself - the <strong>ShopFloor API</strong> (Java 21 / Spring Boot 3), the
+    <strong>Service Desk</strong> (Python 3.14 / Django 6 / DRF), and the <strong>HFT order book</strong>
+    (C++17 / ITCH 5.0 / FIX 4.4). The remaining eleven are portfolio builds, and I would rather say so than blur them
+    together: a direct-to-consumer storefront, a B2B wholesale portal, a Dubai real-estate marketplace, a UAE short-stay
+    booking marketplace, a café / quick-service POS, a property-management platform, an AI customer-support copilot,
+    a smart-building / BMS operations console, a mobile-first AI journaling PWA, a fleet / logistics dispatcher console,
+    and a UAE HR + payroll SaaS. The ERP walkthrough is the one open below - click any tab to switch.
   </p>
 
   <div class="demo-filter" role="group" aria-label="Filter demos by category" hidden>
@@ -96,7 +101,7 @@
       <img class="demo-card-thumb" src="/app/og.jpg" alt="" loading="lazy" decoding="async" width="1200" height="630" />
       <div class="demo-card-eyebrow">Default · open below</div>
       <div class="demo-card-title">ERP system</div>
-      <div class="demo-card-sub">Kingsley MES/ERP - production walkthrough with 20+ integrated modules and 6 PDF templates.</div>
+      <div class="demo-card-sub">Kingsley MES/ERP - production walkthrough with 20+ integrated modules and 8 PDF templates.</div>
       <div class="demo-card-stack">Python · FastAPI · MongoDB · SQL Server · Docker · Nginx · Sage</div>
       <div class="demo-card-tech">Technically: fetch-interceptor mock API, 20+ hash-routed modules, server-side PDF pipeline mirrored in-browser</div>
       <div class="demo-card-cta">Scroll down ↓</div>
@@ -105,7 +110,7 @@
       <img class="demo-card-thumb" src="/assets/og-shopfloor.jpg" alt="" loading="lazy" decoding="async" width="1200" height="630" />
       <div class="demo-card-eyebrow">Live · interactive · Java / Spring Boot</div>
       <div class="demo-card-title">MES/OEE backend (Java)</div>
-      <div class="demo-card-sub">ShopFloor API - the same operations domain as the ERP above, rebuilt as a clean REST backend: job orders that compute OEE on close, downtime + root cause, QC holds, FIFO inventory. Role-based JWT security, JPA + PostgreSQL/Flyway, interactive OpenAPI/Swagger, Docker, green CI. Log in with manager / password (free instance, ~50s to wake if idle).</div>
+      <div class="demo-card-sub">ShopFloor API - the same operations domain as the ERP above, rebuilt as a clean REST backend: job orders that compute OEE on close, downtime + root cause, QC holds, FIFO inventory. Role-based JWT security, JPA + PostgreSQL/Flyway, interactive OpenAPI/Swagger, Docker, green CI. Log in with manager / password (free instance; the first request after idle has to spin the container up, which can take a minute or more).</div>
       <div class="demo-card-stack">Java 21 · Spring Boot 3 · Spring Data JPA · Spring Security · PostgreSQL · Flyway · OpenAPI · Testcontainers</div>
       <div class="demo-card-tech">Technically: OEE computed on job-order close, JWT roles, Flyway-migrated schema, Testcontainers integration tests</div>
       <div class="demo-card-cta">Open live demo ↗</div>
@@ -114,7 +119,7 @@
       <img class="demo-card-thumb" src="/assets/og-servicedesk.jpg" alt="" loading="lazy" decoding="async" width="1200" height="630" />
       <div class="demo-card-eyebrow">Live · interactive · Django / DRF</div>
       <div class="demo-card-title">IT service desk (ITSM)</div>
-      <div class="demo-card-sub">Service Desk - a real, persistent, authenticated ITSM in Django 6 + DRF: tickets with an SLA clock + breach detection, audit timeline, role-based access via Groups, an analytics dashboard, AI triage (with a mock fallback) and notifications. Django admin + server-rendered pages + a REST API with Swagger. Log in with manager / demo12345 (free instance, ~30-60s to wake).</div>
+      <div class="demo-card-sub">Service Desk - a real, persistent, authenticated ITSM in Django 6 + DRF: tickets with an SLA clock + breach detection, audit timeline, role-based access via Groups, an analytics dashboard, AI triage (with a mock fallback) and notifications. Django admin + server-rendered pages + a REST API with Swagger. Log in with agent / demo12345 - the login page publishes and pre-fills them (free instance; the first request after idle has to spin the container up, which can take a minute or more).</div>
       <div class="demo-card-stack">Python 3.14 · Django 6 · Django REST Framework · PostgreSQL · Neon · drf-spectacular · Docker · pytest</div>
       <div class="demo-card-tech">Technically: SLA breach + escalation sweep, Groups-based RBAC, drf-spectacular OpenAPI, HTMX live board, vendor-aware full-text search</div>
       <div class="demo-card-cta">Open live demo ↗</div>
@@ -261,7 +266,7 @@
     </div>
     <div class="demo-meta-item">
       <div class="demo-meta-k">Documents</div>
-      <div class="demo-meta-v">6 PDF templates · all viewable below</div>
+      <div class="demo-meta-v">8 PDF templates · all viewable below</div>
     </div>
   </div>
 
@@ -440,8 +445,8 @@
 
         <div class="kpi-row">
           <div class="kpi-card"><div class="kpi-lbl">Active JOs</div><div class="kpi-val">7</div><div class="kpi-trend up">▲ 2 vs prev shift</div></div>
-          <div class="kpi-card"><div class="kpi-lbl">OEE Line A</div><div class="kpi-val">82<span class="kpi-unit">%</span></div><div class="kpi-trend up">▲ within target band</div></div>
-          <div class="kpi-card"><div class="kpi-lbl">Units / shift</div><div class="kpi-val">3,847</div><div class="kpi-trend up">▲ 4.1% vs prev</div></div>
+          <div class="kpi-card"><div class="kpi-lbl">OEE Line A</div><div class="kpi-val">80<span class="kpi-unit">%</span></div><div class="kpi-trend up">▲ within target band</div></div>
+          <div class="kpi-card"><div class="kpi-lbl">Cases / shift</div><div class="kpi-val">4,820<span class="kpi-unit">&nbsp;cs</span></div><div class="kpi-trend up">▲ 4.1% vs prev</div></div>
           <div class="kpi-card"><div class="kpi-lbl">QC pending</div><div class="kpi-val">4</div><div class="kpi-trend down">▼ 2 since shift open</div></div>
           <div class="kpi-card"><div class="kpi-lbl">Open POs</div><div class="kpi-val">AED&nbsp;47,200</div><div class="kpi-trend up">▲ 3 new this week</div></div>
           <div class="kpi-card"><div class="kpi-lbl">Downtime (min)</div><div class="kpi-val">23</div><div class="kpi-trend down">▼ 14 vs prev shift</div></div>
@@ -464,7 +469,7 @@
           <div class="card">
             <div class="card-head"><h3>Recent activity</h3><div class="card-sub">latest 6</div></div>
             <ul class="activity-list">
-              <li><span class="act-time">just now</span><span class="act-tag tag-prod">PROD</span><span class="act-msg">Batch <code>JO-2026-0418</code> closed on Line A · 1,284 units</span></li>
+              <li><span class="act-time">just now</span><span class="act-tag tag-prod">PROD</span><span class="act-msg">Batch <code>JO-2026-0418</code> closed on Line A · 1,284 cases</span></li>
               <li><span class="act-time">3m ago</span><span class="act-tag tag-qc">QC</span><span class="act-msg">QC sample passed for <code>JO-2026-0418</code></span></li>
               <li><span class="act-time">11m ago</span><span class="act-tag tag-inv">INV</span><span class="act-msg">RM <code>SUGAR-X</code> received · qty <strong>2,400 kg</strong></span></li>
               <li><span class="act-time">22m ago</span><span class="act-tag tag-acc">ACC</span><span class="act-msg">Voucher <code>BPV-2103</code> posted · <strong>AED 8,420.50</strong></span></li>
@@ -555,16 +560,19 @@
           <div class="card">
             <div class="card-head"><h3>Picking sheet</h3><div class="card-sub">RMs required for <code>JO-DEMO-1</code></div></div>
             <table class="data-table compact">
-              <thead><tr><th scope="col">RM</th><th scope="col">Description</th><th scope="col">Req</th><th scope="col">Stock</th><th scope="col">Cost</th></tr></thead>
+              <thead><tr><th scope="col">RM</th><th scope="col">Description</th><th scope="col">Req</th><th scope="col">Stock</th><th scope="col">Cover</th><th scope="col">Cost</th></tr></thead>
               <tbody>
-                <tr><td><code>RM-WATER</code></td><td>Demo Water</td><td>2,400 L</td><td>8,400 L</td><td>AED 1,560</td></tr>
-                <tr><td><code>RM-SUGAR</code></td><td>Demo Sugar</td><td>385 kg</td><td>1,150 kg</td><td>AED 1,232</td></tr>
-                <tr><td><code>RM-FLAVOR</code></td><td>Demo Flavor X</td><td>18.5 L</td><td>245 L</td><td>AED 340</td></tr>
-                <tr><td><code>RM-PREFORM</code></td><td>PET preform 500 mL</td><td>115,200 pcs</td><td>92,400 pcs</td><td>AED 9,216</td></tr>
-                <tr><td><code>RM-CAP</code></td><td>Bottle cap</td><td>115,200 pcs</td><td>184,000 pcs</td><td>AED 4,608</td></tr>
-                <tr><td><code>RM-LABEL</code></td><td>Shrink label</td><td>115,200 pcs</td><td>156,000 pcs</td><td>AED 5,760</td></tr>
+                <tr><td><code>RM-WATER</code></td><td>Demo Water</td><td>2,400 L</td><td>8,400 L</td><td><span class="pill pill-green">OK</span></td><td>AED 1,560</td></tr>
+                <tr><td><code>RM-SUGAR</code></td><td>Demo Sugar</td><td>385 kg</td><td>1,150 kg</td><td><span class="pill pill-green">OK</span></td><td>AED 1,232</td></tr>
+                <tr><td><code>RM-FLAVOR</code></td><td>Demo Flavor X</td><td>18.5 L</td><td>245 L</td><td><span class="pill pill-green">OK</span></td><td>AED 340</td></tr>
+                <tr><td><code>RM-PREFORM</code></td><td>PET preform 500 mL</td><td>115,200 pcs</td><td>92,400 pcs</td><td><span class="pill pill-red">SHORT 22,800</span></td><td>AED 9,216</td></tr>
+                <tr><td><code>RM-CAP</code></td><td>Bottle cap</td><td>115,200 pcs</td><td>184,000 pcs</td><td><span class="pill pill-green">OK</span></td><td>AED 4,608</td></tr>
+                <tr><td><code>RM-LABEL</code></td><td>Shrink label</td><td>115,200 pcs</td><td>156,000 pcs</td><td><span class="pill pill-green">OK</span></td><td>AED 5,760</td></tr>
               </tbody>
             </table>
+            <p class="app-note"><strong>Cannot be picked in full.</strong> PET preform is short by 22,800 pcs against this job order,
+              so release is blocked until the open PO lands or the JO quantity is cut. The check runs on release, not at print time -
+              a picking sheet that lists stock it does not have is how a line ends up stopped mid-run.</p>
           </div>
         </div>
       </section>
@@ -602,8 +610,8 @@
               <li><span class="led led-g"></span>Palletizer · running</li>
             </ul>
             <div class="mini-stats">
-              <div><span>OEE</span><strong>82%</strong></div>
-              <div><span>Speed</span><strong>9,600 bph</strong></div>
+              <div><span>OEE</span><strong>80%</strong></div>
+              <div><span>Speed</span><strong>18,000 bph</strong></div>
               <div><span>Downtime</span><strong>23 min</strong></div>
               <div><span>Output</span><strong>4,820 cs</strong></div>
             </div>
@@ -642,7 +650,7 @@
           <table class="data-table">
             <thead><tr><th scope="col">Batch</th><th scope="col">JO</th><th scope="col">Product</th><th scope="col">Qty</th><th scope="col">Reject</th><th scope="col">OEE</th><th scope="col">Status</th></tr></thead>
             <tbody>
-              <tr><td><code>DEMO-0001</code></td><td><code>JO-DEMO-1</code></td><td>Sample Beverage 500 mL</td><td>4,820</td><td>38</td><td>82%</td><td><span class="pill pill-green">Closed</span></td></tr>
+              <tr><td><code>DEMO-0001</code></td><td><code>JO-DEMO-1</code></td><td>Sample Beverage 500 mL</td><td>4,820</td><td>38</td><td>80%</td><td><span class="pill pill-green">Closed</span></td></tr>
               <tr><td><code>DEMO-0002</code></td><td><code>JO-DEMO-2</code></td><td>Sample Beverage 1 L</td><td>3,180</td><td>52</td><td>78%</td><td><span class="pill pill-blue">In progress</span></td></tr>
             </tbody>
           </table>
@@ -727,8 +735,8 @@
           <div class="tanks">
             <div class="tank">
               <div class="tank-head">Tank&nbsp;1<span class="pill pill-blue">Mixing</span></div>
-              <div class="tank-fill"><span style="--f:60%"></span></div>
-              <div class="tank-meta">Recipe-A1 · 1 L · 1°C</div>
+              <div class="tank-fill"><span style="--f:56%"></span></div>
+              <div class="tank-meta">Recipe-A1 · 2,800 / 5,000 L · 4 °C</div>
             </div>
             <div class="tank">
               <div class="tank-head">Tank&nbsp;2<span class="pill pill-amber">CIP</span></div>
@@ -738,7 +746,7 @@
             <div class="tank">
               <div class="tank-head">Tank&nbsp;3<span class="pill pill-green">Ready</span></div>
               <div class="tank-fill"><span style="--f:100%"></span></div>
-              <div class="tank-meta">Recipe-B2 · 1 L · 1°C</div>
+              <div class="tank-meta">Recipe-B2 · 5,000 / 5,000 L · 4 °C</div>
             </div>
             <div class="tank">
               <div class="tank-head">Tank&nbsp;4<span class="pill pill-grey">Idle</span></div>
@@ -782,9 +790,12 @@
               <tr><td>Net content</td><td>mL</td><td>498</td><td>502</td><td>499.6</td><td><span class="pill pill-green">PASS</span></td></tr>
               <tr><td>Cap torque</td><td>lb·in</td><td>12</td><td>18</td><td>14.2</td><td><span class="pill pill-green">PASS</span></td></tr>
               <tr><td>Seam thickness</td><td>mm</td><td>1.18</td><td>1.28</td><td>1.24</td><td><span class="pill pill-green">PASS</span></td></tr>
-              <tr><td>Carbonation</td><td>vol</td><td>3.4</td><td>3.7</td><td>3.71</td><td><span class="pill pill-amber">REVIEW</span></td></tr>
+              <tr><td>Carbonation</td><td>vol</td><td>3.4</td><td>3.7</td><td>3.71</td><td><span class="pill pill-red">OUT OF SPEC</span></td></tr>
             </tbody>
           </table>
+          <p class="app-note"><strong>Batch held.</strong> One reading is outside its spec range, so the batch cannot be released to dispatch
+            until a QC Manager records a disposition (re-test, concession release with sign-off, or reject). This is the check worth
+            looking at - a QC module that quietly passes a marginal reading is worse than no QC module.</p>
           <div class="row-actions">
             <button class="btn-mini" data-pdf="qc-report" data-batch="DEMO-0001">📄 QC Batch Report PDF</button>
           </div>
@@ -1311,16 +1322,16 @@
           <div class="card">
             <div class="card-head"><h3>OEE - Line A</h3><div class="card-sub">target 85%</div></div>
             <div class="ring-chart">
-              <div class="ring" style="--p:295deg">
+              <div class="ring" style="--p:288deg">
                 <div class="ring-inner">
-                  <div class="ring-val">82%</div>
+                  <div class="ring-val">80%</div>
                   <div class="ring-lbl">OEE</div>
                 </div>
               </div>
               <ul class="ring-legend">
-                <li><span class="dot d-blue"></span>Availability · 91%</li>
-                <li><span class="dot d-green"></span>Performance · 94%</li>
-                <li><span class="dot d-purple"></span>Quality · 96%</li>
+                <li><span class="dot d-blue"></span>Availability · 95% <span class="ring-calc">457 / 480 min</span></li>
+                <li><span class="dot d-green"></span>Performance · 85% <span class="ring-calc">116,592 bottles @ 18,000 bph</span></li>
+                <li><span class="dot d-purple"></span>Quality · 99% <span class="ring-calc">4,820 / 4,858 cs</span></li>
               </ul>
             </div>
           </div>
@@ -1360,7 +1371,7 @@
             <table class="data-table compact">
               <thead><tr><th scope="col">Line</th><th scope="col">Speed</th><th scope="col">Status</th></tr></thead>
               <tbody>
-                <tr><td>Line A</td><td>9,600 bph</td><td><span class="pill pill-green">Running</span></td></tr>
+                <tr><td>Line A</td><td>18,000 bph</td><td><span class="pill pill-green">Running</span></td></tr>
                 <tr><td>Line B</td><td>7,200 bph</td><td><span class="pill pill-amber">Idle</span></td></tr>
                 <tr><td>Line C</td><td>4,800 bph</td><td><span class="pill pill-grey">Down</span></td></tr>
               </tbody>
@@ -1386,7 +1397,9 @@
     <div class="contact-left">
       <span class="section-tag">Want to see the real thing?</span>
       <h2>Happy to walk through it on a call.</h2>
-      <p>I can demo the actual application in a screen-share with redactions on real customer data, or talk through architecture, trade-offs, and what I'd build differently.</p>
+      <p>I can walk through the architecture, the trade-offs I made, and what I would build differently - and answer questions against
+        this walkthrough, which mirrors the real system's structure. Anything that would expose my employer's customer or production
+        data stays out of it; that is their data, not my portfolio.</p>
       <a class="btn btn-primary" href="contact.html">Request a walkthrough <span class="arrow">→</span></a>
     </div>
   </div>
@@ -1510,6 +1523,7 @@
         <tr><td>RM-SUGAR</td><td>Demo Sugar</td><td class="r">385 kg</td><td class="r">1,150 kg</td><td class="r">AED 3.20</td><td class="r">AED 1,232</td></tr>
         <tr><td>RM-FLAVOR</td><td>Demo Flavor X</td><td class="r">18.5 L</td><td class="r">245 L</td><td class="r">AED 18.40</td><td class="r">AED 340</td></tr>
         <tr><td>RM-PREFORM</td><td>PET preform 500 mL</td><td class="r">115,200 pcs</td><td class="r">92,400 pcs</td><td class="r">AED 0.08</td><td class="r">AED 9,216</td></tr>
+        <tr><td colspan="6" style="color:var(--red); font-weight:600;">⚠ RM-PREFORM short by 22,800 pcs - job order cannot be picked in full; release blocked pending PO-DEMO-2.</td></tr>
         <tr><td>RM-CAP</td><td>Bottle cap</td><td class="r">115,200 pcs</td><td class="r">184,000 pcs</td><td class="r">AED 0.04</td><td class="r">AED 4,608</td></tr>
         <tr><td>RM-LABEL</td><td>Shrink label</td><td class="r">115,200 pcs</td><td class="r">156,000 pcs</td><td class="r">AED 0.05</td><td class="r">AED 5,760</td></tr>
       </tbody>
@@ -1560,14 +1574,16 @@
         <tr><td>Net content</td><td>mL</td><td class="r">498</td><td class="r">502</td><td class="r">499.6</td><td class="c">PASS</td></tr>
         <tr><td>Cap torque</td><td>lb·in</td><td class="r">12</td><td class="r">18</td><td class="r">14.2</td><td class="c">PASS</td></tr>
         <tr><td>Seam thickness</td><td>mm</td><td class="r">1.18</td><td class="r">1.28</td><td class="r">1.24</td><td class="c">PASS</td></tr>
-        <tr><td>Carbonation</td><td>vol</td><td class="r">3.4</td><td class="r">3.7</td><td class="r">3.71</td><td class="c">REVIEW</td></tr>
+        <tr><td>Carbonation</td><td>vol</td><td class="r">3.4</td><td class="r">3.7</td><td class="r">3.71</td><td class="c">OUT OF SPEC</td></tr>
         <tr><td>Microbiology</td><td>cfu/mL</td><td class="r">0</td><td class="r">100</td><td class="r">12</td><td class="c">PASS</td></tr>
       </tbody>
     </table>
 
     <section class="doc-notes">
       <h5>QC verdict</h5>
-      <p><strong>Batch released for dispatch.</strong> One parameter flagged for review - within tolerance but trending toward upper bound.</p>
+      <p><strong>Batch held pending QC Manager disposition.</strong> Carbonation measured 3.71 vol against a 3.40-3.70 spec - marginally
+        out of specification, so the batch is not released. Disposition options are re-test, concession release with sign-off, or reject.
+        Dispatch is blocked on this batch until a QC Manager records the decision.</p>
     </section>
 
     <footer class="doc-sign">

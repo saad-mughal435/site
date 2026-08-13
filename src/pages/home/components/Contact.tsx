@@ -1,7 +1,7 @@
 /* =========================================================
    CONTACT - verbatim from home.app.jsx
    ========================================================= */
-import { AVAILABILITY } from '../data';
+import { AVAILABILITY, CV_HREF } from '../data';
 import { MagneticBtn, Reveal } from './primitives';
 
 export function Contact() {
@@ -10,12 +10,15 @@ export function Contact() {
       <Reveal className="contact-box">
         <div className="contact-left">
           <span className="section-tag">Fig. 07 - Contact</span>
-          <h2>Let&rsquo;s build something that ships.</h2>
-          <p>I build backend and operations software - ERP/MES platforms, APIs, and the tooling
-            around them. If that fits a role you&rsquo;re working on, in the UAE or remote, I&rsquo;d be glad to talk.</p>
-          <MagneticBtn as="a" href="contact.html" className="btn btn-primary">
-            Open contact form <span className="arrow">→</span>
-          </MagneticBtn>
+          <h2>Tell me what breaks, and I&rsquo;ll tell you if I can fix it.</h2>
+          <p>I build backend and operations software - ERP/MES platforms, LLM integrations, APIs, and the
+            tooling around them. If that fits a role you&rsquo;re working on, in the UAE or remote, I&rsquo;d be glad to talk.</p>
+          <div className="contact-actions">
+            <MagneticBtn as="a" href="contact.html" className="btn btn-primary">
+              Open contact form <span className="arrow">→</span>
+            </MagneticBtn>
+            <a className="btn btn-ghost" href={CV_HREF} download>Download CV (PDF)</a>
+          </div>
         </div>
         <ul className="contact-list">
           <li><span className="contact-k">Email</span><a className="contact-v" href="mailto:saad@saadm.dev">saad@saadm.dev</a></li>
