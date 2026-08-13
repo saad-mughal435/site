@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <meta name="theme-color" content="#07080d" />
 <meta name="color-scheme" content="dark light" />
-<title>Engineering notes | Muhammad Saad - Automation & Software Developer</title>
-<meta name="description" content="Short engineering write-ups by Muhammad Saad: reconstructing the NASDAQ ITCH 5.0 order book in C++17, building an open OEE engine in Spring Boot next to a production MES, and what running Krones beverage lines taught him about operations software." />
+<title>Engineering notes | Muhammad Saad - AI Engineer &amp; Full Stack Developer</title>
+<meta name="description" content="Short engineering write-ups by Muhammad Saad: putting the Claude API and OpenAI API into a production MES/ERP, reconstructing the NASDAQ ITCH 5.0 order book in C++17, building an open OEE engine in Spring Boot next to a production MES, and what running Krones beverage lines taught him about operations software." />
 <link rel="canonical" href="https://saadm.dev/notes/" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='12'%20fill='%2307080d'/%3E%3Ctext%20x='50%25'%20y='58%25'%20font-family='Space%20Grotesk,sans-serif'%20font-weight='700'%20font-size='34'%20fill='%23edf1f8'%20text-anchor='middle'%3ES%3C/text%3E%3Crect%20x='18'%20y='47'%20width='28'%20height='3'%20fill='%236e8eff'/%3E%3C/svg%3E" />
 <link rel="apple-touch-icon" href="/saad.png" />
@@ -14,14 +14,14 @@
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Saad - saadm.dev" />
 <meta property="og:title" content="Engineering notes - Muhammad Saad" />
-<meta property="og:description" content="Short write-ups on real work: C++17 order-book reconstruction, an open Spring Boot OEE engine, and operations-software lessons from the factory floor." />
+<meta property="og:description" content="Short write-ups on real work: Claude and OpenAI in a production MES/ERP, C++17 order-book reconstruction, an open Spring Boot OEE engine, and operations-software lessons from the factory floor." />
 <meta property="og:url" content="https://saadm.dev/notes/" />
 <meta property="og:image" content="https://saadm.dev/og.png?v=20260813" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Engineering notes - Muhammad Saad" />
-<meta name="twitter:description" content="C++17 order-book reconstruction, an open Spring Boot OEE engine, and operations-software lessons from the factory floor." />
+<meta name="twitter:description" content="Claude and OpenAI in a production MES/ERP, C++17 order-book reconstruction, an open Spring Boot OEE engine, and operations-software lessons from the factory floor." />
 <meta name="twitter:image" content="https://saadm.dev/og.png?v=20260813" />
 <meta name="robots" content="index, follow, max-snippet:-1" />
 
@@ -35,11 +35,13 @@
   "mainEntity": {
     "@type": "ItemList",
     "itemListElement": [
-      { "@type": "ListItem", "position": 1, "url": "https://saadm.dev/notes/itch-orderbook-reconstruction.html",
+      { "@type": "ListItem", "position": 1, "url": "https://saadm.dev/notes/claude-in-production.html",
+        "name": "Putting Claude in production at a beverage plant" },
+      { "@type": "ListItem", "position": 2, "url": "https://saadm.dev/notes/itch-orderbook-reconstruction.html",
         "name": "Reconstructing the NASDAQ book: ITCH 5.0 decode and a lock-free SPSC pipeline" },
-      { "@type": "ListItem", "position": 2, "url": "https://saadm.dev/notes/shopfloor-oee-engine.html",
+      { "@type": "ListItem", "position": 3, "url": "https://saadm.dev/notes/shopfloor-oee-engine.html",
         "name": "An open OEE engine: building ShopFloor API next to a production MES" },
-      { "@type": "ListItem", "position": 3, "url": "https://saadm.dev/notes/krones-operations-software.html",
+      { "@type": "ListItem", "position": 4, "url": "https://saadm.dev/notes/krones-operations-software.html",
         "name": "What running Krones lines taught me about writing operations software" }
     ]
   }
@@ -87,6 +89,16 @@
   </header>
 
   <ul class="note-list">
+    <li class="note-list-item">
+      <a href="/notes/claude-in-production.html">
+        <div class="note-list-meta"><span>Note 04</span><span>2026-08-13</span><span>Essay · Claude · RAG</span><span>~5 min</span></div>
+        <h2>Putting Claude in production at a beverage plant</h2>
+        <p>The design rule that made it safe to ship - the model advises, deterministic code acts - the Sage
+          Evolution integration underneath it, why RAG citations make failures diagnosable, and a plain list
+          of what I have not built yet: no automated eval harness, no formal authority tiers.</p>
+        <span class="note-list-more">Read the note →</span>
+      </a>
+    </li>
     <li class="note-list-item">
       <a href="/notes/itch-orderbook-reconstruction.html">
         <div class="note-list-meta"><span>Note 01</span><span>2026-06-11</span><span>C++17 · HFT</span><span>~5 min</span></div>

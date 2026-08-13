@@ -26,6 +26,7 @@ export default defineConfig({
         'notes-itch': entry('src/notes/itch-orderbook-reconstruction.html'),
         'notes-shopfloor': entry('src/notes/shopfloor-oee-engine.html'),
         'notes-krones': entry('src/notes/krones-operations-software.html'),
+        'notes-claude': entry('src/notes/claude-in-production.html'),
       },
     },
   },

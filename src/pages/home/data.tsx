@@ -189,7 +189,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   },
   {
     q: 'Does Saad write about his engineering work?',
-    a: <Fragment>Yes - short engineering notes at <a href="notes/">saadm.dev/notes</a>: reconstructing the NASDAQ ITCH 5.0 order book in C++17, building the open ShopFloor OEE engine in Spring Boot, and what running Krones lines taught him about operations software.</Fragment>,
+    a: <Fragment>Yes - short engineering notes at <a href="notes/">saadm.dev/notes</a>: putting the Claude API and OpenAI API into a production MES/ERP, reconstructing the NASDAQ ITCH 5.0 order book in C++17, building the open ShopFloor OEE engine in Spring Boot, and what running Krones lines taught him about operations software.</Fragment>,
   },
 ];
 
