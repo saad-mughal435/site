@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <meta name="theme-color" content="#07080d" />
 <meta name="color-scheme" content="dark light" />
-<title>Reconstructing the NASDAQ book: ITCH 5.0 decode and a lock-free SPSC pipeline | Saad - Engineering notes</title>
+<title>Reconstructing the NASDAQ book: ITCH 5.0 decode and a wait-free SPSC pipeline | Saad - Engineering notes</title>
 <meta name="description" content="How hft-orderbook turns a raw NASDAQ ITCH 5.0 feed into L2 order books in C++17: safe big-endian decoding, BinaryFILE vs MoldUDP64 transports, a measured price-level store A/B, and a wait-free SPSC ring verified with ThreadSanitizer." />
 <link rel="canonical" href="https://saadm.dev/notes/itch-orderbook-reconstruction" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='12'%20fill='%2307080d'/%3E%3Ctext%20x='50%25'%20y='58%25'%20font-family='Space%20Grotesk,sans-serif'%20font-weight='700'%20font-size='34'%20fill='%23edf1f8'%20text-anchor='middle'%3ES%3C/text%3E%3Crect%20x='18'%20y='47'%20width='28'%20height='3'%20fill='%236e8eff'/%3E%3C/svg%3E" />
@@ -13,14 +13,14 @@
 
 <meta property="og:type" content="article" />
 <meta property="og:site_name" content="Saad - saadm.dev" />
-<meta property="og:title" content="Reconstructing the NASDAQ book: ITCH 5.0 decode and a lock-free SPSC pipeline" />
+<meta property="og:title" content="Reconstructing the NASDAQ book: ITCH 5.0 decode and a wait-free SPSC pipeline" />
 <meta property="og:description" content="Safe big-endian decoding, BinaryFILE vs MoldUDP64, a measured price-level store A/B, and a wait-free SPSC ring verified with ThreadSanitizer - notes from building hft-orderbook in C++17." />
 <meta property="og:url" content="https://saadm.dev/notes/itch-orderbook-reconstruction.html" />
 <meta property="og:image" content="https://saadm.dev/og.png?v=20260813" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Reconstructing the NASDAQ book: ITCH 5.0 decode and a lock-free SPSC pipeline" />
+<meta name="twitter:title" content="Reconstructing the NASDAQ book: ITCH 5.0 decode and a wait-free SPSC pipeline" />
 <meta name="twitter:description" content="Notes from building hft-orderbook in C++17 - decode safety, two transports, a measured level-store A/B, and a TSan-verified SPSC ring." />
 <meta name="twitter:image" content="https://saadm.dev/og.png?v=20260813" />
 <meta name="robots" content="index, follow, max-snippet:-1" />
@@ -29,7 +29,7 @@
 {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  "headline": "Reconstructing the NASDAQ book: ITCH 5.0 decode and a lock-free SPSC pipeline",
+  "headline": "Reconstructing the NASDAQ book: ITCH 5.0 decode and a wait-free SPSC pipeline",
   "datePublished": "2026-06-11",
   "author": { "@type": "Person", "name": "Muhammad Saad", "url": "https://saadm.dev/" },
   "mainEntityOfPage": "https://saadm.dev/notes/itch-orderbook-reconstruction.html",
@@ -45,7 +45,7 @@
   "itemListElement": [
     { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://saadm.dev/" },
     { "@type": "ListItem", "position": 2, "name": "Engineering notes", "item": "https://saadm.dev/notes/" },
-    { "@type": "ListItem", "position": 3, "name": "Reconstructing the NASDAQ book: ITCH 5.0 decode and a lock-free SPSC pipeline" }
+    { "@type": "ListItem", "position": 3, "name": "Reconstructing the NASDAQ book: ITCH 5.0 decode and a wait-free SPSC pipeline" }
   ]
 }
 </script>
@@ -85,7 +85,7 @@
   <article class="note-wrap">
     <header class="note-head">
       <span class="section-tag">Engineering note · 01</span>
-      <h1>Reconstructing the NASDAQ book: ITCH 5.0 decode and a lock-free SPSC pipeline</h1>
+      <h1>Reconstructing the NASDAQ book: ITCH 5.0 decode and a wait-free SPSC pipeline</h1>
       <div class="note-meta">
         <span>2026-06-11</span>
         <span>~5 min read</span>
