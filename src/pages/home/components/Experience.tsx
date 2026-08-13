@@ -1,11 +1,11 @@
 /* =========================================================
    EXPERIENCE - verbatim from home.app.jsx
    ========================================================= */
-import { EXPERIENCE } from '../data';
+import { EXPERIENCE, viewItems } from '../data';
 import { Reveal, WordReveal } from './primitives';
 
 export function Experience({ view }: { view: string }) {
-  const items = EXPERIENCE.filter((e) => view === 'all' || e.domain === view || e.domain === 'all');
+  const items = viewItems(EXPERIENCE, view);
   return (
     <section id="experience" className="section container">
       <Reveal className="section-head">

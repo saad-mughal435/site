@@ -44,7 +44,7 @@ export function Hero({ view, setView }: ViewProps) {
   return (
     <section className="hero container" id="top">
       <div className="hero-left">
-        <div className="eyebrow"><span className="led" aria-hidden="true"></span> Currently available in the UAE · Open to relocate worldwide</div>
+        <div className="eyebrow"><span className="led" aria-hidden="true"></span> Open to new roles · UAE-based · Open to relocate worldwide</div>
         <div className="view-toggle-wrap">
           <span className="view-toggle-hint">Tailored for:</span>
           <ViewToggle view={view} setView={setView} />
@@ -81,8 +81,8 @@ export function Hero({ view, setView }: ViewProps) {
       <div className="hero-right">
         <figure className="hero-photo">
           <img src="saad.webp" width="400" height="500" loading="eager" decoding="async" fetchPriority="high"
-               alt="Muhammad Saad - Automation & Software Developer, Dubai" />
-          <figcaption><span className="plate-no">Plate 01</span> M. Saad · Automation &amp; Software · Dubai, UAE</figcaption>
+               alt="Muhammad Saad - AI Engineer and Full Stack Developer, Dubai" />
+          <figcaption><span className="plate-no">Plate 01</span> M. Saad · AI &amp; Full Stack · Dubai, UAE</figcaption>
         </figure>
       </div>
     </section>

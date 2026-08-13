@@ -56,7 +56,7 @@ export function Nav() {
     <header className={'nav' + (scrolled ? ' scrolled' : '') + (open ? ' menu-open' : '')}>
       <div className="container nav-inner">
         <a className="logo" href="#top" onClick={close}>
-          <img className="logo-photo" width="38" height="38" decoding="async" src="saad.webp" alt="Saad - Automation Engineer and ERP Developer in Dubai" />
+          <img className="logo-photo" width="38" height="38" decoding="async" src="saad.webp" alt="Muhammad Saad - AI Engineer and Full Stack Developer, Dubai" />
           <span>Saad</span>
         </a>
         <nav className={'nav-links' + (open ? ' open' : '')}>

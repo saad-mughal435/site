@@ -2,7 +2,7 @@
    PROJECTS - ProjectCard + Projects, verbatim from home.app.jsx
    ========================================================= */
 import { Fragment } from 'react';
-import { PROJECTS } from '../data';
+import { PROJECTS, viewItems } from '../data';
 import type { Project } from '../data';
 import { Reveal, TiltCard, WordReveal } from './primitives';
 
@@ -36,7 +36,7 @@ export function ProjectCard({ p, compact }: { p: Project; compact?: boolean }) {
 }
 
 export function Projects({ view }: { view: string }) {
-  const items = PROJECTS.filter((p) => view === 'all' || p.domain === view || p.domain === 'all');
+  const items = viewItems(PROJECTS, view);
   return (
     <section id="projects" className="section container">
       <Reveal className="section-head">

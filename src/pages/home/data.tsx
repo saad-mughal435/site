@@ -31,7 +31,9 @@ export interface HeroCopy {
   cta: Cta;
 }
 
-export interface Stat { num: number; suffix: string; label: string; domain: string }
+/* `display` overrides the rendered figure when the value is not a count -
+   "Since 2020" must not go through toLocaleString() and come out as "2,020". */
+export interface Stat { num: number; suffix: string; label: string; domain: string; display?: string }
 
 export interface FaqItem { q: string; a: ReactNode }
 
@@ -74,22 +76,50 @@ export interface SkillGroup { domain: string; title: string; items: string[] }
    VIEW TOGGLE
    ========================================================= */
 export const VIEWS: View[] = [
+  { key: 'ai',   label: 'AI' },
   { key: 'code', label: 'Coding' },
   { key: 'eng',  label: 'Engineering' },
+  { key: 'all',  label: 'All' },
 ];
+
+export const VIEW_KEYS = VIEWS.map((v) => v.key);
+
+/* `domain` is a space-separated set of view keys, so one card can belong to
+   several views ('all' means every view). Keeping the predicate here rather than
+   repeating it in five components is what stops a new view silently emptying a
+   section - which is exactly how ?view=eng ended up rendering an intro
+   paragraph above a one-card grid. */
+export function matchesView(domain: string, view: string): boolean {
+  if (view === 'all') return true;
+  const keys = domain.split(' ');
+  return keys.includes('all') || keys.includes(view);
+}
+
+/* 'all ai' therefore means "show everywhere, and lead in the AI view". */
+function isAi(domain: string): boolean {
+  return domain.split(' ').includes('ai');
+}
+
+/** Filter to the active view; in the AI view, lead with the AI work. */
+export function viewItems<T extends { domain: string }>(items: T[], view: string): T[] {
+  const shown = items.filter((i) => matchesView(i.domain, view));
+  if (view !== 'ai') return shown;
+  return [...shown.filter((i) => isAi(i.domain)), ...shown.filter((i) => !isAi(i.domain))];
+}
 
 /* =========================================================
    HERO
    ========================================================= */
 export const HERO_COPY: Record<string, HeroCopy> = {
   all: {
-    title: ['Software for operations.', 'Automation behind it.'],
-    sub: <Fragment>I&rsquo;m <strong>Saad</strong> - an <strong>Automation &amp; Software Developer</strong> focused on
-      ERP systems, dashboards, backend tools, and web applications. I build software that replaces manual work
-      - spreadsheets, paper logs, copy-paste reports, ticket prep, inventory tracking, admin panels, and
-      business workflows. Engineering and IT-infrastructure background, so the systems I build are practical,
+    title: ['Software for operations.', 'AI where it earns its place.'],
+    sub: <Fragment>I&rsquo;m <strong>Saad</strong> - an <strong>AI Engineer &amp; Full Stack Developer</strong>{' '}
+      building production ERP systems and the Claude / OpenAI workflows on top of them. I replace manual work
+      - spreadsheets, paper logs, copy-paste reports, ticket prep, inventory tracking - and put language models
+      where they measurably help: document processing, reporting, and copilots that answer from a real corpus
+      with citations. Engineering and IT-infrastructure background, so the systems I build are practical,
       reliable, and usable by real teams.</Fragment>,
-    stack: 'Python · FastAPI · MongoDB · Docker · Linux · React',
+    stack: 'Python · FastAPI · Claude · OpenAI · MongoDB · Docker · React',
     cta: { href: 'demo.html', label: 'Take demo ↗', target: '_blank' },
   },
   eng: {
@@ -99,13 +129,24 @@ export const HERO_COPY: Record<string, HeroCopy> = {
     cta: { href: '#projects', label: 'See work →' },
   },
   code: {
-    title: ['Software for operations.', 'Automation behind it.'],
-    sub: <Fragment>I&rsquo;m <strong>Saad</strong> - an <strong>Automation &amp; Software Developer</strong> focused on
-      ERP systems, dashboards, backend tools, and web applications. I build software that replaces manual work
+    title: ['Software for operations.', 'Backends that hold up.'],
+    sub: <Fragment>I&rsquo;m <strong>Saad</strong> - an <strong>AI Engineer &amp; Full Stack Developer</strong>{' '}
+      focused on ERP systems, backend services, and LLM integrations. I build software that replaces manual work
       - spreadsheets, paper logs, copy-paste reports, inventory tracking, admin panels, and business
-      workflows - with automation that runs itself.</Fragment>,
-    stack: 'Python · FastAPI · Java · Spring Boot · C++17 · PostgreSQL · Docker · TypeScript',
+      workflows - and I keep the parts that have to be correct deterministic.</Fragment>,
+    stack: 'Python · FastAPI · Django · Java · Spring Boot · C++17 · PostgreSQL · Docker · TypeScript',
     cta: { href: 'demo.html', label: 'Explore demos ↗', target: '_blank' },
+  },
+  ai: {
+    title: ['Language models in production.', 'Not in a playground.'],
+    sub: <Fragment>I&rsquo;m <strong>Saad</strong> - an <strong>AI Engineer &amp; Full Stack Developer</strong>.{' '}
+      At Kingsley Beverage the <strong>Claude API</strong> and <strong>OpenAI API</strong> run inside production
+      document-processing and reporting workflows on the MES/ERP platform I built and run. The pattern I trust:{' '}
+      <strong>the model advises, deterministic code acts</strong> - the AI path holds no write credentials to the
+      ERP, so every write is ordinary validated code. Alongside that I build <strong>RAG</strong> copilots that
+      answer from a real document corpus and cite the source they used.</Fragment>,
+    stack: 'Claude API · OpenAI API · LangChain · RAG · FastAPI · Python · Vector search',
+    cta: { href: 'sanad/inbox.html', label: 'Open the AI copilot ↗', target: '_blank' },
   },
 };
 
@@ -113,12 +154,14 @@ export const HERO_COPY: Record<string, HeroCopy> = {
    STATS
    ========================================================= */
 export const STATS_ALL: Stat[] = [
-  { num: KINGSLEY.reportingSpeedup, suffix: '%',    label: 'reduction in production reporting time', domain: 'code' },
-  { num: KINGSLEY.departments,      suffix: '',     label: 'departments digitised through MES/ERP workflows', domain: 'code' },
-  { num: 2,    suffix: ' yrs', label: 'industrial & telecom-ops experience', domain: 'all' },
+  { num: KINGSLEY.reportingSpeedup, suffix: '%',    label: 'less time to produce the daily production report', domain: 'code ai' },
+  { num: KINGSLEY.departments,      suffix: '',     label: 'departments digitised through MES/ERP workflows', domain: 'code ai' },
+  { num: 3,    suffix: ' yrs', label: 'industrial & telecom operations (PTCL NOC → beverage plant)', domain: 'all' },
+  { num: 5,    suffix: '',     label: 'product demos with an LLM wired end-to-end', domain: 'ai' },
   { num: 7,    suffix: '',     label: 'Krones subsystems supported in production', domain: 'eng' },
   { num: 2,    suffix: ' yrs', label: 'GPON / PSTN / broadband NOC operations', domain: 'eng' },
-  { num: 6,    suffix: '+ yrs',label: 'writing Python since university - projects, internships, production', domain: 'code' },
+  { num: 2020, suffix: '', display: 'Since 2020',
+    label: 'writing Python - coursework, internships, production', domain: 'code' },
 ];
 
 /* =========================================================
@@ -241,7 +284,7 @@ export const EXPERIENCE: ExperienceItem[] = [
    ========================================================= */
 export const PROJECTS: Project[] = [
   {
-    domain: 'all', featured: true, kind: 'Production system · Live interactive demo', year: '2025 - Present',
+    domain: 'all ai', featured: true, kind: 'Production system · Live interactive demo', year: '2025 - Present',
     sectionEyebrow: 'Featured manufacturing system',
     sectionHeading: 'The platform behind the factory floor',
     sectionBlurb: 'Internal operations platform built around the beverage production workflow. Replaces Excel + paper across production planning, QC seam-check, batch tracking + expiry, inventory + FIFO, dispatch, accounts, Sage Evolution integration, OEE monitoring - plus 6 print-ready PDF document templates. Sole developer, end-to-end, running in production today at a beverage plant. The platform does not modify Krones machine automation; it digitises the surrounding work.',
@@ -292,7 +335,7 @@ export const PROJECTS: Project[] = [
     ctaSubtitle: 'Live on a free instance - the first request after idle can take ~50s to wake. Log in with manager / password.',
   },
   {
-    domain: 'all', kind: 'Full-stack app · Live demo · Open source · Django / DRF', year: '2026',
+    domain: 'all ai', kind: 'Full-stack app · Live demo · Open source · Django / DRF', year: '2026',
     sectionEyebrow: 'Full-stack Django',
     sectionHeading: 'An IT service desk, end to end in Django',
     sectionBlurb: 'A real, persistent, authenticated ITSM system - not a mock. Tickets with an SLA clock and breach detection, an audit timeline, role-based access via Django Groups, an analytics dashboard, AI triage, and notifications. Three surfaces over one data model: the Django admin, server-rendered pages, and a REST API with Swagger.',
@@ -563,44 +606,20 @@ export const DEMO_PROJECTS: Project[] = [
       { label: 'Open admin ↗', href: 'vacation/admin.html', target: '_blank' },
     ],
   },
+  /* Property Management is written up in full in Selected Work above; this is a
+     pointer so the Demos grid stays complete without reprinting ~1,500 identical
+     characters one screen-scroll later. FixFlow used to be duplicated here too -
+     it is a real full-stack build, not a browser demo, so it now lives only in
+     Selected Work. */
   {
-    domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
+    domain: 'code', kind: 'Client-side product demo · Portfolio piece', year: '2026',
     title: 'Property Management - Happy Tenant + Happy Landlord platform',
-    desc: <Fragment>A property-management platform with <strong>five role portals</strong> - tenant, landlord,
-      property manager, vendor and inspector - off <strong>one shared client-side engine</strong>. Tenants pay
-      rent and raise maintenance; landlords track returns; managers run the whole portfolio; vendors close work
-      orders; inspectors run handovers. No backend, no AI - a deterministic seed + fetch-interceptor mock API +
-      localStorage, with a single source of truth per capability (one engine, five projections).</Fragment>,
-    bullets: [
-      <Fragment><strong>Five role-scoped portals</strong> off one shared engine + mock API - tenant, vendor and inspector are mobile-first; manager and landlord are hash-routed consoles - with a live role / persona switcher</Fragment>,
-      <Fragment><strong>Maintenance SLA state machine</strong>, a rent-cheque schedule with simulated payments &amp; printable receipts, and an <strong>inspection → deposit reconciliation</strong> flow feeding a room-by-room checklist</Fragment>,
-      <Fragment><strong>Inline-SVG charts</strong>, printable owner statements (hidden-iframe print), a notification center and a plain help-desk - <strong>no duplicated logic</strong> across portals</Fragment>,
-      <Fragment><strong>UAE-shaped</strong> - AED, Ejari tenancy contracts, post-dated cheques, DEWA, security-deposit rules; every figure fabricated for the demo</Fragment>,
-    ],
-    tags: ['Vanilla JS (ES6+)', 'Shared engine', 'Mock API (fetch shim)', 'localStorage', 'Inline-SVG charts', 'Role-scoped SPA', 'Hidden-iframe print', 'State machine', 'UAE (AED / Ejari)'],
+    desc: <Fragment>Five role portals - tenant, landlord, property manager, vendor and inspector - off one
+      shared client-side engine. <a href="#projects">Full write-up in Selected Work ↑</a></Fragment>,
+    bullets: [],
+    tags: ['Vanilla JS (ES6+)', 'Shared engine', 'Role-scoped SPA', 'UAE (AED / Ejari)'],
     ctas: [
       { label: 'Open the portals ↗', href: 'property-management/index.html', target: '_blank', primary: true },
-      { label: 'Tenant ↗', href: 'property-management/tenant.html', target: '_blank' },
-      { label: 'Landlord ↗', href: 'property-management/landlord.html', target: '_blank' },
-      { label: 'Manager ↗', href: 'property-management/manager.html', target: '_blank' },
-    ],
-  },
-  {
-    domain: 'all', kind: 'Full-stack app · Django + DRF / React SPA · Open source', year: '2026',
-    title: 'FixFlow - property-maintenance ticketing (full-stack)',
-    desc: <Fragment>A real full-stack build (not a client-side mock): a <strong>Django 6 + DRF</strong> API and a
-      separate <strong>React 19 + TypeScript</strong> SPA. Customers raise requests routed to a department (skill
-      group); a dispatcher assigns a skill-matched, available technician; the technician works it to completion.
-      JWT auth, role-scoped data, an SLA clock, 29 tests + green CI, and a one-blueprint deploy to Render + Neon.</Fragment>,
-    bullets: [
-      <Fragment>Skill-based routing - technician ↔ skills many-to-many, with an assignment guard on skill + availability</Fragment>,
-      <Fragment>Four role portals (customer / dispatcher / technician / manager) over one JWT API</Fragment>,
-      <Fragment>Django + DRF + Postgres/Neon backend; React + Vite SPA; green GitHub Actions CI</Fragment>,
-    ],
-    tags: ['Django 6', 'DRF', 'SimpleJWT', 'React 19', 'TypeScript', 'Vite', 'PostgreSQL', 'Neon', 'pytest', 'ruff', 'Docker', 'Render'],
-    ctas: [
-      { label: 'View source on GitHub ↗', href: 'https://github.com/saad-mughal435/fixflow', target: '_blank', primary: true },
-      { label: 'CI runs ↗', href: 'https://github.com/saad-mughal435/fixflow/actions', target: '_blank' },
     ],
   },
   {
@@ -625,7 +644,7 @@ export const DEMO_PROJECTS: Project[] = [
     ],
   },
   {
-    domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
+    domain: 'code ai', kind: 'Disconnected demo · Portfolio piece', year: '2026',
     title: 'Sanad - AI customer-support copilot',
     desc: <Fragment>A SaaS-style helpdesk with an LLM integrated at every touchpoint. Built to demonstrate <strong>real LLM wiring</strong> end-to-end - system prompts, streaming, prompt caching, server-side key handling via a Cloudflare Worker proxy, graceful mock fallback when the key isn't set, and cost tracking - not just an OpenAI playground demo. Works offline in deterministic mock mode out of the box.</Fragment>,
     bullets: [
@@ -644,7 +663,7 @@ export const DEMO_PROJECTS: Project[] = [
     ],
   },
   {
-    domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
+    domain: 'code ai', kind: 'Disconnected demo · Portfolio piece', year: '2026',
     title: 'Watad - smart-building / BMS operations console',
     desc: <Fragment>A live operator console for a commercial smart building - the kind of software Imdaad / EFS / Schneider / Honeywell ship to facilities teams. Live SVG floor plan with HVAC, lighting, metering and sensor equipment plotted as icons, a simulated BACnet/Modbus telemetry stream (5-second tick mutating ~200 points plausibly per asset class + outdoor temp + occupancy), severity-sorted alarm queue with audio cues, predictive-maintenance work orders, ASHRAE-overlaid energy curves, and an industrial-AI copilot. The <strong>first portfolio demo with a real-time data shape</strong> - proves I can think beyond REST.</Fragment>,
     bullets: [
@@ -664,7 +683,7 @@ export const DEMO_PROJECTS: Project[] = [
     ],
   },
   {
-    domain: 'code', kind: 'Mobile · PWA · Portfolio piece', year: '2026',
+    domain: 'code ai', kind: 'Mobile · PWA · Portfolio piece', year: '2026',
     title: 'Lahza - AI journaling + mood tracking (mobile-first PWA)',
     desc: <Fragment>A mobile-shaped <strong>Progressive Web App</strong> built to demonstrate
       mobile-product thinking and a new AI integration domain (consumer wellness).
@@ -689,7 +708,7 @@ export const DEMO_PROJECTS: Project[] = [
     ],
   },
   {
-    domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
+    domain: 'code ai', kind: 'Disconnected demo · Portfolio piece', year: '2026',
     title: 'Marsad - fleet / logistics dispatcher console',
     desc: <Fragment>A live <strong>dispatcher console for a Dubai last-mile courier</strong>. 16 drivers, 12 vans + 4 motorbikes, 96 in-flight orders across 6 service zones (Marina, JLT, Downtown, Business Bay, Deira, Sharjah Al Nahda). Real Leaflet map with vehicle pins that tick toward their next drop every 4 seconds. The fleet simulator + AI dispatcher copilot are the technical differentiators - recognisably the same shape Aramex / Noon Express / Talabat run internally.</Fragment>,
     bullets: [
@@ -708,7 +727,7 @@ export const DEMO_PROJECTS: Project[] = [
     ],
   },
   {
-    domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
+    domain: 'code ai', kind: 'Disconnected demo · Portfolio piece', year: '2026',
     title: 'Nabta - UAE HR + payroll SaaS',
     desc: <Fragment>A modern <strong>UAE-shaped HRIS</strong>: 32 employees across 5 departments, leave management with line-manager + HR approval, <strong>WPS-compliant payroll runs</strong> through Emirates NBD, recruitment kanban, performance review cycle, and an AI-powered HR policy assistant grounded in the company handbook + UAE Labour Law (Federal Decree-Law No. 33 of 2021). The kind of software every Dubai / Abu Dhabi mid-size company actually runs but typically buys (Bayzat / GulfTalent / Zimyo) rather than builds.</Fragment>,
     bullets: [
@@ -766,18 +785,20 @@ export const DEMO_PROJECTS: Project[] = [
 // Grouped chip cards - no tier badges, no percentages. Each card shows the
 // areas the section title implies. Lets the viewer scan instead of judge.
 export const SKILLS: SkillGroup[] = [
-  { domain: 'code', title: 'Backend & APIs', items:
-    ['Python', 'FastAPI', 'Java', 'Spring Boot', 'Spring Data JPA', 'C++17', 'Lock-free', 'Low-latency', 'Market data', 'Market microstructure', 'FIX protocol', 'UDP multicast', 'TypeScript', 'Node.js', 'REST APIs', 'JWT Auth', 'OpenAPI / Swagger', 'Pydantic', 'async I/O'] },
+  { domain: 'all', title: 'AI & LLM', items:
+    ['Claude API', 'OpenAI API', 'LangChain', 'RAG with citations', 'Embeddings', 'Vector search', 'Prompt design', 'System prompts', 'Streaming', 'Prompt caching', 'Server-side key handling', 'Deterministic fallbacks', 'Per-conversation cost tracking'] },
+  { domain: 'code ai', title: 'Backend & APIs', items:
+    ['Python', 'FastAPI', 'Django', 'Django REST Framework', 'Java', 'Spring Boot', 'Spring Data JPA', 'C++17', 'Wait-free / lock-free', 'Low-latency', 'Market data', 'Market microstructure', 'FIX protocol', 'UDP multicast', 'TypeScript', 'Node.js', 'REST APIs', 'JWT Auth', 'OpenAPI / Swagger', 'Pydantic', 'async I/O'] },
   { domain: 'all', title: 'Manufacturing Systems', items:
     ['MES', 'ERP', 'OEE', 'PPC', 'QC Workflows', 'Batch Tracking', 'Inventory / FIFO', 'Sage Evolution'] },
   { domain: 'code', title: 'Frontend & UI', items:
-    ['JavaScript ES6+', 'HTML5 / CSS3', 'Admin Dashboards', 'Multi-step Forms', 'Role-based UI', 'Responsive Design', 'SPA hash routing'] },
-  { domain: 'code', title: 'Data & Reporting', items:
-    ['MongoDB', 'PostgreSQL', 'SQL Server', 'Flyway', 'Pandas', 'OpenPyXL', 'Excel Automation', 'PDF Generation'] },
+    ['React', 'TypeScript', 'JavaScript ES6+', 'HTML5 / CSS3', 'Vite', 'Admin Dashboards', 'Multi-step Forms', 'Role-based UI', 'Responsive Design', 'SPA hash routing'] },
+  { domain: 'code ai', title: 'Data & Reporting', items:
+    ['MongoDB', 'PostgreSQL', 'SQL Server', 'Flyway', 'pandas', 'NumPy', 'scikit-learn', 'OpenPyXL', 'Excel Automation', 'PDF Generation'] },
   { domain: 'code', title: 'Infrastructure & CI', items:
     ['Docker', 'Docker Compose', 'Linux', 'nginx', 'Cloudflare', 'Git / GitHub', 'GitHub Actions', 'CMake', 'n8n', 'Workflow Automation', "Let's Encrypt"] },
   { domain: 'eng', title: 'Industrial Operations', items:
     ['Krones Line Operations', 'Operator Coordination', 'Line Troubleshooting', 'RCA', 'SOPs', 'Commissioning Support', 'GPON / PSTN', 'Oracle CRM'] },
   { domain: 'all', title: 'Learning / Expanding', items:
-    ['React', 'Tailwind CSS', 'PLC / Siemens basics', 'scikit-learn'] },
+    ['Tailwind CSS', 'PLC / Siemens basics', 'Model-checked concurrency (CDSChecker / herd7)', 'Formal LLM evaluation harnesses'] },
 ];

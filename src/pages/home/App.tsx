@@ -4,6 +4,7 @@
    behaviour from home.app.jsx.
    ========================================================= */
 import { Fragment, useEffect, useState } from 'react';
+import { VIEW_KEYS } from './data';
 import { Nav } from './components/Nav';
 import { ScrollProgress } from './components/primitives';
 import { Hero } from './components/Hero';
@@ -20,11 +21,13 @@ import { Footer } from './components/Footer';
 
 export function App() {
   const [view, setView] = useState(() => {
+    // Validate against VIEW_KEYS rather than a hardcoded list, so adding a view
+    // to VIEWS is enough to make ?view=<key> deep-linkable.
     try {
       const q = new URLSearchParams(window.location.search).get('view');
-      if (q === 'eng' || q === 'code' || q === 'all') return q;
+      if (q && VIEW_KEYS.includes(q)) return q;
       const stored = localStorage.getItem('portfolio_view');
-      return stored === 'eng' || stored === 'code' || stored === 'all' ? stored : 'code';
+      return stored && VIEW_KEYS.includes(stored) ? stored : 'code';
     } catch (_) { return 'code'; }
   });
   // Persist the active view and reflect it in the URL (?view=) so the page is

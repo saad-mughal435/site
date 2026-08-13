@@ -2,7 +2,7 @@
    SKILLS - SkillCard + Skills, verbatim from home.app.jsx
    ========================================================= */
 import { useRef } from 'react';
-import { SKILLS } from '../data';
+import { SKILLS, viewItems } from '../data';
 import type { SkillGroup } from '../data';
 import { useInView } from '../hooks';
 import { Reveal, WordReveal } from './primitives';
@@ -23,7 +23,7 @@ function SkillCard({ s }: { s: SkillGroup }) {
 }
 
 export function Skills({ view }: { view: string }) {
-  const items = SKILLS.filter((s) => view === 'all' || s.domain === view || s.domain === 'all');
+  const items = viewItems(SKILLS, view);
   return (
     <section id="skills" className="section container">
       <Reveal className="section-head">
