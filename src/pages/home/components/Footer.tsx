@@ -5,7 +5,7 @@ export function Footer() {
   return (
     <footer className="footer">
       <div className="container footer-inner">
-        <div className="footer-copy">© {new Date().getFullYear()} Muhammad Saad - Automation &amp; Software Developer. Hand-built with vanilla CSS.
+        <div className="footer-copy">© {new Date().getFullYear()} Muhammad Saad - AI Engineer &amp; Full Stack Developer. Hand-built with vanilla CSS.
           <span className="react-badge" title="This homepage is a React 19 single-page app (bundled with Vite)">⚛ Built with React 19</span>
         </div>
         <div className="footer-links">

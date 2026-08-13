@@ -12,9 +12,10 @@ export function About() {
       </Reveal>
       <div className="about-grid">
         <Reveal className="about-copy">
-          <p>I&rsquo;m an <strong>Automation &amp; Software Developer</strong> at Kingsley Beverage FZCO in Dubai, where I&rsquo;m
-            the sole developer of the MES/ERP platform running across the plant - and also work hands-on as
-            <strong> Automation Engineer</strong> and <strong>IT Administrator</strong>. My engineering background
+          <p>I&rsquo;m an <strong>AI Engineer &amp; Full Stack Developer</strong> at Kingsley Beverage FZCO in Dubai, where I&rsquo;m
+            the sole developer of the MES/ERP platform running across the plant - with the Claude and OpenAI APIs
+            inside its document and reporting workflows - and also work hands-on as
+            <strong>Automation Engineer</strong> and <strong>IT Administrator</strong>. My engineering background
             (B.Sc. Electrical / Computer Engineering, COMSATS University Islamabad) lets me run and support the Krones beverage
             lines and troubleshoot production issues, then build the software <em>around</em> that workflow - the
             machine automation is OEM-locked, so my work is the OEE reporting, QC records, inventory, and management

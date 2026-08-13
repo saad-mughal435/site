@@ -173,7 +173,7 @@ export const STATS_ALL: Stat[] = [
 export const FAQ_ITEMS: FaqItem[] = [
   {
     q: 'Is Saad available for hire?',
-    a: <Fragment>Yes - open to backend, software engineering, ERP / MES, and automation roles. {AVAILABILITY}, and available immediately. Reach out via the <a href="contact.html">contact form</a>, email <a href="mailto:saad@saadm.dev">saad@saadm.dev</a>, or WhatsApp <a href="https://wa.me/971502578065" target="_blank" rel="noopener">+971 50 257 8065</a>.</Fragment>,
+    a: <Fragment>Yes - open to AI engineering, backend, full-stack, ERP / MES, and automation roles. {AVAILABILITY}. Currently employed, so he can start on two weeks&rsquo; notice. Reach out via the <a href="contact.html">contact form</a>, email <a href="mailto:saad@saadm.dev">saad@saadm.dev</a>, or WhatsApp <a href="https://wa.me/971502578065" target="_blank" rel="noopener">+971 50 257 8065</a>.</Fragment>,
   },
   {
     q: 'What does the Kingsley MES / ERP platform do?',
@@ -227,7 +227,7 @@ export const PROOF_QUOTES: ProofQuote[] = [];
    ========================================================= */
 export const EXPERIENCE: ExperienceItem[] = [
   { domain: 'all',
-    title: 'Automation & Software Developer · ERP Developer · IT Administrator',
+    title: 'ERP Developer & AI Integration Engineer',
     when: 'Jul 2025 – Present',
     company: 'Kingsley Beverage FZCO · Dubai, UAE',
     points: [

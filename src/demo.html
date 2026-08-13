@@ -7,6 +7,42 @@
 <meta name="description" content="Interactive walkthrough of an enterprise MES/ERP system built by Saad. Production planning, inventory, quality control, accounts, OEE monitoring and Sage integration. Built with Python, FastAPI, MongoDB. All data fabricated for demonstration." />
 <meta name="keywords" content="MES demo, ERP demo, manufacturing software demo, Saad portfolio, Python MES, FastAPI ERP, beverage manufacturing software" />
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+
+<!-- /demo was the only major page with no structured data. The demo count here
+     is the one number that has drifted before, so it stays in sync with the
+     rendered grid (15 cards). -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://saadm.dev/" },
+    { "@type": "ListItem", "position": 2, "name": "Interactive demos" }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Kingsley MES / ERP / OEE Platform - interactive walkthrough",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "url": "https://saadm.dev/demo",
+  "author": { "@type": "Person", "name": "Muhammad Saad", "url": "https://saadm.dev/" },
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "description": "Interactive walkthrough of a production MES/ERP platform running daily at a Dubai beverage plant: 20+ modules across production planning, QC with hold-on-out-of-spec, batch and expiry tracking, FIFO inventory, dispatch, accounts and Sage Evolution integration, with OEE monitoring and 8 server-generated PDF templates. Every value is fabricated for privacy; the workflows are faithful to the real system.",
+  "featureList": [
+    "Production planning and job orders with OEE computed at close",
+    "Quality control with spec ranges and batch hold on an out-of-spec reading",
+    "Batch and expiry tracking with FIFO/FEFO lot traceability",
+    "Inventory with short-pick detection blocking job-order release",
+    "Dispatch, accounts and Sage Evolution batch export",
+    "8 print-ready PDF templates generated server-side"
+  ]
+}
+</script>
 <meta name="theme-color" content="#07080d" />
 <meta name="color-scheme" content="dark light" />
 <link rel="canonical" href="https://saadm.dev/demo" />
