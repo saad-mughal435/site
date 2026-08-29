@@ -268,6 +268,34 @@ export const PROJECTS: Project[] = [
     ],
   },
   {
+    domain: 'all ai', kind: 'Backend service · Live interactive demo · Open source · Python / FastAPI', year: '2026',
+    sectionEyebrow: 'AI infrastructure',
+    sectionHeading: 'The layer between an app and its language model',
+    sectionBlurb: 'Calling a language model is easy; running that call in production is not, and the gap is almost entirely failure handling - the upstream rate-limits you mid-incident, a model returns JSON that almost parses, one runaway loop bills a month of budget overnight. This is the service that absorbs that: one API in front of any provider, with retries, circuit breaking, failover, caching, tool calling, schema-constrained output, budgets and cost accounting already solved. Provider-agnostic by construction, and it runs with no API key at all.',
+    title: 'llm-gateway - production LLM gateway (Python / FastAPI)',
+    desc: <Fragment>A <strong>provider-agnostic LLM gateway</strong> in <strong>Python / FastAPI</strong>.
+      Applications speak to one stable endpoint; the gateway owns provider selection, failure recovery,
+      spend and observability. Everything vendor-specific sits behind a single <code>Provider</code>{' '}
+      interface, so adding an upstream is one file and one config entry - no change to routing, retry,
+      cost, or any route handler. It ships a <strong>deterministic simulator provider</strong>, so the
+      whole service runs, tests and demos <strong>with no API key, no network and no cost</strong> -
+      which is also the only honest way to demonstrate that the retry, circuit-breaker and failover
+      paths actually work.</Fragment>,
+    bullets: [
+      <Fragment><strong>Resilience</strong> - exponential backoff with full jitter honouring <code>Retry-After</code>, a per-provider <strong>circuit breaker</strong>, and configurable <strong>fallback chains</strong>; every attempt is returned on the response, because a gateway that retries silently is one nobody can debug</Fragment>,
+      <Fragment><strong>Cost control</strong> - a fingerprinted response cache, per-request token and spend accounting persisted per key, <strong>per-key budgets</strong> enforced before the upstream call, and cheapest-first model ranking</Fragment>,
+      <Fragment><strong>Tool calling + structured output</strong> - a real execution loop with JSON-Schema-validated arguments, concurrent execution, per-tool timeouts and an iteration cap; schema-constrained replies with a <strong>bounded repair loop</strong> that feeds validation errors back for correction</Fragment>,
+      <Fragment><strong>Production surface</strong> - hashed API keys with scopes, token-bucket rate limiting, RFC 7807 errors, structured JSON logs with request-id propagation and credential redaction, separate liveness/readiness probes, Docker + Render blueprint, and CI that boots the image and probes it</Fragment>,
+    ],
+    tags: ['Python 3.11+', 'FastAPI', 'pydantic v2', 'async', 'SQLAlchemy 2.0', 'httpx', 'Tool calling', 'JSON Schema', 'Circuit breaker', 'Retry + backoff', 'Failover', 'Prompt caching', 'Cost accounting', 'Rate limiting', 'RFC 7807', 'Structured logging', 'pytest', 'ruff', 'Docker', 'Render', 'GitHub Actions'],
+    ctas: [
+      { label: 'Watch the pipeline run ↗', href: 'llm-gateway/index.html', target: '_blank', primary: true, prominent: true },
+      { label: 'View source on GitHub ↗', href: 'https://github.com/saad-mughal435/llm-gateway', target: '_blank' },
+      { label: 'CI runs ↗', href: 'https://github.com/saad-mughal435/llm-gateway/actions', target: '_blank' },
+    ],
+    ctaSubtitle: 'The demo is a client-side reimplementation of the gateway pipeline - trip a circuit breaker, watch a retry back off, force a failover, and see the cache change the bill. No model call, no API key.',
+  },
+  {
     domain: 'all', kind: 'Backend service · Live API · Open source · Java / Spring Boot', year: '2026',
     sectionEyebrow: 'Backend engineering',
     sectionHeading: 'The same operations domain, in Java & Spring Boot',

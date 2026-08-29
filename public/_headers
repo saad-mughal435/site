@@ -61,6 +61,10 @@
 /lahza/sw.js
   Service-Worker-Allowed: /lahza/
   Cache-Control: public, max-age=0, must-revalidate
+/llm-gateway/css/*
+  Cache-Control: public, max-age=300, must-revalidate
+/llm-gateway/js/*
+  Cache-Control: public, max-age=300, must-revalidate
 /marsad/css/*
   Cache-Control: public, max-age=300, must-revalidate
 /marsad/js/*

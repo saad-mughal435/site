@@ -17,8 +17,8 @@ const DIST = join(ROOT, 'dist');
 // Demo apps - still hand-written static, copied verbatim. Each migrates to Astro
 // in a later phase; remove it from this list as its rebuild reaches parity.
 const DIRS = [
-  'app', 'ask', 'assets', 'b2b', 'b2c', 'hft-book', 'lahza', 'marsad',
-  'nabta', 'pos', 'property', 'sanad', 'vacation', 'watad',
+  'app', 'ask', 'assets', 'b2b', 'b2c', 'hft-book', 'lahza', 'llm-gateway',
+  'marsad', 'nabta', 'pos', 'property', 'sanad', 'vacation', 'watad',
 ];
 
 // Repo-root docs: kept at root so GitHub renders them; also served verbatim.
