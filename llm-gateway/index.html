@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LLM Gateway - request pipeline viewer</title>
+<meta name="description" content="Watch an LLM gateway's request pipeline run stage by stage: routing, retries with exponential backoff and jitter, circuit breaking, provider failover, response caching, tool calling, JSON-schema output with a repair loop, per-key rate limiting, budgets and cost accounting. A browser reimplementation of a Python/FastAPI gateway - no model call, no API key." />
+<link rel="canonical" href="https://saadm.dev/llm-gateway/" />
+<meta name="theme-color" content="#090c14" />
+<meta name="color-scheme" content="dark light" />
+<meta name="robots" content="index, follow" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='12'%20fill='%2307080d'/%3E%3Ctext%20x='50%25'%20y='58%25'%20font-family='Space%20Grotesk,sans-serif'%20font-weight='700'%20font-size='34'%20fill='%23edf1f8'%20text-anchor='middle'%3ES%3C/text%3E%3Crect%20x='18'%20y='47'%20width='28'%20height='3'%20fill='%236e8eff'/%3E%3C/svg%3E" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Saad - saadm.dev" />
+<meta property="og:title" content="LLM Gateway - request pipeline viewer" />
+<meta property="og:description" content="One API in front of any model provider: retries with backoff, circuit breaking, failover, caching, tool calling, schema-constrained output, rate limits, budgets and cost accounting - watched live in the browser." />
+<meta property="og:url" content="https://saadm.dev/llm-gateway/" />
+<meta property="og:image" content="https://saadm.dev/og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="LLM Gateway - request pipeline viewer" />
+<meta name="twitter:description" content="Retries, circuit breaking, failover, caching, tool calling, schema repair, rate limits, budgets and cost accounting - the control flow of a Python/FastAPI LLM gateway, replayed client-side." />
+<meta name="twitter:image" content="https://saadm.dev/og.png" />
+
+<!-- Theme bootstrap, as the rest of saadm.dev does it: read localStorage 'theme', else the
+     OS preference, and set data-theme before paint so there is no flash. The #gw-theme button
+     is wired by js/app.js - this script only mirrors the resulting theme into theme-color,
+     which the browser chrome reads. -->
+<script>
+(function () {
+  var root = document.documentElement;
+  var t;
+  try { t = localStorage.getItem('theme'); } catch (e) { /* private mode */ }
+  if (t !== 'light' && t !== 'dark') {
+    t = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  }
+  root.setAttribute('data-theme', t);
+
+  function syncMeta() {
+    var m = document.querySelector('meta[name="theme-color"]');
+    if (m) m.setAttribute('content', root.getAttribute('data-theme') === 'light' ? '#f4f7fc' : '#090c14');
+  }
+  syncMeta();
+  if (window.MutationObserver) {
+    new MutationObserver(syncMeta).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+  }
+})();
+</script>
+
+<link rel="stylesheet" href="/tokens.css" />
+<link rel="stylesheet" href="css/gateway.css" />
+</head>
+<body>
+
+<a class="gw-skip" href="#gw-main">Skip to the pipeline</a>
+
+<header class="gw-header" role="banner">
+  <div class="gw-wrap">
+
+    <div class="gw-bar">
+      <a class="gw-back" href="https://saadm.dev/">
+        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">
+          <path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        saadm.dev
+      </a>
+
+      <div class="gw-bar-end">
+        <span class="gw-chip" title="Nothing on this page leaves the browser">
+          <span class="gw-chip-dot" aria-hidden="true"></span> Runs entirely in this tab
+        </span>
+        <!-- app.js owns the click, sets aria-label/title and writes the next theme name
+             into [data-theme-label]. The icons show the theme the button switches TO. -->
+        <button id="gw-theme" class="gw-btn gw-btn--ghost gw-theme" type="button" title="Switch to light theme" aria-label="Switch to light theme">
+          <svg class="gw-ico-sun" viewBox="0 0 16 16" width="15" height="15" aria-hidden="true" focusable="false">
+            <circle cx="8" cy="8" r="3.1" fill="none" stroke="currentColor" stroke-width="1.5" />
+            <path d="M8 .9v2.1M8 13v2.1M.9 8h2.1M13 8h2.1M3 3l1.5 1.5M11.5 11.5 13 13M13 3l-1.5 1.5M4.5 11.5 3 13"
+                  fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+          <svg class="gw-ico-moon" viewBox="0 0 16 16" width="15" height="15" aria-hidden="true" focusable="false">
+            <path d="M13.4 9.6A5.6 5.6 0 0 1 6.4 2.6a5.7 5.7 0 1 0 7 7Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+          </svg>
+          <span class="gw-theme-label" data-theme-label>light</span>
+        </button>
+      </div>
+    </div>
+
+    <p class="gw-eyebrow">Python · FastAPI · reliability engineering</p>
+    <h1 class="gw-title">LLM Gateway <span class="gw-title-sub">request pipeline viewer</span></h1>
+    <p class="gw-lede">
+      One API in front of any model provider, and the machinery that keeps it standing up in production:
+      routing, retries with exponential backoff and jitter, per-provider circuit breakers, failover down a
+      route chain, response caching, tool calling, JSON-schema-constrained output with a repair loop,
+      per-key rate limits, budgets and cost accounting.
+    </p>
+
+    <div class="gw-note" role="note" aria-label="What this page is">
+      <h2 class="gw-note-title">What this page is</h2>
+      <p>
+        A browser reimplementation of that pipeline's control flow, written so the mechanics can be watched
+        live. <strong>No language model is called.</strong> There is no network request, no API key and no
+        spend: provider replies come from a deterministic local stub, and every latency, token count and
+        cost figure below is simulated. Prices mirror the operator-supplied price book in the repository's
+        <code>config/gateway.json</code>, expressed in USD per million tokens.
+      </p>
+      <p>
+        The production implementation is Python and FastAPI - the retry policy, breaker, cache fingerprint,
+        token-bucket limiter and error taxonomy modelled here are ports of its modules.
+        <a class="gw-link" href="https://github.com/saad-mughal435/llm-gateway" rel="noopener">Read the source on GitHub</a>.
+      </p>
+    </div>
+
+  </div>
+</header>
+
+<main id="gw-main" class="gw-wrap" tabindex="-1">
+
+  <!-- ============================ scenarios ============================ -->
+  <section class="gw-section" aria-labelledby="gw-h-scenarios">
+    <div class="gw-section-head">
+      <h2 id="gw-h-scenarios">Scenarios</h2>
+      <p class="gw-section-sub">Each preset sets the controls below and runs one request. Start here.</p>
+    </div>
+
+    <!-- app.js: labels/blurbs may be overwritten from window.GATEWAY_SCENARIOS[name].label / .blurb -->
+    <div class="gw-scenarios" role="group" aria-labelledby="gw-h-scenarios">
+      <button class="gw-scenario" type="button" data-scenario="happy">
+        <span class="gw-scn-label">Happy path</span>
+        <span class="gw-scn-blurb">Cache miss, first provider answers, usage and cost recorded.</span>
+      </button>
+      <button class="gw-scenario" type="button" data-scenario="retry">
+        <span class="gw-scn-label">Retry with backoff</span>
+        <span class="gw-scn-blurb">A transient timeout, then exponential backoff with jitter.</span>
+      </button>
+      <button class="gw-scenario" type="button" data-scenario="failover">
+        <span class="gw-scn-label">Provider failover</span>
+        <span class="gw-scn-blurb">Upstream unavailable; the next provider in the chain serves it.</span>
+      </button>
+      <button class="gw-scenario" type="button" data-scenario="circuit">
+        <span class="gw-scn-label">Circuit breaker</span>
+        <span class="gw-scn-blurb">Repeated failures trip the breaker; later calls are shed at O(1).</span>
+      </button>
+      <button class="gw-scenario" type="button" data-scenario="cache">
+        <span class="gw-scn-label">Cache hit</span>
+        <span class="gw-scn-blurb">An identical request is fingerprinted and served from cache.</span>
+      </button>
+      <button class="gw-scenario" type="button" data-scenario="tools">
+        <span class="gw-scn-label">Tool calling</span>
+        <span class="gw-scn-blurb">The model requests a tool; the gateway runs it and calls again.</span>
+      </button>
+      <button class="gw-scenario" type="button" data-scenario="schema-repair">
+        <span class="gw-scn-label">Schema repair</span>
+        <span class="gw-scn-blurb">Output fails validation; a bounded repair loop feeds the error back.</span>
+      </button>
+      <button class="gw-scenario" type="button" data-scenario="ratelimit">
+        <span class="gw-scn-label">Rate limit</span>
+        <span class="gw-scn-blurb">The per-key token bucket is empty; the caller gets 429 and Retry-After.</span>
+      </button>
+      <button class="gw-scenario" type="button" data-scenario="budget">
+        <span class="gw-scn-label">Budget stop</span>
+        <span class="gw-scn-blurb">Projected spend exceeds the key's budget, so nothing is sent upstream.</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ============================ controls ============================= -->
+  <section class="gw-section" aria-labelledby="gw-h-request">
+    <div class="gw-section-head">
+      <h2 id="gw-h-request">Request</h2>
+      <p class="gw-section-sub">Or build one by hand and inject a fault to see how the pipeline reacts.</p>
+    </div>
+
+    <div class="gw-panel gw-controls">
+      <div class="gw-field gw-field--prompt">
+        <label for="gw-prompt">Prompt</label>
+        <textarea id="gw-prompt" rows="3" spellcheck="false"
+          placeholder="Ask the gateway for something">Summarise the last shift: six hours run time, two twelve-minute jams, one changeover, 4,200 cases produced.</textarea>
+        <p class="gw-hint">Identical text plus identical options produces the same cache fingerprint.</p>
+      </div>
+
+      <div class="gw-field">
+        <label for="gw-model">Model route</label>
+        <select id="gw-model">
+          <option value="sim-small">sim-small - cheapest, single provider</option>
+          <option value="sim-medium" selected>sim-medium - default route, one fallback</option>
+          <option value="sim-large">sim-large - dearest, two fallbacks</option>
+          <option value="sim-flaky">sim-flaky - fails intermittently</option>
+          <option value="sim-down">sim-down - always fails</option>
+        </select>
+        <p class="gw-hint">The model name selects an ordered provider chain from the routing table.</p>
+      </div>
+
+      <div class="gw-field">
+        <label for="gw-inject">Inject fault</label>
+        <select id="gw-inject">
+          <option value="none" selected>none - let it succeed</option>
+          <option value="timeout">timeout - 504, retryable</option>
+          <option value="rate_limit">rate_limit - upstream 429, retryable</option>
+          <option value="unavailable">unavailable - 503, retryable</option>
+          <option value="auth_error">auth_error - 502, no retry, failover allowed</option>
+          <option value="bad_request">bad_request - 400, no retry, no failover</option>
+        </select>
+        <p class="gw-hint">The error taxonomy decides whether retrying or failing over could possibly help.</p>
+      </div>
+
+      <fieldset class="gw-field gw-field--options">
+        <legend>Options</legend>
+        <div class="gw-checks">
+          <div class="gw-check">
+            <input type="checkbox" id="gw-cache" checked />
+            <label for="gw-cache">Use response cache</label>
+          </div>
+          <div class="gw-check">
+            <input type="checkbox" id="gw-tools" />
+            <label for="gw-tools">Expose tools</label>
+          </div>
+          <div class="gw-check">
+            <input type="checkbox" id="gw-schema" />
+            <label for="gw-schema">Require JSON schema</label>
+          </div>
+          <div class="gw-check">
+            <input type="checkbox" id="gw-fallback" checked />
+            <label for="gw-fallback">Allow failover</label>
+          </div>
+        </div>
+      </fieldset>
+
+      <div class="gw-actions">
+        <button id="gw-send" class="gw-btn gw-btn--primary" type="button">
+          <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">
+            <path d="M2.5 8h10M9 4.5 12.5 8 9 11.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          Send request
+        </button>
+        <button id="gw-reset" class="gw-btn" type="button">
+          <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">
+            <path d="M13 8a5 5 0 1 1-1.6-3.7M13 2.2V5h-2.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          Reset state
+        </button>
+        <p id="gw-status" class="gw-status" role="status" aria-live="polite">Idle. Pick a scenario, or send the request above.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= results ============================= -->
+  <section class="gw-section" aria-labelledby="gw-h-run">
+    <div class="gw-section-head">
+      <h2 id="gw-h-run">Run</h2>
+      <p class="gw-section-sub">Stages append as they resolve. Provider breakers and totals persist until you reset.</p>
+    </div>
+
+    <div class="gw-grid">
+
+      <article class="gw-panel gw-panel--pipeline" aria-labelledby="gw-h-pipeline">
+        <div class="gw-panel-head">
+          <h3 id="gw-h-pipeline">Pipeline</h3>
+          <span class="gw-panel-note">one row per stage</span>
+        </div>
+        <!-- js/app.js appends <li class="gw-stage" data-status="run|ok|skip|warn|fail">. -->
+        <ol id="gw-pipeline" class="gw-pipeline" aria-live="polite" aria-relevant="additions text"></ol>
+        <p class="gw-empty">No request has run yet.</p>
+      </article>
+
+      <div class="gw-col">
+
+        <article class="gw-panel" aria-labelledby="gw-h-providers">
+          <div class="gw-panel-head">
+            <h3 id="gw-h-providers">Circuit breakers</h3>
+            <span class="gw-panel-note">per provider</span>
+          </div>
+          <!-- js/app.js appends <article class="gw-prov" data-state="closed|half_open|open">. -->
+          <div id="gw-providers" class="gw-providers" aria-live="polite"></div>
+          <p class="gw-empty">Breakers are created on first use, as in the Python registry.</p>
+        </article>
+
+        <article class="gw-panel" aria-labelledby="gw-h-stats">
+          <div class="gw-panel-head">
+            <h3 id="gw-h-stats">Totals</h3>
+            <span class="gw-panel-note">since reset</span>
+          </div>
+          <!-- Placeholder tiles in the shape js/app.js renders (renderStats). It replaces
+               them on load and restores this markup on reset. -->
+          <div id="gw-stats" class="gw-stats" aria-live="polite">
+            <dl class="gw-stat-grid">
+              <div class="gw-stat">
+                <dt class="gw-stat-label">Requests</dt>
+                <dd class="gw-stat-value"><span class="gw-stat-figure">0</span><span class="gw-stat-sub">served by the gateway</span></dd>
+              </div>
+              <div class="gw-stat">
+                <dt class="gw-stat-label">Cache hit rate</dt>
+                <dd class="gw-stat-value"><span class="gw-stat-figure">0%</span><span class="gw-stat-sub">0 hit / 0 miss</span></dd>
+              </div>
+              <div class="gw-stat">
+                <dt class="gw-stat-label">Tokens</dt>
+                <dd class="gw-stat-value"><span class="gw-stat-figure">0</span><span class="gw-stat-sub">0 prompt / 0 completion</span></dd>
+              </div>
+              <div class="gw-stat">
+                <dt class="gw-stat-label">Spend</dt>
+                <dd class="gw-stat-value"><span class="gw-stat-figure">$0.00</span><span class="gw-stat-sub">simulated</span></dd>
+              </div>
+              <div class="gw-stat">
+                <dt class="gw-stat-label">Saved by cache</dt>
+                <dd class="gw-stat-value"><span class="gw-stat-figure">$0.00</span><span class="gw-stat-sub">avoided upstream cost</span></dd>
+              </div>
+            </dl>
+          </div>
+        </article>
+
+      </div>
+
+      <article class="gw-panel gw-panel--wide" aria-labelledby="gw-h-ledger">
+        <div class="gw-panel-head">
+          <h3 id="gw-h-ledger">Ledger</h3>
+          <span class="gw-panel-note">one row per completed request</span>
+        </div>
+        <div class="gw-tablewrap">
+          <table class="gw-table">
+            <caption class="gw-sr-only">Completed gateway requests, newest last</caption>
+            <thead>
+              <!-- Column order matches the row markup in js/app.js (appendLedgerRow). -->
+              <tr>
+                <th scope="col">Time</th>
+                <th scope="col">Model</th>
+                <th scope="col">Provider</th>
+                <th scope="col" class="gw-led-num">Tokens</th>
+                <th scope="col" class="gw-led-num">Cost (USD)</th>
+                <th scope="col">Cache</th>
+                <th scope="col">Outcome</th>
+              </tr>
+            </thead>
+            <tbody id="gw-ledger"></tbody>
+          </table>
+        </div>
+        <p class="gw-empty">The ledger fills as requests complete.</p>
+      </article>
+
+      <article class="gw-panel gw-panel--half" aria-labelledby="gw-h-response">
+        <div class="gw-panel-head">
+          <h3 id="gw-h-response">Response body</h3>
+          <span class="gw-panel-note">application/json</span>
+        </div>
+        <pre id="gw-response" class="gw-response" tabindex="0">// The normalised ChatResponse - or an RFC 7807 problem document - appears here.</pre>
+      </article>
+
+      <article class="gw-panel gw-panel--half" aria-labelledby="gw-h-log">
+        <div class="gw-panel-head">
+          <h3 id="gw-h-log">Structured log</h3>
+          <span class="gw-panel-note">newest last</span>
+        </div>
+        <div id="gw-log" class="gw-log" tabindex="0" role="log" aria-label="Structured log lines"></div>
+        <p class="gw-empty">One JSON line per event, as the Python logger emits.</p>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ========================= what this shows ========================= -->
+  <section class="gw-section" aria-labelledby="gw-h-explain">
+    <div class="gw-section-head">
+      <h2 id="gw-h-explain">What this shows</h2>
+      <p class="gw-section-sub">Each stage in the pipeline stands for a concern the production gateway has to answer.</p>
+    </div>
+
+    <div class="gw-panel gw-explain">
+      <dl class="gw-dl">
+        <div class="gw-dl-row">
+          <dt>Authenticate</dt>
+          <dd>The API key is resolved to a principal and its scopes. Keys are stored hashed and never written to a log line.</dd>
+        </div>
+        <div class="gw-dl-row">
+          <dt>Rate limit</dt>
+          <dd>A per-key token bucket rather than a fixed window, because a fixed window lets a caller fire two windows' worth of traffic across the boundary instant. The default allowance is 60 requests per minute with a burst of 20; refusal returns 429 with <code>Retry-After</code>.</dd>
+        </div>
+        <div class="gw-dl-row">
+          <dt>Budget check</dt>
+          <dd>An estimated token count projects the cost of the call before it is made, and it is checked against the key's remaining budget. Over budget returns 402 rather than an unexpected invoice.</dd>
+        </div>
+        <div class="gw-dl-row">
+          <dt>Cache lookup</dt>
+          <dd>A SHA-256 fingerprint over only the fields that change the output - model, messages, tools, temperature, response format. A hit is the cheapest token the gateway will ever serve: nothing goes upstream and nothing is charged.</dd>
+        </div>
+        <div class="gw-dl-row">
+          <dt>Route</dt>
+          <dd>The requested model name selects an ordered provider chain from the routing table, so callers name a capability and the operator decides who serves it.</dd>
+        </div>
+        <div class="gw-dl-row">
+          <dt>Circuit breaker</dt>
+          <dd>Retries are only cheap when failures are rare. Once a provider has failed <code>failure_threshold</code> times in a row it is skipped outright until a recovery window elapses, then a couple of probe requests decide whether it is back. That turns a dead upstream from a full retry budget per request into an O(1) skip.</dd>
+        </div>
+        <div class="gw-dl-row">
+          <dt>Retry with backoff</dt>
+          <dd>Retryable failures - timeout, upstream 429, 503 - wait an exponentially growing window with full jitter. The jitter is the point: without it, every client that failed at the same moment wakes at the same moment and the retry storm is indistinguishable from the outage that caused it. A provider-supplied <code>Retry-After</code> wins, capped so a hostile header cannot stall the request.</dd>
+        </div>
+        <div class="gw-dl-row">
+          <dt>Failover</dt>
+          <dd>Errors marked failoverable move to the next provider in the chain. A rejected request does not: the next provider would reject it too, so failing fast is the honest answer.</dd>
+        </div>
+        <div class="gw-dl-row">
+          <dt>Tool calling</dt>
+          <dd>When the model asks for a tool, the gateway executes it, appends the result as a tool message and calls again - bounded by <code>max_tool_iterations</code> so a loop cannot bill forever.</dd>
+        </div>
+        <div class="gw-dl-row">
+          <dt>Schema validation and repair</dt>
+          <dd>With a JSON schema requested, the reply is parsed and validated. A failure is fed back to the model as a bounded repair loop before the request gives up with 422, because one malformed brace should not cost the caller the whole call.</dd>
+        </div>
+        <div class="gw-dl-row">
+          <dt>Usage and cost accounting</dt>
+          <dd>Cost is computed from provider-reported token usage against an operator-supplied price book in USD per million tokens. Estimated counts guide decisions such as context trimming; they are never what gets charged.</dd>
+        </div>
+        <div class="gw-dl-row">
+          <dt>Structured logging</dt>
+          <dd>One JSON line per request carrying the request id, route, every attempt with its outcome, latency and cost - enough to answer "what did this request actually do" without a debugger.</dd>
+        </div>
+      </dl>
+
+      <p class="gw-caveat">
+        Figures on this page are produced by the local stub, not measured against a model. The simulated
+        prices match the repository's price book for the <code>sim-*</code> models so the arithmetic is
+        real even though the tokens are not.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="gw-footer" role="contentinfo">
+  <div class="gw-wrap gw-footer-inner">
+    <p>Built by Muhammad Saad - <a class="gw-link" href="https://saadm.dev/">saadm.dev</a></p>
+    <p><a class="gw-link" href="https://github.com/saad-mughal435/llm-gateway" rel="noopener">llm-gateway source (Python, FastAPI)</a></p>
+  </div>
+</footer>
+
+<script src="js/engine.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

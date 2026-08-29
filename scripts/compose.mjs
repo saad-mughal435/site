@@ -12,7 +12,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = join(ROOT, 'dist');
 
 const DIRS = [
-  'app', 'ask', 'assets', 'b2b', 'b2c', 'hft-book', 'lahza', 'marsad',
+  'app', 'ask', 'assets', 'b2b', 'b2c', 'hft-book', 'lahza', 'llm-gateway', 'marsad',
   'nabta', 'pos', 'property', 'property-management', 'sanad', 'vacation', 'watad',
   '.well-known',
 ];
