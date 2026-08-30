@@ -483,6 +483,25 @@ export const PROJECTS: Project[] = [
 /* Product demos - shown directly after Projects as a 3-column grid (compact cards). */
 export const DEMO_PROJECTS: Project[] = [
   {
+    domain: 'all ai', kind: 'Live pipeline viewer · Open source · Python / FastAPI', year: '2026',
+    title: 'llm-gateway - LLM request pipeline viewer',
+    desc: <Fragment>Watch a production LLM gateway serve one request: authentication, rate limit, budget,
+      cache lookup and route resolution, then <strong>retries with exponential backoff</strong>, a{' '}
+      <strong>circuit breaker tripping</strong>, and <strong>failover</strong> down the provider chain.
+      Nine scenario presets, live per-provider breaker state, a running cost ledger and a structured log
+      panel. No language model is called - the pipeline runs entirely in the tab.</Fragment>,
+    bullets: [
+      <Fragment>Nine presets: happy path, retry, failover, circuit breaker, cache hit, tool calling, schema repair, rate limit, budget stop</Fragment>,
+      <Fragment>Real backoff timing, a real token bucket and a real breaker state machine - not an animation</Fragment>,
+      <Fragment>A browser port of the FastAPI service's retry policy, breaker, cache fingerprint and error taxonomy</Fragment>,
+    ],
+    tags: ['Python', 'FastAPI', 'Retry + backoff', 'Circuit breaker', 'Failover', 'Response cache', 'Tool calling', 'JSON Schema', 'Cost accounting', 'Vanilla JS (ES6+)'],
+    ctas: [
+      { label: 'Open viewer ↗', href: 'llm-gateway/index.html', target: '_blank', primary: true },
+      { label: 'View source ↗', href: 'https://github.com/saad-mughal435/llm-gateway', target: '_blank' },
+    ],
+  },
+  {
     domain: 'code', kind: 'Disconnected demo · Portfolio piece', year: '2026',
     title: 'Anvil Supply Co. - B2B wholesale portal',
     desc: <Fragment>A wholesale/industrial portal with tier pricing, MOQs, contract discounts, quote requests, and an

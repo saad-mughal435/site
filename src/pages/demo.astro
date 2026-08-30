@@ -75,7 +75,7 @@ import '../styles/demo.css';
 
 <!-- ================= DEMO CHOOSER ================= -->
 <section class="container no-print" style="padding-top:36px; padding-bottom:8px;">
-  <span class="section-tag">Eleven demos · all interactive · all data fabricated</span>
+  <span class="section-tag">Fifteen demos · all interactive · all data fabricated</span>
   <h1 class="hero-title" style="font-size:clamp(26px,3.4vw,40px); margin-top:10px;">
     Choose a demo to explore.
   </h1>
@@ -129,6 +129,15 @@ import '../styles/demo.css';
       <div class="demo-card-sub">hft-orderbook - a live L2 viewer replaying a synthetic NASDAQ ITCH 5.0 session reconstructed by the C++17 engine: order-book ladder with micro-price, spread, VWAP, volume and imbalance signals. Point ?ws= at a local wsbook to watch a live feed.</div>
       <div class="demo-card-stack">C++17 · NASDAQ ITCH 5.0 · MoldUDP64 · FIX 4.4 · Lock-free · Sub-microsecond · WebSocket · MetaTrader 5</div>
       <div class="demo-card-tech">Technically: lock-free sharded reconstruction, microstructure signals, synthetic-replay viewer bound to a WebSocket book</div>
+      <div class="demo-card-cta">Open viewer ↗</div>
+    </a>
+    <a href="llm-gateway/index.html" target="_blank" rel="noopener" class="demo-card" data-target="llm-gateway" data-category="ai">
+      <img class="demo-card-thumb" src="/llm-gateway/og.jpg" alt="" loading="lazy" decoding="async" width="1200" height="630" />
+      <div class="demo-card-eyebrow">Live · request pipeline viewer</div>
+      <div class="demo-card-title">LLM gateway (Python)</div>
+      <div class="demo-card-sub">llm-gateway - watch a production LLM gateway serve one request: authentication, rate limit, budget, cache lookup and route resolution, then retries with exponential backoff, a circuit breaker tripping, and failover down the provider chain. Nine scenario presets, live per-provider breaker state, a running cost ledger and a structured log panel. No language model is called - the pipeline runs entirely in the tab.</div>
+      <div class="demo-card-stack">Python · FastAPI · Retry + backoff · Circuit breaker · Failover · Response cache · Tool calling · JSON Schema · Cost accounting</div>
+      <div class="demo-card-tech">Technically: a browser port of the FastAPI service's retry policy, breaker, cache fingerprint and error taxonomy</div>
       <div class="demo-card-cta">Open viewer ↗</div>
     </a>
     <a href="b2c/index.html" target="_blank" rel="noopener" class="demo-card" data-target="b2c" data-category="commerce">
