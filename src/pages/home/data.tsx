@@ -203,7 +203,7 @@ export const PROOF_ITEMS: ProofItem[] = [
     v: 'MES/ERP platform running daily at Kingsley Beverage FZCO, Dubai - sole developer, live since 2025.',
     link: { href: 'demo.html', label: 'See the walkthrough ↗', target: '_blank' } },
   { k: 'Upstream',
-    v: 'Four pull requests merged into ArtCraft, the clean-room Rust rewrites of Photoshop (71k stars), Acrobat (17k) and Illustrator (10k) - seven commits on main, each read and approved by a maintainer first. Seven more are in review: there, in the Word rewrite, and in the tokio-modbus crate.',
+    v: 'Five pull requests merged into ArtCraft, the clean-room Rust rewrites of Photoshop (71k stars), Acrobat (17k) and Illustrator (10k) - eight commits on main, each read and approved by a maintainer first. Eight more are in review: there, in the Word and Lightroom rewrites, and in the tokio-modbus crate.',
     link: { href: 'https://github.com/search?q=is%3Apr+author%3Asaad-mughal435+-user%3Asaad-mughal435&type=pullrequests', label: 'See the pull requests ↗', target: '_blank' } },
   { k: 'Open source',
     v: 'Public repos with green GitHub Actions CI - Java, TypeScript and C++17, tests on every push.',
